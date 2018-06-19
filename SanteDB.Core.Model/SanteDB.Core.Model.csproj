@@ -180,6 +180,13 @@
     <Compile Include="NonVersionedEntityData.cs" />
     <Compile Include="VersionedAssociation.cs" />
     <Compile Include="VersionedEntityData.cs" />
+    <Compile Include="Warehouse\DatamartDefinition.cs" />
+    <Compile Include="Warehouse\DatamartSchema.cs" />
+    <Compile Include="Warehouse\DatamartSchemaProperty.cs" />
+    <Compile Include="Warehouse\DatamartStoredQuery.cs" />
+    <Compile Include="Warehouse\DatamartStoredQueryDefinition.cs" />
+    <Compile Include="Warehouse\DataWarehouseObject.cs" />
+    <Compile Include="Warehouse\IDatamartSchemaPropertyContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\SanteDB.licenseheader">
