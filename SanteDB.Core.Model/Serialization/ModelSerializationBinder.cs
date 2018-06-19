@@ -24,22 +24,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using Newtonsoft.Json.Serialization;
 
 namespace SanteDB.Core.Model.Serialization
 {
     /// <summary>
     /// Model binding 
     /// </summary>
-    public class ModelSerializationBinder : SerializationBinder
+    public class ModelSerializationBinder : ISerializationBinder
     {
 
         private static Dictionary<String, Type> s_typeCache = new Dictionary<string, Type>();
         private static object s_lock = new object();
 
         /// <summary>
+        /// Bind the type to a name
+        /// </summary>
+        public void BindToName(Type serializedType, out string assemblyName, out string typeName)
+        {
+            typeName = serializedType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
+            assemblyName = null;
+        }
+
+        /// <summary>
         /// Bind to type
         /// </summary>
-        public override Type BindToType(string assemblyName, string typeName)
+        public Type BindToType(string assemblyName, string typeName)
         {
             // Assembly to search
             Assembly asm = typeof(ModelSerializationBinder).GetTypeInfo().Assembly;
