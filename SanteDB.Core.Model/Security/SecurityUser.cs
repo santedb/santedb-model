@@ -183,7 +183,6 @@ namespace SanteDB.Core.Model.Security
             {
                 return this.Roles.SelectMany(o => o.Policies).ToList();
             }
-
             set
             {
                 
