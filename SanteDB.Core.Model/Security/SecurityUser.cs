@@ -90,8 +90,8 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets whether the password hash is enabled
         /// </summary>
-        [XmlElement("passwordHash"), JsonProperty("passwordHash")]
-        public String PasswordHash { get; set; }
+        [XmlElement("password"), JsonProperty("password")]
+        public String Password { get; set; }
         /// <summary>
         /// Gets or sets whether the security has is enabled
         /// </summary>
@@ -200,7 +200,7 @@ namespace SanteDB.Core.Model.Security
             return base.SemanticEquals(obj) &&
                 this.Email == other.Email &&
                 this.EmailConfirmed == other.EmailConfirmed &&
-                this.PasswordHash == other.PasswordHash &&
+                this.Password == other.Password &&
                 this.PhoneNumber == other.PhoneNumber &&
                 this.PhoneNumberConfirmed == other.PhoneNumberConfirmed &&
                 this.Policies?.SemanticEquals(other.Policies) == true &&
