@@ -65,7 +65,7 @@ namespace SanteDB.Core.Model
 
         // True when the data class is locked for storage
         private bool m_delayLoad = false;
-        public bool Test { get; set; }
+
         // Type id
         private string m_typeId = String.Empty;
 
