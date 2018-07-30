@@ -27,75 +27,71 @@ namespace SanteDB.Core.Model.Constants
 	public static class EntityRelationshipTypeKeys
 	{
 		/// <summary>
-		/// The access
+		/// The source entity gives access to the target entity
 		/// </summary>
 		public static readonly Guid Access = Guid.Parse("DDC1B705-C768-4C7A-8F69-76AD4B167B40");
+        /// <summary>
+        /// Active ingredient, where not the ingredient substance (player), but itaTMs active moiety is the "basis of strength"
+        /// </summary>
+        public static readonly Guid ActiveMoiety = Guid.Parse("212B1B6B-B074-4A75-862D-E4E194252044");
 		/// <summary>
-		/// The active moiety
-		/// </summary>
-		public static readonly Guid ActiveMoiety = Guid.Parse("212B1B6B-B074-4A75-862D-E4E194252044");
-		/// <summary>
-		/// The administerable material
+		/// The source represents a meterial that is an administerable form of the target
 		/// </summary>
 		public static readonly Guid AdministerableMaterial = Guid.Parse("B52C7E95-88B8-4C4C-836A-934277AFDB92");
 		/// <summary>
-		/// The adopted child
+		/// The source is an adopted child of the target
 		/// </summary>
 		public static readonly Guid AdoptedChild = Guid.Parse("8FA25B69-C9C2-4C40-84C1-0EA9641A12EC");
 		/// <summary>
-		/// The adopted daughter
+		/// The source is an adopted daughter of the target
 		/// </summary>
 		public static readonly Guid AdoptedDaughter = Guid.Parse("2B4B2ED8-F90C-4193-870A-F48BC39657C1");
 		/// <summary>
-		/// The adopted son
+		/// The source is an adopted son of the target
 		/// </summary>
 		public static readonly Guid AdoptedSon = Guid.Parse("CE50BA92-CD21-43C4-8582-34E7FBB3170F");
 		/// <summary>
-		/// The affiliate
+		/// The target has a business/professional relationship with the source.
 		/// </summary>
 		public static readonly Guid Affiliate = Guid.Parse("8DE7B5E7-C941-42BD-B735-52D750EFC5E6");
 		/// <summary>
-		/// The agent
+		/// The target is an agent or authorized to act on behalf of the source
 		/// </summary>
 		public static readonly Guid Agent = Guid.Parse("867FD445-D490-4619-804E-75C04B8A0E57");
 		/// <summary>
-		/// The aliquot
+		/// The target is a portion of the original source
 		/// </summary>
 		public static readonly Guid Aliquot = Guid.Parse("CFF670E4-965E-4288-B966-47A44479D2AD");
 		/// <summary>
-		/// The assigned
-		/// </summary>
-		public static readonly Guid Assigned = Guid.Parse("A87A6D21-2CA6-4AEA-88F3-6135CCEB58D1");
-		/// <summary>
-		/// The assigned entity
+		/// The target is an entity acting under the employ of the source entity
 		/// </summary>
 		public static readonly Guid AssignedEntity = Guid.Parse("77B7A04B-C065-4FAF-8EC0-2CDAD4AE372B");
 		/// <summary>
-		/// The aunt
+		/// The target is the aunt of the source
 		/// </summary>
 		public static readonly Guid Aunt = Guid.Parse("0FF2AB03-6E0A-40D1-8947-04C4937B4CC4");
 		/// <summary>
-		/// The birthplace
+		/// The target is the birthplace of the source
 		/// </summary>
 		public static readonly Guid Birthplace = Guid.Parse("F3EF7E48-D8B7-4030-B431-AFF7E0E1CB76");
 		/// <summary>
-		/// The brother
+		/// The target is the brother of the source
 		/// </summary>
 		public static readonly Guid Brother = Guid.Parse("24380D53-EA22-4820-9F06-8671F774F133");
 		/// <summary>
-		/// The brotherinlaw
+		/// The target is the brotherinlaw of the source
 		/// </summary>
 		public static readonly Guid Brotherinlaw = Guid.Parse("0A4C87E2-16C3-4361-BE3C-DD765EE4BC7D");
 		/// <summary>
-		/// The caregiver
+		/// The target is the caregiver of the source
 		/// </summary>
 		public static readonly Guid Caregiver = Guid.Parse("31B0DFCB-D7BA-452A-98B9-45EBCCD30732");
 		/// <summary>
-		/// The case subject
+		/// The the target represents a case subject of the source entity (such as a study)
 		/// </summary>
 		public static readonly Guid CaseSubject = Guid.Parse("D7AD48C0-889D-41E2-99E9-BE5E6C5327B2");
 		/// <summary>
-		/// The child
+		/// The the target is a child of the child source
 		/// </summary>
 		public static readonly Guid Child = Guid.Parse("739457D0-835A-4A9C-811C-42B5E92ED1CA");
 		/// <summary>
@@ -103,11 +99,11 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid ChildInlaw = Guid.Parse("8BF23192-DE75-48EB-ABEE-81A9A15332F8");
 		/// <summary>
-		/// The citizen
+		/// The target is a citizen of the source
 		/// </summary>
 		public static readonly Guid Citizen = Guid.Parse("35B13152-E43C-4BCB-8649-A9E83BEE33A2");
 		/// <summary>
-		/// The claimant
+		/// The target is a claimant  or is making a claim in a policy (source)
 		/// </summary>
 		public static readonly Guid Claimant = Guid.Parse("9D256279-F1AC-46B3-A974-DD13E2AD4F72");
 		/// <summary>
@@ -123,7 +119,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid CommissioningParty = Guid.Parse("33BD1401-DFDB-40E7-A914-0A695AD5186E");
 		/// <summary>
-		/// The contact
+		/// The target represents a contact of the source
 		/// </summary>
 		public static readonly Guid Contact = Guid.Parse("B1D2148D-BB35-4337-8FE6-021F5A3AC8A3");
 		/// <summary>
@@ -131,11 +127,11 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Cousin = Guid.Parse("1C0F931C-9C49-4A52-8FBF-5217C52EA778");
 		/// <summary>
-		/// The coverage sponsor
+		/// The target represents a coverage sponsor of the source
 		/// </summary>
 		public static readonly Guid CoverageSponsor = Guid.Parse("8FF9D9A5-A206-4566-82CD-67B770D7CE8A");
 		/// <summary>
-		/// The covered party
+		/// The target is a covered party of a source (insurance policy)
 		/// </summary>
 		public static readonly Guid CoveredParty = Guid.Parse("D4844672-C0D7-434C-8377-6DD0655B0532");
 		/// <summary>
@@ -147,15 +143,15 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid DaughterInlaw = Guid.Parse("76FDF0E7-CFE0-47B4-9630-C645F254CDFD");
 		/// <summary>
-		/// The dedicated service delivery location
+		/// The target is the dedicated service delivery location for the source
 		/// </summary>
 		public static readonly Guid DedicatedServiceDeliveryLocation = Guid.Parse("455F1772-F580-47E8-86BD-B5CE25D351F9");
 		/// <summary>
-		/// The dependent
+		/// The target is a dependent of the source
 		/// </summary>
 		public static readonly Guid Dependent = Guid.Parse("F28ED78F-85AB-47A1-BA08-B5051E62D6C3");
 		/// <summary>
-		/// The distributed material
+		/// The target is a distributed or shippable material of the source
 		/// </summary>
 		public static readonly Guid DistributedMaterial = Guid.Parse("F5547ADA-1EB9-40BB-B163-081567D869E7");
 		/// <summary>
@@ -163,15 +159,15 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid DomesticPartner = Guid.Parse("3DB182E2-653B-4BFD-A300-32F23345D1C0");
 		/// <summary>
-		/// The emergency contact
+		/// The target is an emergency contact for the source
 		/// </summary>
 		public static readonly Guid EmergencyContact = Guid.Parse("25985F42-476A-4455-A977-4E97A554D710");
 		/// <summary>
-		/// The employee
+		/// The the target is an employee of the source
 		/// </summary>
 		public static readonly Guid Employee = Guid.Parse("B43C9513-1C1C-4ED0-92DB-55A904C122E6");
 		/// <summary>
-		/// The exposed entity
+		/// The target represents a substance which is exposed when the source is exposed
 		/// </summary>
 		public static readonly Guid ExposedEntity = Guid.Parse("AB39087C-17D3-421A-A1E3-2DE4E0AB9FAF");
 		/// <summary>
@@ -243,7 +239,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid GUARD = Guid.Parse("845120DE-E6F7-4CEC-94AA-E6E943C91367");
 		/// <summary>
-		/// The guardian
+		/// The target is a guardian of the source
 		/// </summary>
 		public static readonly Guid Guardian = Guid.Parse("3B8E2334-4CCC-4F24-8AAE-37341EA03D3E");
 		/// <summary>
@@ -259,15 +255,15 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Halfsister = Guid.Parse("CE42C680-A783-4CDE-BCD1-E261D6FD68A0");
 		/// <summary>
-		/// The healthcare provider
+		/// The target is a healthcare provider for the source
 		/// </summary>
 		public static readonly Guid HealthcareProvider = Guid.Parse("6B04FED8-C164-469C-910B-F824C2BDA4F0");
 		/// <summary>
-		/// The health chart
+		/// The target represents a health chart belonging to the source
 		/// </summary>
 		public static readonly Guid HealthChart = Guid.Parse("5B0F8C93-57C9-4DFF-B59A-9564739EF445");
 		/// <summary>
-		/// The held entity
+		/// The source holds the specified quantity of the target entity (the target entity is held by the source)
 		/// </summary>
 		public static readonly Guid HeldEntity = Guid.Parse("9C02A621-8565-46B4-94FF-A2BD210989B1");
 		/// <summary>
@@ -275,15 +271,15 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Husband = Guid.Parse("62ACA44C-B57C-44FD-9703-FCDFF97C04B6");
 		/// <summary>
-		/// The identified entity
+		/// The target represents an entity for purposes of identification of the source
 		/// </summary>
 		public static readonly Guid IdentifiedEntity = Guid.Parse("C5C8B935-294F-4C90-9D81-CBF914BF5808");
 		/// <summary>
-		/// The incidental service delivery location
+		/// The target represents an incidental service delivery location related to the source entity
 		/// </summary>
 		public static readonly Guid IncidentalServiceDeliveryLocation = Guid.Parse("41BAF7AA-5FFD-4421-831F-42D4AB3DE38A");
 		/// <summary>
-		/// The individual
+		/// The target represents an individual instance of the source
 		/// </summary>
 		public static readonly Guid Individual = Guid.Parse("47049B0F-F189-4E19-9AA8-7C38ADB2491A");
 		/// <summary>
@@ -291,7 +287,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid InvestigationSubject = Guid.Parse("0C522BD1-DFA2-43CB-A98E-F6FF137968AE");
 		/// <summary>
-		/// The invoice payor
+		/// The target is the payor of an invoice for the source
 		/// </summary>
 		public static readonly Guid InvoicePayor = Guid.Parse("07C922D2-12C9-415A-95D4-9B3FED4959D6");
 		/// <summary>
@@ -299,15 +295,15 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Isolate = Guid.Parse("020C28A0-7C52-42F4-A046-DB9E329D5A42");
 		/// <summary>
-		/// The licensed entity
+		/// The target represents an entity licensed to perform or use the source
 		/// </summary>
 		public static readonly Guid LicensedEntity = Guid.Parse("B9FE057E-7F57-42EB-89D7-67C69646C0C4");
 		/// <summary>
-		/// The maintained entity
+		/// The target entity is maintained by the source entity
 		/// </summary>
 		public static readonly Guid MaintainedEntity = Guid.Parse("77B6D8CD-05A0-4B1F-9E14-B895203BF40C");
 		/// <summary>
-		/// The manufactured product
+		/// The target entity is a product which is manufactured by the source
 		/// </summary>
 		public static readonly Guid ManufacturedProduct = Guid.Parse("6780DF3B-AFBD-44A3-8627-CBB3DC2F02F6");
 		/// <summary>
@@ -351,7 +347,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid MilitaryPerson = Guid.Parse("1BCFB08D-C6FA-41DD-98BF-06336A33A3B7");
 		/// <summary>
-		/// The mother
+		/// The target is the mother of the source
 		/// </summary>
 		public static readonly Guid Mother = Guid.Parse("29FF64E5-B564-411A-92C7-6818C02A9E48");
 		/// <summary>
@@ -359,7 +355,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Motherinlaw = Guid.Parse("F941988A-1C55-4408-AB57-E9ED35B2A24D");
 		/// <summary>
-		/// The named insured
+		/// The target is a named insured person on the source policy
 		/// </summary>
 		public static readonly Guid NamedInsured = Guid.Parse("3D907F37-085C-4C26-B59B-62E40621DAFD");
 		/// <summary>
@@ -379,7 +375,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid NaturalFather = Guid.Parse("233D890B-04EF-4365-99AD-26CB4E1F75F3");
 		/// <summary>
-		/// The natural father of fetus
+		/// The target is the natural father of fetus of the identified fetus (source) or pregnant entity (source)
 		/// </summary>
 		public static readonly Guid NaturalFatherOfFetus = Guid.Parse("8E88DEBC-D175-46F3-9B48-106F9C151CD2");
 		/// <summary>
@@ -407,7 +403,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Nephew = Guid.Parse("5C5AF1D2-0E6D-458F-9574-3AD61C393A90");
 		/// <summary>
-		/// The next of kin
+		/// The target is the next of kin for the source
 		/// </summary>
 		public static readonly Guid NextOfKin = Guid.Parse("1EE4E74F-542D-4544-96F6-266A6247F274");
 		/// <summary>
@@ -419,15 +415,15 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid NieceNephew = Guid.Parse("A907E4D8-D823-478F-9C5A-6FACAE6B4B5B");
 		/// <summary>
-		/// The notary public
+		/// The target is a notary public acting within the source entity 
 		/// </summary>
 		public static readonly Guid NotaryPublic = Guid.Parse("F1EF6C46-05EB-4482-BAEB-EAF0A8E5FFEF");
 		/// <summary>
-		/// The owned entity
+		/// The target entity is owned by the source entity
 		/// </summary>
 		public static readonly Guid OwnedEntity = Guid.Parse("117DA15C-0864-4F00-A987-9B9854CBA44E");
 		/// <summary>
-		/// The parent
+		/// The target entity is the parent of the source entity
 		/// </summary>
 		public static readonly Guid Parent = Guid.Parse("BFCBB345-86DB-43BA-B47E-E7411276AC7C");
 		/// <summary>
@@ -435,7 +431,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid ParentInlaw = Guid.Parse("5E2B0AFE-724E-41CD-9BE2-9030646F2529");
 		/// <summary>
-		/// The part
+		/// The target entity is a part of the source entity (source is comprised of parts)
 		/// </summary>
 		public static readonly Guid Part = Guid.Parse("B2FEB552-8EAF-45FE-A397-F789D6F4728A");
 		/// <summary>
@@ -475,43 +471,43 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid PaternalUncle = Guid.Parse("853C85DE-4817-4328-A121-6A3BDAFBF82E");
 		/// <summary>
-		/// The patient
+		/// The target is a patient of the source entity
 		/// </summary>
 		public static readonly Guid Patient = Guid.Parse("BACD9C6F-3FA9-481E-9636-37457962804D");
 		/// <summary>
-		/// The payee
+		/// The targert is a payee of the source entity
 		/// </summary>
 		public static readonly Guid Payee = Guid.Parse("734551E1-2960-4A68-93A2-B277DB072A43");
 		/// <summary>
-		/// The personal relationship
+		/// The target possesses a personal relationship with the source entity
 		/// </summary>
 		public static readonly Guid PersonalRelationship = Guid.Parse("ABFD3FE8-9526-48FB-B366-35BACA9BD170");
 		/// <summary>
-		/// The place of death
+		/// The target entity represents the place of death of the source entity
 		/// </summary>
 		public static readonly Guid PlaceOfDeath = Guid.Parse("9BBE0CFE-FAAB-4DC9-A28F-C001E3E95E6E");
 		/// <summary>
-		/// The policy holder
+		/// The target entity represents the policy holder of the source policy
 		/// </summary>
 		public static readonly Guid PolicyHolder = Guid.Parse("CEC017EF-4E49-41AF-8596-ABAD1A91C9D0");
 		/// <summary>
-		/// The program eligible
+		/// The target is an entity which is eligible for funding or participation within a program
 		/// </summary>
 		public static readonly Guid ProgramEligible = Guid.Parse("CBE2A00C-E1D5-44E9-AAE3-D7D03E3C2EFA");
 		/// <summary>
-		/// The qualified entity
+		/// The target represents a qualified version of the source entity
 		/// </summary>
 		public static readonly Guid QualifiedEntity = Guid.Parse("6521DD09-334B-4FBF-9C89-1AD5A804326C");
 		/// <summary>
-		/// The regulated product
+		/// The target represents a regulated version of the source product or represents a product which is regulated within the source jurisdiction
 		/// </summary>
 		public static readonly Guid RegulatedProduct = Guid.Parse("20E98D17-E24D-4C64-B09E-521A177CCD05");
 		/// <summary>
-		/// The research subject
+		/// The target represents a research subject of the source study
 		/// </summary>
 		public static readonly Guid ResearchSubject = Guid.Parse("EF597FFE-D965-4398-B55A-650530EBB997");
 		/// <summary>
-		/// The retailed material
+		/// The target represents a material which is a retailed version of the source or is sold at the particular source
 		/// </summary>
 		public static readonly Guid RetailedMaterial = Guid.Parse("703DF8F4-B124-44C5-9506-1AB74DDFD91D");
 		/// <summary>
@@ -519,7 +515,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Roomate = Guid.Parse("BBFAC1ED-5464-4100-93C3-8685B052A2CF");
 		/// <summary>
-		/// The service delivery location
+		/// The target represents a service delivery location for the source entity
 		/// </summary>
 		public static readonly Guid ServiceDeliveryLocation = Guid.Parse("FF34DFA7-C6D3-4F8B-BC9F-14BCDC13BA6C");
 		/// <summary>
@@ -535,7 +531,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid SignificantOther = Guid.Parse("2EAB5298-BC83-492C-9004-ED3499246AFE");
 		/// <summary>
-		/// The signing authority or officer
+		/// The target has signing authority or is an officer of the source
 		/// </summary>
 		public static readonly Guid SigningAuthorityOrOfficer = Guid.Parse("757F98DF-14E0-446A-BD50-BB0AFFB34F09");
 		/// <summary>
@@ -555,7 +551,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid SonInlaw = Guid.Parse("34F7BC11-2288-471A-AF38-553AE6B8410C");
 		/// <summary>
-		/// The specimen
+		/// The target represents a specimen collected from the source
 		/// </summary>
 		public static readonly Guid Specimen = Guid.Parse("BCE17B21-05B2-4F02-BF7A-C6D3561AA948");
 		/// <summary>
@@ -603,15 +599,15 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Student = Guid.Parse("0C157566-D1E9-4976-8542-473CAA9BA2A4");
 		/// <summary>
-		/// The subscriber
+		/// The target is a subscriber of the source, meaning the target should receive updates whenever the source changes 
 		/// </summary>
 		public static readonly Guid Subscriber = Guid.Parse("F31A2A5B-CE13-47E1-A0FB-D704F31547DB");
 		/// <summary>
-		/// The territory of authority
+		/// The target represents another territory where the source has authority
 		/// </summary>
 		public static readonly Guid TerritoryOfAuthority = Guid.Parse("C6B92576-1D62-4896-8799-6F931F8AB607");
 		/// <summary>
-		/// The therapeutic agent
+		/// The target represents the theraputic agent of the source
 		/// </summary>
 		public static readonly Guid TherapeuticAgent = Guid.Parse("D6657FDB-4EF3-4131-AF79-14E01A21FACA");
 		/// <summary>
@@ -623,11 +619,11 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Underwriter = Guid.Parse("A8FCD83F-808B-494B-8A1C-EC2C6DBC3DFA");
 		/// <summary>
-		/// The used entity
+		/// The target represents an entity that is consumed whenever the source is consumed
 		/// </summary>
 		public static readonly Guid UsedEntity = Guid.Parse("08FFF7D9-BAC7-417B-B026-C9BEE52F4A37");
 		/// <summary>
-		/// The warranted product
+		/// The target represents a product which is warranted by the source
 		/// </summary>
 		public static readonly Guid WarrantedProduct = Guid.Parse("639B4B8F-AFD3-4963-9E79-EF0D3928796A");
 		/// <summary>
@@ -635,7 +631,7 @@ namespace SanteDB.Core.Model.Constants
 		/// </summary>
 		public static readonly Guid Wife = Guid.Parse("A3FF423E-81D5-4571-8EDF-03C295189A23");
 		/// <summary>
-		/// The replaces
+		/// The source replaces the target (note: this is one relationship where the role relationship is reveresed) 
 		/// </summary>
 		public static readonly Guid Replaces = Guid.Parse("D1578637-E1CB-415E-B319-4011DA033813");
         /// <summary>
