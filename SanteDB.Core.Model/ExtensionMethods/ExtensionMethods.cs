@@ -141,7 +141,7 @@ namespace SanteDB.Core.Model
 		/// <summary>
 		/// Update property data if required
 		/// </summary>
-		public static void CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity)
+		public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity)
 		{
 			if (toEntity == null)
 				throw new ArgumentNullException(nameof(toEntity));
@@ -188,6 +188,7 @@ namespace SanteDB.Core.Model
                     (destinationPi.PropertyType.GetTypeInfo().IsValueType && !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
 					destinationPi.SetValue(toEntity, newValue);
 			}
+            return toEntity;
 		}
 
 		/// <summary>
