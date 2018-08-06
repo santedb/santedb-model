@@ -164,11 +164,12 @@
     <Compile Include="Patch\PatchOperationType.cs" />
     <Compile Include="Patch\PatchTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\IFilterFunction.cs" />
+    <Compile Include="Query\IQueryFilterExtension.cs" />
     <Compile Include="Query\NameValueCollection.cs" />
     <Compile Include="Query\QueryExpressionBuilder.cs" />
     <Compile Include="Query\QueryExpressionParser.cs" />
     <Compile Include="ExtensionMethods\ExtensionMethods.cs" />
+    <Compile Include="Query\QueryFilterExtensions.cs" />
     <Compile Include="Roles\Patient.cs" />
     <Compile Include="Roles\Provider.cs" />
     <Compile Include="Security\SecurityApplication.cs" />
