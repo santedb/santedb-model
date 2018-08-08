@@ -19,17 +19,23 @@ namespace SanteDB.Core.Model.Query
         String Name { get; }
 
         /// <summary>
+        /// Gets the return type of the function
+        /// </summary>
+        Type ReturnType { get; }
+
+        /// <summary>
         /// Construct the expression from the parameters on the query string
         /// </summary>
         /// <param name="scope">The scope of the current property</param>
         /// <param name="parms">The parameters on the query string</param>
-        /// <param name="operand">The operand</param>
+        /// <param name="valueExpression">The operand</param>
+        /// <param name="comparison">The type of comparison to be made</param>
         /// <returns></returns>
         /// <remarks>
         /// Basically this will take seomthing like <code>dateOfBirth=:(diff|&lt;=3w)2018-01-01</code> and
         /// turn it into <code>o.DateOfBirth.Diff("2018-01-01", "w") &lt;= 3</code>
         /// </remarks>
-        BinaryExpression Compose(Expression scope, String[] parms, Object operand);
+        BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, String[] parms);
 
         /// <summary>
         /// Allows the filter extension to detect if it is present for 

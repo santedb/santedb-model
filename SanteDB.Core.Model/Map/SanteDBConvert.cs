@@ -18,6 +18,7 @@
  * Date: 2017-9-1
  */
 using System;
+using System.Text.RegularExpressions;
 
 namespace SanteDB.Core.Model.Map
 {
@@ -164,6 +165,49 @@ namespace SanteDB.Core.Model.Map
         public static Decimal Int64ToDecimal(Int64 val)
         {
             return (Decimal)val;
+        }
+
+        /// <summary>
+        /// Timespan converted to string
+        /// </summary>
+        public static String TimeSpanToString(TimeSpan ts)
+        {
+            return ts.ToString();
+        }
+
+        /// <summary>
+        /// String to timespan
+        /// </summary>
+        public static TimeSpan StringToTimespan(String value)
+        {
+            var match = new Regex(@"^(\d*?)([yMdwhms])$").Match(value);
+            if (match.Success) // in format 3w, 2d, etc. 
+            {
+                long qty = long.Parse(match.Groups[1].Value);
+                switch (match.Groups[2].Value)
+                {
+                    case "y":
+                        return new TimeSpan((long)(TimeSpan.TicksPerDay * 365.25d * qty));
+                    case "M":
+                        return new TimeSpan((long)(TimeSpan.TicksPerDay * 30.473d  * qty));
+                    case "d":
+                        return new TimeSpan((int)qty, 0, 0, 0);
+                    case "w":
+                        return new TimeSpan((int)qty * 7, 0, 0, 0);
+                    case "h":
+                        return new TimeSpan(0, (int)qty, 0, 0);
+                    case "m":
+                        return new TimeSpan(0, (int)qty, 0);
+                    case "s":
+                        return new TimeSpan(0, 0, (int)qty);
+                    case "t":
+                        return new TimeSpan((long)qty);
+                    default:
+                        throw new ArgumentOutOfRangeException($"Don't understand unit {match.Groups[2].Value}");
+                }
+            }
+            else
+                return TimeSpan.Parse(value);
         }
     }
 }

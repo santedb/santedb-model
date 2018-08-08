@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.Query
@@ -12,61 +13,42 @@ namespace SanteDB.Core.Model.Query
     /// </summary>
     public static class QueryFilterExtensions
     {
+        // Extended filter regex
+        public static readonly Regex ExtendedFilterRegex = new Regex(@"^:\((\w*?)(\|(.*?)\)|\))(.*)");
+
 
         // The extension methods
-        private static Dictionary<String, MethodInfo> s_extensionMethods = new Dictionary<string, MethodInfo>();
+        private static Dictionary<String, IQueryFilterExtension> s_extensionMethods = new Dictionary<string, IQueryFilterExtension>();
 
         /// <summary>
         /// Create filter extensions
         /// </summary>
         static QueryFilterExtensions()
         {
-            AddExtendedFilter(typeof(QueryFilterExtensions).GetRuntimeMethod(nameof(First), new Type[] { typeof(String), typeof(int), typeof(String) }));
-            AddExtendedFilter(typeof(QueryFilterExtensions).GetRuntimeMethod(nameof(Last), new Type[] { typeof(String), typeof(int), typeof(String) }));
         }
 
         /// <summary>
         /// Add an extended filter to the list
         /// </summary>
-        /// <param name="method">The extension method that should be added to the filter</param>
-        public static void AddExtendedFilter(MethodInfo method)
+        /// <param name="extensionInfo">The extension method that should be added to the filter</param>
+        public static void AddExtendedFilter(IQueryFilterExtension extensionInfo)
         {
-            // Validate
-            if (method.GetParameters().Count() == 0)
-                throw new ArgumentOutOfRangeException("Extension method must have one parameter");
-
-            string methName = method.Name.ToLower();
-
+            string methName = extensionInfo.Name;
             lock (s_extensionMethods)
                 if (!s_extensionMethods.ContainsKey(methName))
-                    s_extensionMethods.Add(methName, method);
+                    s_extensionMethods.Add(methName, extensionInfo);
 
         }
 
         /// <summary>
         /// Get an extended filter name
         /// </summary>
-        public static MethodInfo GetExtendedFilter(String name)
+        public static IQueryFilterExtension GetExtendedFilter(String name)
         {
-            MethodInfo retVal = null;
+            IQueryFilterExtension retVal = null;
             s_extensionMethods.TryGetValue(name, out retVal);
             return retVal;
         }
 
-        /// <summary>
-        /// Begins with 
-        /// </summary>
-        public static bool First(this String me, int length, String compare)
-        {
-            return me.Substring(length) == compare.Substring(length);
-        }
-
-        /// <summary>
-        /// Ends with
-        /// </summary>
-        public static bool Last(this String me, int length, String compare)
-        {
-            return me.Substring(me.Length - length, length) == compare.Substring(compare.Length - length, length);
-        }
     }
 }

@@ -31,6 +31,7 @@ using System.Globalization;
 using SanteDB.Core.Model.Attributes;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using SanteDB.Core.Model.Map;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -343,6 +344,7 @@ namespace SanteDB.Core.Model.Query
                             value = "~" + value;
 
                         Expression nullCheckExpr = null;
+                        Type operandType = thisAccessExpression.Type;
 
                         // Correct for nullable
                         if (value != "null" && thisAccessExpression.Type.GetTypeInfo().IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
@@ -353,11 +355,34 @@ namespace SanteDB.Core.Model.Query
                         }
 
                         // Process value
-                        String pValue = value;
                         ExpressionType et = ExpressionType.Equal;
+                        IQueryFilterExtension extendedFilter = null;
+                        String[] extendedParms = null;
 
                         if (String.IsNullOrEmpty(value)) continue;
+                        // The input parameter is an extended filter operation, let's parse it
+                        else if(value[0] == ':') 
+                        {
+                            var opMatch = QueryFilterExtensions.ExtendedFilterRegex.Match(value);
+                            if (opMatch.Success)
+                            {
+                                // Extract
+                                String fnName = opMatch.Groups[1].Value,
+                                    parms = opMatch.Groups[3].Value,
+                                    operand = opMatch.Groups[4].Value;
+                                extendedParms = parms.Split(',');
+                                // Now find the expression
+                                extendedFilter = QueryFilterExtensions.GetExtendedFilter(fnName);
+                                if (extendedFilter == null) // ensure valid reference
+                                    throw new MissingMemberException(fnName);
+                                value = operand;
+                                operandType = extendedFilter.ReturnType;
+                            }
+                        }
 
+                        String pValue = value;
+
+                        // Operator type
                         switch (value[0])
                         {
                             case '<':
@@ -445,30 +470,48 @@ namespace SanteDB.Core.Model.Query
                             else
                                 valueExpr = Expression.Constant(null);
                         }
-                        else if (thisAccessExpression.Type == typeof(String))
+                        else if (operandType == typeof(String))
                             valueExpr = Expression.Constant(pValue);
-                        else if (thisAccessExpression.Type == typeof(DateTime) || thisAccessExpression.Type == typeof(DateTime?))
+                        else if (operandType == typeof(DateTime) || operandType == typeof(DateTime?))
                             valueExpr = Expression.Constant(DateTime.Parse(pValue));
-                        else if (thisAccessExpression.Type == typeof(DateTimeOffset) || thisAccessExpression.Type == typeof(DateTimeOffset?))
+                        else if (operandType == typeof(DateTimeOffset) || operandType == typeof(DateTimeOffset?))
                             valueExpr = Expression.Constant(DateTimeOffset.Parse(pValue));
-                        else if (thisAccessExpression.Type == typeof(Guid))
+                        else if (operandType == typeof(Guid))
                             valueExpr = Expression.Constant(Guid.Parse(pValue));
-                        else if (thisAccessExpression.Type == typeof(Guid?))
+                        else if (operandType == typeof(Guid?))
                             valueExpr = Expression.Convert(Expression.Constant(Guid.Parse(pValue)), typeof(Guid?));
-                        else if (thisAccessExpression.Type.GetTypeInfo().IsEnum)
+                        else if (operandType.GetTypeInfo().IsEnum)
                         {
                             int tryParse = 0;
                             if (Int32.TryParse(pValue, out tryParse))
-                                valueExpr = Expression.Constant(Enum.ToObject(thisAccessExpression.Type, Int32.Parse(pValue)));
+                                valueExpr = Expression.Constant(Enum.ToObject(operandType, Int32.Parse(pValue)));
                             else
-                                valueExpr = Expression.Constant(Enum.Parse(thisAccessExpression.Type, pValue));
+                                valueExpr = Expression.Constant(Enum.Parse(operandType, pValue));
 
                         }
                         else
-                            valueExpr = Expression.Constant(Convert.ChangeType(pValue, thisAccessExpression.Type));
-                        if (valueExpr.Type != thisAccessExpression.Type)
-                            valueExpr = Expression.Convert(valueExpr, thisAccessExpression.Type);
-                        Expression singleExpression = Expression.MakeBinary(et, thisAccessExpression, valueExpr);
+                        {
+                            Object converted = null;
+                            if(MapUtil.TryConvert(pValue, operandType, out converted))
+                            {
+                                valueExpr = Expression.Constant(converted);
+                            }
+                            else
+                                valueExpr = Expression.Constant(Convert.ChangeType(pValue, operandType));
+                        }
+
+                        // Extended filters operate in a different manner, they basically are allowed to write whatever they like to the Expression
+                        Expression singleExpression = null;
+                        if (extendedFilter != null)
+                        {
+                            singleExpression = extendedFilter.Compose(thisAccessExpression, et, valueExpr, extendedParms);
+                        }
+                        else
+                        {
+                            if (valueExpr.Type != thisAccessExpression.Type)
+                                valueExpr = Expression.Convert(valueExpr, thisAccessExpression.Type);
+                            singleExpression = Expression.MakeBinary(et, thisAccessExpression, valueExpr);
+                        }
 
                         if (nullCheckExpr != null)
                             singleExpression = Expression.MakeBinary(ExpressionType.AndAlso, nullCheckExpr, singleExpression);
