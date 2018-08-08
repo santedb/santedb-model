@@ -99,7 +99,7 @@ namespace SanteDB.Core.Model.Query
             List<KeyValuePair<String, String[]>> workingValues = new List<KeyValuePair<string, string[]>>();
             // Iterate 
             foreach (var nvc in httpQueryParameters.Where(p => !p.Key.StartsWith("_")).Distinct())
-                workingValues.Add(new KeyValuePair<string, string[]>(nvc.Key, nvc.Value.ToArray()));
+                workingValues.Add(new KeyValuePair<string, string[]>(nvc.Key, nvc.Value?.ToArray()));
 
             // Get the first values
             while (workingValues.Count > 0)
@@ -107,7 +107,7 @@ namespace SanteDB.Core.Model.Query
                 var currentValue = workingValues.FirstOrDefault();
                 workingValues.Remove(currentValue);
 
-                if (currentValue.Value.Count(o => !String.IsNullOrEmpty(o)) == 0)
+                if (currentValue.Value?.Count(o => !String.IsNullOrEmpty(o)) == 0)
                     continue;
 
                 // Create accessor expression
@@ -281,7 +281,7 @@ namespace SanteDB.Core.Model.Query
                         var guardLambda = Expression.Lambda(guardExpression, guardParameter);
                         accessExpression = Expression.Call(whereMethod, accessExpression, guardLambda);
 
-                        if (currentValue.Value.Length == 1 && currentValue.Value[0].EndsWith("null"))
+                        if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null"))
                         {
                             var anyMethod = typeof(Enumerable).GetGenericMethod("Any",
                                 new Type[] { itemType },
@@ -295,41 +295,53 @@ namespace SanteDB.Core.Model.Query
                     if (accessExpression.Type.GetTypeInfo().ImplementedInterfaces.Any(o => o == typeof(IEnumerable)) &&
                         accessExpression.Type.GetTypeInfo().IsGenericType)
                     {
-
-
-                        Type itemType = accessExpression.Type.GenericTypeArguments[0];
-                        Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
-
-                        var anyMethod = typeof(Enumerable).GetGenericMethod("Any",
-                            new Type[] { itemType },
-                            new Type[] { accessExpression.Type, predicateType }) as MethodInfo;
-
-                        // Add sub-filter
-                        NameValueCollection subFilter = new NameValueCollection();
-                        subFilter.Add(currentValue.Key.Substring(path.Length), new List<String>(currentValue.Value));
-
-                        // Add collect other parameters
-                        foreach (var wv in workingValues.Where(o => o.Key.StartsWith(path)).ToList())
+                        // First or default
+                        if (currentValue.Value == null)
                         {
-                            subFilter.Add(wv.Key.Substring(path.Length), new List<String>(wv.Value));
-                            workingValues.Remove(wv);
+                            Type itemType = accessExpression.Type.GenericTypeArguments[0];
+                            Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
+                            var firstMethod = typeof(Enumerable).GetGenericMethod("FirstOrDefault", new Type[] { itemType }, new Type[] { accessExpression.Type }) as MethodInfo;
+                            accessExpression = Expression.Call(firstMethod, accessExpression);
                         }
+                        else // We're filtering so guard
+                        {
+                            Type itemType = accessExpression.Type.GenericTypeArguments[0];
+                            Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
 
-                        var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
+                            var anyMethod = typeof(Enumerable).GetGenericMethod("Any",
+                                new Type[] { itemType },
+                                new Type[] { accessExpression.Type, predicateType }) as MethodInfo;
 
-                        Expression predicate = (builderMethod.Invoke(null, new object[] { subFilter, pMember, variables, safeNullable }) as LambdaExpression);
-                        if (predicate == null)
-                            continue;
-                        keyExpression = Expression.Call(anyMethod, accessExpression, predicate);
-                        currentValue = new KeyValuePair<string, string[]>();
-                        break;  // skip
+                            // Add sub-filter
+                            NameValueCollection subFilter = new NameValueCollection();
+                            subFilter.Add(currentValue.Key.Substring(path.Length), new List<String>(currentValue.Value));
+
+                            // Add collect other parameters
+                            foreach (var wv in workingValues.Where(o => o.Key.StartsWith(path)).ToList())
+                            {
+                                subFilter.Add(wv.Key.Substring(path.Length), new List<String>(wv.Value));
+                                workingValues.Remove(wv);
+                            }
+
+                            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
+
+                            Expression predicate = (builderMethod.Invoke(null, new object[] { subFilter, pMember, variables, safeNullable }) as LambdaExpression);
+                            if (predicate == null)
+                                continue;
+                            keyExpression = Expression.Call(anyMethod, accessExpression, predicate);
+                            currentValue = new KeyValuePair<string, string[]>();
+                            break;  // skip
+                        }
                     }
 
+                    // Is this an access expression?
+                    if (currentValue.Value == null && typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(accessExpression.Type.GetTypeInfo()))
+                        accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
                 }
 
                 // Now expression
                 var kp = currentValue.Value;
-                if (kp != null)
+                if (kp != null) {
                     foreach (var qValue in kp.Where(o => !String.IsNullOrEmpty(o)))
                     {
                         var value = qValue;
@@ -361,7 +373,7 @@ namespace SanteDB.Core.Model.Query
 
                         if (String.IsNullOrEmpty(value)) continue;
                         // The input parameter is an extended filter operation, let's parse it
-                        else if(value[0] == ':') 
+                        else if (value[0] == ':')
                         {
                             var opMatch = QueryFilterExtensions.ExtendedFilterRegex.Match(value);
                             if (opMatch.Success)
@@ -458,18 +470,7 @@ namespace SanteDB.Core.Model.Query
                         if (pValue == "null")
                             valueExpr = Expression.Constant(null);
                         else if (pValue.StartsWith("$"))
-                        {
-                            Delegate val = null;
-                            if (variables.TryGetValue(pValue.Replace("$", ""), out val))
-                            {
-                                if (val.GetMethodInfo().GetParameters().Length > 0)
-                                    valueExpr = Expression.Invoke(Expression.Constant(val));
-                                else
-                                    valueExpr = Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo());
-                            }
-                            else
-                                valueExpr = Expression.Constant(null);
-                        }
+                            valueExpr = GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables) ?? Expression.Constant(pValue);
                         else if (operandType == typeof(String))
                             valueExpr = Expression.Constant(pValue);
                         else if (operandType == typeof(DateTime) || operandType == typeof(DateTime?))
@@ -492,7 +493,7 @@ namespace SanteDB.Core.Model.Query
                         else
                         {
                             Object converted = null;
-                            if(MapUtil.TryConvert(pValue, operandType, out converted))
+                            if (MapUtil.TryConvert(pValue, operandType, out converted))
                             {
                                 valueExpr = Expression.Constant(converted);
                             }
@@ -504,7 +505,15 @@ namespace SanteDB.Core.Model.Query
                         Expression singleExpression = null;
                         if (extendedFilter != null)
                         {
-                            singleExpression = extendedFilter.Compose(thisAccessExpression, et, valueExpr, extendedParms);
+                            // Extended parms build
+                            var parms = extendedParms.Select(p =>
+                            {
+                                if (p.StartsWith("$")) // variable
+                                    return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables) ?? Expression.Constant(p);
+                                else
+                                    return Expression.Constant(p);
+                            }).ToArray();
+                            singleExpression = extendedFilter.Compose(thisAccessExpression, et, valueExpr, parms);
                         }
                         else
                         {
@@ -523,6 +532,9 @@ namespace SanteDB.Core.Model.Query
                         else
                             keyExpression = Expression.MakeBinary(ExpressionType.AndAlso, keyExpression, singleExpression);
                     }
+                }
+                else
+                    keyExpression = accessExpression;
 
                 if (retVal == null)
                     retVal = keyExpression;
@@ -530,13 +542,52 @@ namespace SanteDB.Core.Model.Query
                     retVal = Expression.MakeBinary(ExpressionType.AndAlso, retVal, keyExpression);
 
             }
-
             //Debug.WriteLine(String.Format("Converted {0} to {1}", httpQueryParameters, retVal));
 
             if (retVal == null)
                 return null;
             return Expression.Lambda(retVal, parameterExpression);
 
+        }
+
+        /// <summary>
+        /// Get variable expression
+        /// </summary>
+        private static Expression GetVariableExpression(string variablePath, Type expectedReturn, Dictionary<string, Delegate> variables)
+        {
+            Delegate val = null;
+            String varName = variablePath.Contains(".") ? variablePath.Substring(0, variablePath.IndexOf(".")) : variablePath,
+                varPath = variablePath.Substring(varName.Length);
+
+            if (variables.TryGetValue(varName, out val))
+            {
+                Expression retVal = null;
+
+                if (val.GetMethodInfo().GetParameters().Length > 0)
+                    retVal = Expression.Invoke(Expression.Constant(val));
+                else
+                    retVal = Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo());
+
+                if (String.IsNullOrEmpty(varPath))
+                    return Expression.Convert(retVal, expectedReturn);
+                else
+                {
+                    var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { val.GetMethodInfo().ReturnType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
+                    var nvc = new NameValueCollection();
+                    nvc.Add(varPath.Substring(1), "null");
+                    nvc[varPath.Substring(1)] = null;
+                    retVal = Expression.Invoke(builderMethod.Invoke(null, new object[]
+                    {
+                        nvc, varName, null, false
+                    }) as Expression, retVal);
+                    if (retVal.Type.IsConstructedGenericType &&
+                        retVal.Type.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>))
+                        retVal = Expression.Coalesce(retVal, Expression.Default(retVal.Type.GetTypeInfo().GenericTypeArguments[0]));
+                    return retVal;
+                }
+            }
+            else
+                return null;
         }
     }
 }

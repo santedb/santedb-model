@@ -36,7 +36,7 @@ namespace SanteDB.Core.Model.Query
         /// Basically this will take seomthing like <code>dateOfBirth=:(diff|&lt;=3w)2018-01-01</code> and
         /// turn it into <code>o.DateOfBirth.Diff("2018-01-01", "w") &lt;= 3</code>
         /// </remarks>
-        BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, String[] parms);
+        BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms);
 
     }
 }
