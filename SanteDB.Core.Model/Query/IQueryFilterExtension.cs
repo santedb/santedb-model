@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Gets the return type of the function
         /// </summary>
-        Type ReturnType { get; }
+        MethodInfo ExtensionMethod { get; }
 
         /// <summary>
         /// Construct the expression from the parameters on the query string
@@ -37,18 +38,5 @@ namespace SanteDB.Core.Model.Query
         /// </remarks>
         BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, String[] parms);
 
-        /// <summary>
-        /// Allows the filter extension to detect if it is present for 
-        /// </summary>
-        /// <param name="expression">The binary expression to detect if this filter extension has been generated on</param>
-        /// <returns>True if the filter extension detects its own presence on the expression</returns>
-        bool Detect(BinaryExpression expression);
-
-        /// <summary>
-        /// De-compose the LINQ expression to a string representation of the function
-        /// </summary>
-        /// <param name="expression">The expression to decompose</param>
-        /// <returns>The query data for the binary expression</returns>
-        KeyValuePair<String, Object> DeCompose(BinaryExpression expression);
     }
 }

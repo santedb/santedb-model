@@ -25,6 +25,7 @@ using System.Xml.Serialization;
 using SanteDB.Core.Model.Attributes;
 using System.Linq;
 using System.Collections;
+using System.Text;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -224,13 +225,15 @@ namespace SanteDB.Core.Model.Query
                 }
                 else if (!String.IsNullOrEmpty(parmName))
                 {
-                    Object fParmValue = parmValue;
+                    Object fParmValue = this.PrepareValue(parmValue);
                     if (parmValue is DateTime)
                         fParmValue = ((DateTime)parmValue).ToString("o");
                     else if (parmValue is DateTimeOffset)
                         fParmValue = ((DateTimeOffset)parmValue).ToString("o");
                     else if (parmValue == null)
                         fParmValue = "null";
+
+                    
                     // Node type
                     switch (node.NodeType)
                     {
@@ -251,10 +254,40 @@ namespace SanteDB.Core.Model.Query
                             break;
                     }
 
+                    // Is this an extended method?
+                    if (node.Left is MethodCallExpression)
+                    {
+                        var methodCall = node.Left as MethodCallExpression;
+                        var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(methodCall.Method);
+                        if (extendedFn != null)
+                        {
+                            var callValue = $":({extendedFn.Name}";
+                            if (methodCall.Arguments.Count > 1)
+                                callValue += $"|{String.Join(",", methodCall.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o))))}";
+                            callValue += ")";
+                            fParmValue = callValue + fParmValue;
+                        }
+                    }
+
                     this.AddCondition(parmName, fParmValue);
                 }
                 
                 return node;
+            }
+
+            /// <summary>
+            /// Prepare the specified parameter value
+            /// </summary>
+            private object PrepareValue(object parmValue)
+            {
+                Object fParmValue = parmValue;
+                if (parmValue is DateTime)
+                    fParmValue = ((DateTime)parmValue).ToString("o");
+                else if (parmValue is DateTimeOffset)
+                    fParmValue = ((DateTimeOffset)parmValue).ToString("o");
+                else if (parmValue == null)
+                    fParmValue = "null";
+                return fParmValue;
             }
 
             /// <summary>
@@ -354,6 +387,14 @@ namespace SanteDB.Core.Model.Query
                         String guardString = this.BuildGuardExpression(binaryExpression); 
                         return String.Format("{0}[{1}]", path, guardString);
 
+                    }
+                    else
+                    {
+                        var extendedFilter = QueryFilterExtensions.GetExtendedFilterByMethod(callExpr.Method);
+                        if (extendedFilter != null)
+                            return this.ExtractPath(callExpr.Arguments[0], false); // get the chain if required
+                        else
+                            throw new InvalidOperationException($"Can't find extended method handler for {callExpr.Method.Name}");
                     }
                     
                 }

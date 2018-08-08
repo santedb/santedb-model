@@ -376,7 +376,7 @@ namespace SanteDB.Core.Model.Query
                                 if (extendedFilter == null) // ensure valid reference
                                     throw new MissingMemberException(fnName);
                                 value = operand;
-                                operandType = extendedFilter.ReturnType;
+                                operandType = extendedFilter.ExtensionMethod.ReturnType;
                             }
                         }
 

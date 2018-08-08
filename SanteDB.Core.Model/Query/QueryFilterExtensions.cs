@@ -50,5 +50,12 @@ namespace SanteDB.Core.Model.Query
             return retVal;
         }
 
+        /// <summary>
+        /// Get extneded filter by the method is uses in LINQ
+        /// </summary>
+        internal static IQueryFilterExtension GetExtendedFilterByMethod(MethodInfo method)
+        {
+            return s_extensionMethods.Values.FirstOrDefault(o => o.ExtensionMethod == method);
+        }
     }
 }
