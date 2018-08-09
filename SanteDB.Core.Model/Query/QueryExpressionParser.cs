@@ -329,7 +329,7 @@ namespace SanteDB.Core.Model.Query
                             if (predicate == null)
                                 continue;
                             keyExpression = Expression.Call(anyMethod, accessExpression, predicate);
-                            currentValue = new KeyValuePair<string, string[]>();
+                            currentValue = new KeyValuePair<string, string[]>("", new string[0]);
                             break;  // skip
                         }
                     }
@@ -387,7 +387,7 @@ namespace SanteDB.Core.Model.Query
                                 extendedFilter = QueryFilterExtensions.GetExtendedFilter(fnName);
                                 if (extendedFilter == null) // ensure valid reference
                                     throw new MissingMemberException(fnName);
-                                value = operand;
+                                value = String.IsNullOrEmpty(operand) ? "true" : operand;
                                 operandType = extendedFilter.ExtensionMethod.ReturnType;
                             }
                         }
