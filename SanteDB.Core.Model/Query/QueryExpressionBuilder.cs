@@ -107,6 +107,9 @@ namespace SanteDB.Core.Model.Query
                         return node;
                     case ExpressionType.Not:
                         return this.VisitUnary((UnaryExpression)node);
+                    case ExpressionType.Coalesce:
+                        // We coalesce for nulls so we want the first
+                        return this.Visit(((BinaryExpression)node).Left);
                     default:
                         return this.Visit(node);
                 }

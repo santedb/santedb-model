@@ -250,8 +250,11 @@ namespace SanteDB.Core.Model.Query
                         Expression guardAccessor = guardParameter;
                         while (classifierProperty != null && classAttr != null)
                         {
-                            guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
-
+                            if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(classifierProperty.PropertyType.GetTypeInfo()))
+                                guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
+                            else
+                                guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
+                            
 
                             classAttr = classifierProperty.PropertyType.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>();
                             if (classAttr != null && guard != null)
