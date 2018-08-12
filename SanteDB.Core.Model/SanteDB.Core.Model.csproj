@@ -197,7 +197,6 @@
     <None Include="Doc\Query\index.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
     <None Include="SanteDB.Core.Model.nuspec" />
     <None Include="Schema\BaseTypes.xsd">
       <SubType>Designer</SubType>
