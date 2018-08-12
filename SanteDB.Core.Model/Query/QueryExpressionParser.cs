@@ -575,13 +575,10 @@ namespace SanteDB.Core.Model.Query
                     return Expression.Convert(retVal, expectedReturn);
                 else
                 {
-                    var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { val.GetMethodInfo().ReturnType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
-                    var nvc = new NameValueCollection();
-                    nvc.Add(varPath.Substring(1), "null");
-                    nvc[varPath.Substring(1)] = null;
+                    var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildPropertySelector), new Type[] { val.GetMethodInfo().ReturnType }, new Type[] { typeof(String) });
                     retVal = Expression.Invoke(builderMethod.Invoke(null, new object[]
                     {
-                        nvc, varName, null, false
+                        varPath.Substring(1)
                     }) as Expression, retVal);
                     if (retVal.Type.IsConstructedGenericType &&
                         retVal.Type.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -591,6 +588,21 @@ namespace SanteDB.Core.Model.Query
             }
             else
                 return null;
+        }
+
+        /// <summary>
+        /// Build property selector
+        /// </summary>
+        public static LambdaExpression BuildPropertySelector<T>(String propertyName)
+        {
+            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { typeof(T) }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
+            var nvc = new NameValueCollection();
+            nvc.Add(propertyName, "null");
+            nvc[propertyName] = null;
+            return builderMethod.Invoke(null, new object[]
+            {
+                nvc, "__xinstance", null, false
+            }) as LambdaExpression;
         }
     }
 }
