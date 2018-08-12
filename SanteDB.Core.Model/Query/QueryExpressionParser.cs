@@ -250,8 +250,11 @@ namespace SanteDB.Core.Model.Query
                         Expression guardAccessor = guardParameter;
                         while (classifierProperty != null && classAttr != null)
                         {
-                            guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
-
+                            if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(classifierProperty.PropertyType.GetTypeInfo()))
+                                guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
+                            else
+                                guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
+                            
 
                             classAttr = classifierProperty.PropertyType.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>();
                             if (classAttr != null && guard != null)
@@ -329,7 +332,7 @@ namespace SanteDB.Core.Model.Query
                             if (predicate == null)
                                 continue;
                             keyExpression = Expression.Call(anyMethod, accessExpression, predicate);
-                            currentValue = new KeyValuePair<string, string[]>();
+                            currentValue = new KeyValuePair<string, string[]>("", new string[0]);
                             break;  // skip
                         }
                     }
@@ -387,7 +390,7 @@ namespace SanteDB.Core.Model.Query
                                 extendedFilter = QueryFilterExtensions.GetExtendedFilter(fnName);
                                 if (extendedFilter == null) // ensure valid reference
                                     throw new MissingMemberException(fnName);
-                                value = operand;
+                                value = String.IsNullOrEmpty(operand) ? "true" : operand;
                                 operandType = extendedFilter.ExtensionMethod.ReturnType;
                             }
                         }
@@ -572,13 +575,10 @@ namespace SanteDB.Core.Model.Query
                     return Expression.Convert(retVal, expectedReturn);
                 else
                 {
-                    var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { val.GetMethodInfo().ReturnType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
-                    var nvc = new NameValueCollection();
-                    nvc.Add(varPath.Substring(1), "null");
-                    nvc[varPath.Substring(1)] = null;
+                    var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildPropertySelector), new Type[] { val.GetMethodInfo().ReturnType }, new Type[] { typeof(String) });
                     retVal = Expression.Invoke(builderMethod.Invoke(null, new object[]
                     {
-                        nvc, varName, null, false
+                        varPath.Substring(1)
                     }) as Expression, retVal);
                     if (retVal.Type.IsConstructedGenericType &&
                         retVal.Type.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -588,6 +588,21 @@ namespace SanteDB.Core.Model.Query
             }
             else
                 return null;
+        }
+
+        /// <summary>
+        /// Build property selector
+        /// </summary>
+        public static LambdaExpression BuildPropertySelector<T>(String propertyName)
+        {
+            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { typeof(T) }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
+            var nvc = new NameValueCollection();
+            nvc.Add(propertyName, "null");
+            nvc[propertyName] = null;
+            return builderMethod.Invoke(null, new object[]
+            {
+                nvc, "__xinstance", null, false
+            }) as LambdaExpression;
         }
     }
 }

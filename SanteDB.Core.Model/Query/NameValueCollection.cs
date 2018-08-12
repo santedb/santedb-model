@@ -107,7 +107,7 @@ namespace SanteDB.Core.Model.Query
         public void Add(String name, String value)
         {
             List<String> cValue = null;
-            if (this.TryGetValue(name, out cValue))
+            if (this.TryGetValue(name, out cValue) && !cValue.Contains(value))
                 cValue.Add(value);
             else
                 lock (this.m_syncRoot)
