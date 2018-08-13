@@ -72,7 +72,6 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             /// <returns>The modified expression list, if any one of the elements were modified; otherwise, returns the original
             /// expression list.</returns>
-            /// <param name="nodes">The expressions to visit.</param>
             /// <param name="node">Node.</param>
             public override Expression Visit(Expression node)
             {
@@ -185,7 +184,7 @@ namespace SanteDB.Core.Model.Query
             /// Visits the member access.
             /// </summary>
             /// <returns>The member access.</returns>
-            /// <param name="expr">Expr.</param>
+            /// <param name="node">The node being visited</param>
             protected virtual Expression VisitMemberAccess(MemberExpression node)
             {
                 this.Visit(node.Expression);
@@ -336,6 +335,7 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             /// <returns>The path.</returns>
             /// <param name="access">Access.</param>
+            /// <param name="fromUnary">Extract the path from a unuary or binary expression</param>
             protected String ExtractPath(Expression access, bool fromUnary)
             {
                 if (access.NodeType == ExpressionType.MemberAccess)
@@ -446,6 +446,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         /// <returns>The query.</returns>
         /// <param name="model">Model.</param>
+        /// <param name="stripNullChecks">True if null checks should not be included in the output</param>
         /// <typeparam name="TModel">The 1st type parameter.</typeparam>
         public static IEnumerable<KeyValuePair<String, Object>> BuildQuery<TModel>(Expression<Func<TModel, bool>> model, bool stripNullChecks = false)
         {

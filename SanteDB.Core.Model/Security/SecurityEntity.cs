@@ -38,7 +38,9 @@ namespace SanteDB.Core.Model.Security
     public class SecurityEntity : NonVersionedEntityData
     {
 
-        // Policies
+        /// <summary>
+        /// Policies applied to this entity
+        /// </summary>
         protected List<SecurityPolicyInstance> m_policies = new List<SecurityPolicyInstance>();
 
         /// <summary>

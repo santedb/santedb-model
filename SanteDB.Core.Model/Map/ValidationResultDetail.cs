@@ -53,6 +53,13 @@ namespace SanteDB.Core.Model.Map
     public class ValidationResultDetail
     {
 
+        /// <summary>
+        /// Creates a new validation result detail
+        /// </summary>
+        /// <param name="level">The type of detail</param>
+        /// <param name="message">The message of the result detail</param>
+        /// <param name="causedBy">The exception that cuased this detail to be creatd</param>
+        /// <param name="location">The location in the original configuration that caused the detail</param>
         public ValidationResultDetail(ResultDetailType level, string message, Exception causedBy, String location)
         {
             this.Level = level;

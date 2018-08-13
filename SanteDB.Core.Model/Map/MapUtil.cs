@@ -108,8 +108,6 @@ namespace SanteDB.Core.Model.Map
         /// Attempt casting <paramref name="value"/> to <paramref name="destType"/> placing the result 
         /// in <paramref name="result"/>
         /// </summary>
-        /// <remarks>If null is passed as the <paramref name="resultDetails"/> parameter then a <see cref="T:MARC.Everest.Exceptions.VocabularyException"/>
-        /// will be thrown whenever vocabulary cannot be cast.</remarks>
         public static bool TryConvert(object value, Type destType, out object result)
         {
 
@@ -155,7 +153,7 @@ namespace SanteDB.Core.Model.Map
                     result = Enum.Parse(m_destType, value.ToString(), true);
                     return true;
                 }
-                catch (Exception e)
+                catch
                 {
                     result = null;
                     return false;
@@ -239,7 +237,7 @@ namespace SanteDB.Core.Model.Map
                 else
                     result = mi.Invoke(null, new object[] { value }); // Invoke the conversion method
                 var retVal = result != null;
-                if(!retVal) /// non convertable
+                if(!retVal) // non convertable
                     lock (m_nonConvertable)
                         m_nonConvertable.Add(convertKey);
                 return retVal;

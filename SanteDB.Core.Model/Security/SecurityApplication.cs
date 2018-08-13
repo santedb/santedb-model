@@ -36,9 +36,6 @@ namespace SanteDB.Core.Model.Security
     [XmlType("SecurityApplication",  Namespace = "http://santedb.org/model"), JsonObject("SecurityApplication")]
     public class SecurityApplication : SecurityEntity
     {
-        // Backing field
-        private List<SecurityPolicyInstance> m_policies;
-
         /// <summary>
         /// Gets or sets the application secret used for authenticating the application
         /// </summary>

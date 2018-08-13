@@ -21,18 +21,39 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map
 {
+    /// <summary>
+    /// Represents the aggregate function to use when mapping
+    /// </summary>
     [XmlType(nameof(AggregationFunctionType), Namespace = "http://santedb.org/model/map")]
     public enum AggregationFunctionType
     {
+        /// <summary>
+        /// None
+        /// </summary>
         None,
+        /// <summary>
+        /// Use LastOrDefault function
+        /// </summary>
         [XmlEnum("last")]
         LastOrDefault,
+        /// <summary>
+        /// Use FirstOrDefault function
+        /// </summary>
         [XmlEnum("first")]
         FirstOrDefault,
+        /// <summary>
+        /// Use Single() function (throwing an error if more than on present)
+        /// </summary>
         [XmlEnum("single")]
         SingleOrDefault,
+        /// <summary>
+        /// Use the count function
+        /// </summary>
         [XmlEnum("count")]
         Count,
+        /// <summary>
+        /// Use the sum function
+        /// </summary>
         [XmlEnum("sum")]
         Sum
     }

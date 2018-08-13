@@ -201,10 +201,12 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
 
+        #pragma warning disable CS1591
         public bool ShouldSerializeAuthorityScopeXml() => !this.m_minimal;
         public bool ShouldSerializeUrl() => !this.m_minimal;
         public bool ShouldSerializeOid() => !this.m_minimal;
         public bool ShouldSerializeValidationRegex() => !this.m_minimal;
         public bool ShouldSerializeAssigningDeviceKey() => !this.m_minimal && this.AssigningDeviceKey.HasValue;
+        #pragma warning restore CS1591
     }
 }

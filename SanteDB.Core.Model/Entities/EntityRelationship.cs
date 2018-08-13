@@ -54,17 +54,17 @@ namespace SanteDB.Core.Model.Entities
 		{
 		}
 
-		/// <summary>
-		/// Entity relationship between <paramref name="source"/> and <paramref name="target"/>
-		/// </summary>
-		public EntityRelationship(Guid? relationshipType, Entity target)
+        /// <summary>
+        /// Entity relationship between <see cref="Association{TSourceType}.SourceEntityKey"/> container and <paramref name="targetKey"/>
+        /// </summary>
+        public EntityRelationship(Guid? relationshipType, Entity target)
 		{
 			this.RelationshipTypeKey = relationshipType;
 			this.TargetEntity = target;
 		}
 
 		/// <summary>
-		/// Entity relationship between <paramref name="source"/> and <paramref name="target"/>
+		/// Entity relationship between <see cref="Association{TSourceType}.SourceEntityKey"/> container and <paramref name="targetKey"/>
 		/// </summary>
 		public EntityRelationship(Guid? relationshipType, Guid? targetKey)
 		{

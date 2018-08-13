@@ -47,8 +47,8 @@ namespace SanteDB.Core.Model.Map
         /// <summary>
         /// Creates the specified model mmap
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
+        /// <param name="sourceStream"></param>
+        /// <returns>The constructed model map</returns>
         public static ModelMap Load(Stream sourceStream)
         {
             var retVal = s_xsz.Deserialize(sourceStream) as ModelMap;

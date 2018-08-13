@@ -61,6 +61,11 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("description"), JsonProperty("description")]
         public String Description { get; set; }
 
+        /// <summary>
+        /// Determines the semantic equality of <paramref name="obj"/> and this object
+        /// </summary>
+        /// <param name="obj">The object to compare</param>
+        /// <returns>True if the objects have the same meaning</returns>
         public override bool SemanticEquals(object obj)
         {
             var other = obj as TemplateDefinition;

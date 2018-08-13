@@ -360,6 +360,7 @@ namespace SanteDB.Core.Model.Map
         /// Convert the specified lambda expression from model into query
         /// </summary>
         /// <param name="expression">The expression to be converted</param>
+        /// <param name="throwOnError">When true, throw an exception of the expression can't be converted, otherwise return null when expression cannot be parsed</param>
         public Expression<Func<TTo, bool>> MapModelExpression<TFrom, TTo>(Expression<Func<TFrom, bool>> expression, bool throwOnError = true)
         {
             try
@@ -379,7 +380,7 @@ namespace SanteDB.Core.Model.Map
                     return retVal;
                 }
             }
-            catch (Exception e)
+            catch 
             {
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Error converting {0}. {1}", expression, e);

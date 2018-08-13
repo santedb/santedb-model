@@ -48,8 +48,6 @@ namespace SanteDB.Core.Model.DataTypes
         private Guid? m_extensionTypeKey;
         // Extension type
         private ExtensionType m_extensionType;
-        // Extension handler
-        private IExtensionHandler m_extensionHandler;
 
         /// <summary>
         /// Gets or sets the value of the extension

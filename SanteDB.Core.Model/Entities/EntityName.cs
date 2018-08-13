@@ -78,6 +78,9 @@ namespace SanteDB.Core.Model.Entities
 			this.Component = new List<EntityNameComponent>();
 		}
 
+        /// <summary>
+        /// Gets or sets the individual component types
+        /// </summary>
 		[XmlElement("component"), JsonProperty("component")]
 		[AutoLoad]
 		public List<EntityNameComponent> Component { get; set; }

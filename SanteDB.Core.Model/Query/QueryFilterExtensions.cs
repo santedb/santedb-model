@@ -13,7 +13,9 @@ namespace SanteDB.Core.Model.Query
     /// </summary>
     public static class QueryFilterExtensions
     {
-        // Extended filter regex
+        /// <summary>
+        /// Filter regular expression for query parameter syntax
+        /// </summary>
         public static readonly Regex ExtendedFilterRegex = new Regex(@"^:\((\w*?)(\|(.*?)\)|\))(.*)");
 
 
