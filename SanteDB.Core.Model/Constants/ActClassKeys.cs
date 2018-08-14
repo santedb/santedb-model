@@ -18,6 +18,7 @@
  * Date: 2017-9-1
  */
 using System;
+using SanteDB.Core.Model.DataTypes;
 
 namespace SanteDB.Core.Model.Constants
 {
@@ -96,6 +97,31 @@ namespace SanteDB.Core.Model.Constants
         /// The physical transporting of materials or people from one place to another.
         /// </summary>
         public const String  Transport = "61677F76-DC05-466D-91DE-47EFC8E7A3E6";
+
+        /// <summary>
+        /// Represents a contract
+        /// </summary>
+        public const String Contract = "5B947FCB-055A-4E7B-9571-3C2502D72BA6";
+
+        /// <summary>
+        /// Represents a financial contract
+        /// </summary>
+        public const String FinancialContract = "EE5FABB7-F97C-417C-AD81-AC9D05B81C50";
+
+        /// <summary>
+        /// Represents an account for tracking financial obligations
+        /// </summary>
+        public const String Account = "EFD2D8DD-45D4-4746-BF1A-38E95A358C05";
+
+        /// <summary>
+        /// Represents the financial transaction
+        /// </summary>
+        public const string FinancialTransaction = "6A37A91E-CC27-4E64-9B49-618A1F255904";
+
+        /// <summary>
+        /// Represents an individual invoice elemnt
+        /// </summary>
+        public const string InvoiceElement = "6755ee8b-48e6-4fd8-802f-59b89efa8966";
     }
 
 	/// <summary>
@@ -172,5 +198,30 @@ namespace SanteDB.Core.Model.Constants
 		/// The physical transporting of materials or people from one place to another.
 		/// </summary>
 		public static readonly Guid Transport = Guid.Parse(ActClassKeyStrings.Transport);
-	}
+
+        /// <summary>
+        /// Represents a contract
+        /// </summary>
+        public static readonly Guid Contract = Guid.Parse(ActClassKeyStrings.Contract);
+
+        /// <summary>
+        /// Represents a financial contract
+        /// </summary>
+        public static readonly Guid FinancialContract = Guid.Parse(ActClassKeyStrings.FinancialContract);
+
+        /// <summary>
+        /// Represents an account for tracking financial obligations
+        /// </summary>
+        public static readonly Guid Account = Guid.Parse(ActClassKeyStrings.Account);
+
+        /// <summary>
+        /// Represents a single financial transaction
+        /// </summary>
+        public static readonly Guid FinancialTransaction = Guid.Parse(ActClassKeyStrings.FinancialTransaction);
+
+        /// <summary>
+        /// Represents a single invoice element
+        /// </summary>
+        public static Guid? InvoiceElement = Guid.Parse(ActClassKeyStrings.InvoiceElement);
+    }
 }

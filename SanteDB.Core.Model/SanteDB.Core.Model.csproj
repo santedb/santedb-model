@@ -36,12 +36,16 @@
     <DocumentationFile>..\bin\Release\SanteDB.Core.Model.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Acts\Account.cs" />
     <Compile Include="Acts\Act.cs" />
     <Compile Include="Acts\ActParticipation.cs" />
     <Compile Include="Acts\ActProtocol.cs" />
     <Compile Include="Acts\ActRelationship.cs" />
     <Compile Include="Acts\CarePlan.cs" />
     <Compile Include="Acts\ControlAct.cs" />
+    <Compile Include="Acts\FinancialContract.cs" />
+    <Compile Include="Acts\FinancialTransaction.cs" />
+    <Compile Include="Acts\InvoiceElement.cs" />
     <Compile Include="Acts\Observation.cs" />
     <Compile Include="Acts\PatientEncounter.cs" />
     <Compile Include="Acts\Procedure.cs" />
