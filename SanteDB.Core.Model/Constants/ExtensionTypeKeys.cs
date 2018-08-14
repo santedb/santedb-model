@@ -35,5 +35,7 @@ namespace SanteDB.Core.Model.Constants
         /// An extension which can hold a JPG photo of an entity
         /// </summary>
         public static readonly Guid JpegPhotoExtension = Guid.Parse("77B53CBA-C32F-442B-B7A7-ED08184A0FA5");
+
+
     }
 }

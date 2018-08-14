@@ -23,6 +23,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Security;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -87,6 +88,7 @@ namespace SanteDB.Core.Model.Entities
 			this.Relationships = new List<EntityRelationship>();
 			this.Telecoms = new List<EntityTelecomAddress>();
 			this.Tags = new List<EntityTag>();
+            this.Policies = new List<SecurityPolicyInstance>();
 		}
 
 		/// <summary>
@@ -411,11 +413,23 @@ namespace SanteDB.Core.Model.Entities
 			}
 		}
 
-		/// <summary>
-		/// Clean the patient of any empty "noise" elements
-		/// </summary>
-		/// <returns></returns>
-		public override IdentifiedData Clean()
+        /// <summary>
+        /// Gets or sets the security policy instances associated with the entity
+        /// </summary>
+        /// <remarks>
+        /// This property allows authors to tag an act with a particular security policy. Here the 
+        /// security policies may be something akin to "Taboo information" or "Research Only". From there
+        /// the SanteDB policy decision point will determine whether or not the particular piece of
+        /// data should be exposed or masked based on user credentials.
+        /// </remarks>
+        [XmlElement("policy"), JsonProperty("policy")]
+        public List<SecurityPolicyInstance> Policies { get; set; }
+
+        /// <summary>
+        /// Clean the patient of any empty "noise" elements
+        /// </summary>
+        /// <returns></returns>
+        public override IdentifiedData Clean()
 		{
 			this.Addresses.RemoveAll(o => o.Clean().IsEmpty());
 			this.Names.RemoveAll(o => o.Clean().IsEmpty());
