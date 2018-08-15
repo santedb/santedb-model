@@ -160,5 +160,10 @@ namespace SanteDB.Core.Model.Constants
         /// Orgnaiztaion types
         /// </summary>
         public static readonly Guid OrganizationTypes = Guid.Parse("485BC177-3E84-4A5A-9F25-466BA30E987E");
+
+        /// <summary>
+        /// Language codes
+        /// </summary>
+        public static readonly Guid LanguageCodes = Guid.Parse("48b4d375-0dca-4c58-9f45-66abfbc196a1");
     }
 }

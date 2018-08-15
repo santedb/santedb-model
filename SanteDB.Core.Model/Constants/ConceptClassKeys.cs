@@ -90,5 +90,11 @@ namespace SanteDB.Core.Model.Constants
 		/// Unit of measure classification
 		/// </summary>
 		public static readonly Guid UnitOfMeasure = Guid.Parse("1EF69347-EF03-4FF7-B3C5-6334448845E6");
+
+        /// <summary>
+        /// Language codes
+        /// </summary>
+        public static readonly Guid Language = Guid.Parse("ed032625-8139-4bdd-af25-c54a6960f87d");
+
 	}
 }

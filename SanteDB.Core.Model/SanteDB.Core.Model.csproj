@@ -132,6 +132,7 @@
     <Compile Include="Entities\PlaceService.cs" />
     <Compile Include="Exceptions\ModelMapValidationException.cs" />
     <Compile Include="Exceptions\ModelValidationException.cs" />
+    <Compile Include="Export\Dataset.cs" />
     <Compile Include="Extensions\BinaryExtensionHandler.cs" />
     <Compile Include="Extensions\BooleanExtensionHandler.cs" />
     <Compile Include="Extensions\DateExtensionHandler.cs" />
