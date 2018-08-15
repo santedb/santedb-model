@@ -39,6 +39,13 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         private class HttpQueryExpressionVisitor : ExpressionVisitor
         {
+
+            // Readonly names
+            private static readonly String[] s_reservedNames =
+            {
+                "Any", "Where", "Contains", "StartsWith", "EndsWith"
+            };
+
             // The dictionary
             private List<KeyValuePair<String, Object>> m_query;
 			/// <summary>
@@ -396,7 +403,7 @@ namespace SanteDB.Core.Model.Query
                         var extendedFilter = QueryFilterExtensions.GetExtendedFilterByMethod(callExpr.Method);
                         if (extendedFilter != null)
                             return this.ExtractPath(callExpr.Arguments[0], false); // get the chain if required
-                        else
+                        else if(!s_reservedNames.Contains(callExpr.Method.Name))
                             throw new InvalidOperationException($"Can't find extended method handler for {callExpr.Method.Name}");
                     }
                     

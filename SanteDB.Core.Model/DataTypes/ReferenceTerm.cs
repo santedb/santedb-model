@@ -91,8 +91,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets display names associated with the reference term
         /// </summary>
-        
-        [XmlElement("name"), JsonProperty("name")]
+        [AutoLoad, XmlElement("name"), JsonProperty("name")]
         public List<ReferenceTermName> DisplayNames {
             get
             {

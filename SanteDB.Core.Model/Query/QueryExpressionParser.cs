@@ -423,6 +423,7 @@ namespace SanteDB.Core.Model.Query
                                 if (thisAccessExpression.Type == typeof(String))
                                 {
                                     thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("StartsWith", new Type[] { typeof(String) }), Expression.Constant(pValue.Substring(1)));
+                                    operandType = typeof(bool);
                                     pValue = "true";
                                 }
                                 else
@@ -434,6 +435,7 @@ namespace SanteDB.Core.Model.Query
                                 if (thisAccessExpression.Type == typeof(String))
                                 {
                                     thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("Contains", new Type[] { typeof(String) }), Expression.Constant(pValue.Substring(1)));
+                                    operandType = typeof(bool);
                                     pValue = "true";
                                 }
                                 else if (thisAccessExpression.Type == typeof(DateTime) ||
