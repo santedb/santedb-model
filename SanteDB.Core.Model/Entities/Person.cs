@@ -52,7 +52,6 @@ namespace SanteDB.Core.Model.Entities
 
         // Complex relationships
         private List<Guid> m_raceCodeKeys;
-        private List<Guid> m_disabilityKeys;
         private List<Guid> m_ethnicGroupKeys;
         private List<Guid> m_citizenshipKeys;
 
@@ -66,7 +65,6 @@ namespace SanteDB.Core.Model.Entities
 			this.LanguageCommunication = new List<PersonLanguageCommunication>();
             this.RaceCodeKeys = new List<Guid>();
             this.EthnicGroupCodeKeys = new List<Guid>();
-            this.DisabilityCodeKeys = new List<Guid>();
             this.CitizenshipKeys = new List<Guid>();
 		}
 
@@ -269,17 +267,6 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the disability codes
         /// </summary>
-        [XmlElement("disability"), JsonProperty("disability")]
-        public List<Guid> DisabilityCodeKeys
-        {
-            get => this.m_disabilityKeys;
-            set => this.m_disabilityKeys = value;
-        }
-
-
-        /// <summary>
-        /// Gets or sets the disability codes
-        /// </summary>
         [XmlElement("citizenship"), JsonProperty("citizenship")]
         public List<Guid> CitizenshipKeys
         {
@@ -303,15 +290,6 @@ namespace SanteDB.Core.Model.Entities
         public IEnumerable<Concept> EthnicGroupCodes
         {
             get => this.m_ethnicGroupKeys.Select(r => base.DelayLoad<Concept>(r, null));
-        }
-
-        /// <summary>
-        /// Gets the disability concepts
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public IEnumerable<Concept> DisabiltyCodes
-        {
-            get => this.m_disabilityKeys.Select(r => base.DelayLoad<Concept>(r, null));
         }
 
         /// <summary>
