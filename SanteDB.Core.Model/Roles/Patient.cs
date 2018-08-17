@@ -49,6 +49,21 @@ namespace SanteDB.Core.Model.Roles
 
         private Concept m_genderConcept;
 
+        // Marital statuses
+        private Guid? m_maritalStatusKey;
+        private Concept m_maritalStatus;
+        private Guid? m_educationLevelKey;
+        private Concept m_educationLevel;
+        private Guid? m_livingArrangementKey;
+        private Concept m_livingArrangement;
+        private Guid? m_religiousAffiliationKey;
+        private Concept m_religiousAffiliation;
+        private Guid? m_ethnicGroupKey;
+        private Concept m_ethnicGroup;
+
+        // Complex relationships
+        private List<Guid> m_raceCodeKeys;
+
 
         /// <summary>
         /// Represents a patient
@@ -131,6 +146,165 @@ namespace SanteDB.Core.Model.Roles
             {
                 this.m_genderConcept = value;
                 this.m_genderConceptKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the key of the marital status concept
+        /// </summary>
+        [XmlElement("maritalStatus"), JsonProperty("maritalStatus"), EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? MaritalStatusKey
+        {
+            get => this.m_maritalStatusKey;
+            set
+            {
+                this.m_maritalStatusKey = value;
+                this.m_maritalStatus = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the key of the education level
+        /// </summary>
+        [XmlElement("educationLevel"), JsonProperty("educationLevel"), EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? EducationLevelKey
+        {
+            get => this.m_educationLevelKey;
+            set
+            {
+                this.m_educationLevelKey = value;
+                this.m_educationLevel = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the living arrangement
+        /// </summary>
+        [XmlElement("livingArrangement"), JsonProperty("livingArrangement"), EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? LivingArrangementKey
+        {
+            get => this.m_livingArrangementKey;
+            set
+            {
+                this.m_livingArrangementKey = value;
+                this.m_livingArrangement = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the religious affiliation
+        /// </summary>
+        [XmlElement("religion"), JsonProperty("religion"), EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? ReligiousAffiliationKey
+        {
+            get => this.m_religiousAffiliationKey;
+            set
+            {
+                this.m_religiousAffiliationKey = value;
+                this.m_religiousAffiliation = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the marital status code
+        /// </summary>
+        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
+        public Concept MaritalStatus
+        {
+            get
+            {
+                this.m_maritalStatus = base.DelayLoad(this.m_maritalStatusKey, this.m_maritalStatus);
+                return this.m_maritalStatus;
+            }
+            set
+            {
+                this.m_maritalStatus = value;
+                this.m_maritalStatusKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the education level of the person
+        /// </summary>
+        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
+        public Concept EducationLevel
+        {
+            get
+            {
+                this.m_educationLevel = base.DelayLoad(this.m_educationLevelKey, this.m_educationLevel);
+                return this.m_educationLevel;
+            }
+            set
+            {
+                this.m_educationLevel = value;
+                this.m_educationLevelKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the living arrangements
+        /// </summary>
+        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(LivingArrangementKey))]
+        public Concept LivingArrangement
+        {
+            get
+            {
+                this.m_livingArrangement = base.DelayLoad(this.m_livingArrangementKey, this.m_livingArrangement);
+                return this.m_livingArrangement;
+            }
+            set
+            {
+                this.m_livingArrangement = value;
+                this.m_livingArrangementKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the religious affiliation
+        /// </summary>
+        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(ReligiousAffiliationKey))]
+        public Concept ReligiousAffiliation
+        {
+            get
+            {
+                this.m_religiousAffiliation = base.DelayLoad(this.m_religiousAffiliationKey, this.m_religiousAffiliation);
+                return this.m_religiousAffiliation;
+            }
+            set
+            {
+                this.m_religiousAffiliation = value;
+                this.m_religiousAffiliationKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the ethnicity codes
+        /// </summary>
+        [XmlElement("ethnicity"), JsonProperty("ethnicity")]
+        public Guid? EthnicGroupCodeKey
+        {
+            get => this.m_ethnicGroupKey;
+            set
+            {
+                this.m_ethnicGroupKey = value;
+                this.m_ethnicGroup = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the ethic group concepts
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EthnicGroupCodeKey))]
+        public Concept EthnicGroup
+        {
+            get {
+                this.m_ethnicGroup = base.DelayLoad(this.m_ethnicGroupKey, this.m_ethnicGroup);
+                return this.m_ethnicGroup;
+            }
+            set
+            {
+                this.m_ethnicGroup = value;
+                this.m_ethnicGroupKey = value?.Key;
             }
         }
 
