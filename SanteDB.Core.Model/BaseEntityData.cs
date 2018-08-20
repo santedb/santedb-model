@@ -50,11 +50,11 @@ namespace SanteDB.Core.Model
         // Created by identifier
         private Guid? m_createdById;
         // Created by
-        private SecurityUser m_createdBy;
+        private SecurityProvenance m_createdBy;
         // Obsoleted by
         private Guid? m_obsoletedById;
         // Obsoleted by user
-        private SecurityUser m_obsoletedBy;
+        private SecurityProvenance m_obsoletedBy;
 
         /// <summary>
         /// Constructs a new base entity data
@@ -114,7 +114,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         [SerializationReference(nameof(CreatedByKey)), DataIgnore()]
         [XmlIgnore, JsonIgnore]
-        public virtual SecurityUser CreatedBy {
+        public virtual SecurityProvenance CreatedBy {
             get
             {
                 this.m_createdBy = base.DelayLoad(this.m_createdById, this.m_createdBy);
@@ -165,7 +165,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         [SerializationReference(nameof(ObsoletedByKey)), DataIgnore()]
         [XmlIgnore, JsonIgnore]
-        public virtual SecurityUser ObsoletedBy {
+        public virtual SecurityProvenance ObsoletedBy {
             get
             {
                 this.m_obsoletedBy= base.DelayLoad(this.m_obsoletedById, this.m_obsoletedBy);

@@ -183,6 +183,7 @@
     <Compile Include="Security\SecurityDevice.cs" />
     <Compile Include="Security\SecurityEntity.cs" />
     <Compile Include="Security\SecurityPolicy.cs" />
+    <Compile Include="Security\SecurityProvenance.cs" />
     <Compile Include="Security\SecurityRole.cs" />
     <Compile Include="Security\SecurityUser.cs" />
     <Compile Include="Serialization\ModelSerializationBinder.cs" />

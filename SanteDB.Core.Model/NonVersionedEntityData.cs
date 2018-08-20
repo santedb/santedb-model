@@ -42,7 +42,7 @@ namespace SanteDB.Core.Model
         // The updated by id
         private Guid? m_updatedById;
         // The updated by user
-        private SecurityUser m_updatedBy;
+        private SecurityProvenance m_updatedBy;
 
         /// <summary>
         /// Updated time
@@ -82,8 +82,8 @@ namespace SanteDB.Core.Model
         /// Gets or sets the user that updated this base data
         /// </summary>
 
-        [XmlIgnore, JsonIgnore, DataIgnore()]
-        public SecurityUser UpdatedBy
+        [XmlIgnore, JsonIgnore, DataIgnore(), SerializationReference(nameof(UpdatedByKey))]
+        public SecurityProvenance UpdatedBy
         {
             get
             {
