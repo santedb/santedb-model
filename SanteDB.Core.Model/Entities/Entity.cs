@@ -38,7 +38,7 @@ namespace SanteDB.Core.Model.Entities
 	[XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
 	[XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
 	[Classifier(nameof(ClassConcept))]
-	public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable
+	public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable
 	{
 
         private TemplateDefinition m_template;

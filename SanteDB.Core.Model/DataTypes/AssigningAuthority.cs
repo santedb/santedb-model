@@ -58,10 +58,10 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         // Assigning device id
-        private Guid? m_assigningDeviceId;
+        private Guid? m_assigningApplicationKey;
 
         // TODO: Change this to SecurityDevice
-        private SecurityDevice m_assigningDevice;
+        private SecurityApplication m_assigningApplication;
 
         /// <summary>
         /// Gets or sets the name of the assigning authority
@@ -102,14 +102,14 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Assigning device identifier
         /// </summary>
-        [XmlElement("assigningDevice"), JsonProperty("assigningDevice")]
-        public Guid? AssigningDeviceKey
+        [XmlElement("assigningApplication"), JsonProperty("assigningApplication")]
+        public Guid? AssigningApplicationKey
         {
-            get { return this.m_assigningDeviceId; }
+            get { return this.m_assigningApplicationKey; }
             set
             {
-                this.m_assigningDeviceId = value;
-                this.m_assigningDevice = null;
+                this.m_assigningApplicationKey = value;
+                this.m_assigningApplication = null;
             }
         }
 
@@ -133,17 +133,17 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the assigning device
         /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public SecurityDevice AssigningDevice {
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(AssigningApplicationKey))]
+        public SecurityApplication AssigningApplication {
             get
             {
-                this.m_assigningDevice = base.DelayLoad(this.m_assigningDeviceId, this.m_assigningDevice);
-                return this.m_assigningDevice;
+                this.m_assigningApplication = base.DelayLoad(this.m_assigningApplicationKey, this.m_assigningApplication);
+                return this.m_assigningApplication;
             }
             set
             {
-                this.m_assigningDevice = value;
-                this.m_assigningDeviceId = value?.Key;
+                this.m_assigningApplication = value;
+                this.m_assigningApplicationKey = value?.Key;
             }
         }
 
@@ -184,7 +184,7 @@ namespace SanteDB.Core.Model.DataTypes
         public override void Refresh()
         {
             base.Refresh();
-            this.m_assigningDevice = null;
+            this.m_assigningApplication = null;
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace SanteDB.Core.Model.DataTypes
             return base.SemanticEquals(obj) && other.DomainName == this.DomainName &&
                 this.Oid == other.Oid &&
                 this.Url == other.Url &&
-                this.AssigningDeviceKey == other.AssigningDeviceKey;
+                this.AssigningApplicationKey == other.AssigningApplicationKey;
         }
 
 
@@ -206,7 +206,7 @@ namespace SanteDB.Core.Model.DataTypes
         public bool ShouldSerializeUrl() => !this.m_minimal;
         public bool ShouldSerializeOid() => !this.m_minimal;
         public bool ShouldSerializeValidationRegex() => !this.m_minimal;
-        public bool ShouldSerializeAssigningDeviceKey() => !this.m_minimal && this.AssigningDeviceKey.HasValue;
+        public bool ShouldSerializeAssigningDeviceKey() => !this.m_minimal && this.AssigningApplicationKey.HasValue;
         #pragma warning restore CS1591
     }
 }

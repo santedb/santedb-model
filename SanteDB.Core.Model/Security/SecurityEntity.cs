@@ -26,6 +26,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SanteDB.Core.Model.EntityLoader;
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Interfaces;
 
 namespace SanteDB.Core.Model.Security
 {
@@ -35,7 +36,7 @@ namespace SanteDB.Core.Model.Security
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "SecurityEntity")]
     [JsonObject(nameof(SecurityEntity))]
     [NonCached]
-    public class SecurityEntity : NonVersionedEntityData
+    public class SecurityEntity : NonVersionedEntityData, ISecurable
     {
 
         /// <summary>

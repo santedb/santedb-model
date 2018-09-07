@@ -70,6 +70,13 @@ namespace SanteDB.Core.Model.Export
         public List<DataInstallAction> Action { get; set; }
 
         /// <summary>
+        /// Actions to be executed after 
+        /// </summary>
+        [XmlArray("sql")]
+        [XmlArrayItem("exec")]
+        public List<DataExecuteAction> Exec { get; set; }
+
+        /// <summary>
         /// Loads the specified file to dataset
         /// </summary>
         public static Dataset Load(Stream str)
@@ -77,6 +84,26 @@ namespace SanteDB.Core.Model.Export
             XmlSerializer xs = new XmlSerializer(typeof(Dataset));
             return xs.Deserialize(str) as Dataset;
         }
+    }
+
+    /// <summary>
+    /// Data execution actions
+    /// </summary>
+    [XmlType(nameof(DataExecuteAction), Namespace = "http://santedb.org/data")]
+    public class DataExecuteAction
+    {
+
+        /// <summary>
+        /// Gets or sets the invariant
+        /// </summary>
+        [XmlAttribute("invariant")]
+        public string InvariantName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the query text
+        /// </summary>
+        [XmlText]
+        public String QueryText { get; set; }
     }
 
     /// <summary>
