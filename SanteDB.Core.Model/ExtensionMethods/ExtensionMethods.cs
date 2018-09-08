@@ -217,11 +217,13 @@ namespace SanteDB.Core.Model
 
             // Properties which are lists that have had data added from the fromEntities array
             Dictionary<PropertyInfo, List<IdentifiedData>> mergedListProperties = new Dictionary<PropertyInfo, List<IdentifiedData>>();
+            String[] ignoreProperties = { "Key", "VersionKey", "VersionSequenceId", "CreationTime", "CreatedByKey", "CreatedBy", "UpdatedBy", "UpdatedByKey", "UpdatedTime", "ObsoletedBy", "ObsoletedByKey", "ObsoletionTime", "ReplacesVersionKey", "ReplacesVersion" };
 
             // Destination properties
-            foreach (var destinationPi in properties.AsParallel())
+            foreach (var destinationPi in properties.Where(p=>!ignoreProperties.Contains(p.Name)).AsParallel())
                 foreach (var fromEntity in fromEntities.OrderBy(k=>k.ModifiedOn))
                 {
+
                     var sourcePi = fromEntity.GetType().GetRuntimeProperty(destinationPi.Name);
                     // Skip properties no in the source
                     if (sourcePi == null)
