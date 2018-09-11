@@ -190,7 +190,9 @@ namespace SanteDB.Core.Model.Acts
         {
             var other = obj as ActRelationship;
             if (other == null) return false;
-            return base.SemanticEquals(obj) && this.TargetActKey == other.TargetActKey;
+            return base.SemanticEquals(obj) && this.TargetActKey == other.TargetActKey &&
+                this.RelationshipTypeKey == other.RelationshipTypeKey &&
+                this.SourceEntityKey == other.SourceEntityKey;
         }
 
         /// <summary>

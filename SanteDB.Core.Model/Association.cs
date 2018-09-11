@@ -120,7 +120,7 @@ namespace SanteDB.Core.Model
         {
             var other = obj as Association<TSourceType>;
             if (other == null) return false;
-            return base.SemanticEquals(obj) && other.SourceEntityKey == other.SourceEntityKey;
+            return base.SemanticEquals(obj);
         }
     }
 }

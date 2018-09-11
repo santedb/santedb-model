@@ -231,7 +231,8 @@ namespace SanteDB.Core.Model.Entities
 			if (other == null) return false;
 			return base.SemanticEquals(obj) && this.TargetEntityKey == other.TargetEntityKey &&
 				this.RelationshipTypeKey == other.RelationshipTypeKey &&
-                this.Quantity == other.Quantity;
+                this.Quantity == other.Quantity &&
+                this.SourceEntityKey == other.SourceEntityKey;
 		}
 
 		/// <summary>
@@ -264,5 +265,6 @@ namespace SanteDB.Core.Model.Entities
         {
             return string.Format("({0}) {1} = {2}", this.RelationshipType?.ToString() ?? this.RelationshipTypeKey?.ToString(), this.TargetEntityKey, this.Quantity);
         }
+
     }
 }

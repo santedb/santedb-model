@@ -21,6 +21,7 @@ namespace SanteDB.Core.Model.Security
 
         // User
         private SecurityUser m_user;
+        private SecurityApplication m_application;
 
         /// <summary>
         /// Gets the time that the provenance was modified / created
@@ -92,6 +93,24 @@ namespace SanteDB.Core.Model.Security
             {
                 this.m_user = value;
                 this.UserKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets the security application for the provenance if applicable
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ApplicationKey))]
+        public SecurityApplication Application
+        {
+            get
+            {
+                this.m_application = base.DelayLoad(this.ApplicationKey, this.m_application);
+                return this.m_application;
+            }
+            set
+            {
+                this.m_application = value;
+                this.ApplicationKey = value?.Key;
             }
         }
     }

@@ -151,6 +151,23 @@ namespace SanteDB.Core.Model.Map
         {
             return (Decimal)val;
         }
+
+        /// <summary>
+        /// Convert int16 to 32
+        /// </summary>
+        public static Int32 Int16ToInt32(Int16 val)
+        {
+            return (Int32)val;
+        }
+
+        /// <summary>
+        /// Convert int16 to 32
+        /// </summary>
+        public static Int16 Int32ToInt16(Int32 val)
+        {
+            return (Int16)val;
+        }
+
         /// <summary>
         /// Convert Int32 to decimal
         /// </summary>

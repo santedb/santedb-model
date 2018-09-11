@@ -67,7 +67,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Act")]
     [JsonObject("Act")]
     [Classifier(nameof(ClassConcept))]
-    public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable
+    public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IClassifiable, IHasState
     {
 
         private Guid? m_classConceptKey;

@@ -37,7 +37,7 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlType("Concept",  Namespace = "http://santedb.org/model"), JsonObject("Concept")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Concept")]
     [Classifier(nameof(Mnemonic)), KeyLookup(nameof(Mnemonic))]
-    public class Concept : VersionedEntityData<Concept>
+    public class Concept : VersionedEntityData<Concept>, IHasState
     {
         
         /// <summary>

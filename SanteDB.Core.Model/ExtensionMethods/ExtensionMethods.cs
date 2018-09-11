@@ -65,7 +65,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static IEnumerable<TReturn> LoadCollection<TReturn>(this IdentifiedData me, string propertyName)
         {
-            return me.LoadProperty(propertyName) as IEnumerable<TReturn>;
+            return me.LoadProperty(propertyName) as IEnumerable<TReturn> ?? new List<TReturn>();
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace SanteDB.Core.Model
 
             if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(propertyToLoad.PropertyType.GetTypeInfo())) // Collection we load by key
             {
-                if ((currentValue as IList)?.Count == 0)
+                if ((currentValue as IList)?.Count == 0 && me.Key.HasValue)
                 {
                     var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.GetRelations), new Type[] { propertyToLoad.PropertyType.StripGeneric() }, new Type[] { typeof(Guid?) });
                     var loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { me.Key.Value }));
@@ -185,7 +185,7 @@ namespace SanteDB.Core.Model
 
                 if (newValue != null &&
                     !newValue.Equals(oldValue) == true &&
-                    (destinationPi.PropertyType.GetTypeInfo().IsValueType && !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
+                    (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
                     destinationPi.SetValue(toEntity, newValue);
             }
             return toEntity;
@@ -196,6 +196,31 @@ namespace SanteDB.Core.Model
 		/// </summary>
 		public static TObject SemanticCopy<TObject>(this TObject toEntity, params TObject[] fromEntities) where TObject : IdentifiedData
         {
+            return SemanticCopyInternal(toEntity, false, null, fromEntities);
+        }
+
+        /// <summary>
+        /// Update property data with data from <paramref name="fromEntities"/> if the property is not semantically equal
+        /// </summary>
+        public static TObject SemanticCopyNullFields<TObject>(this TObject toEntity, params TObject[] fromEntities) where TObject : IdentifiedData
+        {
+            return SemanticCopyInternal(toEntity, true, null, fromEntities);
+        }
+
+        /// <summary>
+        /// Update property data with data from <paramref name="fromEntities"/> if and only if the source property is null
+        /// in the original toEntity
+        /// </summary>
+        public static TObject SemanticCopyFields<TObject>(this TObject toEntity, TObject[] fromEntities, params String[] fieldNames) where TObject : IdentifiedData
+        {
+            return SemanticCopyInternal(toEntity, false, fieldNames, fromEntities);
+        }
+
+        /// <summary>
+        /// Perform semantic copy
+        /// </summary>
+        private static TObject SemanticCopyInternal<TObject>(this TObject toEntity, bool onlyIfNull,  String[] fieldNames, params TObject[] fromEntities) where TObject : IdentifiedData
+        { 
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
             else if (fromEntities == null)
@@ -220,80 +245,85 @@ namespace SanteDB.Core.Model
             String[] ignoreProperties = { "Key", "VersionKey", "VersionSequenceId", "CreationTime", "CreatedByKey", "CreatedBy", "UpdatedBy", "UpdatedByKey", "UpdatedTime", "ObsoletedBy", "ObsoletedByKey", "ObsoletionTime", "ReplacesVersionKey", "ReplacesVersion" };
 
             // Destination properties
-            foreach (var destinationPi in properties.Where(p=>!ignoreProperties.Contains(p.Name)).AsParallel())
-                foreach (var fromEntity in fromEntities.OrderBy(k=>k.ModifiedOn))
-                {
-
-                    var sourcePi = fromEntity.GetType().GetRuntimeProperty(destinationPi.Name);
-                    // Skip properties no in the source
-                    if (sourcePi == null)
-                        continue;
-
-                    // Skip data ignore
-                    if (destinationPi.PropertyType.GetTypeInfo().IsGenericType &&
-                        destinationPi.PropertyType.GetGenericTypeDefinition().Namespace.StartsWith("System.Data.Linq") ||
-                        destinationPi.PropertyType.Namespace.StartsWith("SanteDB.Persistence"))
-                        continue;
-
-                    object newValue = sourcePi.GetValue(fromEntity),
-                        oldValue = destinationPi.GetValue(toEntity);
-
-                    // HACK: New value wrap for nullables
-                    if (newValue is Guid? && newValue != null)
-                        newValue = (newValue as Guid?).Value;
-
-                    // HACK: Empty lists are NULL
-                    if ((newValue as IList)?.Count == 0)
-                        newValue = null;
-
-                    if (newValue != null) // The new value has something 
+            foreach (var destinationPi in properties.Where(p => !ignoreProperties.Contains(p.Name)))
+            {
+                object oldValue = destinationPi.GetValue(toEntity);
+                if ((onlyIfNull && (oldValue == null || (oldValue as IList)?.Count == 0) || !onlyIfNull) &&
+                    (fieldNames == null || fieldNames.Contains(destinationPi.Name)))
+                    foreach (var fromEntity in fromEntities.OrderBy(k => k.ModifiedOn))
                     {
-                        // The destination is a list, so we should add if the item doesn't exist in the list
-                        if (typeof(IList).GetTypeInfo().IsAssignableFrom(destinationPi.PropertyType.GetTypeInfo()))
+
+                        var sourcePi = fromEntity.GetType().GetRuntimeProperty(destinationPi.Name);
+                        // Skip properties no in the source
+                        if (sourcePi == null)
+                            continue;
+
+                        // Skip data ignore
+                        if (destinationPi.PropertyType.GetTypeInfo().IsGenericType &&
+                            destinationPi.PropertyType.GetGenericTypeDefinition().Namespace.StartsWith("System.Data.Linq") ||
+                            destinationPi.PropertyType.Namespace.StartsWith("SanteDB.Persistence"))
+                            continue;
+
+                        object newValue = sourcePi.GetValue(fromEntity);
+
+                        // HACK: New value wrap for nullables
+                        if (newValue is Guid? && newValue != null)
+                            newValue = (newValue as Guid?).Value;
+
+                        // HACK: Empty lists are NULL
+                        if ((newValue as IList)?.Count == 0)
+                            newValue = null;
+
+                        if (newValue != null) // The new value has something 
                         {
-                            // No current value 
-                            if(oldValue == null)
+                            // The destination is a list, so we should add if the item doesn't exist in the list
+                            if (typeof(IList).GetTypeInfo().IsAssignableFrom(destinationPi.PropertyType.GetTypeInfo()))
                             {
-                                oldValue = Activator.CreateInstance(destinationPi.PropertyType);
-                                destinationPi.SetValue(toEntity, oldValue);
-                            }
-
-                            // Cast lists
-                            IList<IdentifiedData> oldList = (oldValue as IList).OfType<IdentifiedData>().ToList(),
-                                newList = (newValue as IList).OfType<IdentifiedData>().ToList();
-                            IList modifyList = oldValue as IList;
-
-                            // Initialize list if needed
-                            List<IdentifiedData> addedObjects = null;
-                            if (!mergedListProperties.TryGetValue(destinationPi, out addedObjects)) {
-                                addedObjects = new List<IdentifiedData>();
-                                mergedListProperties.Add(destinationPi, addedObjects);
-                            }
-
-                            // Copy / update items
-                            foreach (var itm in newList)
-                            {
-                                // Get an existing item that matches this
-                                var existing = oldList.FirstOrDefault(o => o.SemanticEquals(itm));
-                                // Couldn't find something that "means the same" as the current
-                                if (existing == null)
+                                // No current value 
+                                if (oldValue == null)
                                 {
-                                    var citm = itm.Clone();
-                                    citm.Key = null;
-                                    modifyList.Add(citm);
+                                    oldValue = Activator.CreateInstance(destinationPi.PropertyType);
+                                    destinationPi.SetValue(toEntity, oldValue);
                                 }
-                                addedObjects.Add(itm);
-                            }
 
+                                // Cast lists
+                                IList<IdentifiedData> oldList = (oldValue as IList).OfType<IdentifiedData>().ToList(),
+                                    newList = (newValue as IList).OfType<IdentifiedData>().ToList();
+                                IList modifyList = oldValue as IList;
+
+                                // Initialize list if needed
+                                List<IdentifiedData> addedObjects = null;
+                                if (!mergedListProperties.TryGetValue(destinationPi, out addedObjects))
+                                {
+                                    addedObjects = new List<IdentifiedData>();
+                                    mergedListProperties.Add(destinationPi, addedObjects);
+                                }
+
+                                // Copy / update items
+                                foreach (var itm in newList)
+                                {
+                                    // Get an existing item that matches this
+                                    var existing = oldList.FirstOrDefault(o => o.SemanticEquals(itm));
+                                    // Couldn't find something that "means the same" as the current
+                                    if (existing == null)
+                                    {
+                                        var citm = itm.Clone();
+                                        citm.Key = null;
+                                        modifyList.Add(citm);
+                                    }
+                                    addedObjects.Add(itm);
+                                }
+
+                            }
+                            else if (newValue is IdentifiedData &&
+                                !(newValue as IdentifiedData).SemanticEquals(oldValue))
+                                destinationPi.SetValue(toEntity, newValue);
+                            else if (!newValue.Equals(oldValue) &&
+                                (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
+                                destinationPi.SetValue(toEntity, newValue);
                         }
-                        else if (newValue is IdentifiedData &&
-                            !(newValue as IdentifiedData).SemanticEquals(oldValue))
-                            destinationPi.SetValue(toEntity, newValue);
-                        else if (!newValue.Equals(oldValue) &&
-                            (destinationPi.PropertyType.GetTypeInfo().IsValueType && !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
-                            destinationPi.SetValue(toEntity, newValue);
                     }
-                }
+            }
 
             // Finally we want to remove items from the toEntity which didn't have any added options 
             foreach(var merge in mergedListProperties)
