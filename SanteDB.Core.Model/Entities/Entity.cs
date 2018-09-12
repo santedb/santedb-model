@@ -22,6 +22,7 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
@@ -548,5 +549,15 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public bool ShouldSerializeTemplateKey() => this.TemplateKey.GetValueOrDefault() != Guid.Empty;
 
+        /// <summary>
+        /// Add a policy to this entity
+        /// </summary>
+        public void AddPolicy(string policyId)
+        {
+            var pol = EntitySource.Current.Provider.Query<SecurityPolicy>(o => o.Oid == policyId).SingleOrDefault();
+            if (pol == null)
+                throw new KeyNotFoundException($"Policy {policyId} not found");
+            this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
+        }
     }
 }

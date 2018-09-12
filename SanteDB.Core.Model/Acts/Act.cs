@@ -675,5 +675,16 @@ namespace SanteDB.Core.Model.Acts
             retVal.Extensions = new List<ActExtension>(this.Extensions.ToArray());
             return retVal;
         }
+
+        /// <summary>
+        /// Add a policy to this act
+        /// </summary>
+        public void AddPolicy(string policyId)
+        {
+            var pol = EntitySource.Current.Provider.Query<SecurityPolicy>(o => o.Oid == policyId).SingleOrDefault();
+            if (pol == null)
+                throw new KeyNotFoundException($"Policy {policyId} not found");
+            this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
+        }
     }
 }

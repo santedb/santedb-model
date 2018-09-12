@@ -137,5 +137,6 @@ namespace SanteDB.Core.Model.DataTypes
             this.m_referenceTerm = null;
             this.m_relationshipType = null;
         }
+
     }
 }

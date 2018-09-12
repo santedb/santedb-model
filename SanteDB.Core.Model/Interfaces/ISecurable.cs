@@ -36,5 +36,10 @@ namespace SanteDB.Core.Model.Interfaces
         /// Policies
         /// </summary>
         List<SecurityPolicyInstance> Policies { get; }
+
+        /// <summary>
+        /// Add a policy to the instance
+        /// </summary>
+        void AddPolicy(String policyId);
     }
 }

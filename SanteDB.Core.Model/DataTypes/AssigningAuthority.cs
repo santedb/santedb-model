@@ -207,6 +207,14 @@ namespace SanteDB.Core.Model.DataTypes
         public bool ShouldSerializeOid() => !this.m_minimal;
         public bool ShouldSerializeValidationRegex() => !this.m_minimal;
         public bool ShouldSerializeAssigningDeviceKey() => !this.m_minimal && this.AssigningApplicationKey.HasValue;
-        #pragma warning restore CS1591
+#pragma warning restore CS1591
+
+        /// <summary>
+        /// Represent this as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return $"{this.DomainName},{this.Oid}";
+        }
     }
 }

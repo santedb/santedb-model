@@ -202,5 +202,13 @@ namespace SanteDB.Core.Model.Entities
                 sb.Remove(sb.Length - 2, 2);
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Represent this address as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return this.ToDisplay();
+        }
     }
 }

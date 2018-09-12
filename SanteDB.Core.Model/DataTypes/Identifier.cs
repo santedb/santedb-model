@@ -261,5 +261,13 @@ namespace SanteDB.Core.Model.DataTypes
             if (other == null) return false;
             return base.SemanticEquals(obj) && this.Value == other.Value && this.AuthorityKey == other.AuthorityKey;
         }
+
+        /// <summary>
+        /// Represents this identifier as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return $"{this.Value} [{this.Authority}]";
+        }
     }
 }

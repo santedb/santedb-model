@@ -105,5 +105,13 @@ namespace SanteDB.Core.Model.DataTypes
                 this.Authority == other.Authority &&
                 this.VersionText == other.VersionText;
         }
+
+        /// <summary>
+        /// Represent this object as string
+        /// </summary>
+        public override string ToString()
+        {
+            return $"{this.Authority},{this.Oid}";
+        }
     }
 }

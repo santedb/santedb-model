@@ -140,5 +140,13 @@ namespace SanteDB.Core.Model.DataTypes
             return this.PhoneticAlgorithmKey.HasValue &&
                 this.PhoneticAlgorithmKey != PhoneticAlgorithmKeys.None;
         }
+
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            return $"{this.Name} [{this.Language}]";
+        }
     }
 }
