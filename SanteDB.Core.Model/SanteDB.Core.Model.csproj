@@ -143,8 +143,10 @@
     <Compile Include="Extensions\StringExtensionHandler.cs" />
     <Compile Include="IdentifiedData.cs" />
     <Compile Include="Interfaces\IBaseEntityData.cs" />
+    <Compile Include="Interfaces\IClassifiable.cs" />
     <Compile Include="Interfaces\IExtendable.cs" />
     <Compile Include="Interfaces\IExtensionHandler.cs" />
+    <Compile Include="Interfaces\IHasState.cs" />
     <Compile Include="Interfaces\IIdentifiedEntity.cs" />
     <Compile Include="Interfaces\IModelExtension.cs" />
     <Compile Include="Interfaces\ISimpleAssociation.cs" />
