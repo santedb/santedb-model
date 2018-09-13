@@ -56,7 +56,7 @@ namespace SanteDB.Core.Model.Security
     /// </summary>
     [XmlType("SecurityPolicy",   Namespace = "http://santedb.org/model"), JsonObject("SecurityPolicy")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "SecurityPolicy")]
-    [KeyLookup(nameof(Name)), SimpleValue(nameof(Name))]
+    [KeyLookup(nameof(Oid)), SimpleValue(nameof(Oid))]
     public class SecurityPolicy : BaseEntityData
     {
         
@@ -122,6 +122,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets the policy key
         /// </summary>
+        [XmlElement("policy"), JsonProperty("policy")]
         public Guid? PolicyKey {
             get
             {
@@ -137,7 +138,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// The policy
         /// </summary>
-        [AutoLoad]
+        [AutoLoad, JsonIgnore, XmlIgnore, SerializationReference(nameof(PolicyKey))]
         public SecurityPolicy Policy {
             get
             {
@@ -154,6 +155,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets whether the policy is a Deny
         /// </summary>
+        [XmlElement("grant"), JsonProperty("grant")]
         public PolicyGrantType GrantType { get; set; }
 
     }
