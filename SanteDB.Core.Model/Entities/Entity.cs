@@ -559,5 +559,15 @@ namespace SanteDB.Core.Model.Entities
                 throw new KeyNotFoundException($"Policy {policyId} not found");
             this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
         }
+
+        /// <summary>
+        /// Add a tag to this entity
+        /// </summary>
+        public ITag AddTag(String tagKey, String tagValue)
+        {
+            var tag = new EntityTag(tagKey, tagValue);
+            this.Tags.Add(tag);
+            return tag;
+        }
     }
 }

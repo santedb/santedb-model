@@ -185,7 +185,7 @@ namespace SanteDB.Core.Model
 
                 if (newValue != null &&
                     !newValue.Equals(oldValue) == true &&
-                    (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
+                    (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || typeof(String) == destinationPi.PropertyType && !String.IsNullOrEmpty(newValue.ToString()) || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
                     destinationPi.SetValue(toEntity, newValue);
             }
             return toEntity;

@@ -116,6 +116,14 @@ namespace SanteDB.Core.Model.DataTypes
         {
             return String.Format("{0} [{1}={2}]", base.ToString(), this.TagKey, this.Value);
         }
+
+        /// <summary>
+        /// Any tag that starts with . is not to be persisted
+        /// </summary>
+        public override bool IsEmpty()
+        {
+            return this.TagKey?.StartsWith(".") == true;
+        }
     }
 
     /// <summary>

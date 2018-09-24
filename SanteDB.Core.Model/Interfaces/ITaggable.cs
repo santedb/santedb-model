@@ -36,6 +36,10 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         IEnumerable<ITag> Tags { get; }
 
+        /// <summary>
+        /// Add a tag
+        /// </summary>
+        ITag AddTag(String tagKey, String tagValue);
     }
 
     /// <summary>
