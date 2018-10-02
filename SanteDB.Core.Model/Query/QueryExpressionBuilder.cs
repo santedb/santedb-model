@@ -309,7 +309,7 @@ namespace SanteDB.Core.Model.Query
                 if (access == null)
                     return null;
                 if (access.NodeType == ExpressionType.Parameter)
-                    return ((ParameterExpression)access).Name;
+                    return "$_";
                 else if (access.NodeType == ExpressionType.Constant)
                     return ((ConstantExpression)access).Value;
                 else if (access.NodeType == ExpressionType.Convert)
@@ -318,16 +318,19 @@ namespace SanteDB.Core.Model.Query
                 {
                     MemberExpression expr = access as MemberExpression;
                     var expressionValue = this.ExtractValue(expr.Expression);
-                    if (expr.Member is PropertyInfo)
+                    // Is this a ref to a parameter or variable? If so, we must extract it
+                    if (expressionValue?.ToString().StartsWith("$_") == true)
+                        return this.ExtractPath(expr, false, true);
+                    else if (expr.Member is PropertyInfo)
                     {
-	                    try
-	                    {
-							return (expr.Member as PropertyInfo).GetValue(expressionValue);
-						}
-	                    catch
-	                    {
-		                    return null;
-	                    }
+                        try
+                        {
+                            return (expr.Member as PropertyInfo).GetValue(expressionValue);
+                        }
+                        catch
+                        {
+                            return null;
+                        }
                     }
                     else if (expr.Member is FieldInfo)
                     {
@@ -343,12 +346,12 @@ namespace SanteDB.Core.Model.Query
             /// <returns>The path.</returns>
             /// <param name="access">Access.</param>
             /// <param name="fromUnary">Extract the path from a unuary or binary expression</param>
-            protected String ExtractPath(Expression access, bool fromUnary)
+            protected String ExtractPath(Expression access, bool fromUnary, bool fromOperand = false)
             {
                 if (access.NodeType == ExpressionType.MemberAccess)
                 {
                     MemberExpression memberExpr = access as MemberExpression;
-                    String path = this.ExtractPath(memberExpr.Expression, fromUnary); // get the chain if required
+                    String path = this.ExtractPath(memberExpr.Expression, fromUnary, fromOperand); // get the chain if required
                     if (memberExpr.Expression.Type.GetTypeInfo().IsGenericType && memberExpr.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
                         return path;
 
@@ -367,8 +370,13 @@ namespace SanteDB.Core.Model.Query
                     var memberXattribute = memberInfo.GetCustomAttributes<XmlElementAttribute>().FirstOrDefault();
                     if (memberXattribute == null && queryParameterAttribute != null)
                         memberXattribute = new XmlElementAttribute(queryParameterAttribute.ParameterName); // We don't serialize but it does exist
-                    else if(memberXattribute == null)
+                    else if (memberXattribute == null)
+                    {
+                        if (memberExpr.Expression.Type.StripNullable() == typeof(DateTimeOffset) &&
+                            memberExpr.Member.Name == "DateTime")
+                            return path;
                         return null; // TODO: When this occurs?
+                    }
 
                     // Return path
                     if (String.IsNullOrEmpty(path))
@@ -386,7 +394,7 @@ namespace SanteDB.Core.Model.Query
                     if (callExpr.Method.Name == "Where" ||
                         fromUnary && callExpr.Method.Name == "Any")
                     {
-                        String path = this.ExtractPath(callExpr.Arguments[0], false); // get the chain if required
+                        String path = this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
                         var guardExpression = callExpr.Arguments[1] as LambdaExpression;
                         // Where should be a guard so we just grab the unary equals only!
                         var binaryExpression = guardExpression.Body as BinaryExpression;
@@ -394,7 +402,7 @@ namespace SanteDB.Core.Model.Query
                             throw new InvalidOperationException("Cannot translate non-binary expression guards");
 
                         // Is the expression the guard?
-                        String guardString = this.BuildGuardExpression(binaryExpression); 
+                        String guardString = this.BuildGuardExpression(binaryExpression);
                         return String.Format("{0}[{1}]", path, guardString);
 
                     }
@@ -402,23 +410,25 @@ namespace SanteDB.Core.Model.Query
                     {
                         var extendedFilter = QueryFilterExtensions.GetExtendedFilterByMethod(callExpr.Method);
                         if (extendedFilter != null)
-                            return this.ExtractPath(callExpr.Arguments[0], false); // get the chain if required
-                        else if(!s_reservedNames.Contains(callExpr.Method.Name))
+                            return this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
+                        else if (!s_reservedNames.Contains(callExpr.Method.Name))
                             throw new InvalidOperationException($"Can't find extended method handler for {callExpr.Method.Name}");
                     }
-                    
+
                 }
-                else if(access.NodeType == ExpressionType.Convert ||
+                else if (access.NodeType == ExpressionType.Convert ||
                     access.NodeType == ExpressionType.ConvertChecked)
                 {
                     UnaryExpression ua = (UnaryExpression)access;
-                    return this.ExtractPath(ua.Operand, false);
-                } 
-                else if(access.NodeType == ExpressionType.TypeAs)
+                    return this.ExtractPath(ua.Operand, false, fromOperand);
+                }
+                else if (access.NodeType == ExpressionType.TypeAs)
                 {
                     UnaryExpression ua = (UnaryExpression)access;
-                    return String.Format("{0}@{1}", this.ExtractPath(ua.Operand, false), ua.Type.GetTypeInfo().GetCustomAttribute<XmlTypeAttribute>().TypeName);
+                    return String.Format("{0}@{1}", this.ExtractPath(ua.Operand, false, fromOperand), ua.Type.GetTypeInfo().GetCustomAttribute<XmlTypeAttribute>().TypeName);
                 }
+                else if (access.NodeType == ExpressionType.Parameter && fromOperand)
+                    return "$_";
                 return null;
             }
 
