@@ -122,9 +122,9 @@ namespace SanteDB.Core.Model.Query
                     var pMember = rawMember;
                     String guard = String.Empty,
                         cast = String.Empty;
-                    
+
                     // Guard token incomplete?
-                    if(pMember.Contains("[") && !pMember.Contains("]"))
+                    if (pMember.Contains("[") && !pMember.Contains("]"))
                     {
                         while (!pMember.Contains("]") && i < memberPath.Length)
                             pMember += "." + memberPath[++i];
@@ -250,11 +250,11 @@ namespace SanteDB.Core.Model.Query
                         Expression guardAccessor = guardParameter;
                         while (classifierProperty != null && classAttr != null)
                         {
-                            if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(classifierProperty.PropertyType.GetTypeInfo()))
+                            if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(classifierProperty.PropertyType.GetTypeInfo()) && guard != null)
                                 guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
                             else
                                 guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
-                            
+
 
                             classAttr = classifierProperty.PropertyType.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>();
                             if (classAttr != null && guard != null)
@@ -344,7 +344,8 @@ namespace SanteDB.Core.Model.Query
 
                 // Now expression
                 var kp = currentValue.Value;
-                if (kp != null) {
+                if (kp != null)
+                {
                     foreach (var qValue in kp.Where(o => !String.IsNullOrEmpty(o)))
                     {
                         var value = qValue;
@@ -458,6 +459,7 @@ namespace SanteDB.Core.Model.Query
                                     Expression lowerBound = Expression.MakeBinary(ExpressionType.GreaterThanOrEqual, thisAccessExpression, Expression.Convert(Expression.Constant(dateLow), thisAccessExpression.Type.StripNullable())),
                                         upperBound = Expression.MakeBinary(ExpressionType.LessThanOrEqual, thisAccessExpression, Expression.Convert(Expression.Constant(dateHigh), thisAccessExpression.Type.StripNullable()));
                                     thisAccessExpression = Expression.MakeBinary(ExpressionType.AndAlso, lowerBound, upperBound);
+                                    operandType = thisAccessExpression.Type;
                                     pValue = "true";
                                 }
                                 else
@@ -475,7 +477,7 @@ namespace SanteDB.Core.Model.Query
                         if (pValue == "null")
                             valueExpr = Expression.Constant(null);
                         else if (pValue.StartsWith("$"))
-                            valueExpr = GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables) ?? Expression.Constant(pValue);
+                            valueExpr = GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression) ?? Expression.Constant(pValue);
                         else if (operandType == typeof(String))
                             valueExpr = Expression.Constant(pValue);
                         else if (operandType == typeof(DateTime) || operandType == typeof(DateTime?))
@@ -514,7 +516,7 @@ namespace SanteDB.Core.Model.Query
                             var parms = extendedParms.Select(p =>
                             {
                                 if (p.StartsWith("$")) // variable
-                                    return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables) ?? Expression.Constant(p);
+                                    return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables, parameterExpression) ?? Expression.Constant(p);
                                 else
                                     return Expression.Constant(p);
                             }).ToArray();
@@ -558,38 +560,41 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Get variable expression
         /// </summary>
-        private static Expression GetVariableExpression(string variablePath, Type expectedReturn, Dictionary<string, Delegate> variables)
+        private static Expression GetVariableExpression(string variablePath, Type expectedReturn, Dictionary<string, Delegate> variables, ParameterExpression parameterExpression)
         {
             Delegate val = null;
             String varName = variablePath.Contains(".") ? variablePath.Substring(0, variablePath.IndexOf(".")) : variablePath,
                 varPath = variablePath.Substring(varName.Length);
 
-            if (variables.TryGetValue(varName, out val))
+            Expression scope = null;
+            if (varName == "_")
+                scope = parameterExpression;
+            else if (variables.TryGetValue(varName, out val))
             {
-                Expression retVal = null;
-
                 if (val.GetMethodInfo().GetParameters().Length > 0)
-                    retVal = Expression.Invoke(Expression.Constant(val));
+                    scope = Expression.Invoke(Expression.Constant(val));
                 else
-                    retVal = Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo());
-
-                if (String.IsNullOrEmpty(varPath))
-                    return Expression.Convert(retVal, expectedReturn);
-                else
-                {
-                    var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildPropertySelector), new Type[] { val.GetMethodInfo().ReturnType }, new Type[] { typeof(String) });
-                    retVal = Expression.Invoke(builderMethod.Invoke(null, new object[]
-                    {
-                        varPath.Substring(1)
-                    }) as Expression, retVal);
-                    if (retVal.Type.IsConstructedGenericType &&
-                        retVal.Type.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>))
-                        retVal = Expression.Coalesce(retVal, Expression.Default(retVal.Type.GetTypeInfo().GenericTypeArguments[0]));
-                    return retVal;
-                }
+                    scope = Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo());
             }
             else
                 return null;
+
+            Expression retVal = scope;
+
+            if (String.IsNullOrEmpty(varPath))
+                return Expression.Convert(retVal, expectedReturn);
+            else
+            {
+                var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildPropertySelector), new Type[] { scope.Type }, new Type[] { typeof(String) });
+                retVal = Expression.Invoke(builderMethod.Invoke(null, new object[]
+                {
+                        varPath.Substring(1)
+                }) as Expression, retVal);
+                if (retVal.Type.IsConstructedGenericType &&
+                    retVal.Type.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>))
+                    retVal = Expression.Coalesce(retVal, Expression.Default(retVal.Type.GetTypeInfo().GenericTypeArguments[0]));
+                return retVal;
+            }
         }
 
         /// <summary>
