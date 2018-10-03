@@ -348,7 +348,7 @@ namespace SanteDB.Core.Model
                 .Where(m => m.GetGenericArguments().Length == typeArity)
                 .Where(m => m.GetParameters().Length == argTypes.Length)
                 .Select(m => m.MakeGenericMethod(typeArgs)).ToList()
-                .Where(m => m.GetParameters().All(o => argTypes.Any(p => o.ParameterType.GetTypeInfo().IsAssignableFrom(p.GetTypeInfo()))));
+                .Where(m => Enumerable.Range(0, argTypes.Length).All(i=>m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.GetTypeInfo().IsAssignableFrom(argTypes[i].GetTypeInfo())));
 
             return methods.FirstOrDefault();
             //return Type.DefaultBinder.SelectMethod(flags, methods.ToArray(), argTypes, null);
