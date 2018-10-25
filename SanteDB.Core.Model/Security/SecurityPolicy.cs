@@ -109,7 +109,7 @@ namespace SanteDB.Core.Model.Security
         {
 
         }
-
+        
         /// <summary>
         /// Creates a new policy instance with the specified policy and grant
         /// </summary>
