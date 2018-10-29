@@ -43,7 +43,7 @@ namespace SanteDB.Core.Model.Query
             // Readonly names
             private static readonly String[] s_reservedNames =
             {
-                "Any", "Where", "Contains", "StartsWith", "EndsWith"
+                "Any", "Where", "Contains", "StartsWith", "EndsWith", "ToLower", "ToUpper"
             };
 
             // The dictionary
