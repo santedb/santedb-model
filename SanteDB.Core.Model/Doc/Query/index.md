@@ -1,17 +1,17 @@
 ﻿Immunization Management System Query Language Semantics
 
-Many OpenIZ components use LINQ (Language Independent Natural Query) expressions for querying the data model for complex data structures. This poses a problem, how
+Many SanteDB components use LINQ (Language Independent Natural Query) expressions for querying the data model for complex data structures. This poses a problem, how
 does one effectively represent LINQ as HTTP query parameters or in a text file? Because of this, the SanteDB.Model assembly
 exposes a QueryExpressionBuilder and QueryExpressionParser class. These two classes are responsible for parsing HTTP formatted
 #IMSQL (IMS Query Language) queries to/from LINQ expressions.
 
-## IMSQL Query Semantics
+## HDSQL Query Semantics
 
-The semantics of IMSQ make it quite easy to write complex queries. 
+The semantics of HDSQ make it quite easy to write complex queries. 
 
 ### Properties
 
-IMSQL navigates OpenIZ's reference model using the serialization properties. To understand this, one must view the documentation
+IMSQL navigates SanteDB's reference model using the serialization properties. To understand this, one must view the documentation
 for the HDSI formatted objects. The query parameters are quite simple, take for example a Patient object (note values are removed
 for clarity):
 
@@ -167,7 +167,7 @@ This gets quite powerful when traversing relationships. For example, to return p
 
 ## Debugging your queries
 
-Debugging of queries can be done using the OpenIZ Debugging Tool (oizdt) in any debug mode (either Rules or CarePlan). To 
+Debugging of queries can be done using the SanteDB Debugging Tool (oizdt) in any debug mode (either Rules or CarePlan). To 
 test your queries simply launch the debugger and use the DBQ or SDQ (database query or set data query) commands:
 
 '''
@@ -176,15 +176,15 @@ oizdt --tool=Debug --operation=CarePlan
 # dbq Patient dateOfBirth=>2015-01-01 
 '''
 
-## Creating IMSQL from C#
+## Creating HDSQL from C#
 
 If you're using C# to write a plugin, and wish to serialize or parse an IMSQL query you can use the QueryExpressionBuilder or QueryExpressionParser classes. These
-classes are described in more depth in the OpenIZ API documentation guide.
+classes are described in more depth in the SanteDB API documentation guide.
 
-## Where is IMSQL used?
+## Where is HDSQL used?
 
-IMSQL is used in the following OpenIZ IMS components:
+IMSQL is used in the following SanteDB HDS components:
 
-	* OpenIZ IMS Interface (HDSI) for querying objects
-	* OpenIZ Xml Clinical Protocol Engine (CDSS) for rule guards (one option, XML Linq and Linq are also options)
-	* OpenIZ Disconnected Client for querying data in Applets
+	* SanteDB HDS Interface (HDSI) for querying objects
+	* SanteDB Xml Clinical Protocol Engine (CDSS) for rule guards (one option, XML Linq and Linq are also options)
+	* SanteDB Disconnected Client for querying data in Applets
