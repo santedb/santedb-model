@@ -34,7 +34,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets the version sequence
         /// </summary>
-        decimal? VersionSequence { get; set; }
+        Int32? VersionSequence { get; set; }
 
         /// <summary>
         /// Gets the version key

@@ -135,7 +135,7 @@ namespace SanteDB.Core.Model
         /// The sequence number of the version (for ordering)
         /// </summary>
         [XmlElement("sequence"), JsonProperty("sequence")]
-        public Decimal? VersionSequence { get; set; }
+        public Int32? VersionSequence { get; set; }
 
         /// <summary>
         /// Represent the versioned data as a string
