@@ -41,16 +41,16 @@ namespace SanteDB.Core.Model
     {
 
         // The identifier of the version where this data is effective
-        private Decimal? m_effectiveVersionSequenceId;
+        private Int32? m_effectiveVersionSequenceId;
         // The identifier of the version where this data is no longer effective
-        private Decimal? m_obsoleteVersionSequenceId;
+        private Int32? m_obsoleteVersionSequenceId;
         // The version where this data is effective
 
         /// <summary>
         /// Gets or sets the effective version of this type
         /// </summary>
         [XmlElement("effectiveVersionSequence"), JsonProperty("effectiveVersionSequence")]
-        public Decimal? EffectiveVersionSequenceId
+        public Int32? EffectiveVersionSequenceId
         {
             get { return this.m_effectiveVersionSequenceId; }
             set
@@ -63,7 +63,7 @@ namespace SanteDB.Core.Model
         /// Gets or sets the obsoleted version identifier
         /// </summary>
         [XmlElement("obsoleteVersionSequence"), JsonProperty("obsoleteVersionSequence")]
-        public Decimal? ObsoleteVersionSequenceId
+        public Int32? ObsoleteVersionSequenceId
         {
             get { return this.m_obsoleteVersionSequenceId; }
             set
