@@ -183,7 +183,11 @@ namespace SanteDB.Core.Model
                 if ((newValue as IList)?.Count == 0)
                     newValue = null;
 
-                if (newValue != null &&
+                if (newValue is IList && oldValue is IList) {
+                    if(!Enumerable.SequenceEqual<Object>(((IList)newValue).OfType<Object>(), ((IList)oldValue).OfType<Object>()))
+                        destinationPi.SetValue(toEntity, newValue);
+                }
+                else if (newValue != null &&
                     !newValue.Equals(oldValue) == true &&
                     (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || typeof(String) == destinationPi.PropertyType && !String.IsNullOrEmpty(newValue.ToString()) || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
                     destinationPi.SetValue(toEntity, newValue);
