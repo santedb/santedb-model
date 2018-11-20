@@ -181,7 +181,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Gets or sets the keys of objects that aren't really in the bundle but are expansion items
         /// </summary>
-        [XmlElement("result"), JsonProperty("result")]
+        [XmlElement("refItem"), JsonProperty("refItem")]
         public List<Guid> ExpansionKeys { get; set; }
 
         /// <summary>
