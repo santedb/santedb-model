@@ -38,6 +38,19 @@ namespace SanteDB.Core.Model.Serialization
         private static object s_lock = new object();
 
         /// <summary>
+        /// Register the model type
+        /// </summary>
+        public static void RegisterModelType (Type type)
+        {
+            var typeName = type.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.Name;
+            if (!s_typeCache.ContainsKey(typeName))
+                lock (s_lock)
+                    s_typeCache.Add(typeName, type);
+            else
+                throw new ArgumentException($"Type {typeName} is already registered");
+        }
+
+        /// <summary>
         /// Bind the type to a name
         /// </summary>
         public void BindToName(Type serializedType, out string assemblyName, out string typeName)
