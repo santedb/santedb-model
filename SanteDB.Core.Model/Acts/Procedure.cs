@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2017-10-30
+ * User: justin
+ * Date: 2018-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
