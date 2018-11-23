@@ -36,6 +36,24 @@ namespace SanteDB.Core.Model.Serialization
 
         private static Dictionary<String, Type> s_typeCache = new Dictionary<string, Type>();
         private static object s_lock = new object();
+        private Type m_hintType;
+
+        /// <summary>
+        /// Create a new model serialization binder
+        /// </summary>
+        public ModelSerializationBinder()
+        {
+
+        }
+
+        /// <summary>
+        /// Model serialization binding with hint
+        /// </summary>
+        /// <param name="hintType"></param>
+        public ModelSerializationBinder(Type hintType)
+        {
+            this.m_hintType = hintType;
+        }
 
         /// <summary>
         /// Register the model type
@@ -68,6 +86,12 @@ namespace SanteDB.Core.Model.Serialization
             Assembly asm = typeof(ModelSerializationBinder).GetTypeInfo().Assembly;
             if (!String.IsNullOrEmpty(assemblyName))
                 asm = Assembly.Load(new AssemblyName(assemblyName));
+            else if(this.m_hintType != null) // use hint type
+            {
+                asm = m_hintType.GetTypeInfo().Assembly;
+                if (m_hintType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>()?.Id == typeName)
+                    return this.m_hintType;
+            }
 
             // The type
             Type type = null;
