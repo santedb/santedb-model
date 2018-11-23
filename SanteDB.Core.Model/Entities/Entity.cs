@@ -525,6 +525,7 @@ namespace SanteDB.Core.Model.Entities
         [XmlIgnore, JsonIgnore]
         IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.Extensions.OfType<IModelExtension>(); } }
 
+
         /// <summary>
         /// Copies the entity
         /// </summary>

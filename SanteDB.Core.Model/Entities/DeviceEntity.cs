@@ -20,6 +20,8 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
 using System.ComponentModel;
@@ -33,7 +35,7 @@ namespace SanteDB.Core.Model.Entities
 
 	[XmlType("DeviceEntity", Namespace = "http://santedb.org/model"), JsonObject("DeviceEntity")]
 	[XmlRoot(Namespace = "http://santedb.org/model", ElementName = "DeviceEntity")]
-	public class DeviceEntity : Entity
+	public class DeviceEntity : Entity, IGeoTagged
 	{
 		// Security device
 		private SecurityDevice m_securityDevice;
@@ -99,10 +101,16 @@ namespace SanteDB.Core.Model.Entities
 			}
 		}
 
-		/// <summary>
-		/// Force refresh of data model
-		/// </summary>
-		public override void Refresh()
+        /// <summary>
+        /// Gets or sets the geo tag
+        /// </summary>
+        [XmlElement("geo"), JsonProperty("geo")]
+        public GeoTag GeoTag { get; set; }
+
+        /// <summary>
+        /// Force refresh of data model
+        /// </summary>
+        public override void Refresh()
 		{
 			base.Refresh();
 			this.m_securityDevice = null;

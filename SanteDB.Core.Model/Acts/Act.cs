@@ -67,7 +67,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Act")]
     [JsonObject("Act")]
     [Classifier(nameof(ClassConcept))]
-    public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IClassifiable, IHasState
+    public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IClassifiable, IHasState, IGeoTagged
     {
 
         private Guid? m_classConceptKey;
@@ -659,6 +659,12 @@ namespace SanteDB.Core.Model.Acts
 
         [XmlIgnore, JsonIgnore]
         IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.Extensions.OfType<IModelExtension>(); } }
+
+        /// <summary>
+        /// Gets or sets the geo-tag
+        /// </summary>
+        [XmlElement("geo"), JsonProperty("geo")]
+        public GeoTag GeoTag { get; set; }
 
         /// <summary>
         /// Copies the entity

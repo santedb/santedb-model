@@ -20,6 +20,8 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,7 +35,7 @@ namespace SanteDB.Core.Model.Entities
 
 	[XmlType("Place", Namespace = "http://santedb.org/model"), JsonObject("Place")]
 	[XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Place")]
-	public class Place : Entity
+	public class Place : Entity, IGeoTagged
 	{
 		/// <summary>
 		/// Place ctor
@@ -79,14 +81,48 @@ namespace SanteDB.Core.Model.Entities
 		/// <summary>
 		/// Gets or sets the latitude
 		/// </summary>
-		[XmlElement("lat"), JsonProperty("lat")]
-		public double? Lat { get; set; }
+		[XmlIgnore, JsonIgnore, Obsolete("Use the IGeoTagged properties")]
+		public double? Lat
+        {
+            get
+            {
+                return this.GeoTag?.Lat;
+            }
+            set
+            {
+                if(value.HasValue)
+                {
+                    this.GeoTag = this.GeoTag ?? new GeoTag();
+                    this.GeoTag.Lat = value.Value;
+                }
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets the longitude
 		/// </summary>
-		[XmlElement("lng"), JsonProperty("lng")]
-		public double? Lng { get; set; }
+		[XmlIgnore, JsonIgnore, Obsolete("Use the IGeoTagged properties")]
+		public double? Lng
+        {
+            get
+            {
+                return this.GeoTag?.Lng;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    this.GeoTag = this.GeoTag ?? new GeoTag();
+                    this.GeoTag.Lng = value.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the geographic tag
+        /// </summary>
+        [XmlElement("geo"), JsonProperty("geo")]
+        public GeoTag GeoTag { get; set; }
 
         /// <summary>
         /// Should serialize mobile
