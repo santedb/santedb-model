@@ -102,6 +102,7 @@
     <Compile Include="DataTypes\DatePrecision.cs" />
     <Compile Include="DataTypes\Extension.cs" />
     <Compile Include="DataTypes\ExtensionType.cs" />
+    <Compile Include="DataTypes\GeoTag.cs" />
     <Compile Include="DataTypes\Identifier.cs" />
     <Compile Include="DataTypes\IdentifierType.cs" />
     <Compile Include="DataTypes\Note.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Interfaces\IClassifiable.cs" />
     <Compile Include="Interfaces\IExtendable.cs" />
     <Compile Include="Interfaces\IExtensionHandler.cs" />
+    <Compile Include="Interfaces\IGeoTagged.cs" />
     <Compile Include="Interfaces\IHasState.cs" />
     <Compile Include="Interfaces\IIdentifiedEntity.cs" />
     <Compile Include="Interfaces\IModelExtension.cs" />
