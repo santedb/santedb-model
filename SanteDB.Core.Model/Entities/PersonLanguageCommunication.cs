@@ -23,51 +23,51 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// Represents a single preferred communication method for the entity
-	/// </summary>
+    /// <summary>
+    /// Represents a single preferred communication method for the entity
+    /// </summary>
 
-	[XmlType("PersonLanguageCommunication", Namespace = "http://santedb.org/model"), JsonObject("PersonLanguageCommunication")]
-	public class PersonLanguageCommunication : VersionedAssociation<Entity>
-	{
-		/// <summary>
-		/// Default ctor
-		/// </summary>
-		public PersonLanguageCommunication()
-		{
-		}
+    [XmlType("PersonLanguageCommunication", Namespace = "http://santedb.org/model"), JsonObject("PersonLanguageCommunication")]
+    public class PersonLanguageCommunication : VersionedAssociation<Entity>
+    {
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public PersonLanguageCommunication()
+        {
+        }
 
-		/// <summary>
-		/// Language communication code ctor with specified code and preference
-		/// </summary>
-		public PersonLanguageCommunication(String languageCode, bool isPreferred)
-		{
-			this.LanguageCode = languageCode;
-			this.IsPreferred = isPreferred;
-		}
+        /// <summary>
+        /// Language communication code ctor with specified code and preference
+        /// </summary>
+        public PersonLanguageCommunication(String languageCode, bool isPreferred)
+        {
+            this.LanguageCode = languageCode;
+            this.IsPreferred = isPreferred;
+        }
 
-		/// <summary>
-		/// Gets or set the user's preference indicator
-		/// </summary>
-		[XmlElement("isPreferred"), JsonProperty("isPreferred")]
-		public bool IsPreferred { get; set; }
+        /// <summary>
+        /// Gets or set the user's preference indicator
+        /// </summary>
+        [XmlElement("isPreferred"), JsonProperty("isPreferred")]
+        public bool IsPreferred { get; set; }
 
-		/// <summary>
-		/// Gets or sets the language code
-		/// </summary>
-		[XmlElement("languageCode"), JsonProperty("languageCode")]
-		public string LanguageCode { get; set; }
+        /// <summary>
+        /// Gets or sets the language code
+        /// </summary>
+        [XmlElement("languageCode"), JsonProperty("languageCode")]
+        public string LanguageCode { get; set; }
 
-		/// <summary>
-		/// Semantic equality function
-		/// </summary>
-		public override bool SemanticEquals(object obj)
-		{
-			var other = obj as PersonLanguageCommunication;
-			if (other == null) return false;
-			return base.SemanticEquals(obj) &&
-				this.IsPreferred == other.IsPreferred &&
-				this.LanguageCode == other.LanguageCode;
-		}
-	}
+        /// <summary>
+        /// Semantic equality function
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as PersonLanguageCommunication;
+            if (other == null) return false;
+            return base.SemanticEquals(obj) &&
+                this.IsPreferred == other.IsPreferred &&
+                this.LanguageCode == other.LanguageCode;
+        }
+    }
 }

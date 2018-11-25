@@ -19,7 +19,6 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
-using System;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -27,8 +26,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Identifies a classification for a concept
     /// </summary>
-    
-    [XmlType("ConceptClass",  Namespace = "http://santedb.org/model"), JsonObject("ConceptClass")]
+
+    [XmlType("ConceptClass", Namespace = "http://santedb.org/model"), JsonObject("ConceptClass")]
     [XmlRoot(nameof(ConceptClass), Namespace = "http://santedb.org/model")]
 
     [Classifier(nameof(Mnemonic)), KeyLookup(nameof(Mnemonic))]

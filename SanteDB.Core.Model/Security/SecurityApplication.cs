@@ -17,23 +17,18 @@
  * User: justin
  * Date: 2018-6-21
  */
-using SanteDB.Core.Model.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security
 {
     /// <summary>
     /// Represents a security application
     /// </summary>
-    
+
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "SecurityApplication")]
-    [XmlType("SecurityApplication",  Namespace = "http://santedb.org/model"), JsonObject("SecurityApplication")]
+    [XmlType("SecurityApplication", Namespace = "http://santedb.org/model"), JsonObject("SecurityApplication")]
     public class SecurityApplication : SecurityEntity
     {
         /// <summary>

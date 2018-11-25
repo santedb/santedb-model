@@ -17,24 +17,20 @@
  * User: justin
  * Date: 2018-6-21
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Reflection;
-using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.Interfaces;
-using System.Collections;
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.Roles;
 using SanteDB.Core.Model.Security;
-using Newtonsoft.Json;
-using System.Threading;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Collection
 {
@@ -82,9 +78,9 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(ConceptRelationship))]
     [XmlInclude(typeof(ConceptRelationshipType))]
     [XmlInclude(typeof(SecurityUser))]
-	[XmlInclude(typeof(SecurityRole))]
-	[XmlInclude(typeof(CodeSystem))]
-	public class Bundle : IdentifiedData
+    [XmlInclude(typeof(SecurityRole))]
+    [XmlInclude(typeof(CodeSystem))]
+    public class Bundle : IdentifiedData
     {
         /// <summary>
         /// Create new bundle
@@ -130,7 +126,7 @@ namespace SanteDB.Core.Model.Collection
                 if (this.Item[i] == null)
                     this.Item.RemoveAt(i);
                 else
-                    this.Item[i].Clean() ;
+                    this.Item[i].Clean();
             return this;
         }
 
@@ -202,7 +198,7 @@ namespace SanteDB.Core.Model.Collection
             if (data == null) return;
             this.Item.Insert(index, data);
             this.m_bundleTags.Add(data.Tag);
-        } 
+        }
 
         /// <summary>
         /// True if the bundle has a tag
@@ -309,9 +305,9 @@ namespace SanteDB.Core.Model.Collection
                 // Get the key and find a match
                 var key = (Guid?)keyPi.GetValue(data);
                 var bundleItem = this.Item.Find(o => o.Key == key);
-                if(bundleItem != null)
+                if (bundleItem != null)
                     pi.SetValue(data, bundleItem);
-                
+
             }
 
             context.Remove(data);
@@ -334,12 +330,12 @@ namespace SanteDB.Core.Model.Collection
                         properties = model.GetType().GetRuntimeProperties().Where(p => p.GetCustomAttribute<SerializationReferenceAttribute>() != null ||
                             typeof(IList).GetTypeInfo().IsAssignableFrom(p.PropertyType.GetTypeInfo()) && p.GetCustomAttributes<XmlElementAttribute>().Count() > 0 && followList).ToList();
 
-	                    if (!m_propertyCache.ContainsKey(model.GetType()))
-	                    {
-							m_propertyCache.Add(model.GetType(), properties);
-						}
+                        if (!m_propertyCache.ContainsKey(model.GetType()))
+                        {
+                            m_propertyCache.Add(model.GetType(), properties);
+                        }
                     }
-                
+
                 currentBundle.m_modifiedOn = DateTimeOffset.Now;
                 foreach (var pi in properties)
                 {
@@ -376,7 +372,7 @@ namespace SanteDB.Core.Model.Collection
                             var iValue = rawValue as IdentifiedData;
 
                             // Check for existing item
-                            if (iValue != null && !currentBundle.HasTag(iValue.Tag ))
+                            if (iValue != null && !currentBundle.HasTag(iValue.Tag))
                             {
                                 if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null && iValue != null)
                                     lock (currentBundle.m_lockObject)
@@ -395,7 +391,7 @@ namespace SanteDB.Core.Model.Collection
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine("Error: {0}", e);
             }

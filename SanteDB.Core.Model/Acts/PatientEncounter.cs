@@ -17,17 +17,13 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace SanteDB.Core.Model.Acts
 {
@@ -39,7 +35,7 @@ namespace SanteDB.Core.Model.Acts
     ///An encounter is used to document things like hospital visits, inpatient care encounters, or any longer running series of actions which 
     ///are linked by the admit -&gt; discharge workflow.</para>
     /// </remarks>
-    [XmlType("PatientEncounter",  Namespace = "http://santedb.org/model"), JsonObject("PatientEncounter")]
+    [XmlType("PatientEncounter", Namespace = "http://santedb.org/model"), JsonObject("PatientEncounter")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "PatientEncounter")]
     public class PatientEncounter : Act
     {

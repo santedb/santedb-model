@@ -29,77 +29,77 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// Represents a device entity
-	/// </summary>
+    /// <summary>
+    /// Represents a device entity
+    /// </summary>
 
-	[XmlType("DeviceEntity", Namespace = "http://santedb.org/model"), JsonObject("DeviceEntity")]
-	[XmlRoot(Namespace = "http://santedb.org/model", ElementName = "DeviceEntity")]
-	public class DeviceEntity : Entity, IGeoTagged
-	{
-		// Security device
-		private SecurityDevice m_securityDevice;
+    [XmlType("DeviceEntity", Namespace = "http://santedb.org/model"), JsonObject("DeviceEntity")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "DeviceEntity")]
+    public class DeviceEntity : Entity, IGeoTagged
+    {
+        // Security device
+        private SecurityDevice m_securityDevice;
 
-		// Security device key
-		private Guid? m_securityDeviceKey;
+        // Security device key
+        private Guid? m_securityDeviceKey;
 
-		/// <summary>
-		/// Device entity ctor
-		/// </summary>
-		public DeviceEntity()
-		{
-			this.DeterminerConceptKey = DeterminerKeys.Specific;
-			this.ClassConceptKey = EntityClassKeys.Device;
-		}
+        /// <summary>
+        /// Device entity ctor
+        /// </summary>
+        public DeviceEntity()
+        {
+            this.DeterminerConceptKey = DeterminerKeys.Specific;
+            this.ClassConceptKey = EntityClassKeys.Device;
+        }
 
-		/// <summary>
-		/// Gets or sets the manufacturer model name
-		/// </summary>
-		[XmlElement("manufacturerModelName"), JsonProperty("manufacturerModelName")]
-		public String ManufacturerModelName { get; set; }
+        /// <summary>
+        /// Gets or sets the manufacturer model name
+        /// </summary>
+        [XmlElement("manufacturerModelName"), JsonProperty("manufacturerModelName")]
+        public String ManufacturerModelName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the operating system name
-		/// </summary>
-		[XmlElement("operatingSystemName"), JsonProperty("operatingSystemName")]
-		public String OperatingSystemName { get; set; }
+        /// <summary>
+        /// Gets or sets the operating system name
+        /// </summary>
+        [XmlElement("operatingSystemName"), JsonProperty("operatingSystemName")]
+        public String OperatingSystemName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the security device
-		/// </summary>
-		[SerializationReference(nameof(SecurityDeviceKey))]
-		[XmlIgnore, JsonIgnore]
-		public SecurityDevice SecurityDevice
-		{
-			get
-			{
-				this.m_securityDevice = base.DelayLoad(this.m_securityDeviceKey, this.m_securityDevice);
-				return this.m_securityDevice;
-			}
-			set
-			{
-				this.m_securityDevice = value;
-				this.m_securityDeviceKey = value?.Key;
-			}
-		}
+        /// <summary>
+        /// Gets or sets the security device
+        /// </summary>
+        [SerializationReference(nameof(SecurityDeviceKey))]
+        [XmlIgnore, JsonIgnore]
+        public SecurityDevice SecurityDevice
+        {
+            get
+            {
+                this.m_securityDevice = base.DelayLoad(this.m_securityDeviceKey, this.m_securityDevice);
+                return this.m_securityDevice;
+            }
+            set
+            {
+                this.m_securityDevice = value;
+                this.m_securityDeviceKey = value?.Key;
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets the security device key
-		/// </summary>
-		[XmlElement("securityDevice"), JsonProperty("securityDevice")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public Guid? SecurityDeviceKey
-		{
-			get { return this.m_securityDeviceKey; }
-			set
-			{
-				if (this.m_securityDeviceKey != value)
-				{
-					this.m_securityDeviceKey = value;
-					this.m_securityDevice = null;
-				}
-			}
-		}
+        /// <summary>
+        /// Gets or sets the security device key
+        /// </summary>
+        [XmlElement("securityDevice"), JsonProperty("securityDevice")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? SecurityDeviceKey
+        {
+            get { return this.m_securityDeviceKey; }
+            set
+            {
+                if (this.m_securityDeviceKey != value)
+                {
+                    this.m_securityDeviceKey = value;
+                    this.m_securityDevice = null;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the geo tag
@@ -111,22 +111,22 @@ namespace SanteDB.Core.Model.Entities
         /// Force refresh of data model
         /// </summary>
         public override void Refresh()
-		{
-			base.Refresh();
-			this.m_securityDevice = null;
-		}
+        {
+            base.Refresh();
+            this.m_securityDevice = null;
+        }
 
-		/// <summary>
-		/// Determine semantic equality
-		/// </summary>
-		public override bool SemanticEquals(object obj)
-		{
-			var other = obj as DeviceEntity;
-			if (other == null) return false;
-			return base.SemanticEquals(obj) &&
-				this.SecurityDeviceKey == other.SecurityDeviceKey &&
-				this.ManufacturerModelName == other.ManufacturerModelName &&
-				this.OperatingSystemName == other.OperatingSystemName;
-		}
-	}
+        /// <summary>
+        /// Determine semantic equality
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as DeviceEntity;
+            if (other == null) return false;
+            return base.SemanticEquals(obj) &&
+                this.SecurityDeviceKey == other.SecurityDeviceKey &&
+                this.ManufacturerModelName == other.ManufacturerModelName &&
+                this.OperatingSystemName == other.OperatingSystemName;
+        }
+    }
 }

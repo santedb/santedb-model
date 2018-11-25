@@ -206,7 +206,7 @@ namespace SanteDB.Core.Model.Map
                     case "y":
                         return new TimeSpan((long)(TimeSpan.TicksPerDay * 365.25d * qty));
                     case "M":
-                        return new TimeSpan((long)(TimeSpan.TicksPerDay * 30.473d  * qty));
+                        return new TimeSpan((long)(TimeSpan.TicksPerDay * 30.473d * qty));
                     case "d":
                         return new TimeSpan((int)qty, 0, 0, 0);
                     case "w":

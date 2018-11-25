@@ -17,7 +17,6 @@
  * User: justin
  * Date: 2018-8-16
  */
-using SanteDB.Core.Model;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Collection;
 using SanteDB.Core.Model.DataTypes;
@@ -46,21 +45,21 @@ namespace SanteDB.Core.Model.Export
             this.Action = new List<DataInstallAction>();
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Dataset"/> class.
-		/// </summary>
-		/// <param name="id">The identifier.</param>
-		public Dataset(string id) : this()
-	    {
-		    this.Id = id;
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Dataset"/> class.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public Dataset(string id) : this()
+        {
+            this.Id = id;
+        }
 
         /// <summary>
         /// Gets or sets the identifier of the dataset
         /// </summary>
         [XmlAttribute("id")]
         public String Id { get; set; }
-        
+
         /// <summary>
         /// Actions to be performed
         /// </summary>
@@ -118,13 +117,13 @@ namespace SanteDB.Core.Model.Export
         /// </summary>
         public abstract String ActionName { get; }
 
-		/// <summary>
-		/// Gets the elements to be performed
-		/// </summary>
-		[XmlElement("ConceptReferenceTerm", typeof(ConceptReferenceTerm), Namespace = "http://santedb.org/model")]
-		[XmlElement("ConceptName", typeof(ConceptName), Namespace = "http://santedb.org/model")]
-		[XmlElement("EntityRelationship", typeof(EntityRelationship), Namespace = "http://santedb.org/model")]
-		[XmlElement("Concept", typeof(Concept), Namespace = "http://santedb.org/model")]
+        /// <summary>
+        /// Gets the elements to be performed
+        /// </summary>
+        [XmlElement("ConceptReferenceTerm", typeof(ConceptReferenceTerm), Namespace = "http://santedb.org/model")]
+        [XmlElement("ConceptName", typeof(ConceptName), Namespace = "http://santedb.org/model")]
+        [XmlElement("EntityRelationship", typeof(EntityRelationship), Namespace = "http://santedb.org/model")]
+        [XmlElement("Concept", typeof(Concept), Namespace = "http://santedb.org/model")]
         [XmlElement("ConceptSet", typeof(ConceptSet), Namespace = "http://santedb.org/model")]
         [XmlElement("ConceptRelationship", typeof(ConceptRelationship), Namespace = "http://santedb.org/model")]
         [XmlElement("AssigningAuthority", typeof(AssigningAuthority), Namespace = "http://santedb.org/model")]
@@ -193,7 +192,7 @@ namespace SanteDB.Core.Model.Export
         /// </summary>
         [XmlAttribute("property")]
         public String PropertyName { get; set; }
-        
+
     }
 
     /// <summary>
@@ -205,7 +204,7 @@ namespace SanteDB.Core.Model.Export
         /// <summary>
         /// Gets the action name
         /// </summary>
-        public override string ActionName {  get { return "Update"; } }
+        public override string ActionName { get { return "Update"; } }
 
         /// <summary>
         /// Insert if not exists

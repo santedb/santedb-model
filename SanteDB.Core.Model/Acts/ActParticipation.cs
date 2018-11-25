@@ -17,18 +17,14 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SanteDB.Core.Model.Constants;
 
 namespace SanteDB.Core.Model.Acts
 {
@@ -64,12 +60,12 @@ namespace SanteDB.Core.Model.Acts
         {
         }
 
-		/// <summary>
-		/// Act participation relationship between <paramref name="roleType" /> and <paramref name="player" />
-		/// </summary>
-		/// <param name="roleType">Type of the role.</param>
-		/// <param name="player">The player.</param>
-		public ActParticipation(Guid? roleType, Entity player)
+        /// <summary>
+        /// Act participation relationship between <paramref name="roleType" /> and <paramref name="player" />
+        /// </summary>
+        /// <param name="roleType">Type of the role.</param>
+        /// <param name="player">The player.</param>
+        public ActParticipation(Guid? roleType, Entity player)
         {
             this.ParticipationRoleKey = roleType;
             this.PlayerEntity = player;

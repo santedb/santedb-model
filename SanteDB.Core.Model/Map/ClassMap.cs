@@ -21,8 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map
@@ -30,7 +28,7 @@ namespace SanteDB.Core.Model.Map
     /// <summary>
     /// Class mapping
     /// </summary>
-    [XmlType( nameof(ClassMap), Namespace = "http://santedb.org/model/map")]
+    [XmlType(nameof(ClassMap), Namespace = "http://santedb.org/model/map")]
     public class ClassMap
     {
 
@@ -59,7 +57,9 @@ namespace SanteDB.Core.Model.Map
         /// Gets the model CLR type
         /// </summary>
         [XmlIgnore]
-        public Type ModelType { get
+        public Type ModelType
+        {
+            get
             {
                 if (this.m_modelType == null)
                     this.m_modelType = Type.GetType(this.ModelClass);
@@ -120,7 +120,7 @@ namespace SanteDB.Core.Model.Map
             if (!this.m_modelPropertyMap.TryGetValue(modelName, out retVal))
             {
                 retVal = this.Property.Find(o => o.ModelName == modelName);
-                lock(this.m_lockObject)
+                lock (this.m_lockObject)
                     if (!this.m_modelPropertyMap.ContainsKey(modelName))
                         this.m_modelPropertyMap.Add(modelName, retVal);
             }
@@ -140,10 +140,10 @@ namespace SanteDB.Core.Model.Map
                 domainClass = Type.GetType(this.DomainClass);
             if (modelClass == null)
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Class {0} not found", this.ModelClass), null, null));
-            if(domainClass == null)
+            if (domainClass == null)
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Class {0} not found", this.DomainClass), null, null));
 
-            foreach(var p in this.Property)
+            foreach (var p in this.Property)
                 retVal.AddRange(p.Validate(modelClass, domainClass).Select(o => { o.Location = this.ModelClass; return o; }));
             foreach (var k in this.CollapseKey)
                 retVal.AddRange(k.Validate(domainClass).Select(o => { o.Location = this.ModelClass; return o; }));
@@ -166,7 +166,7 @@ namespace SanteDB.Core.Model.Map
             }
             return retVal != null;
 
-            
+
         }
     }
 }

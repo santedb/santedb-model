@@ -28,8 +28,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a basic information class which classifies the use of an identifier
     /// </summary>
-    
-    [XmlType(nameof(IdentifierType),  Namespace = "http://santedb.org/model"), JsonObject("IdentifierType")]
+
+    [XmlType(nameof(IdentifierType), Namespace = "http://santedb.org/model"), JsonObject("IdentifierType")]
     [XmlRoot(nameof(IdentifierType), Namespace = "http://santedb.org/model")]
     public class IdentifierType : BaseEntityData
     {
@@ -39,19 +39,19 @@ namespace SanteDB.Core.Model.DataTypes
         // Scope concept identifier
         private Guid? m_scopeConceptId;
         // Type concept
-        
+
         private Concept m_typeConcept;
         // Scope concept
-        
+
         private Concept m_scopeConcept;
 
         /// <summary>
         /// Gets or sets the id of the scope concept
         /// </summary>
-        
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("scopeConcept"), JsonProperty("scopeConcept")]
-        public Guid?  ScopeConceptKey
+        public Guid? ScopeConceptKey
         {
             get { return this.m_scopeConceptId; }
             set
@@ -64,10 +64,10 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the concept which identifies the type
         /// </summary>
-        
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
-        public Guid?  TypeConceptKey
+        public Guid? TypeConceptKey
         {
             get { return this.m_typeConceptId; }
             set

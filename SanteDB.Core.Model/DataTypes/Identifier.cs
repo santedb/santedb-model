@@ -17,18 +17,14 @@
  * User: justin
  * Date: 2018-6-21
  */
-using SanteDB.Core.Model.Attributes;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using SanteDB.Core.Model.Entities;
-using SanteDB.Core.Model.Acts;
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Acts;
+using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
+using System;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
 {
@@ -203,7 +199,7 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                if(this.m_authority == null)
+                if (this.m_authority == null)
                     this.m_authority = EntitySource.Current.Get<AssigningAuthority>(this.m_authorityId); // base.DelayLoad(this.m_authorityId, this.m_authority);
                 return this.m_authority?.ToMinimal();
             }
@@ -217,7 +213,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents the authority information 
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore] 
+        [AutoLoad, XmlIgnore, JsonIgnore]
         public AssigningAuthority Authority
         {
             get

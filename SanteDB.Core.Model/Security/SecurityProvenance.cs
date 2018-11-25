@@ -20,11 +20,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security
@@ -102,7 +98,8 @@ namespace SanteDB.Core.Model.Security
         /// Gets the security user for the provenance if applicable
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(UserKey))]
-        public SecurityUser User {
+        public SecurityUser User
+        {
             get
             {
                 this.m_user = base.DelayLoad(this.UserKey, this.m_user);

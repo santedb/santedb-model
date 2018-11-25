@@ -22,13 +22,8 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model
@@ -42,8 +37,8 @@ namespace SanteDB.Core.Model
     /// model, namely it keeps track of which entities created and obsoleted a particular resource and when those
     /// events occurred.
     /// </remarks>
-    
-    [XmlType("BaseEntityData",  Namespace = "http://santedb.org/model"), JsonObject("BaseEntityData")]
+
+    [XmlType("BaseEntityData", Namespace = "http://santedb.org/model"), JsonObject("BaseEntityData")]
     public abstract class BaseEntityData : IdentifiedData, IBaseEntityData
     {
 
@@ -75,13 +70,15 @@ namespace SanteDB.Core.Model
         [XmlElement("creationTime"), JsonProperty("creationTime"), DataIgnore()]
         public String CreationTimeXml
         {
-            get {
-				if (this.CreationTime == default(DateTimeOffset))
-					return null;
-				else
-					return this.CreationTime.ToString("o", CultureInfo.InvariantCulture);
-			}
-            set {
+            get
+            {
+                if (this.CreationTime == default(DateTimeOffset))
+                    return null;
+                else
+                    return this.CreationTime.ToString("o", CultureInfo.InvariantCulture);
+            }
+            set
+            {
                 if (value != null)
                     this.CreationTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
                 else this.CreationTime = default(DateTimeOffset);
@@ -101,7 +98,8 @@ namespace SanteDB.Core.Model
         public String ObsoletionTimeXml
         {
             get { return this.ObsoletionTime?.ToString("o", CultureInfo.InvariantCulture); }
-            set {
+            set
+            {
                 if (value != null)
                     this.ObsoletionTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
                 else this.ObsoletionTime = null;
@@ -114,7 +112,8 @@ namespace SanteDB.Core.Model
         /// </summary>
         [SerializationReference(nameof(CreatedByKey)), DataIgnore()]
         [XmlIgnore, JsonIgnore]
-        public virtual SecurityProvenance CreatedBy {
+        public virtual SecurityProvenance CreatedBy
+        {
             get
             {
                 this.m_createdBy = base.DelayLoad(this.m_createdById, this.m_createdBy);
@@ -125,7 +124,7 @@ namespace SanteDB.Core.Model
                 this.m_createdBy = value;
                 this.m_createdById = value?.Key;
             }
-         }
+        }
 
         /// <summary>
         /// Gets the time that the object was last modified (from base data, default to CreationTime)
@@ -158,17 +157,18 @@ namespace SanteDB.Core.Model
         {
             return this.ObsoletedByKey.HasValue;
         }
-        
+
 
         /// <summary>
         /// Gets or sets the user that obsoleted this base data
         /// </summary>
         [SerializationReference(nameof(ObsoletedByKey)), DataIgnore()]
         [XmlIgnore, JsonIgnore]
-        public virtual SecurityProvenance ObsoletedBy {
+        public virtual SecurityProvenance ObsoletedBy
+        {
             get
             {
-                this.m_obsoletedBy= base.DelayLoad(this.m_obsoletedById, this.m_obsoletedBy);
+                this.m_obsoletedBy = base.DelayLoad(this.m_obsoletedById, this.m_obsoletedBy);
                 return this.m_obsoletedBy;
             }
             set
@@ -185,7 +185,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets or sets the identifier of the user which created the data
         /// </summary>
-        
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("createdBy"), JsonProperty("createdBy")]
         public virtual Guid? CreatedByKey
@@ -202,7 +202,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets or sets the identifier of the user which obsoleted the data
         /// </summary>
-        
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("obsoletedBy"), JsonProperty("obsoletedBy")]
         public virtual Guid? ObsoletedByKey

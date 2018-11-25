@@ -22,10 +22,6 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -44,7 +40,7 @@ namespace SanteDB.Core.Model.Acts
         // Payment terms key
         private Guid? m_paymentTermsKey;
         private Concept m_paymentTerms;
-        
+
         /// <summary>
         /// Creates the financial contract
         /// </summary>

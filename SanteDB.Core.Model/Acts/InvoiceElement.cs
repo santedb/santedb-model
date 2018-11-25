@@ -22,11 +22,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -74,7 +70,8 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <remarks>The modifier allows further description of how/why the price of this invoice element was changed</remarks>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(ModifierKey))]
-        public Concept Modifier {
+        public Concept Modifier
+        {
             get
             {
                 this.m_modifier = base.DelayLoad(this.m_modifierKey, this.m_modifier);
@@ -109,7 +106,8 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the currency of the invoice line item
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? CurrencyKey {
+        public Guid? CurrencyKey
+        {
             get => this.m_currencyKey;
             set
             {
@@ -122,7 +120,8 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the currency of this transaction
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(CurrencyKey))]
-        public Concept Currency {
+        public Concept Currency
+        {
             get
             {
                 this.m_currency = base.DelayLoad(this.m_currencyKey, this.m_currency);

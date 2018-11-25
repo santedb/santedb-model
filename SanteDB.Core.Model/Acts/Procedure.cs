@@ -22,11 +22,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -81,12 +77,13 @@ namespace SanteDB.Core.Model.Acts
         [XmlElement("approachSite"), JsonProperty("approachSite")]
         public Guid? ApproachSiteKey
         {
-            get {
+            get
+            {
                 return this.m_approachSiteKey;
             }
             set
             {
-                if(this.m_approachSiteKey != value)
+                if (this.m_approachSiteKey != value)
                 {
                     this.m_approachSiteKey = value;
                     this.m_approachSite = null;
@@ -107,7 +104,7 @@ namespace SanteDB.Core.Model.Acts
             }
             set
             {
-                if(this.m_targetSiteKey != value)
+                if (this.m_targetSiteKey != value)
                 {
                     this.m_targetSiteKey = value;
                     this.m_targetSite = null;

@@ -27,117 +27,117 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// Represents a name component which is bound to a name
-	/// </summary>
-	[XmlType(Namespace = "http://santedb.org/model", TypeName = "EntityNameComponent")]
-	[JsonObject("EntityNameComponent")]
-	public class EntityNameComponent : GenericComponentValues<EntityName>
-	{
-		private PhoneticAlgorithm m_phoneticAlgorithm;
+    /// <summary>
+    /// Represents a name component which is bound to a name
+    /// </summary>
+    [XmlType(Namespace = "http://santedb.org/model", TypeName = "EntityNameComponent")]
+    [JsonObject("EntityNameComponent")]
+    public class EntityNameComponent : GenericComponentValues<EntityName>
+    {
+        private PhoneticAlgorithm m_phoneticAlgorithm;
 
-		// Id of the algorithm used to generate phonetic code
-		private Guid? m_phoneticAlgorithmId;
+        // Id of the algorithm used to generate phonetic code
+        private Guid? m_phoneticAlgorithmId;
 
-		/// <summary>
-		/// Entity name component
-		/// </summary>
-		public EntityNameComponent()
-		{
-		}
+        /// <summary>
+        /// Entity name component
+        /// </summary>
+        public EntityNameComponent()
+        {
+        }
 
-		/// <summary>
-		/// Creates the entity name component with the specified value
-		/// </summary>
-		/// <param name="value"></param>
-		public EntityNameComponent(String value) : base(value)
-		{
-		}
+        /// <summary>
+        /// Creates the entity name component with the specified value
+        /// </summary>
+        /// <param name="value"></param>
+        public EntityNameComponent(String value) : base(value)
+        {
+        }
 
-		/// <summary>
-		/// Creates the entity name component with the specified value and part type classifier
-		/// </summary>
-		/// <param name="partTypeKey"></param>
-		/// <param name="value"></param>
-		public EntityNameComponent(Guid partTypeKey, String value) : base(partTypeKey, value)
-		{
-		}
+        /// <summary>
+        /// Creates the entity name component with the specified value and part type classifier
+        /// </summary>
+        /// <param name="partTypeKey"></param>
+        /// <param name="value"></param>
+        public EntityNameComponent(Guid partTypeKey, String value) : base(partTypeKey, value)
+        {
+        }
 
-		/// <summary>
-		/// Gets or sets the component type key
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("type"), JsonProperty("type")]
-		[Binding(typeof(NameComponentKeys))]
-		public override Guid? ComponentTypeKey
-		{
-			get
-			{
-				return base.ComponentTypeKey;
-			}
-			set
-			{
-				base.ComponentTypeKey = value;
-			}
-		}
+        /// <summary>
+        /// Gets or sets the component type key
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("type"), JsonProperty("type")]
+        [Binding(typeof(NameComponentKeys))]
+        public override Guid? ComponentTypeKey
+        {
+            get
+            {
+                return base.ComponentTypeKey;
+            }
+            set
+            {
+                base.ComponentTypeKey = value;
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets the phonetic algorithm
-		/// </summary>
-		[SerializationReference(nameof(PhoneticAlgorithmKey))]
-		[XmlIgnore, JsonIgnore]
-		public PhoneticAlgorithm PhoneticAlgorithm
-		{
-			get
-			{
-				this.m_phoneticAlgorithm = base.DelayLoad(this.m_phoneticAlgorithmId, this.m_phoneticAlgorithm);
-				return this.m_phoneticAlgorithm;
-			}
-			set
-			{
-				this.m_phoneticAlgorithm = value;
-				this.m_phoneticAlgorithmId = value?.Key;
-			}
-		}
+        /// <summary>
+        /// Gets or sets the phonetic algorithm
+        /// </summary>
+        [SerializationReference(nameof(PhoneticAlgorithmKey))]
+        [XmlIgnore, JsonIgnore]
+        public PhoneticAlgorithm PhoneticAlgorithm
+        {
+            get
+            {
+                this.m_phoneticAlgorithm = base.DelayLoad(this.m_phoneticAlgorithmId, this.m_phoneticAlgorithm);
+                return this.m_phoneticAlgorithm;
+            }
+            set
+            {
+                this.m_phoneticAlgorithm = value;
+                this.m_phoneticAlgorithmId = value?.Key;
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets the identifier of the phonetic code
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[Binding(typeof(PhoneticAlgorithmKeys))]
-		[XmlElement("phoneticAlgorithm"), JsonProperty("phoneticAlgorithm")]
-		public Guid? PhoneticAlgorithmKey
-		{
-			get { return this.m_phoneticAlgorithmId; }
-			set
-			{
-				this.m_phoneticAlgorithmId = value;
-				this.m_phoneticAlgorithm = null;
-			}
-		}
+        /// <summary>
+        /// Gets or sets the identifier of the phonetic code
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(PhoneticAlgorithmKeys))]
+        [XmlElement("phoneticAlgorithm"), JsonProperty("phoneticAlgorithm")]
+        public Guid? PhoneticAlgorithmKey
+        {
+            get { return this.m_phoneticAlgorithmId; }
+            set
+            {
+                this.m_phoneticAlgorithmId = value;
+                this.m_phoneticAlgorithm = null;
+            }
+        }
 
-		// Algorithm used to generate the code
-		/// <summary>
-		/// Gets or sets the phonetic code of the reference term
-		/// </summary>
-		[XmlElement("phoneticCode"), JsonProperty("phoneticCode")]
-		public String PhoneticCode { get; set; }
+        // Algorithm used to generate the code
+        /// <summary>
+        /// Gets or sets the phonetic code of the reference term
+        /// </summary>
+        [XmlElement("phoneticCode"), JsonProperty("phoneticCode")]
+        public String PhoneticCode { get; set; }
 
-		/// <summary>
-		/// Should serialize
-		/// </summary>
-		public bool ShouldSerializePhoneticAlgorithmKey()
-		{
-			return this.PhoneticAlgorithmKey.HasValue &&
-				this.PhoneticAlgorithmKey != PhoneticAlgorithmKeys.None;
-		}
+        /// <summary>
+        /// Should serialize
+        /// </summary>
+        public bool ShouldSerializePhoneticAlgorithmKey()
+        {
+            return this.PhoneticAlgorithmKey.HasValue &&
+                this.PhoneticAlgorithmKey != PhoneticAlgorithmKeys.None;
+        }
 
-		/// <summary>
-		/// Value of the name
-		/// </summary>
-		public override string ToString()
-		{
-			return this.Value;
-		}
-	}
+        /// <summary>
+        /// Value of the name
+        /// </summary>
+        public override string ToString()
+        {
+            return this.Value;
+        }
+    }
 }

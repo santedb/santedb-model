@@ -20,10 +20,7 @@
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.EntityLoader
 {
@@ -32,7 +29,7 @@ namespace SanteDB.Core.Model.EntityLoader
     /// </summary>
     public interface IEntitySourceProvider
     {
-        
+
         /// <summary>
         /// Get the specified object
         /// </summary>
@@ -57,7 +54,7 @@ namespace SanteDB.Core.Model.EntityLoader
         /// Get relationships
         /// </summary>
         IEnumerable<TObject> GetRelations<TObject>(Guid? sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new();
-        
+
 
     }
 }

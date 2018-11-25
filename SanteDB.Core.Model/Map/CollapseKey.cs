@@ -19,18 +19,15 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using System.Reflection;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map
 {
     /// <summary>
     /// Association map
     /// </summary>
-    [XmlType( nameof(CollapseKey), Namespace = "http://santedb.org/model/map")]
+    [XmlType(nameof(CollapseKey), Namespace = "http://santedb.org/model/map")]
     public class CollapseKey
     {
         /// <summary>
@@ -71,7 +68,7 @@ namespace SanteDB.Core.Model.Map
                     runtimeProperty?.PropertyType != typeof(Decimal?))
                     retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} must be one of [Guid, Nullable<Guid>, Decimal, Nullable<Decimal>]", domainClass?.Name, this.KeyName), null, null));
             }
-            
+
             return retVal;
         }
     }

@@ -17,61 +17,55 @@
  * User: justin
  * Date: 2018-6-21
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace SanteDB.Core.Model.DataTypes
 {
-	/// <summary>
-	/// Represents a date precision object
-	/// </summary>
-	[XmlType("DatePrecision",  Namespace = "http://santedb.org/model")]
+    /// <summary>
+    /// Represents a date precision object
+    /// </summary>
+    [XmlType("DatePrecision", Namespace = "http://santedb.org/model")]
     public enum DatePrecision : int
     {
-		/// <summary>
-		/// Represents full date precision.
-		/// </summary>
-		[XmlEnum("F")]
+        /// <summary>
+        /// Represents full date precision.
+        /// </summary>
+        [XmlEnum("F")]
         Full = 0,
-		/// <summary>
-		/// Represents year date precision.
-		/// </summary>
+        /// <summary>
+        /// Represents year date precision.
+        /// </summary>
         [XmlEnum("Y")]
         Year = 1,
 
-		/// <summary>
-		/// Represents month date precision.
-		/// </summary>
-		[XmlEnum("m")]
+        /// <summary>
+        /// Represents month date precision.
+        /// </summary>
+        [XmlEnum("m")]
         Month = 2,
 
-		/// <summary>
-		/// Represents day date precision.
-		/// </summary>
-		[XmlEnum("D")]
+        /// <summary>
+        /// Represents day date precision.
+        /// </summary>
+        [XmlEnum("D")]
         Day = 3,
 
-		/// <summary>
-		/// Represents hour date precision.
-		/// </summary>
-		[XmlEnum("H")]
+        /// <summary>
+        /// Represents hour date precision.
+        /// </summary>
+        [XmlEnum("H")]
         Hour = 4,
 
-		/// <summary>
-		/// Represents minute date precision.
-		/// </summary>
-		[XmlEnum("M")]
+        /// <summary>
+        /// Represents minute date precision.
+        /// </summary>
+        [XmlEnum("M")]
         Minute = 5,
 
-		/// <summary>
-		/// Represents second date precision.
-		/// </summary>
-		[XmlEnum("S")]
+        /// <summary>
+        /// Represents second date precision.
+        /// </summary>
+        [XmlEnum("S")]
         Second = 6
     }
 }

@@ -20,10 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace SanteDB.Core.Model.Map
@@ -237,7 +234,7 @@ namespace SanteDB.Core.Model.Map
                 else
                     result = mi.Invoke(null, new object[] { value }); // Invoke the conversion method
                 var retVal = result != null;
-                if(!retVal) // non convertable
+                if (!retVal) // non convertable
                     lock (m_nonConvertable)
                         m_nonConvertable.Add(convertKey);
                 return retVal;

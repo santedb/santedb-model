@@ -22,11 +22,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -61,7 +57,8 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the currency key
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? CurrencyKey {
+        public Guid? CurrencyKey
+        {
             get
             {
                 return this.m_amountCurrencyKey;

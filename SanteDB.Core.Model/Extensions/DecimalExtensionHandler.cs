@@ -19,10 +19,6 @@
  */
 using SanteDB.Core.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Extensions
 {
@@ -47,10 +43,10 @@ namespace SanteDB.Core.Extensions
         /// </summary>
         public object DeSerialize(byte[] extensionData)
         {
-	        if (extensionData == null)
-	        {
-		        return default(decimal);
-	        }
+            if (extensionData == null)
+            {
+                return default(decimal);
+            }
 
             byte[] edata = new byte[16];
             if (extensionData.Length == 16)
@@ -84,7 +80,7 @@ namespace SanteDB.Core.Extensions
         {
             var ints = Decimal.GetBits((Decimal)data);
             byte[] retVal = new byte[16];
-            for(int i = 0; i < ints.Length; i++)
+            for (int i = 0; i < ints.Length; i++)
                 Array.Copy(BitConverter.GetBytes(ints[i]), 0, retVal, i * 4, 4);
             return retVal;
         }

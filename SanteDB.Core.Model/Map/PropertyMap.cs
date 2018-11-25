@@ -18,21 +18,18 @@
  * Date: 2018-6-21
  */
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Diagnostics;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map
 {
     /// <summary>
     /// Represents a property map
     /// </summary>
-    [XmlType( nameof(PropertyMap), Namespace = "http://santedb.org/model/map")]
+    [XmlType(nameof(PropertyMap), Namespace = "http://santedb.org/model/map")]
     public class PropertyMap
     {
         /// <summary>
@@ -112,7 +109,7 @@ namespace SanteDB.Core.Model.Map
                 retVal.AddRange(this.Via.Validate(modelClass?.GetRuntimeProperty(this.ModelName ?? "")?.PropertyType ?? modelClass, domainClass?.GetRuntimeProperty(this.DomainName)?.PropertyType));
 
             // Order by?
-            if(!String.IsNullOrEmpty(this.OrderBy) && domainClass != null)
+            if (!String.IsNullOrEmpty(this.OrderBy) && domainClass != null)
             {
 
                 var orderProperty = domainClass.GetRuntimeProperty(this.DomainName);

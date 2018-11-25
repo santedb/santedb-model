@@ -18,11 +18,7 @@
  * Date: 2018-6-21
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.Attributes
 {
@@ -44,7 +40,7 @@ namespace SanteDB.Core.Model.Attributes
         /// <summary>
         /// Identifies where the serialization information can be found
         /// </summary>
-        public String  RedirectProperty { get; set; }
+        public String RedirectProperty { get; set; }
 
         /// <summary>
         /// Get property from the type

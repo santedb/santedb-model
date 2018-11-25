@@ -21,9 +21,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -32,7 +30,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents a name (human name) that a concept may have
     /// </summary>
     [Classifier(nameof(Language)), SimpleValue(nameof(Name))]
-    [XmlType("ConceptName",  Namespace = "http://santedb.org/model"), JsonObject("ConceptName")]
+    [XmlType("ConceptName", Namespace = "http://santedb.org/model"), JsonObject("ConceptName")]
     public class ConceptName : VersionedAssociation<Concept>
     {
 
@@ -40,35 +38,35 @@ namespace SanteDB.Core.Model.DataTypes
         private Guid? m_phoneticAlgorithmId;
 
         // Algorithm used to generate the code
-        
+
         private PhoneticAlgorithm m_phoneticAlgorithm;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConceptName"/> class.
-		/// </summary>
-		public ConceptName()
-	    {
-		    
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConceptName"/> class.
+        /// </summary>
+        public ConceptName()
+        {
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConceptName"/> class.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		public ConceptName(string name)
-		{
-			this.Name = name;
-		}
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConceptName"/> class.
-		/// </summary>
-		/// <param name="language">The language.</param>
-		/// <param name="name">The name.</param>
-		public ConceptName(string language, string name) : this(name)
-	    {
-		    this.Language = language;
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConceptName"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        public ConceptName(string name)
+        {
+            this.Name = name;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConceptName"/> class.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="name">The name.</param>
+        public ConceptName(string language, string name) : this(name)
+        {
+            this.Language = language;
+        }
 
 
         /// <summary>
@@ -95,7 +93,7 @@ namespace SanteDB.Core.Model.DataTypes
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(PhoneticAlgorithmKeys))]
         [XmlElement("phoneticAlgorithm"), JsonProperty("phoneticAlgorithm")]
-        public Guid?  PhoneticAlgorithmKey
+        public Guid? PhoneticAlgorithmKey
         {
             get { return this.m_phoneticAlgorithmId; }
             set

@@ -33,312 +33,312 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// Represents the base of all entities
-	/// </summary>
-	[XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
-	[XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
-	[Classifier(nameof(ClassConcept))]
-	public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IClassifiable, IHasState
+    /// <summary>
+    /// Represents the base of all entities
+    /// </summary>
+    [XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
+    [Classifier(nameof(ClassConcept))]
+    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IClassifiable, IHasState
     {
 
         private TemplateDefinition m_template;
         private Guid? m_templateKey;
 
-		// Class concept
-		private Concept m_classConcept;
+        // Class concept
+        private Concept m_classConcept;
 
-		// Classe concept
-		private Guid? m_classConceptId;
+        // Classe concept
+        private Guid? m_classConceptId;
 
-		// TODO: Change this to Act
-		private Act m_creationAct;
+        // TODO: Change this to Act
+        private Act m_creationAct;
 
-		// Control act which created this
-		private Guid? m_creationActId;
+        // Control act which created this
+        private Guid? m_creationActId;
 
-		// Determiner concept
-		private Concept m_determinerConcept;
+        // Determiner concept
+        private Concept m_determinerConcept;
 
-		// Determiner concept id
-		private Guid? m_determinerConceptId;
+        // Determiner concept id
+        private Guid? m_determinerConceptId;
 
-		// Status concept
-		private Concept m_statusConcept;
+        // Status concept
+        private Concept m_statusConcept;
 
-		// Status
-		private Guid? m_statusConceptId;
+        // Status
+        private Guid? m_statusConceptId;
 
-		// Type concept
-		private Concept m_typeConcept;
+        // Type concept
+        private Concept m_typeConcept;
 
-		// Type concept
-		private Guid? m_typeConceptId;
+        // Type concept
+        private Guid? m_typeConceptId;
 
-		/// <summary>
-		/// Creates a new instance of the entity class
-		/// </summary>
-		public Entity()
-		{
-			this.Identifiers = new List<EntityIdentifier>();
-			this.Addresses = new List<EntityAddress>();
-			this.Extensions = new List<EntityExtension>();
-			this.Names = new List<EntityName>();
-			this.Notes = new List<EntityNote>();
-			this.Participations = new List<ActParticipation>();
-			this.Relationships = new List<EntityRelationship>();
-			this.Telecoms = new List<EntityTelecomAddress>();
-			this.Tags = new List<EntityTag>();
+        /// <summary>
+        /// Creates a new instance of the entity class
+        /// </summary>
+        public Entity()
+        {
+            this.Identifiers = new List<EntityIdentifier>();
+            this.Addresses = new List<EntityAddress>();
+            this.Extensions = new List<EntityExtension>();
+            this.Names = new List<EntityName>();
+            this.Notes = new List<EntityNote>();
+            this.Participations = new List<ActParticipation>();
+            this.Relationships = new List<EntityRelationship>();
+            this.Telecoms = new List<EntityTelecomAddress>();
+            this.Tags = new List<EntityTag>();
             this.Policies = new List<SecurityPolicyInstance>();
-		}
+        }
 
-		/// <summary>
-		/// Gets a list of all addresses associated with the entity
-		/// </summary>
-		[AutoLoad()]
-		[AutoLoad(EntityClassKeyStrings.Patient)]
-		[AutoLoad(EntityClassKeyStrings.ServiceDeliveryLocation)]
-		[AutoLoad(EntityClassKeyStrings.Provider)]
-		[AutoLoad(EntityClassKeyStrings.Person)]
-		[AutoLoad(EntityClassKeyStrings.Place)]
-		[AutoLoad(EntityClassKeyStrings.State)]
-		[AutoLoad(EntityClassKeyStrings.Country)]
-		[AutoLoad(EntityClassKeyStrings.CountyOrParish)]
-		[AutoLoad(EntityClassKeyStrings.CityOrTown)]
-		[AutoLoad(EntityClassKeyStrings.Organization)]
-		[XmlElement("address"), JsonProperty("address")]
-		public List<EntityAddress> Addresses { get; set; }
+        /// <summary>
+        /// Gets a list of all addresses associated with the entity
+        /// </summary>
+        [AutoLoad()]
+        [AutoLoad(EntityClassKeyStrings.Patient)]
+        [AutoLoad(EntityClassKeyStrings.ServiceDeliveryLocation)]
+        [AutoLoad(EntityClassKeyStrings.Provider)]
+        [AutoLoad(EntityClassKeyStrings.Person)]
+        [AutoLoad(EntityClassKeyStrings.Place)]
+        [AutoLoad(EntityClassKeyStrings.State)]
+        [AutoLoad(EntityClassKeyStrings.Country)]
+        [AutoLoad(EntityClassKeyStrings.CountyOrParish)]
+        [AutoLoad(EntityClassKeyStrings.CityOrTown)]
+        [AutoLoad(EntityClassKeyStrings.Organization)]
+        [XmlElement("address"), JsonProperty("address")]
+        public List<EntityAddress> Addresses { get; set; }
 
-		/// <summary>
-		/// Class concept datal load property
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		[AutoLoad()]
-		[SerializationReference(nameof(ClassConceptKey))]
-		public Concept ClassConcept
-		{
-			get
-			{
-				this.m_classConcept = base.DelayLoad(this.m_classConceptId, this.m_classConcept);
-				return this.m_classConcept;
-			}
-			set
-			{
-				this.m_classConcept = value;
-				this.m_classConceptId = value?.Key;
-			}
-		}
+        /// <summary>
+        /// Class concept datal load property
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        [AutoLoad()]
+        [SerializationReference(nameof(ClassConceptKey))]
+        public Concept ClassConcept
+        {
+            get
+            {
+                this.m_classConcept = base.DelayLoad(this.m_classConceptId, this.m_classConcept);
+                return this.m_classConcept;
+            }
+            set
+            {
+                this.m_classConcept = value;
+                this.m_classConceptId = value?.Key;
+            }
+        }
 
-		/// <summary>
-		/// Class concept
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("classConcept"), JsonProperty("classConcept")]
-		[Binding(typeof(EntityClassKeys))]
-		public virtual Guid? ClassConceptKey
-		{
-			get { return this.m_classConceptId; }
-			set
-			{
-				if (this.m_classConceptId != value)
-				{
-					this.m_classConceptId = value;
-					this.m_classConcept = null;
-				}
-			}
-		}
+        /// <summary>
+        /// Class concept
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        [Binding(typeof(EntityClassKeys))]
+        public virtual Guid? ClassConceptKey
+        {
+            get { return this.m_classConceptId; }
+            set
+            {
+                if (this.m_classConceptId != value)
+                {
+                    this.m_classConceptId = value;
+                    this.m_classConcept = null;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Creation act reference
-		/// </summary>
-		[SerializationReference(nameof(CreationActKey))]
-		[XmlIgnore, JsonIgnore]
-		public Act CreationAct
-		{
-			get
-			{
-				this.m_creationAct = base.DelayLoad(this.m_creationActId, this.m_creationAct);
-				return this.m_creationAct;
-			}
-			set
-			{
-				this.m_creationAct = value;
-				this.m_creationActId = value?.Key;
-			}
-		}
+        /// <summary>
+        /// Creation act reference
+        /// </summary>
+        [SerializationReference(nameof(CreationActKey))]
+        [XmlIgnore, JsonIgnore]
+        public Act CreationAct
+        {
+            get
+            {
+                this.m_creationAct = base.DelayLoad(this.m_creationActId, this.m_creationAct);
+                return this.m_creationAct;
+            }
+            set
+            {
+                this.m_creationAct = value;
+                this.m_creationActId = value?.Key;
+            }
+        }
 
-		/// <summary>
-		/// Creation act reference
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("creationAct"), JsonProperty("creationAct")]
-		public Guid? CreationActKey
-		{
-			get { return this.m_creationActId; }
-			set
-			{
-				if (this.m_creationActId != value)
-				{
-					this.m_creationActId = value;
-					this.m_creationAct = null;
-				}
-			}
-		}
+        /// <summary>
+        /// Creation act reference
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("creationAct"), JsonProperty("creationAct")]
+        public Guid? CreationActKey
+        {
+            get { return this.m_creationActId; }
+            set
+            {
+                if (this.m_creationActId != value)
+                {
+                    this.m_creationActId = value;
+                    this.m_creationAct = null;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Determiner concept
-		/// </summary>
-		[SerializationReference(nameof(DeterminerConceptKey))]
-		[XmlIgnore, JsonIgnore]
-		[AutoLoad()]
-		public virtual Concept DeterminerConcept
-		{
-			get
-			{
-				this.m_determinerConcept = base.DelayLoad(this.m_determinerConceptId, this.m_determinerConcept);
-				return this.m_determinerConcept;
-			}
-			set
-			{
-				this.m_determinerConcept = value;
-				if (value == null)
-					this.m_determinerConceptId = Guid.Empty;
-				else
-					this.m_determinerConceptId = value.Key;
-			}
-		}
+        /// <summary>
+        /// Determiner concept
+        /// </summary>
+        [SerializationReference(nameof(DeterminerConceptKey))]
+        [XmlIgnore, JsonIgnore]
+        [AutoLoad()]
+        public virtual Concept DeterminerConcept
+        {
+            get
+            {
+                this.m_determinerConcept = base.DelayLoad(this.m_determinerConceptId, this.m_determinerConcept);
+                return this.m_determinerConcept;
+            }
+            set
+            {
+                this.m_determinerConcept = value;
+                if (value == null)
+                    this.m_determinerConceptId = Guid.Empty;
+                else
+                    this.m_determinerConceptId = value.Key;
+            }
+        }
 
-		/// <summary>
-		/// Determiner concept
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("determinerConcept"), JsonProperty("determinerConcept")]
-		[Binding(typeof(DeterminerKeys))]
-		public virtual Guid? DeterminerConceptKey
-		{
-			get { return this.m_determinerConceptId; }
-			set
-			{
-				if (this.m_determinerConceptId != value)
-				{
-					this.m_determinerConceptId = value;
-					this.m_determinerConcept = null;
-				}
-			}
-		}
+        /// <summary>
+        /// Determiner concept
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("determinerConcept"), JsonProperty("determinerConcept")]
+        [Binding(typeof(DeterminerKeys))]
+        public virtual Guid? DeterminerConceptKey
+        {
+            get { return this.m_determinerConceptId; }
+            set
+            {
+                if (this.m_determinerConceptId != value)
+                {
+                    this.m_determinerConceptId = value;
+                    this.m_determinerConcept = null;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Gets a list of all extensions associated with the entity
-		/// </summary>
-		[AutoLoad()]
-		[XmlElement("extension"), JsonProperty("extension")]
-		public List<EntityExtension> Extensions
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets a list of all extensions associated with the entity
+        /// </summary>
+        [AutoLoad()]
+        [XmlElement("extension"), JsonProperty("extension")]
+        public List<EntityExtension> Extensions
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets the identifiers associated with this entity
-		/// </summary>
-		[AutoLoad()]
-		[XmlElement("identifier"), JsonProperty("identifier")]
-		public List<EntityIdentifier> Identifiers { get; set; }
+        /// <summary>
+        /// Gets the identifiers associated with this entity
+        /// </summary>
+        [AutoLoad()]
+        [XmlElement("identifier"), JsonProperty("identifier")]
+        public List<EntityIdentifier> Identifiers { get; set; }
 
-		/// <summary>
-		/// Gets a list of all names associated with the entity
-		/// </summary>
-		[AutoLoad()]
-		[XmlElement("name"), JsonProperty("name")]
-		public List<EntityName> Names { get; set; }
+        /// <summary>
+        /// Gets a list of all names associated with the entity
+        /// </summary>
+        [AutoLoad()]
+        [XmlElement("name"), JsonProperty("name")]
+        public List<EntityName> Names { get; set; }
 
-		/// <summary>
-		/// Gets a list of all notes associated with the entity
-		/// </summary>
-		[AutoLoad()]
-		[XmlElement("note"), JsonProperty("note")]
-		public List<EntityNote> Notes { get; set; }
+        /// <summary>
+        /// Gets a list of all notes associated with the entity
+        /// </summary>
+        [AutoLoad()]
+        [XmlElement("note"), JsonProperty("note")]
+        public List<EntityNote> Notes { get; set; }
 
-		/// <summary>
-		/// Gets the acts in which this entity participates
-		/// </summary>
-		[XmlElement("participation"), JsonProperty("participation")]
-		public List<ActParticipation> Participations { get; set; }
+        /// <summary>
+        /// Gets the acts in which this entity participates
+        /// </summary>
+        [XmlElement("participation"), JsonProperty("participation")]
+        public List<ActParticipation> Participations { get; set; }
 
-		/// <summary>
-		/// Gets a list of all associated entities for this entity
-		/// </summary>
-		[AutoLoad()]
-		[XmlElement("relationship"), JsonProperty("relationship")]
-		public List<EntityRelationship> Relationships
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets a list of all associated entities for this entity
+        /// </summary>
+        [AutoLoad()]
+        [XmlElement("relationship"), JsonProperty("relationship")]
+        public List<EntityRelationship> Relationships
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Status concept id
-		/// </summary>
-		[SerializationReference(nameof(StatusConceptKey))]
-		[XmlIgnore, JsonIgnore]
-		[AutoLoad()]
-		public Concept StatusConcept
-		{
-			get
-			{
-				this.m_statusConcept = base.DelayLoad(this.m_statusConceptId, this.m_statusConcept);
-				return this.m_statusConcept;
-			}
-			set
-			{
-				this.m_statusConcept = value;
-				if (value == null)
-					this.m_statusConceptId = Guid.Empty;
-				else
-					this.m_statusConceptId = value.Key;
-			}
-		}
+        /// <summary>
+        /// Status concept id
+        /// </summary>
+        [SerializationReference(nameof(StatusConceptKey))]
+        [XmlIgnore, JsonIgnore]
+        [AutoLoad()]
+        public Concept StatusConcept
+        {
+            get
+            {
+                this.m_statusConcept = base.DelayLoad(this.m_statusConceptId, this.m_statusConcept);
+                return this.m_statusConcept;
+            }
+            set
+            {
+                this.m_statusConcept = value;
+                if (value == null)
+                    this.m_statusConceptId = Guid.Empty;
+                else
+                    this.m_statusConceptId = value.Key;
+            }
+        }
 
-		/// <summary>
-		/// Status concept id
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("statusConcept"), JsonProperty("statusConcept")]
-		[Binding(typeof(StatusKeys))]
-		public Guid? StatusConceptKey
-		{
-			get { return this.m_statusConceptId; }
-			set
-			{
-				if (this.m_statusConceptId != value)
-				{
-					this.m_statusConceptId = value;
-					this.m_statusConcept = null;
-				}
-			}
-		}
+        /// <summary>
+        /// Status concept id
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("statusConcept"), JsonProperty("statusConcept")]
+        [Binding(typeof(StatusKeys))]
+        public Guid? StatusConceptKey
+        {
+            get { return this.m_statusConceptId; }
+            set
+            {
+                if (this.m_statusConceptId != value)
+                {
+                    this.m_statusConceptId = value;
+                    this.m_statusConcept = null;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Gets a list of all tags associated with the entity
-		/// </summary>
-		[AutoLoad()]
-		[XmlElement("tag"), JsonProperty("tag")]
-		public List<EntityTag> Tags { get; set; }
+        /// <summary>
+        /// Gets a list of all tags associated with the entity
+        /// </summary>
+        [AutoLoad()]
+        [XmlElement("tag"), JsonProperty("tag")]
+        public List<EntityTag> Tags { get; set; }
 
-		/// <summary>
-		/// Gets a list of all telecommunications addresses associated with the entity
-		/// </summary>
-		[AutoLoad(EntityClassKeyStrings.Patient)]
-		[AutoLoad(EntityClassKeyStrings.ServiceDeliveryLocation)]
-		[AutoLoad(EntityClassKeyStrings.Provider)]
-		[AutoLoad(EntityClassKeyStrings.Organization)]
-		[AutoLoad(EntityClassKeyStrings.Person)]
-		[XmlElement("telecom"), JsonProperty("telecom")]
-		public List<EntityTelecomAddress> Telecoms
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets a list of all telecommunications addresses associated with the entity
+        /// </summary>
+        [AutoLoad(EntityClassKeyStrings.Patient)]
+        [AutoLoad(EntityClassKeyStrings.ServiceDeliveryLocation)]
+        [AutoLoad(EntityClassKeyStrings.Provider)]
+        [AutoLoad(EntityClassKeyStrings.Organization)]
+        [AutoLoad(EntityClassKeyStrings.Person)]
+        [XmlElement("telecom"), JsonProperty("telecom")]
+        public List<EntityTelecomAddress> Telecoms
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets the template key
@@ -375,44 +375,44 @@ namespace SanteDB.Core.Model.Entities
                 this.m_templateKey = value?.Key;
             }
         }
-        
-		/// <summary>
-		/// Type concept identifier
-		/// </summary>
-		[SerializationReference(nameof(TypeConceptKey))]
-		[AutoLoad()]
-		[XmlIgnore, JsonIgnore]
-		public Concept TypeConcept
-		{
-			get
-			{
-				this.m_typeConcept = base.DelayLoad(this.m_typeConceptId, this.m_typeConcept);
-				return this.m_typeConcept;
-			}
-			set
-			{
-				this.m_typeConcept = value;
-				this.m_typeConceptId = value?.Key;
-			}
-		}
 
-		/// <summary>
-		/// Type concept identifier
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("typeConcept"), JsonProperty("typeConcept")]
-		public Guid? TypeConceptKey
-		{
-			get { return this.m_typeConceptId; }
-			set
-			{
-				if (this.m_typeConceptId != value)
-				{
-					this.m_typeConceptId = value;
-					this.m_typeConcept = null;
-				}
-			}
-		}
+        /// <summary>
+        /// Type concept identifier
+        /// </summary>
+        [SerializationReference(nameof(TypeConceptKey))]
+        [AutoLoad()]
+        [XmlIgnore, JsonIgnore]
+        public Concept TypeConcept
+        {
+            get
+            {
+                this.m_typeConcept = base.DelayLoad(this.m_typeConceptId, this.m_typeConcept);
+                return this.m_typeConcept;
+            }
+            set
+            {
+                this.m_typeConcept = value;
+                this.m_typeConceptId = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Type concept identifier
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("typeConcept"), JsonProperty("typeConcept")]
+        public Guid? TypeConceptKey
+        {
+            get { return this.m_typeConceptId; }
+            set
+            {
+                if (this.m_typeConceptId != value)
+                {
+                    this.m_typeConceptId = value;
+                    this.m_typeConcept = null;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the security policy instances associated with the entity
@@ -431,53 +431,53 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         /// <returns></returns>
         public override IdentifiedData Clean()
-		{
-			this.Addresses.RemoveAll(o => o.Clean().IsEmpty());
-			this.Names.RemoveAll(o => o.Clean().IsEmpty());
-			this.Telecoms.RemoveAll(o => o.Clean().IsEmpty());
-			this.Tags.RemoveAll(o => o.Clean().IsEmpty());
-			this.Notes.RemoveAll(o => o.Clean().IsEmpty());
-			this.Extensions.RemoveAll(o => o.Clean().IsEmpty());
-			this.Identifiers.RemoveAll(o => o.Clean().IsEmpty());
-			//this.Relationships.RemoveAll(o => o.Clean().IsEmpty());
-			//this.Participations.RemoveAll(o => o.Clean().IsEmpty());
-			return this;
-		}
+        {
+            this.Addresses.RemoveAll(o => o.Clean().IsEmpty());
+            this.Names.RemoveAll(o => o.Clean().IsEmpty());
+            this.Telecoms.RemoveAll(o => o.Clean().IsEmpty());
+            this.Tags.RemoveAll(o => o.Clean().IsEmpty());
+            this.Notes.RemoveAll(o => o.Clean().IsEmpty());
+            this.Extensions.RemoveAll(o => o.Clean().IsEmpty());
+            this.Identifiers.RemoveAll(o => o.Clean().IsEmpty());
+            //this.Relationships.RemoveAll(o => o.Clean().IsEmpty());
+            //this.Participations.RemoveAll(o => o.Clean().IsEmpty());
+            return this;
+        }
 
-		/// <summary>
-		/// Semantic equality function
-		/// </summary>
-		public override bool SemanticEquals(object obj)
-		{
-			var other = obj as Entity;
-			if (other == null) return false;
-			return base.SemanticEquals(obj) &&
-				this.Addresses?.SemanticEquals(other.Addresses) == true &&
-				this.ClassConceptKey == other.ClassConceptKey &&
-				this.CreationActKey == other.CreationActKey &&
-				this.DeterminerConceptKey == other.DeterminerConceptKey &&
-				this.Extensions?.SemanticEquals(other.Extensions) == true &&
-				this.Identifiers?.SemanticEquals(other.Identifiers) == true &&
-				this.Names?.SemanticEquals(other.Names) == true &&
-				this.Notes?.SemanticEquals(other.Notes) == true &&
-				this.Participations?.SemanticEquals(other.Participations) == true &&
-				this.Relationships?.SemanticEquals(other.Relationships) == true &&
-				this.StatusConceptKey == other.StatusConceptKey &&
-				this.Tags?.SemanticEquals(other.Tags) == true &&
-				this.Telecoms?.SemanticEquals(other.Telecoms) == true &&
-				this.Template?.SemanticEquals(other.Template) == true &&
-				this.TypeConceptKey == other.TypeConceptKey;
-		}
+        /// <summary>
+        /// Semantic equality function
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as Entity;
+            if (other == null) return false;
+            return base.SemanticEquals(obj) &&
+                this.Addresses?.SemanticEquals(other.Addresses) == true &&
+                this.ClassConceptKey == other.ClassConceptKey &&
+                this.CreationActKey == other.CreationActKey &&
+                this.DeterminerConceptKey == other.DeterminerConceptKey &&
+                this.Extensions?.SemanticEquals(other.Extensions) == true &&
+                this.Identifiers?.SemanticEquals(other.Identifiers) == true &&
+                this.Names?.SemanticEquals(other.Names) == true &&
+                this.Notes?.SemanticEquals(other.Notes) == true &&
+                this.Participations?.SemanticEquals(other.Participations) == true &&
+                this.Relationships?.SemanticEquals(other.Relationships) == true &&
+                this.StatusConceptKey == other.StatusConceptKey &&
+                this.Tags?.SemanticEquals(other.Tags) == true &&
+                this.Telecoms?.SemanticEquals(other.Telecoms) == true &&
+                this.Template?.SemanticEquals(other.Template) == true &&
+                this.TypeConceptKey == other.TypeConceptKey;
+        }
 
-		/// <summary>
-		/// Should serialize creation act
-		/// </summary>
-		public bool ShouldSerializeCreationActKey() => this.CreationActKey.HasValue;
+        /// <summary>
+        /// Should serialize creation act
+        /// </summary>
+        public bool ShouldSerializeCreationActKey() => this.CreationActKey.HasValue;
 
-		/// <summary>
-		/// Should serialize type concept
-		/// </summary>
-		public bool ShouldSerializeTypeConceptKey() => this.TypeConceptKey.HasValue;
+        /// <summary>
+        /// Should serialize type concept
+        /// </summary>
+        public bool ShouldSerializeTypeConceptKey() => this.TypeConceptKey.HasValue;
 
         /// <summary>
         /// Should serialize identifiers
@@ -492,7 +492,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Should serialize addresses
         /// </summary>
-        public bool ShouldSerializeAddresses () => this.Addresses?.Count > 0;
+        public bool ShouldSerializeAddresses() => this.Addresses?.Count > 0;
 
         /// <summary>
         /// Should serialize participations
@@ -502,12 +502,12 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Should serialize tags
         /// </summary>
-        public bool ShouldSerializeTags () => this.Tags?.Count > 0;
+        public bool ShouldSerializeTags() => this.Tags?.Count > 0;
 
         /// <summary>
         /// Shoudl serialize extensions
         /// </summary>
-        public bool ShouldSerializeExtensions() =>this.Extensions?.Count > 0;
+        public bool ShouldSerializeExtensions() => this.Extensions?.Count > 0;
 
         /// <summary>
         /// Should serialize notes

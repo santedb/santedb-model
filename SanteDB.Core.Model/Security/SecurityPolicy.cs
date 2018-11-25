@@ -17,15 +17,10 @@
  * User: justin
  * Date: 2018-6-21
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Xml.Serialization;
-using SanteDB.Core.Model.Attributes;
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
+using System;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security
 {
@@ -35,15 +30,15 @@ namespace SanteDB.Core.Model.Security
     /// </summary>
     public enum PolicyGrantType
     {
-		/// <summary>
-		/// Represents a policy grant type of deny.
-		/// </summary>
-		Deny = 0,
+        /// <summary>
+        /// Represents a policy grant type of deny.
+        /// </summary>
+        Deny = 0,
 
-		/// <summary>
-		/// Represnts a policy grant type of elevate.
-		/// </summary>
-		Elevate = 1,
+        /// <summary>
+        /// Represnts a policy grant type of elevate.
+        /// </summary>
+        Elevate = 1,
 
         /// <summary>
         /// Represents a policy grant type of grant.
@@ -54,12 +49,12 @@ namespace SanteDB.Core.Model.Security
     /// <summary>
     /// Represents a simply security policy
     /// </summary>
-    [XmlType("SecurityPolicy",   Namespace = "http://santedb.org/model"), JsonObject("SecurityPolicy")]
+    [XmlType("SecurityPolicy", Namespace = "http://santedb.org/model"), JsonObject("SecurityPolicy")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "SecurityPolicy")]
     [KeyLookup(nameof(Oid)), SimpleValue(nameof(Oid))]
     public class SecurityPolicy : BaseEntityData
     {
-        
+
         /// <summary>
         /// Gets or sets the handler which may handle this policy
         /// </summary>
@@ -109,7 +104,7 @@ namespace SanteDB.Core.Model.Security
         {
 
         }
-        
+
         /// <summary>
         /// Creates a new policy instance with the specified policy and grant
         /// </summary>
@@ -123,7 +118,8 @@ namespace SanteDB.Core.Model.Security
         /// Gets or sets the policy key
         /// </summary>
         [XmlElement("policy"), JsonProperty("policy")]
-        public Guid? PolicyKey {
+        public Guid? PolicyKey
+        {
             get
             {
                 return this.m_policyId;
@@ -139,7 +135,8 @@ namespace SanteDB.Core.Model.Security
         /// The policy
         /// </summary>
         [AutoLoad, JsonIgnore, XmlIgnore, SerializationReference(nameof(PolicyKey))]
-        public SecurityPolicy Policy {
+        public SecurityPolicy Policy
+        {
             get
             {
                 this.m_policy = base.DelayLoad(this.m_policyId, this.m_policy);

@@ -29,60 +29,60 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// An entity which is a place where healthcare services are delivered
-	/// </summary>
+    /// <summary>
+    /// An entity which is a place where healthcare services are delivered
+    /// </summary>
 
-	[XmlType("Place", Namespace = "http://santedb.org/model"), JsonObject("Place")]
-	[XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Place")]
-	public class Place : Entity, IGeoTagged
-	{
-		/// <summary>
-		/// Place ctor
-		/// </summary>
-		public Place()
-		{
-			base.ClassConceptKey = EntityClassKeys.Place;
-			base.DeterminerConceptKey = DeterminerKeys.Specific;
-			this.Services = new List<PlaceService>();
-		}
+    [XmlType("Place", Namespace = "http://santedb.org/model"), JsonObject("Place")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Place")]
+    public class Place : Entity, IGeoTagged
+    {
+        /// <summary>
+        /// Place ctor
+        /// </summary>
+        public Place()
+        {
+            base.ClassConceptKey = EntityClassKeys.Place;
+            base.DeterminerConceptKey = DeterminerKeys.Specific;
+            this.Services = new List<PlaceService>();
+        }
 
-		/// <summary>
-		/// Gets or sets the class concept key
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("classConcept"), JsonProperty("classConcept")]
-		public override Guid? ClassConceptKey
-		{
-			get
-			{
-				return base.ClassConceptKey;
-			}
+        /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey
+        {
+            get
+            {
+                return base.ClassConceptKey;
+            }
 
-			set
-			{
-				if (value == EntityClassKeys.Place ||
-					value == EntityClassKeys.ServiceDeliveryLocation ||
-					value == EntityClassKeys.State ||
-					value == EntityClassKeys.CityOrTown ||
-					value == EntityClassKeys.Country ||
-					value == EntityClassKeys.CountyOrParish)
-					base.ClassConceptKey = value;
-				else throw new ArgumentOutOfRangeException("Invalid ClassConceptKey value");
-			}
-		}
+            set
+            {
+                if (value == EntityClassKeys.Place ||
+                    value == EntityClassKeys.ServiceDeliveryLocation ||
+                    value == EntityClassKeys.State ||
+                    value == EntityClassKeys.CityOrTown ||
+                    value == EntityClassKeys.Country ||
+                    value == EntityClassKeys.CountyOrParish)
+                    base.ClassConceptKey = value;
+                else throw new ArgumentOutOfRangeException("Invalid ClassConceptKey value");
+            }
+        }
 
-		/// <summary>
-		/// True if location is mobile
-		/// </summary>
-		[XmlElement("isMobile"), JsonProperty("isMobile")]
-		public Boolean IsMobile { get; set; }
+        /// <summary>
+        /// True if location is mobile
+        /// </summary>
+        [XmlElement("isMobile"), JsonProperty("isMobile")]
+        public Boolean IsMobile { get; set; }
 
-		/// <summary>
-		/// Gets or sets the latitude
-		/// </summary>
-		[XmlIgnore, JsonIgnore, Obsolete("Use the IGeoTagged properties")]
-		public double? Lat
+        /// <summary>
+        /// Gets or sets the latitude
+        /// </summary>
+        [XmlIgnore, JsonIgnore, Obsolete("Use the IGeoTagged properties")]
+        public double? Lat
         {
             get
             {
@@ -90,7 +90,7 @@ namespace SanteDB.Core.Model.Entities
             }
             set
             {
-                if(value.HasValue)
+                if (value.HasValue)
                 {
                     this.GeoTag = this.GeoTag ?? new GeoTag();
                     this.GeoTag.Lat = value.Value;
@@ -98,11 +98,11 @@ namespace SanteDB.Core.Model.Entities
             }
         }
 
-		/// <summary>
-		/// Gets or sets the longitude
-		/// </summary>
-		[XmlIgnore, JsonIgnore, Obsolete("Use the IGeoTagged properties")]
-		public double? Lng
+        /// <summary>
+        /// Gets or sets the longitude
+        /// </summary>
+        [XmlIgnore, JsonIgnore, Obsolete("Use the IGeoTagged properties")]
+        public double? Lng
         {
             get
             {
@@ -142,24 +142,24 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public bool ShouldSerializeLng() => this.Lng.GetValueOrDefault() != 0;
 
-		/// <summary>
-		/// Gets the services
-		/// </summary>
-		[AutoLoad, XmlElement("service"), JsonProperty("service")]
-		public List<PlaceService> Services { get; set; }
+        /// <summary>
+        /// Gets the services
+        /// </summary>
+        [AutoLoad, XmlElement("service"), JsonProperty("service")]
+        public List<PlaceService> Services { get; set; }
 
-		/// <summary>
-		/// Determine semantic equality
-		/// </summary>
-		public override bool SemanticEquals(object obj)
-		{
-			var other = obj as Place;
-			if (other == null) return false;
-			return base.SemanticEquals(obj) &&
-				this.IsMobile == other.IsMobile &&
-				this.Lat == other.Lat &&
-				this.Lng == other.Lng &&
-				this.Services?.SemanticEquals(other.Services) == true;
-		}
-	}
+        /// <summary>
+        /// Determine semantic equality
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as Place;
+            if (other == null) return false;
+            return base.SemanticEquals(obj) &&
+                this.IsMobile == other.IsMobile &&
+                this.Lat == other.Lat &&
+                this.Lng == other.Lng &&
+                this.Services?.SemanticEquals(other.Services) == true;
+        }
+    }
 }

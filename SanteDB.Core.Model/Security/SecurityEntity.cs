@@ -17,16 +17,13 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
-using System;
+using SanteDB.Core.Model.EntityLoader;
+using SanteDB.Core.Model.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using SanteDB.Core.Model.EntityLoader;
-using Newtonsoft.Json;
-using SanteDB.Core.Model.Interfaces;
 
 namespace SanteDB.Core.Model.Security
 {

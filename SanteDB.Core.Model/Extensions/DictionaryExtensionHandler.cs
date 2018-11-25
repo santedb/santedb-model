@@ -20,12 +20,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SanteDB.Core.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Extensions
 {
@@ -50,27 +46,27 @@ namespace SanteDB.Core.Extensions
         /// </summary>
         public object DeSerialize(byte[] extensionData)
         {
-			// HACK: will fix ASAP, deadlines are deadlines
-	        try
-	        {
-		        JsonSerializer jsz = new JsonSerializer();
-		        using (var ms = new MemoryStream(extensionData))
-		        using (var tr = new StreamReader(ms))
-		        using (var jr = new JsonTextReader(tr))
-		        {
-			        var obj = jsz.Deserialize<dynamic>(jr);
+            // HACK: will fix ASAP, deadlines are deadlines
+            try
+            {
+                JsonSerializer jsz = new JsonSerializer();
+                using (var ms = new MemoryStream(extensionData))
+                using (var tr = new StreamReader(ms))
+                using (var jr = new JsonTextReader(tr))
+                {
+                    var obj = jsz.Deserialize<dynamic>(jr);
                     if (obj is JArray)
                         return (obj as JArray).Values<dynamic>().ToArray();
                     else if (obj is JObject)
                         return (obj as JObject).Value<dynamic>();
-		        }
-			}
-	        catch
-	        {
-		        // ignored
-	        }
+                }
+            }
+            catch
+            {
+                // ignored
+            }
 
-	        return null;
+            return null;
         }
 
         /// <summary>
@@ -81,11 +77,11 @@ namespace SanteDB.Core.Extensions
             // Anything that is smart enough to read JSON data is smart enough to use the raw stream data
             // (We also want to prevent the raw literatl from going in the db)
             var strData = JsonConvert.SerializeObject(data);
-            if(strData.Length > 64)
+            if (strData.Length > 64)
                 strData = strData.Substring(0, 64);
             return strData;
-	        //return this.DeSerialize(data);
-	        //return null;
+            //return this.DeSerialize(data);
+            //return null;
         }
 
         /// <summary>

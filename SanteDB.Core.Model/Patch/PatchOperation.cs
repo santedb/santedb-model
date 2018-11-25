@@ -20,13 +20,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SanteDB.Core.Model.Acts;
-using SanteDB.Core.Model.Collection;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
-using SanteDB.Core.Model.Roles;
-using SanteDB.Core.Model.Security;
 using System;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Patch

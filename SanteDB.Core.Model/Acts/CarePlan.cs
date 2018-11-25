@@ -18,13 +18,10 @@
  * Date: 2018-6-21
  */
 using Newtonsoft.Json;
-using SanteDB.Core.Model.Collection;
 using SanteDB.Core.Model.Roles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -41,7 +38,7 @@ namespace SanteDB.Core.Model.Acts
     [JsonObject(nameof(CarePlan))]
     public class CarePlan : BaseEntityData
     {
-                
+
         /// <summary>
         /// Target of the careplan
         /// </summary>
@@ -84,7 +81,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public static CarePlan CreateCarePlanRequest(Patient p)
         {
-            return new CarePlan() { Target= p  };
+            return new CarePlan() { Target = p };
         }
     }
 }

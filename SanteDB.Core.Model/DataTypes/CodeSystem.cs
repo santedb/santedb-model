@@ -26,8 +26,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a code system which is a collection of reference terms
     /// </summary>
-    
-    [XmlType("CodeSystem",  Namespace = "http://santedb.org/model"), JsonObject("CodeSystem")]
+
+    [XmlType("CodeSystem", Namespace = "http://santedb.org/model"), JsonObject("CodeSystem")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "CodeSystem")]
     [Classifier(nameof(Name))]
     public class CodeSystem : NonVersionedEntityData

@@ -17,21 +17,16 @@
  * User: justin
  * Date: 2018-6-21
  */
+using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Map;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 using System.Xml.Serialization;
-using System.Diagnostics;
-using System.Globalization;
-using SanteDB.Core.Model.Attributes;
-using System.Collections;
-using System.Runtime.CompilerServices;
-using SanteDB.Core.Model.Map;
 
 namespace SanteDB.Core.Model.Query
 {

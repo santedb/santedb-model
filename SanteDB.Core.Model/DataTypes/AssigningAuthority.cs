@@ -32,9 +32,9 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents a model class which is an assigning authority
     /// </summary>
     [Classifier(nameof(DomainName)), KeyLookup(nameof(DomainName))]
-    [XmlType(nameof(AssigningAuthority),  Namespace = "http://santedb.org/model"), JsonObject("AssigningAuthority")]
+    [XmlType(nameof(AssigningAuthority), Namespace = "http://santedb.org/model"), JsonObject("AssigningAuthority")]
     [XmlRoot(nameof(AssigningAuthority), Namespace = "http://santedb.org/model")]
-    public  class AssigningAuthority : BaseEntityData
+    public class AssigningAuthority : BaseEntityData
     {
 
         private bool m_minimal = false;
@@ -134,7 +134,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the assigning device
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(AssigningApplicationKey))]
-        public SecurityApplication AssigningApplication {
+        public SecurityApplication AssigningApplication
+        {
             get
             {
                 this.m_assigningApplication = base.DelayLoad(this.m_assigningApplicationKey, this.m_assigningApplication);
@@ -201,7 +202,7 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
 
-        #pragma warning disable CS1591
+#pragma warning disable CS1591
         public bool ShouldSerializeAuthorityScopeXml() => !this.m_minimal;
         public bool ShouldSerializeUrl() => !this.m_minimal;
         public bool ShouldSerializeOid() => !this.m_minimal;

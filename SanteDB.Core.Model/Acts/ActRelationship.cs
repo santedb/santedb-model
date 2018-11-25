@@ -17,17 +17,13 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SanteDB.Core.Model.Constants;
 
 namespace SanteDB.Core.Model.Acts
 {
@@ -56,30 +52,30 @@ namespace SanteDB.Core.Model.Acts
 
         private Concept m_relationshipType;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ActRelationship"/> class.
-		/// </summary>
-		public ActRelationship()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActRelationship"/> class.
+        /// </summary>
+        public ActRelationship()
         {
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ActRelationship"/> class.
-		/// </summary>
-		/// <param name="relationshipType">Type of the relationship.</param>
-		/// <param name="target">The target.</param>
-		public ActRelationship(Guid? relationshipType, Act target)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActRelationship"/> class.
+        /// </summary>
+        /// <param name="relationshipType">Type of the relationship.</param>
+        /// <param name="target">The target.</param>
+        public ActRelationship(Guid? relationshipType, Act target)
         {
             this.RelationshipTypeKey = relationshipType;
             this.TargetAct = target;
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ActRelationship"/> class.
-		/// </summary>
-		/// <param name="relationshipType">Type of the relationship.</param>
-		/// <param name="targetKey">The target key.</param>
-		public ActRelationship(Guid? relationshipType, Guid? targetKey)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActRelationship"/> class.
+        /// </summary>
+        /// <param name="relationshipType">Type of the relationship.</param>
+        /// <param name="targetKey">The target key.</param>
+        public ActRelationship(Guid? relationshipType, Guid? targetKey)
         {
             this.RelationshipTypeKey = relationshipType;
             this.TargetActKey = targetKey;

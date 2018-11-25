@@ -17,17 +17,13 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace SanteDB.Core.Model.Acts
 {
@@ -50,8 +46,8 @@ namespace SanteDB.Core.Model.Acts
     /// No matter what type of value an observation carries (coded, quantity, text) it is always classified by the type concept (<see cref="Act.TypeConceptKey"/>).
     /// </para>
     /// </remarks>
-    [XmlType("Observation",  Namespace = "http://santedb.org/model"), JsonObject("Observation")]
-    
+    [XmlType("Observation", Namespace = "http://santedb.org/model"), JsonObject("Observation")]
+
     public class Observation : Act
     {
 
@@ -72,7 +68,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the interpretation concept
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        
+
         [XmlElement("interpretationConcept"), JsonProperty("interpretationConcept")]
         public Guid? InterpretationConceptKey
         {
@@ -101,7 +97,8 @@ namespace SanteDB.Core.Model.Acts
         [XmlIgnore, JsonIgnore]
         public Concept InterpretationConcept
         {
-            get {
+            get
+            {
                 this.m_interpretationConcept = base.DelayLoad(this.m_interpretationConceptKey, this.m_interpretationConcept);
                 return this.m_interpretationConcept;
             }
@@ -144,8 +141,8 @@ namespace SanteDB.Core.Model.Acts
     /// The quantity observation class should be used whenever you wish to store an observation which carries a numerical value 
     /// and an optional unit of measure (example: length = 3.2 ft, weight = 1.2 kg, etc.)
     /// </remarks>
-    [XmlType("QuantityObservation",  Namespace = "http://santedb.org/model"), JsonObject("QuantityObservation")]
-    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "QuantityObservation" )]
+    [XmlType("QuantityObservation", Namespace = "http://santedb.org/model"), JsonObject("QuantityObservation")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "QuantityObservation")]
     public class QuantityObservation : Observation
     {
 
@@ -178,7 +175,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlElement("unitOfMeasure"), JsonProperty("unitOfMeasure")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        
+
         public Guid? UnitOfMeasureKey
         {
             get { return this.m_unitOfMeasureKey; }
@@ -239,7 +236,7 @@ namespace SanteDB.Core.Model.Acts
     /// cannot be quantified or classified using either a coded or observed value. Please note that this type should not be used
     /// for taking notes, rather it is a specific type of thing observed about a patient. For example: Interpretation of patient's mood
     /// </remarks>
-    [XmlType("TextObservation",  Namespace = "http://santedb.org/model"), JsonObject("TextObservation")]
+    [XmlType("TextObservation", Namespace = "http://santedb.org/model"), JsonObject("TextObservation")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "TextObservation")]
     public class TextObservation : Observation
     {
@@ -281,7 +278,7 @@ namespace SanteDB.Core.Model.Acts
     /// A coded observation represents an observation whose value is classified using a coded concept. For example: fetal presentation, 
     /// stage of pregnancy, etc.
     /// </remarks>
-    [XmlType("CodedObservation",  Namespace = "http://santedb.org/model"), JsonObject("CodedObservation")]
+    [XmlType("CodedObservation", Namespace = "http://santedb.org/model"), JsonObject("CodedObservation")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "CodedObservation")]
     public class CodedObservation : Observation
     {
@@ -309,7 +306,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        
+
         public Guid? ValueKey
         {
             get { return this.m_valueKey; }

@@ -17,17 +17,11 @@
  * User: justin
  * Date: 2018-6-21
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SanteDB.Core.Model.Attributes;
-using System.Reflection;
-using System.Runtime;
 using SanteDB.Core.Interfaces;
+using SanteDB.Core.Model.Attributes;
+using System;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
 {
@@ -35,7 +29,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// Instructions on how an extensionshould be handled
     /// </summary>
     [Classifier(nameof(Name)), KeyLookup(nameof(Name))]
-    [XmlType(nameof(ExtensionType),  Namespace = "http://santedb.org/model"), JsonObject("ExtensionType")]
+    [XmlType(nameof(ExtensionType), Namespace = "http://santedb.org/model"), JsonObject("ExtensionType")]
     [XmlRoot(nameof(ExtensionType), Namespace = "http://santedb.org/model")]
     public class ExtensionType : NonVersionedEntityData
     {
@@ -67,7 +61,9 @@ namespace SanteDB.Core.Model.DataTypes
         /// Extension handler instance
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public IExtensionHandler ExtensionHandlerInstance {  get
+        public IExtensionHandler ExtensionHandlerInstance
+        {
+            get
             {
                 try
                 {

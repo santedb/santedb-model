@@ -27,229 +27,229 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// Represents an association between two entities
-	/// </summary>
-	[Classifier(nameof(RelationshipType))]
-	[XmlRoot("EntityRelationship", Namespace = "http://santedb.org/model")]
-	[XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
-	public class EntityRelationship : VersionedAssociation<Entity>
-	{
-		// The association type key
-		private Guid? m_associationTypeKey;
+    /// <summary>
+    /// Represents an association between two entities
+    /// </summary>
+    [Classifier(nameof(RelationshipType))]
+    [XmlRoot("EntityRelationship", Namespace = "http://santedb.org/model")]
+    [XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
+    public class EntityRelationship : VersionedAssociation<Entity>
+    {
+        // The association type key
+        private Guid? m_associationTypeKey;
 
-		private Concept m_relationshipType;
+        private Concept m_relationshipType;
 
-		private Entity m_targetEntity;
+        private Entity m_targetEntity;
 
-		// The entity key
-		private Guid? m_targetEntityKey;
+        // The entity key
+        private Guid? m_targetEntityKey;
 
-		// The target entity
-		// The association type
-		/// <summary>
-		/// Default constructor for entity relationship
-		/// </summary>
-		public EntityRelationship()
-		{
-		}
+        // The target entity
+        // The association type
+        /// <summary>
+        /// Default constructor for entity relationship
+        /// </summary>
+        public EntityRelationship()
+        {
+        }
 
         /// <summary>
         /// Entity relationship between <see cref="Association{TSourceType}.SourceEntityKey"/> container and <paramref name="targetKey"/>
         /// </summary>
         public EntityRelationship(Guid? relationshipType, Entity target)
-		{
-			this.RelationshipTypeKey = relationshipType;
-			this.TargetEntity = target;
-		}
+        {
+            this.RelationshipTypeKey = relationshipType;
+            this.TargetEntity = target;
+        }
 
-		/// <summary>
-		/// Entity relationship between <see cref="Association{TSourceType}.SourceEntityKey"/> container and <paramref name="targetKey"/>
-		/// </summary>
-		public EntityRelationship(Guid? relationshipType, Guid? targetKey)
-		{
-			this.RelationshipTypeKey = relationshipType;
-			this.TargetEntityKey = targetKey;
-		}
+        /// <summary>
+        /// Entity relationship between <see cref="Association{TSourceType}.SourceEntityKey"/> container and <paramref name="targetKey"/>
+        /// </summary>
+        public EntityRelationship(Guid? relationshipType, Guid? targetKey)
+        {
+            this.RelationshipTypeKey = relationshipType;
+            this.TargetEntityKey = targetKey;
+        }
 
-		/// <summary>
-		/// The entity that this relationship targets
-		/// </summary>
-		[XmlIgnore, JsonIgnore, SerializationReference(nameof(HolderKey)), DataIgnore]
-		public Entity Holder
-		{
-			get
-			{
-				return this.SourceEntity;
-			}
-			set
-			{
-				this.SourceEntity = value;
-			}
-		}
+        /// <summary>
+        /// The entity that this relationship targets
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(HolderKey)), DataIgnore]
+        public Entity Holder
+        {
+            get
+            {
+                return this.SourceEntity;
+            }
+            set
+            {
+                this.SourceEntity = value;
+            }
+        }
 
-		/// <summary>
-		/// The entity that this relationship targets
-		/// </summary>
-		[JsonProperty("holder"), XmlElement("holder")]
-		public Guid? HolderKey
-		{
-			get
-			{
-				return this.SourceEntityKey;
-			}
-			set
-			{
-				this.SourceEntityKey = value;
-			}
-		}
+        /// <summary>
+        /// The entity that this relationship targets
+        /// </summary>
+        [JsonProperty("holder"), XmlElement("holder")]
+        public Guid? HolderKey
+        {
+            get
+            {
+                return this.SourceEntityKey;
+            }
+            set
+            {
+                this.SourceEntityKey = value;
+            }
+        }
 
-		/// <summary>
-		/// The inversion indicator
-		/// </summary>
-		[XmlElement("inversionInd"), JsonProperty("inversionInd")]
-		public bool InversionIndicator { get; set; }
+        /// <summary>
+        /// The inversion indicator
+        /// </summary>
+        [XmlElement("inversionInd"), JsonProperty("inversionInd")]
+        public bool InversionIndicator { get; set; }
 
-		/// <summary>
-		/// Represents the quantity of target in source
-		/// </summary>
-		[XmlElement("quantity"), JsonProperty("quantity")]
-		public int? Quantity { get; set; }
+        /// <summary>
+        /// Represents the quantity of target in source
+        /// </summary>
+        [XmlElement("quantity"), JsonProperty("quantity")]
+        public int? Quantity { get; set; }
 
-		/// <summary>
-		/// Gets or sets the association type
-		/// </summary>
-		[AutoLoad]
-		[XmlIgnore, JsonIgnore]
-		[SerializationReference(nameof(RelationshipTypeKey))]
-		public Concept RelationshipType
-		{
-			get
-			{
-				this.m_relationshipType = base.DelayLoad(this.m_associationTypeKey, this.m_relationshipType);
-				return this.m_relationshipType;
-			}
-			set
-			{
-				this.m_relationshipType = value;
-				this.m_associationTypeKey = value?.Key;
-			}
-		}
+        /// <summary>
+        /// Gets or sets the association type
+        /// </summary>
+        [AutoLoad]
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(RelationshipTypeKey))]
+        public Concept RelationshipType
+        {
+            get
+            {
+                this.m_relationshipType = base.DelayLoad(this.m_associationTypeKey, this.m_relationshipType);
+                return this.m_relationshipType;
+            }
+            set
+            {
+                this.m_relationshipType = value;
+                this.m_associationTypeKey = value?.Key;
+            }
+        }
 
-		/// <summary>
-		/// Association type key
-		/// </summary>
-		[XmlElement("relationshipType"), JsonProperty("relationshipType")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[Binding(typeof(EntityRelationshipTypeKeys))]
-		public Guid? RelationshipTypeKey
-		{
-			get { return this.m_associationTypeKey; }
-			set
-			{
-				if (this.m_associationTypeKey != value)
-				{
-					this.m_associationTypeKey = value;
-					this.m_relationshipType = null;
-				}
-			}
-		}
+        /// <summary>
+        /// Association type key
+        /// </summary>
+        [XmlElement("relationshipType"), JsonProperty("relationshipType")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(EntityRelationshipTypeKeys))]
+        public Guid? RelationshipTypeKey
+        {
+            get { return this.m_associationTypeKey; }
+            set
+            {
+                if (this.m_associationTypeKey != value)
+                {
+                    this.m_associationTypeKey = value;
+                    this.m_relationshipType = null;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Target entity reference
-		/// </summary>
-		[SerializationReference(nameof(TargetEntityKey))]
-		[XmlIgnore, JsonIgnore]
-		public Entity TargetEntity
-		{
-			get
-			{
-				this.m_targetEntity = base.DelayLoad(this.m_targetEntityKey, this.m_targetEntity);
-				return this.m_targetEntity;
-			}
-			set
-			{
-				this.m_targetEntity = value;
-				this.m_targetEntityKey = value?.Key;
-			}
-		}
+        /// <summary>
+        /// Target entity reference
+        /// </summary>
+        [SerializationReference(nameof(TargetEntityKey))]
+        [XmlIgnore, JsonIgnore]
+        public Entity TargetEntity
+        {
+            get
+            {
+                this.m_targetEntity = base.DelayLoad(this.m_targetEntityKey, this.m_targetEntity);
+                return this.m_targetEntity;
+            }
+            set
+            {
+                this.m_targetEntity = value;
+                this.m_targetEntityKey = value?.Key;
+            }
+        }
 
-		/// <summary>
-		/// The target of the association
-		/// </summary>
-		[XmlElement("target"), JsonProperty("target")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public Guid? TargetEntityKey
-		{
-			get { return this.m_targetEntityKey; }
-			set
-			{
-				if (this.m_targetEntityKey != value)
-				{
-					this.m_targetEntityKey = value;
-					this.m_targetEntity = null;
-				}
-			}
-		}
+        /// <summary>
+        /// The target of the association
+        /// </summary>
+        [XmlElement("target"), JsonProperty("target")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? TargetEntityKey
+        {
+            get { return this.m_targetEntityKey; }
+            set
+            {
+                if (this.m_targetEntityKey != value)
+                {
+                    this.m_targetEntityKey = value;
+                    this.m_targetEntity = null;
+                }
+            }
+        }
 
-		/// <summary>
-		/// Clean the entity
-		/// </summary>
-		/// <returns></returns>
-		public override IdentifiedData Clean()
-		{
-			this.m_targetEntity = this.m_targetEntity?.Clean() as Entity;
-			return this;
-		}
+        /// <summary>
+        /// Clean the entity
+        /// </summary>
+        /// <returns></returns>
+        public override IdentifiedData Clean()
+        {
+            this.m_targetEntity = this.m_targetEntity?.Clean() as Entity;
+            return this;
+        }
 
-		/// <summary>
-		/// Is empty
-		/// </summary>
-		/// <returns></returns>
-		public override bool IsEmpty()
-		{
-			return this.RelationshipType == null && this.RelationshipTypeKey == null ||
-				this.TargetEntity == null && this.TargetEntityKey == null;
-		}
+        /// <summary>
+        /// Is empty
+        /// </summary>
+        /// <returns></returns>
+        public override bool IsEmpty()
+        {
+            return this.RelationshipType == null && this.RelationshipTypeKey == null ||
+                this.TargetEntity == null && this.TargetEntityKey == null;
+        }
 
-		/// <summary>
-		/// Refresh this entity
-		/// </summary>
-		public override void Refresh()
-		{
-			base.Refresh();
-			this.m_relationshipType = null;
-			this.m_targetEntity = null;
-		}
+        /// <summary>
+        /// Refresh this entity
+        /// </summary>
+        public override void Refresh()
+        {
+            base.Refresh();
+            this.m_relationshipType = null;
+            this.m_targetEntity = null;
+        }
 
-		/// <summary>
-		/// Determine semantic equality
-		/// </summary>
-		public override bool SemanticEquals(object obj)
-		{
-			var other = obj as EntityRelationship;
-			if (other == null) return false;
-			return base.SemanticEquals(obj) && this.TargetEntityKey == other.TargetEntityKey &&
-				this.RelationshipTypeKey == other.RelationshipTypeKey &&
+        /// <summary>
+        /// Determine semantic equality
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as EntityRelationship;
+            if (other == null) return false;
+            return base.SemanticEquals(obj) && this.TargetEntityKey == other.TargetEntityKey &&
+                this.RelationshipTypeKey == other.RelationshipTypeKey &&
                 this.Quantity == other.Quantity &&
                 this.SourceEntityKey == other.SourceEntityKey;
-		}
+        }
 
-		/// <summary>
-		/// Should serialize inversion indicator?
-		/// </summary>
-		public bool ShouldSerializeInversionIndicator()
-		{
-			return this.InversionIndicator;
-		}
+        /// <summary>
+        /// Should serialize inversion indicator?
+        /// </summary>
+        public bool ShouldSerializeInversionIndicator()
+        {
+            return this.InversionIndicator;
+        }
 
-		/// <summary>
-		/// Should serialize quantity?
-		/// </summary>
-		public bool ShouldSerializeQuantity()
-		{
-			return this.Quantity.HasValue;
-		}
+        /// <summary>
+        /// Should serialize quantity?
+        /// </summary>
+        public bool ShouldSerializeQuantity()
+        {
+            return this.Quantity.HasValue;
+        }
         /// <summary>
         /// Shoudl serialize source entity?
         /// </summary>

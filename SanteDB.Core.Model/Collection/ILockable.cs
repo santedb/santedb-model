@@ -30,6 +30,6 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Get a locked version of the collection
         /// </summary>
-        IEnumerable GetLocked(); 
+        IEnumerable GetLocked();
     }
 }

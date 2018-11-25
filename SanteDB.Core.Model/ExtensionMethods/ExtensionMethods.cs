@@ -18,8 +18,10 @@
  * Date: 2018-6-21
  */
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
 using System;
 using System.Collections;
@@ -29,8 +31,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Serialization;
-using SanteDB.Core.Model.Constants;
-using SanteDB.Core.Model.Interfaces;
 
 namespace SanteDB.Core.Model
 {
@@ -183,8 +183,9 @@ namespace SanteDB.Core.Model
                 if ((newValue as IList)?.Count == 0)
                     newValue = null;
 
-                if (newValue is IList && oldValue is IList) {
-                    if(!Enumerable.SequenceEqual<Object>(((IList)newValue).OfType<Object>(), ((IList)oldValue).OfType<Object>()))
+                if (newValue is IList && oldValue is IList)
+                {
+                    if (!Enumerable.SequenceEqual<Object>(((IList)newValue).OfType<Object>(), ((IList)oldValue).OfType<Object>()))
                         destinationPi.SetValue(toEntity, newValue);
                 }
                 else if (newValue != null &&
@@ -223,8 +224,8 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Perform semantic copy
         /// </summary>
-        private static TObject SemanticCopyInternal<TObject>(this TObject toEntity, bool onlyIfNull,  String[] fieldNames, params TObject[] fromEntities) where TObject : IdentifiedData
-        { 
+        private static TObject SemanticCopyInternal<TObject>(this TObject toEntity, bool onlyIfNull, String[] fieldNames, params TObject[] fromEntities) where TObject : IdentifiedData
+        {
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
             else if (fromEntities == null)
@@ -330,7 +331,7 @@ namespace SanteDB.Core.Model
             }
 
             // Finally we want to remove items from the toEntity which didn't have any added options 
-            foreach(var merge in mergedListProperties)
+            foreach (var merge in mergedListProperties)
             {
                 IList modifyList = merge.Key.GetValue(toEntity) as IList;
                 IList<IdentifiedData> oldList = modifyList.OfType<IdentifiedData>().ToList();
@@ -352,7 +353,7 @@ namespace SanteDB.Core.Model
                 .Where(m => m.GetGenericArguments().Length == typeArity)
                 .Where(m => m.GetParameters().Length == argTypes.Length)
                 .Select(m => m.MakeGenericMethod(typeArgs)).ToList()
-                .Where(m => Enumerable.Range(0, argTypes.Length).All(i=>m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.GetTypeInfo().IsAssignableFrom(argTypes[i].GetTypeInfo())));
+                .Where(m => Enumerable.Range(0, argTypes.Length).All(i => m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.GetTypeInfo().IsAssignableFrom(argTypes[i].GetTypeInfo())));
 
             return methods.FirstOrDefault();
             //return Type.DefaultBinder.SelectMethod(flags, methods.ToArray(), argTypes, null);

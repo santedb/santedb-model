@@ -125,7 +125,7 @@ namespace SanteDB.Core.Model.Warehouse
         /// Identifies the column is a UUID
         /// </summary>
         [XmlEnum("uuid")]
-        Uuid = 5, 
+        Uuid = 5,
         /// <summary>
         /// Identifies the column as binary
         /// </summary>
@@ -135,7 +135,7 @@ namespace SanteDB.Core.Model.Warehouse
         /// Decimal
         /// </summary>
         [XmlEnum("decimal")]
-        Decimal = 7, 
+        Decimal = 7,
         /// <summary>
         /// Identifies the column is an object which has other data
         /// </summary>

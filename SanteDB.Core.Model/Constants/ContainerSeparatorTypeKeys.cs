@@ -18,27 +18,23 @@
  * Date: 2018-6-21
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.Constants
 {
-	/// <summary>
-	/// Represents a collection of container separator type keys.
-	/// A material in a blood collection container that facilitates the separation of of blood cells from serum or plasma
-	/// </summary>
-	public static class ContainerSeparatorTypeKeys
-	{
-		/// <summary>
-		/// Represents a gelatinous type of separator material.
-		/// </summary>
-		public static readonly Guid Gel = Guid.Parse("EE450FF6-9BED-4C47-90D2-671AB3041756");
+    /// <summary>
+    /// Represents a collection of container separator type keys.
+    /// A material in a blood collection container that facilitates the separation of of blood cells from serum or plasma
+    /// </summary>
+    public static class ContainerSeparatorTypeKeys
+    {
+        /// <summary>
+        /// Represents a gelatinous type of separator material.
+        /// </summary>
+        public static readonly Guid Gel = Guid.Parse("EE450FF6-9BED-4C47-90D2-671AB3041756");
 
-		/// <summary>
-		/// Represents no separator material is present in the container.
-		/// </summary>
-		public static readonly Guid None = Guid.Parse("472524EB-C8D4-49F8-862A-EF4BD7CA0395");
-	}
+        /// <summary>
+        /// Represents no separator material is present in the container.
+        /// </summary>
+        public static readonly Guid None = Guid.Parse("472524EB-C8D4-49F8-862A-EF4BD7CA0395");
+    }
 }

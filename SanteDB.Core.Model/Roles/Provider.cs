@@ -17,26 +17,22 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace SanteDB.Core.Model.Roles
 {
     /// <summary>
     /// Represents a provider role of a person
     /// </summary>
-    
-    [XmlType("Provider",  Namespace = "http://santedb.org/model"), JsonObject("Provider")]
+
+    [XmlType("Provider", Namespace = "http://santedb.org/model"), JsonObject("Provider")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Provider")]
     public class Provider : Person
     {
@@ -44,7 +40,7 @@ namespace SanteDB.Core.Model.Roles
         // Specialty key
         private Guid? m_providerSpecialtyKey;
         // Specialty value
-        
+
         private Concept m_providerSpeciality;
 
         /// <summary>
@@ -60,7 +56,7 @@ namespace SanteDB.Core.Model.Roles
         /// Gets or sets the provider specialty key
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        
+
         [XmlElement("providerSpecialty"), JsonProperty("providerSpecialty")]
         public Guid? ProviderSpecialtyKey
         {

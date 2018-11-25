@@ -40,6 +40,6 @@ namespace SanteDB.Core.Model.Warehouse
         /// <summary>
         /// Gets the sub-properties
         /// </summary>
-        List<DatamartSchemaProperty> Properties { get; } 
+        List<DatamartSchemaProperty> Properties { get; }
     }
 }

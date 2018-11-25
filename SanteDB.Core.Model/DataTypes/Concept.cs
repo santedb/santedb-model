@@ -33,13 +33,13 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// A class representing a generic concept used in the SanteDB datamodel
     /// </summary>
-    
-    [XmlType("Concept",  Namespace = "http://santedb.org/model"), JsonObject("Concept")]
+
+    [XmlType("Concept", Namespace = "http://santedb.org/model"), JsonObject("Concept")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Concept")]
     [Classifier(nameof(Mnemonic)), KeyLookup(nameof(Mnemonic))]
     public class Concept : VersionedEntityData<Concept>, IHasState
     {
-        
+
         /// <summary>
         /// Creates a new concept
         /// </summary>
@@ -76,11 +76,11 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the status concept key
         /// </summary>
-        
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
-        public Guid?  StatusConceptKey
+        public Guid? StatusConceptKey
         {
             get
             {
@@ -136,7 +136,9 @@ namespace SanteDB.Core.Model.DataTypes
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("conceptClass"), JsonProperty("conceptClass")]
         [Binding(typeof(ConceptClassKeys))]
-        public Guid?  ClassKey { get
+        public Guid? ClassKey
+        {
+            get
             {
                 return this.m_classId;
             }
@@ -169,7 +171,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets a list of concept reference terms
         /// </summary>
-        
+
         [AutoLoad, XmlElement("referenceTerm"), JsonProperty("referenceTerm")]
         public List<ConceptReferenceTerm> ReferenceTerms { get; set; }
 
@@ -194,15 +196,15 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                
-                if(this.m_conceptSets == null)
-                    this.m_conceptSets = this.ConceptSetsXml?.Select(o=>EntitySource.Current.Get<ConceptSet>(o)).ToList();
+
+                if (this.m_conceptSets == null)
+                    this.m_conceptSets = this.ConceptSetsXml?.Select(o => EntitySource.Current.Get<ConceptSet>(o)).ToList();
                 return this.m_conceptSets;
             }
             set
             {
 
-                this.ConceptSetsXml = value?.Where(o=>o.Key.HasValue).Select(o => o.Key.Value).ToList();
+                this.ConceptSetsXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
                 this.m_conceptSets = value;
             }
         }

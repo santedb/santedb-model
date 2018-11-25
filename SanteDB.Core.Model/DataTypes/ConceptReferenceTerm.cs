@@ -29,46 +29,47 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents a reference term relationship between a concept and reference term
     /// </summary>
     [Classifier(nameof(ReferenceTerm))]
-    [XmlType("ConceptReferenceTerm",  Namespace = "http://santedb.org/model"), JsonObject("ConceptReferenceTerm")]
+    [XmlType("ConceptReferenceTerm", Namespace = "http://santedb.org/model"), JsonObject("ConceptReferenceTerm")]
     public class ConceptReferenceTerm : VersionedAssociation<Concept>
     {
         // Reference term id
         private Guid? m_referenceTermId;
         // Reference term
-        
+
         private ReferenceTerm m_referenceTerm;
         // ConceptRelationship type
         private Guid? m_relationshipTypeId;
         // Relationship type
-        
+
         private ConceptRelationshipType m_relationshipType;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConceptReferenceTerm"/> class.
-		/// </summary>
-		public ConceptReferenceTerm()
-	    {
-		    
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConceptReferenceTerm"/> class.
+        /// </summary>
+        public ConceptReferenceTerm()
+        {
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConceptReferenceTerm"/> class.
-		/// </summary>
-		/// <param name="referenceTermKey">The reference term identifier.</param>
-		/// <param name="relationshipTypeKey">The relationship type identifier.</param>
-		public ConceptReferenceTerm(Guid? referenceTermKey, Guid? relationshipTypeKey)
-		{
-			this.RelationshipTypeKey = relationshipTypeKey;
-			this.ReferenceTermKey = referenceTermKey;
-		}
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConceptReferenceTerm"/> class.
+        /// </summary>
+        /// <param name="referenceTermKey">The reference term identifier.</param>
+        /// <param name="relationshipTypeKey">The relationship type identifier.</param>
+        public ConceptReferenceTerm(Guid? referenceTermKey, Guid? relationshipTypeKey)
+        {
+            this.RelationshipTypeKey = relationshipTypeKey;
+            this.ReferenceTermKey = referenceTermKey;
+        }
 
         /// <summary>
         /// Gets or sets the reference term identifier
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        
+
         [XmlElement("term"), JsonProperty("term")]
-        public Guid?  ReferenceTermKey {
+        public Guid? ReferenceTermKey
+        {
             get { return this.m_referenceTermId; }
             set
             {
@@ -101,7 +102,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
-        public Guid?  RelationshipTypeKey {
+        public Guid? RelationshipTypeKey
+        {
             get { return this.m_relationshipTypeId; }
             set
             {
@@ -115,7 +117,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipTypeKey))]
-        public ConceptRelationshipType RelationshipType {
+        public ConceptRelationshipType RelationshipType
+        {
             get
             {
                 this.m_relationshipType = base.DelayLoad(this.m_relationshipTypeId, this.m_relationshipType);

@@ -19,10 +19,6 @@
  */
 using SanteDB.Core.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Extensions
 {
@@ -36,7 +32,7 @@ namespace SanteDB.Core.Extensions
         /// </summary>
         public string Name => "Boolean";
 
-	    /// <summary>
+        /// <summary>
         /// Gets the boolean obect from a byte array
         /// </summary>
         public object DeSerialize(byte[] extensionData)

@@ -24,37 +24,37 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// Manufactured material
-	/// </summary>
+    /// <summary>
+    /// Manufactured material
+    /// </summary>
 
-	[XmlType("ManufacturedMaterial", Namespace = "http://santedb.org/model"), JsonObject("ManufacturedMaterial")]
-	[XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ManufacturedMaterial")]
-	public class ManufacturedMaterial : Material
-	{
-		/// <summary>
-		/// Creates a new manufactured material
-		/// </summary>
-		public ManufacturedMaterial()
-		{
-			base.DeterminerConceptKey = DeterminerKeys.Specific;
-			base.ClassConceptKey = EntityClassKeys.ManufacturedMaterial;
-		}
+    [XmlType("ManufacturedMaterial", Namespace = "http://santedb.org/model"), JsonObject("ManufacturedMaterial")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ManufacturedMaterial")]
+    public class ManufacturedMaterial : Material
+    {
+        /// <summary>
+        /// Creates a new manufactured material
+        /// </summary>
+        public ManufacturedMaterial()
+        {
+            base.DeterminerConceptKey = DeterminerKeys.Specific;
+            base.ClassConceptKey = EntityClassKeys.ManufacturedMaterial;
+        }
 
-		/// <summary>
-		/// Gets or sets the lot number of the manufactured material
-		/// </summary>
-		[XmlElement("lotNumber"), JsonProperty("lotNumber")]
-		public String LotNumber { get; set; }
+        /// <summary>
+        /// Gets or sets the lot number of the manufactured material
+        /// </summary>
+        [XmlElement("lotNumber"), JsonProperty("lotNumber")]
+        public String LotNumber { get; set; }
 
-		/// <summary>
-		/// Semantic equality
-		/// </summary>
-		public override bool SemanticEquals(object obj)
-		{
-			var other = obj as ManufacturedMaterial;
-			if (other == null) return false;
-			return base.SemanticEquals(obj) && this.LotNumber == other.LotNumber;
-		}
-	}
+        /// <summary>
+        /// Semantic equality
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as ManufacturedMaterial;
+            if (other == null) return false;
+            return base.SemanticEquals(obj) && this.LotNumber == other.LotNumber;
+        }
+    }
 }

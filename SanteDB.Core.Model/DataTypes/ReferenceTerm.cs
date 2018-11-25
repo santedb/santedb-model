@@ -17,17 +17,15 @@
  * User: justin
  * Date: 2018-6-21
  */
-using System.Linq;
-
-
+using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using SanteDB.Core.Model.Attributes;
+using System.Linq;
 using System.Xml.Serialization;
-using SanteDB.Core.Model.EntityLoader;
-using Newtonsoft.Json;
-using SanteDB.Core.Model.Constants;
 
 namespace SanteDB.Core.Model.DataTypes
 {
@@ -35,7 +33,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents a basic reference term
     /// </summary>
     [Classifier(nameof(CodeSystem))]
-    [XmlType("ReferenceTerm",  Namespace = "http://santedb.org/model"), JsonObject("ReferenceTerm")]
+    [XmlType("ReferenceTerm", Namespace = "http://santedb.org/model"), JsonObject("ReferenceTerm")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ReferenceTerm")]
     public class ReferenceTerm : NonVersionedEntityData
     {
@@ -43,10 +41,10 @@ namespace SanteDB.Core.Model.DataTypes
         // Backing field for code system identifier
         private Guid? m_codeSystemId;
         // Code system
-        
+
         private CodeSystem m_codeSystem;
         // Display names
-        
+
         private List<ReferenceTermName> m_displayNames;
 
         /// <summary>
@@ -60,7 +58,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [SerializationReference(nameof(CodeSystemKey))]
         [XmlIgnore, JsonIgnore]
-        public CodeSystem CodeSystem {
+        public CodeSystem CodeSystem
+        {
             get
             {
                 this.m_codeSystem = base.DelayLoad(this.m_codeSystemId, this.m_codeSystem);
@@ -72,14 +71,15 @@ namespace SanteDB.Core.Model.DataTypes
                 this.m_codeSystemId = value?.Key;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the code system identifier
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("codeSystem"), JsonProperty("codeSystem")]
         [Binding(typeof(CodeSystemKeys))]
-        public Guid?  CodeSystemKey {
+        public Guid? CodeSystemKey
+        {
             get { return this.m_codeSystemId; }
             set
             {
@@ -92,10 +92,11 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets display names associated with the reference term
         /// </summary>
         [AutoLoad, XmlElement("name"), JsonProperty("name")]
-        public List<ReferenceTermName> DisplayNames {
+        public List<ReferenceTermName> DisplayNames
+        {
             get
             {
-                if(this.m_displayNames == null && this.IsDelayLoadEnabled)
+                if (this.m_displayNames == null && this.IsDelayLoadEnabled)
                     this.m_displayNames = EntitySource.Current.Provider.Query<ReferenceTermName>(o => o.SourceEntityKey == this.Key && o.ObsoletionTime == null).ToList();
                 return this.m_displayNames;
             }

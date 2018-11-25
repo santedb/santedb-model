@@ -31,7 +31,7 @@ namespace SanteDB.Core.Model.Patch
         /// Patch operation adds the specified value to the array
         /// </summary>
         [XmlEnum("add")]
-        Add, 
+        Add,
         /// <summary>
         /// Patch operation removes the specified value from the array
         /// </summary>
@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model.Patch
         /// Patch operation replaces the specified item at the path 
         /// </summary>
         [XmlEnum("replace")]
-        Replace, 
+        Replace,
         /// <summary>
         /// Patch should test value before proceeding
         /// </summary>

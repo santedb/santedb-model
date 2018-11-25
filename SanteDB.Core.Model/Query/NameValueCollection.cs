@@ -21,8 +21,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -61,8 +59,8 @@ namespace SanteDB.Core.Model.Query
         public NameValueCollection(KeyValuePair<string, object>[] kvpa)
         {
             foreach (var kv in kvpa)
-                if(kv.Value is IList)
-                    this.Add(kv.Key, (kv.Value as IList).OfType<Object>().Select(o=>o.ToString()).ToList());
+                if (kv.Value is IList)
+                    this.Add(kv.Key, (kv.Value as IList).OfType<Object>().Select(o => o.ToString()).ToList());
                 else
                     this.Add(kv.Key, kv.Value?.ToString());
         }
@@ -92,7 +90,7 @@ namespace SanteDB.Core.Model.Query
                     Replace("%5D", "]").
                     Replace("%7C", "|").Trim();
                 // HACK: Replace this later
-                if(!String.IsNullOrEmpty(value))
+                if (!String.IsNullOrEmpty(value))
                     retVal.Add(expr[0].Trim(), value);
             }
             return retVal;

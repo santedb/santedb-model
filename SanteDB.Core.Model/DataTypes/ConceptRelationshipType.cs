@@ -20,7 +20,6 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -30,7 +29,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// </summary>
     [Classifier(nameof(Mnemonic)), KeyLookup(nameof(Mnemonic))]
     [XmlRoot("ConceptRelationshipType", Namespace = "http://santedb.org/model")]
-    [XmlType("ConceptRelationshipType",  Namespace = "http://santedb.org/model"), JsonObject("ConceptRelationshipType")]
+    [XmlType("ConceptRelationshipType", Namespace = "http://santedb.org/model"), JsonObject("ConceptRelationshipType")]
     public class ConceptRelationshipType : NonVersionedEntityData
     {
 

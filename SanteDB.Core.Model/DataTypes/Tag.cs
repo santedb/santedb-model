@@ -17,17 +17,13 @@
  * User: justin
  * Date: 2018-6-21
  */
-using SanteDB.Core.Model.Acts;
-using SanteDB.Core.Model.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.Interfaces;
+using System;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
 {
@@ -36,7 +32,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// </summary>
     [Classifier(nameof(TagKey)), SimpleValue(nameof(Value))]
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Tag")]
-    public abstract class Tag<TSourceType> :  BaseEntityData, ITag, ISimpleAssociation where TSourceType : IdentifiedData, new()
+    public abstract class Tag<TSourceType> : BaseEntityData, ITag, ISimpleAssociation where TSourceType : IdentifiedData, new()
     {
 
         /// <summary>
@@ -103,7 +99,7 @@ namespace SanteDB.Core.Model.DataTypes
         {
             var other = obj as Tag<TSourceType>;
             if (other == null) return false;
-            return 
+            return
                 other.TagKey == this.TagKey &&
                 other.Value == this.Value;
         }
@@ -129,8 +125,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a tag associated with an entity
     /// </summary>
-    
-    [XmlType("EntityTag",  Namespace = "http://santedb.org/model"), JsonObject("EntityTag")]
+
+    [XmlType("EntityTag", Namespace = "http://santedb.org/model"), JsonObject("EntityTag")]
     public class EntityTag : Tag<Entity>
     {
 
@@ -156,8 +152,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a tag on an act
     /// </summary>
-    
-    [XmlType("ActTag",  Namespace = "http://santedb.org/model"), JsonObject("ActTag")]
+
+    [XmlType("ActTag", Namespace = "http://santedb.org/model"), JsonObject("ActTag")]
     public class ActTag : Tag<Act>
     {
         /// <summary>

@@ -20,19 +20,11 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.Collection;
-using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using SanteDB.Core.Model.Roles;
 
 namespace SanteDB.Core.Model
 {
@@ -177,7 +169,8 @@ namespace SanteDB.Core.Model
         /// Gets or sets whether the object was partial loaded
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public LoadState LoadState {
+        public LoadState LoadState
+        {
             get
             {
                 return this.m_loadState;
@@ -258,6 +251,6 @@ namespace SanteDB.Core.Model
                 return obj.Key.GetHashCode();
             }
         }
-        
+
     }
 }

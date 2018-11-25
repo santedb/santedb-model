@@ -20,9 +20,6 @@
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
 
 namespace SanteDB.Core.Model.EntityLoader
@@ -59,7 +56,7 @@ namespace SanteDB.Core.Model.EntityLoader
             /// </summary>
             public IEnumerable<TObject> GetRelations<TObject>(Guid? sourceKey, decimal? sourceVersionSequence) where TObject : IdentifiedData, IVersionedAssociation, new()
             {
-	            return new List<TObject>();
+                return new List<TObject>();
             }
 
             /// <summary>
@@ -67,8 +64,8 @@ namespace SanteDB.Core.Model.EntityLoader
             /// </summary>
             public IEnumerable<TObject> GetRelations<TObject>(Guid? sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new()
             {
-				return new List<TObject>();
-			}
+                return new List<TObject>();
+            }
 
             /// <summary>
             /// Query 
@@ -82,10 +79,10 @@ namespace SanteDB.Core.Model.EntityLoader
 
         // Load object
         private static Object s_lockObject = new object();
-  
+
         // Current instance
         private static EntitySource s_instance = new EntitySource(new DummyEntitySource());
-        
+
 
         /// <summary>
         /// Delay load provider
@@ -103,7 +100,8 @@ namespace SanteDB.Core.Model.EntityLoader
         /// <summary>
         /// Gets the current delay loader
         /// </summary>
-        public static EntitySource Current {
+        public static EntitySource Current
+        {
             get
             {
                 return s_instance;
@@ -139,6 +137,6 @@ namespace SanteDB.Core.Model.EntityLoader
         /// <summary>
         /// Gets the current entity source provider
         /// </summary>
-        public IEntitySourceProvider Provider {  get { return this.m_provider; } }
+        public IEntitySourceProvider Provider { get { return this.m_provider; } }
     }
 }

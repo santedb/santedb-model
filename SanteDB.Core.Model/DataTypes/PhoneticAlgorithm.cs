@@ -18,7 +18,6 @@
  * Date: 2018-6-21
  */
 using Newtonsoft.Json;
-using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Xml.Serialization;
@@ -28,8 +27,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a phonetic algorithm record in the model
     /// </summary>
-    
-    [XmlType("PhoneticAlgorithm",  Namespace = "http://santedb.org/model"), JsonObject("PhoneticAlgorithm")]
+
+    [XmlType("PhoneticAlgorithm", Namespace = "http://santedb.org/model"), JsonObject("PhoneticAlgorithm")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "PhoneticAlgorithm")]
     public class PhoneticAlgorithm : NonVersionedEntityData
     {
@@ -44,8 +43,8 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                if(s_nullPhoneticAlgorithm == null)
-                    lock(s_lockObject)
+                if (s_nullPhoneticAlgorithm == null)
+                    lock (s_lockObject)
                         s_nullPhoneticAlgorithm = EntitySource.Current.Get<PhoneticAlgorithm>(Guid.Parse("402CD339-D0E4-46CE-8FC2-12A4B0E17226"));
                 return s_nullPhoneticAlgorithm;
             }

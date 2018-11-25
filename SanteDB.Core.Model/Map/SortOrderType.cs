@@ -21,22 +21,22 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map
 {
-	/// <summary>
-	/// Represents sort order
-	/// </summary>
-	[XmlType(nameof(SortOrderType), Namespace = "http://santedb.org/model/map")]
+    /// <summary>
+    /// Represents sort order
+    /// </summary>
+    [XmlType(nameof(SortOrderType), Namespace = "http://santedb.org/model/map")]
     public enum SortOrderType
     {
-		/// <summary>
-		/// Order by ascending.
-		/// </summary>
-		[XmlEnum("asc")]
+        /// <summary>
+        /// Order by ascending.
+        /// </summary>
+        [XmlEnum("asc")]
         OrderBy,
 
-		/// <summary>
-		/// Order by descending.
-		/// </summary>
-		[XmlEnum("desc")]
+        /// <summary>
+        /// Order by descending.
+        /// </summary>
+        [XmlEnum("desc")]
         OrderByDescending
     }
 }

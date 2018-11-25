@@ -17,15 +17,11 @@
  * User: justin
  * Date: 2018-6-21
  */
-using SanteDB.Core.Model.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using SanteDB.Core.Model.Interfaces;
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
+using System;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model
 {
@@ -49,7 +45,7 @@ namespace SanteDB.Core.Model
         {
             get
             {
-                if(this.m_sourceEntity != null)
+                if (this.m_sourceEntity != null)
                     return this.m_sourceEntity.ModifiedOn;
                 return DateTime.Now;
             }

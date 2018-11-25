@@ -17,19 +17,17 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
+using SanteDB.Core.Interfaces;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Entities;
+using SanteDB.Core.Model.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Xml.Serialization;
 using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SanteDB.Core.Interfaces;
-using SanteDB.Core.Model.Interfaces;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
 {
@@ -39,7 +37,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// </summary>
     [Classifier(nameof(ExtensionType)), SimpleValue(nameof(ExtensionValueString))]
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Extension")]
-    public abstract class Extension<TBoundModel> : 
+    public abstract class Extension<TBoundModel> :
         VersionedAssociation<TBoundModel>, IModelExtension where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
 
@@ -115,7 +113,7 @@ namespace SanteDB.Core.Model.DataTypes
         {
             return this.LoadProperty<ExtensionType>("ExtensionType")?.ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
         }
-        
+
         /// <summary>
         /// Gets or sets an extension displayable value
         /// </summary>
@@ -129,7 +127,7 @@ namespace SanteDB.Core.Model.DataTypes
             }
             set { }
         }
-         
+
         /// <summary>
         /// Gets or sets the extension type
         /// </summary>
@@ -200,7 +198,7 @@ namespace SanteDB.Core.Model.DataTypes
                 return this.ExtensionDisplay;
             }
         }
-        
+
         /// <summary>
         /// Get the value of the extension
         /// </summary>

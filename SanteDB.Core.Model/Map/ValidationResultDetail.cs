@@ -18,10 +18,6 @@
  * Date: 2018-6-21
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.Map
 {
@@ -31,21 +27,21 @@ namespace SanteDB.Core.Model.Map
     /// </summary>
     public enum ResultDetailType
     {
-		/// <summary>
-		/// Represents an error.
-		/// </summary>
-		Error,
+        /// <summary>
+        /// Represents an error.
+        /// </summary>
+        Error,
 
-		/// <summary>
-		/// Represents a warning.
-		/// </summary>
-		Warning,
+        /// <summary>
+        /// Represents a warning.
+        /// </summary>
+        Warning,
 
-		/// <summary>
-		/// Represents information.
-		/// </summary>
-		Information
-	}
+        /// <summary>
+        /// Represents information.
+        /// </summary>
+        Information
+    }
 
     /// <summary>
     /// Represents a result detail which is a validation result

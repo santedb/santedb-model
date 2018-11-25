@@ -17,6 +17,7 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
@@ -24,13 +25,8 @@ using SanteDB.Core.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Diagnostics;
 using System.Globalization;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Roles
 {
@@ -84,7 +80,8 @@ namespace SanteDB.Core.Model.Roles
         /// Deceased date XML
         /// </summary>
         [XmlElement("deceasedDate"), JsonProperty("deceasedDate"), DataIgnore]
-        public String DeceasedDateXml {
+        public String DeceasedDateXml
+        {
             get
             {
                 return this.DeceasedDate?.ToString("yyyy-MM-dd");
@@ -297,7 +294,8 @@ namespace SanteDB.Core.Model.Roles
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(EthnicGroupCodeKey))]
         public Concept EthnicGroup
         {
-            get {
+            get
+            {
                 this.m_ethnicGroup = base.DelayLoad(this.m_ethnicGroupKey, this.m_ethnicGroup);
                 return this.m_ethnicGroup;
             }
@@ -346,7 +344,7 @@ namespace SanteDB.Core.Model.Roles
         {
             var other = obj as Patient;
             if (other == null) return false;
-            return base.SemanticEquals(obj) && 
+            return base.SemanticEquals(obj) &&
                 this.GenderConceptKey == other.GenderConceptKey &&
                 this.DeceasedDate == other.DeceasedDate &&
                 this.DeceasedDatePrecision == other.DeceasedDatePrecision;

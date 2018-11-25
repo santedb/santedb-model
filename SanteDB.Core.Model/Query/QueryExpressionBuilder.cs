@@ -17,15 +17,14 @@
  * User: justin
  * Date: 2018-6-21
  */
-using System;
-using System.Reflection;
-using System.Linq.Expressions;
-using System.Collections.Generic;
-using System.Xml.Serialization;
 using SanteDB.Core.Model.Attributes;
-using System.Linq;
+using System;
 using System.Collections;
-using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -48,11 +47,11 @@ namespace SanteDB.Core.Model.Query
 
             // The dictionary
             private List<KeyValuePair<String, Object>> m_query;
-			/// <summary>
-			/// Initializes a new instance of the <see cref="HttpQueryExpressionVisitor"/> class.
-			/// </summary>
-			/// <param name="workingDictionary">The working dictionary.</param>
-			public HttpQueryExpressionVisitor(List<KeyValuePair<String, Object>> workingDictionary)
+            /// <summary>
+            /// Initializes a new instance of the <see cref="HttpQueryExpressionVisitor"/> class.
+            /// </summary>
+            /// <param name="workingDictionary">The working dictionary.</param>
+            public HttpQueryExpressionVisitor(List<KeyValuePair<String, Object>> workingDictionary)
             {
                 this.m_query = workingDictionary;
             }
@@ -62,7 +61,7 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             private void AddCondition(String key, Object value)
             {
-                var cvalue = this.m_query.FirstOrDefault(o=>o.Key == key);
+                var cvalue = this.m_query.FirstOrDefault(o => o.Key == key);
                 if (cvalue.Value == null)
                     this.m_query.Add(new KeyValuePair<string, object>(key, value));
                 else if (cvalue.Value is IList)
@@ -126,7 +125,7 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             protected override Expression VisitUnary(UnaryExpression node)
             {
-                switch(node.NodeType)
+                switch (node.NodeType)
                 {
                     case ExpressionType.Not:
                         var parmName = this.ExtractPath(node.Operand, true);
@@ -178,7 +177,7 @@ namespace SanteDB.Core.Model.Query
                             }
                             else
                                 return null;
-                           
+
                         }
                     default:
                         return base.VisitMethodCall(node);
@@ -242,7 +241,7 @@ namespace SanteDB.Core.Model.Query
                     else if (parmValue == null)
                         fParmValue = "null";
 
-                    
+
                     // Node type
                     switch (node.NodeType)
                     {
@@ -280,7 +279,7 @@ namespace SanteDB.Core.Model.Query
 
                     this.AddCondition(parmName, fParmValue);
                 }
-                
+
                 return node;
             }
 
@@ -470,7 +469,7 @@ namespace SanteDB.Core.Model.Query
             List<KeyValuePair<String, Object>> retVal = new List<KeyValuePair<string, Object>>();
             var visitor = new HttpQueryExpressionVisitor(retVal);
             visitor.Visit(model);
-            if(stripNullChecks)
+            if (stripNullChecks)
                 retVal.RemoveAll(o => retVal.Any(c => c.Key == o.Key && c.Value != o.Value) && o.Value.Equals("!null"));
             return retVal;
         }

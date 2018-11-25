@@ -21,24 +21,24 @@ using System;
 
 namespace SanteDB.Core.Model.Constants
 {
-	/// <summary>
-	/// Phonetic algorithm keys for built in phonetic algorithms in SanteDB
-	/// </summary>
-	public static class PhoneticAlgorithmKeys
-	{
-		/// <summary>
-		/// Represents the metaphone phonetic algorithm
-		/// </summary>
-		public static readonly Guid Metaphone = Guid.Parse("d79a4dc6-66a6-4602-8fcb-7dc09a895793");
+    /// <summary>
+    /// Phonetic algorithm keys for built in phonetic algorithms in SanteDB
+    /// </summary>
+    public static class PhoneticAlgorithmKeys
+    {
+        /// <summary>
+        /// Represents the metaphone phonetic algorithm
+        /// </summary>
+        public static readonly Guid Metaphone = Guid.Parse("d79a4dc6-66a6-4602-8fcb-7dc09a895793");
 
-		/// <summary>
-		/// Represents the null phonetic algorithm
-		/// </summary>
-		public static readonly Guid None = Guid.Parse("402CD339-D0E4-46CE-8FC2-12A4B0E17226");
+        /// <summary>
+        /// Represents the null phonetic algorithm
+        /// </summary>
+        public static readonly Guid None = Guid.Parse("402CD339-D0E4-46CE-8FC2-12A4B0E17226");
 
-		/// <summary>
-		/// Represents the soundex algorithm
-		/// </summary>
-		public static readonly Guid Soundex = Guid.Parse("3352a79a-d2e0-4e0c-9b48-6fd2a202c681");
-	}
+        /// <summary>
+        /// Represents the soundex algorithm
+        /// </summary>
+        public static readonly Guid Soundex = Guid.Parse("3352a79a-d2e0-4e0c-9b48-6fd2a202c681");
+    }
 }

@@ -21,86 +21,83 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
-using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Security;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// Represents an entity which is a person
-	/// </summary>
+    /// <summary>
+    /// Represents an entity which is a person
+    /// </summary>
 
-	[XmlType("Person", Namespace = "http://santedb.org/model"), JsonObject("Person")]
-	[XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Person")]
-	public class Person : Entity
-	{
-        
-		/// <summary>
-		/// Person constructor
-		/// </summary>
-		public Person()
-		{
-			base.DeterminerConceptKey = DeterminerKeys.Specific;
-			base.ClassConceptKey = EntityClassKeys.Person;
-			this.LanguageCommunication = new List<PersonLanguageCommunication>();
-            
-		}
+    [XmlType("Person", Namespace = "http://santedb.org/model"), JsonObject("Person")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Person")]
+    public class Person : Entity
+    {
 
-		/// <summary>
-		/// Gets the security user account associated with this person if applicable
-		/// </summary>
-		[XmlIgnore, JsonIgnore, DataIgnore]
-		public virtual SecurityUser AsSecurityUser { get { return null; } }
+        /// <summary>
+        /// Person constructor
+        /// </summary>
+        public Person()
+        {
+            base.DeterminerConceptKey = DeterminerKeys.Specific;
+            base.ClassConceptKey = EntityClassKeys.Person;
+            this.LanguageCommunication = new List<PersonLanguageCommunication>();
 
-		/// <summary>
-		/// Gets or sets the person's date of birth
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		public DateTime? DateOfBirth { get; set; }
+        }
 
-		/// <summary>
-		/// Gets or sets the precision ofthe date of birth
-		/// </summary>
-		[XmlElement("dateOfBirthPrecision"), JsonProperty("dateOfBirthPrecision")]
-		public DatePrecision? DateOfBirthPrecision { get; set; }
+        /// <summary>
+        /// Gets the security user account associated with this person if applicable
+        /// </summary>
+        [XmlIgnore, JsonIgnore, DataIgnore]
+        public virtual SecurityUser AsSecurityUser { get { return null; } }
 
-		/// <summary>
-		/// Gets the date of birth as XML
-		/// </summary>
-		[XmlElement("dateOfBirth"), JsonProperty("dateOfBirth"), DataIgnore]
-		public String DateOfBirthXml
-		{
-			get
-			{
-				return this.DateOfBirth?.ToString("yyyy-MM-dd");
-			}
-			set
-			{
+        /// <summary>
+        /// Gets or sets the person's date of birth
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public DateTime? DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the precision ofthe date of birth
+        /// </summary>
+        [XmlElement("dateOfBirthPrecision"), JsonProperty("dateOfBirthPrecision")]
+        public DatePrecision? DateOfBirthPrecision { get; set; }
+
+        /// <summary>
+        /// Gets the date of birth as XML
+        /// </summary>
+        [XmlElement("dateOfBirth"), JsonProperty("dateOfBirth"), DataIgnore]
+        public String DateOfBirthXml
+        {
+            get
+            {
+                return this.DateOfBirth?.ToString("yyyy-MM-dd");
+            }
+            set
+            {
                 if (!String.IsNullOrEmpty(value))
                 {
-                    if(value.Length > 10)
+                    if (value.Length > 10)
                         this.DateOfBirth = DateTime.ParseExact(value, "o", CultureInfo.InvariantCulture);
                     else
                         this.DateOfBirth = DateTime.ParseExact(value.Substring(0, 10), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
                 }
                 else
                     this.DateOfBirth = null;
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Gets the person's languages of communication
-		/// </summary>
-		[AutoLoad, XmlElement("language"), JsonProperty("language")]
-		public List<PersonLanguageCommunication> LanguageCommunication { get; set; }
+        /// <summary>
+        /// Gets the person's languages of communication
+        /// </summary>
+        [AutoLoad, XmlElement("language"), JsonProperty("language")]
+        public List<PersonLanguageCommunication> LanguageCommunication { get; set; }
 
-        
+
         /// <summary>
         /// Should serialize date of birth precision
         /// </summary>
@@ -109,17 +106,17 @@ namespace SanteDB.Core.Model.Entities
             return this.DateOfBirthPrecision.HasValue;
         }
 
-		/// <summary>
-		/// Semantic equality function
-		/// </summary>
-		public override bool SemanticEquals(object obj)
-		{
-			var other = obj as Person;
-			if (other == null) return false;
-			return base.SemanticEquals(obj) &&
-				this.DateOfBirth == other.DateOfBirth &&
-				this.DateOfBirthPrecision == other.DateOfBirthPrecision &&
-				this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) == true;
-		}
-	}
+        /// <summary>
+        /// Semantic equality function
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as Person;
+            if (other == null) return false;
+            return base.SemanticEquals(obj) &&
+                this.DateOfBirth == other.DateOfBirth &&
+                this.DateOfBirthPrecision == other.DateOfBirthPrecision &&
+                this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) == true;
+        }
+    }
 }

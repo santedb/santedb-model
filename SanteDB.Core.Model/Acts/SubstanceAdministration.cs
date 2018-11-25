@@ -17,18 +17,14 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Xml.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using SanteDB.Core.Model.Entities;
+using System;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
 {
@@ -45,7 +41,7 @@ namespace SanteDB.Core.Model.Acts
     /// how much of the substance was administered.
     /// </para>
     /// </remarks>
-    [XmlType("SubstanceAdministration",  Namespace = "http://santedb.org/model"), JsonObject("SubstanceAdministration")]
+    [XmlType("SubstanceAdministration", Namespace = "http://santedb.org/model"), JsonObject("SubstanceAdministration")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "SubstanceAdministration")]
     public class SubstanceAdministration : Act
     {
@@ -171,7 +167,7 @@ namespace SanteDB.Core.Model.Acts
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets or sets a concept which indicates the site of administration
         /// </summary>
@@ -218,7 +214,7 @@ namespace SanteDB.Core.Model.Acts
         /// Should serialize site key
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializeSiteKey ()
+        public bool ShouldSerializeSiteKey()
         {
             return this.SiteKey.HasValue;
         }

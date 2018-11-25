@@ -18,13 +18,11 @@
  * Date: 2018-6-21
  */
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
-using Newtonsoft.Json.Serialization;
 
 namespace SanteDB.Core.Model.Serialization
 {
@@ -58,7 +56,7 @@ namespace SanteDB.Core.Model.Serialization
         /// <summary>
         /// Register the model type
         /// </summary>
-        public static void RegisterModelType (Type type)
+        public static void RegisterModelType(Type type)
         {
             var typeName = type.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.Name;
             if (!s_typeCache.ContainsKey(typeName))
@@ -86,7 +84,7 @@ namespace SanteDB.Core.Model.Serialization
             Assembly asm = typeof(ModelSerializationBinder).GetTypeInfo().Assembly;
             if (!String.IsNullOrEmpty(assemblyName))
                 asm = Assembly.Load(new AssemblyName(assemblyName));
-            else if(this.m_hintType != null) // use hint type
+            else if (this.m_hintType != null) // use hint type
             {
                 asm = m_hintType.GetTypeInfo().Assembly;
                 if (m_hintType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>()?.Id == typeName)
@@ -95,13 +93,13 @@ namespace SanteDB.Core.Model.Serialization
 
             // The type
             Type type = null;
-            if(!s_typeCache.TryGetValue(typeName, out type))
-                lock(s_lock)
+            if (!s_typeCache.TryGetValue(typeName, out type))
+                lock (s_lock)
                 {
                     type = asm.ExportedTypes.SingleOrDefault(
                         t => t.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
                         );
-                    if(!s_typeCache.ContainsKey(typeName))
+                    if (!s_typeCache.ContainsKey(typeName))
                         s_typeCache.Add(typeName, type);
                 }
             if (type == null)

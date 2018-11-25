@@ -19,13 +19,10 @@
  */
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Warehouse
 {
@@ -52,7 +49,7 @@ namespace SanteDB.Core.Model.Warehouse
         {
             this.Name = kvp.Key;
             if (kvp.Value is IDictionary<String, Object>)
-                this.Value = (kvp.Value as IDictionary<String, Object>).Select(o=>new DataWarehouseObjectPropertyValue(o)).ToList();
+                this.Value = (kvp.Value as IDictionary<String, Object>).Select(o => new DataWarehouseObjectPropertyValue(o)).ToList();
             else
                 this.Value = kvp.Value;
         }
@@ -76,7 +73,7 @@ namespace SanteDB.Core.Model.Warehouse
         [XmlElement("bytea", typeof(byte[]))]
         [XmlElement("object", typeof(List<DataWarehouseObjectPropertyValue>))]
         public Object Value { get; set; }
-        
+
         /// <summary>
         /// Expand the value 
         /// </summary>
@@ -94,9 +91,9 @@ namespace SanteDB.Core.Model.Warehouse
     /// </summary>
     [XmlType(nameof(DataWarehouseObject), Namespace = "http://santedb.org/warehousing"), JsonObject(nameof(DataWarehouseObject))]
     [XmlRoot(nameof(DataWarehouseObject), Namespace = "http://santedb.org/warehousing")]
-    public class DataWarehouseObject 
+    public class DataWarehouseObject
     {
-        
+
         /// <summary>
         /// Data warehouse object wrapper
         /// </summary>
@@ -114,7 +111,7 @@ namespace SanteDB.Core.Model.Warehouse
 
         }
 
-    
+
         /// <summary>
         /// Gets or sets the properties
         /// </summary>

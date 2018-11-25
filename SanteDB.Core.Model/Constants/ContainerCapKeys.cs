@@ -18,51 +18,47 @@
  * Date: 2018-6-21
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.Constants
 {
-	/// <summary>
-	/// Represents a collection of container cap keys.
-	/// </summary>
-	public static class ContainerCapKeys
-	{
-		/// <summary>
-		/// Represents a child proof cap.
-		/// </summary>
-		public static readonly Guid ChildProof = Guid.Parse("5A209555-FB3A-437D-B043-0190685A4284");
+    /// <summary>
+    /// Represents a collection of container cap keys.
+    /// </summary>
+    public static class ContainerCapKeys
+    {
+        /// <summary>
+        /// Represents a child proof cap.
+        /// </summary>
+        public static readonly Guid ChildProof = Guid.Parse("5A209555-FB3A-437D-B043-0190685A4284");
 
-		/// <summary>
-		/// Represents an easy open cap.
-		/// </summary>
-		public static readonly Guid EasyOpen = Guid.Parse("1E630924-CE10-4A8A-A91D-E319F517A6EC");
+        /// <summary>
+        /// Represents an easy open cap.
+        /// </summary>
+        public static readonly Guid EasyOpen = Guid.Parse("1E630924-CE10-4A8A-A91D-E319F517A6EC");
 
-		/// <summary>
-		/// Represents a film cap.
-		/// </summary>
-		public static readonly Guid Film = Guid.Parse("266A20FE-DFFB-4C8D-9EAD-FDC7CD86C552");
+        /// <summary>
+        /// Represents a film cap.
+        /// </summary>
+        public static readonly Guid Film = Guid.Parse("266A20FE-DFFB-4C8D-9EAD-FDC7CD86C552");
 
-		/// <summary>
-		/// Represents a foil cap.
-		/// </summary>
-		public static readonly Guid Foil = Guid.Parse("EE2B76DB-85E9-412F-90BB-47A94F8E4C30");
+        /// <summary>
+        /// Represents a foil cap.
+        /// </summary>
+        public static readonly Guid Foil = Guid.Parse("EE2B76DB-85E9-412F-90BB-47A94F8E4C30");
 
-		/// <summary>
-		/// Represents a medication cap.
-		/// </summary>
-		public static readonly Guid MedicationCap = Guid.Parse("6470A9BE-FCB4-463D-BB0C-894D0CDDD4C2");
+        /// <summary>
+        /// Represents a medication cap.
+        /// </summary>
+        public static readonly Guid MedicationCap = Guid.Parse("6470A9BE-FCB4-463D-BB0C-894D0CDDD4C2");
 
-		/// <summary>
-		/// Represents a push cap.
-		/// </summary>
-		public static readonly Guid PushCap = Guid.Parse("47C40DF6-3F69-47CC-A84C-33037E4BFFD9");
+        /// <summary>
+        /// Represents a push cap.
+        /// </summary>
+        public static readonly Guid PushCap = Guid.Parse("47C40DF6-3F69-47CC-A84C-33037E4BFFD9");
 
-		/// <summary>
-		/// Represents a screw cap.
-		/// </summary>
-		public static readonly Guid ScrewCap = Guid.Parse("05695B7C-6BF7-4AF7-A0C9-A5C8B2E63E05");
-	}
+        /// <summary>
+        /// Represents a screw cap.
+        /// </summary>
+        public static readonly Guid ScrewCap = Guid.Parse("05695B7C-6BF7-4AF7-A0C9-A5C8B2E63E05");
+    }
 }

@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map
@@ -32,7 +30,7 @@ namespace SanteDB.Core.Model.Map
     /// <summary>
     /// Model map format class
     /// </summary>
-    [XmlRoot(Namespace = "http://santedb.org/model/map", ElementName ="modelMap")]
+    [XmlRoot(Namespace = "http://santedb.org/model/map", ElementName = "modelMap")]
     [XmlType(nameof(ModelMap), Namespace = "http://santedb.org/model/map")]
     public class ModelMap
     {
@@ -72,12 +70,12 @@ namespace SanteDB.Core.Model.Map
         public ClassMap GetModelClassMap(Type type)
         {
             ClassMap retVal = null;
-            if(!this.m_classCache.TryGetValue(type, out retVal))
+            if (!this.m_classCache.TryGetValue(type, out retVal))
             {
                 retVal = this.Class.Find(o => o.ModelType == type);
-                if(retVal != null)
-                    lock(this.m_lockObject)
-                        if(!this.m_classCache.ContainsKey(type))
+                if (retVal != null)
+                    lock (this.m_lockObject)
+                        if (!this.m_classCache.ContainsKey(type))
                             this.m_classCache.Add(type, retVal);
             }
             return retVal;
@@ -89,7 +87,7 @@ namespace SanteDB.Core.Model.Map
         public IEnumerable<ValidationResultDetail> Validate()
         {
             List<ValidationResultDetail> retVal = new List<ValidationResultDetail>();
-            foreach(var cls in this.Class)
+            foreach (var cls in this.Class)
                 retVal.AddRange(cls.Validate());
             return retVal;
         }

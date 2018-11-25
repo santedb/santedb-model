@@ -21,12 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using SanteDB.Core.Model.Security;
-using SanteDB.Core.Model.Map;
-using System.IO;
-using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace SanteDB.Core.Model.Map
@@ -88,7 +82,7 @@ namespace SanteDB.Core.Model.Map
                             {
 
                                 var memInfo = this.m_memberAccess.Type.GetRuntimeProperty(memberExpression.Member.Name);
-                                if(memInfo == null)
+                                if (memInfo == null)
                                     return memberExpression;
                                 else
                                     return Expression.MakeMemberAccess(this.m_memberAccess, memInfo ?? memberExpression.Member);
@@ -256,7 +250,7 @@ namespace SanteDB.Core.Model.Map
                 Type targetType = m_mapper.MapModelType(convert.Type);
                 if (targetType == convert.Type) // No map
                     return newOperand;
-                
+
                 return Expression.Convert(newOperand, targetType);
             }
             return convert;
@@ -335,16 +329,16 @@ namespace SanteDB.Core.Model.Map
                 if (argExpression is LambdaExpression)
                 {
                     var lambdaExpression = argExpression as LambdaExpression;
-					// Ok, we need to find the traversal expression
-					//this.m_mapper.
-					
+                    // Ok, we need to find the traversal expression
+                    //this.m_mapper.
 
-					var newParameter = Expression.Parameter(this.m_mapper.ExtractDomainType(retVal[0].Type), lambdaExpression.Parameters[0].Name);
-					//Expression accessExpression = this.m_mapper.CreateLambdaMemberAdjustmentExpression(retVal.First(), newParameter);
 
-					var accessExpression = this.m_mapper.CreateLambdaMemberAdjustmentExpression(args.First() as MemberExpression, newParameter);
+                    var newParameter = Expression.Parameter(this.m_mapper.ExtractDomainType(retVal[0].Type), lambdaExpression.Parameters[0].Name);
+                    //Expression accessExpression = this.m_mapper.CreateLambdaMemberAdjustmentExpression(retVal.First(), newParameter);
 
-					var newBody = new LambdaCorrectionVisitor(accessExpression, lambdaExpression.Parameters[0], this.m_mapper).Visit(lambdaExpression.Body);
+                    var accessExpression = this.m_mapper.CreateLambdaMemberAdjustmentExpression(args.First() as MemberExpression, newParameter);
+
+                    var newBody = new LambdaCorrectionVisitor(accessExpression, lambdaExpression.Parameters[0], this.m_mapper).Visit(lambdaExpression.Body);
                     if (newBody == null)
                         return null;
 
@@ -382,13 +376,13 @@ namespace SanteDB.Core.Model.Map
             // Are the types compatible?
             if (!right.Type.GetTypeInfo().IsAssignableFrom(left.Type.GetTypeInfo()))
             {
-                if(right.NodeType == ExpressionType.Convert)
+                if (right.NodeType == ExpressionType.Convert)
                     right = ((UnaryExpression)right).Operand;
 
                 // Convert byte[] <= Guid
                 if ((right.Type == typeof(Guid) || right.Type == typeof(Guid?)) && left.Type == typeof(Byte[]))
                 {
-                    switch(right.NodeType)
+                    switch (right.NodeType)
                     {
                         case ExpressionType.MemberAccess:
                             var memberExpr = (MemberExpression)right;
@@ -417,9 +411,9 @@ namespace SanteDB.Core.Model.Map
                             }
                             if (memberExpr.Member is FieldInfo)
                                 right = Expression.Constant(((Guid)(memberExpr.Member as FieldInfo).GetValue(scope)).ToByteArray());
-                            else if(memberExpr.Member is MethodInfo)
+                            else if (memberExpr.Member is MethodInfo)
                                 right = Expression.Constant(((Guid)(memberExpr.Member as MethodInfo).Invoke(scope, null)).ToByteArray());
-                            else if(memberExpr.Member is PropertyInfo)
+                            else if (memberExpr.Member is PropertyInfo)
                                 right = Expression.Constant(((Guid)(memberExpr.Member as PropertyInfo).GetValue(scope)).ToByteArray());
 
                             break;
@@ -428,10 +422,10 @@ namespace SanteDB.Core.Model.Map
                             break;
                     }
                 }
-				else if ((right.Type == typeof(DateTimeOffset) || right.Type == typeof(DateTimeOffset?)) && (left.Type == typeof(DateTime?) || left.Type == typeof(DateTime)))
-				{
-					DateTime dateTime;
-                    var cvalue = this.GetConstantValue(right );
+                else if ((right.Type == typeof(DateTimeOffset) || right.Type == typeof(DateTimeOffset?)) && (left.Type == typeof(DateTime?) || left.Type == typeof(DateTime)))
+                {
+                    DateTime dateTime;
+                    var cvalue = this.GetConstantValue(right);
 
                     if (cvalue == null)
                     {
@@ -446,9 +440,9 @@ namespace SanteDB.Core.Model.Map
                         right = Expression.Constant(dateTime, left.Type);
                         return Expression.MakeBinary(node.NodeType, left, Expression.Convert(right, left.Type));
                     }
-				}
+                }
 
-				return Expression.MakeBinary(node.NodeType, left, Expression.Convert(right, left.Type));
+                return Expression.MakeBinary(node.NodeType, left, Expression.Convert(right, left.Type));
             }
             else if (right != node.Right || left != node.Left)
             {
@@ -490,7 +484,7 @@ namespace SanteDB.Core.Model.Map
 
             Type mappedType = this.m_mapper.MapModelType(node.Type);
             var parameterRef = this.m_parameters.FirstOrDefault(p => p.Name == node.Name && p.Type == mappedType);
-            
+
             if (parameterRef != null)
                 return parameterRef;
 

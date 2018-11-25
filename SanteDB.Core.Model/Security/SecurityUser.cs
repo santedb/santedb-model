@@ -17,20 +17,14 @@
  * User: justin
  * Date: 2018-6-21
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Constants;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Serialization;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using SanteDB.Core.Model.EntityLoader;
-using System.Globalization;
-using Newtonsoft.Json;
-using SanteDB.Core.Model.Entities;
-using SanteDB.Core.Model.Constants;
 
 namespace SanteDB.Core.Model.Security
 {
@@ -112,7 +106,7 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("photo"), JsonProperty("photo")]
         public byte[] UserPhoto { get; set; }
-        
+
 
         /// <summary>
         /// The last login time
@@ -185,7 +179,7 @@ namespace SanteDB.Core.Model.Security
             }
             set
             {
-                
+
             }
         }
 
@@ -208,7 +202,7 @@ namespace SanteDB.Core.Model.Security
                 this.TwoFactorEnabled == other.TwoFactorEnabled &&
                 this.UserClass == other.UserClass &&
                 this.UserName == other.UserName &&
-                (this.UserPhoto ?? new byte[0]).HashCode().Equals((other.UserPhoto?? new byte[0]).HashCode()) == true;
+                (this.UserPhoto ?? new byte[0]).HashCode().Equals((other.UserPhoto ?? new byte[0]).HashCode()) == true;
         }
     }
 }

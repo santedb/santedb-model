@@ -17,8 +17,9 @@
  * User: justin
  * Date: 2018-6-21
  */
-using SanteDB.Core.Exceptions;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.EntityLoader;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,11 +28,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using SanteDB.Core.Model.Interfaces;
-using SanteDB.Core.Model.EntityLoader;
 
 namespace SanteDB.Core.Model.Map
 {
@@ -184,7 +180,7 @@ namespace SanteDB.Core.Model.Map
             PropertyMap castMap = classMap.Cast?.Find(o => o.ModelType == sourceExpression.Type);
             if (castMap == null) throw new InvalidCastException();
             Expression accessExpr = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(castMap.DomainName));
-            while(castMap.Via != null)
+            while (castMap.Via != null)
             {
                 castMap = castMap.Via;
                 accessExpr = Expression.MakeMemberAccess(accessExpr, accessExpr.Type.GetRuntimeProperty(castMap.DomainName));
@@ -295,7 +291,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public Type MapDomainType(Type domainType)
         {
-            ClassMap classMap = this.m_mapFile.Class.FirstOrDefault(o=>o.DomainType == domainType);
+            ClassMap classMap = this.m_mapFile.Class.FirstOrDefault(o => o.DomainType == domainType);
             if (classMap == null)
                 return domainType;
             Type modelType = classMap.ModelType;
@@ -380,7 +376,7 @@ namespace SanteDB.Core.Model.Map
                     return retVal;
                 }
             }
-            catch 
+            catch
             {
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Error converting {0}. {1}", expression, e);
@@ -418,13 +414,13 @@ namespace SanteDB.Core.Model.Map
                 {
                     if (!s_modelPropertyCache.TryGetValue(typeof(TModel), out propertyClassMap))
                         propertyClassMap = new Dictionary<string, PropertyInfo[]>();
-                    if(!s_modelPropertyCache.ContainsKey(typeof(TModel)))
+                    if (!s_modelPropertyCache.ContainsKey(typeof(TModel)))
                         s_modelPropertyCache.Add(typeof(TModel), propertyClassMap);
                 }
             }
 
-            if(!propertyClassMap.TryGetValue(String.Empty, out properties))
-            { 
+            if (!propertyClassMap.TryGetValue(String.Empty, out properties))
+            {
                 lock (s_modelPropertyCache)
                 {
                     properties = typeof(TModel).GetRuntimeProperties().Where(m => m != null &&
@@ -505,7 +501,7 @@ namespace SanteDB.Core.Model.Map
         /// Map domain instance
         /// </summary>
         public object MapDomainInstance(Type tDomain, Type tModel, object domainInstance, bool useCache = true, HashSet<Guid> keyStack = null)
-        { 
+        {
             ClassMap classMap = this.m_mapFile.GetModelClassMap(tModel, tDomain);
 
             if (domainInstance == null)
@@ -556,15 +552,16 @@ namespace SanteDB.Core.Model.Map
             // Classifier value 
             String classifierValue = null;
             String classPropertyName = String.Empty;
-            if(!m_domainClassPropertyName.TryGetValue(tModel, out classPropertyName))
+            if (!m_domainClassPropertyName.TryGetValue(tModel, out classPropertyName))
             {
                 classPropertyName = tModel.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>()?.ClassifierProperty;
                 lock (m_domainClassPropertyName)
-                    if(!m_domainClassPropertyName.ContainsKey(tModel))
+                    if (!m_domainClassPropertyName.ContainsKey(tModel))
                         m_domainClassPropertyName.Add(tModel, classPropertyName);
             }
 
-            if (classPropertyName != null) {
+            if (classPropertyName != null)
+            {
                 // Key value
                 classPropertyName = tModel.GetRuntimeProperty(classPropertyName)?.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty ?? classPropertyName;
 
@@ -605,10 +602,10 @@ namespace SanteDB.Core.Model.Map
                     if (!s_modelPropertyCache.TryGetValue(tModel, out propertyClassMap))
                         propertyClassMap = new Dictionary<string, PropertyInfo[]>();
 
-	                if (!s_modelPropertyCache.ContainsKey(tModel))
-	                {
-						s_modelPropertyCache.Add(tModel, propertyClassMap);
-					}
+                    if (!s_modelPropertyCache.ContainsKey(tModel))
+                    {
+                        s_modelPropertyCache.Add(tModel, propertyClassMap);
+                    }
                 }
             }
             if (!propertyClassMap.TryGetValue(classifierValue ?? String.Empty, out properties))
@@ -738,7 +735,7 @@ namespace SanteDB.Core.Model.Map
 
                                 // Get the generic method for LIST to be widdled down
                                 instance = Expression.Lambda(aggregateExpr, parm).Compile().DynamicInvoke(instance);
-                                
+
                             }
                             via = via.Via;
                         }
@@ -772,7 +769,7 @@ namespace SanteDB.Core.Model.Map
                 {
                     // TODO: Clean this up
                     var instance = originalValue; //sourceProperty.GetValue(sourceObject);
-                    
+
                     var via = propMap?.Via;
                     while (via != null)
                     {
@@ -808,7 +805,7 @@ namespace SanteDB.Core.Model.Map
                 keyStack.Remove(idEnt.Key.Value);
                 FireMappedToModel(this, vidEnt?.VersionKey ?? idEnt?.Key ?? Guid.Empty, retVal as IdentifiedData);
             }
-           // (retVal as IdentifiedData).SetDelayLoad(true);
+            // (retVal as IdentifiedData).SetDelayLoad(true);
 
             return retVal;
         }

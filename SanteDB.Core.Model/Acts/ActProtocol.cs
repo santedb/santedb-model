@@ -18,9 +18,9 @@
  * Date: 2018-6-21
  */
 using Newtonsoft.Json;
-using System.Xml.Serialization;
-using System;
 using SanteDB.Core.Model.Attributes;
+using System;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
 {
@@ -58,12 +58,12 @@ namespace SanteDB.Core.Model.Acts
         [XmlElement("state"), JsonProperty("state")]
         public byte[] StateData { get; set; }
 
-		/// <summary>
-		/// Determines equality of this association
-		/// </summary>
-		/// <param name="obj">The object.</param>
-		/// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-		public override bool SemanticEquals(object obj)
+        /// <summary>
+        /// Determines equality of this association
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public override bool SemanticEquals(object obj)
         {
             var other = obj as ActProtocol;
             if (other == null) return false;

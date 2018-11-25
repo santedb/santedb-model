@@ -26,45 +26,45 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
 {
-	/// <summary>
-	/// A single address component
-	/// </summary>
-	[XmlType("AddressComponent", Namespace = "http://santedb.org/model"), JsonObject("AddressComponent")]
-	public class EntityAddressComponent : GenericComponentValues<EntityAddress>
-	{
-		/// <summary>
-		/// Creates a new address component type.
-		/// </summary>
-		/// <param name="componentType"></param>
-		/// <param name="value"></param>
-		public EntityAddressComponent(Guid componentType, String value) : base(componentType, value)
-		{
-		}
+    /// <summary>
+    /// A single address component
+    /// </summary>
+    [XmlType("AddressComponent", Namespace = "http://santedb.org/model"), JsonObject("AddressComponent")]
+    public class EntityAddressComponent : GenericComponentValues<EntityAddress>
+    {
+        /// <summary>
+        /// Creates a new address component type.
+        /// </summary>
+        /// <param name="componentType"></param>
+        /// <param name="value"></param>
+        public EntityAddressComponent(Guid componentType, String value) : base(componentType, value)
+        {
+        }
 
-		/// <summary>
-		/// Default ctor
-		/// </summary>
-		public EntityAddressComponent()
-		{
-		}
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public EntityAddressComponent()
+        {
+        }
 
-		/// <summary>
-		/// Gets or sets the component type key
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("type"), JsonProperty("type")]
-		[Binding(typeof(AddressComponentKeys))]
-		public override Guid? ComponentTypeKey
-		{
-			get
-			{
-				return base.ComponentTypeKey;
-			}
+        /// <summary>
+        /// Gets or sets the component type key
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("type"), JsonProperty("type")]
+        [Binding(typeof(AddressComponentKeys))]
+        public override Guid? ComponentTypeKey
+        {
+            get
+            {
+                return base.ComponentTypeKey;
+            }
 
-			set
-			{
-				base.ComponentTypeKey = value;
-			}
-		}
-	}
+            set
+            {
+                base.ComponentTypeKey = value;
+            }
+        }
+    }
 }

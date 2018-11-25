@@ -22,7 +22,6 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -31,19 +30,19 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents a relationship between two concepts
     /// </summary>
     [Classifier(nameof(RelationshipType))]
-    [XmlType("ConceptRelationship",  Namespace = "http://santedb.org/model"), JsonObject("ConceptRelationship")]
+    [XmlType("ConceptRelationship", Namespace = "http://santedb.org/model"), JsonObject("ConceptRelationship")]
     public class ConceptRelationship : VersionedAssociation<Concept>
     {
 
         // Target concept id
         private Guid? m_targetConceptId;
         // Target concept
-        
+
         private Concept m_targetConcept;
         // Relaltionship type id
         private Guid? m_relationshipTypeId;
         // Relationship type
-        
+
         private ConceptRelationshipType m_relationshipType;
 
         /// <summary>
@@ -86,7 +85,8 @@ namespace SanteDB.Core.Model.DataTypes
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(ConceptRelationshipTypeKeys))]
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
-        public Guid?  RelationshipTypeKey {
+        public Guid? RelationshipTypeKey
+        {
             get { return this.m_relationshipTypeId; }
             set
             {
