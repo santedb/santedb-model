@@ -95,6 +95,18 @@ namespace SanteDB.Core.Model.Security
         public Guid? SessionKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the external security object reference
+        /// </summary>
+        [XmlElement("extern"), JsonProperty("extern")]
+        public Guid? ExternalSecurityObjectRefKey { get; set; }
+
+        /// <summary>
+        /// Gets the type of object that the external key references
+        /// </summary>
+        [XmlElement("externClass"), JsonProperty("externClass")]
+        public String ExternalSecurityObjectRefType { get; set; }
+
+        /// <summary>
         /// Gets the security user for the provenance if applicable
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(UserKey))]
@@ -129,5 +141,6 @@ namespace SanteDB.Core.Model.Security
                 this.ApplicationKey = value?.Key;
             }
         }
+        
     }
 }
