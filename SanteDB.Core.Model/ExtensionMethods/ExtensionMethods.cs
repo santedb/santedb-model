@@ -391,7 +391,7 @@ namespace SanteDB.Core.Model
             long hash = 1009;
             foreach (var b in me)
                 hash = ((hash << 5) + hash) ^ b;
-            return BitConverter.ToString(BitConverter.GetBytes(hash)).Replace("-", "");
+            return BitConverter.ToString(BitConverter.GetBytes(hash)).Replace("-","");
         }
 
         /// <summary>

@@ -64,7 +64,7 @@ namespace SanteDB.Core.Model.DataTypes
                 if (this.ExtensionValueXml == null) return null;
                 try
                 {
-                    return BitConverter.ToString(this.ExtensionValueXml).Replace("-", "");
+                    return BitConverter.ToString(this.ExtensionValueXml).Replace("-","");
                 }
                 catch
                 {

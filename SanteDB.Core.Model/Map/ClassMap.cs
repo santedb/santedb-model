@@ -132,7 +132,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public IEnumerable<ValidationResultDetail> Validate()
         {
-#if DEBUG
+#if VERBOSE_DEBUG
             Debug.WriteLine(String.Format("Validating {0}>{1}", this.ModelClass, this.DomainClass));
 #endif
             List<ValidationResultDetail> retVal = new List<ValidationResultDetail>();
