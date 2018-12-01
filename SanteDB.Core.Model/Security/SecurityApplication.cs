@@ -18,7 +18,9 @@
  * Date: 2018-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using System;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security
@@ -44,5 +46,42 @@ namespace SanteDB.Core.Model.Security
         public String Name { get; set; }
 
 
+        /// <summary>
+        /// Gets or sets the lockout time as XML date
+        /// </summary>
+        [XmlElement("lockout"), JsonProperty("lockout"), DataIgnore]
+        public String LockoutXml
+        {
+            get => this.Lockout?.ToString("o", CultureInfo.InvariantCulture);
+            set => this.Lockout = value == null ? null : (DateTimeOffset?)DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Gets or sets the lockout
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(LockoutXml))]
+        public DateTimeOffset? Lockout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of invalid authentication attempts
+        /// </summary>
+        [XmlElement("invalidAuth"), JsonProperty("invalidAuth")]
+        public int? InvalidAuthAttempts { get; set; }
+
+        /// <summary>
+        /// Gets the last authenticated time
+        /// </summary>
+        [XmlElement("lastAuthentication"), JsonProperty("lastAuthentication"), DataIgnore]
+        public String LastAuthenticationXml
+        {
+            get => this.LastAuthentication?.ToString("o", CultureInfo.InvariantCulture);
+            set => this.LastAuthentication = value == null ? null : (DateTimeOffset?)DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Gets or sets the last authentication time as a DTO
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(LastAuthenticationXml))]
+        public DateTimeOffset? LastAuthentication { get; set; }
     }
 }
