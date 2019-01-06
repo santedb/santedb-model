@@ -79,7 +79,7 @@ namespace SanteDB.Core.Model.Query
             var expression = BuildLinqExpression<TModelType>(httpQueryParameters, "o", variables, safeNullable);
 
             if (expression == null) // No query!
-                return (TModelType o) => o != null;
+                return (TModelType o) => true;
             else
                 return Expression.Lambda<Func<TModelType, bool>>(expression.Body, expression.Parameters);
         }

@@ -91,7 +91,7 @@ namespace SanteDB.Core.Model.Map
             typeof(UInt32?),
             typeof(byte[])
         };
-
+        
         private static Dictionary<Type, Dictionary<String, PropertyInfo[]>> s_modelPropertyCache = new Dictionary<Type, Dictionary<String, PropertyInfo[]>>();
 
         private static Dictionary<Type, String> m_domainClassPropertyName = new Dictionary<Type, string>();
@@ -357,7 +357,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         /// <param name="expression">The expression to be converted</param>
         /// <param name="throwOnError">When true, throw an exception of the expression can't be converted, otherwise return null when expression cannot be parsed</param>
-        public Expression<Func<TTo, bool>> MapModelExpression<TFrom, TTo>(Expression<Func<TFrom, bool>> expression, bool throwOnError = true)
+        public Expression<Func<TTo, TReturn>> MapModelExpression<TFrom, TTo, TReturn>(Expression<Func<TFrom, TReturn>> expression, bool throwOnError = true)
         {
             try
             {
@@ -369,7 +369,7 @@ namespace SanteDB.Core.Model.Map
                     return null;
                 else
                 {
-                    var retVal = Expression.Lambda<Func<TTo, bool>>(expr, parameter);
+                    var retVal = Expression.Lambda<Func<TTo, TReturn>>(expr, parameter);
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Map Expression: {0} > {1}", expression, retVal);
 #endif
