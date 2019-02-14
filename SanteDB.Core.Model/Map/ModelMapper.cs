@@ -369,6 +369,8 @@ namespace SanteDB.Core.Model.Map
                     return null;
                 else
                 {
+                    if (typeof(TReturn) != expr.Type)
+                        expr = Expression.Convert(expr, typeof(TReturn));
                     var retVal = Expression.Lambda<Func<TTo, TReturn>>(expr, parameter);
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Map Expression: {0} > {1}", expression, retVal);
@@ -512,7 +514,8 @@ namespace SanteDB.Core.Model.Map
                 while (cType != null && classMap == null || !tDomain.GetTypeInfo().IsAssignableFrom(Type.GetType(classMap.DomainClass).GetTypeInfo()))
                 {
                     cType = cType.GetTypeInfo().BaseType;
-                    classMap = this.m_mapFile.GetModelClassMap(cType);
+                    if(cType != null)
+                        classMap = this.m_mapFile.GetModelClassMap(cType);
                 } // work up the tree
             }
 
