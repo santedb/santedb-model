@@ -17,6 +17,7 @@
  * User: justin
  * Date: 2018-6-22
  */
+using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Entities;
@@ -359,6 +360,20 @@ namespace SanteDB.Core.Model
 
             return methods.FirstOrDefault();
             //return Type.DefaultBinder.SelectMethod(flags, methods.ToArray(), argTypes, null);
+        }
+
+        /// <summary>
+        /// Get the serialization name
+        /// </summary>
+        public static string GetSerializationName(this PropertyInfo me)
+        {
+            var xmlName = me.GetCustomAttribute<XmlElementAttribute>()?.ElementName;
+            if (xmlName == null)
+            {
+                var refName = me.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty;
+                xmlName = me.DeclaringType.GetRuntimeProperty(refName)?.GetCustomAttribute<XmlElementAttribute>()?.ElementName;
+            }
+            return xmlName;
         }
 
         /// <summary>

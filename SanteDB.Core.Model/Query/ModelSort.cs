@@ -30,6 +30,8 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public ModelSort(Expression<Func<TData, dynamic>> property, SortOrderType order)
         {
+            if (property.NodeType != ExpressionType.Lambda)
+                throw new ArgumentException($"{nameof(property)} must be a LambdaExpression");
             this.SortProperty = property;
             this.SortOrder = order;
         }

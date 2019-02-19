@@ -474,6 +474,24 @@ namespace SanteDB.Core.Model.Query
             return retVal;
         }
 
+
+        /// <summary>
+        /// Builds an HTTP sorting expression
+        /// </summary>
+        /// <returns></returns>
+        /// TODO: Handle chained sort properties
+        public static String BuildSortExpression<TModel>(ModelSort<TModel> sort)
+        {
+            var memberExpression = (sort.SortProperty as LambdaExpression)?.Body;
+            while (!(memberExpression is MemberExpression) && memberExpression != null)
+                memberExpression = (memberExpression as UnaryExpression)?.Operand;
+
+            if (memberExpression == null)
+                throw new InvalidOperationException("Cannot convert sort expression");
+            else
+                return $"{((memberExpression as MemberExpression).Member as PropertyInfo).GetSerializationName()}:{(sort.SortOrder == Map.SortOrderType.OrderBy ? "asc" : "desc")}";
+
+        }
     }
 }
 
