@@ -107,7 +107,6 @@ namespace SanteDB.Core.Model.Security
         [XmlElement("photo"), JsonProperty("photo")]
         public byte[] UserPhoto { get; set; }
 
-
         /// <summary>
         /// The last login time
         /// </summary>

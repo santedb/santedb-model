@@ -71,7 +71,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets the last authenticated time
         /// </summary>
-        [XmlElement("lastAuthentication"), JsonProperty("lastAuthentication"), DataIgnore]
+        [XmlElement("lastAuthenticationTime"), JsonProperty("lastAuthenticationTime"), DataIgnore]
         public String LastAuthenticationXml
         {
             get => this.LastAuthentication?.ToString("o", CultureInfo.InvariantCulture);
