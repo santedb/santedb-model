@@ -62,7 +62,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets whether the account is locked out
         /// </summary>
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(LockoutXml))]
         public DateTime? Lockout { get; set; }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// The last login time
         /// </summary>
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(LastLoginTimeXml))]
         public DateTimeOffset? LastLoginTime { get; set; }
 
         /// <summary>
