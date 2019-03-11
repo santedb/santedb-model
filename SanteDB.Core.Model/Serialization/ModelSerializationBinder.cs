@@ -62,8 +62,8 @@ namespace SanteDB.Core.Model.Serialization
             if (!s_typeCache.ContainsKey(typeName))
                 lock (s_lock)
                     s_typeCache.Add(typeName, type);
-            else
-                throw new ArgumentException($"Type {typeName} is already registered");
+            //else
+            //    throw new ArgumentException($"Type {typeName} is already registered");
         }
 
         /// <summary>
