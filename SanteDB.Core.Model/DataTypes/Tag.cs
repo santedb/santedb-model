@@ -36,6 +36,23 @@ namespace SanteDB.Core.Model.DataTypes
     {
 
         /// <summary>
+        /// Default ctor for serialization
+        /// </summary>
+        public Tag()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new tag
+        /// </summary>
+        public Tag(string key, string value)
+        {
+            this.TagKey = key;
+            this.Value = value;
+        }
+
+        /// <summary>
         /// Gets or sets the key of the tag
         /// </summary>
         [XmlElement("key"), JsonProperty("key")]
