@@ -367,12 +367,16 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static string GetSerializationName(this PropertyInfo me)
         {
-            var xmlName = me.GetCustomAttribute<XmlElementAttribute>()?.ElementName;
+            var xmlName = me.GetCustomAttributes<XmlElementAttribute>().FirstOrDefault()?.ElementName ?? me.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName;
             if (xmlName == null)
             {
                 var refName = me.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty;
+                if (refName == null)
+                    return null;
                 xmlName = me.DeclaringType.GetRuntimeProperty(refName)?.GetCustomAttribute<XmlElementAttribute>()?.ElementName;
             }
+            else if (xmlName == String.Empty)
+                xmlName = me.Name;
             return xmlName;
         }
 
