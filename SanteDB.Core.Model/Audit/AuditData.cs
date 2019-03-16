@@ -168,10 +168,10 @@ namespace SanteDB.Core.Auditing
     }
 
     /// <summary>
-    /// Represents data related to an audit event
+    /// Specific information related to an audit
     /// </summary>
     [XmlType(nameof(AuditData), Namespace = "http://santedb.org/audit")]
-    [XmlRoot("audit", Namespace = "http://marc-hi.ca/audit")]
+    [XmlRoot("Audit", Namespace = "http://marc-hi.ca/audit")]
     [JsonObject(nameof(AuditData))]
     public class AuditData : IdentifiedData
     {
