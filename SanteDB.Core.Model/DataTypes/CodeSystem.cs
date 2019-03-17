@@ -29,7 +29,7 @@ namespace SanteDB.Core.Model.DataTypes
 
     [XmlType("CodeSystem", Namespace = "http://santedb.org/model"), JsonObject("CodeSystem")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "CodeSystem")]
-    [Classifier(nameof(Name))]
+    [Classifier(nameof(Authority))]
     public class CodeSystem : NonVersionedEntityData
     {
 

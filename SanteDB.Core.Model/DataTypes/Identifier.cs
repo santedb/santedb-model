@@ -31,7 +31,6 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Entity identifiers
     /// </summary>
-
     [XmlType("EntityIdentifier", Namespace = "http://santedb.org/model"), JsonObject("EntityIdentifier")]
     public class EntityIdentifier : IdentifierBase<Entity>
     {

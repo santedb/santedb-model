@@ -171,7 +171,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets a list of concept reference terms
         /// </summary>
-
         [AutoLoad, XmlElement("referenceTerm"), JsonProperty("referenceTerm")]
         public List<ConceptReferenceTerm> ReferenceTerms { get; set; }
 

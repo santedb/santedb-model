@@ -77,6 +77,11 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
+        /// Should serialize phonetic algorithm
+        /// </summary>
+        public bool ShouldSerializePhoneticAlgorithmKey() => !String.IsNullOrEmpty(this.PhoneticCode);
+
+        /// <summary>
         /// Gets or sets the language code of the object
         /// </summary>
         [XmlElement("language"), JsonProperty("language")]

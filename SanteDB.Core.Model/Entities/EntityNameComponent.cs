@@ -101,6 +101,11 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
+        /// Should serialize phonetic algorithm
+        /// </summary>
+        public bool ShouldSerializePhoneticAlgorithmKey() => !String.IsNullOrEmpty(this.PhoneticCode);
+
+        /// <summary>
         /// Gets or sets the identifier of the phonetic code
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -123,14 +128,6 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("phoneticCode"), JsonProperty("phoneticCode")]
         public String PhoneticCode { get; set; }
 
-        /// <summary>
-        /// Should serialize
-        /// </summary>
-        public bool ShouldSerializePhoneticAlgorithmKey()
-        {
-            return this.PhoneticAlgorithmKey.HasValue &&
-                this.PhoneticAlgorithmKey != PhoneticAlgorithmKeys.None;
-        }
 
         /// <summary>
         /// Value of the name
