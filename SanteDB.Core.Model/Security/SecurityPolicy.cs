@@ -64,7 +64,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets the name of the policy
         /// </summary>
-        [XmlElement("name"), JsonProperty("name")]
+        [XmlElement("name"), JsonProperty("name"), NoCase]
         public String Name { get; set; }
 
         /// <summary>

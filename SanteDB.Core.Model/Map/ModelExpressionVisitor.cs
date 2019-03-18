@@ -17,6 +17,7 @@
  * User: justi
  * Date: 2019-1-12
  */
+using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -373,6 +374,15 @@ namespace SanteDB.Core.Model.Map
             if (right == null || left == null)
                 return null;
 
+            // Does the left have ToLower() and the right not?
+            if(left.NodeType == ExpressionType.Call && node.Left.NodeType == ExpressionType.MemberAccess &&
+                    (node.Left as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
+                    right = Expression.Call(right, (left as MethodCallExpression).Method);
+            else if(right.NodeType == ExpressionType.Call && node.Right.NodeType == ExpressionType.MemberAccess &&
+                    (node.Right as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
+                left = Expression.Call(left, (right as MethodCallExpression).Method);
+
+
             // Are the types compatible?
             if (!right.Type.GetTypeInfo().IsAssignableFrom(left.Type.GetTypeInfo()))
             {
@@ -506,6 +516,7 @@ namespace SanteDB.Core.Model.Map
         {
             // Convert the expression
             Expression newExpression = this.Visit(node.Expression);
+
             if (newExpression == null)
                 return null;
             if (newExpression != node.Expression)
@@ -517,7 +528,13 @@ namespace SanteDB.Core.Model.Map
                     if (convertExpression.Type.GetTypeInfo().IsAssignableFrom(convertExpression.Operand.Type.GetTypeInfo()))
                         node = Expression.MakeMemberAccess(convertExpression.Operand, node.Member);
                 }
-                return this.m_mapper.MapModelMember(node, newExpression);
+
+                var retVal = this.m_mapper.MapModelMember(node, newExpression);
+                if (node.NodeType == ExpressionType.MemberAccess &&
+                    (node as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
+                    retVal = Expression.Call(retVal, typeof(String).GetRuntimeMethod(nameof(String.ToLower), new Type[0]));
+
+                return retVal;
             }
             return node;
         }

@@ -56,6 +56,7 @@
     <Compile Include="Attributes\ClassifierAttribute.cs" />
     <Compile Include="Attributes\DataIgnoreAttribute.cs" />
     <Compile Include="Attributes\KeyLookupAttribute.cs" />
+    <Compile Include="Attributes\NoCaseAttribute.cs" />
     <Compile Include="Attributes\NonCachedAttribute.cs" />
     <Compile Include="Attributes\QueryParameterAttribute.cs" />
     <Compile Include="Attributes\SerializationReferenceAttribute.cs" />

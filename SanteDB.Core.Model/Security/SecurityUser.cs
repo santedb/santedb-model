@@ -47,7 +47,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets the email address of the user
         /// </summary>
-        [XmlElement("email"), JsonProperty("email")]
+        [XmlElement("email"), JsonProperty("email"), NoCase]
         public String Email { get; set; }
         /// <summary>
         /// Gets or sets whether the email address is confirmed
@@ -99,7 +99,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets the logical user name ofthe user
         /// </summary>
-        [XmlElement("userName"), JsonProperty("userName")]
+        [XmlElement("userName"), JsonProperty("userName"), NoCase]
         public String UserName { get; set; }
         /// <summary>
         /// Gets or sets the binary representation of the user's photo
