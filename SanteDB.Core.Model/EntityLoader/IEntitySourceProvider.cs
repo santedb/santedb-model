@@ -48,7 +48,7 @@ namespace SanteDB.Core.Model.EntityLoader
         /// <summary>
         /// Get relationships
         /// </summary>
-        IEnumerable<TObject> GetRelations<TObject>(Guid? sourceKey, decimal? sourceVersionSequence) where TObject : IdentifiedData, IVersionedAssociation, new();
+        IEnumerable<TObject> GetRelations<TObject>(Guid? sourceKey, int? sourceVersionSequence) where TObject : IdentifiedData, IVersionedAssociation, new();
 
         /// <summary>
         /// Get relationships
