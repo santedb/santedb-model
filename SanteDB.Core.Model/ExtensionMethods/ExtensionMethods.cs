@@ -231,10 +231,10 @@ namespace SanteDB.Core.Model
                 throw new ArgumentNullException(nameof(toEntity));
             else if (fromEntities == null)
                 throw new ArgumentNullException(nameof(fromEntities));
-            else if (!fromEntities.Any(e => e.GetType().GetTypeInfo().IsAssignableFrom(toEntity.GetType().GetTypeInfo())))
-                throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntities.GetType().FullName}", nameof(fromEntities));
             else if (fromEntities.Length == 0)
                 return toEntity;
+            else if (!fromEntities.Any(e => e.GetType().GetTypeInfo().IsAssignableFrom(toEntity.GetType().GetTypeInfo())))
+                throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntities.GetType().FullName}", nameof(fromEntities));
 
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
