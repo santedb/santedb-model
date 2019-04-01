@@ -142,7 +142,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Update property data if required
         /// </summary>
-        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity)
+        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull = false)
         {
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
@@ -189,10 +189,14 @@ namespace SanteDB.Core.Model
                     if (!Enumerable.SequenceEqual<Object>(((IList)newValue).OfType<Object>(), ((IList)oldValue).OfType<Object>()))
                         destinationPi.SetValue(toEntity, newValue);
                 }
-                else if (newValue != null &&
+                else if (
+                    newValue != null &&
                     !newValue.Equals(oldValue) == true &&
                     (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || typeof(String) == destinationPi.PropertyType && !String.IsNullOrEmpty(newValue.ToString()) || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
                     destinationPi.SetValue(toEntity, newValue);
+                else if(newValue == null && overwritePopulatedWithNull)
+                    destinationPi.SetValue(toEntity, newValue);
+
             }
             return toEntity;
         }
