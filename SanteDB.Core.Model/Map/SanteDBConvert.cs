@@ -185,6 +185,14 @@ namespace SanteDB.Core.Model.Map
         }
 
         /// <summary>
+        /// Convert 64-bit long to int
+        /// </summary>
+        public static Int32 Int64ToInt32(Int64 val)
+        {
+            return (Int32)val;
+        }
+
+        /// <summary>
         /// Timespan converted to string
         /// </summary>
         public static String TimeSpanToString(TimeSpan ts)
