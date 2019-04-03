@@ -195,7 +195,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Clone the specified data
         /// </summary>
-        public IdentifiedData GetLocked()
+        public virtual IdentifiedData GetLocked()
         {
             var retVal = this.MemberwiseClone() as IdentifiedData;
             return retVal;

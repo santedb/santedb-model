@@ -207,6 +207,11 @@
     <Compile Include="Security\SecurityUser.cs" />
     <Compile Include="Serialization\ModelSerializationBinder.cs" />
     <Compile Include="NonVersionedEntityData.cs" />
+    <Compile Include="Subscription\SubscriptionClientDefinition.cs" />
+    <Compile Include="Subscription\SubscriptionDefinition.cs" />
+    <Compile Include="Subscription\SubscriptionModeType.cs" />
+    <Compile Include="Subscription\SubscriptionServerDefinition.cs" />
+    <Compile Include="Subscription\SubscriptionTriggerType.cs" />
     <Compile Include="VersionedAssociation.cs" />
     <Compile Include="VersionedEntityData.cs" />
     <Compile Include="Warehouse\DatamartDefinition.cs" />
@@ -242,6 +247,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2">
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
