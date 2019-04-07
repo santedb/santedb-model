@@ -18,6 +18,7 @@
  * Date: 2019-1-12
  */
 using Newtonsoft.Json;
+using System;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -26,8 +27,13 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents a simple geographic tagging attribute
     /// </summary>
     [XmlType(nameof(GeoTag), Namespace = "http://santedb.org/model"), JsonObject(nameof(GeoTag))]
-    public class GeoTag
+    public class GeoTag : IdentifiedData
     {
+
+        /// <summary>
+        /// Gets the default modified on
+        /// </summary>
+        public override DateTimeOffset ModifiedOn => default(DateTimeOffset);
 
         /// <summary>
         /// Creates a new geo-tag

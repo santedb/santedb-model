@@ -140,9 +140,17 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Copy object data from one object instance to another
+        /// </summary>
+        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity)
+        {
+            return toEntity.CopyObjectData(fromEntity, false);
+        }
+
+        /// <summary>
         /// Update property data if required
         /// </summary>
-        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull = false)
+        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull)
         {
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
