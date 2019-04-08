@@ -103,20 +103,9 @@ namespace SanteDB.Core.Model
         //[SerializationReference(nameof(PreviousVersionKey))]
         public virtual THistoryModelType GetPreviousVersion()
         {
-            if (this.m_previousVersion == null &&
-                this.m_previousVersionId.HasValue)
-                this.m_previousVersion = EntitySource.Current.Get<THistoryModelType>(this.Key, this.m_previousVersionId.Value);
-            return this.m_previousVersion;
-        }
-
-        /// <summary>
-        /// Sets the previous version so loading from database is not performed
-        /// </summary>
-        /// <param name="previousVersion"></param>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual void SetPreviousVersion(THistoryModelType previousVersion)
-        {
-            this.m_previousVersion = previousVersion;
+            if (this.m_previousVersionId.HasValue)
+                return EntitySource.Current.Get<THistoryModelType>(this.Key, this.m_previousVersionId.Value);
+            return null;
         }
 
         /// <summary>

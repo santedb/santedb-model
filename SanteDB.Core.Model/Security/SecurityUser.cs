@@ -133,7 +133,6 @@ namespace SanteDB.Core.Model.Security
         /// Represents roles
         /// </summary>
         [XmlIgnore, JsonIgnore]
-
         public List<SecurityRole> Roles { get; set; }
 
         /// <summary>
