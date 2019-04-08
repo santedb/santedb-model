@@ -163,8 +163,15 @@ namespace SanteDB.Core.Model.Acts
             get { return this.ActTime.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
+                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
-                    this.ActTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.ActTime = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
                 else
                     this.ActTime = default(DateTimeOffset);
             }
@@ -185,8 +192,15 @@ namespace SanteDB.Core.Model.Acts
             get { return this.StartTime?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
+                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
-                    this.StartTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.StartTime = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
                 else
                     this.StartTime = default(DateTimeOffset);
             }
@@ -208,8 +222,15 @@ namespace SanteDB.Core.Model.Acts
             get { return this.StopTime?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
+                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
-                    this.StopTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.StopTime = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
                 else
                     this.StopTime = default(DateTimeOffset);
             }

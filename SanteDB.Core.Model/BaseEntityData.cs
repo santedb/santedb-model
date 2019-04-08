@@ -79,8 +79,15 @@ namespace SanteDB.Core.Model
             }
             set
             {
+                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
-                    this.CreationTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.CreationTime = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
                 else this.CreationTime = default(DateTimeOffset);
             }
         }
@@ -100,8 +107,15 @@ namespace SanteDB.Core.Model
             get { return this.ObsoletionTime?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
+                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
-                    this.ObsoletionTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.ObsoletionTime = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
                 else this.ObsoletionTime = null;
             }
         }

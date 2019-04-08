@@ -56,8 +56,15 @@ namespace SanteDB.Core.Model
             get { return this.UpdatedTime?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
+                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
-                    this.UpdatedTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.UpdatedTime = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
                 else
                     this.UpdatedTime = null;
             }

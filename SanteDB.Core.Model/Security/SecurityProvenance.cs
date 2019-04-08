@@ -37,6 +37,7 @@ namespace SanteDB.Core.Model.Security
         // User
         private SecurityUser m_user;
         private SecurityApplication m_application;
+        private SecurityDevice m_device;
 
         /// <summary>
         /// Gets the time that the provenance was modified / created
@@ -64,8 +65,15 @@ namespace SanteDB.Core.Model.Security
             }
             set
             {
+                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
-                    this.CreationTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.CreationTime = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
                 else this.CreationTime = default(DateTimeOffset);
             }
         }
@@ -105,6 +113,25 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("externClass"), JsonProperty("externClass")]
         public String ExternalSecurityObjectRefType { get; set; }
+
+        /// <summary>
+        /// Gets the security user for the provenance if applicable
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(DeviceKey))]
+        public SecurityDevice Device
+        {
+            get
+            {
+                this.m_device = base.DelayLoad(this.DeviceKey, this.m_device);
+                return this.m_device;
+            }
+            set
+            {
+                this.m_device = value;
+                this.DeviceKey = value?.Key;
+            }
+        }
+
 
         /// <summary>
         /// Gets the security user for the provenance if applicable
