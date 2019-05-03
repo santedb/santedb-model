@@ -51,7 +51,7 @@ namespace SanteDB.Core.Extensions
             switch((ReferenceType)extensionData[0])
             {
                 case ReferenceType.Act:
-                    return ModelEntityLoader.EntitySource.Current.Get<Act>(uuid);
+                    return Model.EntityLoader.EntitySource.Current.Get<Act>(uuid);
                 case ReferenceType.Entity:
                     return Model.EntityLoader.EntitySource.Current.Get<Entity>(uuid);
                 case ReferenceType.Concept:
