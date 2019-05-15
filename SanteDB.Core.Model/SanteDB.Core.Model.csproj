@@ -151,6 +151,7 @@
     <Compile Include="Export\Dataset.cs" />
     <Compile Include="Extensions\BinaryExtensionHandler.cs" />
     <Compile Include="Extensions\BooleanExtensionHandler.cs" />
+    <Compile Include="Extensions\ReferenceExtensionHandler.cs" />
     <Compile Include="Extensions\UuidExtensionHandler.cs" />
     <Compile Include="Extensions\DateExtensionHandler.cs" />
     <Compile Include="Extensions\DecimalExtensionHandler.cs" />

@@ -121,6 +121,12 @@ namespace SanteDB.Core.Model.Constants
         /// Represents an individual invoice elemnt
         /// </summary>
         public const string InvoiceElement = "6755ee8b-48e6-4fd8-802f-59b89efa8966";
+
+        /// <summary>
+        /// List
+        /// </summary>
+        public const string List = "b0323489-9a09-411a-bb55-ff283830ea1a";
+
     }
 
     /// <summary>
@@ -221,6 +227,11 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Represents a single invoice element
         /// </summary>
-        public static Guid? InvoiceElement = Guid.Parse(ActClassKeyStrings.InvoiceElement);
+        public static readonly Guid? InvoiceElement = Guid.Parse(ActClassKeyStrings.InvoiceElement);
+
+        /// <summary>
+        /// List
+        /// </summary>
+        public static readonly Guid? List = Guid.Parse(ActClassKeyStrings.List);
     }
 }
