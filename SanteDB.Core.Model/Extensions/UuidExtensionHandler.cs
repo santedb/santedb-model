@@ -30,7 +30,7 @@ namespace SanteDB.Core.Model.Extensions
         /// <summary>
         /// Get the name of the extension handler
         /// </summary>
-        public string Name => "Concept";
+        public string Name => "Uuid";
 
         /// <summary>
         /// Deserialize
