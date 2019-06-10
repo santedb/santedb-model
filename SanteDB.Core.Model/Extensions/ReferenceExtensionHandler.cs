@@ -45,10 +45,21 @@ namespace SanteDB.Core.Extensions
         /// </summary>
         public object DeSerialize(byte[] extensionData)
         {
-            if (extensionData.Length != 0x11)
-                throw new InvalidOperationException($"Extension data must be {0x11} bytes long");
-            Guid uuid = new Guid(extensionData.Skip(1).ToArray());
-            switch((ReferenceType)extensionData[0])
+            Guid uuid = Guid.Empty;
+            ReferenceType refType = (ReferenceType)extensionData[0];
+            if (extensionData.Length == 0x11) // Data in pure binary format - LEGACY FROM OPENIZ
+                uuid = new Guid(extensionData.Skip(1).ToArray());
+            else if (extensionData[1] == (byte)'^') // Data is from text format 
+            {
+                var extData = Encoding.UTF8.GetString(extensionData, 0, extensionData.Length);
+                var data = extData.Split('^');
+                if (data[0][0] >= (byte)'0')
+                    refType = (ReferenceType)byte.Parse(data[0]);
+                uuid = Guid.Parse(data[1]);
+            }
+            else
+                throw new ArgumentOutOfRangeException(nameof(extensionData), $"Argument not in appropriate format. Expecting 11 byte binary reference or string format ({BitConverter.ToString(extensionData)}");
+            switch (refType)
             {
                 case ReferenceType.Act:
                     return Model.EntityLoader.EntitySource.Current.Get<Act>(uuid);
@@ -75,18 +86,18 @@ namespace SanteDB.Core.Extensions
         /// </summary>
         public byte[] Serialize(object data)
         {
-            byte[] retVal = new byte[0x11];
+            StringBuilder retVal = new StringBuilder();
             if (data is Entity)
-                retVal[0] = (byte)ReferenceType.Entity;
+                retVal.Append(ReferenceType.Entity);
             else if (data is Act)
-                retVal[0] = (byte)ReferenceType.Act;
+                retVal.Append(ReferenceType.Act);
             else if (data is Concept)
-                retVal[0] = (byte)ReferenceType.Concept;
+                retVal.Append(ReferenceType.Concept);
             else
                 throw new ArgumentOutOfRangeException("Only Entity, Act, or Concept can be stored in this extension type");
 
-            Array.Copy((data as IdentifiedData).Key.Value.ToByteArray(), 0, retVal, 1, 0x10);
-            return retVal;
+            retVal.AppendFormat("^{0}", (data as IdentifiedData).Key);
+            return Encoding.UTF8.GetBytes(retVal.ToString());
         }
     }
 }
