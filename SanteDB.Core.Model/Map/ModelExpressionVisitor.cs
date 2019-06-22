@@ -465,16 +465,22 @@ namespace SanteDB.Core.Model.Map
                         if (right.NodeType == ExpressionType.Convert &&
                             (right as UnaryExpression).Operand.Type == left.Type)
                             right = (right as UnaryExpression).Operand;
+                        else if (left is ConstantExpression && (left as ConstantExpression).Value == null)
+                            return Expression.MakeBinary(node.NodeType, left, right);
                         else
                             right = Expression.Coalesce(right, Expression.Constant(Activator.CreateInstance(right.Type.GetTypeInfo().GenericTypeArguments[0])));
                     }
                     if (left.Type.GetTypeInfo().IsGenericType &&
                         left.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
                         if (left.NodeType == ExpressionType.Convert &&
                             (left as UnaryExpression).Operand.Type == right.Type)
                             left = (left as UnaryExpression).Operand;
+                        else if (right is ConstantExpression && (right as ConstantExpression).Value == null) // Handle : o.Nullable == null
+                            return Expression.MakeBinary(node.NodeType, left, right);
                         else
                             left = Expression.Coalesce(left, Expression.Constant(Activator.CreateInstance(left.Type.GetTypeInfo().GenericTypeArguments[0])));
+                    }
                     // Handle nullable <> null to always be true
                     if ((right is ConstantExpression && (right as ConstantExpression).Value == null ||
                         left is ConstantExpression && (left as ConstantExpression).Value == null) &&
