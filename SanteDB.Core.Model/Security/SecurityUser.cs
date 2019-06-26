@@ -122,10 +122,16 @@ namespace SanteDB.Core.Model.Security
             get { return this.LastLoginTime?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
+                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
-                    this.LastLoginTime = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
-                else
-                    this.LastLoginTime = default(DateTimeOffset);
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.LastLoginTime = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
+                else this.LastLoginTime = default(DateTimeOffset);
             }
         }
 
