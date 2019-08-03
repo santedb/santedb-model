@@ -465,7 +465,7 @@ namespace SanteDB.Core.Model.Entities
                 this.StatusConceptKey == other.StatusConceptKey &&
                 this.Tags?.SemanticEquals(other.Tags) == true &&
                 this.Telecoms?.SemanticEquals(other.Telecoms) == true &&
-                this.Template?.SemanticEquals(other.Template) == true &&
+                this.TemplateKey == other.TemplateKey &&
                 this.TypeConceptKey == other.TypeConceptKey;
         }
 
