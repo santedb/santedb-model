@@ -157,12 +157,10 @@ namespace SanteDB.Core.Auditing
 	/// <summary>
 	/// Represents object data extension
 	/// </summary>
+    /// <remarks>This allows auditors to affix any additional data to an audit which the default structure does not support</remarks>
 	[XmlType(nameof(ObjectDataExtension), Namespace = "http://santedb.org/audit")]
 	public class ObjectDataExtension
 	{
-		public ObjectDataExtension()
-		{
-		}
 
 		/// <summary>
 		/// Object data extension

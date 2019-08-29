@@ -134,13 +134,13 @@ namespace SanteDB.Core.Model.Entities
         /// Should serialize latitude
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializeLat() => this.Lat.GetValueOrDefault() != 0;
+        public bool ShouldSerializeLat() => this.GeoTag?.Lat != 0;
 
         /// <summary>
         /// Should serialize longitude
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializeLng() => this.Lng.GetValueOrDefault() != 0;
+        public bool ShouldSerializeLng() => this.GeoTag?.Lng != 0;
 
         /// <summary>
         /// Gets the services
@@ -157,8 +157,8 @@ namespace SanteDB.Core.Model.Entities
             if (other == null) return false;
             return base.SemanticEquals(obj) &&
                 this.IsMobile == other.IsMobile &&
-                this.Lat == other.Lat &&
-                this.Lng == other.Lng &&
+                this.GeoTag?.Lat == other.GeoTag?.Lat &&
+                this.GeoTag?.Lng == other.GeoTag?.Lng &&
                 this.Services?.SemanticEquals(other.Services) == true;
         }
     }

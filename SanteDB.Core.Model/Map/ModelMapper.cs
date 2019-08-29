@@ -393,9 +393,6 @@ namespace SanteDB.Core.Model.Map
         public TDomain MapModelInstance<TModel, TDomain>(TModel modelInstance) where TDomain : new()
         {
 
-            // Set the identity source
-            IEntitySourceProvider currentProvider = null;
-
 
             ClassMap classMap = this.m_mapFile.GetModelClassMap(typeof(TModel), typeof(TDomain));
             if (classMap == null)

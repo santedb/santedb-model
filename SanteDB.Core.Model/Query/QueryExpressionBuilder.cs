@@ -345,6 +345,7 @@ namespace SanteDB.Core.Model.Query
             /// <returns>The path.</returns>
             /// <param name="access">Access.</param>
             /// <param name="fromUnary">Extract the path from a unuary or binary expression</param>
+            /// <param name="fromOperand">Indicates the extraction should occur from an operand and not the operator</param>
             protected String ExtractPath(Expression access, bool fromUnary, bool fromOperand = false)
             {
                 if (access.NodeType == ExpressionType.MemberAccess)
@@ -374,7 +375,7 @@ namespace SanteDB.Core.Model.Query
                         if (memberExpr.Expression.Type.StripNullable() == typeof(DateTimeOffset) &&
                             memberExpr.Member.Name == "DateTime")
                             return path;
-                        return null; // TODO: When this occurs?
+                        throw new InvalidOperationException($"The path {access} cannot be translated, ensure the property is XML navigable or has a QueryParameter attribute"); // TODO: When this occurs?
                     }
 
                     // Return path

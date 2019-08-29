@@ -360,8 +360,6 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static MethodBase GetGenericMethod(this Type type, string name, Type[] typeArgs, Type[] argTypes)
         {
-            IEnumerable e;
-            
             int typeArity = typeArgs.Length;
             var methods = type.GetRuntimeMethods()
                 .Where(m => m.Name == name)

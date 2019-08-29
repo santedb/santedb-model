@@ -55,8 +55,10 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// Entity relationship between <see cref="Association{TSourceType}.SourceEntityKey"/> container and <paramref name="targetKey"/>
+        /// Entity relationship between <see cref="Association{TSourceType}.SourceEntityKey"/> container and <paramref name="target"/> having relationship type <paramref name="relationshipType"/>
         /// </summary>
+        /// <param name="relationshipType">The key of the concept representing the relationship between source and target</param>
+        /// <param name="target">The entity which is the target of this relationship</param>
         public EntityRelationship(Guid? relationshipType, Entity target)
         {
             this.RelationshipTypeKey = relationshipType;

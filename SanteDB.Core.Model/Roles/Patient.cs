@@ -57,10 +57,6 @@ namespace SanteDB.Core.Model.Roles
         private Guid? m_ethnicGroupKey;
         private Concept m_ethnicGroup;
 
-        // Complex relationships
-        private List<Guid> m_raceCodeKeys;
-
-
         /// <summary>
         /// Represents a patient
         /// </summary>
@@ -105,6 +101,7 @@ namespace SanteDB.Core.Model.Roles
         /// </summary>
         [XmlElement("deceasedDatePrecision"), JsonProperty("deceasedDatePrecision")]
         public DatePrecision? DeceasedDatePrecision { get; set; }
+
         /// <summary>
         /// Gets or sets the multiple birth order of the patient 
         /// </summary>

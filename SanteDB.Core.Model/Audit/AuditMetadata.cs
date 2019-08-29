@@ -28,32 +28,74 @@ namespace SanteDB.Core.Auditing
     [XmlType(nameof(AuditMetadataKey), Namespace = "http://santedb.org/audit")]
     public enum AuditMetadataKey
     {
+        /// <summary>
+        /// The metadata represents a patient identifier
+        /// </summary>
         [XmlEnum("pid")]
         PID,
+        /// <summary>
+        /// The object is a process name
+        /// </summary>
         [XmlEnum("process")]
         ProcessName,
+        /// <summary>
+        /// Identifies the remote host
+        /// </summary>
         [XmlEnum("remoteHost")]
         RemoteHost,
+        /// <summary>
+        /// Identifies the remote endpoint
+        /// </summary>
         [XmlEnum("remoteEp")]
         RemoteEndpoint,
+        /// <summary>
+        /// Identifies the local endpoint
+        /// </summary>
         [XmlEnum("localEp")]
         LocalEndpoint,
+        /// <summary>
+        /// Identifies the time a batch was submitted
+        /// </summary>
         [XmlEnum("submission_time")]
         SubmissionTime,
+        /// <summary>
+        /// Identifies if an object was in original format
+        /// </summary>
         [XmlEnum("format")]
         OriginalFormat,
+        /// <summary>
+        /// Identifies the status of the object
+        /// </summary>
         [XmlEnum("status")]
         SubmissionStatus,
+        /// <summary>
+        /// Identifies the priority of the object
+        /// </summary>
         [XmlEnum("priority")]
         Priority,
+        /// <summary>
+        /// Identifies the object classification
+        /// </summary>
         [XmlEnum("classification")]
         Classification,
+        /// <summary>
+        /// Identifies the object as a session identifier
+        /// </summary>
         [XmlEnum("sessionId")]
         SessionId,
+        /// <summary>
+        /// Identifies the object as an enterprise site identifier
+        /// </summary>
         [XmlEnum("enterpriseSiteId")]
         EnterpriseSiteID,
+        /// <summary>
+        /// Identifies the object's metadata as the source
+        /// </summary>
         [XmlEnum("auditSourceId")]
         AuditSourceID,
+        /// <summary>
+        /// Identifies the source type
+        /// </summary>
         [XmlEnum("auditSourceType")]
         AuditSourceType
     }

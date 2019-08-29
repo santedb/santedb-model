@@ -221,6 +221,7 @@ namespace SanteDB.Core.Model.Export
     [XmlType(nameof(DataObsolete), Namespace = "http://santedb.org/data")]
     public class DataObsolete : DataInstallAction
     {
+        /// <summary>
         /// Gets the action name
         /// </summary>
         public override string ActionName { get { return "Obsolete"; } }
@@ -233,6 +234,7 @@ namespace SanteDB.Core.Model.Export
     [XmlType(nameof(DataInsert), Namespace = "http://santedb.org/data")]
     public class DataInsert : DataInstallAction
     {
+        /// <summary>
         /// Gets the action name
         /// </summary>
         public override string ActionName { get { return "Insert"; } }
