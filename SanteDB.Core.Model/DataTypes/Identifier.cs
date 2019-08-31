@@ -137,7 +137,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the assinging authority id
         /// </summary>
-
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlIgnore, JsonIgnore]
         public Guid? AuthorityKey
@@ -155,7 +154,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the type identifier
         /// </summary>
-
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlIgnore, JsonIgnore]
         public Guid? IdentifierTypeKey

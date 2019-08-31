@@ -445,8 +445,9 @@ namespace SanteDB.Core.Model.Query
                     case ExpressionType.Equal:
                         var expressionMember = binaryExpression.Left as MemberExpression;
                         var valueExpression = binaryExpression.Right as ConstantExpression;
-                        if (expressionMember.Member.DeclaringType.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>()?.ClassifierProperty != expressionMember.Member.Name)
-                            throw new InvalidOperationException("Guards must be on classifier");
+                        var classifierAttribute = expressionMember.Member.DeclaringType.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>();
+                        if (classifierAttribute?.ClassifierProperty != expressionMember.Member.Name)
+                            throw new InvalidOperationException($"Classifier for type on {expressionMember.Member.DeclaringType.FullName} is property {classifierAttribute?.ClassifierProperty} however expression uses property {expressionMember.Member.Name}. Only {classifierAttribute?.ClassifierProperty} may be used in guard expression");
                         if (valueExpression == null)
                             throw new InvalidOperationException("Only constant expressions are supported on guards");
                         return valueExpression.Value.ToString();
