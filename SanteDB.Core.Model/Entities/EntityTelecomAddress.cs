@@ -36,10 +36,12 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("EntityTelecomAddress", Namespace = "http://santedb.org/model"), JsonObject("EntityTelecomAddress")]
     public class EntityTelecomAddress : VersionedAssociation<Entity>
     {
-        private Concept m_nameUseConcept;
+        private Concept m_useConcept;
+        private Concept m_typeConcept;
 
         // Name use key
-        private Guid? m_nameUseKey;
+        private Guid? m_useKey;
+        private Guid? m_typeKey;
 
         // Name use concept
         /// <summary>
@@ -67,13 +69,13 @@ namespace SanteDB.Core.Model.Entities
         {
             get
             {
-                this.m_nameUseConcept = base.DelayLoad(this.m_nameUseKey, this.m_nameUseConcept);
-                return this.m_nameUseConcept;
+                this.m_useConcept = base.DelayLoad(this.m_useKey, this.m_useConcept);
+                return this.m_useConcept;
             }
             set
             {
-                this.m_nameUseConcept = value;
-                this.m_nameUseKey = value?.Key;
+                this.m_useConcept = value;
+                this.m_useKey = value?.Key;
             }
         }
 
@@ -85,17 +87,54 @@ namespace SanteDB.Core.Model.Entities
         [Binding(typeof(TelecomAddressUseKeys))]
         public Guid? AddressUseKey
         {
-            get { return this.m_nameUseKey; }
+            get { return this.m_useKey; }
             set
             {
-                if (this.m_nameUseKey != value)
+                if (this.m_useKey != value)
                 {
-                    this.m_nameUseKey = value;
-                    this.m_nameUseConcept = null;
+                    this.m_useKey = value;
+                    this.m_useConcept = null;
                 }
             }
         }
 
+        /// <summary>
+        /// Gets or sets the name use
+        /// </summary>
+        [SerializationReference(nameof(TypeConceptKey)), AutoLoad]
+        [XmlIgnore, JsonIgnore]
+        public Concept TypeConcept
+        {
+            get
+            {
+                this.m_useConcept = base.DelayLoad(this.m_typeKey, this.m_typeConcept);
+                return this.m_typeConcept;
+            }
+            set
+            {
+                this.m_typeConcept = value;
+                this.m_typeKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the name use key
+        /// </summary>
+        [XmlElement("type"), JsonProperty("type")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(TelecomAddressTypeKeys))]
+        public Guid? TypeConceptKey
+        {
+            get { return this.m_typeKey; }
+            set
+            {
+                if (this.m_typeKey != value)
+                {
+                    this.m_typeKey = value;
+                    this.m_typeConcept = null;
+                }
+            }
+        }
         /// <summary>
         /// Gets or sets the value as an IETF value
         /// </summary>
@@ -197,7 +236,7 @@ namespace SanteDB.Core.Model.Entities
         public override void Refresh()
         {
             base.Refresh();
-            this.m_nameUseConcept = null;
+            this.m_useConcept = null;
         }
 
         /// <summary>
