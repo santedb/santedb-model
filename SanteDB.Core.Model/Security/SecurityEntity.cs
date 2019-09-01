@@ -67,5 +67,13 @@ namespace SanteDB.Core.Model.Security
                 throw new KeyNotFoundException($"Policy {policyId} not found");
             this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
         }
+
+        /// <summary>
+        /// Returns true if this object has the specified policy applied
+        /// </summary>
+        public bool HasPolicy(string policyId)
+        {
+            return this.Policies.Any(o => o.Policy.Oid == policyId);
+        }
     }
 }

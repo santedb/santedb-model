@@ -712,6 +712,14 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
+        /// Determines if the object has policy
+        /// </summary>
+        public bool HasPolicy(string policyId)
+        {
+            return this.LoadCollection<SecurityPolicyInstance>(nameof(Policies)).Any(o => o.LoadProperty<SecurityPolicy>(nameof(SecurityPolicyInstance.Policy)).Oid == policyId);
+        }
+
+        /// <summary>
         /// Add a tag to this act
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
