@@ -47,13 +47,20 @@ namespace SanteDB.Core.Model.Query
 
             // The dictionary
             private List<KeyValuePair<String, Object>> m_query;
+
+            // Interface hints
+            private Dictionary<Type, Type> m_interfaceHints = new Dictionary<Type, Type>();
+
             /// <summary>
             /// Initializes a new instance of the <see cref="HttpQueryExpressionVisitor"/> class.
             /// </summary>
             /// <param name="workingDictionary">The working dictionary.</param>
-            public HttpQueryExpressionVisitor(List<KeyValuePair<String, Object>> workingDictionary)
+            public HttpQueryExpressionVisitor(List<KeyValuePair<String, Object>> workingDictionary, Type modelType)
             {
                 this.m_query = workingDictionary;
+
+                foreach (var itm in modelType.GetTypeInfo().ImplementedInterfaces)
+                    this.m_interfaceHints.Add(itm, modelType);
             }
 
             /// <summary>
@@ -165,7 +172,7 @@ namespace SanteDB.Core.Model.Query
                             var parmName = this.ExtractPath(node.Arguments[0], false);
                             // Process lambda
                             var result = new List<KeyValuePair<string, object>>();
-                            var subQueryExpressionVisitor = new HttpQueryExpressionVisitor(result);
+                            var subQueryExpressionVisitor = new HttpQueryExpressionVisitor(result, node.Arguments[0].Type);
                             if (node.Arguments.Count == 2)
                             {
                                 subQueryExpressionVisitor.Visit(node.Arguments[1]);
@@ -359,6 +366,11 @@ namespace SanteDB.Core.Model.Query
                     var memberInfo = memberExpr.Expression.Type.GetRuntimeProperty(memberExpr.Member.Name + "Xml") ??
                                      memberExpr.Member;
 
+                    // Member information is declread on interface
+                    Type mapType = null;
+                    if(memberInfo.DeclaringType.GetTypeInfo().IsInterface && this.m_interfaceHints.TryGetValue(memberInfo.DeclaringType, out mapType))
+                        memberInfo = mapType.GetRuntimeProperty(memberInfo.Name) ?? memberInfo;
+                    
                     // Is this a delay load?
                     var serializationReferenceAttribute = memberExpr.Member.GetCustomAttribute<SerializationReferenceAttribute>();
                     var queryParameterAttribute = memberExpr.Member.GetCustomAttribute<QueryParameterAttribute>();
@@ -469,7 +481,7 @@ namespace SanteDB.Core.Model.Query
         public static IEnumerable<KeyValuePair<String, Object>> BuildQuery<TModel>(Expression<Func<TModel, bool>> model, bool stripNullChecks = false)
         {
             List<KeyValuePair<String, Object>> retVal = new List<KeyValuePair<string, Object>>();
-            var visitor = new HttpQueryExpressionVisitor(retVal);
+            var visitor = new HttpQueryExpressionVisitor(retVal, typeof(TModel));
             visitor.Visit(model);
             if (stripNullChecks)
                 retVal.RemoveAll(o => retVal.Any(c => c.Key == o.Key && c.Value != o.Value) && o.Value.Equals("!null"));
