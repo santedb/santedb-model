@@ -162,6 +162,14 @@ namespace SanteDB.Core.Auditing
 	public class ObjectDataExtension
 	{
 
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public ObjectDataExtension()
+        {
+
+        }
+
 		/// <summary>
 		/// Object data extension
 		/// </summary>
