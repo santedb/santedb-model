@@ -99,7 +99,7 @@ namespace SanteDB.Core.Model.Serialization
                     type = asm.ExportedTypes.SingleOrDefault(
                         t => t.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
                         );
-                    if (!s_typeCache.ContainsKey(typeName))
+                    if (!s_typeCache.ContainsKey(typeName) && type != null)
                         s_typeCache.Add(typeName, type);
                 }
             if (type == null)
