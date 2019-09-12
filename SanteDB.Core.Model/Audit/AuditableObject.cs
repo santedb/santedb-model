@@ -41,6 +41,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Auditing
@@ -177,12 +178,21 @@ namespace SanteDB.Core.Auditing
 		/// <param name="value"></param>
 		public ObjectDataExtension(String key, byte[] value)
 		{
+            this.Key = key;
+            this.Value = value;
 		}
 
-		/// <summary>
-		/// Key of the extension
+        /// <summary>
+		/// Object data extension
 		/// </summary>
-		[XmlAttribute("key"), JsonProperty("key")]
+		public ObjectDataExtension(String key, string value) : this(key, Encoding.UTF8.GetBytes(value))
+        {
+        }
+
+        /// <summary>
+        /// Key of the extension
+        /// </summary>
+        [XmlAttribute("key"), JsonProperty("key")]
 		public String Key { get; set; }
 
 		/// <summary>
