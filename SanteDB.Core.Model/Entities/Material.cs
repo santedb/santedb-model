@@ -28,9 +28,9 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Entities
 {
     /// <summary>
-    /// Represents a material
+    /// Represents a material which describes a type of material (i.e. scapel, antigen, etc.) and serves as a base class for manufactured materials
     /// </summary>
-
+    /// <remarks>In SanteDB, a Material represents the base class for kinds and instances of materials which may or may not be manufactured by a manufacturer</remarks>
     [XmlType("Material", Namespace = "http://santedb.org/model"), JsonObject("Material")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Material")]
     public class Material : Entity

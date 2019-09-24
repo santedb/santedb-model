@@ -49,13 +49,13 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the balance
+        /// Gets or sets the balance of this account
         /// </summary>
         [XmlElement("balance"), JsonProperty("balance")]
         public decimal Balance { get; set; }
 
         /// <summary>
-        /// Gets or sets the currency
+        /// Gets or sets the currency concept UUID for this account
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
         public Guid? CurrencyKey
@@ -87,13 +87,13 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the minimum balance
+        /// Gets or sets the minimum balance of this account
         /// </summary>
         [XmlElement("minBalance"), JsonProperty("minBalance")]
         public Decimal? MinBalance { get; set; }
 
         /// <summary>
-        /// Gets or sets the maximum balance
+        /// Gets or sets the maximum balance of this account
         /// </summary>
         [XmlElement("maxBalance"), JsonProperty("maxBalance")]
         public Decimal MaxBalance { get; set; }

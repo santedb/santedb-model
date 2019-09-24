@@ -30,7 +30,7 @@ namespace SanteDB.Core.Model
 {
 
     /// <summary>
-    /// Identifies the state of loading of the object
+    /// Identifies the state of loading of the object from persistence
     /// </summary>
     public enum LoadState
     {
@@ -77,7 +77,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// The internal primary key value of the entity
+        /// Gets or sets the primary identifying UUID of this object
         /// </summary>
         [XmlElement("id"), JsonProperty("id")]
         public Guid? Key { get; set; }
@@ -92,7 +92,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Gets the type
+        /// Gets the type registration of this object
         /// </summary>
         [DataIgnore, XmlIgnore, JsonProperty("$type")]
         public virtual String Type
@@ -128,7 +128,7 @@ namespace SanteDB.Core.Model
         public virtual void Refresh() { }
 
         /// <summary>
-        /// Gets or sets the modified on time
+        /// Gets or sets date/time that this object was last created or modified
         /// </summary>
         [XmlElement("modifiedOn"), JsonProperty("modifiedOn"), DataIgnore]
         public abstract DateTimeOffset ModifiedOn { get; }

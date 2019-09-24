@@ -25,8 +25,12 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Entities
 {
     /// <summary>
-    /// Manufactured material
+    /// Represents a material which is manufactured by a particular organization or company.
     /// </summary>
+    /// <remarks>
+    /// A manufactured material represents an instance of a material which was or can be manufactured by 
+    /// an organization and tracked as stock.
+    /// </remarks>
 
     [XmlType("ManufacturedMaterial", Namespace = "http://santedb.org/model"), JsonObject("ManufacturedMaterial")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ManufacturedMaterial")]

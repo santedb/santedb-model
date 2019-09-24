@@ -27,6 +27,10 @@ namespace SanteDB.Core.Model
     /// <summary>
     /// Represents a relational class which is bound on a version boundary
     /// </summary>
+    /// <remarks>
+    /// <para>This association is used to link two complex objects to one another when the version 
+    /// of the source object at time of assoication carries meaning.</para>
+    /// </remarks>
 
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("VersionedAssociation")]
     public abstract class VersionedAssociation<TSourceType> : Association<TSourceType>, IVersionedAssociation where TSourceType : VersionedEntityData<TSourceType>, new()
@@ -39,7 +43,7 @@ namespace SanteDB.Core.Model
         // The version where this data is effective
 
         /// <summary>
-        /// Gets or sets the effective version of this type
+        /// Gets or sets the version sequence of the source object when this assoication became active
         /// </summary>
         [XmlElement("effectiveVersionSequence"), JsonProperty("effectiveVersionSequence")]
         public Int32? EffectiveVersionSequenceId
@@ -52,7 +56,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Gets or sets the obsoleted version identifier
+        /// Gets or sets the sequence identifier of the source when this association is no longer active
         /// </summary>
         [XmlElement("obsoleteVersionSequence"), JsonProperty("obsoleteVersionSequence")]
         public Int32? ObsoleteVersionSequenceId

@@ -34,8 +34,11 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Entities
 {
     /// <summary>
-    /// Represents the base of all entities
+    /// Represents the base class of all entities (persons, places, things) in SanteDB
     /// </summary>
+    /// <remarks>
+    /// In SanteDB, an entity represents a physical object which can be acted upon or can participate in an act. 
+    /// </remarks>
     [XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]

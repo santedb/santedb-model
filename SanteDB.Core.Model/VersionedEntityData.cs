@@ -27,8 +27,11 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model
 {
     /// <summary>
-    /// Represents versioned based data, that is base data which has versions
+    /// Represents versioned based data
     /// </summary>
+    /// <remarks>
+    /// <para>In SanteDB, certain objects are not actually updated or deleted, rather they are subsequent versions
+    /// of the data appended to the previous. This class represents the base class of all objects which are versioned objects</para></remarks>
 
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("VersionedEntityData")]
     public abstract class VersionedEntityData<THistoryModelType> : BaseEntityData, IVersionedEntity where THistoryModelType : VersionedEntityData<THistoryModelType>, new()
@@ -71,7 +74,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Gets or sets the previous version key
+        /// Gets or sets the UUID of the previous version of this record
         /// </summary>
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -119,7 +122,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Gets or sets the key which represents the version of the entity
+        /// Gets or sets the UUID of the current version of this object
         /// </summary>
         [XmlElement("version"), JsonProperty("version")]
         public Guid? VersionKey { get; set; }

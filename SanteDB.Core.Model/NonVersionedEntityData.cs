@@ -30,6 +30,7 @@ namespace SanteDB.Core.Model
     /// <summary>
     /// Updateable entity data which is not versioned
     /// </summary>
+    /// <remarks>Non versioned data in SanteDB means that data can be updated (modified) in the underlying data store and changes are not tracked.</remarks>
     [XmlType(nameof(NonVersionedEntityData), Namespace = "http://santedb.org/model")]
     [JsonObject(Id = nameof(NonVersionedEntityData))]
     public class NonVersionedEntityData : BaseEntityData
@@ -48,7 +49,7 @@ namespace SanteDB.Core.Model
 
 
         /// <summary>
-        /// Gets or sets the creation time in XML format
+        /// Gets or sets the time that this object was last modified in ISO format
         /// </summary>
         [XmlElement("updatedTime"), JsonProperty("updatedTime"), DataIgnore()]
         public String UpdatedTimeXml
@@ -101,7 +102,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Gets or sets the created by identifier
+        /// Gets or sets the provenance identifier associated with the last update of this object
         /// </summary>
 
         [EditorBrowsable(EditorBrowsableState.Never)]

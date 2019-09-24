@@ -26,9 +26,15 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model
 {
     /// <summary>
-    /// Represents a bse class for bound relational data
+    /// Represents a base class for association between two objects
     /// </summary>
-    /// <typeparam name="TSourceType"></typeparam>
+    /// <remarks></remarks>
+    /// <typeparam name="TSourceType">The source type which indicates the type of object being associated from</typeparam>
+    /// <remarks>
+    /// <para>In SanteDB's data store, complex objects are associated with one another using this class. For example, when associating identifiers with an 
+    /// <see cref="SanteDB.Core.Model.Acts.Act"/> with an <see cref="SanteDB.Core.Model.DataTypes.ActIdentifier"/> the ActIdentifier is an association</para>
+    /// <para>This version of the assoication is used between non-versioned objects or for versioned objects where the version has no bearing on the association</para>
+    /// </remarks>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Association")]
     public abstract class Association<TSourceType> : IdentifiedData, ISimpleAssociation where TSourceType : IdentifiedData, new()
     {

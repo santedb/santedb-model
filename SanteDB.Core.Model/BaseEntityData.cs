@@ -65,7 +65,7 @@ namespace SanteDB.Core.Model
         public DateTimeOffset CreationTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation time in XML format
+        /// Gets or sets the creation time as an ISO date format
         /// </summary>
         [XmlElement("creationTime"), JsonProperty("creationTime"), DataIgnore()]
         public String CreationTimeXml
@@ -99,7 +99,7 @@ namespace SanteDB.Core.Model
         public DateTimeOffset? ObsoletionTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation time in XML format
+        /// Gets or sets the time that the data is no longer valid (was deleted/obsoleted) in ISO format
         /// </summary>
         [XmlElement("obsoletionTime", IsNullable = false), JsonProperty("obsoletionTime"), DataIgnore()]
         public String ObsoletionTimeXml
@@ -197,7 +197,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Gets or sets the identifier of the user which created the data
+        /// Gets or sets the security provenance object which represents the creation of this object
         /// </summary>
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -214,7 +214,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Gets or sets the identifier of the user which obsoleted the data
+        /// Gets or sets the security provenance object which represents the obsoletion of this data
         /// </summary>
 
         [EditorBrowsable(EditorBrowsableState.Never)]

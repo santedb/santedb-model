@@ -34,7 +34,7 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Acts
 {
     /// <summary>
-    /// Represents the base class for an act
+    /// Represents the base class for an act (something which is done or actioned on)
     /// </summary>
     /// <remarks>
     /// <para>
@@ -115,7 +115,7 @@ namespace SanteDB.Core.Model.Acts
         public DateTimeOffset ActTime { get; set; }
 
         /// <summary>
-        /// Gets the template key
+        /// Gets the template UUID upon which this act is based
         /// </summary>
         /// <remarks>
         /// Templates are used to classify the specific rules and input forms used to create the act. It further
@@ -155,7 +155,7 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the creation time in XML format
+        /// Gets or sets the moment in time that this act occurred in ISO format
         /// </summary>
         [DataIgnore, XmlElement("actTime"), JsonProperty("actTime")]
         public String ActTimeXml
@@ -184,7 +184,7 @@ namespace SanteDB.Core.Model.Acts
         public DateTimeOffset? StartTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation time in XML format
+        /// Gets or sets the time when the act should or did start ocurring in ISO format
         /// </summary>
         [DataIgnore, XmlElement("startTime"), JsonProperty("startTime")]
         public String StartTimeXml
@@ -214,7 +214,7 @@ namespace SanteDB.Core.Model.Acts
 
 
         /// <summary>
-        /// Gets or sets the creation time in XML format
+        /// Gets or sets the time when the act should or did stop ocurring in ISO format
         /// </summary>
         [DataIgnore, XmlElement("stopTime"), JsonProperty("stopTime")]
         public String StopTimeXml
@@ -260,8 +260,32 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the key of the concept which specifies the mood of the act.
         /// </summary>
-        /// <see cref="MoodConcept"/>
         /// <see cref="ActMoodKeys"/>
+        /// <remarks>
+        /// <para>In SanteDB, a mood of an act describes the mode of that act. The mood of the act clasifies whether the act did occur, is intended to occur, is requested to occur or proposed. Mood codes may include:</para>
+        /// <list type="bullet">
+        /// <item>
+        ///     <term>Event Occurence</term>
+        ///     <description>The ACT did or did not occur (i.e. the patient presented and the data represents the outcome of that encounter)</description>
+        /// </item>
+        /// <item>
+        ///     <term>Proposed</term>
+        ///     <description>The ACT exists because a computerized process proposed that the act occur</description>
+        /// </item>
+        /// <item>
+        ///     <term>Request</term>
+        ///     <description>The ACT represents a request by a human to perform the action provided</description>
+        /// </item>
+        /// <item>
+        ///     <term>Intent</term>
+        ///     <description>The ACT has not yet occurred, however a human has indicated their intent to perform the act at a future date (i.e. appointment)</description>
+        /// </item>
+        /// <item>
+        ///     <term>Goal</term>
+        ///     <description>The ACT represents a goal rather than something that has, or will occur. A goal act is used to store goals in care plans</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("moodConcept"), JsonProperty("moodConcept")]
         [Binding(typeof(ActMoodKeys))]
@@ -282,9 +306,12 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the key of the concept which defines the reason why the act is or didn't occur
         /// </summary>
-        /// <see cref="ReasonConcept"/>
         /// <see cref="ActReasonKeys"/>
         /// <see cref="NullReasonKeys"/>
+        /// <remarks>
+        /// <para>The reason concept on an act indicates why something should, or did/did not occur. For example, when used in conjunction with IsNegated, this concept typically indicates WHY the action did not occur
+        /// (safety concern, etc.)</para>
+        /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("reasonConcept"), JsonProperty("reasonConcept")]
         [Binding(typeof(ActReasonKeys))]
@@ -304,8 +331,32 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the key of the concept which describes the current status of the act
         /// </summary>
-        /// <see cref="StatusConcept"/>
         /// <see cref="StatusKeys"/>
+        /// <remarks>
+        /// <para>The status concepts for an act allow for a basic state machine to be represented in SanteDB. Common states for an act are:</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <term>New</term>
+        ///         <description>The ACT has just newly been created (through an automated process, care plan, etc.) and has not been reviewed by a user or other process</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Active</term>
+        ///         <description>The ACT is currently in progress. This means that the ACT is still being actioned upon</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Complete</term>
+        ///         <description>The ACT or action described by the act has been completed</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Obsolete</term>
+        ///         <description>The ACT did happen, or did accurately describe an event, however the information in that ACT is no longer valid</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Nullified</term>
+        ///         <description>The ACT did not happen, and was created in error</description>
+        ///     </item>
+        /// </list>
+        /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
