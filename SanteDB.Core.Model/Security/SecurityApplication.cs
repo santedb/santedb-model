@@ -53,7 +53,19 @@ namespace SanteDB.Core.Model.Security
         public String LockoutXml
         {
             get => this.Lockout?.ToString("o", CultureInfo.InvariantCulture);
-            set => this.Lockout = value == null ? null : (DateTimeOffset?)DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+            set
+            {
+                DateTimeOffset val = default(DateTimeOffset);
+                if (value != null)
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.Lockout = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
+                else this.Lockout = default(DateTimeOffset);
+            }
         }
 
         /// <summary>
@@ -75,7 +87,19 @@ namespace SanteDB.Core.Model.Security
         public String LastAuthenticationXml
         {
             get => this.LastAuthentication?.ToString("o", CultureInfo.InvariantCulture);
-            set => this.LastAuthentication = value == null ? null : (DateTimeOffset?)DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
+            set
+            {
+                DateTimeOffset val = default(DateTimeOffset);
+                if (value != null)
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.LastAuthentication = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
+                else this.LastAuthentication = default(DateTimeOffset);
+            }
         }
 
         /// <summary>
