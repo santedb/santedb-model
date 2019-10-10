@@ -36,7 +36,7 @@ namespace SanteDB.Core.Model.Query
     /// A class which is responsible for translating a series of Query Parmaeters to a LINQ expression
     /// to be passed to the persistence layer
     /// </summary>
-    public class QueryExpressionParser
+    public static class QueryExpressionParser
     {
 
         // Member cache
@@ -45,6 +45,24 @@ namespace SanteDB.Core.Model.Query
         private static Dictionary<String, Type> m_castCache = new Dictionary<string, Type>();
         // Redirect cache
         private static Dictionary<Type, Dictionary<String, PropertyInfo>> m_redirectCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+
+        /// <summary>
+        /// Build the order by expression
+        /// </summary>
+        public static ModelSort<TModelType>[] BuildSort<TModelType>(List<String> orderBy)
+        {
+            // Order by
+            List<ModelSort<TModelType>> retVal = new List<ModelSort<TModelType>>();
+            foreach (var itm in orderBy)
+            {
+                var sortData = itm.Split(':');
+                retVal.Add(new ModelSort<TModelType>(
+                    QueryExpressionParser.BuildPropertySelector<TModelType>(sortData[0]),
+                    sortData.Length == 1 || sortData[1] == "asc" ? Core.Model.Map.SortOrderType.OrderBy : Core.Model.Map.SortOrderType.OrderByDescending
+                ));
+            }
+            return retVal.ToArray();
+        }
 
         /// <summary>
         /// Buidl linq expression
