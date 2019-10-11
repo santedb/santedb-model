@@ -78,6 +78,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(ConceptRelationship))]
     [XmlInclude(typeof(ConceptRelationshipType))]
     [XmlInclude(typeof(SecurityUser))]
+    [XmlInclude(typeof(SecurityProvenance))]
     [XmlInclude(typeof(SecurityRole))]
     [XmlInclude(typeof(CodeSystem))]
     public class Bundle : IdentifiedData
