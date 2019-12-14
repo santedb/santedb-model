@@ -198,7 +198,13 @@ namespace SanteDB.Core.Model
                 var hasConstructor = false;
                 if(newValue != null && !s_parameterlessCtor.TryGetValue(newValue.GetType(), out hasConstructor))
                 {
-                    hasConstructor = newValue.GetType().GetTypeInfo().DeclaredConstructors.Any(o => o.GetParameters().Length == 0);
+                    /// HACK: Some .NET types don't like to be constructed
+                    try
+                    {
+                        Activator.CreateInstance(newValue.GetType());
+                        hasConstructor = true;
+                    }
+                    catch { hasConstructor = false; }
                     lock (s_parameterlessCtor)
                         s_parameterlessCtor.Add(newValue.GetType(), hasConstructor);
                 }
