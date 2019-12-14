@@ -45,6 +45,8 @@ namespace SanteDB.Core.Model
 
         private static Dictionary<Type, PropertyInfo[]> s_typePropertyCache = new Dictionary<Type, PropertyInfo[]>();
 
+        private static Dictionary<Type, bool> s_parameterlessCtor = new Dictionary<Type, bool>();
+
         /// <summary>
         /// Get postal code
         /// </summary>
@@ -192,6 +194,17 @@ namespace SanteDB.Core.Model
                 if ((newValue as IList)?.Count == 0)
                     newValue = null;
 
+                object defaultValue = null;
+                var hasConstructor = false;
+                if(newValue != null && !s_parameterlessCtor.TryGetValue(newValue.GetType(), out hasConstructor))
+                {
+                    hasConstructor = newValue.GetType().GetTypeInfo().DeclaredConstructors.Any(o => o.GetParameters().Length == 0);
+                    lock (s_parameterlessCtor)
+                        s_parameterlessCtor.Add(newValue.GetType(), hasConstructor);
+                }
+                if(newValue != null && hasConstructor)
+                    defaultValue = Activator.CreateInstance(newValue.GetType());
+
                 if (newValue is IList && oldValue is IList)
                 {
                     if (!Enumerable.SequenceEqual<Object>(((IList)newValue).OfType<Object>(), ((IList)oldValue).OfType<Object>()))
@@ -200,7 +213,7 @@ namespace SanteDB.Core.Model
                 else if (
                     newValue != null &&
                     !newValue.Equals(oldValue) == true &&
-                    (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || typeof(String) == destinationPi.PropertyType && !String.IsNullOrEmpty(newValue.ToString()) || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
+                    (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || typeof(String) == destinationPi.PropertyType && !String.IsNullOrEmpty(newValue.ToString()) || !newValue.Equals(defaultValue) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
                     destinationPi.SetValue(toEntity, newValue);
                 else if(newValue == null && overwritePopulatedWithNull)
                     destinationPi.SetValue(toEntity, newValue);
