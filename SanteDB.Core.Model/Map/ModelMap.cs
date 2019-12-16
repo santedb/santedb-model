@@ -36,7 +36,7 @@ namespace SanteDB.Core.Model.Map
     {
 
         // Class cache
-        private Dictionary<Type, ClassMap> m_classCache = new Dictionary<Type, ClassMap>();
+        private Dictionary<KeyValuePair<Type, Type>, ClassMap> m_classCache = new Dictionary<KeyValuePair<Type, Type>, ClassMap>();
         // Lock object
         private Object m_lockObject = new Object();
         private static XmlSerializer s_xsz = new XmlSerializer(typeof(ModelMap));
@@ -69,16 +69,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public ClassMap GetModelClassMap(Type type)
         {
-            ClassMap retVal = null;
-            if (!this.m_classCache.TryGetValue(type, out retVal))
-            {
-                retVal = this.Class.Find(o => o.ModelType == type);
-                if (retVal != null)
-                    lock (this.m_lockObject)
-                        if (!this.m_classCache.ContainsKey(type))
-                            this.m_classCache.Add(type, retVal);
-            }
-            return retVal;
+            return this.GetModelClassMap(type, null);
         }
 
         /// <summary>
@@ -97,14 +88,25 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         internal ClassMap GetModelClassMap(Type modelType, Type domainType)
         {
-            var retVal = this.GetModelClassMap(modelType);
-            if (retVal?.DomainType == (domainType ?? retVal?.DomainType))
-                return retVal;
-            while (modelType != typeof(Object) && retVal?.DomainType != (domainType ?? retVal?.DomainType))
+            KeyValuePair<Type, Type> key = new KeyValuePair<Type, Type>(modelType, domainType);
+            if (!this.m_classCache.TryGetValue(key, out ClassMap retVal))
             {
-                modelType = modelType.GetTypeInfo().BaseType;
-                retVal = this.Class.Find(o => o.ModelType == modelType && o.DomainType == domainType);
+                retVal = this.Class.Find(o => o.ModelType == modelType && o.DomainType == (domainType ?? o.DomainType));
+
+                // Look up the object hierarchy
+                if (retVal == null)
+                    while (modelType != typeof(Object) && retVal?.DomainType != (domainType ?? retVal?.DomainType))
+                    {
+                        modelType = modelType.GetTypeInfo().BaseType;
+                        retVal = this.Class.Find(o => o.ModelType == modelType && o.DomainType == domainType);
+                    }
+
+                if (retVal != null)
+                    lock (this.m_lockObject)
+                        if (!this.m_classCache.ContainsKey(key))
+                            this.m_classCache.Add(key, retVal);
             }
+          
             return retVal;
         }
     }
