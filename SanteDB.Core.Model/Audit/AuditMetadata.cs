@@ -18,6 +18,7 @@
  * Date: 2019-1-12
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Auditing
@@ -110,6 +111,7 @@ namespace SanteDB.Core.Auditing
     /// </summary>
     [XmlType(nameof(AuditMetadata), Namespace = "http://santedb.org/audit")]
     [JsonObject(nameof(AuditMetadata))]
+    [Classifier(nameof(Key))]
     public class AuditMetadata 
     {
 
@@ -133,13 +135,13 @@ namespace SanteDB.Core.Auditing
         /// <summary>
         /// Gets or sets the metadata key
         /// </summary>
-        [XmlAttribute("key"), JsonProperty("key")]
+        [XmlAttribute("key"), JsonProperty("key"), QueryParameter("key")]
         public AuditMetadataKey Key { get; set; }
 
         /// <summary>
         /// Gets or sets the process name
         /// </summary>
-        [XmlAttribute("value"), JsonProperty("value")]
+        [XmlAttribute("value"), JsonProperty("value"), QueryParameter("value")]
         public string Value { get; set; }
 
     }

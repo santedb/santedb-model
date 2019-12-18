@@ -285,7 +285,12 @@ namespace SanteDB.Core.Model.Query
                         if (guard != null)
                             foreach (var g in guard.Split('|'))
                             {
-                                var expr = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(g));
+                                // HACK: Some types use enums as their classifier 
+                                object value = g;
+                                if (guardAccessor.Type.GetTypeInfo().IsEnum)
+                                    value = Enum.Parse(guardAccessor.Type, g);
+                                
+                                var expr = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(value));
                                 if (guardExpression == null)
                                     guardExpression = expr;
                                 else
