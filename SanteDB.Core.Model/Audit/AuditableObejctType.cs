@@ -27,6 +27,12 @@ namespace SanteDB.Core.Auditing
     [XmlType(nameof(AuditableObjectType), Namespace = "http://santedb.org/audit")]
 	public enum AuditableObjectType
 	{
+        /// <summary>
+        /// Not specified
+        /// </summary>
+        [XmlEnum("u")]
+        NotSpecified = 0,
+
 		/// <summary>
 		/// Represents a person.
 		/// </summary>
