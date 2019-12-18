@@ -27,8 +27,14 @@ namespace SanteDB.Core.Auditing
     [XmlType(nameof(AuditableObjectIdType), Namespace = "http://santedb.org/audit")]
 	public enum AuditableObjectIdType
 	{
-		/// <remarks>Use with object type code Person</remarks>
-		[XmlEnum("mrn")]
+
+
+        /// <remarks>Use with object type code Person</remarks>
+        [XmlEnum("na")]
+        NotSpecified = 0x01,
+
+        /// <remarks>Use with object type code Person</remarks>
+        [XmlEnum("mrn")]
 		MedicalRecord = 0x01,
 
 		/// <remarks>Use with object type code Person</remarks>

@@ -206,6 +206,7 @@ namespace SanteDB.Core.Model
                     }
                     catch { hasConstructor = false; }
                     lock (s_parameterlessCtor)
+                        if(!s_parameterlessCtor.ContainsKey(newValue.GetType()))
                         s_parameterlessCtor.Add(newValue.GetType(), hasConstructor);
                 }
                 if(newValue != null && hasConstructor)
