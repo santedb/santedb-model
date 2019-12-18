@@ -183,6 +183,8 @@ namespace SanteDB.Core.Auditing
             this.Timestamp = DateTime.Now;
             this.Actors = new List<AuditActorData>();
             this.AuditableObjects = new List<AuditableObject>();
+            this.Metadata = new List<AuditMetadata>();
+
         }
 
         /// <summary>
@@ -204,7 +206,6 @@ namespace SanteDB.Core.Auditing
             this.EventTypeCode = eventTypeCode;
             this.Actors = new List<AuditActorData>();
             this.AuditableObjects = new List<AuditableObject>();
-            this.Metadata = new List<AuditMetadata>();
         }
 
         /// <summary>

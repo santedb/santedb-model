@@ -97,7 +97,12 @@ namespace SanteDB.Core.Auditing
         /// Identifies the source type
         /// </summary>
         [XmlEnum("auditSourceType")]
-        AuditSourceType
+        AuditSourceType,
+        /// <summary>
+        /// Allows the correlation of data between audits
+        /// </summary>
+        [XmlEnum("correlationToken")]
+        CorrelationToken
     }
 
     /// <summary>
