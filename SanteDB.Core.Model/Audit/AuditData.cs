@@ -110,7 +110,7 @@ namespace SanteDB.Core.Auditing
         /// Represents a network entry.
         /// </summary>
         [XmlEnum("network")]
-        NetowrkEntry,
+        NetworkEntry,
 
         /// <summary>
         /// Represents an import.
