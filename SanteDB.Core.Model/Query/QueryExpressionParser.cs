@@ -335,7 +335,12 @@ namespace SanteDB.Core.Model.Query
 
                             // Add sub-filter
                             NameValueCollection subFilter = new NameValueCollection();
-                            subFilter.Add(currentValue.Key.Substring(path.Length), new List<String>(currentValue.Value));
+
+                            // Default to id
+                            if(currentValue.Key.Length + 1 > path.Length)
+                                subFilter.Add(currentValue.Key.Substring(path.Length), new List<String>(currentValue.Value));
+                            else
+                                subFilter.Add("id", new List<String>(currentValue.Value));
 
                             // Add collect other parameters
                             foreach (var wv in workingValues.Where(o => o.Key.StartsWith(path)).ToList())
