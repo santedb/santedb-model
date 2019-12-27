@@ -175,6 +175,10 @@ namespace SanteDB.Core.Auditing
     [JsonObject(nameof(AuditData))]
     public class AuditData : IdentifiedData
     {
+
+        // Serializer ref
+        private static XmlSerializer s_serializer = new XmlSerializer(typeof(AuditData));
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditData"/> class.
         /// </summary>
@@ -276,7 +280,7 @@ namespace SanteDB.Core.Auditing
         {
             using (var sw = new StringWriter())
             {
-                new XmlSerializer(typeof(AuditData)).Serialize(sw, this);
+                s_serializer.Serialize(sw, this);
                 return sw.ToString();
             }
         }

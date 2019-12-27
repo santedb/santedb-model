@@ -37,6 +37,9 @@ namespace SanteDB.Core.Model.Export
     [XmlType(nameof(Dataset), Namespace = "http://santedb.org/data")]
     public class Dataset
     {
+        // Serializer
+        private static XmlSerializer m_xsz = new XmlSerializer(typeof(Dataset));
+
         /// <summary>
         /// Default ctor
         /// </summary>
@@ -80,8 +83,7 @@ namespace SanteDB.Core.Model.Export
         /// </summary>
         public static Dataset Load(Stream str)
         {
-            XmlSerializer xs = new XmlSerializer(typeof(Dataset));
-            return xs.Deserialize(str) as Dataset;
+            return m_xsz.Deserialize(str) as Dataset;
         }
     }
 
