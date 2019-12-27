@@ -17,6 +17,7 @@
  * User: Justin Fyfe
  * Date: 2019-8-8
  */
+using System;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Auditing
@@ -24,37 +25,37 @@ namespace SanteDB.Core.Auditing
     /// <summary>
     /// Represents types of actions
     /// </summary>
-    [XmlType(nameof(ActionType), Namespace = "http://santedb.org/audit")]
+    [XmlType(nameof(ActionType), Namespace = "http://santedb.org/audit"), Flags]
 	public enum ActionType
 	{
 		/// <summary>
 		/// Data was created in the system
 		/// </summary>
 		[XmlEnum("c")]
-		Create,
+		Create = 0x01,
 
 		/// <summary>
 		/// Data was viewed, printed, displayed, etc...
 		/// </summary>
 		[XmlEnum("r")]
-		Read,
+		Read = 0x02,
 
 		/// <summary>
 		/// Data was revised in the system
 		/// </summary>
 		[XmlEnum("u")]
-		Update,
+		Update = 0x04,
 
 		/// <summary>
 		/// Data was removed from the system
 		/// </summary>
 		[XmlEnum("d")]
-		Delete,
+		Delete = 0x08,
 
 		/// <summary>
 		/// A system, or application function was performed
 		/// </summary>
 		[XmlEnum("x")]
-		Execute
+		Execute = 0x10
 	}
 }
