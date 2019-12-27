@@ -140,5 +140,11 @@ namespace SanteDB.Core.Model.Constants
         /// Indicates that the source act transforms the target act
         /// </summary>
         public static readonly Guid Transforms = Guid.Parse("DB2AE02A-FF12-4C1B-9C5B-ECDD41AF8583");
+
+        /// <summary>
+        /// Duplicate entity
+        /// </summary>
+        public static readonly Guid Duplicate = Guid.Parse("2BBF068B-9121-4081-BF3C-AB62C01362EE");
+
     }
 }

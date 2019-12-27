@@ -643,5 +643,10 @@ namespace SanteDB.Core.Model.Constants
         /// Relates the target entity to a source location
         /// </summary>
         public static readonly Guid LocatedEntity = Guid.Parse("4F6273D3-8223-4E18-8596-C718AD029DEB");
+
+        /// <summary>
+        /// Duplicate entity
+        /// </summary>
+        public static readonly Guid Duplicate = Guid.Parse("2BBF068B-9121-4081-BF3C-AB62C01362EE");
     }
 }
