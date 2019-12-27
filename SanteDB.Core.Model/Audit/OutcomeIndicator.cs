@@ -17,6 +17,7 @@
  * User: Justin Fyfe
  * Date: 2019-8-8
  */
+using System;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Auditing
@@ -24,31 +25,31 @@ namespace SanteDB.Core.Auditing
     /// <summary>
     /// Represents potential outcomes.
     /// </summary>
-    [XmlType(nameof(OutcomeIndicator), Namespace = "http://santedb.org/audit")]
+    [XmlType(nameof(OutcomeIndicator), Namespace = "http://santedb.org/audit"), Flags]
 	public enum OutcomeIndicator
 	{
 		/// <summary>
 		/// Successful operation.
 		/// </summary>
 		[XmlEnum("ok")]
-		Success = 0x00,
+		Success = 1,
 
 		/// <summary>
 		/// Minor failure, action should be restarted.
 		/// </summary>
 		[XmlEnum("fail.minor")]
-		MinorFail = 0x04,
+		MinorFail= 2, 
 
 		/// <summary>
 		/// Action was terminated.
 		/// </summary>
 		[XmlEnum("fail.major")]
-		SeriousFail = 0x08,
+		SeriousFail = 4, 
 
 		/// <summary>
 		/// Major failure, action is made unavailable.
 		/// </summary>
 		[XmlEnum("fail.epic")]
-		EpicFail = 0x0C
+		EpicFail = 8
 	}
 }
