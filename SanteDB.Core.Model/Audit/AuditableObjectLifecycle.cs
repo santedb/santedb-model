@@ -28,6 +28,12 @@ namespace SanteDB.Core.Auditing
 	public enum AuditableObjectLifecycle
 	{
         /// <summary>
+        /// Not set
+        /// </summary>
+		[XmlEnum("none")]
+        NotSet = 0x0,
+
+        /// <summary>
         /// An object was created
         /// </summary>
 		[XmlEnum("create")]
