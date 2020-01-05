@@ -302,7 +302,7 @@ namespace SanteDB.Core.Model.Query
                         var guardLambda = Expression.Lambda(guardExpression, guardParameter);
                         accessExpression = Expression.Call(whereMethod, accessExpression, guardLambda);
 
-                        if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null"))
+                        if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null") && i == memberPath.Length)
                         {
                             var anyMethod = typeof(Enumerable).GetGenericMethod("Any",
                                 new Type[] { itemType },
@@ -526,6 +526,11 @@ namespace SanteDB.Core.Model.Query
                             if (MapUtil.TryConvert(pValue, operandType, out converted))
                             {
                                 valueExpr = Expression.Constant(converted);
+                            }
+                            else if(typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(operandType.GetTypeInfo()) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
+                            {
+                                valueExpr = Expression.Constant(uuid);
+                                thisAccessExpression = accessExpression = Expression.MakeMemberAccess(accessExpression, operandType.GetRuntimeProperty(nameof(IdentifiedData.Key)));
                             }
                             else
                                 valueExpr = Expression.Constant(Convert.ChangeType(pValue, operandType));

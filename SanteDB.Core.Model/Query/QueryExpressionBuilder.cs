@@ -113,6 +113,8 @@ namespace SanteDB.Core.Model.Query
                         return this.VisitMethodCall((MethodCallExpression)node);
                     case ExpressionType.Lambda:
                         return this.VisitLambdaGeneric((LambdaExpression)node);
+                    case ExpressionType.Invoke:
+                        return this.VisitInvocation((InvocationExpression)node);
                     case ExpressionType.Constant:
                     case ExpressionType.Convert:
                     case ExpressionType.TypeAs:
@@ -123,7 +125,41 @@ namespace SanteDB.Core.Model.Query
                         // We coalesce for nulls so we want the first
                         return this.Visit(((BinaryExpression)node).Left);
                     default:
-                        return this.Visit(node);
+                        throw new InvalidOperationException($"Don't know how to conver type of {node.Type}");
+                }
+            }
+
+            /// <summary>
+            /// Visit the invocation expression (expand this and compile the expression if it is a lambda and invoke / dynamic invoke , capturing the results)
+            /// </summary>
+            /// <param name="node"></param>
+            /// <returns></returns>
+            protected override Expression VisitInvocation(InvocationExpression node)
+            {
+                if(node.Expression is LambdaExpression)
+                {
+                    var callee = (node.Expression as LambdaExpression).Compile();
+                    var args = node.Arguments.Select(o =>
+                    {
+                        switch (o.NodeType)
+                        {
+                            case ExpressionType.Constant:
+                                return (o as ConstantExpression).Value;
+                            case ExpressionType.Call:
+                                {
+                                    var ie = o as MethodCallExpression;
+                                    var obj = (ie.Object as ConstantExpression)?.Value;
+                                    return ie.Method.Invoke(obj, new object[0]);
+                                }
+                            default:
+                                throw new InvalidOperationException($"Cannot expand parameter {0}");
+                        }
+                    });
+                    return Expression.Constant(callee.DynamicInvoke(args.ToArray()));
+                }
+                else
+                {
+                    throw new InvalidOperationException("Cannot invoke a non-Lambda expression");
                 }
             }
 
@@ -314,36 +350,43 @@ namespace SanteDB.Core.Model.Query
             {
                 if (access == null)
                     return null;
-                if (access.NodeType == ExpressionType.Parameter)
-                    return "$_";
-                else if (access.NodeType == ExpressionType.Constant)
-                    return ((ConstantExpression)access).Value;
-                else if (access.NodeType == ExpressionType.Convert)
-                    return this.ExtractValue(((UnaryExpression)access).Operand);
-                else if (access.NodeType == ExpressionType.MemberAccess)
+
+                switch(access.NodeType)
                 {
-                    MemberExpression expr = access as MemberExpression;
-                    var expressionValue = this.ExtractValue(expr.Expression);
-                    // Is this a ref to a parameter or variable? If so, we must extract it
-                    if (expressionValue?.ToString().StartsWith("$_") == true)
-                        return this.ExtractPath(expr, false, true);
-                    else if (expr.Member is PropertyInfo)
-                    {
-                        try
+                    case ExpressionType.Parameter:
+                        return "$_";
+                    case ExpressionType.Constant:
+                        return ((ConstantExpression)access).Value;
+                    case ExpressionType.Convert:
+                        return this.ExtractValue(((UnaryExpression)access).Operand);
+                    case ExpressionType.MemberAccess:
+                        MemberExpression expr = access as MemberExpression;
+                        var expressionValue = this.ExtractValue(expr.Expression);
+                        // Is this a ref to a parameter or variable? If so, we must extract it
+                        if (expressionValue?.ToString().StartsWith("$_") == true)
+                            return this.ExtractPath(expr, false, true);
+                        else if (expr.Member is PropertyInfo)
                         {
-                            return (expr.Member as PropertyInfo).GetValue(expressionValue);
+                            try
+                            {
+                                return (expr.Member as PropertyInfo).GetValue(expressionValue);
+                            }
+                            catch
+                            {
+                                return null;
+                            }
                         }
-                        catch
+                        else if (expr.Member is FieldInfo)
                         {
-                            return null;
+                            return (expr.Member as FieldInfo).GetValue(expressionValue);
                         }
-                    }
-                    else if (expr.Member is FieldInfo)
-                    {
-                        return (expr.Member as FieldInfo).GetValue(expressionValue);
-                    }
+                        break;
+                    case ExpressionType.Coalesce:
+                        return this.ExtractValue((access as BinaryExpression).Left);
+                    case ExpressionType.Invoke:
+                        return this.ExtractValue(this.VisitInvocation(access as InvocationExpression));
                 }
-                return null;
+                return null; 
             }
 
             /// <summary>
