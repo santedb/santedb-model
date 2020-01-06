@@ -110,6 +110,11 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
+        /// Gets the source entity
+        /// </summary>
+        object ISimpleAssociation.SourceEntity { get => this.SourceEntity; set => this.SourceEntity = (TSourceType)value; }
+
+        /// <summary>
         /// Semantic equality 
         /// </summary>
         public override bool SemanticEquals(object obj)

@@ -31,5 +31,10 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets or sets the source entity key
         /// </summary>
         Guid? SourceEntityKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source entity
+        /// </summary>
+        object SourceEntity { get; set; }
     }
 }

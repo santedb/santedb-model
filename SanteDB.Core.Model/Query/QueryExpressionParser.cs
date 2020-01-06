@@ -302,7 +302,7 @@ namespace SanteDB.Core.Model.Query
                         var guardLambda = Expression.Lambda(guardExpression, guardParameter);
                         accessExpression = Expression.Call(whereMethod, accessExpression, guardLambda);
 
-                        if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null"))
+                        if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null") && i == memberPath.Length)
                         {
                             var anyMethod = typeof(Enumerable).GetGenericMethod("Any",
                                 new Type[] { itemType },
@@ -527,6 +527,11 @@ namespace SanteDB.Core.Model.Query
                             {
                                 valueExpr = Expression.Constant(converted);
                             }
+                            else if(typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(operandType.GetTypeInfo()) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
+                            {
+                                valueExpr = Expression.Constant(uuid);
+                                thisAccessExpression = accessExpression = Expression.MakeMemberAccess(accessExpression, operandType.GetRuntimeProperty(nameof(IdentifiedData.Key)));
+                            }
                             else
                                 valueExpr = Expression.Constant(Convert.ChangeType(pValue, operandType));
                         }
@@ -536,13 +541,18 @@ namespace SanteDB.Core.Model.Query
                         if (extendedFilter != null)
                         {
                             // Extended parms build
+                            int parmNo = 1;
                             var parms = extendedParms.Select(p =>
                             {
+                                var parmType = extendedFilter.ExtensionMethod.GetParameters()[parmNo++];
                                 if (p.StartsWith("$")) // variable
                                     return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables, parameterExpression) ?? Expression.Constant(p);
+                                else if (parmType.ParameterType != typeof(String) && MapUtil.TryConvert(p, parmType.ParameterType, out object res)) // convert parameter type
+                                    return Expression.Constant(res);
                                 else
                                     return Expression.Constant(p);
                             }).ToArray();
+
                             singleExpression = extendedFilter.Compose(thisAccessExpression, et, valueExpr, parms);
                         }
                         else
