@@ -144,6 +144,11 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
+        /// Source entity
+        /// </summary>
+        object ISimpleAssociation.SourceEntity { get => null; set { } }
+
+        /// <summary>
         /// Force reloading of delay load properties
         /// </summary>
         public override void Refresh()

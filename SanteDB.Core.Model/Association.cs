@@ -96,6 +96,11 @@ namespace SanteDB.Core.Model
             }
         }
 
+        /// <summary>
+        /// Source entity 
+        /// </summary>
+        object ISimpleAssociation.SourceEntity { get => this.SourceEntity; set => this.SourceEntity = (TSourceType)value; }
+
 
         /// <summary>
         /// Should serialize obsolete

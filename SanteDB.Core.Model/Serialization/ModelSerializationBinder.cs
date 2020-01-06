@@ -66,6 +66,19 @@ namespace SanteDB.Core.Model.Serialization
             //    throw new ArgumentException($"Type {typeName} is already registered");
         }
 
+
+        /// <summary>
+        /// Register the model type
+        /// </summary>
+        public static void RegisterModelType(String typeName, Type type)
+        {
+            if (!s_typeCache.ContainsKey(typeName))
+                lock (s_lock)
+                    s_typeCache.Add(typeName, type);
+            //else
+            //    throw new ArgumentException($"Type {typeName} is already registered");
+        }
+
         /// <summary>
         /// Bind the type to a name
         /// </summary>

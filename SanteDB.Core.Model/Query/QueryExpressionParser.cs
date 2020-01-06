@@ -541,13 +541,18 @@ namespace SanteDB.Core.Model.Query
                         if (extendedFilter != null)
                         {
                             // Extended parms build
+                            int parmNo = 1;
                             var parms = extendedParms.Select(p =>
                             {
+                                var parmType = extendedFilter.ExtensionMethod.GetParameters()[parmNo++];
                                 if (p.StartsWith("$")) // variable
                                     return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables, parameterExpression) ?? Expression.Constant(p);
+                                else if (parmType.ParameterType != typeof(String) && MapUtil.TryConvert(p, parmType.ParameterType, out object res)) // convert parameter type
+                                    return Expression.Constant(res);
                                 else
                                     return Expression.Constant(p);
                             }).ToArray();
+
                             singleExpression = extendedFilter.Compose(thisAccessExpression, et, valueExpr, parms);
                         }
                         else

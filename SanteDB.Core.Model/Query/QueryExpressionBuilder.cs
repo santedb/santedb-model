@@ -72,7 +72,10 @@ namespace SanteDB.Core.Model.Query
                 if (cvalue.Value == null)
                     this.m_query.Add(new KeyValuePair<string, object>(key, value));
                 else if (cvalue.Value is IList)
-                    (cvalue.Value as IList).Add(value);
+                {
+                    if(!(cvalue.Value as IList).Contains(value))
+                        (cvalue.Value as IList).Add(value);
+                }
                 else
                 {
                     this.m_query.Remove(cvalue);
@@ -222,8 +225,14 @@ namespace SanteDB.Core.Model.Query
                                 return null;
 
                         }
-                    default:
-                        return base.VisitMethodCall(node);
+                    default: // extended fn?
+                        {
+                            var methodCall = node as MethodCallExpression;
+                            var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(methodCall.Method);
+                            if (extendedFn == null)
+                                throw new MissingMemberException($"Cannot find extension method {methodCall.Method}");
+                        }
+                        return null;
 
                 }
 

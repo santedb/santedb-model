@@ -152,13 +152,13 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Update property data if required
         /// </summary>
-        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull)
+        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull, bool ignoreTypeMismatch = false)
         {
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
             else if (fromEntity == null)
                 throw new ArgumentNullException(nameof(fromEntity));
-            else if (!fromEntity.GetType().GetTypeInfo().IsAssignableFrom(toEntity.GetType().GetTypeInfo()))
+            else if (!ignoreTypeMismatch && !fromEntity.GetType().GetTypeInfo().IsAssignableFrom(toEntity.GetType().GetTypeInfo()))
                 throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntity.GetType().FullName}", nameof(fromEntity));
 
             PropertyInfo[] properties = null;
