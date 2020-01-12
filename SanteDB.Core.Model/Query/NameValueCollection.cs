@@ -74,6 +74,7 @@ namespace SanteDB.Core.Model.Query
             NameValueCollection retVal = new NameValueCollection();
             if (String.IsNullOrEmpty(qstring)) return retVal;
             if (qstring.StartsWith("?")) qstring = qstring.Substring(1);
+
             // Escape regex
             var escapeRegex = new Regex("%([A-Fa-f0-9]{2})");
 
