@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -73,22 +74,16 @@ namespace SanteDB.Core.Model.Query
             NameValueCollection retVal = new NameValueCollection();
             if (String.IsNullOrEmpty(qstring)) return retVal;
             if (qstring.StartsWith("?")) qstring = qstring.Substring(1);
+
+            // Escape regex
+            var escapeRegex = new Regex("%([A-Fa-f0-9]{2})");
+
             foreach (var itm in qstring.Split('&'))
             {
                 var expr = itm.Split('=');
                 expr[0] = Uri.UnescapeDataString(expr[0]);
                 expr[1] = Uri.UnescapeDataString(expr[1]);
-                var value = expr[1].Replace('+', ' ').
-                    Replace("%3A", ":").
-                    Replace("%2F", "/").
-                    Replace("%2A", "*").
-                    Replace("%3C", "<").
-                    Replace("%3E", ">").
-                    Replace("%21", "!").
-                    Replace("%3D", "=").
-                    Replace("%5B", "[").
-                    Replace("%5D", "]").
-                    Replace("%7C", "|").Trim();
+                var value = escapeRegex.Replace(expr[1], (m) => System.Text.Encoding.UTF8.GetString(new byte[] { Convert.ToByte(m.Groups[1].Value, 16) }, 0, 1));
                 // HACK: Replace this later
                 if (!String.IsNullOrEmpty(value))
                     retVal.Add(expr[0].Trim(), value);

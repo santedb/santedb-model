@@ -34,7 +34,7 @@ namespace SanteDB.Core.Model.DataTypes
     [Classifier(nameof(DomainName)), KeyLookup(nameof(DomainName))]
     [XmlType(nameof(AssigningAuthority), Namespace = "http://santedb.org/model"), JsonObject("AssigningAuthority")]
     [XmlRoot(nameof(AssigningAuthority), Namespace = "http://santedb.org/model")]
-    public class AssigningAuthority : BaseEntityData
+    public class AssigningAuthority : NonVersionedEntityData
     {
 
         private bool m_minimal = false;
@@ -60,8 +60,12 @@ namespace SanteDB.Core.Model.DataTypes
         // Assigning device id
         private Guid? m_assigningApplicationKey;
 
-        // TODO: Change this to SecurityDevice
         private SecurityApplication m_assigningApplication;
+
+        // Assigning authortity policy
+        private Guid? m_assigningAuthorityPolicyKey;
+        // Assigning authority policy
+        private SecurityPolicy m_assigningAuthorityPolicy;
 
         /// <summary>
         /// Gets or sets the name of the assigning authority
@@ -110,6 +114,37 @@ namespace SanteDB.Core.Model.DataTypes
             {
                 this.m_assigningApplicationKey = value;
                 this.m_assigningApplication = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the policy 
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(PolicyKey))]
+        public SecurityPolicy Policy {
+            get
+            {
+                this.m_assigningAuthorityPolicy = base.DelayLoad(this.m_assigningAuthorityPolicyKey, this.m_assigningAuthorityPolicy);
+                return this.m_assigningAuthorityPolicy;
+            }
+            set
+            {
+                this.m_assigningAuthorityPolicy = value;
+                this.m_assigningAuthorityPolicyKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the policy key associated with this assigning authority for disclosure
+        /// </summary>
+        [XmlElement("policy"), JsonProperty("policy")]
+        public Guid? PolicyKey
+        {
+            get { return this.m_assigningAuthorityPolicyKey; }
+            set
+            {
+                this.m_assigningAuthorityPolicyKey = value;
+                this.m_assigningAuthorityPolicy = null;
             }
         }
 
