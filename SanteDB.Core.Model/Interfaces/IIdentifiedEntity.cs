@@ -38,4 +38,5 @@ namespace SanteDB.Core.Model.Interfaces
         Guid? Key { get; set; }
 
     }
+
 }

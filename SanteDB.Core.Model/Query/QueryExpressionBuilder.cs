@@ -434,6 +434,10 @@ namespace SanteDB.Core.Model.Query
                     var memberXattribute = memberInfo.GetCustomAttributes<XmlElementAttribute>().FirstOrDefault();
                     if (memberXattribute == null && queryParameterAttribute != null)
                         memberXattribute = new XmlElementAttribute(queryParameterAttribute.ParameterName); // We don't serialize but it does exist
+                    else if(memberExpr.Expression is ConstantExpression)
+                    {
+                        return (memberExpr.Expression as ConstantExpression).Value.ToString();
+                    }
                     else if (memberXattribute == null)
                     {
                         if (memberExpr.Expression.Type.StripNullable() == typeof(DateTimeOffset) &&
