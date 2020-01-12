@@ -84,8 +84,12 @@ namespace SanteDB.Core.Model.Serialization
         /// </summary>
         public void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
-            typeName = serializedType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
+            // Attempt to see if the type was registered
+            typeName = s_typeCache.FirstOrDefault(o => o.Value == serializedType).Key;
+            if (typeName == null)
+                typeName = serializedType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
             assemblyName = null;
+
         }
 
         /// <summary>

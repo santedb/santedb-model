@@ -363,15 +363,6 @@ namespace SanteDB.Core.Model
                     }
             }
 
-            // Finally we want to remove items from the toEntity which didn't have any added options 
-            foreach (var merge in mergedListProperties)
-            {
-                IList modifyList = merge.Key.GetValue(toEntity) as IList;
-                IList<IdentifiedData> oldList = modifyList.OfType<IdentifiedData>().ToList();
-                foreach (var rm in oldList.Where(o => !merge.Value.Any(m => m.Key == o.Key || m.SemanticEquals(o))))
-                    modifyList.Remove(rm);
-            }
-
             return toEntity;
         }
 
