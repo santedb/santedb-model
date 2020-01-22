@@ -105,7 +105,8 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build LINQ expression
         /// </summary>
-        public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Delegate> variables = null, bool safeNullable = true)
+        /// <param name="forceLoad">When true, will assume the object is working on memory objects and will call LoadProperty on guards</param>
+        public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Delegate> variables = null, bool safeNullable = true, bool forceLoad = false)
         {
             var parameterExpression = Expression.Parameter(typeof(TModelType), parameterName);
             Expression retVal = null;
@@ -264,7 +265,16 @@ namespace SanteDB.Core.Model.Query
                         while (classifierProperty != null && classAttr != null)
                         {
                             if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(classifierProperty.PropertyType.GetTypeInfo()) && guard != null)
-                                guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
+                            {
+                                if (forceLoad) {
+                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) });
+                                    var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name));
+                                    guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
+                                }
+                                else
+                                    guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
+
+                            }
                             else
                                 guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
 
@@ -349,9 +359,9 @@ namespace SanteDB.Core.Model.Query
                                 workingValues.Remove(wv);
                             }
 
-                            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
+                            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool), typeof(bool) });
 
-                            Expression predicate = (builderMethod.Invoke(null, new object[] { subFilter, pMember, variables, safeNullable }) as LambdaExpression);
+                            Expression predicate = (builderMethod.Invoke(null, new object[] { subFilter, pMember, variables, safeNullable, forceLoad }) as LambdaExpression);
                             if (predicate == null)
                                 continue;
                             keyExpression = Expression.Call(anyMethod, accessExpression, predicate);
@@ -618,10 +628,11 @@ namespace SanteDB.Core.Model.Query
                 return Expression.Convert(retVal, expectedReturn);
             else
             {
-                var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildPropertySelector), new Type[] { scope.Type }, new Type[] { typeof(String) });
+                var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildPropertySelector), new Type[] { scope.Type }, new Type[] { typeof(String), typeof(Boolean) });
                 retVal = Expression.Invoke(builderMethod.Invoke(null, new object[]
                 {
-                        varPath.Substring(1)
+                        varPath.Substring(1),
+                        true
                 }) as Expression, retVal);
                 if (retVal.Type.IsConstructedGenericType &&
                     retVal.Type.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -638,17 +649,26 @@ namespace SanteDB.Core.Model.Query
             return BuildPropertySelector(typeof(T), propertyName);
         }
 
+
+        /// <summary>
+        /// Build property selector
+        /// </summary>
+        public static LambdaExpression BuildPropertySelector<T>(String propertyName, bool forceLoad)
+        {
+            return BuildPropertySelector(typeof(T), propertyName, forceLoad);
+        }
+
         /// <summary>
         /// Build a property selector 
         /// </summary>
-        public static LambdaExpression BuildPropertySelector(Type type, String propertyName) { 
-            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { type }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool) });
+        public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false) { 
+            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { type }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool), typeof(bool) });
             var nvc = new NameValueCollection();
             nvc.Add(propertyName, "null");
             nvc[propertyName] = null;
             return builderMethod.Invoke(null, new object[]
             {
-                nvc, "__xinstance", null, false
+                nvc, "__xinstance", null, false, forceLoad
             }) as LambdaExpression;
         }
     }
