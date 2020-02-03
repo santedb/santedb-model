@@ -85,7 +85,7 @@ namespace SanteDB.Core.Model
 
             if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(propertyToLoad.PropertyType.GetTypeInfo())) // Collection we load by key
             {
-                if ((currentValue as IList)?.Count == 0 && me.Key.HasValue)
+                if ((currentValue == null || (currentValue as IList)?.Count == 0) && me.Key.HasValue)
                 {
                     var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.GetRelations), new Type[] { propertyToLoad.PropertyType.StripGeneric() }, new Type[] { typeof(Guid?) });
                     var loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { me.Key.Value }));
@@ -150,6 +150,53 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Strips all version information from the specified object. 
+        /// </summary>
+        public static TObject StripAssociatedItemSources<TObject>(this TObject toEntity)
+        {
+            if (toEntity == null)
+                throw new ArgumentNullException(nameof(toEntity));
+
+            PropertyInfo[] properties = null;
+            if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
+            {
+                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<DataIgnoreAttribute>() == null &&
+                    destinationPi.CanWrite).ToArray();
+                lock (s_typePropertyCache)
+                    if (!s_typePropertyCache.ContainsKey(toEntity.GetType()))
+                        s_typePropertyCache.Add(toEntity.GetType(), properties);
+            }
+            foreach (var destinationPi in properties.AsParallel())
+            {
+                if (typeof(ISimpleAssociation).GetTypeInfo().IsAssignableFrom(destinationPi.PropertyType.StripGeneric().GetTypeInfo())) // Versioned association
+                {
+                    var value = destinationPi.GetValue(toEntity);
+                    if (value is IList list)
+                        foreach (ISimpleAssociation itm in list)
+                        {
+                            (itm as IIdentifiedEntity).Key = null;
+                            itm.SourceEntityKey = null;
+
+                            if(itm is IVersionedAssociation va)
+                                va.EffectiveVersionSequenceId = null;
+                            itm.StripAssociatedItemSources();
+                        }
+                    else if (value is ISimpleAssociation assoc)
+                    {
+                        (assoc as IIdentifiedEntity).Key = null;
+                        assoc.SourceEntityKey = null;
+                        if(assoc is IVersionedAssociation va)
+                            va.EffectiveVersionSequenceId = null;
+                        assoc.StripAssociatedItemSources();
+                    }
+                }
+               
+            }
+
+            return toEntity;
+        }
+
+        /// <summary>
         /// Update property data if required
         /// </summary>
         public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull, bool ignoreTypeMismatch = false)
@@ -196,7 +243,7 @@ namespace SanteDB.Core.Model
 
                 object defaultValue = null;
                 var hasConstructor = false;
-                if(newValue != null && !s_parameterlessCtor.TryGetValue(newValue.GetType(), out hasConstructor))
+                if (newValue != null && !s_parameterlessCtor.TryGetValue(newValue.GetType(), out hasConstructor))
                 {
                     /// HACK: Some .NET types don't like to be constructed
                     try
@@ -206,10 +253,10 @@ namespace SanteDB.Core.Model
                     }
                     catch { hasConstructor = false; }
                     lock (s_parameterlessCtor)
-                        if(!s_parameterlessCtor.ContainsKey(newValue.GetType()))
-                        s_parameterlessCtor.Add(newValue.GetType(), hasConstructor);
+                        if (!s_parameterlessCtor.ContainsKey(newValue.GetType()))
+                            s_parameterlessCtor.Add(newValue.GetType(), hasConstructor);
                 }
-                if(newValue != null && hasConstructor)
+                if (newValue != null && hasConstructor)
                     defaultValue = Activator.CreateInstance(newValue.GetType());
 
                 if (newValue is IList && oldValue is IList)
@@ -222,7 +269,7 @@ namespace SanteDB.Core.Model
                     !newValue.Equals(oldValue) == true &&
                     (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || typeof(String) == destinationPi.PropertyType && !String.IsNullOrEmpty(newValue.ToString()) || !newValue.Equals(defaultValue) || !destinationPi.PropertyType.GetTypeInfo().IsValueType))
                     destinationPi.SetValue(toEntity, newValue);
-                else if(newValue == null && overwritePopulatedWithNull)
+                else if (newValue == null && oldValue != null && overwritePopulatedWithNull)
                     destinationPi.SetValue(toEntity, newValue);
 
             }
@@ -434,7 +481,7 @@ namespace SanteDB.Core.Model
             long hash = 1009;
             foreach (var b in me)
                 hash = ((hash << 5) + hash) ^ b;
-            return BitConverter.ToString(BitConverter.GetBytes(hash)).Replace("-","");
+            return BitConverter.ToString(BitConverter.GetBytes(hash)).Replace("-", "");
         }
 
         /// <summary>

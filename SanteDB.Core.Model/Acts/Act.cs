@@ -724,10 +724,10 @@ namespace SanteDB.Core.Model.Acts
         /// Gets the tags
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        IEnumerable<ITag> ITaggable.Tags { get { return this.Tags.OfType<ITag>(); } }
+        IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection<EntityTag>(nameof(Act.Tags)).OfType<ITag>(); } }
 
         [XmlIgnore, JsonIgnore]
-        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.Extensions.OfType<IModelExtension>(); } }
+        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection<EntityExtension>(nameof(Act.Extensions)).OfType<IModelExtension>(); } }
 
         /// <summary>
         /// Gets or sets the geo-tag

@@ -523,10 +523,10 @@ namespace SanteDB.Core.Model.Entities
         public bool ShouldSerializeTelecoms() => this.Telecoms?.Count > 0;
 
         [XmlIgnore, JsonIgnore]
-        IEnumerable<ITag> ITaggable.Tags { get { return this.Tags.OfType<ITag>(); } }
+        IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection<EntityTag>(nameof(Entity.Tags)).OfType<ITag>(); } }
 
         [XmlIgnore, JsonIgnore]
-        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.Extensions.OfType<IModelExtension>(); } }
+        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection<EntityExtension>(nameof(Entity.Extensions)).OfType<IModelExtension>(); } }
 
 
         /// <summary>

@@ -69,7 +69,7 @@ namespace SanteDB.Core.Model
             }
             set
             {
-                if (value != this.m_sourceEntity?.Key)
+                if (value != this.m_sourceEntity?.Key || value != this.m_sourceEntityKey)
                 {
                     this.m_sourceEntityKey = value;
                     this.m_sourceEntity = null;
