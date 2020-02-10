@@ -36,6 +36,12 @@ namespace SanteDB.Core.Model.Serialization
         private static object s_lock = new object();
         private Type m_hintType;
 
+
+        /// <summary>
+        /// Gets all registered types
+        /// </summary>
+        public static IEnumerable<Type> GetRegisteredTypes() => s_typeCache.Values;
+
         /// <summary>
         /// Create a new model serialization binder
         /// </summary>
