@@ -209,6 +209,7 @@
     <Compile Include="Security\SecurityUser.cs" />
     <Compile Include="Serialization\ModelSerializationBinder.cs" />
     <Compile Include="NonVersionedEntityData.cs" />
+    <Compile Include="Serialization\XmlModelSerializerFactory.cs" />
     <Compile Include="Subscription\SubscriptionClientDefinition.cs" />
     <Compile Include="Subscription\SubscriptionDefinition.cs" />
     <Compile Include="Subscription\SubscriptionModeType.cs" />

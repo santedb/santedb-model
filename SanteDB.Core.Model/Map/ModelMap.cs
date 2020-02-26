@@ -18,6 +18,7 @@
  * Date: 2019-8-8
  */
 using SanteDB.Core.Exceptions;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +40,7 @@ namespace SanteDB.Core.Model.Map
         private Dictionary<KeyValuePair<Type, Type>, ClassMap> m_classCache = new Dictionary<KeyValuePair<Type, Type>, ClassMap>();
         // Lock object
         private Object m_lockObject = new Object();
-        private static XmlSerializer s_xsz = new XmlSerializer(typeof(ModelMap));
+        private static XmlSerializer s_xsz = XmlModelSerializerFactory.Current.CreateSerializer(typeof(ModelMap));
 
 
         /// <summary>

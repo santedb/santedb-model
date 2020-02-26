@@ -18,6 +18,7 @@
  * Date: 2019-8-8
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,7 +34,7 @@ namespace SanteDB.Core.Model.Warehouse
     [XmlRoot(nameof(DatamartSchema), Namespace = "http://santedb.org/warehousing")]
     public class DatamartSchema : IDatamartSchemaPropertyContainer
     {
-        private static XmlSerializer s_xsz = new XmlSerializer(typeof(DatamartSchema));
+        private static XmlSerializer s_xsz = XmlModelSerializerFactory.Current.CreateSerializer(typeof(DatamartSchema));
 
         /// <summary>
         /// Datamart schema

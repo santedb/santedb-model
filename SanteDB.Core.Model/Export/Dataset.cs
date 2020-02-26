@@ -23,6 +23,7 @@ using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.Roles;
 using SanteDB.Core.Model.Security;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,7 +39,7 @@ namespace SanteDB.Core.Model.Export
     public class Dataset
     {
         // Serializer
-        private static XmlSerializer m_xsz = new XmlSerializer(typeof(Dataset));
+        private static XmlSerializer m_xsz = XmlModelSerializerFactory.Current.CreateSerializer(typeof(Dataset));
 
         /// <summary>
         /// Default ctor

@@ -19,6 +19,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model;
+using SanteDB.Core.Model.Serialization;
 
 /*
 * Copyright 2012-2013 Mohawk College of Applied Arts and Technology
@@ -177,7 +178,7 @@ namespace SanteDB.Core.Auditing
     {
 
         // Serializer ref
-        private static XmlSerializer s_serializer = new XmlSerializer(typeof(AuditData));
+        private static XmlSerializer s_serializer = XmlModelSerializerFactory.Current.CreateSerializer(typeof(AuditData));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditData"/> class.

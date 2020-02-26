@@ -38,7 +38,7 @@ namespace SanteDB.Core.Model.Subscription
     public class SubscriptionDefinition : IdentifiedData
     {
         // XmlSerializer
-        private static XmlSerializer m_xsz = new XmlSerializer(typeof(SubscriptionDefinition));
+        private static XmlSerializer m_xsz = XmlModelSerializerFactory.Current.CreateSerializer(typeof(SubscriptionDefinition));
 
         // True if server definitions should be included
         private bool m_includeServerDefs = true;

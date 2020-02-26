@@ -305,6 +305,8 @@ namespace SanteDB.Core.Model.Collection
 
                 // Get the key and find a match
                 var key = (Guid?)keyPi.GetValue(data);
+                if (key == null)
+                    continue;
                 var bundleItem = this.Item.Find(o => o.Key == key);
                 if (bundleItem != null)
                     pi.SetValue(data, bundleItem);
