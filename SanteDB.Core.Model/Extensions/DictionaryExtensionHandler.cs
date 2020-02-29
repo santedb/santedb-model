@@ -70,6 +70,30 @@ namespace SanteDB.Core.Extensions
         }
 
         /// <summary>
+        /// Deserialize
+        /// </summary>
+        public T DeSerialize<T>(byte[] extensionData)
+        {
+            try
+            {
+                JsonSerializer jsz = new JsonSerializer();
+                using (var ms = new MemoryStream(extensionData))
+                using (var tr = new StreamReader(ms))
+                using (var jr = new JsonTextReader(tr))
+                {
+                    return jsz.Deserialize<T>(jr);
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return default(T);
+        }
+
+
+        /// <summary>
         /// Get display value
         /// </summary>
         public string GetDisplay(object data)

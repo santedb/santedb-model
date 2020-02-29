@@ -46,5 +46,10 @@ namespace SanteDB.Core.Interfaces
         /// Gets the display value
         /// </summary>
         String GetDisplay(object data);
+
+        /// <summary>
+        /// De-serialize as a strongly type object
+        /// </summary>
+        T DeSerialize<T>(byte[] extensionValueXml);
     }
 }

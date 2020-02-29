@@ -779,5 +779,25 @@ namespace SanteDB.Core.Model.Acts
             this.Tags.Add(tag);
             return tag;
         }
+
+        /// <summary>
+        /// Remove the specified extension
+        /// </summary>
+        /// <param name="extensionType">The type of extension to remove</param>
+        public void RemoveExtension(Guid extensionType)
+        {
+            this.Extensions.RemoveAll(o => o.ExtensionTypeKey == extensionType);
+        }
+
+        /// <summary>
+        /// Add the specified extension type to the collection
+        /// </summary>
+        /// <param name="extensionType">The extension type to be added</param>
+        /// <param name="handlerType">The handler</param>
+        /// <param name="value">The value</param>
+        public void AddExtension(Guid extensionType, Type handlerType, object value)
+        {
+            this.Extensions.Add(new ActExtension(extensionType, handlerType, value));
+        }
     }
 }

@@ -581,5 +581,22 @@ namespace SanteDB.Core.Model.Entities
             this.Tags.Add(tag);
             return tag;
         }
+
+        /// <summary>
+        /// Remove the specified extension
+        /// </summary>
+        public void RemoveExtension(Guid extensionTypeKey)
+        {
+            this.Extensions.RemoveAll(o => o.ExtensionTypeKey == extensionTypeKey);
+        }
+        
+        /// <summary>
+        /// Add an extension to this entity
+        /// </summary>
+        public void AddExtension(Guid extensionType, Type handlerType, object value)
+        {
+            // Is there already an extension type? if so just replace
+            this.Extensions.Add(new EntityExtension(extensionType, handlerType, value));
+        }
     }
 }

@@ -96,11 +96,11 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.ExtensionType?.ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
+                return this.LoadProperty<ExtensionType>("ExtensionType").ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
             }
             set
             {
-                if (this.ExtensionType?.ExtensionHandlerInstance != null)
+                if (this.LoadProperty<ExtensionType>("ExtensionType").ExtensionHandlerInstance != null)
                     this.ExtensionValueXml = this.ExtensionType?.ExtensionHandlerInstance?.Serialize(value);
             }
         }
@@ -112,6 +112,19 @@ namespace SanteDB.Core.Model.DataTypes
         public Object GetValue()
         {
             return this.LoadProperty<ExtensionType>("ExtensionType")?.ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
+        }
+
+        /// <summary>
+        /// Get the specified value as a particular type
+        /// </summary>
+        /// <typeparam name="T">The type to retrieve the value as</typeparam>
+        /// <returns>The de-searlized object</returns>
+        public T GetValue<T>()
+        {
+            var handler = this.LoadProperty<ExtensionType>("ExtensionType")?.ExtensionHandlerInstance;
+            if (handler != null)
+                return handler.DeSerialize<T>(this.ExtensionValueXml);
+            else return default(T);
         }
 
         /// <summary>
@@ -265,6 +278,7 @@ namespace SanteDB.Core.Model.DataTypes
             this.ExtensionValueXml = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
         }
 
+       
     }
 
     /// <summary>

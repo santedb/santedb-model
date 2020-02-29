@@ -47,6 +47,17 @@ namespace SanteDB.Core.Model.Query
         private static Dictionary<Type, Dictionary<String, PropertyInfo>> m_redirectCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
 
         /// <summary>
+        /// Gets the default built in variables
+        /// </summary>
+        private static readonly Dictionary<String, Delegate> m_builtInVars = new Dictionary<string, Delegate>();
+
+        /// Static CTOR        
+        static QueryExpressionParser()
+        {
+            m_builtInVars.Add("now", (Func<DateTime>)(() => DateTime.Now));
+        }
+
+        /// <summary>
         /// Build the order by expression
         /// </summary>
         public static ModelSort<TModelType>[] BuildSort<TModelType>(List<String> orderBy)
@@ -94,6 +105,7 @@ namespace SanteDB.Core.Model.Query
         /// <returns>Expression&lt;Func&lt;TModelType, System.Boolean&gt;&gt;.</returns>
         public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Delegate> variables, bool safeNullable)
         {
+
             var expression = BuildLinqExpression<TModelType>(httpQueryParameters, "o", variables, safeNullable);
 
             if (expression == null) // No query!
@@ -108,6 +120,7 @@ namespace SanteDB.Core.Model.Query
         /// <param name="forceLoad">When true, will assume the object is working on memory objects and will call LoadProperty on guards</param>
         public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Delegate> variables = null, bool safeNullable = true, bool forceLoad = false)
         {
+
             var parameterExpression = Expression.Parameter(typeof(TModelType), parameterName);
             Expression retVal = null;
             List<KeyValuePair<String, String[]>> workingValues = new List<KeyValuePair<string, string[]>>();
@@ -192,7 +205,7 @@ namespace SanteDB.Core.Model.Query
                     // Handle XML props
                     if (memberInfo.Name.EndsWith("Xml"))
                         memberInfo = accessExpression.Type.GetRuntimeProperty(memberInfo.Name.Replace("Xml", ""));
-                    else if (pMember != memberPath.Last())
+                    else if (i != memberPath.Length - 1)
                     {
                         PropertyInfo backingFor = null;
 
@@ -266,7 +279,8 @@ namespace SanteDB.Core.Model.Query
                         {
                             if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(classifierProperty.PropertyType.GetTypeInfo()) && guard != null)
                             {
-                                if (forceLoad) {
+                                if (forceLoad)
+                                {
                                     var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) });
                                     var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name));
                                     guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
@@ -299,7 +313,7 @@ namespace SanteDB.Core.Model.Query
                                 object value = g;
                                 if (guardAccessor.Type.GetTypeInfo().IsEnum)
                                     value = Enum.Parse(guardAccessor.Type, g);
-                                
+
                                 var expr = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(value));
                                 if (guardExpression == null)
                                     guardExpression = expr;
@@ -312,7 +326,7 @@ namespace SanteDB.Core.Model.Query
                         var guardLambda = Expression.Lambda(guardExpression, guardParameter);
                         accessExpression = Expression.Call(whereMethod, accessExpression, guardLambda);
 
-                        if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null") && i == memberPath.Length)
+                        if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null") && i == memberPath.Length - 1)
                         {
                             var anyMethod = typeof(Enumerable).GetGenericMethod("Any",
                                 new Type[] { itemType },
@@ -347,9 +361,9 @@ namespace SanteDB.Core.Model.Query
                             NameValueCollection subFilter = new NameValueCollection();
 
                             // Default to id
-                            if(currentValue.Key.Length + 1 > path.Length)
+                            if (currentValue.Key.Length + 1 > path.Length)
                                 subFilter.Add(currentValue.Key.Substring(path.Length), new List<String>(currentValue.Value));
-                            else
+                            else if (currentValue.Value.All(o => Guid.TryParse(o, out Guid _)))
                                 subFilter.Add("id", new List<String>(currentValue.Value));
 
                             // Add collect other parameters
@@ -359,11 +373,12 @@ namespace SanteDB.Core.Model.Query
                                 workingValues.Remove(wv);
                             }
 
-                            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool), typeof(bool) });
+                            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool), typeof(bool)});
 
                             Expression predicate = (builderMethod.Invoke(null, new object[] { subFilter, pMember, variables, safeNullable, forceLoad }) as LambdaExpression);
-                            if (predicate == null)
+                            if (predicate == null) // No predicate so just ANY()
                                 continue;
+
                             keyExpression = Expression.Call(anyMethod, accessExpression, predicate);
                             currentValue = new KeyValuePair<string, string[]>("", new string[0]);
                             break;  // skip
@@ -388,7 +403,8 @@ namespace SanteDB.Core.Model.Query
                             thisAccessExpression.Type.StripNullable() == typeof(DateTimeOffset)) &&
                             value.Length <= 7 &&
                             !value.StartsWith("~") &&
-                            !value.Contains("null")
+                            !value.Contains("null") &&
+                            !value.Contains("$")
                             )
                             value = "~" + value;
 
@@ -396,7 +412,7 @@ namespace SanteDB.Core.Model.Query
                         Type operandType = thisAccessExpression.Type;
 
                         // Correct for nullable
-                        if (value != "null" && thisAccessExpression.Type.GetTypeInfo().IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+                        if (value != "null" && value != "!null" && thisAccessExpression.Type.GetTypeInfo().IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
                             safeNullable)
                         {
                             nullCheckExpr = Expression.MakeBinary(ExpressionType.NotEqual, thisAccessExpression, Expression.Constant(null));
@@ -537,7 +553,7 @@ namespace SanteDB.Core.Model.Query
                             {
                                 valueExpr = Expression.Constant(converted);
                             }
-                            else if(typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(operandType.GetTypeInfo()) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
+                            else if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(operandType.GetTypeInfo()) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
                             {
                                 valueExpr = Expression.Constant(uuid);
                                 thisAccessExpression = accessExpression = Expression.MakeMemberAccess(accessExpression, operandType.GetRuntimeProperty(nameof(IdentifiedData.Key)));
@@ -555,7 +571,8 @@ namespace SanteDB.Core.Model.Query
                             var parms = extendedParms.Select(p =>
                             {
                                 var parmList = extendedFilter.ExtensionMethod.GetParameters();
-                                if (parmList.Length > parmNo) {
+                                if (parmList.Length > parmNo)
+                                {
                                     var parmType = parmList[parmNo++];
                                     if (p.StartsWith("$")) // variable
                                         return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables, parameterExpression) ?? Expression.Constant(p);
@@ -616,7 +633,7 @@ namespace SanteDB.Core.Model.Query
             Expression scope = null;
             if (varName == "_")
                 scope = parameterExpression;
-            else if (variables.TryGetValue(varName, out val))
+            else if (variables?.TryGetValue(varName, out val) == true || m_builtInVars.TryGetValue(varName, out val))
             {
                 if (val.GetMethodInfo().GetParameters().Length > 0)
                     scope = Expression.Invoke(Expression.Constant(val));
@@ -653,7 +670,6 @@ namespace SanteDB.Core.Model.Query
             return BuildPropertySelector(typeof(T), propertyName);
         }
 
-
         /// <summary>
         /// Build property selector
         /// </summary>
@@ -665,8 +681,9 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build a property selector 
         /// </summary>
-        public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false) { 
-            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { type }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool), typeof(bool) });
+        public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false)
+        {
+            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { type }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool), typeof(bool)});
             var nvc = new NameValueCollection();
             nvc.Add(propertyName, "null");
             nvc[propertyName] = null;

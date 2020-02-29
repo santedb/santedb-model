@@ -17,6 +17,7 @@
  * User: Justin Fyfe
  * Date: 2019-8-8
  */
+using System;
 using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
@@ -32,5 +33,17 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         IEnumerable<IModelExtension> Extensions { get; }
 
+        /// <summary>
+        /// Remove an extension from the extension object
+        /// </summary>
+        void RemoveExtension(Guid extensionType);
+
+        /// <summary>
+        /// Add an extension from the extension object
+        /// </summary>
+        /// <param name="extensionType">The type of extension to add</param>
+        /// <param name="handlerType">The handler to serialize the <paramref name="value"/></param>
+        /// <param name="value">The value of the extension to set</param>
+        void AddExtension(Guid extensionType, Type handlerType, object value);
     }
 }

@@ -280,8 +280,17 @@ namespace SanteDB.Core.Model.Query
                     // Special exists method call - i.e. HAS X
                     var mci = (node.Left as MethodCallExpression);
                     parmName = this.ExtractPath(mci.Arguments[0], false);
-                    var cci = node.Right is ConstantExpression;
-                    this.AddCondition(parmName, cci ? "null" : "!null");
+                    if (node.Right is ConstantExpression cci)
+                    {
+                        if (node.NodeType == ExpressionType.NotEqual)
+                            this.AddCondition(parmName, true.Equals(cci.Value) ? "null" : "!null");
+                        else if (node.NodeType == ExpressionType.Equal)
+                            this.AddCondition(parmName, true.Equals(cci.Value) ? "!null" : "null");
+                        else
+                            throw new InvalidOperationException($"Cannot determine how to convert ANY() function '{node}'");
+                    }
+                    else
+                        this.AddCondition(parmName, "null");
                 }
                 else if (!String.IsNullOrEmpty(parmName))
                 {
@@ -292,7 +301,6 @@ namespace SanteDB.Core.Model.Query
                         fParmValue = ((DateTimeOffset)parmValue).ToString("o");
                     else if (parmValue == null)
                         fParmValue = "null";
-
 
                     // Node type
                     switch (node.NodeType)

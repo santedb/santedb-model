@@ -65,6 +65,15 @@ namespace SanteDB.Core.Extensions
             return new Decimal(ints);
         }
 
+
+        /// <summary>
+        /// Deserialize
+        /// </summary>
+        public T DeSerialize<T>(byte[] extensionData)
+        {
+            return (T)this.DeSerialize(extensionData);
+        }
+
         /// <summary>
         /// Get display
         /// </summary>

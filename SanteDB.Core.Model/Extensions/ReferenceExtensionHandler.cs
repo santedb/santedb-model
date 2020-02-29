@@ -93,6 +93,14 @@ namespace SanteDB.Core.Extensions
         }
 
         /// <summary>
+        /// Deserialize
+        /// </summary>
+        public T DeSerialize<T>(byte[] extensionData)
+        {
+            return (T)this.DeSerialize(extensionData);
+        }
+
+        /// <summary>
         /// Get the display data
         /// </summary>
         public string GetDisplay(object data)
