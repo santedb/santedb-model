@@ -107,7 +107,7 @@ namespace SanteDB.Core.Model.Entities
         {
             get
             {
-                this.m_useConcept = base.DelayLoad(this.m_typeKey, this.m_typeConcept);
+                this.m_typeConcept = base.DelayLoad(this.m_typeKey, this.m_typeConcept);
                 return this.m_typeConcept;
             }
             set
