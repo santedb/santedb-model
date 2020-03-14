@@ -201,6 +201,7 @@
     <Compile Include="Roles\Patient.cs" />
     <Compile Include="Roles\Provider.cs" />
     <Compile Include="Security\SecurityApplication.cs" />
+    <Compile Include="Security\SecurityChallenge.cs" />
     <Compile Include="Security\SecurityDevice.cs" />
     <Compile Include="Security\SecurityEntity.cs" />
     <Compile Include="Security\SecurityPolicy.cs" />

@@ -86,6 +86,7 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("password"), JsonProperty("password")]
         public String Password { get; set; }
+
         /// <summary>
         /// Gets or sets whether the security has is enabled
         /// </summary>
@@ -136,11 +137,39 @@ namespace SanteDB.Core.Model.Security
         }
 
         /// <summary>
+        /// The last login time
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(PasswordExpirationXml))]
+        public DateTimeOffset? PasswordExpiration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation time in XML format
+        /// </summary>
+        [XmlElement("passwordExpiry"), JsonProperty("passwordExpiry")]
+        public String PasswordExpirationXml
+        {
+            get { return this.PasswordExpiration?.ToString("o", CultureInfo.InvariantCulture); }
+            set
+            {
+                DateTimeOffset val = default(DateTimeOffset);
+                if (value != null)
+                {
+                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
+                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                        this.PasswordExpiration = val;
+                    else
+                        throw new FormatException($"Date {value} was not recognized as a valid date format");
+                }
+                else this.PasswordExpiration = null ;
+            }
+        }
+
+        /// <summary>
         /// Represents roles
         /// </summary>
         [XmlIgnore, JsonIgnore, QueryParameter("roles")]
         public List<SecurityRole> Roles { get; set; }
-
+       
         /// <summary>
         /// Gets or sets the patient's phone number
         /// </summary>
@@ -152,6 +181,12 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("phoneNumberConfirmed"), JsonProperty("phoneNumberConfirmed")]
         public Boolean PhoneNumberConfirmed { get; set; }
+
+        /// <summary>
+        /// Gets or sets the preferred tfa mechanism
+        /// </summary>
+        [XmlElement("twoFactorMechanism"), JsonProperty("twoFactorMechanism")]
+        public Guid TwoFactorMechnaismKey { get; set; }
 
         /// <summary>
         /// Gets or sets the user class key

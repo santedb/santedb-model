@@ -83,6 +83,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(SecurityUser))]
     [XmlInclude(typeof(SecurityProvenance))]
     [XmlInclude(typeof(SecurityRole))]
+    [XmlInclude(typeof(SecurityChallenge))]
     [XmlInclude(typeof(CodeSystem))]
     public class Bundle : IdentifiedData
     {
