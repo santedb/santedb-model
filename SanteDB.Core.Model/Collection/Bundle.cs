@@ -138,7 +138,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Gets or sets items in the bundle
         /// </summary>
-        [XmlElement("item"), JsonProperty("item")]
+        [XmlElement("resource"), JsonProperty("resource")]
         public List<IdentifiedData> Item
         {
             get { return this.m_bundleContents; }
@@ -182,7 +182,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Gets or sets the keys of objects that aren't really in the bundle but are expansion items
         /// </summary>
-        [XmlElement("refItem"), JsonProperty("refItem")]
+        [XmlElement("ref"), JsonProperty("ref")]
         public List<Guid> ExpansionKeys { get; set; }
 
         /// <summary>

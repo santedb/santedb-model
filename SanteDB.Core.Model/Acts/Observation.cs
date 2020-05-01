@@ -38,9 +38,9 @@ namespace SanteDB.Core.Model.Acts
     /// It is not recommended to use this class directly, rather one of its sub classes based on the type of observation being made such as:
     /// </para>
     /// <list type="bullet">
-    ///     <item>Coded observation (<see cref="CodedObservation"/>) for observations whose values are codified (example: blood type, presentation, etc.), </item>
-    ///     <item>Quantity observations (<see cref="QuantityObservation"/>) for observations whose values are quantified values (example: weight, height, etc.), </item>
-    ///     <item>Text observations (<see cref="TextObservation"/>) for observations whose values are textual in nature.</item>
+    ///     <resource>Coded observation (<see cref="CodedObservation"/>) for observations whose values are codified (example: blood type, presentation, etc.), </resource>
+    ///     <resource>Quantity observations (<see cref="QuantityObservation"/>) for observations whose values are quantified values (example: weight, height, etc.), </resource>
+    ///     <resource>Text observations (<see cref="TextObservation"/>) for observations whose values are textual in nature.</resource>
     /// </list>
     /// <para>
     /// No matter what type of value an observation carries (coded, quantity, text) it is always classified by the type concept (<see cref="Act.TypeConceptKey"/>).

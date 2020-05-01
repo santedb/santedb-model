@@ -81,8 +81,8 @@ namespace SanteDB.Core.Model.Query
             foreach (var itm in qstring.Split('&'))
             {
                 var expr = itm.Split('=');
-                expr[0] = Uri.UnescapeDataString(expr[0]);
-                expr[1] = Uri.UnescapeDataString(expr[1]);
+                expr[0] = Uri.UnescapeDataString(expr[0]).Trim();
+                expr[1] = Uri.UnescapeDataString(expr[1]).Trim();
                 var value = escapeRegex.Replace(expr[1], (m) => System.Text.Encoding.UTF8.GetString(new byte[] { Convert.ToByte(m.Groups[1].Value, 16) }, 0, 1));
                 // HACK: Replace this later
                 if (!String.IsNullOrEmpty(value))

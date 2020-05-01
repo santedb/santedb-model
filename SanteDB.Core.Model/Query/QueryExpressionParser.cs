@@ -49,12 +49,12 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Gets the default built in variables
         /// </summary>
-        private static readonly Dictionary<String, Delegate> m_builtInVars = new Dictionary<string, Delegate>();
+        private static readonly Dictionary<String, Func<object>> m_builtInVars = new Dictionary<string, Func<object>>();
 
         /// Static CTOR        
         static QueryExpressionParser()
         {
-            m_builtInVars.Add("now", (Func<DateTime>)(() => DateTime.Now));
+            m_builtInVars.Add("now", () => DateTime.Now);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build a LINQ expression
         /// </summary>
-        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Delegate> variables)
+        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables)
         {
             return BuildLinqExpression<TModelType>(httpQueryParameters, variables, true);
 
@@ -103,7 +103,7 @@ namespace SanteDB.Core.Model.Query
         /// <param name="variables">The variables.</param>
         /// <param name="safeNullable">if set to <c>true</c> [safe nullable].</param>
         /// <returns>Expression&lt;Func&lt;TModelType, System.Boolean&gt;&gt;.</returns>
-        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Delegate> variables, bool safeNullable)
+        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables, bool safeNullable)
         {
 
             var expression = BuildLinqExpression<TModelType>(httpQueryParameters, "o", variables, safeNullable);
@@ -118,7 +118,7 @@ namespace SanteDB.Core.Model.Query
         /// Build LINQ expression
         /// </summary>
         /// <param name="forceLoad">When true, will assume the object is working on memory objects and will call LoadProperty on guards</param>
-        public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Delegate> variables = null, bool safeNullable = true, bool forceLoad = false)
+        public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false)
         {
 
             var parameterExpression = Expression.Parameter(typeof(TModelType), parameterName);
@@ -373,7 +373,7 @@ namespace SanteDB.Core.Model.Query
                                 workingValues.Remove(wv);
                             }
 
-                            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool), typeof(bool)});
+                            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Func<Object>>), typeof(bool), typeof(bool)});
 
                             Expression predicate = (builderMethod.Invoke(null, new object[] { subFilter, pMember, variables, safeNullable, forceLoad }) as LambdaExpression);
                             if (predicate == null) // No predicate so just ANY()
@@ -624,9 +624,9 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Get variable expression
         /// </summary>
-        private static Expression GetVariableExpression(string variablePath, Type expectedReturn, Dictionary<string, Delegate> variables, ParameterExpression parameterExpression)
+        private static Expression GetVariableExpression(string variablePath, Type expectedReturn, Dictionary<string, Func<object>> variables, ParameterExpression parameterExpression)
         {
-            Delegate val = null;
+            Func<object> val = null;
             String varName = variablePath.Contains(".") ? variablePath.Substring(0, variablePath.IndexOf(".")) : variablePath,
                 varPath = variablePath.Substring(varName.Length);
 
@@ -683,7 +683,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false)
         {
-            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { type }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Delegate>), typeof(bool), typeof(bool)});
+            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { type }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Func<Object>>), typeof(bool), typeof(bool)});
             var nvc = new NameValueCollection();
             nvc.Add(propertyName, "null");
             nvc[propertyName] = null;
