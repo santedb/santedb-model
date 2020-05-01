@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
@@ -14,8 +14,32 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+  </PropertyGroup>-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
+    
+  <PropertyGroup>
+    <PackageId>SanteDB.Core.Model</PackageId>
+    <Title>SanteDB.Core.Model</Title>
+    <Version>1.130.0</Version>
+    <Description>SanteDB Core models</Description>
+    <Authors>SanteSuite Contributors</Authors>
+    <PackageTags>SanteDB</PackageTags>
+    <RepositoryUrl>https://github.com/santedb/santedb-model</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSymbols>true</IncludeSymbols>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Product>SanteDB</Product>
+    <Copyright>Copyright (C) 2015-2020 SanteSuite Contributors (See: NOTICES)</Copyright>
+    <Company>SanteSuite Contributors</Company>
+  </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -35,7 +59,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\bin\Release\SanteDB.Core.Model.XML</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <Compile Include="Acts\Account.cs" />
     <Compile Include="Acts\Act.cs" />
     <Compile Include="Acts\ActParticipation.cs" />
@@ -225,7 +249,7 @@
     <Compile Include="Warehouse\DatamartStoredQueryDefinition.cs" />
     <Compile Include="Warehouse\DataWarehouseObject.cs" />
     <Compile Include="Warehouse\IDatamartSchemaPropertyContainer.cs" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
     <None Include="..\SanteDB.licenseheader">
       <Link>SanteDB.licenseheader</Link>
@@ -251,8 +275,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2">
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
