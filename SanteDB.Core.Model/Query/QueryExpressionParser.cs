@@ -638,7 +638,11 @@ namespace SanteDB.Core.Model.Query
                 if (val.GetMethodInfo().GetParameters().Length > 0)
                     scope = Expression.Invoke(Expression.Constant(val));
                 else
-                    scope = Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo());
+                {
+                    var targetType = val()?.GetType();
+                    scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), targetType);
+
+                }
             }
             else
                 return null;
