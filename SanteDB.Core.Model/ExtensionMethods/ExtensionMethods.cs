@@ -48,6 +48,25 @@ namespace SanteDB.Core.Model
         private static Dictionary<Type, bool> s_parameterlessCtor = new Dictionary<Type, bool>();
 
         /// <summary>
+        /// Convert a hex string to byte array
+        /// </summary>
+        public static byte[] ParseHexString(this String hexString)
+        {
+            return Enumerable.Range(0, hexString.Length)
+                                   .Where(x => x % 2 == 0)
+                                   .Select(x => System.Convert.ToByte(hexString.Substring(x, 2), 16))
+                                   .ToArray();
+        }
+
+        /// <summary>
+        /// Convert a hex string to byte array
+        /// </summary>
+        public static String ToHexString(this byte[] array)
+        {
+            return BitConverter.ToString(array).Replace("-", "");
+        }
+
+        /// <summary>
         /// Get postal code
         /// </summary>
         public static String Value(this EntityAddress me, Guid addressType)
@@ -177,7 +196,7 @@ namespace SanteDB.Core.Model
                             (itm as IIdentifiedEntity).Key = null;
                             itm.SourceEntityKey = null;
 
-                            if(itm is IVersionedAssociation va)
+                            if (itm is IVersionedAssociation va)
                                 va.EffectiveVersionSequenceId = null;
                             itm.StripAssociatedItemSources();
                         }
@@ -185,12 +204,12 @@ namespace SanteDB.Core.Model
                     {
                         (assoc as IIdentifiedEntity).Key = null;
                         assoc.SourceEntityKey = null;
-                        if(assoc is IVersionedAssociation va)
+                        if (assoc is IVersionedAssociation va)
                             va.EffectiveVersionSequenceId = null;
                         assoc.StripAssociatedItemSources();
                     }
                 }
-               
+
             }
 
             return toEntity;
