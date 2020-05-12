@@ -133,6 +133,17 @@ namespace SanteDB.Core.Model.Query
             }
 
             /// <summary>
+            /// Strips a Convert() to get the internal
+            /// </summary>
+            private Expression StripConvert(Expression node)
+            {
+                while (node.NodeType == ExpressionType.Convert ||
+                    node.NodeType == ExpressionType.ConvertChecked)
+                    node = (node as UnaryExpression).Operand;
+                return node;
+            }
+
+            /// <summary>
             /// Visit the invocation expression (expand this and compile the expression if it is a lambda and invoke / dynamic invoke , capturing the results)
             /// </summary>
             /// <param name="node"></param>
@@ -144,6 +155,7 @@ namespace SanteDB.Core.Model.Query
                     var callee = (node.Expression as LambdaExpression).Compile();
                     var args = node.Arguments.Select(o =>
                     {
+                        o = this.StripConvert(o);
                         switch (o.NodeType)
                         {
                             case ExpressionType.Constant:
@@ -155,7 +167,7 @@ namespace SanteDB.Core.Model.Query
                                     return ie.Method.Invoke(obj, new object[0]);
                                 }
                             default:
-                                throw new InvalidOperationException($"Cannot expand parameter {0}");
+                                throw new InvalidOperationException($"Cannot expand parameter {o} ({o.NodeType})");
                         }
                     });
                     return Expression.Constant(callee.DynamicInvoke(args.ToArray()));
@@ -368,14 +380,14 @@ namespace SanteDB.Core.Model.Query
                 if (access == null)
                     return null;
 
+                access = this.StripConvert(access);
+
                 switch(access.NodeType)
                 {
                     case ExpressionType.Parameter:
                         return "$_";
                     case ExpressionType.Constant:
                         return ((ConstantExpression)access).Value;
-                    case ExpressionType.Convert:
-                        return this.ExtractValue(((UnaryExpression)access).Operand);
                     case ExpressionType.MemberAccess:
                         MemberExpression expr = access as MemberExpression;
                         var expressionValue = this.ExtractValue(expr.Expression);
@@ -415,6 +427,7 @@ namespace SanteDB.Core.Model.Query
             /// <param name="fromOperand">Indicates the extraction should occur from an operand and not the operator</param>
             protected String ExtractPath(Expression access, bool fromUnary, bool fromOperand = false)
             {
+                access = this.StripConvert(access);
                 if (access.NodeType == ExpressionType.MemberAccess)
                 {
                     MemberExpression memberExpr = access as MemberExpression;
@@ -492,12 +505,7 @@ namespace SanteDB.Core.Model.Query
                     }
 
                 }
-                else if (access.NodeType == ExpressionType.Convert ||
-                    access.NodeType == ExpressionType.ConvertChecked)
-                {
-                    UnaryExpression ua = (UnaryExpression)access;
-                    return this.ExtractPath(ua.Operand, false, fromOperand);
-                }
+                
                 else if (access.NodeType == ExpressionType.TypeAs)
                 {
                     UnaryExpression ua = (UnaryExpression)access;
