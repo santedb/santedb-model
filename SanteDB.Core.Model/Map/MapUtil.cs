@@ -17,9 +17,11 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 
 
@@ -38,11 +40,35 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         private static Dictionary<string, MethodInfo> s_wireMaps = new Dictionary<string, MethodInfo>();
 
+        // Class key maps
+        private static Dictionary<Guid, Type> s_classKeyMaps;
+
         // Non convertable
         private static HashSet<String> m_nonConvertable = new HashSet<String>();
 
         // Conversion maps
         private static Dictionary<String, MethodInfo> m_converterMaps = new Dictionary<string, MethodInfo>();
+
+        /// <summary>
+        /// Get the model type from the classification key
+        /// </summary>
+        public static Type GetModelTypeFromClassKey(Guid classKey)
+        {
+            if (s_classKeyMaps == null)
+            {
+                s_classKeyMaps = new Dictionary<Guid, Type>();
+                foreach (var t in typeof(MapUtil).Assembly.GetTypes())
+                {
+                    var atts = t.GetCustomAttributes<ClassConceptKeyAttribute>();
+                    if (!atts.Any()) continue; // no map
+                    foreach (var clsCode in atts)
+                        s_classKeyMaps.Add(Guid.Parse(clsCode.ClassConcept), t);
+                }
+            }
+
+            s_classKeyMaps.TryGetValue(classKey, out Type retVal);
+            return retVal;
+        }
 
         /// <summary>
         /// Register a map

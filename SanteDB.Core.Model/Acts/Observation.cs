@@ -47,7 +47,7 @@ namespace SanteDB.Core.Model.Acts
     /// </para>
     /// </remarks>
     [XmlType("Observation", Namespace = "http://santedb.org/model"), JsonObject("Observation")]
-
+    [ClassConceptKey(ActClassKeyStrings.Observation)]
     public class Observation : Act
     {
 

@@ -34,6 +34,7 @@ namespace SanteDB.Core.Model.Acts
     /// the financial impact of a particular service.</remarks>
     [XmlType("InvoiceElement", Namespace = "http://santedb.org/model"), JsonObject("InvoiceElement")]
     [XmlRoot("InvoiceElement", Namespace = "http://santedb.org/model")]
+    [ClassConceptKey(ActClassKeyStrings.InvoiceElement)]
     public class InvoiceElement : Act
     {
 

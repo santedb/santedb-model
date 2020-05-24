@@ -18,6 +18,7 @@
  * Date: 2019-11-27
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Roles;
 using System;
 using System.Collections.Generic;

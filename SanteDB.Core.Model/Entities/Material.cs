@@ -33,6 +33,7 @@ namespace SanteDB.Core.Model.Entities
     /// <remarks>In SanteDB, a Material represents the base class for kinds and instances of materials which may or may not be manufactured by a manufacturer</remarks>
     [XmlType("Material", Namespace = "http://santedb.org/model"), JsonObject("Material")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Material")]
+    [ClassConceptKey(EntityClassKeyStrings.Material)]
     public class Material : Entity
     {
         // Form concept

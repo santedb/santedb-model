@@ -35,6 +35,12 @@ namespace SanteDB.Core.Model.Entities
 
     [XmlType("Place", Namespace = "http://santedb.org/model"), JsonObject("Place")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Place")]
+    [ClassConceptKey(EntityClassKeyStrings.Place)]
+    [ClassConceptKey(EntityClassKeyStrings.ServiceDeliveryLocation)]
+    [ClassConceptKey(EntityClassKeyStrings.CityOrTown)]
+    [ClassConceptKey(EntityClassKeyStrings.Country)]
+    [ClassConceptKey(EntityClassKeyStrings.CountyOrParish)]
+    [ClassConceptKey(EntityClassKeyStrings.State)]
     public class Place : Entity, IGeoTagged
     {
         /// <summary>

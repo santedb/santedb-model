@@ -32,6 +32,7 @@ namespace SanteDB.Core.Model.Acts
     /// </summary>
     [XmlType("FinancialTransaction", Namespace = "http://santedb.org/model"), JsonObject("FinancialTransaction")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "FinancialTransaction")]
+    [ClassConceptKey(ActClassKeyStrings.FinancialTransaction)]
     public class FinancialTransaction : Act
     {
 

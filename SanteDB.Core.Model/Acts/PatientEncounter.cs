@@ -37,6 +37,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [XmlType("PatientEncounter", Namespace = "http://santedb.org/model"), JsonObject("PatientEncounter")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "PatientEncounter")]
+    [ClassConceptKey(ActClassKeyStrings.Encounter)]
     public class PatientEncounter : Act
     {
 

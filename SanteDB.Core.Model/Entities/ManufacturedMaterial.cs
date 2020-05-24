@@ -18,6 +18,7 @@
  * Date: 2019-11-27
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using System;
 using System.Xml.Serialization;
@@ -34,6 +35,7 @@ namespace SanteDB.Core.Model.Entities
 
     [XmlType("ManufacturedMaterial", Namespace = "http://santedb.org/model"), JsonObject("ManufacturedMaterial")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ManufacturedMaterial")]
+    [ClassConceptKey(EntityClassKeyStrings.ManufacturedMaterial)]
     public class ManufacturedMaterial : Material
     {
         /// <summary>

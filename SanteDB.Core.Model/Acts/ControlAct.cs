@@ -18,6 +18,7 @@
  * Date: 2019-11-27
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using System.Xml.Serialization;
 
@@ -27,6 +28,7 @@ namespace SanteDB.Core.Model.Acts
     /// Represents an act which indicates why data was created/changed
     /// </summary>
     [XmlType(nameof(ControlAct), Namespace = "http://santedb.org/model"), JsonObject("ControlAct")]
+    [ClassConceptKey(ActClassKeyStrings.ControlAct)]
     public class ControlAct : Act
     {
         /// <summary>

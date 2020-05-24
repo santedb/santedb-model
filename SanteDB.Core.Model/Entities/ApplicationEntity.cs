@@ -33,6 +33,7 @@ namespace SanteDB.Core.Model.Entities
 
     [XmlType("ApplicationEntity", Namespace = "http://santedb.org/model"), JsonObject("ApplicationEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ApplicationEntity")]
+    [ClassConceptKey(EntityClassKeyStrings.NonLivingSubject)]
     public class ApplicationEntity : Entity
     {
         // Security application
