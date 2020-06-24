@@ -66,6 +66,8 @@ namespace SanteDB.Core.Model.Map
 
                 if (node == null)
                     return node;
+                else if (node.CanReduce)
+                    node = node.Reduce();
 
                 switch (node.NodeType)
                 {
@@ -175,6 +177,8 @@ namespace SanteDB.Core.Model.Map
 
             if (node == null)
                 return node;
+            else if (node.CanReduce)
+                node = node.Reduce();
 
             switch (node.NodeType)
             {

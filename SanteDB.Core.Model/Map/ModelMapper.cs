@@ -362,6 +362,7 @@ namespace SanteDB.Core.Model.Map
             try
             {
                 var parameter = Expression.Parameter(typeof(TTo), expression.Parameters[0].Name);
+
                 Expression expr = new ModelExpressionVisitor(this, parameter).Visit(expression.Body);
                 if (expr == null && throwOnError)
                     throw new InvalidOperationException("Could not map expressions");

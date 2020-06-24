@@ -204,6 +204,10 @@ namespace SanteDB.Core.Model.DataTypes
             {
                 this.m_authority = value;
                 this.m_authorityId = value?.Key;
+
+                if(String.IsNullOrEmpty(this.m_authority?.DomainName) && this.m_authorityId.HasValue) // no domain - load
+                    this.m_authority = EntitySource.Current.Get<AssigningAuthority>(this.m_authorityId); // base.DelayLoad(this.m_authorityId, this.m_authority);
+
             }
         }
 
