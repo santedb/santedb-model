@@ -59,6 +59,32 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Parse base 64 encode
+        /// </summary>
+        /// <param name="base64String"></param>
+        /// <returns></returns>
+        public static byte[] ParseBase64UrlEncode(this String base64String)
+        {
+            string incoming = base64String.Replace('_', '/').Replace('-', '+');
+            switch (base64String.Length % 4)
+            {
+                case 2: incoming += "=="; break;
+                case 3: incoming += "="; break;
+            }
+            return System.Convert.FromBase64String(incoming);
+        }
+
+        /// <summary>
+        /// Convert to base 64
+        /// </summary>
+        public static String Base64UrlEncode(this byte[] array)
+        {
+            return System.Convert.ToBase64String(array)
+                    .TrimEnd(new Char[] { '=' }).Replace('+', '-').Replace('/', '_');
+
+        }
+
+        /// <summary>
         /// Convert a hex string to byte array
         /// </summary>
         public static String ToHexString(this byte[] array)
