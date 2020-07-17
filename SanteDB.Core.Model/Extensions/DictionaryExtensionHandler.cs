@@ -17,6 +17,8 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SanteDB.Core.Interfaces;
