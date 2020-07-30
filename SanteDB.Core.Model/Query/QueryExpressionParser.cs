@@ -27,6 +27,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Serialization;
+using SanteDB.Core.Model.Interfaces;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -232,8 +233,25 @@ namespace SanteDB.Core.Model.Query
                             memberInfo = backingFor;
                     }
 
-                    accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
-
+                    
+                    // Force loading of properties
+                    if (forceLoad)
+                    {
+                        if (typeof(IList).IsAssignableFrom(memberInfo.PropertyType))
+                        {
+                            var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String) });
+                            accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name));
+                        }
+                        else if(typeof(IIdentifiedEntity).IsAssignableFrom(memberInfo.PropertyType))
+                        {
+                            var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) });
+                            accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name));
+                        }
+                        else
+                            accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
+                    }
+                    else 
+                        accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
 
                     if (!String.IsNullOrEmpty(cast))
                     {
@@ -340,6 +358,8 @@ namespace SanteDB.Core.Model.Query
                     if (accessExpression.Type.GetTypeInfo().ImplementedInterfaces.Any(o => o == typeof(IEnumerable)) &&
                         accessExpression.Type.GetTypeInfo().IsGenericType)
                     {
+
+                       
                         // First or default
                         if (currentValue.Value == null)
                         {
