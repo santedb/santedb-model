@@ -44,6 +44,21 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         static QueryFilterExtensions()
         {
+            
+        }
+
+        /// <summary>
+        /// Initialize filters
+        /// </summary>
+        private static void InitializeFilters()
+        {
+            // Try to init extended filters
+            foreach (var ext in AppDomain.CurrentDomain.GetAssemblies()
+                    .Where(a => !a.IsDynamic)
+                    .SelectMany(a => { try { return a.ExportedTypes; } catch { return Type.EmptyTypes; } })
+                    .Where(t => typeof(IQueryFilterExtension).IsAssignableFrom(t) && !t.IsAbstract)
+                    .Select(t => Activator.CreateInstance(t) as IQueryFilterExtension))
+                QueryFilterExtensions.AddExtendedFilter(ext);
         }
 
         /// <summary>
@@ -64,6 +79,8 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public static IQueryFilterExtension GetExtendedFilter(String name)
         {
+            if (s_extensionMethods.Count == 0)
+                InitializeFilters();
             IQueryFilterExtension retVal = null;
             s_extensionMethods.TryGetValue(name, out retVal);
             return retVal;
