@@ -34,12 +34,7 @@ namespace SanteDB.Core.Model.DataTypes
     public class ConceptName : VersionedAssociation<Concept>
     {
 
-        // Id of the algorithm used to generate phonetic code
-        private Guid? m_phoneticAlgorithmId;
-
-        // Algorithm used to generate the code
-
-        private PhoneticAlgorithm m_phoneticAlgorithm;
+       
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConceptName"/> class.
@@ -81,64 +76,7 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("value"), JsonProperty("value")]
         public String Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the phonetic code of the reference term
-        /// </summary>
-        [XmlElement("phoneticCode"), JsonProperty("phoneticCode")]
-        public String PhoneticCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the identifier of the phonetic code
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Binding(typeof(PhoneticAlgorithmKeys))]
-        [XmlElement("phoneticAlgorithm"), JsonProperty("phoneticAlgorithm")]
-        public Guid? PhoneticAlgorithmKey
-        {
-            get { return this.m_phoneticAlgorithmId; }
-            set
-            {
-                this.m_phoneticAlgorithmId = value;
-                this.m_phoneticAlgorithm = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the phonetic algorithm
-        /// </summary>
-        [SerializationReference(nameof(PhoneticAlgorithmKey))]
-        [XmlIgnore, JsonIgnore]
-        public PhoneticAlgorithm PhoneticAlgorithm
-        {
-            get
-            {
-                this.m_phoneticAlgorithm = base.DelayLoad(this.m_phoneticAlgorithmId, this.m_phoneticAlgorithm);
-                return this.m_phoneticAlgorithm;
-            }
-            set
-            {
-                this.m_phoneticAlgorithm = value;
-                this.m_phoneticAlgorithmId = value?.Key;
-            }
-        }
-
-        /// <summary>
-        /// Refresh the object's delay load properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_phoneticAlgorithm = null;
-        }
-        /// <summary>
-        /// Should serialize 
-        /// </summary>
-        public bool ShouldSerializePhoneticAlgorithmKey()
-        {
-            return this.PhoneticAlgorithmKey.HasValue &&
-                this.PhoneticAlgorithmKey != PhoneticAlgorithmKeys.None;
-        }
-
+       
         /// <summary>
         /// Represent as a string
         /// </summary>

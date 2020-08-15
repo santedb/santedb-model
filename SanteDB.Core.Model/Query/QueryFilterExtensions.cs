@@ -33,8 +33,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Filter regular expression for query parameter syntax
         /// </summary>
-        public static readonly Regex ExtendedFilterRegex = new Regex(@"^:\((\w*?)(\|(.*?)\)|\))(.*)");
-
+        public static readonly Regex ExtendedFilterRegex = new Regex(@":\((\w*?)(\|((?:"".*(?:[^\\]""))|(?:.*?))\)|\))(.*)");
 
         // The extension methods
         private static Dictionary<String, IQueryFilterExtension> s_extensionMethods = new Dictionary<string, IQueryFilterExtension>();

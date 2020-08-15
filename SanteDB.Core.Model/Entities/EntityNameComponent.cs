@@ -34,11 +34,7 @@ namespace SanteDB.Core.Model.Entities
     [JsonObject("EntityNameComponent")]
     public class EntityNameComponent : GenericComponentValues<EntityName>
     {
-        private PhoneticAlgorithm m_phoneticAlgorithm;
-
-        // Id of the algorithm used to generate phonetic code
-        private Guid? m_phoneticAlgorithmId;
-
+       
         /// <summary>
         /// Entity name component
         /// </summary>
@@ -80,54 +76,6 @@ namespace SanteDB.Core.Model.Entities
                 base.ComponentTypeKey = value;
             }
         }
-
-        /// <summary>
-        /// Gets or sets the phonetic algorithm
-        /// </summary>
-        [SerializationReference(nameof(PhoneticAlgorithmKey))]
-        [XmlIgnore, JsonIgnore]
-        public PhoneticAlgorithm PhoneticAlgorithm
-        {
-            get
-            {
-                this.m_phoneticAlgorithm = base.DelayLoad(this.m_phoneticAlgorithmId, this.m_phoneticAlgorithm);
-                return this.m_phoneticAlgorithm;
-            }
-            set
-            {
-                this.m_phoneticAlgorithm = value;
-                this.m_phoneticAlgorithmId = value?.Key;
-            }
-        }
-
-        /// <summary>
-        /// Should serialize phonetic algorithm
-        /// </summary>
-        public bool ShouldSerializePhoneticAlgorithmKey() => !String.IsNullOrEmpty(this.PhoneticCode);
-
-        /// <summary>
-        /// Gets or sets the identifier of the phonetic code
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Binding(typeof(PhoneticAlgorithmKeys))]
-        [XmlElement("phoneticAlgorithm"), JsonProperty("phoneticAlgorithm")]
-        public Guid? PhoneticAlgorithmKey
-        {
-            get { return this.m_phoneticAlgorithmId; }
-            set
-            {
-                this.m_phoneticAlgorithmId = value;
-                this.m_phoneticAlgorithm = null;
-            }
-        }
-
-        // Algorithm used to generate the code
-        /// <summary>
-        /// Gets or sets the phonetic code of the reference term
-        /// </summary>
-        [XmlElement("phoneticCode"), JsonProperty("phoneticCode")]
-        public String PhoneticCode { get; set; }
-
 
         /// <summary>
         /// Value of the name

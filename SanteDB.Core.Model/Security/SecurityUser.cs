@@ -20,6 +20,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -221,6 +222,12 @@ namespace SanteDB.Core.Model.Security
 
             }
         }
+
+        /// <summary>
+        /// Link from this security resource to an entity resource 
+        /// </summary>
+        [XmlIgnore, QueryParameter("userEntity"), JsonIgnore]
+        public UserEntity UserEntity { get; set; }
 
         /// <summary>
         /// Determine semantic equality of user

@@ -306,7 +306,7 @@ namespace SanteDB.Core.Model.Query
                 }
                 else if (!String.IsNullOrEmpty(parmName))
                 {
-                    Object fParmValue = this.PrepareValue(parmValue);
+                    Object fParmValue = this.PrepareValue(parmValue, false);
                     if (parmValue is DateTime)
                         fParmValue = ((DateTime)parmValue).ToString("o");
                     else if (parmValue is DateTimeOffset)
@@ -343,7 +343,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             var callValue = $":({extendedFn.Name}";
                             if (methodCall.Arguments.Count > 1)
-                                callValue += $"|{String.Join(",", methodCall.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o))))}";
+                                callValue += $"|{String.Join(",", methodCall.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o), true)))}";
                             callValue += ")";
                             fParmValue = callValue + fParmValue;
                         }
@@ -358,7 +358,7 @@ namespace SanteDB.Core.Model.Query
             /// <summary>
             /// Prepare the specified parameter value
             /// </summary>
-            private object PrepareValue(object parmValue)
+            private object PrepareValue(object parmValue, bool quoteStrings)
             {
                 Object fParmValue = parmValue;
                 if (parmValue is DateTime)
@@ -367,6 +367,8 @@ namespace SanteDB.Core.Model.Query
                     fParmValue = ((DateTimeOffset)parmValue).ToString("o");
                 else if (parmValue == null)
                     fParmValue = "null";
+                else if (parmValue is String && !"null".Equals(parmValue) && quoteStrings)
+                    fParmValue = $"\"{parmValue.ToString().Replace("\"","\\\"")}\"";
                 return fParmValue;
             }
 

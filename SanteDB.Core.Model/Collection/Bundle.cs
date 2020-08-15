@@ -75,7 +75,6 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(DeviceEntity))]
     [XmlInclude(typeof(ApplicationEntity))]
     [XmlInclude(typeof(DeviceEntity))]
-    [XmlInclude(typeof(PhoneticAlgorithm))]
     [XmlInclude(typeof(Bundle))]
     [XmlInclude(typeof(ConceptClass))]
     [XmlInclude(typeof(ConceptRelationship))]

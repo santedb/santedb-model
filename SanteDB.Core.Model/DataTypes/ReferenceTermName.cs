@@ -35,11 +35,7 @@ namespace SanteDB.Core.Model.DataTypes
     public class ReferenceTermName : BaseEntityData, ISimpleAssociation
     {
 
-        // Id of the algorithm used to generate phonetic code
-        private Guid? m_phoneticAlgorithmId;
-        // Algorithm used to generate the code
-
-        private PhoneticAlgorithm m_phoneticAlgorithm;
+      
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReferenceTermName"/> class.
@@ -77,11 +73,6 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
-        /// Should serialize phonetic algorithm
-        /// </summary>
-        public bool ShouldSerializePhoneticAlgorithmKey() => !String.IsNullOrEmpty(this.PhoneticCode);
-
-        /// <summary>
         /// Gets or sets the language code of the object
         /// </summary>
         [XmlElement("language"), JsonProperty("language")]
@@ -92,47 +83,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
         public String Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the phonetic code of the reference term
-        /// </summary>
-        [XmlElement("phoneticCode"), JsonProperty("phoneticCode")]
-        public String PhoneticCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the identifier of the phonetic code
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Binding(typeof(PhoneticAlgorithmKeys))]
-        [XmlElement("phoneticAlgorithm"), JsonProperty("phoneticAlgorithm")]
-        public Guid? PhoneticAlgorithmKey
-        {
-            get { return this.m_phoneticAlgorithmId; }
-            set
-            {
-                this.m_phoneticAlgorithmId = value;
-                this.m_phoneticAlgorithm = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the phonetic algorithm
-        /// </summary>
-        [SerializationReference(nameof(PhoneticAlgorithmKey))]
-        [XmlIgnore, JsonIgnore]
-        public PhoneticAlgorithm PhoneticAlgorithm
-        {
-            get
-            {
-                this.m_phoneticAlgorithm = base.DelayLoad(this.m_phoneticAlgorithmId, this.m_phoneticAlgorithm);
-                return this.m_phoneticAlgorithm;
-            }
-            set
-            {
-                this.m_phoneticAlgorithm = value;
-                this.m_phoneticAlgorithmId = value?.Key;
-            }
-        }
 
         /// <summary>
         /// Gets the source entity key
@@ -148,13 +98,5 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         object ISimpleAssociation.SourceEntity { get => null; set { } }
 
-        /// <summary>
-        /// Force reloading of delay load properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_phoneticAlgorithm = null;
-        }
     }
 }

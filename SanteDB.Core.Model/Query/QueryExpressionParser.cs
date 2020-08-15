@@ -269,7 +269,7 @@ namespace SanteDB.Core.Model.Query
                         }
                         accessExpression = Expression.TypeAs(accessExpression, castType);
                     }
-                    if (coalesce)
+                    if (coalesce && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null)
                     {
                         accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
                     }
@@ -451,6 +451,7 @@ namespace SanteDB.Core.Model.Query
                             var opMatch = QueryFilterExtensions.ExtendedFilterRegex.Match(value);
                             if (opMatch.Success)
                             {
+                                
                                 // Extract
                                 String fnName = opMatch.Groups[1].Value,
                                     parms = opMatch.Groups[3].Value,
@@ -568,18 +569,25 @@ namespace SanteDB.Core.Model.Query
                         }
                         else
                         {
-                            Object converted = null;
-                            if (MapUtil.TryConvert(pValue, operandType, out converted))
+                            try
                             {
-                                valueExpr = Expression.Constant(converted);
+                                Object converted = null;
+                                if (MapUtil.TryConvert(pValue, operandType, out converted))
+                                {
+                                    valueExpr = Expression.Constant(converted);
+                                }
+                                else if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(operandType.GetTypeInfo()) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
+                                {
+                                    valueExpr = Expression.Constant(uuid);
+                                    thisAccessExpression = accessExpression = Expression.MakeMemberAccess(accessExpression, operandType.GetRuntimeProperty(nameof(IdentifiedData.Key)));
+                                }
+                                else
+                                    valueExpr = Expression.Constant(Convert.ChangeType(pValue, operandType));
                             }
-                            else if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(operandType.GetTypeInfo()) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
+                            catch(Exception e)
                             {
-                                valueExpr = Expression.Constant(uuid);
-                                thisAccessExpression = accessExpression = Expression.MakeMemberAccess(accessExpression, operandType.GetRuntimeProperty(nameof(IdentifiedData.Key)));
+                                throw new InvalidOperationException($"Unable to convert {pValue} to {operandType}", e);
                             }
-                            else
-                                valueExpr = Expression.Constant(Convert.ChangeType(pValue, operandType));
                         }
 
                         // Extended filters operate in a different manner, they basically are allowed to write whatever they like to the Expression
@@ -598,6 +606,8 @@ namespace SanteDB.Core.Model.Query
                                         return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(p);
                                     else if (parmType.ParameterType != typeof(String) && MapUtil.TryConvert(p, parmType.ParameterType, out object res)) // convert parameter type
                                         return Expression.Constant(res);
+                                    else if (p.StartsWith("\"") && p.EndsWith("\""))
+                                        return Expression.Constant(p.Substring(1, p.Length - 2).Replace("\\\"","\""));
                                     else
                                         return Expression.Constant(p);
                                 }
