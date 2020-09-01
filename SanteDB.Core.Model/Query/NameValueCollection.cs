@@ -107,6 +107,14 @@ namespace SanteDB.Core.Model.Query
                     this.Add(name, new List<String>() { value });
         }
 
+
+        /// <summary>
+        /// Add the specified key and value to the collection
+        /// </summary>
+        public void Add(String name, IEnumerable<String> value)
+        {
+            base.Add(name, value.ToList());
+        }
         /// <summary>
         /// Represent as a string
         /// </summary>

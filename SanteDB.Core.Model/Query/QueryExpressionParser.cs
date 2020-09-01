@@ -442,7 +442,7 @@ namespace SanteDB.Core.Model.Query
                         // Process value
                         ExpressionType et = ExpressionType.Equal;
                         IQueryFilterExtension extendedFilter = null;
-                        String[] extendedParms = null;
+                        List<String> extendedParms = new List<string>();
 
                         if (String.IsNullOrEmpty(value)) continue;
                         // The input parameter is an extended filter operation, let's parse it
@@ -456,7 +456,15 @@ namespace SanteDB.Core.Model.Query
                                 String fnName = opMatch.Groups[1].Value,
                                     parms = opMatch.Groups[3].Value,
                                     operand = opMatch.Groups[4].Value;
-                                extendedParms = parms.Split(',');
+
+                                var parmExtract = QueryFilterExtensions.ParameterExtractRegex.Match(parms + ",");
+                                while(parmExtract.Success)
+                                {
+                                    extendedParms.Add(parmExtract.Groups[1].Value);
+                                    parmExtract = QueryFilterExtensions.ParameterExtractRegex.Match(parmExtract.Groups[2].Value);
+                                }
+                                //extendedParms = parms.Split(',');
+                                
                                 // Now find the expression
                                 extendedFilter = QueryFilterExtensions.GetExtendedFilter(fnName);
                                 if (extendedFilter == null) // ensure valid reference
