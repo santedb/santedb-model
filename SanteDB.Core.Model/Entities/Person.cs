@@ -82,10 +82,11 @@ namespace SanteDB.Core.Model.Entities
             {
                 if (!String.IsNullOrEmpty(value))
                 {
-                    if (value.Length > 10)
-                        this.DateOfBirth = DateTime.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                    // Try to parse ISO date
+                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                        this.DateOfBirth = dt;
                     else
-                        this.DateOfBirth = DateTime.ParseExact(value.Substring(0, 10), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+                        throw new FormatException($"Cannot parse {value} as a date");
                 }
                 else
                     this.DateOfBirth = null;
