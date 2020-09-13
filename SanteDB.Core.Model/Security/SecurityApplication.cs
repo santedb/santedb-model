@@ -44,8 +44,7 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("name"), JsonProperty("name"), NoCase]
         public String Name { get; set; }
-
-
+        
         /// <summary>
         /// Gets or sets the lockout time as XML date
         /// </summary>

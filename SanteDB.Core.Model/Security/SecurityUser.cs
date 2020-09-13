@@ -93,6 +93,7 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("securityStamp"), JsonProperty("securityStamp")]
         public String SecurityHash { get; set; }
+
         /// <summary>
         /// Gets or sets whether two factor authentication is required
         /// </summary>
