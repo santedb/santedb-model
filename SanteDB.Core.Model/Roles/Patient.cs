@@ -81,7 +81,7 @@ namespace SanteDB.Core.Model.Roles
         {
             get
             {
-                return this.DeceasedDate?.ToString("yyyy-MM-dd");
+                return this.DeceasedDate?.ToString("o");
             }
             set
             {

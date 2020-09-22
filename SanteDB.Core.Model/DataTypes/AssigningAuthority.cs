@@ -20,6 +20,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,9 @@ namespace SanteDB.Core.Model.DataTypes
     {
 
         private bool m_minimal = false;
+
+        // private validator
+        private IIdentifierValidator m_validator;
 
         /// <summary>
         /// Assigning authority
@@ -60,6 +64,7 @@ namespace SanteDB.Core.Model.DataTypes
         // Assigning device id
         private Guid? m_assigningApplicationKey;
 
+        // Assigning app backing field
         private SecurityApplication m_assigningApplication;
 
         // Assigning authortity policy
@@ -159,6 +164,27 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("isUnique"), JsonProperty("isUnique")]
         public bool IsUnique { get; set; }
+
+        /// <summary>
+        /// Gets or sets the IIdentifierValidator instance to use for this solution 
+        /// </summary>
+        [XmlElement("customValidator"), JsonProperty("customValidator")]
+        public string CustomValidator { get; set; }
+
+        /// <summary>
+        /// Gets the custom validator
+        /// </summary>
+        /// <returns>The validator</returns>
+        public IIdentifierValidator GetCustomValidator()
+        {
+            if(this.m_validator == null && !String.IsNullOrEmpty(this.CustomValidator))
+            {
+                var t = System.Type.GetType(this.CustomValidator);
+                if (t == null) throw new InvalidOperationException($"Validator {this.CustomValidator} is not valid");
+                this.m_validator = Activator.CreateInstance(t) as IIdentifierValidator;
+            }
+            return this.m_validator;
+        }
 
         /// <summary>
         /// Should serialize IsUnique

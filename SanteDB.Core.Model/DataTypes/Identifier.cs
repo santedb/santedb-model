@@ -24,6 +24,7 @@ using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -133,6 +134,75 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("value"), JsonProperty("value")]
         public String Value { get; set; }
 
+        /// <summary>
+        /// Serialization property for issued date
+        /// </summary>
+        [XmlElement("issued"), JsonProperty("issued"), DataIgnore, EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        public String IssueDateXml
+        {
+            get
+            {
+                return this.IssueDate?.ToString("yyyy-MM-dd");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date
+                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                        this.IssueDate = dt;
+                    else
+                        throw new FormatException($"Cannot parse {value} as a date");
+                }
+                else
+                    this.IssueDate = null;
+
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the date of issue
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        public DateTime? IssueDate { get; set; }
+
+        /// <summary>
+        /// Serialization field for expiry date
+        /// </summary>
+        [XmlElement("expires"), JsonProperty("expires"), DataIgnore, EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        public String ExpiryDateXml
+        {
+            get
+            {
+                return this.ExpiryDate?.ToString("yyyy-MM-dd");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date
+                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                        this.ExpiryDate = dt;
+                    else
+                        throw new FormatException($"Cannot parse {value} as a date");
+                }
+                else
+                    this.ExpiryDate = null;
+
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the expiration date of the identifier
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public DateTime? ExpiryDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the check-digit if it is stored separate from the identifier
+        /// </summary>
+        [XmlElement("checkDigit"), JsonProperty("checkDigit")]
+        public String CheckDigit { get; set; }
 
         /// <summary>
         /// Gets or sets the assinging authority id

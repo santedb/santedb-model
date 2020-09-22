@@ -76,7 +76,7 @@ namespace SanteDB.Core.Model.Entities
         {
             get
             {
-                return this.DateOfBirth?.ToString("yyyy-MM-dd");
+                return this.DateOfBirth?.ToString("o");
             }
             set
             {
