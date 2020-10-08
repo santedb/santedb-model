@@ -17,6 +17,7 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
 using System;
 
 namespace SanteDB.Core.Model.Attributes
@@ -27,8 +28,7 @@ namespace SanteDB.Core.Model.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class AutoLoadAttribute : Attribute
     {
-
-        /// <summary>
+	    /// <summary>
         /// Auto load
         /// </summary>
         public AutoLoadAttribute()
@@ -36,17 +36,17 @@ namespace SanteDB.Core.Model.Attributes
 
         }
 
-        /// <summary>
+	    /// <summary>
         /// Load on attribute
         /// </summary>
-        public AutoLoadAttribute(String classCode)
+        public AutoLoadAttribute(string classCode)
         {
             this.ClassCode = classCode;
         }
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the value when the class code is true to auto-load
         /// </summary>
-        public String ClassCode { get; private set; }
+        public string ClassCode { get; }
     }
 }

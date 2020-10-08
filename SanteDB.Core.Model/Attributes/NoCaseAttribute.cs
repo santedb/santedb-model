@@ -17,19 +17,15 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.Attributes
 {
-    /// <summary>
-    /// Indicates that a particular property has no case
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
+	/// <summary>
+	/// Indicates that a particular property has no case
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property)]
     public class NoCaseAttribute : Attribute
-    {
-    }
+    {}
 }

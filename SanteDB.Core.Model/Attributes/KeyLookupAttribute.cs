@@ -17,29 +17,28 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
 using System;
 
 namespace SanteDB.Core.Model.Attributes
 {
-    /// <summary>
-    /// Identifies to the persistence layer what property can be used for lookup when a key is not present
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+	/// <summary>
+	/// Identifies to the persistence layer what property can be used for lookup when a key is not present
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class)]
     public class KeyLookupAttribute : Attribute
     {
-
-        /// <summary>
+	    /// <summary>
         /// Default constructor
         /// </summary>
-        public KeyLookupAttribute(String uniqueProperty)
+        public KeyLookupAttribute(string uniqueProperty)
         {
             this.UniqueProperty = uniqueProperty;
         }
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets whether the persistence engine should throw an exception when persisting duplicates
         /// </summary>
-        public String UniqueProperty { get; set; }
-
+        public string UniqueProperty { get; set; }
     }
 }

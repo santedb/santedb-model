@@ -17,6 +17,7 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
 using System;
 
 namespace SanteDB.Core.Model.Attributes
@@ -26,6 +27,5 @@ namespace SanteDB.Core.Model.Attributes
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class NonCachedAttribute : Attribute
-    {
-    }
+    {}
 }

@@ -17,18 +17,18 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
 using System;
 
 namespace SanteDB.Core.Model.Attributes
 {
-    /// <summary>
-    /// Binding attributes to suggest what values can be used in a property
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
+	/// <summary>
+	/// Binding attributes to suggest what values can be used in a property
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property)]
     public class BindingAttribute : Attribute
     {
-
-        /// <summary>
+	    /// <summary>
         /// Binding attribute
         /// </summary>
         public BindingAttribute(Type binding)
@@ -36,10 +36,9 @@ namespace SanteDB.Core.Model.Attributes
             this.Binding = binding;
         }
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the type binding
         /// </summary>
         public Type Binding { get; set; }
-
     }
 }

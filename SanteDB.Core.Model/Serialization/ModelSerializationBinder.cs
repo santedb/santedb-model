@@ -17,6 +17,7 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -26,23 +27,17 @@ using System.Reflection;
 
 namespace SanteDB.Core.Model.Serialization
 {
-    /// <summary>
-    /// Model binding 
-    /// </summary>
-    public class ModelSerializationBinder : ISerializationBinder
+	/// <summary>
+	/// Model binding 
+	/// </summary>
+	public class ModelSerializationBinder : ISerializationBinder
     {
+	    private static readonly object s_lock = new object();
 
-        private static Dictionary<String, Type> s_typeCache = new Dictionary<string, Type>();
-        private static object s_lock = new object();
-        private Type m_hintType;
+	    private static readonly Dictionary<string, Type> s_typeCache = new Dictionary<string, Type>();
+	    private readonly Type m_hintType;
 
-
-        /// <summary>
-        /// Gets all registered types
-        /// </summary>
-        public static IEnumerable<Type> GetRegisteredTypes() => s_typeCache.Values;
-
-        /// <summary>
+	    /// <summary>
         /// Create a new model serialization binder
         /// </summary>
         public ModelSerializationBinder()
@@ -50,7 +45,7 @@ namespace SanteDB.Core.Model.Serialization
 
         }
 
-        /// <summary>
+	    /// <summary>
         /// Model serialization binding with hint
         /// </summary>
         /// <param name="hintType"></param>
@@ -59,33 +54,7 @@ namespace SanteDB.Core.Model.Serialization
             this.m_hintType = hintType;
         }
 
-        /// <summary>
-        /// Register the model type
-        /// </summary>
-        public static void RegisterModelType(Type type)
-        {
-            var typeName = type.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.Name;
-            if (!s_typeCache.ContainsKey(typeName))
-                lock (s_lock)
-                    s_typeCache.Add(typeName, type);
-            //else
-            //    throw new ArgumentException($"Type {typeName} is already registered");
-        }
-
-
-        /// <summary>
-        /// Register the model type
-        /// </summary>
-        public static void RegisterModelType(String typeName, Type type)
-        {
-            if (!s_typeCache.ContainsKey(typeName))
-                lock (s_lock)
-                    s_typeCache.Add(typeName, type);
-            //else
-            //    throw new ArgumentException($"Type {typeName} is already registered");
-        }
-
-        /// <summary>
+	    /// <summary>
         /// Bind the type to a name
         /// </summary>
         public void BindToName(Type serializedType, out string assemblyName, out string typeName)
@@ -93,41 +62,101 @@ namespace SanteDB.Core.Model.Serialization
             // Attempt to see if the type was registered
             typeName = s_typeCache.FirstOrDefault(o => o.Value == serializedType).Key;
             if (typeName == null)
-                typeName = serializedType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
+            {
+	            typeName = serializedType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
+            }
+
             assemblyName = null;
 
         }
 
-        /// <summary>
+	    /// <summary>
         /// Bind to type
         /// </summary>
         public Type BindToType(string assemblyName, string typeName)
         {
             // Assembly to search
-            Assembly asm = typeof(ModelSerializationBinder).GetTypeInfo().Assembly;
-            if (!String.IsNullOrEmpty(assemblyName))
-                asm = Assembly.Load(new AssemblyName(assemblyName));
+            var asm = typeof(ModelSerializationBinder).GetTypeInfo().Assembly;
+            if (!string.IsNullOrEmpty(assemblyName))
+            {
+	            asm = Assembly.Load(new AssemblyName(assemblyName));
+            }
             else if (this.m_hintType != null) // use hint type
             {
-                asm = m_hintType.GetTypeInfo().Assembly;
-                if (m_hintType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>()?.Id == typeName)
-                    return this.m_hintType;
+                asm = this.m_hintType.GetTypeInfo().Assembly;
+                if (this.m_hintType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>()?.Id == typeName)
+                {
+	                return this.m_hintType;
+                }
             }
 
             // The type
             Type type = null;
             if (!s_typeCache.TryGetValue(typeName, out type))
-                lock (s_lock)
-                {
-                    type = asm.ExportedTypes.SingleOrDefault(
-                        t => t.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
-                        );
-                    if (!s_typeCache.ContainsKey(typeName) && type != null)
-                        s_typeCache.Add(typeName, type);
-                }
+            {
+	            lock (s_lock)
+	            {
+		            type = asm.ExportedTypes.SingleOrDefault(
+			            t => t.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
+		            );
+		            if (!s_typeCache.ContainsKey(typeName) && type != null)
+		            {
+			            s_typeCache.Add(typeName, type);
+		            }
+	            }
+            }
+
             if (type == null)
-                type = asm.GetType(typeName);
+            {
+	            type = asm.GetType(typeName);
+            }
+
             return type ?? null;
+        }
+
+
+	    /// <summary>
+        /// Gets all registered types
+        /// </summary>
+        public static IEnumerable<Type> GetRegisteredTypes()
+	    {
+		    return s_typeCache.Values;
+	    }
+
+	    /// <summary>
+        /// Register the model type
+        /// </summary>
+        public static void RegisterModelType(Type type)
+        {
+            var typeName = type.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.Name;
+            if (!s_typeCache.ContainsKey(typeName))
+            {
+	            lock (s_lock)
+	            {
+		            s_typeCache.Add(typeName, type);
+	            }
+            }
+
+            //else
+            //    throw new ArgumentException($"Type {typeName} is already registered");
+        }
+
+
+	    /// <summary>
+        /// Register the model type
+        /// </summary>
+        public static void RegisterModelType(string typeName, Type type)
+        {
+            if (!s_typeCache.ContainsKey(typeName))
+            {
+	            lock (s_lock)
+	            {
+		            s_typeCache.Add(typeName, type);
+	            }
+            }
+
+            //else
+            //    throw new ArgumentException($"Type {typeName} is already registered");
         }
     }
 }

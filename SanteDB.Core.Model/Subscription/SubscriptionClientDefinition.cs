@@ -23,10 +23,10 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Subscription
 {
-    /// <summary>
-    /// Represents client side definition
-    /// </summary>
-    [XmlType(nameof(SubscriptionClientDefinition), Namespace = "http://santedb.org/subscription")]
+	/// <summary>
+	/// Represents client side definition
+	/// </summary>
+	[XmlType(nameof(SubscriptionClientDefinition), Namespace = "http://santedb.org/subscription")]
     [JsonObject(nameof(SubscriptionClientDefinition))]
     public class SubscriptionClientDefinition
     {

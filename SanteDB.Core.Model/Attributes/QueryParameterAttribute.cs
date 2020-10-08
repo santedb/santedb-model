@@ -17,6 +17,7 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
 using System;
 
 namespace SanteDB.Core.Model.Attributes
@@ -26,8 +27,7 @@ namespace SanteDB.Core.Model.Attributes
     /// </summary>
     public class QueryParameterAttribute : Attribute
     {
-
-        /// <summary>
+	    /// <summary>
         /// Creates a new query parameter attribute
         /// </summary>
         public QueryParameterAttribute(string parameterName)
@@ -35,9 +35,9 @@ namespace SanteDB.Core.Model.Attributes
             this.ParameterName = parameterName;
         }
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the name of the parameter
         /// </summary>
-        public String ParameterName { get; set; }
+        public string ParameterName { get; set; }
     }
 }

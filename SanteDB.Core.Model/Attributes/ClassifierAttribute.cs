@@ -17,6 +17,7 @@
  * User: fyfej
  * Date: 2019-11-27
  */
+
 using System;
 
 namespace SanteDB.Core.Model.Attributes
@@ -27,18 +28,18 @@ namespace SanteDB.Core.Model.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class ClassifierAttribute : Attribute
     {
-        /// <summary>
+	    /// <summary>
         /// Classifier attribute property
         /// </summary>
         /// <param name="classProperty"></param>
-        public ClassifierAttribute(String classProperty)
+        public ClassifierAttribute(string classProperty)
         {
             this.ClassifierProperty = classProperty;
         }
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the classifier property
         /// </summary>
-        public String ClassifierProperty { get; set; }
+        public string ClassifierProperty { get; set; }
     }
 }
