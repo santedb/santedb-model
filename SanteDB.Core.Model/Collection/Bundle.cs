@@ -40,6 +40,7 @@ namespace SanteDB.Core.Model.Collection
     /// <summary>
     /// Represents a collection of model items 
     /// </summary>
+    [ResourceCollection]
     [XmlType(nameof(Bundle), Namespace = "http://santedb.org/model")]
     [XmlRoot(nameof(Bundle), Namespace = "http://santedb.org/model")]
     [JsonObject("Bundle")]
