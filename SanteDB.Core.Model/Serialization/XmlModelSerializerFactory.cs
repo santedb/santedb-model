@@ -108,8 +108,8 @@ namespace SanteDB.Core.Model.Serialization
 		                        .GetTypeInfo()
 		                        .Assembly
 		                        .ExportedTypes
-		                        .Union(ModelSerializationBinder.GetRegisteredTypes())
-		                        .Where(t => typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo()) && !t.GetTypeInfo().IsGenericTypeDefinition && !t.GetTypeInfo().IsAbstract)
+                                .Where(t => typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo()) && !t.GetTypeInfo().IsGenericTypeDefinition && !t.GetTypeInfo().IsAbstract)
+                                .Union(ModelSerializationBinder.GetRegisteredTypes())
 		                        .ToArray();
                         }
 
