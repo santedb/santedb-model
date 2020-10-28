@@ -157,6 +157,11 @@ namespace SanteDB.Core.Model.Query
                 for (int i = 0; i < memberPath.Length; i++)
                 {
                     var rawMember = memberPath[i];
+
+                    // No access path - so they are just referencing the core parameter
+                    if (String.IsNullOrEmpty(rawMember)) 
+                        continue;
+
                     var pMember = rawMember;
                     String guard = String.Empty,
                         cast = String.Empty;
@@ -395,6 +400,8 @@ namespace SanteDB.Core.Model.Query
                                 subFilter.Add(currentValue.Key.Substring(path.Length), new List<String>(currentValue.Value));
                             else if (currentValue.Value.All(o => Guid.TryParse(o, out Guid _)))
                                 subFilter.Add("id", new List<String>(currentValue.Value));
+                            else if (currentValue.Key.Length == path.Length - 1) // just the same property so is simple
+                                subFilter.Add("", new List<String>(currentValue.Value));
 
                             // Add collect other parameters
                             foreach (var wv in workingValues.Where(o => o.Key.StartsWith(path)).ToList())
