@@ -69,5 +69,12 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static IEnumerable<ActParticipation> GetParticipations(this Act me) => me.LoadCollection<ActParticipation>(nameof(Act.Participations));
 
+        /// <summary>
+        /// Get the target of the relationship
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="me"></param>
+        /// <returns></returns>
+        public static T GetTargetAs<T>(this EntityRelationship me) where T : Entity => me.LoadProperty<T>(nameof(EntityRelationship.TargetEntity)); 
     }
 }

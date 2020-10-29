@@ -265,7 +265,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public override string ToString()
         {
-            return string.Format("({0}) {1} = {2}", this.RelationshipType?.ToString() ?? this.RelationshipTypeKey?.ToString(), this.TargetEntityKey, this.Quantity);
+            return string.Format("{1} => [{0}] => {2} (QTY: {3})", this.RelationshipType?.ToString() ?? this.RelationshipTypeKey?.ToString(), this.SourceEntityKey, this.TargetEntityKey, this.Quantity);
         }
 
     }
