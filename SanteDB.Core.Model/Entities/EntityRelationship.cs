@@ -21,6 +21,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -33,7 +34,7 @@ namespace SanteDB.Core.Model.Entities
     [Classifier(nameof(RelationshipType))]
     [XmlRoot("EntityRelationship", Namespace = "http://santedb.org/model")]
     [XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
-    public class EntityRelationship : VersionedAssociation<Entity>
+    public class EntityRelationship : VersionedAssociation<Entity>, ITargetedAssociation
     {
         // The association type key
         private Guid? m_associationTypeKey;
@@ -192,6 +193,15 @@ namespace SanteDB.Core.Model.Entities
                     this.m_targetEntity = null;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the targeted entity
+        /// </summary>
+        object ITargetedAssociation.TargetEntity
+        {
+            get => this.TargetEntity;
+            set => this.TargetEntity = (Entity)value;
         }
 
         /// <summary>

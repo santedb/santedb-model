@@ -22,6 +22,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -43,7 +44,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [Classifier(nameof(ParticipationRole))]
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "ActParticipation"), JsonObject(nameof(ActParticipation))]
-    public class ActParticipation : VersionedAssociation<Act>
+    public class ActParticipation : VersionedAssociation<Act> , ITargetedAssociation
     {
 
         private Guid? m_playerKey;
@@ -264,6 +265,24 @@ namespace SanteDB.Core.Model.Acts
         public override string ToString()
         {
             return string.Format("({0}) {1} = {2}", this.ParticipationRole?.ToString() ?? this.ParticipationRoleKey?.ToString(), this.PlayerEntityKey, this.Quantity);
+        }
+
+        /// <summary>
+        /// Gets or sets the targeted entity
+        /// </summary>
+        Guid? ITargetedAssociation.TargetEntityKey
+        {
+            get => this.PlayerEntityKey;
+            set => this.PlayerEntityKey = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the targeted entity
+        /// </summary>
+        object ITargetedAssociation.TargetEntity
+        {
+            get => this.PlayerEntity;
+            set => this.PlayerEntity = (Entity)value;
         }
     }
 }
