@@ -21,6 +21,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -39,7 +40,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [Classifier(nameof(RelationshipType))]
     [XmlType("ActRelationship", Namespace = "http://santedb.org/model"), JsonObject("ActRelationship")]
-    public class ActRelationship : VersionedAssociation<Act>
+    public class ActRelationship : VersionedAssociation<Act>, ITargetedAssociation
     {
         // The entity key
         private Guid? m_targetActKey;
@@ -198,6 +199,24 @@ namespace SanteDB.Core.Model.Acts
         public override string ToString()
         {
             return string.Format("({0}) {1} ", this.RelationshipType?.ToString() ?? this.RelationshipTypeKey?.ToString(), this.TargetActKey);
+        }
+
+        /// <summary>
+        /// Gets or sets the targeted entity
+        /// </summary>
+        Guid? ITargetedAssociation.TargetEntityKey
+        {
+            get => this.TargetActKey;
+            set => this.TargetActKey = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the targeted entity
+        /// </summary>
+        object ITargetedAssociation.TargetEntity
+        {
+            get => this.TargetAct;
+            set => this.TargetAct = (Act)value;
         }
     }
 }
