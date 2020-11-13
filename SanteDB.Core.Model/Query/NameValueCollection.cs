@@ -126,6 +126,7 @@ namespace SanteDB.Core.Model.Query
             {
                 foreach (var val in kv.Value)
                 {
+                    if (string.IsNullOrEmpty(val)) continue;
                     queryString += String.Format("{0}={1}", kv.Key, Uri.EscapeDataString(val));
                     if (!kv.Equals(this.Last()))
                         queryString += "&";
