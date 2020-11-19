@@ -48,7 +48,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         static QueryFilterExtensions()
         {
-            
+            InitializeFilters();
         }
 
         /// <summary>
