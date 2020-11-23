@@ -86,7 +86,12 @@ namespace SanteDB.Core.Model.Query
                 var value = escapeRegex.Replace(expr[1], (m) => System.Text.Encoding.UTF8.GetString(new byte[] { Convert.ToByte(m.Groups[1].Value, 16) }, 0, 1));
                 // HACK: Replace this later
                 if (!String.IsNullOrEmpty(value))
-                    retVal.Add(expr[0].Trim(), value);
+                {
+                    if (retVal.TryGetValue(expr[0], out List<String> v))
+                        v.Add(value);
+                    else
+                        retVal.Add(expr[0].Trim(), value);
+                }
             }
             return retVal;
         }
