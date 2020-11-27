@@ -133,6 +133,8 @@ namespace SanteDB.Core.Model.Export
         [XmlElement("ConceptClass", typeof(ConceptClass), Namespace = "http://santedb.org/model")]
         [XmlElement("SecurityPolicy", typeof(SecurityPolicy), Namespace = "http://santedb.org/model")]
         [XmlElement("SecurityRole", typeof(SecurityRole), Namespace = "http://santedb.org/model")]
+        [XmlElement("SecurityApplication", typeof(SecurityApplication), Namespace = "http://santedb.org/model")]
+        [XmlElement("ApplicationEntity", typeof(ApplicationEntity), Namespace = "http://santedb.org/model")]
         [XmlElement("SecurityUser", typeof(SecurityUser), Namespace = "http://santedb.org/model")]
         [XmlElement("ExtensionType", typeof(ExtensionType), Namespace = "http://santedb.org/model")]
         [XmlElement("CodeSystem", typeof(CodeSystem), Namespace = "http://santedb.org/model")]
