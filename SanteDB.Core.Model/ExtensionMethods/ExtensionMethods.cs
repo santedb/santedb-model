@@ -26,6 +26,7 @@ using SanteDB.Core.Model.Map;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -738,6 +739,16 @@ namespace SanteDB.Core.Model
                 t.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>))
                 return t.GetTypeInfo().GenericTypeArguments[0];
             return t;
+        }
+
+        /// <summary>
+        /// Return the age 
+        /// </summary>
+        /// <remarks>This exists for the extended query filter only</remarks>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static TimeSpan Age(this DateTime me, DateTime atDateTime)
+        {
+            return me.Subtract(atDateTime);
         }
     }
 }
