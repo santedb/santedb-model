@@ -33,6 +33,11 @@ namespace SanteDB.Core.Model
     {
 
         /// <summary>
+        /// Load the person's languages
+        /// </summary>
+        public static IEnumerable<PersonLanguageCommunication> GetPersonLanguages(this Person me) => me.LoadCollection<PersonLanguageCommunication>(nameof(Person.LanguageCommunication));
+
+        /// <summary>
         /// Gets or loads addresses attached to an entity
         /// </summary>
         public static IEnumerable<EntityAddress> GetAddresses(this Entity me) => me.LoadCollection<EntityAddress>(nameof(Entity.Addresses));

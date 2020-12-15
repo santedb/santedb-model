@@ -205,10 +205,30 @@ namespace SanteDB.Core.Model.Query
                 {
                     case "Contains":
                         {
-                            var parmName = this.ExtractPath(node.Object, false);
-                            object parmValue = this.ExtractValue(node.Arguments[0]);
-                            this.AddCondition(parmName, "~" + parmValue.ToString());
-                            return null;
+                            if (node.Object == null && node.Method.DeclaringType == typeof(Enumerable))
+                            {
+                                // Array contains 
+                                // value=X&value=Y&value=Z
+                                Expression array = node.Arguments[0],
+                                    bindParameter = node.Arguments[1];
+                                var parmName = this.ExtractPath(bindParameter, false);
+                                var valueList = this.ExtractValue(array);
+                                if (valueList is IEnumerable enumerable)
+                                {
+                                    foreach (var i in enumerable)
+                                        this.AddCondition(parmName, i);
+                                    return null;
+                                }
+                                else
+                                    throw new InvalidOperationException("Cannot understand this enumerable object");
+                            }
+                            else
+                            {
+                                var parmName = this.ExtractPath(node.Object, false);
+                                object parmValue = this.ExtractValue(node.Arguments[0]);
+                                this.AddCondition(parmName, "~" + parmValue.ToString());
+                                return null;
+                            }
                         }
                     case "StartsWith":
                         {

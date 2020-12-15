@@ -27,6 +27,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Serialization;
 using SanteDB.Core.Model.Interfaces;
+using System.Xml;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -582,6 +583,21 @@ namespace SanteDB.Core.Model.Query
                             valueExpr = Expression.Constant(Guid.Parse(pValue));
                         else if (operandType == typeof(Guid?))
                             valueExpr = Expression.Convert(Expression.Constant(Guid.Parse(pValue)), typeof(Guid?));
+                        else if(operandType == typeof(TimeSpan) || operandType == typeof(TimeSpan?))
+                        {
+                            if (!TimeSpan.TryParse(pValue, out TimeSpan ts))
+                            {
+                                try
+                                {
+                                    ts = XmlConvert.ToTimeSpan(pValue);
+                                }
+                                catch
+                                {
+                                    throw new ArgumentException($"Cannot parse {pValue} as valid timestamp");
+                                }
+                            }
+                            valueExpr = Expression.Constant(ts);
+                        }
                         else if (operandType.GetTypeInfo().IsEnum)
                         {
                             int tryParse = 0;
