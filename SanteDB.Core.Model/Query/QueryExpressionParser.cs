@@ -208,7 +208,7 @@ namespace SanteDB.Core.Model.Query
                     PropertyInfo memberInfo = null;
                     if (!memberCache.TryGetValue(pMember, out memberInfo))
                     {
-                        memberInfo = accessExpression.Type.GetRuntimeProperties().FirstOrDefault(p => p.GetCustomAttributes<XmlElementAttribute>()?.Any(a => a.ElementName == pMember) == true || p.GetCustomAttribute<QueryParameterAttribute>()?.ParameterName == pMember);
+                        memberInfo = accessExpression.Type.GetRuntimeProperties().FirstOrDefault(p => p.GetQueryName() == pMember);
                         if (memberInfo == null)
                             throw new ArgumentOutOfRangeException(currentValue.Key);
 
