@@ -283,7 +283,7 @@ namespace SanteDB.Core.Model.Acts
     {
 
         // Value key
-        private Guid? m_valueKey;
+        private Guid m_valueKey;
         // Value
         private Concept m_value;
 
@@ -305,8 +305,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-
-        public Guid? ValueKey
+        public Guid ValueKey
         {
             get { return this.m_valueKey; }
             set
@@ -334,7 +333,7 @@ namespace SanteDB.Core.Model.Acts
             set
             {
                 this.m_value = value;
-                this.m_valueKey = value?.Key;
+                this.m_valueKey = value?.Key ?? Guid.Empty;
             }
         }
 
