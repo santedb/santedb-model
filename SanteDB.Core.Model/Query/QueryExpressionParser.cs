@@ -593,7 +593,7 @@ namespace SanteDB.Core.Model.Query
                                 }
                                 catch
                                 {
-                                    throw new ArgumentException($"Cannot parse {pValue} as valid timestamp");
+                                    ts = SanteDBConvert.StringToTimespan(pValue);
                                 }
                             }
                             valueExpr = Expression.Constant(ts);
