@@ -23,6 +23,7 @@ using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Security;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
 
@@ -37,6 +38,10 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Person)]
     public class Person : Entity
     {
+
+        // Backing fields for occupation
+        private Guid? m_occupationConceptKey;
+        private Concept m_occupationConcept;
 
         /// <summary>
         /// Person constructor
@@ -98,6 +103,37 @@ namespace SanteDB.Core.Model.Entities
         [AutoLoad, XmlElement("language"), JsonProperty("language")]
         public List<PersonLanguageCommunication> LanguageCommunication { get; set; }
 
+        /// <summary>
+        /// Gets or sets the religious affiliation
+        /// </summary>
+        [XmlElement("occupation"), JsonProperty("occupation"), EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? OccupationKey
+        {
+            get => this.m_occupationConceptKey;
+            set
+            {
+                this.m_occupationConceptKey = value;
+                this.m_occupationConcept = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the marital status code
+        /// </summary>
+        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(OccupationKey))]
+        public Concept Occupation
+        {
+            get
+            {
+                this.m_occupationConcept = base.DelayLoad(this.m_occupationConceptKey, this.m_occupationConcept);
+                return this.m_occupationConcept;
+            }
+            set
+            {
+                this.m_occupationConcept = value;
+                this.m_occupationConceptKey = value?.Key;
+            }
+        }
 
         /// <summary>
         /// Should serialize date of birth precision
