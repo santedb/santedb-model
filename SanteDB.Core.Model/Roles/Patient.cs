@@ -56,6 +56,8 @@ namespace SanteDB.Core.Model.Roles
         private Concept m_religiousAffiliation;
         private Guid? m_ethnicGroupKey;
         private Concept m_ethnicGroup;
+        private Guid? m_vipStatusKey;
+        private Concept m_vipStatus;
 
         /// <summary>
         /// Represents a patient
@@ -145,6 +147,21 @@ namespace SanteDB.Core.Model.Roles
         }
 
         /// <summary>
+        /// Gets or sets the VIP code
+        /// </summary>
+        [XmlElement("vipStatus"), JsonProperty("vipStatus"), EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? VipStatusKey
+        {
+            get => this.m_vipStatusKey;
+            set
+            {
+                this.m_vipStatusKey = value;
+                this.m_vipStatus = null;
+            }
+        }
+
+
+        /// <summary>
         /// Gets or sets the key of the marital status concept
         /// </summary>
         [XmlElement("maritalStatus"), JsonProperty("maritalStatus"), EditorBrowsable(EditorBrowsableState.Never)]
@@ -215,6 +232,24 @@ namespace SanteDB.Core.Model.Roles
             {
                 this.m_maritalStatus = value;
                 this.m_maritalStatusKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the VIP status code
+        /// </summary>
+        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(VipStatusKey))]
+        public Concept VipStatus
+        {
+            get
+            {
+                this.m_vipStatus = base.DelayLoad(this.m_vipStatusKey, this.m_vipStatus);
+                return this.m_vipStatus;
+            }
+            set
+            {
+                this.m_vipStatus = value;
+                this.m_vipStatusKey = value?.Key;
             }
         }
 

@@ -494,7 +494,15 @@ namespace SanteDB.Core.Model
             return xmlName;
         }
 
-
+        /// <summary>
+        /// Get the serialization name
+        /// </summary>
+        public static string GetQueryName(this PropertyInfo me)
+        {
+            return me.GetCustomAttributes<QueryParameterAttribute>().FirstOrDefault()?.ParameterName
+                ?? me.GetCustomAttributes<XmlElementAttribute>().FirstOrDefault()?.ElementName 
+                ?? me.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName;
+        }
         /// <summary>
         /// Get the serialization type name
         /// </summary>

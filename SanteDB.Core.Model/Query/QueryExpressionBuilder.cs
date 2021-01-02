@@ -171,6 +171,16 @@ namespace SanteDB.Core.Model.Query
                     });
                     return Expression.Constant(callee.DynamicInvoke(args.ToArray()));
                 }
+                else if (node.Expression is ConstantExpression constant)
+                {
+                    var retVal = this.ExtractValue(constant);
+                    if (retVal is MethodInfo mi)
+                        retVal = mi.Invoke(null, new object[0]);
+                    else if (retVal is Func<dynamic> fn)
+                        retVal = fn();
+                    return Expression.Constant(retVal);
+
+                }
                 else
                 {
                     throw new InvalidOperationException("Cannot invoke a non-Lambda expression");

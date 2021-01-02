@@ -45,8 +45,17 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         /// </summary>
         public BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms)
         {
-            return Expression.MakeBinary(comparison,
-                Expression.Call(scope, this.ExtensionMethod), Expression.Call(valueExpression, this.ExtensionMethod));
+            if(scope is MethodCallExpression callExpression) // We're calling a method so use the internal argument
+            {
+                return Expression.MakeBinary(comparison, Expression.Call(
+                    Expression.Call(callExpression.Object, this.ExtensionMethod),
+                    callExpression.Method,
+                    Expression.Call(callExpression.Arguments[0], this.ExtensionMethod)
+                ), Expression.Constant(true));
+            }
+            else 
+                return Expression.MakeBinary(comparison,
+                    Expression.Call(scope, this.ExtensionMethod), Expression.Call(valueExpression, this.ExtensionMethod));
         }
     }
 }
