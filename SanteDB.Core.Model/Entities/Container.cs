@@ -35,26 +35,7 @@ namespace SanteDB.Core.Model.Entities
     [JsonObject(nameof(Container))]
     public class Container : ManufacturedMaterial
     {
-        /// <summary>
-        /// The cap type concept.
-        /// </summary>
-        private Concept capTypeConcept;
-
-        /// <summary>
-        /// The cap type concept key.
-        /// </summary>
-        private Guid? capTypeConceptKey;
-
-        /// <summary>
-        /// The separator type concept.
-        /// </summary>
-        private Concept separatorTypeConcept;
-
-        /// <summary>
-        /// The separator type concept key.
-        /// </summary>
-        private Guid? separatorTypeConceptKey;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class.
         /// </summary>
@@ -74,64 +55,11 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// Gets or sets the barrier delta quantity. The distance from the Point of Reference to the separator material (barrier) within a container.
-        /// </summary>
-        /// <value>The barrier delta quantity.</value>
-        [XmlElement("barrierDeltaQuantity"), JsonProperty("barrierDeltaQuantity")]
-        public decimal? BarrierDeltaQuantity { get; set; }
-
-        /// <summary>
-        /// Gets or sets the bottom delta quantity. The distance from the Point of Reference to the outside bottom of the container.
-        /// </summary>
-        /// <value>The bottom delta quantity.</value>
-        [XmlElement("bottomDeltaQuantity"), JsonProperty("bottomDeltaQuantity")]
-        public decimal? BottomDeltaQuantity { get; set; }
-
-        /// <summary>
         /// Gets or sets the capacity quantity. The functional capacity of the container.
         /// </summary>
         /// <value>The capacity quantity.</value>
         [XmlElement("capacityQuantity"), JsonProperty("capacityQuantity")]
         public decimal? CapacityQuantity { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cap type concept. The type of container cap consistent with de-capping, piercing or other automated manipulation.
-        /// </summary>
-        /// <value>The cap type concept.</value>
-        [XmlIgnore, JsonIgnore]
-        [SerializationReference(nameof(CapTypeConceptKey))]
-        public Concept CapTypeConcept
-        {
-            get
-            {
-                capTypeConcept = base.DelayLoad(this.capTypeConceptKey, this.capTypeConcept);
-                return this.capTypeConcept;
-            }
-            set
-            {
-                this.capTypeConcept = value;
-                this.capTypeConceptKey = value?.Key;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the cap type concept key.
-        /// </summary>
-        /// <value>The cap type concept key.</value>
-        [XmlElement("capTypeConcept"), JsonProperty("capTypeConcept")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? CapTypeConceptKey
-        {
-            get { return this.capTypeConceptKey; }
-            set
-            {
-                if (this.capTypeConceptKey != value)
-                {
-                    this.capTypeConceptKey = value;
-                    this.capTypeConcept = null;
-                }
-            }
-        }
 
         /// <summary>
         /// Gets or sets the diameter quantity. The outside diameter of the container.
@@ -148,46 +76,6 @@ namespace SanteDB.Core.Model.Entities
         public decimal? HeightQuantity { get; set; }
 
         /// <summary>
-        /// Gets or sets the separator type concept. A material added to a container to facilitate and create a physical separation of specimen components of differing density.
-        /// Examples: A gel material added to blood collection tubes that following centrifugation creates a physical barrier between the blood cells and the serum or plasma.
-        /// </summary>
-        /// <value>The separator type concept.</value>
-        [XmlIgnore, JsonIgnore]
-        [SerializationReference(nameof(SeparatorTypeConceptKey))]
-        public Concept SeparatorTypeConcept
-        {
-            get
-            {
-                this.separatorTypeConcept = base.DelayLoad(this.separatorTypeConceptKey, this.separatorTypeConcept);
-                return this.separatorTypeConcept;
-            }
-            set
-            {
-                this.separatorTypeConcept = value;
-                this.separatorTypeConceptKey = value?.Key;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the separator type concept key.
-        /// </summary>
-        /// <value>The separator type concept key.</value>
-        [XmlElement("separatorTypeConcept"), JsonProperty("separatorTypeConcept")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? SeparatorTypeConceptKey
-        {
-            get { return this.separatorTypeConceptKey; }
-            set
-            {
-                if (this.separatorTypeConceptKey != value)
-                {
-                    this.separatorTypeConceptKey = value;
-                    this.separatorTypeConcept = null;
-                }
-            }
-        }
-
-        /// <summary>
         /// Determines if two containers are semantically equal.
         /// </summary>
         /// <param name="obj">The container to compare against.</param>
@@ -202,13 +90,9 @@ namespace SanteDB.Core.Model.Entities
             }
 
             return base.SemanticEquals(other) &&
-                    this.BarrierDeltaQuantity == other.BarrierDeltaQuantity &&
-                    this.BottomDeltaQuantity == other.BottomDeltaQuantity &&
-                    this.CapTypeConceptKey == other.CapTypeConceptKey &&
                     this.CapacityQuantity == other.CapacityQuantity &&
                     this.DiameterQuantity == other.DiameterQuantity &&
-                    this.HeightQuantity == other.HeightQuantity &&
-                    this.SeparatorTypeConceptKey == other.SeparatorTypeConceptKey;
+                    this.HeightQuantity == other.HeightQuantity;
         }
     }
 }
