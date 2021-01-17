@@ -98,6 +98,13 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Build linq expression from string
+        /// </summary>
+        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(String filter)
+        {
+            return BuildLinqExpression<TModelType>(NameValueCollection.ParseQueryString(filter), null);
+        }
+        /// <summary>
         /// Build a LINQ expression
         /// </summary>
         public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables)
