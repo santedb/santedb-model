@@ -56,6 +56,11 @@ namespace SanteDB.Core.Model.Constants
         public const string CountyOrParish = "d9489d56-ddac-4596-b5c6-8f41d73d8dc5";
 
         /// <summary>
+        /// Represents a precinct or sub-division of a city such as a burrogh
+        /// </summary>
+        public const string PrecinctOrBurrogh = "ACAFE0F2-E209-43BB-8633-3665FD7C90BA";
+
+        /// <summary>
         /// Device
         /// </summary>
         public const string Device = "1373ff04-a6ef-420a-b1d0-4a07465fe8e8";
@@ -232,6 +237,11 @@ namespace SanteDB.Core.Model.Constants
         /// State
         /// </summary>
         public static readonly Guid State = Guid.Parse("8CF4B0B0-84E5-4122-85FE-6AFA8240C218");
+
+        /// <summary>
+        /// Represents a precinct or sub-division of a city such as a burrogh
+        /// </summary>
+        public static readonly Guid PrecinctOrBurrogh = Guid.Parse("ACAFE0F2-E209-43BB-8633-3665FD7C90BA");
 
     }
 }
