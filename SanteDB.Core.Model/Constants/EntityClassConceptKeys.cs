@@ -58,7 +58,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Represents a precinct or sub-division of a city such as a burrogh
         /// </summary>
-        public const string PrecinctOrBurrogh = "ACAFE0F2-E209-43BB-8633-3665FD7C90BA";
+        public const string PrecinctOrBorough = "ACAFE0F2-E209-43BB-8633-3665FD7C90BA";
 
         /// <summary>
         /// Device
@@ -241,7 +241,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Represents a precinct or sub-division of a city such as a burrogh
         /// </summary>
-        public static readonly Guid PrecinctOrBurrogh = Guid.Parse("ACAFE0F2-E209-43BB-8633-3665FD7C90BA");
+        public static readonly Guid PrecinctOrBorough = Guid.Parse("ACAFE0F2-E209-43BB-8633-3665FD7C90BA");
 
     }
 }
