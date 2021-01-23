@@ -34,5 +34,9 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         TemplateDefinition Template { get; set; }
 
+        /// <summary>
+        /// Gets or sets the template key
+        /// </summary>
+        Guid? TemplateKey { get; set; }
     }
 }

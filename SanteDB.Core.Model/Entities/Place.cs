@@ -36,6 +36,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Place")]
     [ClassConceptKey(EntityClassKeyStrings.Place)]
     [ClassConceptKey(EntityClassKeyStrings.ServiceDeliveryLocation)]
+    [ClassConceptKey(EntityClassKeyStrings.PrecinctOrBorough)]
     [ClassConceptKey(EntityClassKeyStrings.CityOrTown)]
     [ClassConceptKey(EntityClassKeyStrings.Country)]
     [ClassConceptKey(EntityClassKeyStrings.CountyOrParish)]
@@ -70,6 +71,7 @@ namespace SanteDB.Core.Model.Entities
                     value == EntityClassKeys.ServiceDeliveryLocation ||
                     value == EntityClassKeys.State ||
                     value == EntityClassKeys.CityOrTown ||
+                    value == EntityClassKeys.PrecinctOrBorough ||
                     value == EntityClassKeys.Country ||
                     value == EntityClassKeys.CountyOrParish)
                     base.ClassConceptKey = value;

@@ -136,7 +136,13 @@ namespace SanteDB.Core.Model.Serialization
         /// </summary>
         public XmlSerializer GetSerializer(XmlReader bodyReader)
         {
-            return this.m_serializers.Values.FirstOrDefault(o => o.CanDeserialize(bodyReader));
+            var retVal = this.m_serializers.Values.FirstOrDefault(o => o.CanDeserialize(bodyReader));
+            if (retVal == null)
+            {
+                var type = new ModelSerializationBinder().BindToType(String.Empty, bodyReader.LocalName);
+                return this.CreateSerializer(type);
+            }
+            return retVal;
         }
     }
 }
