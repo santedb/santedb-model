@@ -32,6 +32,9 @@ namespace SanteDB.Core.Model.Query.FilterExtension
             if (rawParm == null || !DateTime.TryParse(rawParm.Value.ToString(), out DateTime parsedParm))
                 parsedParm = DateTime.Now;
 
+
+            if (scope.Type == typeof(DateTimeOffset))
+                scope = Expression.MakeMemberAccess(scope, typeof(DateTimeOffset).GetProperty(nameof(DateTimeOffset.DateTime)));
             return Expression.MakeBinary(comparison, Expression.Call(null, this.ExtensionMethod, scope, Expression.Constant(parsedParm)), valueExpression);
 
         }
