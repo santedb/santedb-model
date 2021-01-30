@@ -431,7 +431,15 @@ namespace SanteDB.Core.Model.Map
 
                             break;
                         case ExpressionType.Constant:
-                            right = Expression.Constant(((Guid)((ConstantExpression)right).Value).ToByteArray());
+                            if(right is ConstantExpression ce)
+                            {
+                                if (ce.Value is Guid uuid)
+                                    right = Expression.Constant(uuid.ToByteArray());
+                                else if (ce.Value is Nullable<Guid>)
+                                    right = Expression.Constant((ce.Value as Guid?).GetValueOrDefault().ToByteArray());
+                                else if (ce.Value == null)
+                                    right = Expression.Constant(null);
+                            }
                             break;
                     }
                 }

@@ -134,7 +134,7 @@ namespace SanteDB.Core.Model.DataTypes
             set
             {
                 this.m_assigningAuthorityPolicy = value;
-                this.m_assigningAuthorityPolicyKey = value?.Key;
+                this.m_assigningAuthorityPolicyKey = value?.Key ?? this.m_assigningAuthorityPolicyKey;
             }
         }
 
