@@ -101,5 +101,6 @@ namespace SanteDB.Core.Model.Constants
         /// Indicates that the entity or act did exist at one point, however it no longer exists
         /// </summary>
         public static readonly Guid Purged = Guid.Parse("39995C08-0A5C-4549-8BA7-D187F9B3C4FD");
+
     }
 }

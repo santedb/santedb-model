@@ -576,8 +576,14 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
         {
-            var tag = new EntityTag(tagKey, tagValue);
-            this.Tags.Add(tag);
+            var tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            if (tag == null)
+            {
+                tag = new EntityTag(tagKey, tagValue);
+                this.Tags.Add(tag);
+            }
+            else
+                tag.Value = tagValue;
             return tag;
         }
 
