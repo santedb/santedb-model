@@ -120,7 +120,7 @@ namespace SanteDB.Core.Model.Serialization
                         {
 	                        this.m_serializerKeys[type] = key;
                         }
-                        else
+                        else if(existingKey == null)
                         {
 	                        this.m_serializerKeys.Add(type, key); // Link the key 
                         }
