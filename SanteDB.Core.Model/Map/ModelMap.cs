@@ -97,7 +97,7 @@ namespace SanteDB.Core.Model.Map
                 if (retVal == null)
                     while (modelType != typeof(Object) && retVal?.DomainType != (domainType ?? retVal?.DomainType))
                     {
-                        modelType = modelType.GetTypeInfo().BaseType;
+                        modelType = modelType.BaseType;
                         retVal = this.Class.Find(o => o.ModelType == modelType && o.DomainType == domainType);
                     }
 

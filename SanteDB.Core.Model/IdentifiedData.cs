@@ -99,7 +99,7 @@ namespace SanteDB.Core.Model
             get
             {
                 if (String.IsNullOrEmpty(this.m_typeId))
-                    this.m_typeId = this.GetType().GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>().Id;
+                    this.m_typeId = this.GetType().GetCustomAttribute<JsonObjectAttribute>().Id;
                 return this.m_typeId;
             }
             set { }

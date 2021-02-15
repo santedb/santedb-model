@@ -107,12 +107,12 @@ namespace SanteDB.Core.Model.Map
                 var rtm = scanType.GetRuntimeMethods();
                 foreach (MethodInfo mi in rtm)
                     if (mi.GetParameters().Length == 2 &&
-                                       (mi.ReturnType.GetTypeInfo().IsSubclassOf(destType) || destType == mi.ReturnType) &&
+                                       (mi.ReturnType.IsSubclassOf(destType) || destType == mi.ReturnType) &&
                                        mi.GetParameters()[0].ParameterType.FullName == sourceType.FullName &&
                                        mi.GetParameters()[1].ParameterType.FullName == typeof(IFormatProvider).FullName)
                         retVal = mi;
                     else if (mi.GetParameters().Length == 1 &&
-                                            (mi.ReturnType.GetTypeInfo().IsSubclassOf(destType) || destType == mi.ReturnType) &&
+                                            (mi.ReturnType.IsSubclassOf(destType) || destType == mi.ReturnType) &&
                                             mi.GetParameters()[0].ParameterType.FullName == sourceType.FullName && retVal == null)
                         retVal = mi;
 
@@ -147,28 +147,28 @@ namespace SanteDB.Core.Model.Map
                 result = null;
                 return false;
             }
-            else if (m_destType.GetTypeInfo().IsGenericType && !value.GetType().GetTypeInfo().IsEnum)
+            else if (m_destType.IsGenericType && !value.GetType().IsEnum)
             {
                 m_destType = m_destType.GenericTypeArguments[0];
             }
 
             // Is there a cast?
-            if (destType.GetTypeInfo().IsAssignableFrom(value.GetType().GetTypeInfo())) //  (m_destType.IsAssignableFrom(value.GetType())) // Same type
+            if (destType.IsAssignableFrom(value.GetType())) //  (m_destType.IsAssignableFrom(value.GetType())) // Same type
             {
                 result = value;
                 return true;
             }
-            else if (m_destType == typeof(int) && value.GetType().GetTypeInfo().IsEnum)
+            else if (m_destType == typeof(int) && value.GetType().IsEnum)
             {
                 result = (int)value;
                 return true;
             }
-            else if (m_destType.GetTypeInfo().IsEnum && value.GetType() == typeof(int))
+            else if (m_destType.IsEnum && value.GetType() == typeof(int))
             {
                 result = Enum.ToObject(m_destType, value);
                 return true;
             }
-            else if (m_destType.GetTypeInfo().IsEnum && value.GetType() == typeof(String)) // No map exists yet
+            else if (m_destType.IsEnum && value.GetType() == typeof(String)) // No map exists yet
             {
                 try
                 {
@@ -216,8 +216,8 @@ namespace SanteDB.Core.Model.Map
                     // We have two generic types, however the dest type generic doesn't match the 
                     // value type generic. This is common with type overrides where the object container
                     // doesn't match the value. For example, attempting to assign a CV<String> to a CS<ResponseMode>
-                    if (value.GetType().GetTypeInfo().IsGenericType &&
-                        destType.GetTypeInfo().IsGenericType &&
+                    if (value.GetType().IsGenericType &&
+                        destType.IsGenericType &&
                         destType.GenericTypeArguments[0] != value.GetType().GenericTypeArguments[0] &&
                         destType.GetGenericTypeDefinition() != value.GetType().GetGenericTypeDefinition())
                     {

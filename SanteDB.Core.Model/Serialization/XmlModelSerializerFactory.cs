@@ -103,10 +103,10 @@ namespace SanteDB.Core.Model.Serialization
                         if(type.GetCustomAttribute<ResourceCollectionAttribute>() != null && extraTypes.Length == 0)
                         {
 	                        extraTypes = typeof(XmlModelSerializerFactory)
-		                        .GetTypeInfo()
+		                        
 		                        .Assembly
 		                        .ExportedTypes
-                                .Where(t => typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo()) && !t.GetTypeInfo().IsGenericTypeDefinition && !t.GetTypeInfo().IsAbstract)
+                                .Where(t => typeof(IdentifiedData).IsAssignableFrom(t) && !t.IsGenericTypeDefinition && !t.IsAbstract)
                                 .Union(ModelSerializationBinder.GetRegisteredTypes())
 		                        .ToArray();
                         }

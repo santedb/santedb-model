@@ -334,7 +334,7 @@ namespace SanteDB.Core.Model.Collection
                     lock (s_lockObject)
                     {
                         properties = model.GetType().GetRuntimeProperties().Where(p => p.GetCustomAttribute<SerializationReferenceAttribute>() != null ||
-                            typeof(IList).GetTypeInfo().IsAssignableFrom(p.PropertyType.GetTypeInfo()) && p.GetCustomAttributes<XmlElementAttribute>().Count() > 0 && followList).ToList();
+                            typeof(IList).IsAssignableFrom(p.PropertyType) && p.GetCustomAttributes<XmlElementAttribute>().Count() > 0 && followList).ToList();
 
                         if (!m_propertyCache.ContainsKey(model.GetType()))
                         {

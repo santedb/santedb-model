@@ -38,7 +38,7 @@ namespace SanteDB.Core.Model.Patch
         /// </summary>
         public Patch()
         {
-            this.Version = typeof(Patch).GetTypeInfo().Assembly.GetName().Version.ToString();
+            this.Version = typeof(Patch).Assembly.GetName().Version.ToString();
             this.Operation = new List<PatchOperation>();
         }
 
