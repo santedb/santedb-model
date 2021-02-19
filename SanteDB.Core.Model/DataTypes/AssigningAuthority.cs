@@ -31,6 +31,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a model class which is an assigning authority
     /// </summary>
+    /// TODO: Refactor for V3 -> Identity Domain
     [Classifier(nameof(DomainName)), KeyLookup(nameof(DomainName))]
     [XmlType(nameof(AssigningAuthority), Namespace = "http://santedb.org/model"), JsonObject("AssigningAuthority")]
     [XmlRoot(nameof(AssigningAuthority), Namespace = "http://santedb.org/model")]
