@@ -603,5 +603,11 @@ namespace SanteDB.Core.Model.Entities
             // Is there already an extension type? if so just replace
             this.Extensions.Add(new EntityExtension(extensionType, handlerType, value));
         }
+
+        /// <summary>
+        /// Render the display of this entity
+        /// </summary>
+        /// <returns></returns>
+        public override string ToDisplay() => $"{this.Type} : {this.Names?.FirstOrDefault().ToDisplay()} (K:{this.Key})";
     }
 }
