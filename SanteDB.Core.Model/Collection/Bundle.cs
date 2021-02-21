@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2019 - 2020, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2019-11-27
+ * Date: 2021-2-9
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
@@ -334,7 +334,7 @@ namespace SanteDB.Core.Model.Collection
                     lock (s_lockObject)
                     {
                         properties = model.GetType().GetRuntimeProperties().Where(p => p.GetCustomAttribute<SerializationReferenceAttribute>() != null ||
-                            typeof(IList).GetTypeInfo().IsAssignableFrom(p.PropertyType.GetTypeInfo()) && p.GetCustomAttributes<XmlElementAttribute>().Count() > 0 && followList).ToList();
+                            typeof(IList).IsAssignableFrom(p.PropertyType) && p.GetCustomAttributes<XmlElementAttribute>().Count() > 0 && followList).ToList();
 
                         if (!m_propertyCache.ContainsKey(model.GetType()))
                         {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2019 - 2020, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2020-5-1
+ * Date: 2021-2-9
  */
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -61,7 +61,7 @@ namespace SanteDB.Core.Model.Serialization
             typeName = s_typeCache.FirstOrDefault(o => o.Value == serializedType).Key;
             if (typeName == null)
             {
-	            typeName = serializedType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
+	            typeName = serializedType.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
             }
 
             assemblyName = null;
@@ -74,15 +74,15 @@ namespace SanteDB.Core.Model.Serialization
         public Type BindToType(string assemblyName, string typeName)
         {
             // Assembly to search
-            var asm = typeof(ModelSerializationBinder).GetTypeInfo().Assembly;
+            var asm = typeof(ModelSerializationBinder).Assembly;
             if (!string.IsNullOrEmpty(assemblyName))
             {
 	            asm = Assembly.Load(new AssemblyName(assemblyName));
             }
             else if (this.m_hintType != null) // use hint type
             {
-                asm = this.m_hintType.GetTypeInfo().Assembly;
-                if (this.m_hintType.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>()?.Id == typeName)
+                asm = this.m_hintType.Assembly;
+                if (this.m_hintType.GetCustomAttribute<JsonObjectAttribute>()?.Id == typeName)
                 {
 	                return this.m_hintType;
                 }
@@ -95,7 +95,7 @@ namespace SanteDB.Core.Model.Serialization
 	            lock (s_lock)
 	            {
 		            type = asm.ExportedTypes.SingleOrDefault(
-			            t => t.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
+			            t => t.GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
 		            );
 		            if (!s_typeCache.ContainsKey(typeName) && type != null)
 		            {
@@ -126,7 +126,7 @@ namespace SanteDB.Core.Model.Serialization
         /// </summary>
         public static void RegisterModelType(Type type)
         {
-            var typeName = type.GetTypeInfo().GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.Name;
+            var typeName = type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.Name;
             if (!s_typeCache.ContainsKey(typeName))
             {
 	            lock (s_lock)

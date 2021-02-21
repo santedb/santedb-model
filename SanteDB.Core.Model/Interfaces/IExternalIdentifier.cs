@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-2-9
+ * Date: 2021-2-21
  */
 using SanteDB.Core.Model.DataTypes;
 using System;
@@ -24,19 +24,19 @@ using System.Text;
 namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Indicates an object has a template
+    /// Describes a class that is an external identifier
     /// </summary>
-    public interface IHasTemplate
+    public interface IExternalIdentifier
     {
 
         /// <summary>
-        /// Get the tamplate for the object
+        /// Gets the authority
         /// </summary>
-        TemplateDefinition Template { get; set; }
+        AssigningAuthority Authority { get; }
 
         /// <summary>
-        /// Gets or sets the template key
+        /// Gets the value of the identity 
         /// </summary>
-        Guid? TemplateKey { get; set; }
+        String Value { get; }
     }
 }

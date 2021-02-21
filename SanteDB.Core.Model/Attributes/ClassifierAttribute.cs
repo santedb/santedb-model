@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2019 - 2020, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2019-11-27
+ * Date: 2021-2-9
  */
 using System;
 
@@ -26,18 +26,27 @@ namespace SanteDB.Core.Model.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class ClassifierAttribute : Attribute
     {
-	    /// <summary>
+        /// <summary>
         /// Classifier attribute property
         /// </summary>
-        /// <param name="classProperty"></param>
-        public ClassifierAttribute(string classProperty)
+        /// <param name="classProperty">The classifier property named classifier</param>
+        /// <param name="keyProperty">The key property for the classifier used when UUIDs are queried</param>
+        public ClassifierAttribute(string classProperty, string keyProperty = null)
         {
             this.ClassifierProperty = classProperty;
+            this.ClassifierKeyProperty = keyProperty;
         }
 
 	    /// <summary>
         /// Gets or sets the classifier property
         /// </summary>
         public string ClassifierProperty { get; set; }
+
+        /// <summary>
+        /// Gets or sets the property to set as key when a UUID is used
+        /// </summary>
+        public string ClassifierKeyProperty { get; set; }
+
+
     }
 }

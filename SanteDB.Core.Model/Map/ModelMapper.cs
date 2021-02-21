@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2019 - 2020, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2019-11-27
+ * Date: 2021-2-9
  */
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
@@ -221,7 +221,7 @@ namespace SanteDB.Core.Model.Map
                             break;
                         viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
 
-                        if (via.OrderBy != null && viaExpression.Type.GetTypeInfo().ImplementedInterfaces.Any(o => o == typeof(IEnumerable)))
+                        if (via.OrderBy != null && viaExpression.Type.FindInterfaces((o,_)=>o == typeof(IEnumerable),null).Length > 0)
                             viaExpression = viaExpression.Sort(via.OrderBy, via.SortOrder);
                         if (via.Aggregate != AggregationFunctionType.None)
                             viaExpression = viaExpression.Aggregate(via.Aggregate);
@@ -247,7 +247,7 @@ namespace SanteDB.Core.Model.Map
                     if (classMap.ParentDomainProperty != null)
                     {
                         domainMember = domainType.GetRuntimeProperty(classMap.ParentDomainProperty.DomainName);
-                        return MapModelMember(memberExpression, Expression.MakeMemberAccess(accessExpression, domainMember), (modelType ?? memberExpression.Expression.Type).GetTypeInfo().BaseType);
+                        return MapModelMember(memberExpression, Expression.MakeMemberAccess(accessExpression, domainMember), (modelType ?? memberExpression.Expression.Type).BaseType);
                     }
                     else
                     {
@@ -319,7 +319,7 @@ namespace SanteDB.Core.Model.Map
                     classMap.TryGetModelProperty(propertyExpression.Member.Name, out propertyMap);
                     if (propertyMap == null)
                     {
-                        classMap = this.m_mapFile.GetModelClassMap(classMap.ModelType.GetTypeInfo().BaseType);
+                        classMap = this.m_mapFile.GetModelClassMap(classMap.ModelType.BaseType);
                         //                    var tDomain = rootExpression.Expression.Type.GetRuntimeProperty(classMap.ParentDomainProperty.DomainName);
 
                     }
@@ -424,7 +424,7 @@ namespace SanteDB.Core.Model.Map
                 {
                     properties = typeof(TModel).GetRuntimeProperties().Where(m => m != null &&
                     m.GetCustomAttribute<DataIgnoreAttribute>() == null &&
-                    (primitives.Contains(m.PropertyType) || m.PropertyType.GetTypeInfo().IsEnum) &&
+                    (primitives.Contains(m.PropertyType) || m.PropertyType.IsEnum) &&
                     m.CanWrite).ToArray();
                     if (!propertyClassMap.ContainsKey(String.Empty))
                         propertyClassMap.Add(String.Empty, properties);
@@ -440,15 +440,15 @@ namespace SanteDB.Core.Model.Map
                 if (propValue == null)
                     continue;
 
-                if (!propInfo.PropertyType.GetTypeInfo().IsPrimitive && propInfo.PropertyType != typeof(Guid) &&
-                    (!propInfo.PropertyType.GetTypeInfo().IsGenericType || propInfo.PropertyType.GetGenericTypeDefinition() != typeof(Nullable<>)) &&
+                if (!propInfo.PropertyType.IsPrimitive && propInfo.PropertyType != typeof(Guid) &&
+                    (!propInfo.PropertyType.IsGenericType || propInfo.PropertyType.GetGenericTypeDefinition() != typeof(Nullable<>)) &&
                     propInfo.PropertyType != typeof(String) &&
                     propInfo.PropertyType != typeof(DateTime) &&
                     propInfo.PropertyType != typeof(DateTimeOffset) &&
                     propInfo.PropertyType != typeof(Type) &&
                     propInfo.PropertyType != typeof(Decimal) &&
                     propInfo.PropertyType != typeof(byte[]) &&
-                    !propInfo.PropertyType.GetTypeInfo().IsEnum)
+                    !propInfo.PropertyType.IsEnum)
                     continue;
 
                 // Map property
@@ -476,7 +476,7 @@ namespace SanteDB.Core.Model.Map
                 {
                     domainProperty.SetValue(targetObject, ((DateTimeOffset)propValue).DateTime);
                 }
-                else if (domainProperty.PropertyType.GetTypeInfo().IsAssignableFrom(propInfo.PropertyType.GetTypeInfo()))
+                else if (domainProperty.PropertyType.IsAssignableFrom(propInfo.PropertyType))
                     domainProperty.SetValue(targetObject, propValue);
                 else if (propInfo.PropertyType == typeof(Type) && domainProperty.PropertyType == typeof(String))
                     domainProperty.SetValue(targetObject, (propValue as Type).AssemblyQualifiedName);
@@ -508,9 +508,9 @@ namespace SanteDB.Core.Model.Map
             else
             {
                 var cType = tModel;
-                while (cType != null && classMap == null || !tDomain.GetTypeInfo().IsAssignableFrom(Type.GetType(classMap.DomainClass).GetTypeInfo()))
+                while (cType != null && classMap == null || !tDomain.IsAssignableFrom(Type.GetType(classMap.DomainClass)))
                 {
-                    cType = cType.GetTypeInfo().BaseType;
+                    cType = cType.BaseType;
                     if(cType != null)
                         classMap = this.m_mapFile.GetModelClassMap(cType);
                 } // work up the tree
@@ -554,7 +554,7 @@ namespace SanteDB.Core.Model.Map
             String classPropertyName = String.Empty;
             if (!m_domainClassPropertyName.TryGetValue(tModel, out classPropertyName))
             {
-                classPropertyName = tModel.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>()?.ClassifierProperty;
+                classPropertyName = tModel.GetCustomAttribute<ClassifierAttribute>()?.ClassifierProperty;
                 lock (m_domainClassPropertyName)
                     if (!m_domainClassPropertyName.ContainsKey(tModel))
                         m_domainClassPropertyName.Add(tModel, classPropertyName);
@@ -614,7 +614,7 @@ namespace SanteDB.Core.Model.Map
                 {
                     properties = tModel.GetRuntimeProperties().Where(m => m != null &&
                     m.GetCustomAttribute<DataIgnoreAttribute>() == null &&
-                    (primitives.Contains(m.PropertyType) || m.PropertyType.GetTypeInfo().IsEnum ||
+                    (primitives.Contains(m.PropertyType) || m.PropertyType.IsEnum ||
                     m.GetCustomAttributes<AutoLoadAttribute>().Any(o => o.ClassCode == classifierValue || o.ClassCode == null)) &&
                     m.CanWrite).ToArray();
                     if (!propertyClassMap.ContainsKey(classifierValue ?? String.Empty))
@@ -704,7 +704,7 @@ namespace SanteDB.Core.Model.Map
                 //DebugWriteLine("Unmapped property ({0}).{1}", typeof(TDomain).Name, propInfo.Name);
                 if (sourceProperty.PropertyType == typeof(byte[]) && modelProperty.PropertyType.StripNullable() == typeof(Guid)) // Guid to BA
                     modelProperty.SetValue(retVal, new Guid((byte[])sourceProperty.GetValue(sourceObject)));
-                else if (modelProperty.PropertyType.GetTypeInfo().IsAssignableFrom(sourceProperty.PropertyType.GetTypeInfo()))
+                else if (modelProperty.PropertyType.IsAssignableFrom(sourceProperty.PropertyType))
                     modelProperty.SetValue(retVal, sourceProperty.GetValue(sourceObject));
                 else if (sourceProperty.PropertyType == typeof(String) && modelProperty.PropertyType == typeof(Type))
                     modelProperty.SetValue(retVal, Type.GetType(sourceProperty.GetValue(sourceObject) as String));
@@ -715,8 +715,8 @@ namespace SanteDB.Core.Model.Map
                 {
                     var modelInstance = Activator.CreateInstance(modelProperty.PropertyType) as IList;
                     modelProperty.SetValue(retVal, modelInstance);
-                    var instanceMapFunction = typeof(ModelMapper).GetGenericMethod("MapDomainInstance", new Type[] { sourceProperty.PropertyType.GetTypeInfo().GenericTypeArguments[0], modelProperty.PropertyType.GetTypeInfo().GenericTypeArguments[0] },
-                        new Type[] { sourceProperty.PropertyType.GetTypeInfo().GenericTypeArguments[0], typeof(bool), typeof(HashSet<Guid>) });
+                    var instanceMapFunction = typeof(ModelMapper).GetGenericMethod("MapDomainInstance", new Type[] { sourceProperty.PropertyType.GenericTypeArguments[0], modelProperty.PropertyType.GenericTypeArguments[0] },
+                        new Type[] { sourceProperty.PropertyType.GenericTypeArguments[0], typeof(bool), typeof(HashSet<Guid>) });
                     foreach (var itm in originalValue as IList)
                     {
                         // Traverse?
@@ -743,8 +743,8 @@ namespace SanteDB.Core.Model.Map
                     }
                 }
                 // Flat map list 1..1
-                else if (typeof(IList).GetTypeInfo().IsAssignableFrom(modelProperty.PropertyType.GetTypeInfo()) &&
-                    typeof(IList).GetTypeInfo().IsAssignableFrom(sourceProperty.PropertyType.GetTypeInfo()))
+                else if (typeof(IList).IsAssignableFrom(modelProperty.PropertyType) &&
+                    typeof(IList).IsAssignableFrom(sourceProperty.PropertyType))
                 {
                     var modelInstance = Activator.CreateInstance(modelProperty.PropertyType) as IList;
                     modelProperty.SetValue(retVal, modelInstance);

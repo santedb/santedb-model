@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2019 - 2020, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2019-11-27
+ * Date: 2021-2-9
  */
 using System;
 using System.Collections;
@@ -112,11 +112,11 @@ namespace SanteDB.Core.Model.Map
             {
 
                 var orderProperty = domainClass.GetRuntimeProperty(this.DomainName);
-                if (!orderProperty.PropertyType.GetTypeInfo().ImplementedInterfaces.Any(o => o == typeof(IEnumerable)))
+                if (!orderProperty.PropertyType.IsEnumerable())
                     retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Sort Property {0}.{1} is not enumerable", domainClass?.Name, this.OrderBy), null, null));
                 else
                 {
-                    orderProperty = orderProperty.PropertyType.GetTypeInfo().GenericTypeArguments[0].GetRuntimeProperty(this.OrderBy);
+                    orderProperty = orderProperty.PropertyType.GenericTypeArguments[0].GetRuntimeProperty(this.OrderBy);
                     if (orderProperty == null)
                         retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Sort Property {0}.{1} not found", domainClass?.Name, this.OrderBy), null, null));
                 }

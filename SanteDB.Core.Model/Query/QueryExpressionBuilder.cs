@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2019 - 2020, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2020-5-1
+ * Date: 2021-2-9
  */
 using SanteDB.Core.Model.Attributes;
 using System;
@@ -58,7 +58,7 @@ namespace SanteDB.Core.Model.Query
             {
                 this.m_query = workingDictionary;
 
-                foreach (var itm in modelType.GetTypeInfo().ImplementedInterfaces)
+                foreach (var itm in modelType.GetInterfaces())
                     this.m_interfaceHints.Add(itm, modelType);
             }
 
@@ -463,7 +463,7 @@ namespace SanteDB.Core.Model.Query
                 {
                     MemberExpression memberExpr = access as MemberExpression;
                     String path = this.ExtractPath(memberExpr.Expression, fromUnary, fromOperand); // get the chain if required
-                    if (memberExpr.Expression.Type.GetTypeInfo().IsGenericType && memberExpr.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    if (memberExpr.Expression.Type.IsGenericType && memberExpr.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
                         return path;
 
                     // XML property?
@@ -472,7 +472,7 @@ namespace SanteDB.Core.Model.Query
 
                     // Member information is declread on interface
                     Type mapType = null;
-                    if(memberInfo.DeclaringType.GetTypeInfo().IsInterface && this.m_interfaceHints.TryGetValue(memberInfo.DeclaringType, out mapType))
+                    if(memberInfo.DeclaringType.IsInterface && this.m_interfaceHints.TryGetValue(memberInfo.DeclaringType, out mapType))
                         memberInfo = mapType.GetRuntimeProperty(memberInfo.Name) ?? memberInfo;
                     
                     // Is this a delay load?
@@ -540,7 +540,7 @@ namespace SanteDB.Core.Model.Query
                 else if (access.NodeType == ExpressionType.TypeAs)
                 {
                     UnaryExpression ua = (UnaryExpression)access;
-                    return String.Format("{0}@{1}", this.ExtractPath(ua.Operand, false, fromOperand), ua.Type.GetTypeInfo().GetCustomAttribute<XmlTypeAttribute>().TypeName);
+                    return String.Format("{0}@{1}", this.ExtractPath(ua.Operand, false, fromOperand), ua.Type.GetCustomAttribute<XmlTypeAttribute>().TypeName);
                 }
                 else if (access.NodeType == ExpressionType.Parameter && fromOperand)
                     return "$_";
@@ -559,13 +559,24 @@ namespace SanteDB.Core.Model.Query
                         return $"{this.BuildGuardExpression(binaryExpression.Left as BinaryExpression)}|{this.BuildGuardExpression(binaryExpression.Right as BinaryExpression)}";
                     case ExpressionType.Equal:
                         var expressionMember = binaryExpression.Left as MemberExpression;
-                        var valueExpression = binaryExpression.Right as ConstantExpression;
-                        var classifierAttribute = expressionMember.Member.DeclaringType.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>();
-                        if (classifierAttribute?.ClassifierProperty != expressionMember.Member.Name)
-                            throw new InvalidOperationException($"Classifier for type on {expressionMember.Member.DeclaringType.FullName} is property {classifierAttribute?.ClassifierProperty} however expression uses property {expressionMember.Member.Name}. Only {classifierAttribute?.ClassifierProperty} may be used in guard expression");
+                        var valueExpression = this.ExtractValue(binaryExpression.Right);
+                        var classifierAttribute = expressionMember.Member.DeclaringType.GetCustomAttribute<ClassifierAttribute>();
+                        if (classifierAttribute == null)
+                            throw new InvalidOperationException($"No classifier is defined on {expressionMember.Expression.Type.FullName}");
+                        else if (classifierAttribute.ClassifierProperty != expressionMember.Member.Name)
+                        {
+                            // Lookup the key property
+                            PropertyInfo keyProp = null;
+                            if (!String.IsNullOrEmpty(classifierAttribute.ClassifierKeyProperty))
+                                keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierKeyProperty);
+                            else 
+                                keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierProperty).GetSerializationRedirectProperty();
+                            if(keyProp?.Name != expressionMember.Member.Name)
+                                throw new InvalidOperationException($"Classifier for type on {expressionMember.Member.DeclaringType.FullName} is property {classifierAttribute?.ClassifierProperty} however expression uses property {expressionMember.Member.Name}. Only {classifierAttribute?.ClassifierProperty} may be used in guard expression");
+                        }
                         if (valueExpression == null)
                             throw new InvalidOperationException("Only constant expressions are supported on guards");
-                        return valueExpression.Value.ToString();
+                        return valueExpression.ToString();
                     default:
                         throw new InvalidOperationException($"Binary expressions of {binaryExpression.NodeType} are not permitted");
 

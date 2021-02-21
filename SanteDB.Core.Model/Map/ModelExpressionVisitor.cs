@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2019 - 2020, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2020-5-1
+ * Date: 2021-2-9
  */
 using SanteDB.Core.Model.Attributes;
 using System;
@@ -387,7 +387,7 @@ namespace SanteDB.Core.Model.Map
 
 
             // Are the types compatible?
-            if (!right.Type.GetTypeInfo().IsAssignableFrom(left.Type.GetTypeInfo()))
+            if (!right.Type.IsAssignableFrom(left.Type))
             {
                 if (right.NodeType == ExpressionType.Convert)
                     right = ((UnaryExpression)right).Operand;
@@ -470,7 +470,7 @@ namespace SanteDB.Core.Model.Map
                 if (right.Type != left.Type)
                 {
 
-                    if (right.Type.GetTypeInfo().IsGenericType &&
+                    if (right.Type.IsGenericType &&
                         right.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
                     {
                         if (right.NodeType == ExpressionType.Convert &&
@@ -479,9 +479,9 @@ namespace SanteDB.Core.Model.Map
                         else if (left is ConstantExpression && (left as ConstantExpression).Value == null)
                             return Expression.MakeBinary(node.NodeType, left, right);
                         else
-                            right = Expression.Coalesce(right, Expression.Constant(Activator.CreateInstance(right.Type.GetTypeInfo().GenericTypeArguments[0])));
+                            right = Expression.Coalesce(right, Expression.Constant(Activator.CreateInstance(right.Type.GenericTypeArguments[0])));
                     }
-                    if (left.Type.GetTypeInfo().IsGenericType &&
+                    if (left.Type.IsGenericType &&
                         left.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
                     {
                         if (left.NodeType == ExpressionType.Convert &&
@@ -490,12 +490,12 @@ namespace SanteDB.Core.Model.Map
                         else if (right is ConstantExpression && (right as ConstantExpression).Value == null) // Handle : o.Nullable == null
                             return Expression.MakeBinary(node.NodeType, left, right);
                         else
-                            left = Expression.Coalesce(left, Expression.Constant(Activator.CreateInstance(left.Type.GetTypeInfo().GenericTypeArguments[0])));
+                            left = Expression.Coalesce(left, Expression.Constant(Activator.CreateInstance(left.Type.GenericTypeArguments[0])));
                     }
                     // Handle nullable <> null to always be true
                     if ((right is ConstantExpression && (right as ConstantExpression).Value == null ||
                         left is ConstantExpression && (left as ConstantExpression).Value == null) &&
-                        (!right.Type.GetTypeInfo().IsClass || !left.Type.GetTypeInfo().IsClass))
+                        (!right.Type.IsClass || !left.Type.IsClass))
                         return Expression.Constant(true);
                 }
                 return Expression.MakeBinary(node.NodeType, left, right);
@@ -542,7 +542,7 @@ namespace SanteDB.Core.Model.Map
                 if (node.Expression.NodeType == ExpressionType.Convert)
                 {
                     UnaryExpression convertExpression = node.Expression as UnaryExpression;
-                    if (convertExpression.Type.GetTypeInfo().IsAssignableFrom(convertExpression.Operand.Type.GetTypeInfo()))
+                    if (convertExpression.Type.IsAssignableFrom(convertExpression.Operand.Type))
                         node = Expression.MakeMemberAccess(convertExpression.Operand, node.Member);
                 }
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2019 - 2020, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +14,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2019-11-27
+ * Date: 2021-2-9
  */
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Map;
@@ -166,7 +166,7 @@ namespace SanteDB.Core.Model.Query
                     var rawMember = memberPath[i];
 
                     // No access path - so they are just referencing the core parameter
-                    if (String.IsNullOrEmpty(rawMember)) 
+                    if (String.IsNullOrEmpty(rawMember))
                         continue;
 
                     var pMember = rawMember;
@@ -255,7 +255,7 @@ namespace SanteDB.Core.Model.Query
                             memberInfo = backingFor;
                     }
 
-                    
+
                     // Force loading of properties
                     if (forceLoad)
                     {
@@ -264,7 +264,7 @@ namespace SanteDB.Core.Model.Query
                             var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String) });
                             accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name));
                         }
-                        else if(typeof(IIdentifiedEntity).IsAssignableFrom(memberInfo.PropertyType))
+                        else if (typeof(IIdentifiedEntity).IsAssignableFrom(memberInfo.PropertyType))
                         {
                             var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) });
                             accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name));
@@ -272,7 +272,7 @@ namespace SanteDB.Core.Model.Query
                         else
                             accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
                     }
-                    else 
+                    else
                         accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
 
                     if (!String.IsNullOrEmpty(cast))
@@ -281,7 +281,7 @@ namespace SanteDB.Core.Model.Query
                         Type castType = null;
                         if (!m_castCache.TryGetValue(cast, out castType))
                         {
-                            castType = typeof(QueryExpressionParser).GetTypeInfo().Assembly.ExportedTypes.FirstOrDefault(o => o.GetTypeInfo().GetCustomAttribute<XmlTypeAttribute>()?.TypeName == cast);
+                            castType = typeof(QueryExpressionParser).Assembly.ExportedTypes.FirstOrDefault(o => o.GetCustomAttribute<XmlTypeAttribute>()?.TypeName == cast);
                             if (castType == null)
                                 throw new ArgumentOutOfRangeException(nameof(castType), cast);
 
@@ -302,67 +302,95 @@ namespace SanteDB.Core.Model.Query
                         Type itemType = accessExpression.Type.GenericTypeArguments[0];
                         Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
                         ParameterExpression guardParameter = Expression.Parameter(itemType, "guard");
-                        if (guard == "null")
-                            guard = null;
-
                         // Cascade the Classifiers to get the access
-                        ClassifierAttribute classAttr = itemType.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>();
+                        ClassifierAttribute classAttr = itemType.GetCustomAttribute<ClassifierAttribute>();
                         if (classAttr == null)
                             throw new InvalidOperationException("No classifier found for guard expression");
                         PropertyInfo classifierProperty = itemType.GetRuntimeProperty(classAttr.ClassifierProperty);
-                        // Handle XML props
-                        if (classifierProperty.Name.EndsWith("Xml"))
-                            classifierProperty = itemType.GetRuntimeProperty(classifierProperty.Name.Replace("Xml", ""));
-
-                        Expression guardAccessor = guardParameter;
-                        while (classifierProperty != null && classAttr != null)
-                        {
-                            if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(classifierProperty.PropertyType.GetTypeInfo()) && guard != null)
-                            {
-                                if (forceLoad)
-                                {
-                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) });
-                                    var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name));
-                                    guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
-                                }
-                                else
-                                    guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
-
-                            }
-                            else
-                                guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
-
-
-                            classAttr = classifierProperty.PropertyType.GetTypeInfo().GetCustomAttribute<ClassifierAttribute>();
-                            if (classAttr != null && guard != null)
-                                classifierProperty = classifierProperty.PropertyType.GetRuntimeProperty(classAttr.ClassifierProperty);
-                            else if (guard == null)
-                                break;
-                        }
-
-                        MethodInfo whereMethod = typeof(Enumerable).GetGenericMethod("Where",
-                            new Type[] { itemType },
-                            new Type[] { accessExpression.Type, predicateType }) as MethodInfo;
-
-                        // Now make expression
                         Expression guardExpression = null;
-                        if (guard != null)
-                            foreach (var g in guard.Split('|'))
-                            {
-                                // HACK: Some types use enums as their classifier 
-                                object value = g;
-                                if (guardAccessor.Type.GetTypeInfo().IsEnum)
-                                    value = Enum.Parse(guardAccessor.Type, g);
 
-                                var expr = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(value));
+                        
+                        if (guard.Split('|').All(o => Guid.TryParse(o, out Guid _))) // TODO: Refactor this (and the entire class)
+                        {
+                            if (!String.IsNullOrEmpty(classAttr.ClassifierKeyProperty)) // attempt to get via classifier key
+                                classifierProperty = itemType.GetRuntimeProperty(classAttr.ClassifierKeyProperty);
+                            else 
+                                classifierProperty = classifierProperty.GetSerializationRedirectProperty();
+
+                            if(classifierProperty == null)
+                                throw new ArgumentOutOfRangeException("Cannot use UUID filter for Guard on this context");
+
+                            foreach(var g in guard.Split('|'))
+                            {
+                                var expr = Expression.MakeBinary(ExpressionType.Equal, Expression.MakeMemberAccess(guardParameter, classifierProperty), Expression.Convert(Expression.Constant(Guid.Parse(g)), classifierProperty.PropertyType));
                                 if (guardExpression == null)
                                     guardExpression = expr;
                                 else
-                                    guardExpression = Expression.MakeBinary(ExpressionType.Or, guardExpression, expr);
+                                    guardExpression = Expression.MakeBinary(ExpressionType.OrElse, guardExpression, expr);
                             }
-                        else
-                            guardExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(null));
 
+
+                        }
+                        else
+                        {
+                            if (guard == "null")
+                                guard = null;
+
+                            // Handle XML props
+                            if (classifierProperty.Name.EndsWith("Xml"))
+                            {
+                                classifierProperty = itemType.GetRuntimeProperty(classifierProperty.Name.Replace("Xml", ""));
+                            }
+
+                            Expression guardAccessor = guardParameter;
+                            while (classifierProperty != null && classAttr != null)
+                            {
+                                if (typeof(IdentifiedData).IsAssignableFrom(classifierProperty.PropertyType) && guard != null)
+                                {
+                                    if (forceLoad)
+                                    {
+                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) });
+                                        var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name));
+                                        guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
+                                    }
+                                    else
+                                        guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
+
+                                }
+                                else
+                                    guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
+
+
+                                classAttr = classifierProperty.PropertyType.GetCustomAttribute<ClassifierAttribute>();
+                                if (classAttr != null && guard != null)
+                                    classifierProperty = classifierProperty.PropertyType.GetRuntimeProperty(classAttr.ClassifierProperty);
+                                else if (guard == null)
+                                    break;
+                            }
+
+                            // Now make expression
+                            if (guard == null)
+                                guardExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(null));
+                            else
+                                foreach (var g in guard.Split('|'))
+                                {
+                                    // HACK: Some types use enums as their classifier 
+                                    object value = g;
+                                    if (guardAccessor.Type.IsEnum)
+                                        value = Enum.Parse(guardAccessor.Type, g);
+
+                                    var expr = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(value));
+                                    if (guardExpression == null)
+                                        guardExpression = expr;
+                                    else
+                                        guardExpression = Expression.MakeBinary(ExpressionType.Or, guardExpression, expr);
+                                }
+
+                        }
+
+                        MethodInfo whereMethod = typeof(Enumerable).GetGenericMethod("Where",
+                                new Type[] { itemType },
+                                new Type[] { accessExpression.Type, predicateType }) as MethodInfo;
                         var guardLambda = Expression.Lambda(guardExpression, guardParameter);
                         accessExpression = Expression.Call(whereMethod, accessExpression, guardLambda);
 
@@ -377,11 +405,11 @@ namespace SanteDB.Core.Model.Query
 
                     }
                     // List expression, we want the Any() operator
-                    if (accessExpression.Type.GetTypeInfo().ImplementedInterfaces.Any(o => o == typeof(IEnumerable)) &&
-                        accessExpression.Type.GetTypeInfo().IsGenericType)
+                    if (accessExpression.Type.IsEnumerable() &&
+                        accessExpression.Type.IsGenericType)
                     {
 
-                       
+
                         // First or default
                         if (currentValue.Value == null)
                         {
@@ -430,7 +458,7 @@ namespace SanteDB.Core.Model.Query
                     }
 
                     // Is this an access expression?
-                    if (currentValue.Value == null && typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(accessExpression.Type.GetTypeInfo()))
+                    if (currentValue.Value == null && typeof(IdentifiedData).IsAssignableFrom(accessExpression.Type))
                         accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
                 }
 
@@ -456,7 +484,7 @@ namespace SanteDB.Core.Model.Query
                         Type operandType = thisAccessExpression.Type;
 
                         // Correct for nullable
-                        if (value != "null" && value != "!null" && thisAccessExpression.Type.GetTypeInfo().IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+                        if (value != "null" && value != "!null" && thisAccessExpression.Type.IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
                             safeNullable)
                         {
                             nullCheckExpr = Expression.MakeBinary(ExpressionType.NotEqual, thisAccessExpression, Expression.Constant(null));
@@ -475,20 +503,20 @@ namespace SanteDB.Core.Model.Query
                             var opMatch = QueryFilterExtensions.ExtendedFilterRegex.Match(value);
                             if (opMatch.Success)
                             {
-                                
+
                                 // Extract
                                 String fnName = opMatch.Groups[1].Value,
                                     parms = opMatch.Groups[3].Value,
                                     operand = opMatch.Groups[4].Value;
 
                                 var parmExtract = QueryFilterExtensions.ParameterExtractRegex.Match(parms + ",");
-                                while(parmExtract.Success)
+                                while (parmExtract.Success)
                                 {
                                     extendedParms.Add(parmExtract.Groups[1].Value);
                                     parmExtract = QueryFilterExtensions.ParameterExtractRegex.Match(parmExtract.Groups[2].Value);
                                 }
                                 //extendedParms = parms.Split(',');
-                                
+
                                 // Now find the expression
                                 extendedFilter = QueryFilterExtensions.GetExtendedFilter(fnName);
                                 if (extendedFilter == null) // ensure valid reference
@@ -590,7 +618,7 @@ namespace SanteDB.Core.Model.Query
                             valueExpr = Expression.Constant(Guid.Parse(pValue));
                         else if (operandType == typeof(Guid?))
                             valueExpr = Expression.Convert(Expression.Constant(Guid.Parse(pValue)), typeof(Guid?));
-                        else if(operandType == typeof(TimeSpan) || operandType == typeof(TimeSpan?))
+                        else if (operandType == typeof(TimeSpan) || operandType == typeof(TimeSpan?))
                         {
                             if (!TimeSpan.TryParse(pValue, out TimeSpan ts))
                             {
@@ -605,7 +633,7 @@ namespace SanteDB.Core.Model.Query
                             }
                             valueExpr = Expression.Constant(ts);
                         }
-                        else if (operandType.GetTypeInfo().IsEnum)
+                        else if (operandType.IsEnum)
                         {
                             int tryParse = 0;
                             if (Int32.TryParse(pValue, out tryParse))
@@ -623,7 +651,7 @@ namespace SanteDB.Core.Model.Query
                                 {
                                     valueExpr = Expression.Constant(converted);
                                 }
-                                else if (typeof(IdentifiedData).GetTypeInfo().IsAssignableFrom(operandType.GetTypeInfo()) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
+                                else if (typeof(IdentifiedData).IsAssignableFrom(operandType) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
                                 {
                                     valueExpr = Expression.Constant(uuid);
                                     thisAccessExpression = accessExpression = Expression.MakeMemberAccess(accessExpression, operandType.GetRuntimeProperty(nameof(IdentifiedData.Key)));
@@ -631,7 +659,7 @@ namespace SanteDB.Core.Model.Query
                                 else
                                     valueExpr = Expression.Constant(Convert.ChangeType(pValue, operandType));
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
                                 throw new InvalidOperationException($"Unable to convert {pValue} to {operandType}", e);
                             }
@@ -654,7 +682,7 @@ namespace SanteDB.Core.Model.Query
                                     else if (parmType.ParameterType != typeof(String) && MapUtil.TryConvert(p, parmType.ParameterType, out object res)) // convert parameter type
                                         return Expression.Constant(res);
                                     else if (p.StartsWith("\"") && p.EndsWith("\""))
-                                        return Expression.Constant(p.Substring(1, p.Length - 2).Replace("\\\"","\""));
+                                        return Expression.Constant(p.Substring(1, p.Length - 2).Replace("\\\"", "\""));
                                     else
                                         return Expression.Constant(p);
                                 }
@@ -746,8 +774,8 @@ namespace SanteDB.Core.Model.Query
                         true
                 }) as Expression, retVal);
                 if (retVal.Type.IsConstructedGenericType &&
-                    retVal.Type.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>))
-                    retVal = Expression.Coalesce(retVal, Expression.Default(retVal.Type.GetTypeInfo().GenericTypeArguments[0]));
+                    retVal.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    retVal = Expression.Coalesce(retVal, Expression.Default(retVal.Type.GenericTypeArguments[0]));
 
                 return retVal;
             }
