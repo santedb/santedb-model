@@ -21,6 +21,7 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -110,8 +111,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents an external assigned identifier
     /// </summary>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("IdentifierBase")]
-    [Classifier(nameof(AuthorityXml))]
-    public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel> where TBoundModel : VersionedEntityData<TBoundModel>, new()
+    [Classifier(nameof(AuthorityXml), nameof(AuthorityKey))]
+    public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier  where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
 
         // Identifier id

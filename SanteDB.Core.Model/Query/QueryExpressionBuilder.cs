@@ -566,7 +566,11 @@ namespace SanteDB.Core.Model.Query
                         else if (classifierAttribute.ClassifierProperty != expressionMember.Member.Name)
                         {
                             // Lookup the key property
-                            var keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierProperty).GetSerializationRedirectProperty();
+                            PropertyInfo keyProp = null;
+                            if (!String.IsNullOrEmpty(classifierAttribute.ClassifierKeyProperty))
+                                keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierKeyProperty);
+                            else 
+                                keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierProperty).GetSerializationRedirectProperty();
                             if(keyProp?.Name != expressionMember.Member.Name)
                                 throw new InvalidOperationException($"Classifier for type on {expressionMember.Member.DeclaringType.FullName} is property {classifierAttribute?.ClassifierProperty} however expression uses property {expressionMember.Member.Name}. Only {classifierAttribute?.ClassifierProperty} may be used in guard expression");
                         }

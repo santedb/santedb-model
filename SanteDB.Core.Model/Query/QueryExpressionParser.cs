@@ -312,8 +312,12 @@ namespace SanteDB.Core.Model.Query
                         
                         if (guard.Split('|').All(o => Guid.TryParse(o, out Guid _))) // TODO: Refactor this (and the entire class)
                         {
-                            classifierProperty = classifierProperty.GetSerializationRedirectProperty();
-                            if (classifierProperty == null)
+                            if (!String.IsNullOrEmpty(classAttr.ClassifierKeyProperty)) // attempt to get via classifier key
+                                classifierProperty = itemType.GetRuntimeProperty(classAttr.ClassifierKeyProperty);
+                            else 
+                                classifierProperty = classifierProperty.GetSerializationRedirectProperty();
+
+                            if(classifierProperty == null)
                                 throw new ArgumentOutOfRangeException("Cannot use UUID filter for Guard on this context");
 
                             foreach(var g in guard.Split('|'))
