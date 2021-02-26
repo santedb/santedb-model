@@ -250,17 +250,18 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
-        /// Gets the equals of this object
+        /// Returns whether <paramref name="obj"/> has the same meaning as this object
         /// </summary>
         public override bool SemanticEquals(object obj)
         {
             var other = obj as AssigningAuthority;
             if (other == null) return false;
-            return base.SemanticEquals(obj) && other.DomainName == this.DomainName &&
-                this.Oid == other.Oid &&
-                this.Url == other.Url &&
+            return other.DomainName == this.DomainName ||
+                this.Oid == other.Oid ||
+                this.Url == other.Url ||
                 this.AssigningApplicationKey == other.AssigningApplicationKey;
         }
+
 
 
 #pragma warning disable CS1591

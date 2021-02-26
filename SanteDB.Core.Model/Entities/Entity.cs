@@ -434,13 +434,13 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public override IdentifiedData Clean()
         {
-            this.Addresses.RemoveAll(o => o.Clean().IsEmpty());
-            this.Names.RemoveAll(o => o.Clean().IsEmpty());
-            this.Telecoms.RemoveAll(o => o.Clean().IsEmpty());
-            this.Tags.RemoveAll(o => o.Clean().IsEmpty());
-            this.Notes.RemoveAll(o => o.Clean().IsEmpty());
-            this.Extensions.RemoveAll(o => o.Clean().IsEmpty());
-            this.Identifiers.RemoveAll(o => o.Clean().IsEmpty());
+            this.Addresses?.RemoveAll(o => o.Clean().IsEmpty());
+            this.Names?.RemoveAll(o => o.Clean().IsEmpty());
+            this.Telecoms?.RemoveAll(o => o.Clean().IsEmpty());
+            this.Tags?.RemoveAll(o => o.Clean().IsEmpty());
+            this.Notes?.RemoveAll(o => o.Clean().IsEmpty());
+            this.Extensions?.RemoveAll(o => o.Clean().IsEmpty());
+            this.Identifiers?.RemoveAll(o => o.Clean().IsEmpty());
             //this.Relationships.RemoveAll(o => o.Clean().IsEmpty());
             //this.Participations.RemoveAll(o => o.Clean().IsEmpty());
             return this;
