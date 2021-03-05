@@ -268,13 +268,11 @@ namespace SanteDB.Core.Model.Query
                         }
                     default: // extended fn?
                         {
-                            var methodCall = node as MethodCallExpression;
-                            var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(methodCall.Method);
+                            var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(node.Method);
                             if (extendedFn == null)
-                                throw new MissingMemberException($"Cannot find extension method {methodCall.Method}");
+                                throw new MissingMemberException($"Cannot find extension method {node.Method}");
+                            return null;
                         }
-                        return null;
-
                 }
 
             }
@@ -445,6 +443,8 @@ namespace SanteDB.Core.Model.Query
                         return this.ExtractValue((access as BinaryExpression).Left);
                     case ExpressionType.Invoke:
                         return this.ExtractValue(this.VisitInvocation(access as InvocationExpression));
+                    case ExpressionType.Call:
+                        return this.ExtractValue((access as MethodCallExpression).Arguments[0]);
                 }
                 return null; 
             }
