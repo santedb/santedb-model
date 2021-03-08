@@ -26,12 +26,22 @@ namespace SanteDB.Core.Model.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class ClassifierAttribute : Attribute
     {
+
+        /// <summary>
+        /// Classifier attribute property
+        /// </summary>
+        /// <param name="classProperty">The classifier property named classifier</param>
+        public ClassifierAttribute(string classProperty)
+        {
+            this.ClassifierProperty = classProperty;
+        }
+
         /// <summary>
         /// Classifier attribute property
         /// </summary>
         /// <param name="classProperty">The classifier property named classifier</param>
         /// <param name="keyProperty">The key property for the classifier used when UUIDs are queried</param>
-        public ClassifierAttribute(string classProperty, string keyProperty = null)
+        public ClassifierAttribute(string classProperty, string keyProperty)
         {
             this.ClassifierProperty = classProperty;
             this.ClassifierKeyProperty = keyProperty;

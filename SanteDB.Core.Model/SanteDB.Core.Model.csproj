@@ -24,7 +24,7 @@
   <PropertyGroup>
     <PackageId>SanteDB.Core.Model</PackageId>
     <Title>SanteDB.Core.Model</Title>
-    <Version>2.1.0</Version>
+    <Version>2.1.2</Version>
     <Description>SanteDB Clinical Data Repository (CDR) core business models</Description>
     <Authors>SanteSuite Contributors</Authors>
     <PackageTags>SanteDB</PackageTags>
@@ -53,7 +53,7 @@
     <DocumentationFile>..\bin\Debug\SanteDB.Core.Model.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>

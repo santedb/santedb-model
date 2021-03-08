@@ -29,92 +29,92 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
 		/// The act represents generic account management such as adjudications, financial adjustments, stock counting, etc.
 		/// </summary>
-		public const String AccountManagement = "CA44A469-81D7-4484-9189-CA1D55AFECBC";
+		public const String AccountManagement = "ca44a469-81d7-4484-9189-ca1d55afecbc";
 
         /// <summary>
         /// The act represents a generic act which has no special classification
         /// </summary>
-        public const String Act = "D874424E-C692-4FD8-B94E-642E1CBF83E9";
+        public const String Act = "d874424e-c692-4fd8-b94e-642e1cbf83e9";
 
         /// <summary>
         /// The act represents a simple battery of procedures/administrations/tests/etc.
         /// </summary>
-        public const String Battery = "676DE278-64AA-44F2-9B69-60D61FC1F5F5";
+        public const String Battery = "676de278-64aa-44f2-9b69-60d61fc1f5f5";
 
         /// <summary>
         /// The act represents some provision of care such as the seeking out services.
         /// </summary>
-        public const String CareProvision = "1071D24E-6FE9-480F-8A20-B1825AE4D707";
+        public const String CareProvision = "1071d24e-6fe9-480f-8a20-b1825ae4d707";
 
         /// <summary>
         /// The act represents a problem or condition which the patient is suffering from.
         /// </summary>
-        public const String Condition = "1987C53C-7AB8-4461-9EBC-0D428744A8C0";
+        public const String Condition = "1987c53c-7ab8-4461-9ebc-0d428744a8c0";
 
         /// <summary>
         /// The control act event key is used to describe an infrastructural act which has no clinical meaning but can be used to wrap technical details.
         /// </summary>
-        public const String ControlAct = "B35488CE-B7CD-4DD4-B4DE-5F83DC55AF9F";
+        public const String ControlAct = "b35488ce-b7cd-4dd4-b4de-5f83dc55af9f";
 
         /// <summary>
         /// The act represents an encounter such as the patient presenting for care and receiving services during a visit.
         /// </summary>
-        public const String Encounter = "54B52119-1709-4098-8911-5DF6D6C84140";
+        public const String Encounter = "54b52119-1709-4098-8911-5df6d6c84140";
 
         /// <summary>
         /// The act represents an attempt to provide additional clinical information.
         /// </summary>
-        public const String Inform = "192F1768-D39E-409D-87BE-5AFD0EE0D1FE";
+        public const String Inform = "192f1768-d39e-409d-87be-5afd0ee0d1fe";
 
         /// <summary>
         /// The act represents an observation that is made about a patient such as a vital sign, an allergy, cause of death, etc..
         /// </summary>
-        public const String Observation = "28D022C6-8A8B-47C4-9E6A-2BC67308739E";
+        public const String Observation = "28d022c6-8a8b-47c4-9e6a-2bc67308739e";
 
         /// <summary>
         /// The act represents a procedure (something done to a patient).
         /// </summary>
-        public const String Procedure = "8CC5EF0D-3911-4D99-937F-6CFDC2A27D55";
+        public const String Procedure = "8cc5ef0d-3911-4d99-937f-6cfdc2a27d55";
 
         /// <summary>
         /// The act represents a registration event such as the registration of a patient.
         /// </summary>
-        public const String Registration = "6BE8D358-F591-4A3A-9A57-1889B0147C7E";
+        public const String Registration = "6be8d358-f591-4a3a-9a57-1889b0147c7e";
 
         /// <summary>
         /// The act represents that a substance (medication, or otherwise) was, should, or will be administered to the patient.
         /// </summary>
-        public const String SubstanceAdministration = "932A3C7E-AD77-450A-8A1F-030FC2855450";
+        public const String SubstanceAdministration = "932a3c7e-ad77-450a-8a1f-030fc2855450";
 
         /// <summary>
         /// The act represents a supply of some material or financial instrument between entities.
         /// </summary>
-        public const String Supply = "A064984F-9847-4480-8BEA-DDDF64B3C77C";
+        public const String Supply = "a064984f-9847-4480-8bea-dddf64b3c77c";
 
         /// <summary>
         /// The physical transporting of materials or people from one place to another.
         /// </summary>
-        public const String Transport = "61677F76-DC05-466D-91DE-47EFC8E7A3E6";
+        public const String Transport = "61677f76-dc05-466d-91de-47efc8e7a3e6";
 
         /// <summary>
         /// Represents a contract
         /// </summary>
-        public const String Contract = "5B947FCB-055A-4E7B-9571-3C2502D72BA6";
+        public const String Contract = "5b947fcb-055a-4e7b-9571-3c2502d72ba6";
 
         /// <summary>
         /// Represents a financial contract
         /// </summary>
-        public const String FinancialContract = "EE5FABB7-F97C-417C-AD81-AC9D05B81C50";
+        public const String FinancialContract = "ee5fabb7-f97c-417c-ad81-ac9d05b81c50";
 
         /// <summary>
         /// Represents an account for tracking financial obligations
         /// </summary>
-        public const String Account = "EFD2D8DD-45D4-4746-BF1A-38E95A358C05";
+        public const String Account = "efd2d8dd-45d4-4746-bf1a-38e95a358c05";
 
         /// <summary>
         /// Represents the financial transaction
         /// </summary>
-        public const string FinancialTransaction = "6A37A91E-CC27-4E64-9B49-618A1F255904";
+        public const string FinancialTransaction = "6a37a91e-cc27-4e64-9b49-618a1f255904";
 
         /// <summary>
         /// Represents an individual invoice elemnt
