@@ -121,6 +121,44 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
+        /// </summary>
+        public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector) 
+            where TSource : IdentifiedData
+            where TReturn : IdentifiedData
+        {
+            if (selector is LambdaExpression lambda)
+            {
+                var body = lambda.Body as MemberExpression;
+                if (body != null)
+                    return me.LoadCollection<TReturn>(body.Member.Name);
+                else
+                    throw new InvalidOperationException("Must be simple property selector");
+            }
+            else
+                throw new InvalidOperationException("Unknown expression passed");
+        }
+
+        /// <summary>
+        /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
+        /// </summary>
+        public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector) 
+            where TSource : IdentifiedData
+            where TReturn : IdentifiedData
+        {
+            if (selector is LambdaExpression lambda)
+            {
+                var body = lambda.Body as MemberExpression;
+                if (body != null)
+                    return me.LoadProperty<TReturn>(body.Member.Name);
+                else
+                    throw new InvalidOperationException("Must be simple property selector");
+            }
+            else
+                throw new InvalidOperationException("Unknown expression passed");
+        }
+
+        /// <summary>
         /// Delay load property
         /// </summary>
         public static object LoadProperty(this IdentifiedData me, string propertyName)
