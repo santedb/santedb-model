@@ -28,7 +28,6 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Generic note class
     /// </summary>
-    [SimpleValue(nameof(Text))]
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Note")]
     public abstract class Note<TBoundModel> : VersionedAssociation<TBoundModel> where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
