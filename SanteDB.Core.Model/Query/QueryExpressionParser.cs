@@ -565,7 +565,11 @@ namespace SanteDB.Core.Model.Query
                                 et = ExpressionType.Equal;
                                 if (thisAccessExpression.Type == typeof(String))
                                 {
-                                    thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("Contains", new Type[] { typeof(String) }), Expression.Constant(pValue.Substring(1)));
+                                    pValue = pValue.Substring(1);
+                                    if (pValue.StartsWith("$"))
+                                        thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("Contains", new Type[] { typeof(String) }), GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(pValue));
+                                    else
+                                        thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("Contains", new Type[] { typeof(String) }), Expression.Constant(pValue));
                                     operandType = typeof(bool);
                                     pValue = "true";
                                 }

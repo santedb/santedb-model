@@ -141,6 +141,21 @@ namespace SanteDB.Core.Model.Query
             }
             return queryString;
         }
+
+        /// <summary>
+        /// Convert to name value collection
+        /// </summary>
+        public System.Collections.Specialized.NameValueCollection ToNameValueCollection()
+        {
+            var retVal = new System.Collections.Specialized.NameValueCollection();
+            foreach(var itm in this)
+            {
+                foreach (var val in itm.Value) {
+                    retVal.Add(itm.Key, val);
+                }
+            }
+            return retVal;
+        }
     }
 
 }
