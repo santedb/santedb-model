@@ -17,6 +17,9 @@
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
   </PropertyGroup>-->
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Condition="'$(VersionNumber)' == ''">
+    <VersionNumber>2.1.0-debug</VersionNumber>
+  </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
