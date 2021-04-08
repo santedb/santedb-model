@@ -63,7 +63,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Act")]
     [JsonObject("Act")]
     [Classifier(nameof(ClassConcept))]
-    public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IClassifiable, IHasState, IGeoTagged, IHasTemplate
+    public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IClassifiable, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
 
         private Guid? m_classConceptKey;
@@ -735,6 +735,18 @@ namespace SanteDB.Core.Model.Acts
         public GeoTag GeoTag { get; set; }
 
         /// <summary>
+        /// Has identifiers
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        IEnumerable<IExternalIdentifier> IHasIdentifiers.Identifiers => this.LoadCollection(o => o.Identifiers);
+
+        /// <summary>
+        /// Relationships
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        IEnumerable<ITargetedAssociation> IHasRelationships.Relationships => this.Relationships;
+
+        /// <summary>
         /// Copies the entity
         /// </summary>
         /// <returns></returns>
@@ -798,5 +810,10 @@ namespace SanteDB.Core.Model.Acts
         {
             this.Extensions.Add(new ActExtension(extensionType, handlerType, value));
         }
+
+        /// <summary>
+        /// Get the specified tag
+        /// </summary>
+        public string GetTag(string tagKey) => this.Tags.FirstOrDefault(o => o.TagKey == tagKey)?.Value;
     }
 }
