@@ -654,6 +654,11 @@ namespace SanteDB.Core.Model.Constants
         /// Entity is scoped by target
         /// </summary>
         public const string Scoper = "FCD37959-5BC2-48DB-BBB5-36AFD9EDF19A";
+
+        /// <summary>
+        /// Entity is just a link to another entity
+        /// </summary>
+        public const string Reference = "724B1FC7-94FC-43E5-B597-B6ED2FB8F660";
     }
 
     /// <summary>
@@ -1288,5 +1293,10 @@ namespace SanteDB.Core.Model.Constants
         /// Duplicate entity
         /// </summary>
         public static readonly Guid Scoper = Guid.Parse(EntityRelationshipTypeKeyStrings.Scoper);
+
+        /// <summary>
+        /// Referenced entities
+        /// </summary>
+        public static readonly Guid Reference = Guid.Parse(EntityRelationshipTypeKeyStrings.Reference);
     }
 }

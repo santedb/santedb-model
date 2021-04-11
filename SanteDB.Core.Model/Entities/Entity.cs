@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]
-    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IClassifiable, IHasState, IHasTemplate
+    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IClassifiable, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
 
         private TemplateDefinition m_template;
@@ -527,6 +527,17 @@ namespace SanteDB.Core.Model.Entities
         [XmlIgnore, JsonIgnore]
         IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection<EntityExtension>(nameof(Entity.Extensions)).OfType<IModelExtension>(); } }
 
+        /// <summary>
+        /// Has identifiers
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        IEnumerable<IExternalIdentifier> IHasIdentifiers.Identifiers => this.LoadCollection(o=>o.Identifiers);
+
+        /// <summary>
+        /// Relationships
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        IEnumerable<ITargetedAssociation> IHasRelationships.Relationships => this.Relationships;
 
         /// <summary>
         /// Copies the entity
@@ -609,5 +620,10 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         /// <returns></returns>
         public override string ToDisplay() => $"{this.Type} : {this.Names?.FirstOrDefault().ToDisplay()} (K:{this.Key})";
+
+        /// <summary>
+        /// Get the specified tag
+        /// </summary>
+        public string GetTag(string tagKey) => this.Tags.FirstOrDefault(o => o.TagKey == tagKey)?.Value;
     }
 }

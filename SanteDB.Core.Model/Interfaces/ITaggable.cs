@@ -36,6 +36,11 @@ namespace SanteDB.Core.Model.Interfaces
         /// Add a tag
         /// </summary>
         ITag AddTag(String tagKey, String tagValue);
+
+        /// <summary>
+        /// Get the tag
+        /// </summary>
+        string GetTag(string tagKey);
     }
 
     /// <summary>
