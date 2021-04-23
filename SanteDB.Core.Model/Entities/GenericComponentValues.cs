@@ -116,15 +116,6 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// Forces refreshing of delay load properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_componentType = null;
-        }
-
-        /// <summary>
         /// Semantic equality function
         /// </summary>
         public override bool SemanticEquals(object obj)

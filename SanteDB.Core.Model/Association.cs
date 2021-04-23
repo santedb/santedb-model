@@ -109,16 +109,6 @@ namespace SanteDB.Core.Model
             return this.m_sourceEntityKey.HasValue;
         }
 
-
-        /// <summary>
-        /// Force delay load properties to reload
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_sourceEntity = null;
-        }
-
         /// <summary>
         /// Determines equality of this association
         /// </summary>

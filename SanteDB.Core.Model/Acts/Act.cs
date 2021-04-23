@@ -617,15 +617,6 @@ namespace SanteDB.Core.Model.Acts
         public List<ActParticipation> Participations { get; set; }
 
         /// <summary>
-        /// Forces the delay load properties in this type to reload
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_moodConcept = this.m_reasonConcept = this.m_classConcept = this.m_statusConcept = this.m_typeConcept = null;
-        }
-
-        /// <summary>
         /// True if reason concept key should be serialized
         /// </summary>
         public bool ShouldSerializeReasonConceptKey()

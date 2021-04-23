@@ -127,13 +127,5 @@ namespace SanteDB.Core.Model
             return this.UpdatedByKey.HasValue;
         }
 
-        /// <summary>
-        /// Forces refresh
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_updatedBy = null;
-        }
     }
 }

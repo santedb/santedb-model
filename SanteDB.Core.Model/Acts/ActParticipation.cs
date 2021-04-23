@@ -52,7 +52,8 @@ namespace SanteDB.Core.Model.Acts
         private Guid? m_participationRoleKey;
 
         private Concept m_participationRole;
-
+        private Guid? m_classificationKey;
+        private Concept m_classification;
         /// <summary>
         /// Default constructor for act participation
         /// </summary>
@@ -80,6 +81,51 @@ namespace SanteDB.Core.Model.Acts
         {
             this.ParticipationRoleKey = roleType;
             this.PlayerEntityKey = playerKey;
+        }
+
+        /// <summary>
+        /// Gets or sets the an additional (sub-type) of the relationship
+        /// </summary>
+        /// <remarks>
+        /// <para>The context classification allows consumers of this data to understand the context in which the relationship. For example,
+        /// a Patient->NextOfKin[null]->Person may have a context of related person to indidcate the NOK is to be used as a 
+        /// formal relationship, whereas Patient->NextOfKin[EmergencyContact]->Person may indicate that NOK record is only for 
+        /// use as a contact and no other relationship can be inferred from the entry.</para>
+        /// </remarks>
+        [AutoLoad]
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(ClassificationKey))]
+        public Concept Classification
+        {
+            get
+            {
+                this.m_classification = base.DelayLoad(this.m_classificationKey, this.m_classification);
+                return this.m_classification;
+            }
+            set
+            {
+                this.m_classification = value;
+                this.m_classificationKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Association type key
+        /// </summary>
+        [XmlElement("classification"), JsonProperty("classification")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(RelationshipClassKeys))]
+        public Guid? ClassificationKey
+        {
+            get { return this.m_classificationKey; }
+            set
+            {
+                if (this.m_classificationKey != value)
+                {
+                    this.m_classificationKey = value;
+                    this.m_classification = null;
+                }
+            }
         }
 
         /// <summary>
@@ -194,16 +240,6 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlElement("quantity"), JsonProperty("quantity")]
         public int? Quantity { get; set; }
-
-        /// <summary>
-        /// Forces a delay load from the underlying model
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_participationRole = null;
-            this.m_player = null;
-        }
 
         /// <summary>
         /// Clean

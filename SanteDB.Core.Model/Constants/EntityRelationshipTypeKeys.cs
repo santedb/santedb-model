@@ -658,7 +658,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Entity is just a link to another entity
         /// </summary>
-        public const string Reference = "724B1FC7-94FC-43E5-B597-B6ED2FB8F660";
+        public const string EquivalentEntity = "395F4EDF-5D5D-4950-9F5E-F827F72E4B32";
     }
 
     /// <summary>
@@ -1297,6 +1297,6 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Referenced entities
         /// </summary>
-        public static readonly Guid Reference = Guid.Parse(EntityRelationshipTypeKeyStrings.Reference);
+        public static readonly Guid EquivalentEntity = Guid.Parse(EntityRelationshipTypeKeyStrings.EquivalentEntity);
     }
 }

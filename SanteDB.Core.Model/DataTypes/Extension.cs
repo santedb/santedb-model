@@ -95,11 +95,11 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.LoadProperty<ExtensionType>("ExtensionType").ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
+                return this.LoadProperty(o=>o.ExtensionType).ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
             }
             set
             {
-                if (this.LoadProperty<ExtensionType>("ExtensionType").ExtensionHandlerInstance != null)
+                if (this.LoadProperty(o => o.ExtensionType).ExtensionHandlerInstance != null)
                     this.ExtensionValueXml = this.ExtensionType?.ExtensionHandlerInstance?.Serialize(value);
             }
         }
@@ -220,15 +220,6 @@ namespace SanteDB.Core.Model.DataTypes
             {
                 return this.GetValue();
             }
-        }
-
-        /// <summary>
-        /// Forces refresh 
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_extensionType = null;
         }
 
         /// <summary>

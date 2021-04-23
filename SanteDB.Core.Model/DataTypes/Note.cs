@@ -100,15 +100,6 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
-        /// Forces a refresh of the object
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_author = null;
-        }
-
-        /// <summary>
         /// Determine equality
         /// </summary>
         public override bool SemanticEquals(object obj)

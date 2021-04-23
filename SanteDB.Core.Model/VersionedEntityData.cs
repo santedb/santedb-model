@@ -140,14 +140,6 @@ namespace SanteDB.Core.Model
             return String.Format("{0} (K:{1}, V:{2})", this.GetType().Name, this.Key, this.VersionKey);
         }
 
-        /// <summary>
-        /// Force bound attributes to reload
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_previousVersion = default(THistoryModelType);
-        }
     }
 
 }

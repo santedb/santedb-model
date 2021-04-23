@@ -32,11 +32,6 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid JpegPhotoExtension = Guid.Parse("77B53CBA-C32F-442B-B7A7-ED08184A0FA5");
 
         /// <summary>
-        /// An extension that links when a contacct should be used
-        /// </summary>
-        public static readonly Guid ContactRolesExtension = Guid.Parse("5d91d3d5-783d-4024-bb20-d50bc101f7fc");
-
-        /// <summary>
         /// Data quality issue extension
         /// </summary>
         public static readonly Guid DataQualityExtension = Guid.Parse("6DE54C16-8D1C-48E4-B750-7A2F4552E86D");

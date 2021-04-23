@@ -79,16 +79,7 @@ namespace SanteDB.Core.Model.Entities
         /// The schedule that the service is offered
         /// </summary>
         [XmlElement("serviceSchedule"), JsonProperty("serviceSchedule")]
-        public Object ServiceSchedule { get; set; }
-
-        /// <summary>
-        /// Refresh the delay load properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_service = null;
-        }
+        public String ServiceSchedule { get; set; }
 
         /// <summary>
         /// Semantic equality

@@ -108,15 +108,6 @@ namespace SanteDB.Core.Model.Entities
         public GeoTag GeoTag { get; set; }
 
         /// <summary>
-        /// Force refresh of data model
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_securityDevice = null;
-        }
-
-        /// <summary>
         /// Determine semantic equality
         /// </summary>
         public override bool SemanticEquals(object obj)

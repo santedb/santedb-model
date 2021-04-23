@@ -122,11 +122,6 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Force reloading of delay load properties
-        /// </summary>
-        public virtual void Refresh() { }
-
-        /// <summary>
         /// Gets or sets date/time that this object was last created or modified
         /// </summary>
         [XmlElement("modifiedOn"), JsonProperty("modifiedOn"), DataIgnore]

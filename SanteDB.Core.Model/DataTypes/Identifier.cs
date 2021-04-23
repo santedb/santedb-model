@@ -301,16 +301,6 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
-        /// Force reloading of delay load properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_authority = null;
-            this.m_identifierType = null;
-        }
-
-        /// <summary>
         /// True if the identifier is empty
         /// </summary>
         /// <returns></returns>

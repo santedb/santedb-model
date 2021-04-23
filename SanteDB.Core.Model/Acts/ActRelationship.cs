@@ -49,8 +49,9 @@ namespace SanteDB.Core.Model.Acts
         // The association type key
         private Guid? m_relationshipTypeKey;
         // The association type
-
         private Concept m_relationshipType;
+        private Guid? m_classificationKey;
+        private Concept m_classification;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActRelationship"/> class.
@@ -79,6 +80,52 @@ namespace SanteDB.Core.Model.Acts
         {
             this.RelationshipTypeKey = relationshipType;
             this.TargetActKey = targetKey;
+        }
+
+
+        /// <summary>
+        /// Gets or sets the an additional (sub-type) of the relationship
+        /// </summary>
+        /// <remarks>
+        /// <para>The context classification allows consumers of this data to understand the context in which the relationship. For example,
+        /// a Patient->NextOfKin[null]->Person may have a context of related person to indidcate the NOK is to be used as a 
+        /// formal relationship, whereas Patient->NextOfKin[EmergencyContact]->Person may indicate that NOK record is only for 
+        /// use as a contact and no other relationship can be inferred from the entry.</para>
+        /// </remarks>
+        [AutoLoad]
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(ClassificationKey))]
+        public Concept Classification
+        {
+            get
+            {
+                this.m_classification = base.DelayLoad(this.m_classificationKey, this.m_classification);
+                return this.m_classification;
+            }
+            set
+            {
+                this.m_classification = value;
+                this.m_classificationKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Association type key
+        /// </summary>
+        [XmlElement("classification"), JsonProperty("classification")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(RelationshipClassKeys))]
+        public Guid? ClassificationKey
+        {
+            get { return this.m_classificationKey; }
+            set
+            {
+                if (this.m_classificationKey != value)
+                {
+                    this.m_classificationKey = value;
+                    this.m_classification = null;
+                }
+            }
         }
 
         /// <summary>
@@ -158,16 +205,6 @@ namespace SanteDB.Core.Model.Acts
                 else
                     this.m_relationshipTypeKey = value.Key;
             }
-        }
-
-        /// <summary>
-        /// Refreshes the model to force reload from underlying model
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_relationshipType = null;
-            this.m_targetAct = null;
         }
 
         /// <summary>

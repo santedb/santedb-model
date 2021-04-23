@@ -39,12 +39,6 @@ namespace SanteDB.Core.Model.Roles
     public class Patient : Person
     {
 
-        // Gender concept key
-        private Guid? m_genderConceptKey;
-        // Gender concept
-
-        private Concept m_genderConcept;
-
         // Marital statuses
         private Guid? m_maritalStatusKey;
         private Concept m_maritalStatus;
@@ -110,41 +104,6 @@ namespace SanteDB.Core.Model.Roles
         /// </summary>
         [XmlElement("multipleBirthOrder"), JsonProperty("multipleBirthOrder")]
         public int? MultipleBirthOrder { get; set; }
-
-        /// <summary>
-        /// Gets or sets the gender concept key
-        /// </summary>
-        [XmlElement("genderConcept"), JsonProperty("genderConcept")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? GenderConceptKey
-        {
-            get { return this.m_genderConceptKey; }
-            set
-            {
-
-                this.m_genderConceptKey = value;
-                this.m_genderConcept = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the gender concept
-        /// </summary>
-        [SerializationReference(nameof(GenderConceptKey))]
-        [XmlIgnore, JsonIgnore, AutoLoad]
-        public Concept GenderConcept
-        {
-            get
-            {
-                this.m_genderConcept = base.DelayLoad(this.m_genderConceptKey, this.m_genderConcept);
-                return this.m_genderConcept;
-            }
-            set
-            {
-                this.m_genderConcept = value;
-                this.m_genderConceptKey = value?.Key;
-            }
-        }
 
         /// <summary>
         /// Gets or sets the VIP code
@@ -360,15 +319,6 @@ namespace SanteDB.Core.Model.Roles
             return this.MultipleBirthOrder.HasValue;
         }
 
-        /// <summary>
-        /// Force a refresh of delay load properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_genderConcept = null;
-
-        }
 
         /// <summary>
         /// Semantic equality function
@@ -378,7 +328,6 @@ namespace SanteDB.Core.Model.Roles
             var other = obj as Patient;
             if (other == null) return false;
             return base.SemanticEquals(obj) &&
-                this.GenderConceptKey == other.GenderConceptKey &&
                 this.DeceasedDate == other.DeceasedDate &&
                 this.DeceasedDatePrecision == other.DeceasedDatePrecision;
         }

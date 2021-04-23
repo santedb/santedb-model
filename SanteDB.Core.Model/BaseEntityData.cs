@@ -238,12 +238,5 @@ namespace SanteDB.Core.Model
             return String.Format("{0} (K:{1})", this.GetType().Name, this.Key);
         }
 
-        /// <summary>
-        /// Clears delay load properties forcing a refresh
-        /// </summary>
-        public override void Refresh()
-        {
-            this.m_createdBy = this.m_obsoletedBy = null;
-        }
     }
 }
