@@ -94,15 +94,6 @@ namespace SanteDB.Core.Model.Roles
         }
 
         /// <summary>
-        /// Force a refresh of the delay load properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_providerSpeciality = null;
-        }
-
-        /// <summary>
         /// Semantic equality function
         /// </summary>
         public override bool SemanticEquals(object obj)

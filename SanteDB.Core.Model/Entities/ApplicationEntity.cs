@@ -107,15 +107,6 @@ namespace SanteDB.Core.Model.Entities
         public String VersionName { get; set; }
 
         /// <summary>
-        /// Force delay loading
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_securityApplication = null;
-        }
-
-        /// <summary>
         /// Semantic equality function
         /// </summary>
         public override bool SemanticEquals(object obj)

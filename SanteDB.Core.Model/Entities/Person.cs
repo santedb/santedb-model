@@ -38,6 +38,10 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Person)]
     public class Person : Entity
     {
+        // Gender concept key
+        private Guid? m_genderConceptKey;
+        private Concept m_genderConcept;
+
 
         // Backing fields for occupation
         private Guid? m_occupationConceptKey;
@@ -71,6 +75,43 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [XmlElement("dateOfBirthPrecision"), JsonProperty("dateOfBirthPrecision")]
         public DatePrecision? DateOfBirthPrecision { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the gender concept key
+        /// </summary>
+        [XmlElement("genderConcept"), JsonProperty("genderConcept")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? GenderConceptKey
+        {
+            get { return this.m_genderConceptKey; }
+            set
+            {
+
+                this.m_genderConceptKey = value;
+                this.m_genderConcept = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the gender concept
+        /// </summary>
+        [SerializationReference(nameof(GenderConceptKey))]
+        [XmlIgnore, JsonIgnore, AutoLoad]
+        public Concept GenderConcept
+        {
+            get
+            {
+                this.m_genderConcept = base.DelayLoad(this.m_genderConceptKey, this.m_genderConcept);
+                return this.m_genderConcept;
+            }
+            set
+            {
+                this.m_genderConcept = value;
+                this.m_genderConceptKey = value?.Key;
+            }
+        }
+
 
         /// <summary>
         /// Gets the date of birth as XML
@@ -152,6 +193,7 @@ namespace SanteDB.Core.Model.Entities
             if (other == null) return false;
             return base.SemanticEquals(obj) &&
                 this.DateOfBirth == other.DateOfBirth &&
+                this.GenderConceptKey == other.GenderConceptKey &&
                 this.DateOfBirthPrecision == other.DateOfBirthPrecision &&
                 this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) == true;
         }

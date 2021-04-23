@@ -188,15 +188,6 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Force delay loading of properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_doseUnit = this.m_route = null;
-        }
-
-        /// <summary>
         /// Semantic equality function
         /// </summary>
         public override bool SemanticEquals(object obj)

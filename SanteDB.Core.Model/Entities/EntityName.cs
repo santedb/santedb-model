@@ -141,18 +141,6 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// Gets or sets the component types
-        /// </summary>
-        /// <summary>
-        /// Refreshes the underlying content
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_nameUseKey = null;
-        }
-
-        /// <summary>
         /// Semantic equality function
         /// </summary>
         public override bool SemanticEquals(object obj)

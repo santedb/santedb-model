@@ -110,15 +110,6 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Refresh the object forcing delay load 
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_interpretationConcept = null;
-        }
-
-        /// <summary>
         /// Semantic equality function
         /// </summary>
         public override bool SemanticEquals(object obj)
@@ -206,15 +197,6 @@ namespace SanteDB.Core.Model.Acts
                 this.m_unitOfMeasure = value;
                 this.m_unitOfMeasureKey = value?.Key;
             }
-        }
-
-        /// <summary>
-        /// Forces a refresh of the object
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_unitOfMeasure = null;
         }
 
         /// <summary>
@@ -336,15 +318,6 @@ namespace SanteDB.Core.Model.Acts
                 this.m_value = value;
                 this.m_valueKey = value?.Key ?? Guid.Empty;
             }
-        }
-
-        /// <summary>
-        /// Forces a refresh of underlying data
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_value = null;
         }
 
         /// <summary>

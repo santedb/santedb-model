@@ -241,15 +241,6 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
-        /// Force reloading of delay load properties
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_assigningApplication = null;
-        }
-
-        /// <summary>
         /// Returns whether <paramref name="obj"/> has the same meaning as this object
         /// </summary>
         public override bool SemanticEquals(object obj)

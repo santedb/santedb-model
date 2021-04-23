@@ -91,15 +91,6 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Refresh forcing delay load
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_dischargeDisposition = null;
-        }
-
-        /// <summary>
         /// Semantic equality function
         /// </summary>
         public override bool SemanticEquals(object obj)

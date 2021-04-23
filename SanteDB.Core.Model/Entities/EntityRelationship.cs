@@ -37,8 +37,11 @@ namespace SanteDB.Core.Model.Entities
     {
         // The association type key
         private Guid? m_associationTypeKey;
-
         private Concept m_relationshipType;
+        private Guid? m_classificationKey;
+        private Concept m_classification;
+        private Guid? m_roleTypeKey;
+        private Concept m_roleType;
 
         private Entity m_targetEntity;
 
@@ -158,6 +161,89 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
+        /// Gets or sets the association type
+        /// </summary>
+        [AutoLoad]
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(RelationshipRoleKey))]
+        public Concept RelationshipRole
+        {
+            get
+            {
+                this.m_roleType = base.DelayLoad(this.m_roleTypeKey, this.m_roleType);
+                return this.m_roleType;
+            }
+            set
+            {
+                this.m_roleType = value;
+                this.m_roleTypeKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Association type key
+        /// </summary>
+        [XmlElement("relationshipRole"), JsonProperty("relationshipRole")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? RelationshipRoleKey
+        {
+            get { return this.m_roleTypeKey; }
+            set
+            {
+                if (this.m_roleTypeKey != value)
+                {
+                    this.m_roleTypeKey = value;
+                    this.m_roleType = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the an additional (sub-type) of the relationship
+        /// </summary>
+        /// <remarks>
+        /// <para>The context classification allows consumers of this data to understand the context in which the relationship. For example,
+        /// a Patient->NextOfKin[null]->Person may have a context of related person to indidcate the NOK is to be used as a 
+        /// formal relationship, whereas Patient->NextOfKin[EmergencyContact]->Person may indicate that NOK record is only for 
+        /// use as a contact and no other relationship can be inferred from the entry.</para>
+        /// </remarks>
+        [AutoLoad]
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(ClassificationKey))]
+        public Concept Classification
+        {
+            get
+            {
+                this.m_classification = base.DelayLoad(this.m_classificationKey, this.m_classification);
+                return this.m_classification;
+            }
+            set
+            {
+                this.m_classification = value;
+                this.m_classificationKey = value?.Key;
+            }
+        }
+
+        /// <summary>
+        /// Association type key
+        /// </summary>
+        [XmlElement("classification"), JsonProperty("classification")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(RelationshipClassKeys))]
+        public Guid? ClassificationKey
+        {
+            get { return this.m_classificationKey; }
+            set
+            {
+                if (this.m_classificationKey != value)
+                {
+                    this.m_classificationKey = value;
+                    this.m_classification = null;
+                }
+            }
+        }
+
+        /// <summary>
         /// Target entity reference
         /// </summary>
         [SerializationReference(nameof(TargetEntityKey))]
@@ -221,16 +307,6 @@ namespace SanteDB.Core.Model.Entities
         {
             return this.RelationshipType == null && this.RelationshipTypeKey == null ||
                 this.TargetEntity == null && this.TargetEntityKey == null;
-        }
-
-        /// <summary>
-        /// Refresh this entity
-        /// </summary>
-        public override void Refresh()
-        {
-            base.Refresh();
-            this.m_relationshipType = null;
-            this.m_targetEntity = null;
         }
 
         /// <summary>
