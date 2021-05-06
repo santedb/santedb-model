@@ -81,14 +81,14 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the individual component types
         /// </summary>
 		[XmlElement("component"), JsonProperty("component")]
-        [AutoLoad]
+        
         public List<EntityNameComponent> Component { get; set; }
 
         /// <summary>
         /// Gets or sets the name use
         /// </summary>
         [SerializationReference(nameof(NameUseKey))]
-        [XmlIgnore, JsonIgnore, AutoLoad]
+        [XmlIgnore, JsonIgnore]
         public Concept NameUse
         {
             get

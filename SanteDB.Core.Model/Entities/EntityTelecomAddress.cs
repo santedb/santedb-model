@@ -62,7 +62,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the name use
         /// </summary>
-        [SerializationReference(nameof(AddressUseKey)), AutoLoad]
+        [SerializationReference(nameof(AddressUseKey))]
         [XmlIgnore, JsonIgnore]
         public Concept AddressUse
         {
@@ -100,7 +100,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the name use
         /// </summary>
-        [SerializationReference(nameof(TypeConceptKey)), AutoLoad]
+        [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept TypeConcept
         {

@@ -67,7 +67,7 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the type of address component
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [SerializationReference(nameof(ComponentTypeKey)), AutoLoad]
+        [SerializationReference(nameof(ComponentTypeKey))]
         public Concept ComponentType
         {
             get

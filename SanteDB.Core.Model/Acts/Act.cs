@@ -138,7 +138,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the template definition
         /// </summary>
-        [AutoLoad, SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
         public TemplateDefinition Template
         {
             get
@@ -401,7 +401,7 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         /// <see cref="ActClassKeys"/>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(ClassConceptKey))]
+        [SerializationReference(nameof(ClassConceptKey))]
         public Concept ClassConcept
         {
             get
@@ -425,7 +425,7 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         /// <see cref="ActMoodKeys"/>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(MoodConceptKey))]
+        [SerializationReference(nameof(MoodConceptKey))]
         public Concept MoodConcept
         {
             get
@@ -449,7 +449,7 @@ namespace SanteDB.Core.Model.Acts
         /// of reason codes may be "patient was too old", "out of stock", "patient has allergy", etc.
         /// </remarks>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(ReasonConceptKey))]
+        [SerializationReference(nameof(ReasonConceptKey))]
         public Concept ReasonConcept
         {
             get
@@ -478,7 +478,7 @@ namespace SanteDB.Core.Model.Acts
         ///     <item>Nullified - The Act never occurred, this record was created in error</item>
         /// </list>
         /// </remarks>
-        [AutoLoad, SerializationReference(nameof(StatusConceptKey))]
+        [SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept StatusConcept
         {
@@ -500,7 +500,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Type concept identifier
         /// </summary>
-        [AutoLoad, SerializationReference(nameof(TypeConceptKey))]
+        [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept TypeConcept
         {
@@ -524,7 +524,7 @@ namespace SanteDB.Core.Model.Acts
         /// be used internally for tracking the act, or can be used to correlate an act in a way that an external system
         /// will know it.
         /// </remarks>
-        [AutoLoad, XmlElement("identifier"), JsonProperty("identifier")]
+        [XmlElement("identifier"), JsonProperty("identifier")]
         public List<ActIdentifier> Identifiers { get; set; }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace SanteDB.Core.Model.Acts
         /// directly as in an encounter with component acts, or between care episodes for chronic
         /// care.
         /// </remarks>
-        [AutoLoad, XmlElement("relationship"), JsonProperty("relationship")]
+        [XmlElement("relationship"), JsonProperty("relationship")]
         public List<ActRelationship> Relationships { get; set; }
 
         /// <summary>
@@ -562,14 +562,14 @@ namespace SanteDB.Core.Model.Acts
         /// are not
         /// </para>
         /// </remarks>
-        [AutoLoad, XmlElement("extension"), JsonProperty("extension")]
+        [XmlElement("extension"), JsonProperty("extension")]
         public List<ActExtension> Extensions { get; set; }
 
         /// <summary>
         /// Gets a list of all notes associated with the act
         /// </summary>
         /// <remarks>Allows one or more notes to be taken about an act by a clinician</remarks>
-        [AutoLoad, XmlElement("note"), JsonProperty("note")]
+        [XmlElement("note"), JsonProperty("note")]
         public List<ActNote> Notes { get; set; }
 
         /// <summary>
@@ -580,7 +580,7 @@ namespace SanteDB.Core.Model.Acts
         /// extend the underlying application in ways not imagined by the original SanteDB team. Tags differ
         /// from extensions in that they can only carry simple values (strings) and they are not versioned. 
         /// </remarks>
-        [AutoLoad, XmlElement("tag"), JsonProperty("tag")]
+        [XmlElement("tag"), JsonProperty("tag")]
         public List<ActTag> Tags { get; set; }
 
         /// <summary>
@@ -590,7 +590,7 @@ namespace SanteDB.Core.Model.Acts
         /// The protocols element is used to track which clinical protocols where linked with 
         /// the act.
         /// </remarks>
-        [AutoLoad, XmlElement("protocol"), JsonProperty("protocol")]
+        [XmlElement("protocol"), JsonProperty("protocol")]
         public List<ActProtocol> Protocols
         {
             get;
@@ -613,7 +613,7 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         /// <see cref="ActParticipationKey"/>
         [XmlElement("participation"), JsonProperty("participation")]
-        [AutoLoad]
+        
         public List<ActParticipation> Participations { get; set; }
 
         /// <summary>

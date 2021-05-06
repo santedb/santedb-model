@@ -103,7 +103,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets a concept which indicates the route of administration (eg: Oral, Injection, etc.)
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RouteKey))]
         public Concept Route
         {
@@ -122,7 +122,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets a concept which indicates the unit of measure for the dose (eg: 5 mL, 10 mL, 1 drop, etc.)
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(DoseUnitKey))]
         public Concept DoseUnit
         {
@@ -171,7 +171,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets a concept which indicates the site of administration
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(SiteKey))]
         public Concept Site
         {

@@ -261,7 +261,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets a minimal assigning authority from XML data
         /// </summary>
         //[SerializationReference(nameof(AuthorityKey))]
-        [AutoLoad, XmlElement("authority"), JsonProperty("authority")]
+        [XmlElement("authority"), JsonProperty("authority")]
         public AssigningAuthority AuthorityXml
         {
             get
@@ -284,7 +284,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents the authority information 
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         public AssigningAuthority Authority
         {
             get

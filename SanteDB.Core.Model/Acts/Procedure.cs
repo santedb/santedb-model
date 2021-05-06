@@ -115,7 +115,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets te method/technique used to perform the procedure
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(MethodKey))]
         public Concept Method
         {
@@ -134,7 +134,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the anatomical site or system which is the target of the procedure
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ApproachSiteKey))]
         public Concept ApproachSite
         {
@@ -153,7 +153,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets te method/technique used to perform the procedure
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(TargetSiteKey))]
         public Concept TargetSite
         {

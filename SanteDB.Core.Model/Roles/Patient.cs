@@ -179,7 +179,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the marital status code
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
         public Concept MaritalStatus
         {
             get
@@ -197,7 +197,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the VIP status code
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(VipStatusKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(VipStatusKey))]
         public Concept VipStatus
         {
             get
@@ -215,7 +215,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the education level of the person
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
         public Concept EducationLevel
         {
             get
@@ -233,7 +233,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the living arrangements
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(LivingArrangementKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(LivingArrangementKey))]
         public Concept LivingArrangement
         {
             get
@@ -251,7 +251,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(ReligiousAffiliationKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ReligiousAffiliationKey))]
         public Concept ReligiousAffiliation
         {
             get

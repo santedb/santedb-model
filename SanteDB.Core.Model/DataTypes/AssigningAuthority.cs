@@ -105,7 +105,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents scopes to which the authority is bound
         /// </summary>
-        [AutoLoad, JsonProperty("scope"), XmlElement("scope")]
+        [JsonProperty("scope"), XmlElement("scope")]
         public List<Guid> AuthorityScopeXml { get; set; }
 
         /// <summary>

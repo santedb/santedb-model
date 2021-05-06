@@ -16,11 +16,17 @@
  * User: fyfej
  * Date: 2021-2-9
  */
+using Microsoft.CSharp;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
+using SanteDB.Core.Model.Exceptions;
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Map.Builder;
 using System;
+using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -31,31 +37,6 @@ using System.Reflection;
 namespace SanteDB.Core.Model.Map
 {
 
-    /// <summary>
-    /// Represents model mapping event arguments
-    /// </summary>
-    public class ModelMapEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Domain object
-        /// </summary>
-        public Guid Key { get; set; }
-
-        /// <summary>
-        /// Identified data model object
-        /// </summary>
-        public IdentifiedData ModelObject { get; set; }
-
-        /// <summary>
-        /// Gets or sets the domain object type
-        /// </summary>
-        public Type ObjectType { get; set; }
-
-        /// <summary>
-        /// Gets or sets a cancel comand
-        /// </summary>
-        public bool Cancel { get; set; }
-    }
 
     /// <summary>
     /// Model mapper
@@ -63,37 +44,13 @@ namespace SanteDB.Core.Model.Map
     public sealed class ModelMapper
     {
 
-        /// <summary>
-        /// Primitive types
-        /// </summary>
-        private static readonly HashSet<Type> primitives = new HashSet<Type>()
-        {
-            typeof(bool),
-            typeof(bool?),
-            typeof(int),
-            typeof(int?),
-            typeof(float),
-            typeof(float?),
-            typeof(double),
-            typeof(double?),
-            typeof(decimal),
-            typeof(decimal?),
-            typeof(String),
-            typeof(Guid),
-            typeof(Guid?),
-            typeof(Type),
-            typeof(DateTime),
-            typeof(DateTime?),
-            typeof(DateTimeOffset),
-            typeof(DateTimeOffset?),
-            typeof(UInt32),
-            typeof(UInt32?),
-            typeof(byte[])
-        };
-        
-        private static Dictionary<Type, Dictionary<String, PropertyInfo[]>> s_modelPropertyCache = new Dictionary<Type, Dictionary<String, PropertyInfo[]>>();
+        private ConcurrentDictionary<Type, IModelMapper> m_mappersBySource = new ConcurrentDictionary<Type, Builder.IModelMapper>();
+        private ConcurrentDictionary<Type, IModelMapper> m_mappersByTarget = new ConcurrentDictionary<Type, Builder.IModelMapper>();
+        private static ConcurrentDictionary<String, Assembly> m_loadedMaps = new ConcurrentDictionary<string, Assembly>();
 
-        private static Dictionary<Type, String> m_domainClassPropertyName = new Dictionary<Type, string>();
+        //private static Dictionary<Type, Dictionary<String, PropertyInfo[]>> s_modelPropertyCache = new Dictionary<Type, Dictionary<String, PropertyInfo[]>>();
+
+        //private static Dictionary<Type, String> m_domainClassPropertyName = new Dictionary<Type, string>();
 
         /// <summary>
         /// Maps a model property at a root level only
@@ -123,48 +80,84 @@ namespace SanteDB.Core.Model.Map
         /// <summary>
         /// Creates a new mapper from source stream
         /// </summary>
-        public ModelMapper(Stream sourceStream)
+        public ModelMapper(Stream sourceStream, String name)
         {
-            this.Load(sourceStream);
+            this.Load(sourceStream, name);
         }
 
         /// <summary>
         /// Load mapping from a stream
         /// </summary>
-        private void Load(Stream sourceStream)
+        private void Load(Stream sourceStream, String name)
         {
             this.m_mapFile = ModelMap.Load(sourceStream);
-        }
 
-        /// <summary>
-        /// Fired anytime any model mapper maps to a model
-        /// </summary>
-        public static event EventHandler<ModelMapEventArgs> MappingToModel;
-        /// <summary>
-        /// Fired anytime any model mapper maps finished
-        /// </summary>
-        public static event EventHandler<ModelMapEventArgs> MappedToModel;
 
-        /// <summary>
-        /// Fires the pre map returning whether cancellation is necessary
-        /// </summary>
-        private static object FireMappingToModel(object sender, Guid key, IdentifiedData modelInstance)
-        {
-            ModelMapEventArgs e = new ModelMapEventArgs() { ObjectType = modelInstance.GetType(), ModelObject = modelInstance, Key = key };
-            MappingToModel?.Invoke(sender, e);
-            if (e.Cancel)
-                return e.ModelObject;
+            if (m_loadedMaps.TryGetValue(name, out Assembly asm))
+            {
+                this.ProcessAssembly(asm);
+            }
             else
-                return null;
+            {
+                var csProvider = new CSharpCodeProvider();
+                var compileUnit = new CodeCompileUnit();
+
+                // Add namespace
+                compileUnit.Namespaces.Add(new Builder.ModelMapBuilder().CreateCodeNamespace(this.m_mapFile, name));
+                compileUnit.ReferencedAssemblies.Add("System.dll");
+                compileUnit.ReferencedAssemblies.Add(typeof(ModelMapper).Assembly.Location);
+
+                // Compiler parameters
+                var compileParameters = new CompilerParameters();
+                compileParameters.ReferencedAssemblies.AddRange(compileUnit.ReferencedAssemblies.OfType<String>().ToArray());
+                compileParameters.GenerateInMemory = true;
+                compileParameters.GenerateExecutable = false;
+
+#if DEBUG
+                using(var sw = new StringWriter())
+                {
+                    csProvider.GenerateCodeFromCompileUnit(compileUnit, sw, new CodeGeneratorOptions() { });
+                    String codeReview = sw.ToString();
+                }
+#endif
+                var results = csProvider.CompileAssemblyFromDom(compileParameters, compileUnit);
+
+                if (results.Errors.HasErrors)
+                {
+                    throw new ModelMapCompileException(results.Errors);
+                }
+
+                this.ProcessAssembly(results.CompiledAssembly);
+                m_loadedMaps.TryAdd(name, results.CompiledAssembly);
+            }
+
         }
 
         /// <summary>
-        /// Fires that a map has occurred
+        /// Process the provided assembly for mappers
         /// </summary>
-        private static void FireMappedToModel(object sender, Guid key, IdentifiedData modelInstance)
+        private void ProcessAssembly(Assembly asm)
         {
-            ModelMapEventArgs e = new ModelMapEventArgs() { ObjectType = modelInstance.GetType(), Key = key, ModelObject = modelInstance };
-            MappedToModel?.BeginInvoke(sender, e, null, null);
+            // Load the types
+            foreach (var t in asm.ExportedTypes.Where(t => typeof(IModelMapper).IsAssignableFrom(t)))
+            {
+                var map = Activator.CreateInstance(t, this) as IModelMapper;
+                this.m_mappersBySource.TryAdd(map.SourceType, map);
+                this.m_mappersBySource.TryAdd(map.TargetType, map);
+            }
+
+        }
+
+        /// <summary>
+        /// Gets a model mapper that can handle the specified type
+        /// </summary>
+        public IModelMapper GetModelMapper(Type forType)
+        {
+            if (this.m_mappersBySource.TryGetValue(forType, out IModelMapper retVal))
+                return retVal;
+            else if (this.m_mappersByTarget.TryGetValue(forType, out retVal))
+                return retVal;
+            return null;
         }
 
         /// <summary>
@@ -221,7 +214,7 @@ namespace SanteDB.Core.Model.Map
                             break;
                         viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
 
-                        if (via.OrderBy != null && viaExpression.Type.FindInterfaces((o,_)=>o == typeof(IEnumerable),null).Length > 0)
+                        if (via.OrderBy != null && viaExpression.Type.FindInterfaces((o, _) => o == typeof(IEnumerable), null).Length > 0)
                             viaExpression = viaExpression.Sort(via.OrderBy, via.SortOrder);
                         if (via.Aggregate != AggregationFunctionType.None)
                             viaExpression = viaExpression.Aggregate(via.Aggregate);
@@ -390,10 +383,48 @@ namespace SanteDB.Core.Model.Map
         /// <summary>
         /// Map model instance
         /// </summary>
-        public TDomain MapModelInstance<TModel, TDomain>(TModel modelInstance) where TDomain : new()
+        public object MapModelInstance<TModel>(TModel modelInstance)
+            where TModel : new()
         {
 
+            if (this.m_mappersBySource.TryGetValue(modelInstance.GetType(), out IModelMapper modelMapper))
+            {
+                return modelMapper.MapToTarget(modelInstance);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
+        /// <summary>
+        /// Map model instance
+        /// </summary>
+        public TDomain MapModelInstance<TModel, TDomain>(TModel modelInstance)
+            where TDomain : new()
+            where TModel : new()
+        {
+
+            if (this.m_mappersBySource.TryGetValue(modelInstance.GetType(), out IModelMapper modelMapper))
+            {
+                if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
+                    return smodelMapper.MapToTarget(modelInstance);
+                else
+                    return (TDomain)modelMapper.MapToTarget(modelInstance);
+            }
+            else if (this.m_mappersByTarget.TryGetValue(typeof(TModel), out modelMapper))
+            {
+                return (TDomain)modelMapper.MapToTarget(modelInstance);
+            }
+            else if(this.m_mappersByTarget.TryGetValue(typeof(TDomain), out modelMapper))
+            {
+                return (TDomain)modelMapper.MapToTarget(modelInstance);
+            }
+            else
+            {
+                return default(TDomain);
+            }
+            /*
             ClassMap classMap = this.m_mapFile.GetModelClassMap(typeof(TModel), typeof(TDomain));
             if (classMap == null)
                 classMap = this.m_mapFile.GetModelClassMap(typeof(TModel));
@@ -486,21 +517,57 @@ namespace SanteDB.Core.Model.Map
             }
 
             return retVal;
+            */
         }
 
+
         /// <summary>
-        /// Map model instance
+        /// Map the specified domain instance
         /// </summary>
-        public TModel MapDomainInstance<TDomain, TModel>(TDomain domainInstance, bool useCache = true, HashSet<Guid> keyStack = null) where TModel : new()
+        public TModel MapDomainInstance<TDomain, TModel>(TDomain domainInstance)
+            where TModel : new()
+            where TDomain : new()
         {
-            return (TModel)MapDomainInstance(typeof(TDomain), typeof(TModel), domainInstance, useCache, keyStack);
+            if (this.m_mappersByTarget.TryGetValue(domainInstance.GetType(), out IModelMapper modelMapper))
+            {
+                if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
+                    return smodelMapper.MapToSource(domainInstance);
+                else
+                    return (TModel)modelMapper.MapToSource(domainInstance);
+            }
+            else if (this.m_mappersByTarget.TryGetValue(typeof(TDomain), out modelMapper))
+            {
+                return (TModel)modelMapper.MapToSource(domainInstance);
+            }
+            else if (this.m_mappersBySource.TryGetValue(typeof(TModel), out modelMapper))
+            {
+                return (TModel)modelMapper.MapToSource(domainInstance);
+            }
+            else
+            {
+                return default(TModel);
+            }
         }
 
         /// <summary>
         /// Map domain instance
         /// </summary>
-        public object MapDomainInstance(Type tDomain, Type tModel, object domainInstance, bool useCache = true, HashSet<Guid> keyStack = null)
+        public object MapDomainInstance(Type tDomain, Type tModel, object domainInstance)
         {
+
+            if (this.m_mappersByTarget.TryGetValue(tDomain, out IModelMapper modelMapper))
+            {
+                return modelMapper.MapToSource(domainInstance);
+            }
+            else if (this.m_mappersBySource.TryGetValue(tModel, out modelMapper))
+            {
+                return modelMapper.MapToSource(domainInstance);
+            }
+            else
+            {
+                return null;
+            }
+            /*
             ClassMap classMap = this.m_mapFile.GetModelClassMap(tModel, tDomain);
 
             if (domainInstance == null)
@@ -808,6 +875,7 @@ namespace SanteDB.Core.Model.Map
             // (retVal as IdentifiedData).SetDelayLoad(true);
 
             return retVal;
+            */
         }
 
     }

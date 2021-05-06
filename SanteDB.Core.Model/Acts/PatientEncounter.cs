@@ -56,7 +56,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the key of discharge disposition
         /// </summary>
-        [AutoLoad, EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("dischargeDisposition"), JsonProperty("dischargeDisposition")]
         public Guid? DischargeDispositionKey
         {

@@ -92,7 +92,7 @@ namespace SanteDB.Core.Model.Acts
         /// formal relationship, whereas Patient->NextOfKin[EmergencyContact]->Person may indicate that NOK record is only for 
         /// use as a contact and no other relationship can be inferred from the entry.</para>
         /// </remarks>
-        [AutoLoad]
+        
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
         public Concept Classification
@@ -188,7 +188,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the association type
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipTypeKey))]
         public Concept RelationshipType
         {

@@ -80,7 +80,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or set the reference term
         /// </summary>
-        [AutoLoad, SerializationReference(nameof(ReferenceTermKey))]
+        [SerializationReference(nameof(ReferenceTermKey))]
         [XmlIgnore, JsonIgnore]
         public ReferenceTerm ReferenceTerm
         {

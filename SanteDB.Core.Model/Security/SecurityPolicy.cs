@@ -133,7 +133,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// The policy
         /// </summary>
-        [AutoLoad, JsonIgnore, XmlIgnore, SerializationReference(nameof(PolicyKey))]
+        [JsonIgnore, XmlIgnore, SerializationReference(nameof(PolicyKey))]
         public SecurityPolicy Policy
         {
             get

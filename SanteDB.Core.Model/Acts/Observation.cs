@@ -93,7 +93,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the concept which indicates the interpretation of the observtion
         /// </summary>
-        [AutoLoad, SerializationReference(nameof(InterpretationConceptKey))]
+        [SerializationReference(nameof(InterpretationConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept InterpretationConcept
         {
@@ -184,7 +184,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the unit of measure
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(UnitOfMeasureKey))]
+        [SerializationReference(nameof(UnitOfMeasureKey))]
         public Concept UnitOfMeasure
         {
             get
@@ -305,7 +305,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the coded value of the observation
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(ValueKey))]
+        [SerializationReference(nameof(ValueKey))]
         public Concept Value
         {
             get

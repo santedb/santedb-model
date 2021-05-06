@@ -145,7 +145,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [SerializationReference(nameof(ExtensionTypeKey))]
         [XmlIgnore, JsonIgnore]
-        [AutoLoad]
+        
         public ExtensionType ExtensionType
         {
             get

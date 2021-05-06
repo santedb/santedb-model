@@ -97,7 +97,7 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the gender concept
         /// </summary>
         [SerializationReference(nameof(GenderConceptKey))]
-        [XmlIgnore, JsonIgnore, AutoLoad]
+        [XmlIgnore, JsonIgnore]
         public Concept GenderConcept
         {
             get
@@ -141,7 +141,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets the person's languages of communication
         /// </summary>
-        [AutoLoad, XmlElement("language"), JsonProperty("language")]
+        [XmlElement("language"), JsonProperty("language")]
         public List<PersonLanguageCommunication> LanguageCommunication { get; set; }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the marital status code
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(OccupationKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(OccupationKey))]
         public Concept Occupation
         {
             get

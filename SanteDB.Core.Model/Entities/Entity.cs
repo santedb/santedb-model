@@ -97,17 +97,6 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets a list of all addresses associated with the entity
         /// </summary>
-        [AutoLoad()]
-        [AutoLoad(EntityClassKeyStrings.Patient)]
-        [AutoLoad(EntityClassKeyStrings.ServiceDeliveryLocation)]
-        [AutoLoad(EntityClassKeyStrings.Provider)]
-        [AutoLoad(EntityClassKeyStrings.Person)]
-        [AutoLoad(EntityClassKeyStrings.Place)]
-        [AutoLoad(EntityClassKeyStrings.State)]
-        [AutoLoad(EntityClassKeyStrings.Country)]
-        [AutoLoad(EntityClassKeyStrings.CountyOrParish)]
-        [AutoLoad(EntityClassKeyStrings.CityOrTown)]
-        [AutoLoad(EntityClassKeyStrings.Organization)]
         [XmlElement("address"), JsonProperty("address")]
         public List<EntityAddress> Addresses { get; set; }
 
@@ -115,7 +104,6 @@ namespace SanteDB.Core.Model.Entities
         /// Class concept datal load property
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad()]
         [SerializationReference(nameof(ClassConceptKey))]
         public Concept ClassConcept
         {
@@ -192,7 +180,6 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(DeterminerConceptKey))]
         [XmlIgnore, JsonIgnore]
-        [AutoLoad()]
         public virtual Concept DeterminerConcept
         {
             get
@@ -232,7 +219,6 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets a list of all extensions associated with the entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("extension"), JsonProperty("extension")]
         public List<EntityExtension> Extensions
         {
@@ -243,21 +229,18 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets the identifiers associated with this entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("identifier"), JsonProperty("identifier")]
         public List<EntityIdentifier> Identifiers { get; set; }
 
         /// <summary>
         /// Gets a list of all names associated with the entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("name"), JsonProperty("name")]
         public List<EntityName> Names { get; set; }
 
         /// <summary>
         /// Gets a list of all notes associated with the entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("note"), JsonProperty("note")]
         public List<EntityNote> Notes { get; set; }
 
@@ -270,7 +253,6 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets a list of all associated entities for this entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("relationship"), JsonProperty("relationship")]
         public List<EntityRelationship> Relationships
         {
@@ -283,7 +265,6 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
-        [AutoLoad()]
         public Concept StatusConcept
         {
             get
@@ -323,18 +304,12 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets a list of all tags associated with the entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("tag"), JsonProperty("tag")]
         public List<EntityTag> Tags { get; set; }
 
         /// <summary>
         /// Gets a list of all telecommunications addresses associated with the entity
         /// </summary>
-        [AutoLoad(EntityClassKeyStrings.Patient)]
-        [AutoLoad(EntityClassKeyStrings.ServiceDeliveryLocation)]
-        [AutoLoad(EntityClassKeyStrings.Provider)]
-        [AutoLoad(EntityClassKeyStrings.Organization)]
-        [AutoLoad(EntityClassKeyStrings.Person)]
         [XmlElement("telecom"), JsonProperty("telecom")]
         public List<EntityTelecomAddress> Telecoms
         {
@@ -363,7 +338,6 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the template definition
         /// </summary>
-        [AutoLoad, SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
         public TemplateDefinition Template
         {
             get
@@ -382,7 +356,6 @@ namespace SanteDB.Core.Model.Entities
         /// Type concept identifier
         /// </summary>
         [SerializationReference(nameof(TypeConceptKey))]
-        [AutoLoad()]
         [XmlIgnore, JsonIgnore]
         public Concept TypeConcept
         {

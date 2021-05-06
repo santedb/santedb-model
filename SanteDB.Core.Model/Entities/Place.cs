@@ -152,7 +152,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets the services
         /// </summary>
-        [AutoLoad, XmlElement("service"), JsonProperty("service")]
+        [XmlElement("service"), JsonProperty("service")]
         public List<PlaceService> Services { get; set; }
 
         /// <summary>

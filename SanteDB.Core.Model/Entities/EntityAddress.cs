@@ -85,7 +85,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(AddressUseKey))]
         [XmlIgnore, JsonIgnore]
-        [AutoLoad]
+        
         public Concept AddressUse
         {
             get
@@ -123,7 +123,7 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the component types
         /// </summary>
         [XmlElement("component"), JsonProperty("component")]
-        [AutoLoad]
+        
         public List<EntityAddressComponent> Component { get; set; }
 
 

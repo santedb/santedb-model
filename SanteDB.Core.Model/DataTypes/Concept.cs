@@ -116,7 +116,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets a list of concept relationships
         /// </summary>
-        [AutoLoad, XmlElement("relationship"), JsonProperty("relationship")]
+        [XmlElement("relationship"), JsonProperty("relationship")]
         public List<ConceptRelationship> Relationship { get; set; }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the classification of the concept
         /// </summary>
         [SerializationReference(nameof(ClassKey))]
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         public ConceptClass Class
         {
             get
@@ -170,14 +170,14 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets a list of concept reference terms
         /// </summary>
-        [AutoLoad, XmlElement("referenceTerm"), JsonProperty("referenceTerm")]
+        [XmlElement("referenceTerm"), JsonProperty("referenceTerm")]
         public List<ConceptReferenceTerm> ReferenceTerms { get; set; }
 
         /// <summary>
         /// Gets the concept names
         /// </summary>
         //
-        [AutoLoad, XmlElement("name"), JsonProperty("name")]
+        [XmlElement("name"), JsonProperty("name")]
         public List<ConceptName> ConceptNames { get; set; }
 
         /// <summary>
