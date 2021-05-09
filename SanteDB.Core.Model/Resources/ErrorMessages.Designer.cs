@@ -70,6 +70,15 @@ namespace SanteDB.Core.Model.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Types {0} and {1} are incompatible.
+        /// </summary>
+        internal static string ERR_MAP_INCOMPATIBLE_TYPE {
+            get {
+                return ResourceManager.GetString("ERR_MAP_INCOMPATIBLE_TYPE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expected instance of {0}.
         /// </summary>
         internal static string ERR_MAP_INVALID_TYPE {

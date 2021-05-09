@@ -120,6 +120,9 @@
   <data name="ERR_ARGUMENT_NULL" xml:space="preserve">
     <value>Argument {0} was null</value>
   </data>
+  <data name="ERR_MAP_INCOMPATIBLE_TYPE" xml:space="preserve">
+    <value>Types {0} and {1} are incompatible</value>
+  </data>
   <data name="ERR_MAP_INVALID_TYPE" xml:space="preserve">
     <value>Expected instance of {0}</value>
   </data>

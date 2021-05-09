@@ -3,7 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SanteDB.Core.Model.Exceptions
+namespace SanteDB.Core.Exceptions
 {
     /// <summary>
     /// An exception of model map compilation errors

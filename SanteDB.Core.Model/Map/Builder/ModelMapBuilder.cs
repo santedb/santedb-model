@@ -1,9 +1,12 @@
-﻿using SanteDB.Core.Model.Resources;
+﻿using SanteDB.Core.Exceptions;
+using SanteDB.Core.Model.Resources;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map.Builder
 {
@@ -24,7 +27,7 @@ namespace SanteDB.Core.Model.Map.Builder
         private static readonly CodeThisReferenceExpression s_this = new CodeThisReferenceExpression();
 
         private static readonly CodeFieldReferenceExpression s_mapperContext = new CodeFieldReferenceExpression(s_this, "m_mapper");
-        private static readonly CodeVariableReferenceExpression s_retVal = new CodeVariableReferenceExpression("_retVal");
+        private static readonly CodeVariableReferenceExpression s_retVal = new CodeVariableReferenceExpression("retVal");
         private static readonly CodeTypeReference s_tIdentifiedData = new CodeTypeReference(typeof(IdentifiedData));
         private static readonly CodeTypeReference s_tType = new CodeTypeReference(typeof(Type));
 
@@ -113,24 +116,11 @@ namespace SanteDB.Core.Model.Map.Builder
         }
 
         /// <summary>
-        /// Create type reference
-        /// </summary>
-        private CodeTypeReference CreateInternalModelMapInterface(Type sourceType, Type targetType)
-        {
-            var retVal = new CodeTypeReference("IModelMapperInternal");
-            retVal.TypeArguments.Add(new CodeTypeReference(sourceType));
-            retVal.TypeArguments.Add(new CodeTypeReference(targetType));
-            return retVal;
-        }
-
-        /// <summary>
         /// Create a code namespace for the specified assembly
         /// </summary>
         public CodeNamespace CreateCodeNamespace(ModelMap map, String name)
         {
             CodeNamespace retVal = new CodeNamespace($"SanteDB.Core.Model.Map.{name}");
-
-            retVal.Types.Add(this.CreateInternalModelMapInterface());
 
             foreach (var t in map.Class)
             {
@@ -140,45 +130,6 @@ namespace SanteDB.Core.Model.Map.Builder
             }
             return retVal;
         }
-
-        /// <summary>
-        /// Create 
-        /// </summary>
-        public CodeTypeDeclaration CreateInternalModelMapInterface()
-        {
-            CodeTypeDeclaration retVal = new CodeTypeDeclaration($"IModelMapperInternal");
-
-            var tsource = new CodeTypeParameter("TSource");
-            var ttarget = new CodeTypeParameter("TTarget");
-            retVal.TypeParameters.Add(tsource);
-            retVal.TypeParameters.Add(ttarget);
-            retVal.BaseTypes.Add(typeof(IModelMapper));
-            var mapMethodDef = new CodeMemberMethod()
-            {
-                Name = "MapToTarget",
-                ReturnType = new CodeTypeReference(ttarget)
-            };
-            mapMethodDef.Parameters.Add(new CodeParameterDeclarationExpression(new CodeTypeReference(tsource), "source"));
-            mapMethodDef.Parameters.Add(new CodeParameterDeclarationExpression(typeof(HashSet<Guid>), "stack"));
-            mapMethodDef.Attributes = MemberAttributes.Public;
-            retVal.Members.Add(mapMethodDef);
-
-            mapMethodDef = new CodeMemberMethod()
-            {
-                Name = "MapToSource",
-                ReturnType = new CodeTypeReference(tsource)
-            };
-            mapMethodDef.Parameters.Add(new CodeParameterDeclarationExpression(new CodeTypeReference(ttarget), "target"));
-            mapMethodDef.Parameters.Add(new CodeParameterDeclarationExpression(typeof(HashSet<Guid>), "stack"));
-            retVal.Members.Add(mapMethodDef);
-
-            retVal.IsInterface = true;
-            retVal.IsClass = false;
-
-            retVal.TypeAttributes = TypeAttributes.NotPublic | TypeAttributes.Interface;
-            return retVal;
-        }
-
 
         /// <summary>
         /// Creates a view model serializer
@@ -197,7 +148,6 @@ namespace SanteDB.Core.Model.Map.Builder
             retVal.TypeAttributes = TypeAttributes.Public | TypeAttributes.Sealed;
             retVal.BaseTypes.Add(typeof(IModelMapper));
             retVal.BaseTypes.Add(typeof(IModelMapper<,>).MakeGenericType(map.ModelType, map.DomainType));
-            retVal.BaseTypes.Add(this.CreateInternalModelMapInterface(map.ModelType, map.DomainType));
 
             retVal.Members.Add(new CodeMemberField(typeof(ModelMapper), "m_mapper") { Attributes = MemberAttributes.Private });
             retVal.Members.Add(this.CreateInitializorConstructor(className));
@@ -205,13 +155,138 @@ namespace SanteDB.Core.Model.Map.Builder
             retVal.Members.Add(this.CreateTypeGetProperty("SourceType", map.ModelType));
             retVal.Members.Add(this.CreateTypeGetProperty("TargetType", map.DomainType));
 
-            retVal.Members.Add(this.CreateTypedMapMethod("MapToSource", map.DomainType, map.ModelType));
-            retVal.Members.Add(this.CreateTypedMapMethod("MapToTarget", map.ModelType, map.DomainType));
             retVal.Members.Add(this.CreateObjectMapMethod("MapToSource", map.DomainType));
             retVal.Members.Add(this.CreateObjectMapMethod("MapToTarget", map.ModelType));
-            //retVal.Members.Add(this.CreateMapToTargetGenInternal(map.ModelType, map.DomainType));
-            //retVal.Members.Add(this.CreateMapToSourceGenInternal(map.ModelType, map.DomainType));
+            retVal.Members.Add(this.CreateMapToTargetMethod(map));
+            retVal.Members.Add(this.CreateMapToSourceMethod(map));
 
+            return retVal;
+        }
+
+        /// <summary>
+        /// Create MapToSource Method based on the instructions in the <paramref name="map"/>
+        /// </summary>
+        /// <param name="map">The map to use</param>
+        /// <returns>The type member</returns>
+        private CodeMemberMethod CreateMapToSourceMethod(ClassMap map)
+        {
+            var retVal = new CodeMemberMethod()
+            {
+                Name = "MapToSource",
+                ReturnType = new CodeTypeReference(map.ModelType),
+                Attributes = MemberAttributes.Public | MemberAttributes.Final
+            };
+            retVal.Parameters.Add(new CodeParameterDeclarationExpression(map.DomainType, "instance"));
+            var _instance = new CodeVariableReferenceExpression("instance");
+
+            retVal.Statements.Add(new CodeConditionStatement(new CodeBinaryOperatorExpression(_instance, CodeBinaryOperatorType.IdentityEquality, s_null), new CodeMethodReturnStatement(new CodeDefaultValueExpression(new CodeTypeReference(map.ModelType)))));
+            retVal.Statements.Add(new CodeVariableDeclarationStatement(new CodeTypeReference(map.ModelType), "retVal", new CodeObjectCreateExpression(new CodeTypeReference(map.ModelType))));
+
+            // Iterate through the inbound properties and copy them over
+            foreach (var propInfo in map.DomainType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                if (!propInfo.PropertyType.IsPrimitive
+                    && propInfo.PropertyType.StripNullable() != typeof(Guid) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(String) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(DateTime) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(DateTimeOffset) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(Type) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(Decimal) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(byte[]) &&
+                   !propInfo.PropertyType.IsEnum)
+                {
+                    continue;
+                }
+
+                // Auto map property
+                var otherProp = map.ModelType.GetProperty(propInfo.Name);
+                if (map.TryGetDomainProperty(propInfo.Name, out PropertyMap configMap))
+                {
+                    otherProp = map.ModelType.GetProperty(configMap.ModelName);
+                }
+
+                // Other property
+                if (otherProp == null || !otherProp.CanWrite)
+                {
+                    continue;
+                }
+
+                // Special cases
+                try
+                {
+                    retVal.Statements.Add(this.CreateCheckedAssignment(propInfo.PropertyType, new CodePropertyReferenceExpression(_instance, propInfo.Name), otherProp.PropertyType, new CodePropertyReferenceExpression(s_retVal, otherProp.Name)));
+                }
+                catch(InvalidOperationException e)
+                {
+                    throw new ModelMapValidationException(new ValidationResultDetail[] { new ValidationResultDetail(ResultDetailType.Error, $"{map.ModelType.FullName}.{otherProp.Name} = {map.DomainType.FullName}.{propInfo.Name} - {e.Message}", e, "") });
+                }
+            }
+            retVal.Statements.Add(new CodeMethodReturnStatement(s_retVal));
+            return retVal;
+        }
+
+        /// <summary>
+        /// Create the MapToTarget method
+        /// </summary>
+        /// <param name="map">The map to use</param>
+        /// <returns>The target map method</returns>
+        private CodeMemberMethod CreateMapToTargetMethod(ClassMap map)
+        {
+            var retVal = new CodeMemberMethod()
+            {
+                Name = "MapToTarget",
+                ReturnType = new CodeTypeReference(map.DomainType),
+                Attributes = MemberAttributes.Public | MemberAttributes.Final
+            };
+            retVal.Parameters.Add(new CodeParameterDeclarationExpression(map.ModelType, "instance"));
+
+            var _instance = new CodeVariableReferenceExpression("instance");
+            
+            retVal.Statements.Add(new CodeConditionStatement(new CodeBinaryOperatorExpression(_instance, CodeBinaryOperatorType.IdentityEquality, s_null), new CodeMethodReturnStatement(new CodeDefaultValueExpression(new CodeTypeReference(map.DomainType)))));
+            retVal.Statements.Add(new CodeVariableDeclarationStatement(new CodeTypeReference(map.DomainType), "retVal", new CodeObjectCreateExpression(new CodeTypeReference(map.DomainType))));
+
+            // Iterate through the inbound properties and copy them over
+            foreach(var propInfo in map.DomainType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                if (!propInfo.PropertyType.IsPrimitive
+                    && propInfo.PropertyType.StripNullable() != typeof(Guid) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(String) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(DateTime) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(DateTimeOffset) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(Type) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(Decimal) &&
+                   propInfo.PropertyType.StripGeneric() != typeof(byte[]) &&
+                   !propInfo.PropertyType.IsEnum)
+                {
+                    continue;
+                }
+
+                // Auto map property
+                var modelProp = map.ModelType.GetProperty(propInfo.Name);
+                if (map.TryGetDomainProperty(propInfo.Name, out PropertyMap configMap))
+                {
+                    modelProp = map.ModelType.GetProperty(configMap.ModelName);
+                }
+
+                // Other property
+                if(modelProp == null || !modelProp.CanWrite || !propInfo.CanWrite)
+                {
+                    continue;
+                }
+
+                // Special cases
+                try
+                {
+                    retVal.Statements.Add(this.CreateCheckedAssignment(modelProp.PropertyType, new CodePropertyReferenceExpression(_instance, modelProp.Name), propInfo.PropertyType, new CodePropertyReferenceExpression(s_retVal, propInfo.Name)));
+                }
+                catch (InvalidOperationException e)
+                {
+                    throw new ModelMapValidationException(new ValidationResultDetail[] { new ValidationResultDetail(ResultDetailType.Error, $"{map.DomainType.FullName}.{propInfo.Name} = {map.ModelType.FullName}.{modelProp.Name} - {e.Message}", e, "") });
+                }
+
+                
+            }
+            retVal.Statements.Add(new CodeMethodReturnStatement(s_retVal));
             return retVal;
         }
 
@@ -232,33 +307,140 @@ namespace SanteDB.Core.Model.Map.Builder
         }
 
         /// <summary>
-        /// Creates a generic typed form of MapToX method
+        /// Create a checked assignment statement which ensures that the value from <paramref name="fromObject"/>
         /// </summary>
-        /// <param name="methodName">The name of the method to generate</param>
-        /// <param name="parameterType">The type of parameter to accept</param>
-        /// <param name="returnType">The type of parameter to return</param>
-        /// <returns>The code type member</returns>
-        private CodeTypeMember CreateTypedMapMethod(string methodName, Type parameterType, Type returnType)
+        private CodeStatement CreateCheckedAssignment(Type fromType, CodeExpression fromObject, Type toType, CodeExpression toObject)
         {
-            var retVal = new CodeMemberMethod()
+
+            // BYTE[] <-- GUID
+            if (typeof(byte[]).Equals(toType) && typeof(Guid).Equals(fromType))
             {
-                Name = methodName,
-                ReturnType = new CodeTypeReference(returnType),
-                Attributes = MemberAttributes.Public | MemberAttributes.Final
-            };
-            retVal.Parameters.Add(new CodeParameterDeclarationExpression(parameterType, "o"));
-            var _o = new CodeVariableReferenceExpression("o");
+                return new CodeAssignStatement(toObject, this.CreateMethodCallExpression(fromObject, nameof(Guid.ToByteArray)));
+            }
+            // GUID <-- BYTE[]
+            else if(typeof(Guid).Equals(toType.StripNullable()) && typeof(byte[]).Equals(fromType))
+            {
+                return new CodeAssignStatement(toObject, new CodeObjectCreateExpression(typeof(Guid), fromObject));
+            }
+            else if (typeof(Type).Equals(toType) && typeof(String).Equals(fromType))
+            {
+                return new CodeAssignStatement(toObject, this.CreateMethodCallExpression(new CodeTypeReferenceExpression(typeof(Type)), "GetType", fromObject));
+            }
+            // ENUM <-- INT
+            else if(toType.StripNullable().IsEnum && typeof(Int32).Equals(fromType))
+            {
+                return new CodeAssignStatement(toObject, new CodeCastExpression(new CodeTypeReference(toType), fromObject));
+            }
+            // DATETIME <-- DATETIMEOFFSET
+            else if(typeof(DateTime).Equals(toType.StripNullable()) && typeof(DateTimeOffset).IsAssignableFrom(fromType))
+            {
+                return new CodeAssignStatement(toObject, new CodePropertyReferenceExpression(fromObject, nameof(DateTimeOffset.DateTime)));
+            }
+            // DATETIMEOFFST <== DATETIME
+            else if(typeof(DateTimeOffset).Equals(toType.StripNullable()) && typeof(DateTime).IsAssignableFrom(fromType))
+            {
+                return new CodeAssignStatement(toObject, new CodeCastExpression(typeof(DateTimeOffset), fromObject));
+            }
+            // INT <== ENUM
+            else if(typeof(Int32).Equals(toType.StripNullable()) && fromType.IsEnum)
+            {
+                return new CodeAssignStatement(toObject, new CodeCastExpression(typeof(Int32), fromObject));
+            }
+            // ENUM <== STRING
+            else if(toType.StripNullable().IsEnum && typeof(String).Equals(fromType))
+            {
+                if(toType.StripNullable().GetFields().Any(f=>f.GetCustomAttribute<XmlEnumAttribute>() != null))
+                {
+                    CodeConditionStatement retVal = null;
+                    foreach(var f in toType.StripNullable().GetFields())
+                    {
+                        var enumV = f.GetCustomAttribute<XmlEnumAttribute>();
+                        if (enumV == null)
+                        {
+                            continue;
+                        }
 
-            retVal.Statements.Add(this.CreateArgumentNullCheckStatement(_o));
-            retVal.Statements.Add(new CodeVariableDeclarationStatement(typeof(HashSet<Guid>), "keySet", new CodeObjectCreateExpression(new CodeTypeReference(typeof(HashSet<Guid>)))));
-            var _keySet = new CodeVariableReferenceExpression("keySet");
+                        var logicExpression = new CodeConditionStatement(this.CreateValueEqualsStatement(new CodePrimitiveExpression(enumV.Name), fromObject), new CodeAssignStatement(toObject, new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(toType.StripGeneric()), f.Name)));
+                        if (retVal == null)
+                        {
+                            retVal = logicExpression;
+                        }
+                        else
+                        {
+                            logicExpression.FalseStatements.Add(retVal);
+                            retVal = logicExpression;
+                        }
 
-            // Call and return
-            retVal.Statements.Add(new CodeMethodReturnStatement(this.CreateMethodCallExpression(s_this, methodName, _o, _keySet)));
+                    }
 
-            return retVal;
+                    return retVal;
+                }
+                else
+                {
+                    return new CodeAssignStatement(toObject, new CodeCastExpression(toType.StripNullable(), this.CreateMethodCallExpression(new CodeTypeReferenceExpression(typeof(Enum)), "Parse", new CodeTypeOfExpression(fromType.StripNullable()), fromObject)));
+                }
+            }
+            // STRING <== ENUM
+            else if(typeof(String).Equals(toType) && fromType.IsEnum)
+            {
+                // Use the XML enum?
+                if(fromType.GetFields().Any(f=>f.GetCustomAttribute<XmlEnumAttribute>() != null))
+                {
+                    CodeConditionStatement retVal = null;
+                    foreach(var f in fromType.GetFields())
+                    {
+                        var enumV = f.GetCustomAttribute<XmlEnumAttribute>();
+                        if (enumV == null)
+                        {
+                            continue;
+                        }
+
+                        // Convert with an if
+                        var logicExpression = new CodeConditionStatement(new CodeBinaryOperatorExpression(fromObject, CodeBinaryOperatorType.ValueEquality, new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(fromType), f.Name)), 
+                            new CodeAssignStatement(toObject, new CodePrimitiveExpression(enumV.Name)));
+                        if(retVal == null)
+                        {
+                            retVal = logicExpression;
+                        }
+                        else
+                        {
+                            logicExpression.FalseStatements.Add(retVal);
+                            retVal = logicExpression;
+                        }
+                    }
+                    return retVal;
+                }
+                else
+                {
+                    // Just TOSTRING()
+                    return new CodeAssignStatement(toObject, this.CreateToStringExpression(fromObject));
+                }
+            }
+            // STRING <== TYPE
+            else if(typeof(String).Equals(toType) && fromType.Equals(typeof(Type)))
+            {
+                return new CodeAssignStatement(toObject, new CodePropertyReferenceExpression(fromObject, nameof(Type.AssemblyQualifiedName)));
+            }
+            // TYPE? <== TYPE
+            else if (fromType.IsGenericType && 
+                typeof(Nullable<>).IsAssignableFrom(fromType.GetGenericTypeDefinition())) // generic
+            {
+                return new CodeConditionStatement(
+                    new CodePropertyReferenceExpression(fromObject, "HasValue"),
+                    this.CreateCheckedAssignment(fromType.StripNullable(), new CodePropertyReferenceExpression(fromObject, "Value"), toType, toObject)
+                    );
+            }
+            // TYPE == TYPE
+            else if (fromType.Equals(toType) || toType.IsAssignableFrom(fromType))
+            {
+                return new CodeAssignStatement(toObject, fromObject);
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.ERR_MAP_INCOMPATIBLE_TYPE, fromType, toType));
+            }
         }
-
+        
         /// <summary>
         /// Creates a non-generic form of the MapToX method, casting to appropriate <paramref name="parameterType"/>
         /// </summary>

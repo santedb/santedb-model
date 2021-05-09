@@ -17,9 +17,9 @@
  * Date: 2021-2-9
  */
 using Microsoft.CSharp;
+using SanteDB.Core.Exceptions;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
-using SanteDB.Core.Model.Exceptions;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map.Builder;
 using System;
@@ -44,8 +44,7 @@ namespace SanteDB.Core.Model.Map
     public sealed class ModelMapper
     {
 
-        private ConcurrentDictionary<Type, IModelMapper> m_mappersBySource = new ConcurrentDictionary<Type, Builder.IModelMapper>();
-        private ConcurrentDictionary<Type, IModelMapper> m_mappersByTarget = new ConcurrentDictionary<Type, Builder.IModelMapper>();
+        private ConcurrentDictionary<Type, IModelMapper> m_mappers = new ConcurrentDictionary<Type, Builder.IModelMapper>();
         private static ConcurrentDictionary<String, Assembly> m_loadedMaps = new ConcurrentDictionary<string, Assembly>();
 
         //private static Dictionary<Type, Dictionary<String, PropertyInfo[]>> s_modelPropertyCache = new Dictionary<Type, Dictionary<String, PropertyInfo[]>>();
@@ -80,15 +79,15 @@ namespace SanteDB.Core.Model.Map
         /// <summary>
         /// Creates a new mapper from source stream
         /// </summary>
-        public ModelMapper(Stream sourceStream, String name)
+        public ModelMapper(Stream sourceStream, String name, bool useReflectionOnly = false)
         {
-            this.Load(sourceStream, name);
+            this.Load(sourceStream, name, useReflectionOnly);
         }
 
         /// <summary>
         /// Load mapping from a stream
         /// </summary>
-        private void Load(Stream sourceStream, String name)
+        private void Load(Stream sourceStream, String name, bool useReflectionOnly)
         {
             this.m_mapFile = ModelMap.Load(sourceStream);
 
@@ -99,38 +98,81 @@ namespace SanteDB.Core.Model.Map
             }
             else
             {
-                var csProvider = new CSharpCodeProvider();
-                var compileUnit = new CodeCompileUnit();
+                if (!useReflectionOnly)
+                {
+                    try
+                    {
+                        var csProvider = new CSharpCodeProvider();
+                        var compileUnit = new CodeCompileUnit();
 
-                // Add namespace
-                compileUnit.Namespaces.Add(new Builder.ModelMapBuilder().CreateCodeNamespace(this.m_mapFile, name));
-                compileUnit.ReferencedAssemblies.Add("System.dll");
-                compileUnit.ReferencedAssemblies.Add(typeof(ModelMapper).Assembly.Location);
+                        // Add namespace
+                        compileUnit.Namespaces.Add(new Builder.ModelMapBuilder().CreateCodeNamespace(this.m_mapFile, name));
 
-                // Compiler parameters
-                var compileParameters = new CompilerParameters();
-                compileParameters.ReferencedAssemblies.AddRange(compileUnit.ReferencedAssemblies.OfType<String>().ToArray());
-                compileParameters.GenerateInMemory = true;
-                compileParameters.GenerateExecutable = false;
+                        compileUnit.ReferencedAssemblies.Add(typeof(Type).Assembly.Location);
+                        compileUnit.ReferencedAssemblies.Add(typeof(HashSet<>).Assembly.Location);
+                        compileUnit.ReferencedAssemblies.AddRange(this.m_mapFile.Class.Select(o => o.ModelType.Assembly.Location).Distinct().ToArray());
+                        compileUnit.ReferencedAssemblies.AddRange(this.m_mapFile.Class.Select(o => o.DomainType.Assembly.Location).Distinct().ToArray());
+                        foreach (var casm in compileUnit.ReferencedAssemblies.OfType<String>().ToArray().Select(o => Assembly.LoadFile(o)).SelectMany(o => o.GetReferencedAssemblies()))
+                        {
+                            var asmC = Assembly.Load(casm);
+                            compileUnit.ReferencedAssemblies.Add(asmC.Location);
+                        }
+
+                        // Compiler parameters
+                        var compileParameters = new CompilerParameters();
+                        compileParameters.ReferencedAssemblies.AddRange(compileUnit.ReferencedAssemblies.OfType<String>().ToArray());
+                        compileParameters.GenerateInMemory = true;
+                        compileParameters.GenerateExecutable = false;
 
 #if DEBUG
-                using(var sw = new StringWriter())
-                {
-                    csProvider.GenerateCodeFromCompileUnit(compileUnit, sw, new CodeGeneratorOptions() { });
-                    String codeReview = sw.ToString();
-                }
+                        using (var sw = new StringWriter())
+                        {
+                            csProvider.GenerateCodeFromCompileUnit(compileUnit, sw, new CodeGeneratorOptions() { });
+                            String codeReview = sw.ToString();
+                        }
 #endif
-                var results = csProvider.CompileAssemblyFromDom(compileParameters, compileUnit);
+                        var results = csProvider.CompileAssemblyFromDom(compileParameters, compileUnit);
 
-                if (results.Errors.HasErrors)
-                {
-                    throw new ModelMapCompileException(results.Errors);
+                        if (results.Errors.HasErrors)
+                        {
+                            throw new ModelMapCompileException(results.Errors);
+                        }
+
+                        this.ProcessAssembly(results.CompiledAssembly);
+                        m_loadedMaps.TryAdd(name, results.CompiledAssembly);
+                    }
+                    catch(ModelMapCompileException)
+                    {
+                        throw;
+                    }
+                    catch(ModelMapValidationException)
+                    {
+                        throw;
+                    }
+                    catch(Exception e)
+                    {
+                        this.InitializeReflection(this.m_mapFile);
+                    }
                 }
-
-                this.ProcessAssembly(results.CompiledAssembly);
-                m_loadedMaps.TryAdd(name, results.CompiledAssembly);
+                else
+                {
+                    this.InitializeReflection(this.m_mapFile);
+                }
             }
 
+        }
+
+        /// <summary>
+        /// Creates a reflection map only for the map file
+        /// </summary>
+        private void InitializeReflection(ModelMap mapFile)
+        {
+            foreach(var map in mapFile.Class)
+            {
+                var mapper = new ReflectionModelMapper(map, this);
+                this.m_mappers.TryAdd(map.DomainType, mapper);
+                this.m_mappers.TryAdd(map.ModelType, mapper);
+            }
         }
 
         /// <summary>
@@ -142,8 +184,8 @@ namespace SanteDB.Core.Model.Map
             foreach (var t in asm.ExportedTypes.Where(t => typeof(IModelMapper).IsAssignableFrom(t)))
             {
                 var map = Activator.CreateInstance(t, this) as IModelMapper;
-                this.m_mappersBySource.TryAdd(map.SourceType, map);
-                this.m_mappersBySource.TryAdd(map.TargetType, map);
+                this.m_mappers.TryAdd(map.SourceType, map);
+                this.m_mappers.TryAdd(map.TargetType, map);
             }
 
         }
@@ -153,9 +195,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public IModelMapper GetModelMapper(Type forType)
         {
-            if (this.m_mappersBySource.TryGetValue(forType, out IModelMapper retVal))
-                return retVal;
-            else if (this.m_mappersByTarget.TryGetValue(forType, out retVal))
+            if (this.m_mappers.TryGetValue(forType, out IModelMapper retVal))
                 return retVal;
             return null;
         }
@@ -387,7 +427,7 @@ namespace SanteDB.Core.Model.Map
             where TModel : new()
         {
 
-            if (this.m_mappersBySource.TryGetValue(modelInstance.GetType(), out IModelMapper modelMapper))
+            if (this.m_mappers.TryGetValue(modelInstance.GetType(), out IModelMapper modelMapper))
             {
                 return modelMapper.MapToTarget(modelInstance);
             }
@@ -405,20 +445,14 @@ namespace SanteDB.Core.Model.Map
             where TModel : new()
         {
 
-            if (this.m_mappersBySource.TryGetValue(modelInstance.GetType(), out IModelMapper modelMapper))
+            if (this.m_mappers.TryGetValue(typeof(TModel), out IModelMapper modelMapper) || 
+                this.m_mappers.TryGetValue(modelInstance.GetType(), out modelMapper) ||
+                this.m_mappers.TryGetValue(typeof(TDomain), out modelMapper))
             {
                 if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
                     return smodelMapper.MapToTarget(modelInstance);
                 else
                     return (TDomain)modelMapper.MapToTarget(modelInstance);
-            }
-            else if (this.m_mappersByTarget.TryGetValue(typeof(TModel), out modelMapper))
-            {
-                return (TDomain)modelMapper.MapToTarget(modelInstance);
-            }
-            else if(this.m_mappersByTarget.TryGetValue(typeof(TDomain), out modelMapper))
-            {
-                return (TDomain)modelMapper.MapToTarget(modelInstance);
             }
             else
             {
@@ -528,20 +562,14 @@ namespace SanteDB.Core.Model.Map
             where TModel : new()
             where TDomain : new()
         {
-            if (this.m_mappersByTarget.TryGetValue(domainInstance.GetType(), out IModelMapper modelMapper))
+            if (this.m_mappers.TryGetValue(domainInstance.GetType(), out IModelMapper modelMapper) ||
+                this.m_mappers.TryGetValue(typeof(TDomain), out modelMapper) ||
+                this.m_mappers.TryGetValue(typeof(TModel), out modelMapper))
             {
                 if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
                     return smodelMapper.MapToSource(domainInstance);
                 else
                     return (TModel)modelMapper.MapToSource(domainInstance);
-            }
-            else if (this.m_mappersByTarget.TryGetValue(typeof(TDomain), out modelMapper))
-            {
-                return (TModel)modelMapper.MapToSource(domainInstance);
-            }
-            else if (this.m_mappersBySource.TryGetValue(typeof(TModel), out modelMapper))
-            {
-                return (TModel)modelMapper.MapToSource(domainInstance);
             }
             else
             {
@@ -555,11 +583,8 @@ namespace SanteDB.Core.Model.Map
         public object MapDomainInstance(Type tDomain, Type tModel, object domainInstance)
         {
 
-            if (this.m_mappersByTarget.TryGetValue(tDomain, out IModelMapper modelMapper))
-            {
-                return modelMapper.MapToSource(domainInstance);
-            }
-            else if (this.m_mappersBySource.TryGetValue(tModel, out modelMapper))
+            if (this.m_mappers.TryGetValue(tDomain, out IModelMapper modelMapper) ||
+                this.m_mappers.TryGetValue(tModel, out modelMapper))
             {
                 return modelMapper.MapToSource(domainInstance);
             }
