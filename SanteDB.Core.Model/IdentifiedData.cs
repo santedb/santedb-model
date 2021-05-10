@@ -21,7 +21,9 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
 
@@ -53,6 +55,10 @@ namespace SanteDB.Core.Model
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
     public abstract class IdentifiedData : IIdentifiedEntity
     {
+
+        // Annotations
+        // A small list of objects which can be passed around on the object 
+        private List<Object> m_annotations  = new List<object>();
 
         // True when the data class is locked for storage
         private bool m_delayLoad = false;
@@ -246,5 +252,25 @@ namespace SanteDB.Core.Model
             }
         }
 
+        /// <summary>
+        /// Remove annotation
+        /// </summary>
+        public void RemoveAnnotation(Object annotation)
+        {
+            this.m_annotations.Remove(annotation);
+        }
+
+        /// <summary>
+        /// Get annotations of specified <typeparamref name="T"/>
+        /// </summary>
+        public IEnumerable<T> GetAnnotations<T>() => this.m_annotations.OfType<T>();
+
+        /// <summary>
+        /// Add an annotated object
+        /// </summary>
+        public void AddAnnotation(Object annotation)
+        {
+            this.m_annotations.Add(annotation);
+        }
     }
 }
