@@ -283,6 +283,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the targeted entity
         /// </summary>
+        [JsonIgnore, XmlIgnore]
         object ITargetedAssociation.TargetEntity
         {
             get => this.TargetEntity;
