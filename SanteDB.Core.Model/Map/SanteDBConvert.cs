@@ -18,6 +18,7 @@
  */
 using System;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace SanteDB.Core.Model.Map
 {
@@ -231,7 +232,16 @@ namespace SanteDB.Core.Model.Map
                 }
             }
             else
-                return TimeSpan.Parse(value);
+            {
+                try
+                {
+                    return XmlConvert.ToTimeSpan(value);
+                }
+                catch
+                {
+                    return TimeSpan.Parse(value);
+                }
+            }
         }
     }
 }
