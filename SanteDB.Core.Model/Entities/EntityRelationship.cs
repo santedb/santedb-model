@@ -66,6 +66,7 @@ namespace SanteDB.Core.Model.Entities
         {
             this.RelationshipTypeKey = relationshipType;
             this.TargetEntity = target;
+            this.Strength = 1.0;
         }
 
         /// <summary>
@@ -75,6 +76,16 @@ namespace SanteDB.Core.Model.Entities
         {
             this.RelationshipTypeKey = relationshipType;
             this.TargetEntityKey = targetKey;
+            this.Strength = 1.0;
+        }
+
+        /// <summary>
+        /// Entity relationship between <see cref="Association{TSourceType}.SourceEntityKey"/> container and <paramref name="targetKey"/>
+        /// </summary>
+        public EntityRelationship(Guid? relationshipType, Guid? sourceKey, Guid? targetKey, Guid? classificationKey) : this(relationshipType, targetKey)
+        {
+            this.SourceEntityKey = sourceKey;
+            this.ClassificationKey = classificationKey;
         }
 
         /// <summary>
@@ -114,6 +125,12 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [XmlElement("inversionInd"), JsonProperty("inversionInd")]
         public bool InversionIndicator { get; set; }
+
+        /// <summary>
+        /// The strength (confidence) of the relationship between source and target
+        /// </summary>
+        [XmlElement("strength"), JsonProperty("strength")]
+        public double? Strength { get; set; }
 
         /// <summary>
         /// Represents the quantity of target in source
