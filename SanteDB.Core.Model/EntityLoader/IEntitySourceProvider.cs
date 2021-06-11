@@ -44,11 +44,7 @@ namespace SanteDB.Core.Model.EntityLoader
         /// </summary>
         IEnumerable<TObject> Query<TObject>(Expression<Func<TObject, bool>> query) where TObject : IdentifiedData, new();
 
-        /// <summary>
-        /// Get relationships
-        /// </summary>
-        IEnumerable<TObject> GetRelations<TObject>(Guid? sourceKey, int? sourceVersionSequence) where TObject : IdentifiedData, IVersionedAssociation, new();
-
+    
         /// <summary>
         /// Get relationships
         /// </summary>

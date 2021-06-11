@@ -19,6 +19,7 @@
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
+using SanteDB.Core.Model.Query;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,62 +36,62 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Load the person's languages
         /// </summary>
-        public static IEnumerable<PersonLanguageCommunication> GetPersonLanguages(this Person me) => me.LoadCollection<PersonLanguageCommunication>(nameof(Person.LanguageCommunication));
+        public static IEnumerable<PersonLanguageCommunication> GetPersonLanguages(this Person me) => me.LoadCollection<PersonLanguageCommunication>(nameof(Person.LanguageCommunication)).AsResultSet();
 
         /// <summary>
         /// Gets or loads addresses attached to an entity
         /// </summary>
-        public static IEnumerable<EntityAddress> GetAddresses(this Entity me) => me.LoadCollection<EntityAddress>(nameof(Entity.Addresses));
+        public static IEnumerable<EntityAddress> GetAddresses(this Entity me) => me.LoadCollection<EntityAddress>(nameof(Entity.Addresses)).AsResultSet();
 
         /// <summary>
         /// Gets or loads names attached to an entity
         /// </summary>
-        public static IEnumerable<EntityName> GetNames(this Entity me) => me.LoadCollection<EntityName>(nameof(Entity.Names));
+        public static IEnumerable<EntityName> GetNames(this Entity me) => me.LoadCollection<EntityName>(nameof(Entity.Names)).AsResultSet();
 
         /// <summary>
         /// Gets or loads telecoms attached to an entity
         /// </summary>
-        public static IEnumerable<EntityTelecomAddress> GetTelecoms(this Entity me) => me.LoadCollection<EntityTelecomAddress>(nameof(Entity.Telecoms));
+        public static IEnumerable<EntityTelecomAddress> GetTelecoms(this Entity me) => me.LoadCollection<EntityTelecomAddress>(nameof(Entity.Telecoms)).AsResultSet();
 
         /// <summary>
         /// Gets or loads relationships
         /// </summary>
-        public static IEnumerable<EntityRelationship> GetRelationships(this Entity me) => me.LoadCollection<EntityRelationship>(nameof(Entity.Relationships));
+        public static IEnumerable<EntityRelationship> GetRelationships(this Entity me) => me.LoadCollection<EntityRelationship>(nameof(Entity.Relationships)).AsResultSet();
 
         /// <summary>
         /// Gets or loads identifiers
         /// </summary>
-        public static IEnumerable<EntityIdentifier> GetIdentifiers(this Entity me) => me.LoadCollection<EntityIdentifier>(nameof(Entity.Identifiers));
+        public static IEnumerable<EntityIdentifier> GetIdentifiers(this Entity me) => me.LoadCollection<EntityIdentifier>(nameof(Entity.Identifiers)).AsResultSet();
         
         /// <summary>
         /// Gets or loads notes
         /// </summary>
-        public static IEnumerable<EntityNote> GetNotes(this Entity me) => me.LoadCollection<EntityNote>(nameof(Entity.Notes));
+        public static IEnumerable<EntityNote> GetNotes(this Entity me) => me.LoadCollection<EntityNote>(nameof(Entity.Notes)).AsResultSet();
 
         /// <summary>
         /// Gets or loads tags
         /// </summary>
-        public static IEnumerable<EntityTag> GetTags(this Entity me) => me.LoadCollection<EntityTag>(nameof(Entity.Tags));
+        public static IEnumerable<EntityTag> GetTags(this Entity me) => me.LoadCollection<EntityTag>(nameof(Entity.Tags)).AsResultSet();
 
         /// <summary>
         /// Gets or loads extensions
         /// </summary>
-        public static IEnumerable<EntityExtension> GetExtensions(this Entity me) => me.LoadCollection<EntityExtension>(nameof(Entity.Extensions));
+        public static IEnumerable<EntityExtension> GetExtensions(this Entity me) => me.LoadCollection<EntityExtension>(nameof(Entity.Extensions)).AsResultSet();
 
         /// <summary>
         /// Gets or loads identifiers
         /// </summary>
-        public static IEnumerable<ActIdentifier> GetIdentifiers(this Act me) => me.LoadCollection<ActIdentifier>(nameof(Act.Identifiers));
+        public static IEnumerable<ActIdentifier> GetIdentifiers(this Act me) => me.LoadCollection<ActIdentifier>(nameof(Act.Identifiers)).AsResultSet();
 
         /// <summary>
         /// Gets or loads relationships
         /// </summary>
-        public static IEnumerable<ActRelationship> GetRelationships(this Act me) => me.LoadCollection<ActRelationship>(nameof(Act.Relationships));
+        public static IEnumerable<ActRelationship> GetRelationships(this Act me) => me.LoadCollection<ActRelationship>(nameof(Act.Relationships)).AsResultSet();
         
         /// <summary>
         /// Gets or loads participations
         /// </summary>
-        public static IEnumerable<ActParticipation> GetParticipations(this Act me) => me.LoadCollection<ActParticipation>(nameof(Act.Participations));
+        public static IEnumerable<ActParticipation> GetParticipations(this Act me) => me.LoadCollection<ActParticipation>(nameof(Act.Participations)).AsResultSet();
 
         /// <summary>
         /// Get the target of the relationship

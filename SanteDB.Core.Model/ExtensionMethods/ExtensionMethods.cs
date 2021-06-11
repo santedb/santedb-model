@@ -23,6 +23,7 @@ using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
+using SanteDB.Core.Model.Query;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -61,6 +62,37 @@ namespace SanteDB.Core.Model
                                    .Select(x => System.Convert.ToByte(hexString.Substring(x, 2), 16))
                                    .ToArray();
         }
+
+        /// <summary>
+        /// As result set
+        /// </summary>
+        public static IQueryResultSet AsResultSet(this IEnumerable me)
+        {
+            if (me is IQueryResultSet qre)
+            {
+                return qre;
+            }
+            else
+            {
+                return new MemoryQueryResultSet(me);
+            }
+        }
+
+        /// <summary>
+        /// As result set
+        /// </summary>
+        public static IQueryResultSet<TData> AsResultSet<TData>(this IEnumerable<TData> me)
+        {
+            if (me is IQueryResultSet<TData> qre)
+            {
+                return qre;
+            }
+            else
+            {
+                return new MemoryQueryResultSet<TData>(me);
+            }
+        }
+
 
         /// <summary>
         /// Parse base 64 encode
