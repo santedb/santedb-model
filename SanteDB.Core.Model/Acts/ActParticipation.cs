@@ -305,6 +305,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the targeted entity
         /// </summary>
+        [JsonIgnore, XmlIgnore]
         Guid? ITargetedAssociation.TargetEntityKey
         {
             get => this.PlayerEntityKey;
@@ -314,6 +315,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the targeted entity
         /// </summary>
+        [JsonIgnore, XmlIgnore]
         object ITargetedAssociation.TargetEntity
         {
             get => this.PlayerEntity;

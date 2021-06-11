@@ -495,10 +495,10 @@ namespace SanteDB.Core.Model.Entities
         public bool ShouldSerializeTelecoms() => this.Telecoms?.Count > 0;
 
         [XmlIgnore, JsonIgnore]
-        IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection<EntityTag>(nameof(Entity.Tags)).OfType<ITag>(); } }
+        IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection(o=>o.Tags).OfType<ITag>(); } }
 
         [XmlIgnore, JsonIgnore]
-        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection<EntityExtension>(nameof(Entity.Extensions)).OfType<IModelExtension>(); } }
+        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection(o=>o.Extensions).OfType<IModelExtension>(); } }
 
         /// <summary>
         /// Has identifiers
@@ -510,7 +510,7 @@ namespace SanteDB.Core.Model.Entities
         /// Relationships
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        IEnumerable<ITargetedAssociation> IHasRelationships.Relationships => this.Relationships;
+        IEnumerable<ITargetedAssociation> IHasRelationships.Relationships => this.LoadCollection(o=>o.Relationships);
 
         /// <summary>
         /// Copies the entity
@@ -560,7 +560,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
         {
-            var tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            var tag = this.LoadCollection(o=>o.Tags).FirstOrDefault(o => o.TagKey == tagKey);
             if (tag == null)
             {
                 tag = new EntityTag(tagKey, tagValue);
@@ -592,11 +592,11 @@ namespace SanteDB.Core.Model.Entities
         /// Render the display of this entity
         /// </summary>
         /// <returns></returns>
-        public override string ToDisplay() => $"{this.Type} : {this.Names?.FirstOrDefault().ToDisplay()} (K:{this.Key})";
+        public override string ToDisplay() => $"{this.Type} : {this.LoadCollection(o=>o.Names)?.FirstOrDefault().ToDisplay()} (K:{this.Key})";
 
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => this.Tags.FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => this.LoadCollection(o=>o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
     }
 }
