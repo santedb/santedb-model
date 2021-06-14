@@ -95,6 +95,15 @@ namespace SanteDB.Core.Model.Collection
             this.ExpansionKeys = new List<Guid>();
         }
 
+        /// <summary>
+        /// Create enw bundle
+        /// </summary>
+        public Bundle(IEnumerable<IdentifiedData> objects)
+        {
+            this.Item = new List<IdentifiedData>(objects);
+            this.ExpansionKeys = new List<Guid>();
+        }
+
         // Lock object
         private object m_lockObject = new object();
 
@@ -192,6 +201,17 @@ namespace SanteDB.Core.Model.Collection
             if (data == null) return;
             this.Item.Add(data);
             this.m_bundleTags.Add(data.Tag);
+        }
+
+        /// <summary>
+        /// Add range of items
+        /// </summary>
+        public void AddRange(IEnumerable<IdentifiedData> items)
+        {
+            foreach (var itm in items)
+            {
+                this.Add(itm);
+            }
         }
 
         /// <summary>
