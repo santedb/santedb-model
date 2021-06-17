@@ -23,7 +23,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Represents bound relational data
     /// </summary>
-    public interface ISimpleAssociation
+    public interface ISimpleAssociation : IIdentifiedEntity
     {
 
         /// <summary>
