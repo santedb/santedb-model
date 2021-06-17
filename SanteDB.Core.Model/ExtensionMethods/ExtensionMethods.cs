@@ -107,7 +107,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static TReturn LoadProperty<TReturn>(this IdentifiedData me, string propertyName)
+        public static TReturn LoadProperty<TReturn>(this IIdentifiedEntity me, string propertyName)
         {
             return (TReturn)me.LoadProperty(propertyName);
         }
@@ -115,7 +115,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IdentifiedData me, string propertyName)
+        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IIdentifiedEntity me, string propertyName)
         {
             return me.LoadProperty(propertyName) as IEnumerable<TReturn> ?? new List<TReturn>();
         }
@@ -124,8 +124,8 @@ namespace SanteDB.Core.Model
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
         /// </summary>
         public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector) 
-            where TSource : IdentifiedData
-            where TReturn : IdentifiedData
+            where TSource : IIdentifiedEntity
+            where TReturn : IIdentifiedEntity
         {
             if (selector is LambdaExpression lambda)
             {
@@ -143,8 +143,7 @@ namespace SanteDB.Core.Model
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
         /// </summary>
         public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector) 
-            where TSource : IdentifiedData
-            where TReturn : IdentifiedData
+            where TSource : IIdentifiedEntity
         {
             if (selector is LambdaExpression lambda)
             {
@@ -161,7 +160,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static object LoadProperty(this IdentifiedData me, string propertyName)
+        public static object LoadProperty(this IIdentifiedEntity me, string propertyName)
         {
             if (me == null) return null;
 
