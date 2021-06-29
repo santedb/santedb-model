@@ -23,7 +23,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Model extension
     /// </summary>
-    public interface IModelExtension
+    public interface IModelExtension : IIdentifiedEntity
     {
 
         /// <summary>
