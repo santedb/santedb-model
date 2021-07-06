@@ -189,6 +189,7 @@ namespace SanteDB.Core.Model
         {
             var retVal = this.MemberwiseClone() as IdentifiedData;
             retVal.m_delayLoad = true;
+            retVal.m_annotations = new List<object>();
             return retVal;
         }
 
