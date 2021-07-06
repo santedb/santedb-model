@@ -41,11 +41,39 @@ namespace SanteDB.Core.Model
     /// </summary>
     public static class ExtensionMethods
     {
+
+        /// <summary>
+        /// Indicates a properly was load/checked 
+        /// </summary>
+        private struct PropertyLoadCheck
+        {
+
+            /// <summary>
+            /// Creates a new laod check struct
+            /// </summary>
+            public PropertyLoadCheck(String propertyName)
+            {
+                this.PropertyName = propertyName;
+            }
+
+            /// <summary>
+            /// Gets or sets the name of the property 
+            /// </summary>
+            public String PropertyName { get; set; }
+
+            /// <summary>
+            /// Get the property hash code
+            /// </summary>
+            public override int GetHashCode() => this.PropertyName.GetHashCode();
+
+        }
         // Property cache
         private static ConcurrentDictionary<String, PropertyInfo> s_propertyCache = new ConcurrentDictionary<string, PropertyInfo>();
 
+        // Type property cache
         private static ConcurrentDictionary<Type, PropertyInfo[]> s_typePropertyCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
 
+        // Parameterless ctor cache
         private static ConcurrentDictionary<Type, bool> s_parameterlessCtor = new ConcurrentDictionary<Type, bool>();
 
         // Enumerable types
@@ -166,8 +194,17 @@ namespace SanteDB.Core.Model
 
             var propertyToLoad = me.GetType().GetRuntimeProperty(propertyName);
             if (propertyToLoad == null) return null;
-
             var currentValue = propertyToLoad.GetValue(me);
+            var loadCheck = new PropertyLoadCheck(propertyName);
+
+            if (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
+            {
+                return currentValue;
+            }
+            else
+            {
+                me.AddAnnotation(loadCheck);
+            }
 
             if (typeof(IList).IsAssignableFrom(propertyToLoad.PropertyType)) // Collection we load by key
             {

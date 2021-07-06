@@ -17,6 +17,7 @@
  * Date: 2021-2-9
  */
 using System;
+using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
 {
@@ -35,6 +36,22 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets the identifier for the entity
         /// </summary>
         Guid? Key { get; set; }
+
+
+        /// <summary>
+        /// Remove annotation
+        /// </summary>
+        void RemoveAnnotation(Object annotation);
+
+        /// <summary>
+        /// Get annotations of specified <typeparamref name="T"/>
+        /// </summary>
+        IEnumerable<T> GetAnnotations<T>();
+
+        /// <summary>
+        /// Add an annotated object
+        /// </summary>
+        void AddAnnotation(Object annotation);
 
     }
 

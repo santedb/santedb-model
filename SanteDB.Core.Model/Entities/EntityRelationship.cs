@@ -30,7 +30,7 @@ namespace SanteDB.Core.Model.Entities
     /// <summary>
     /// Represents an association between two entities
     /// </summary>
-    [Classifier(nameof(RelationshipType))]
+    [Classifier(nameof(RelationshipType)), NonCached]
     [XmlRoot("EntityRelationship", Namespace = "http://santedb.org/model")]
     [XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
     public class EntityRelationship : VersionedAssociation<Entity>, ITargetedAssociation

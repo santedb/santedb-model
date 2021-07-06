@@ -41,6 +41,11 @@ namespace SanteDB.Core.Model.Interfaces
         /// Get the tag
         /// </summary>
         string GetTag(string tagKey);
+
+        /// <summary>
+        /// Remove the specified tag
+        /// </summary>
+        void RemoveTag(string tagKey);
     }
 
     /// <summary>
