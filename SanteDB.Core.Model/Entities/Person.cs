@@ -76,7 +76,6 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("dateOfBirthPrecision"), JsonProperty("dateOfBirthPrecision")]
         public DatePrecision? DateOfBirthPrecision { get; set; }
 
-
         /// <summary>
         /// Gets or sets the gender concept key
         /// </summary>

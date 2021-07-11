@@ -39,6 +39,11 @@ namespace SanteDB.Core.Model.Interfaces
         Guid? ClassificationKey { get; set; }
 
         /// <summary>
+        /// Classification key (how the holder is related to the target)
+        /// </summary>
+        Guid? AssociationTypeKey { get; set; }
+
+        /// <summary>
         /// The target entity object
         /// </summary>
         object TargetEntity { get; set; }

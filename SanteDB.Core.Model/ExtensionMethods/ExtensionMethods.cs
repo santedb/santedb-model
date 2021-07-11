@@ -135,23 +135,23 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static TReturn LoadProperty<TReturn>(this IIdentifiedEntity me, string propertyName)
+        public static TReturn LoadProperty<TReturn>(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
         {
-            return (TReturn)me.LoadProperty(propertyName);
+            return (TReturn)me.LoadProperty(propertyName, forceReload);
         }
 
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IIdentifiedEntity me, string propertyName)
+        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
         {
-            return me.LoadProperty(propertyName) as IEnumerable<TReturn> ?? new List<TReturn>();
+            return me.LoadProperty(propertyName, forceReload) as IEnumerable<TReturn> ?? new List<TReturn>();
         }
 
         /// <summary>
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
         /// </summary>
-        public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector) 
+        public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector, bool forceReload = false) 
             where TSource : IIdentifiedEntity
             where TReturn : IIdentifiedEntity
         {
@@ -159,7 +159,7 @@ namespace SanteDB.Core.Model
             {
                 var body = lambda.Body as MemberExpression;
                 if (body != null)
-                    return me.LoadCollection<TReturn>(body.Member.Name);
+                    return me.LoadCollection<TReturn>(body.Member.Name, forceReload);
                 else
                     throw new InvalidOperationException("Must be simple property selector");
             }
@@ -170,14 +170,14 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
         /// </summary>
-        public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector) 
+        public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false) 
             where TSource : IIdentifiedEntity
         {
             if (selector is LambdaExpression lambda)
             {
                 var body = lambda.Body as MemberExpression;
                 if (body != null)
-                    return me.LoadProperty<TReturn>(body.Member.Name);
+                    return me.LoadProperty<TReturn>(body.Member.Name, forceReload);
                 else
                     throw new InvalidOperationException("Must be simple property selector");
             }
@@ -188,7 +188,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static object LoadProperty(this IIdentifiedEntity me, string propertyName)
+        public static object LoadProperty(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
         {
             if (me == null) return null;
 
@@ -197,14 +197,15 @@ namespace SanteDB.Core.Model
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
-            if (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
+            if (!forceReload && me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
             {
                 return currentValue;
             }
-            else
+            else if(forceReload)
             {
-                me.AddAnnotation(loadCheck);
+                currentValue = null;
             }
+            me.AddAnnotation(loadCheck);
 
             if (typeof(IList).IsAssignableFrom(propertyToLoad.PropertyType)) // Collection we load by key
             {
@@ -287,6 +288,8 @@ namespace SanteDB.Core.Model
         {
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
+            if (!(toEntity is IdentifiedData identifiedData))
+                return toEntity;
 
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
@@ -303,20 +306,30 @@ namespace SanteDB.Core.Model
                     if (value is IList list)
                         foreach (ISimpleAssociation itm in list)
                         {
-                            (itm as IIdentifiedEntity).Key = null;
-                            itm.SourceEntityKey = null;
 
-                            if (itm is IVersionedAssociation va)
-                                va.EffectiveVersionSequenceId = null;
-                            itm.StripAssociatedItemSources();
+                            if (itm.SourceEntityKey != identifiedData.Key)
+                            {
+                                itm.Key = null;
+                                itm.SourceEntityKey = null;
+                                
+                                if (itm is IVersionedAssociation va)
+                                    va.EffectiveVersionSequenceId = null;
+                                itm.StripAssociatedItemSources();
+                            }
+                            
                         }
                     else if (value is ISimpleAssociation assoc)
                     {
-                        (assoc as IIdentifiedEntity).Key = null;
-                        assoc.SourceEntityKey = null;
-                        if (assoc is IVersionedAssociation va)
-                            va.EffectiveVersionSequenceId = null;
-                        assoc.StripAssociatedItemSources();
+
+                        if (assoc.SourceEntityKey != identifiedData.Key)
+                        {
+                            assoc.Key = null;
+                            assoc.SourceEntityKey = null;
+                            if (assoc is IVersionedAssociation va)
+                                va.EffectiveVersionSequenceId = null;
+                            assoc.StripAssociatedItemSources();
+                        }
+                        
                     }
                 }
 

@@ -256,5 +256,10 @@ namespace SanteDB.Core.Model.Acts
             get => this.TargetAct;
             set => this.TargetAct = (Act)value;
         }
+
+        /// <summary>
+        /// Association type
+        /// </summary>
+        Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
     }
 }
