@@ -445,6 +445,11 @@ namespace SanteDB.Core.Model.Map
             where TModel : new()
         {
 
+            if(modelInstance == null)
+            {
+                throw new ArgumentNullException(nameof(modelInstance));
+            } 
+
             if (this.m_mappers.TryGetValue(typeof(TModel), out IModelMapper modelMapper) || 
                 this.m_mappers.TryGetValue(modelInstance.GetType(), out modelMapper) ||
                 this.m_mappers.TryGetValue(typeof(TDomain), out modelMapper))
@@ -562,6 +567,11 @@ namespace SanteDB.Core.Model.Map
             where TModel : new()
             where TDomain : new()
         {
+            if (domainInstance == null)
+            {
+                throw new ArgumentNullException(nameof(domainInstance));
+            }
+
             if (this.m_mappers.TryGetValue(domainInstance.GetType(), out IModelMapper modelMapper) ||
                 this.m_mappers.TryGetValue(typeof(TDomain), out modelMapper) ||
                 this.m_mappers.TryGetValue(typeof(TModel), out modelMapper))
