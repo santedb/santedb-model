@@ -806,5 +806,10 @@ namespace SanteDB.Core.Model.Acts
         /// Get the specified tag
         /// </summary>
         public string GetTag(string tagKey) => this.Tags.FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+
+        /// <summary>
+        /// Remove <paramref name="tagKey"/> from the tag collection
+        /// </summary>
+        public void RemoveTag(string tagKey) => this.Tags.RemoveAll(o => o.TagKey == tagKey);
     }
 }

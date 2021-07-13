@@ -37,7 +37,7 @@ namespace SanteDB.Core.Model.Acts
     /// encounter with the encounter, but can also be used to link together chronic care episodes.
     /// </para>
     /// </remarks>
-    [Classifier(nameof(RelationshipType))]
+    [Classifier(nameof(RelationshipType)), NonCached]
     [XmlType("ActRelationship", Namespace = "http://santedb.org/model"), JsonObject("ActRelationship")]
     public class ActRelationship : VersionedAssociation<Act>, ITargetedAssociation
     {
@@ -256,5 +256,10 @@ namespace SanteDB.Core.Model.Acts
             get => this.TargetAct;
             set => this.TargetAct = (Act)value;
         }
+
+        /// <summary>
+        /// Association type
+        /// </summary>
+        Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
     }
 }

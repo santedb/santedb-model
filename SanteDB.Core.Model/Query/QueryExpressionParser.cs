@@ -261,13 +261,13 @@ namespace SanteDB.Core.Model.Query
                     {
                         if (typeof(IList).IsAssignableFrom(memberInfo.PropertyType))
                         {
-                            var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String) });
-                            accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name));
+                            var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
+                            accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
                         }
                         else if (typeof(IIdentifiedEntity).IsAssignableFrom(memberInfo.PropertyType))
                         {
-                            var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) });
-                            accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name));
+                            var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
+                            accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
                         }
                         else
                             accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
@@ -349,8 +349,8 @@ namespace SanteDB.Core.Model.Query
                                 {
                                     if (forceLoad)
                                     {
-                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) });
-                                        var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name));
+                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) , typeof(bool) });
+                                        var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false));
                                         guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
                                     }
                                     else

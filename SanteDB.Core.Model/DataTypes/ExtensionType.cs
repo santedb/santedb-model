@@ -97,11 +97,6 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("name"), JsonProperty("name")]
         public String Name { get; set; }
 
-        /// <summary>
-        /// Whether the extension is enabled
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public bool IsEnabled { get; set; }
 
 
     }

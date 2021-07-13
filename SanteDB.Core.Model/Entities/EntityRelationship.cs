@@ -30,7 +30,7 @@ namespace SanteDB.Core.Model.Entities
     /// <summary>
     /// Represents an association between two entities
     /// </summary>
-    [Classifier(nameof(RelationshipType))]
+    [Classifier(nameof(RelationshipType)), NonCached]
     [XmlRoot("EntityRelationship", Namespace = "http://santedb.org/model")]
     [XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
     public class EntityRelationship : VersionedAssociation<Entity>, ITargetedAssociation
@@ -370,6 +370,11 @@ namespace SanteDB.Core.Model.Entities
         {
             return string.Format("{1} => [{0}] => {2} (QTY: {3})", this.RelationshipType?.ToString() ?? this.RelationshipTypeKey?.ToString(), this.SourceEntityKey, this.TargetEntityKey, this.Quantity);
         }
+
+        /// <summary>
+        /// Association type
+        /// </summary>
+        Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
 
     }
 }

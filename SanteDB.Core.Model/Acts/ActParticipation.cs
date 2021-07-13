@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model.Acts
     /// as part of an act, then the quantity would be 100.
     /// </para>
     /// </remarks>
-    [Classifier(nameof(ParticipationRole))]
+    [Classifier(nameof(ParticipationRole)), NonCached]
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "ActParticipation"), JsonObject(nameof(ActParticipation))]
     public class ActParticipation : VersionedAssociation<Act> , ITargetedAssociation
     {
@@ -321,5 +321,10 @@ namespace SanteDB.Core.Model.Acts
             get => this.PlayerEntity;
             set => this.PlayerEntity = (Entity)value;
         }
+
+        /// <summary>
+        /// Association type
+        /// </summary>
+        Guid? ITargetedAssociation.AssociationTypeKey { get => this.ParticipationRoleKey; set => this.ParticipationRoleKey = value; }
     }
 }
