@@ -543,7 +543,7 @@ namespace SanteDB.Core.Model.Entities
         /// Copies the entity
         /// </summary>
         /// <returns></returns>
-        public IdentifiedData Copy()
+        public virtual IdentifiedData Copy()
         {
             var retVal = base.Clone() as Entity;
             retVal.Relationships = new List<EntityRelationship>(this.Relationships.ToArray());

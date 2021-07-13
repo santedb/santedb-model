@@ -371,5 +371,10 @@ namespace SanteDB.Core.Model.Entities
             return string.Format("{1} => [{0}] => {2} (QTY: {3})", this.RelationshipType?.ToString() ?? this.RelationshipTypeKey?.ToString(), this.SourceEntityKey, this.TargetEntityKey, this.Quantity);
         }
 
+        /// <summary>
+        /// Association type
+        /// </summary>
+        Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
+
     }
 }

@@ -188,6 +188,8 @@ namespace SanteDB.Core.Model.Map
                 case ExpressionType.GreaterThanOrEqual:
                 case ExpressionType.Equal:
                 case ExpressionType.NotEqual:
+                case ExpressionType.AndAlso:
+                case ExpressionType.OrElse:
                     return this.VisitBinary((BinaryExpression)node);
                 case ExpressionType.MemberAccess:
                     return this.VisitMemberAccess((MemberExpression)node);
@@ -531,11 +533,16 @@ namespace SanteDB.Core.Model.Map
         /// <param name="node">The node to be converted</param>
         protected virtual Expression VisitMemberAccess(MemberExpression node)
         {
+
+            if (node.Expression == null) // Constant?
+                return node;
             // Convert the expression
             Expression newExpression = this.Visit(node.Expression);
 
             if (newExpression == null)
+            {
                 return null;
+            }
             if (newExpression != node.Expression)
             {
                 // Is the node member access a useless convert function?

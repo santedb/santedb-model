@@ -321,5 +321,10 @@ namespace SanteDB.Core.Model.Acts
             get => this.PlayerEntity;
             set => this.PlayerEntity = (Entity)value;
         }
+
+        /// <summary>
+        /// Association type
+        /// </summary>
+        Guid? ITargetedAssociation.AssociationTypeKey { get => this.ParticipationRoleKey; set => this.ParticipationRoleKey = value; }
     }
 }

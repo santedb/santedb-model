@@ -21,6 +21,7 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -190,6 +191,15 @@ namespace SanteDB.Core.Model
             var retVal = this.MemberwiseClone() as IdentifiedData;
             retVal.m_delayLoad = true;
             retVal.m_annotations = new List<object>();
+
+            // Re-initialize all arrays
+            foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if(pi.CanWrite && typeof(IList).IsAssignableFrom(pi.PropertyType))
+                {
+                    pi.SetValue(retVal, Activator.CreateInstance(pi.PropertyType, pi.GetValue(this)));
+                }
+            }
             return retVal;
         }
 
