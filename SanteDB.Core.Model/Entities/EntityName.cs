@@ -123,15 +123,6 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// Clean object
-        /// </summary>
-        public override IdentifiedData Clean()
-        {
-            this.Component.RemoveAll(o => String.IsNullOrEmpty(o.Value));
-            return this;
-        }
-
-        /// <summary>
         /// True if empty
         /// </summary>
         /// <returns></returns>

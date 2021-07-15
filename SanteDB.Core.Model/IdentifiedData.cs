@@ -58,8 +58,10 @@ namespace SanteDB.Core.Model
     {
 
         // Annotations
-        // A small list of objects which can be passed around on the object 
-        private List<Object> m_annotations  = new List<object>();
+        /// <summary>
+        /// A list of custom tags which were added to this object
+        /// </summary>
+        protected List<Object> m_annotations  = new List<object>();
 
         // True when the data class is locked for storage
         private bool m_delayLoad = false;
@@ -156,15 +158,10 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Cleans the identified data of any "empty" stuff
-        /// </summary>
-        public virtual IdentifiedData Clean() { return this; }
-
-        /// <summary>
         /// True if the object is empty
         /// </summary>
         /// <returns></returns>
-        public virtual bool IsEmpty() { return false; }
+        public virtual bool IsEmpty() => false;
 
         /// <summary>
         /// Gets or sets whether the object was partial loaded
@@ -195,7 +192,9 @@ namespace SanteDB.Core.Model
             // Re-initialize all arrays
             foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                if(pi.CanWrite && typeof(IList).IsAssignableFrom(pi.PropertyType))
+                var thisValue = pi.GetValue(this);
+                if (thisValue is IList listValue && listValue.Count > 0 && 
+                    pi.PropertyType.GetConstructor(new Type[] { thisValue.GetType() }) != null)
                 {
                     pi.SetValue(retVal, Activator.CreateInstance(pi.PropertyType, pi.GetValue(this)));
                 }

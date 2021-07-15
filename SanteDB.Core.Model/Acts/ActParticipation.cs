@@ -242,16 +242,6 @@ namespace SanteDB.Core.Model.Acts
         public int? Quantity { get; set; }
 
         /// <summary>
-        /// Clean
-        /// </summary>
-        /// <returns></returns>
-        public override IdentifiedData Clean()
-        {
-            this.m_player = this.m_player?.Clean() as Entity;
-            return this;
-        }
-
-        /// <summary>
         /// Determine if this is empty
         /// </summary>
         /// <returns></returns>

@@ -308,16 +308,6 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// Clean the entity
-        /// </summary>
-        /// <returns></returns>
-        public override IdentifiedData Clean()
-        {
-            this.m_targetEntity = this.m_targetEntity?.Clean() as Entity;
-            return this;
-        }
-
-        /// <summary>
         /// Is empty
         /// </summary>
         /// <returns></returns>
