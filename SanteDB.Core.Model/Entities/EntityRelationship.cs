@@ -327,7 +327,10 @@ namespace SanteDB.Core.Model.Entities
             return base.SemanticEquals(obj) && this.TargetEntityKey == other.TargetEntityKey &&
                 this.RelationshipTypeKey == other.RelationshipTypeKey &&
                 this.Quantity == other.Quantity &&
-                this.SourceEntityKey == other.SourceEntityKey;
+                this.SourceEntityKey == other.SourceEntityKey &&
+                this.ClassificationKey == other.ClassificationKey &&
+                this.RelationshipRoleKey == other.RelationshipRoleKey
+                ;
         }
 
         /// <summary>

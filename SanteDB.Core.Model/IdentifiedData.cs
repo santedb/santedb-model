@@ -239,10 +239,11 @@ namespace SanteDB.Core.Model
             return this.Key.ToString();
         }
 
+
         /// <summary>
         /// Quality Comparer
         /// </summary>
-        public class EqualityComparer<T> : IEqualityComparer<T>
+        public class SemanticEqualityComparer<T> : IEqualityComparer<T>
             where T : IdentifiedData
         {
             /// <summary>
@@ -250,7 +251,7 @@ namespace SanteDB.Core.Model
             /// </summary>
             public bool Equals(T x, T y)
             {
-                return x.Key == y.Key;
+                return x.SemanticEquals(y);
             }
 
             /// <summary>
