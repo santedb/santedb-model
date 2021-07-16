@@ -129,19 +129,6 @@ namespace SanteDB.Core.Model.Collection
             }
         }
 
-        /// <summary>
-        /// Clean the bundle
-        /// </summary>
-        /// <returns></returns>
-        public override IdentifiedData Clean()
-        {
-            for (int i = this.Item.Count - 1; i >= 0; i--)
-                if (this.Item[i] == null)
-                    this.Item.RemoveAt(i);
-                else
-                    this.Item[i].Clean();
-            return this;
-        }
 
         /// <summary>
         /// Gets or sets items in the bundle

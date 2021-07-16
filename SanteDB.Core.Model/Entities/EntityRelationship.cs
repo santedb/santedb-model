@@ -308,16 +308,6 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// Clean the entity
-        /// </summary>
-        /// <returns></returns>
-        public override IdentifiedData Clean()
-        {
-            this.m_targetEntity = this.m_targetEntity?.Clean() as Entity;
-            return this;
-        }
-
-        /// <summary>
         /// Is empty
         /// </summary>
         /// <returns></returns>
@@ -337,7 +327,10 @@ namespace SanteDB.Core.Model.Entities
             return base.SemanticEquals(obj) && this.TargetEntityKey == other.TargetEntityKey &&
                 this.RelationshipTypeKey == other.RelationshipTypeKey &&
                 this.Quantity == other.Quantity &&
-                this.SourceEntityKey == other.SourceEntityKey;
+                this.SourceEntityKey == other.SourceEntityKey &&
+                this.ClassificationKey == other.ClassificationKey &&
+                this.RelationshipRoleKey == other.RelationshipRoleKey
+                ;
         }
 
         /// <summary>
