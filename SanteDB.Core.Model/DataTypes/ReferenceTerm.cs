@@ -37,15 +37,6 @@ namespace SanteDB.Core.Model.DataTypes
     public class ReferenceTerm : NonVersionedEntityData
     {
 
-        // Backing field for code system identifier
-        private Guid? m_codeSystemId;
-        // Code system
-
-        private CodeSystem m_codeSystem;
-        // Display names
-
-        private List<ReferenceTermName> m_displayNames;
-
         /// <summary>
         /// Gets or sets the mnemonic for the reference term
         /// </summary>
@@ -57,53 +48,20 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [SerializationReference(nameof(CodeSystemKey))]
         [XmlIgnore, JsonIgnore]
-        public CodeSystem CodeSystem
-        {
-            get
-            {
-                this.m_codeSystem = base.DelayLoad(this.m_codeSystemId, this.m_codeSystem);
-                return this.m_codeSystem;
-            }
-            set
-            {
-                this.m_codeSystem = value;
-                this.m_codeSystemId = value?.Key;
-            }
-        }
+        public CodeSystem CodeSystem { get; set; }
 
         /// <summary>
         /// Gets or sets the code system identifier
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("codeSystem"), JsonProperty("codeSystem")]
         [Binding(typeof(CodeSystemKeys))]
-        public Guid? CodeSystemKey
-        {
-            get { return this.m_codeSystemId; }
-            set
-            {
-                this.m_codeSystemId = value;
-                this.m_codeSystem = null;
-            }
-        }
+        public Guid? CodeSystemKey { get; set; }
 
         /// <summary>
         /// Gets display names associated with the reference term
         /// </summary>
         [XmlElement("name"), JsonProperty("name")]
-        public List<ReferenceTermName> DisplayNames
-        {
-            get
-            {
-                if (this.m_displayNames == null && this.IsDelayLoadEnabled)
-                    this.m_displayNames = EntitySource.Current.Provider.Query<ReferenceTermName>(o => o.SourceEntityKey == this.Key && o.ObsoletionTime == null).ToList();
-                return this.m_displayNames;
-            }
-            set
-            {
-                this.m_displayNames = value;
-            }
-        }
+        public List<ReferenceTermName> DisplayNames { get; set; }
 
 
     }

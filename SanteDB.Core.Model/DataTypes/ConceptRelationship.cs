@@ -33,85 +33,32 @@ namespace SanteDB.Core.Model.DataTypes
     public class ConceptRelationship : VersionedAssociation<Concept>
     {
 
-        // Target concept id
-        private Guid? m_targetConceptId;
-        // Target concept
-
-        private Concept m_targetConcept;
-        // Relaltionship type id
-        private Guid? m_relationshipTypeId;
-        // Relationship type
-
-        private ConceptRelationshipType m_relationshipType;
-
         /// <summary>
         /// Gets or sets the target concept identifier
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("targetConcept"), JsonProperty("targetConcept")]
-        public Guid? TargetConceptKey
-        {
-            get { return this.m_targetConceptId; }
-            set
-            {
-                this.m_targetConceptId = value;
-                this.m_targetConcept = null;
-            }
-        }
+        public Guid? TargetConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the target concept
         /// </summary>
         [SerializationReference(nameof(TargetConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept TargetConcept
-        {
-            get
-            {
-                this.m_targetConcept = base.DelayLoad(this.m_targetConceptId, this.m_targetConcept);
-                return this.m_targetConcept;
-            }
-            set
-            {
-                this.m_targetConcept = value;
-                this.m_targetConceptId = value?.Key;
-            }
-        }
+        public Concept TargetConcept { get; set; }
 
         /// <summary>
         /// Relationship type
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(ConceptRelationshipTypeKeys))]
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
-        public Guid? RelationshipTypeKey
-        {
-            get { return this.m_relationshipTypeId; }
-            set
-            {
-                this.m_relationshipTypeId = value;
-                this.m_relationshipType = null;
-            }
-        }
+        public Guid? RelationshipTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the relationship type
         /// </summary>
         [SerializationReference(nameof(RelationshipTypeKey))]
         [XmlIgnore, JsonIgnore]
-        public ConceptRelationshipType RelationshipType
-        {
-            get
-            {
-                this.m_relationshipType = base.DelayLoad(this.m_relationshipTypeId, this.m_relationshipType);
-                return this.m_relationshipType;
-            }
-            set
-            {
-                this.m_relationshipType = value;
-                this.m_relationshipTypeId = value?.Key;
-            }
-        }
+        public ConceptRelationshipType RelationshipType { get; set; }
 
     }
 }

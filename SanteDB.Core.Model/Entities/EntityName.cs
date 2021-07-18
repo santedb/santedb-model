@@ -30,22 +30,21 @@ namespace SanteDB.Core.Model.Entities
     /// <summary>
     /// Represents a name for an entity
     /// </summary>
+    /// <remarks>In SanteDB an entity name is a structured object which is made up of multiple
+    /// components. This allows SanteDB to store complex names without having to copy multiple
+    /// name components into a single field.</remarks>
     [Classifier(nameof(NameUse))]
     [XmlType("EntityName", Namespace = "http://santedb.org/model"), JsonObject("EntityName")]
     public class EntityName : VersionedAssociation<Entity>
     {
-        private Concept m_nameUseConcept;
-
-        // Name use key
-        private Guid? m_nameUseKey;
-
+        
         // Name use concept
         /// <summary>
         /// Creates a new name
         /// </summary>
         public EntityName(Guid nameUse, String family, params String[] given)
         {
-            this.m_nameUseKey = nameUse;
+            this.NameUseKey = nameUse;
             this.Component = new List<EntityNameComponent>();
 
             if (!String.IsNullOrEmpty(family))
@@ -62,7 +61,7 @@ namespace SanteDB.Core.Model.Entities
         /// <param name="name"></param>
         public EntityName(Guid nameUse, String name)
         {
-            this.m_nameUseKey = nameUse;
+            this.NameUseKey = nameUse;
             this.Component = new List<EntityNameComponent>()
             {
                 new EntityNameComponent(name)
@@ -81,7 +80,6 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the individual component types
         /// </summary>
 		[XmlElement("component"), JsonProperty("component")]
-        
         public List<EntityNameComponent> Component { get; set; }
 
         /// <summary>
@@ -89,38 +87,14 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(NameUseKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept NameUse
-        {
-            get
-            {
-                this.m_nameUseConcept = base.DelayLoad(this.m_nameUseKey, this.m_nameUseConcept);
-                return this.m_nameUseConcept;
-            }
-            set
-            {
-                this.m_nameUseConcept = value;
-                this.m_nameUseKey = value?.Key;
-            }
-        }
+        public Concept NameUse { get; set; }
 
         /// <summary>
         /// Gets or sets the name use key
         /// </summary>
         [XmlElement("use"), JsonProperty("use")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(NameUseKeys))]
-        public Guid? NameUseKey
-        {
-            get { return this.m_nameUseKey; }
-            set
-            {
-                if (this.m_nameUseKey != value)
-                {
-                    this.m_nameUseKey = value;
-                    this.m_nameUseConcept = null;
-                }
-            }
-        }
+        public Guid? NameUseKey { get; set; }
 
         /// <summary>
         /// True if empty

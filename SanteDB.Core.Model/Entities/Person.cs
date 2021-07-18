@@ -38,15 +38,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Person)]
     public class Person : Entity
     {
-        // Gender concept key
-        private Guid? m_genderConceptKey;
-        private Concept m_genderConcept;
-
-
-        // Backing fields for occupation
-        private Guid? m_occupationConceptKey;
-        private Concept m_occupationConcept;
-
+       
         /// <summary>
         /// Person constructor
         /// </summary>
@@ -59,9 +51,15 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
+        /// Gets the class concept key
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => EntityClassKeys.Person; set => base.ClassConceptKey = EntityClassKeys.Person; }
+
+        /// <summary>
         /// Gets the security user account associated with this person if applicable
         /// </summary>
-        [XmlIgnore, JsonIgnore, DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationMetadata]
         public virtual SecurityUser AsSecurityUser { get { return null; } }
 
         /// <summary>
@@ -80,42 +78,19 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the gender concept key
         /// </summary>
         [XmlElement("genderConcept"), JsonProperty("genderConcept")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? GenderConceptKey
-        {
-            get { return this.m_genderConceptKey; }
-            set
-            {
-
-                this.m_genderConceptKey = value;
-                this.m_genderConcept = null;
-            }
-        }
+        public Guid? GenderConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the gender concept
         /// </summary>
         [SerializationReference(nameof(GenderConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept GenderConcept
-        {
-            get
-            {
-                this.m_genderConcept = base.DelayLoad(this.m_genderConceptKey, this.m_genderConcept);
-                return this.m_genderConcept;
-            }
-            set
-            {
-                this.m_genderConcept = value;
-                this.m_genderConceptKey = value?.Key;
-            }
-        }
-
+        public Concept GenderConcept { get; set; }
 
         /// <summary>
         /// Gets the date of birth as XML
         /// </summary>
-        [XmlElement("dateOfBirth"), JsonProperty("dateOfBirth"), DataIgnore]
+        [XmlElement("dateOfBirth"), JsonProperty("dateOfBirth"), SerializationMetadata]
         public String DateOfBirthXml
         {
             get
@@ -146,34 +121,14 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [XmlElement("occupation"), JsonProperty("occupation"), EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? OccupationKey
-        {
-            get => this.m_occupationConceptKey;
-            set
-            {
-                this.m_occupationConceptKey = value;
-                this.m_occupationConcept = null;
-            }
-        }
+        [XmlElement("occupation"), JsonProperty("occupation")]
+        public Guid? OccupationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the marital status code
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(OccupationKey))]
-        public Concept Occupation
-        {
-            get
-            {
-                this.m_occupationConcept = base.DelayLoad(this.m_occupationConceptKey, this.m_occupationConcept);
-                return this.m_occupationConcept;
-            }
-            set
-            {
-                this.m_occupationConcept = value;
-                this.m_occupationConceptKey = value?.Key;
-            }
-        }
+        public Concept Occupation { get; set; }
 
         /// <summary>
         /// Should serialize date of birth precision

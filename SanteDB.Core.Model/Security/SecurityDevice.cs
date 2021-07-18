@@ -48,7 +48,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets the lockout time as XML date
         /// </summary>
-        [XmlElement("lockout"), JsonProperty("lockout"), DataIgnore]
+        [XmlElement("lockout"), JsonProperty("lockout"), SerializationMetadata]
         public String LockoutXml
         {
             get => this.Lockout?.ToString("o", CultureInfo.InvariantCulture);
@@ -82,7 +82,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets the last authenticated time
         /// </summary>
-        [XmlElement("lastAuthenticationTime"), JsonProperty("lastAuthenticationTime"), DataIgnore]
+        [XmlElement("lastAuthenticationTime"), JsonProperty("lastAuthenticationTime"), SerializationMetadata]
         public String LastAuthenticationXml
         {
             get => this.LastAuthentication?.ToString("o", CultureInfo.InvariantCulture);

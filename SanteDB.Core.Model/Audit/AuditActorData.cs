@@ -17,34 +17,16 @@
  * Date: 2021-2-9
  */
 using Newtonsoft.Json;
-
-/*
-* Copyright 2012-2013 Mohawk College of Applied Arts and Technology
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You may
-* obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-* License for the specific language governing permissions and limitations under
-* the License.
-*
-* User: fyfej
-* Date: 7-8-2012
-*/
-
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
     /// Data related to actors that participate in the event
     /// </summary>
+	/// <remarks><para>In SanteDB an actor represents an individual participant in the action which can include a user, 
+	/// a system, a device, etc.</para></remarks>
     [XmlType(nameof(AuditActorData), Namespace = "http://santedb.org/audit")]
 	[JsonObject(nameof(AuditActorData))]
 	public class AuditActorData

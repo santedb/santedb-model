@@ -37,12 +37,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Device)]
     public class DeviceEntity : Entity, IGeoTagged
     {
-        // Security device
-        private SecurityDevice m_securityDevice;
-
-        // Security device key
-        private Guid? m_securityDeviceKey;
-
+       
         /// <summary>
         /// Device entity ctor
         /// </summary>
@@ -51,6 +46,12 @@ namespace SanteDB.Core.Model.Entities
             this.DeterminerConceptKey = DeterminerKeys.Specific;
             this.ClassConceptKey = EntityClassKeys.Device;
         }
+
+        /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => DeterminerKeys.Specific; set => base.ClassConceptKey = DeterminerKeys.Specific; }
 
         /// <summary>
         /// Gets or sets the manufacturer model name
@@ -69,37 +70,14 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(SecurityDeviceKey))]
         [XmlIgnore, JsonIgnore]
-        public SecurityDevice SecurityDevice
-        {
-            get
-            {
-                this.m_securityDevice = base.DelayLoad(this.m_securityDeviceKey, this.m_securityDevice);
-                return this.m_securityDevice;
-            }
-            set
-            {
-                this.m_securityDevice = value;
-                this.m_securityDeviceKey = value?.Key;
-            }
-        }
+        public SecurityDevice SecurityDevice { get; set; }
 
         /// <summary>
         /// Gets or sets the security device key
         /// </summary>
         [XmlElement("securityDevice"), JsonProperty("securityDevice")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? SecurityDeviceKey
-        {
-            get { return this.m_securityDeviceKey; }
-            set
-            {
-                if (this.m_securityDeviceKey != value)
-                {
-                    this.m_securityDeviceKey = value;
-                    this.m_securityDevice = null;
-                }
-            }
-        }
+        public Guid? SecurityDeviceKey { get; set; }
 
         /// <summary>
         /// Gets or sets the geo tag

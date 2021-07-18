@@ -32,12 +32,6 @@ namespace SanteDB.Core.Model.DataTypes
     public abstract class Note<TBoundModel> : VersionedAssociation<TBoundModel> where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
 
-        // Author id
-        private Guid? m_authorKey;
-        // Author entity
-
-        private Entity m_author;
-
         /// <summary>
         /// Default ctor
         /// </summary>
@@ -64,40 +58,15 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the author key
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-
         [XmlElement("author"), JsonProperty("author")]
-        public Guid? AuthorKey
-        {
-            get { return this.m_authorKey; }
-            set
-            {
-                if (this.m_authorKey != value)
-                {
-                    this.m_authorKey = value;
-                    this.m_author = null;
-                }
-            }
-        }
+        public Guid? AuthorKey { get; set; }
 
         /// <summary>
         /// Gets or sets the author entity
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(AuthorKey))]
-        public Entity Author
-        {
-            get
-            {
-                this.m_author = base.DelayLoad(this.m_authorKey, this.m_author);
-                return this.m_author;
-            }
-            set
-            {
-                this.m_author = value;
-                this.m_authorKey = value?.Key;
-            }
-        }
+        public Entity Author { get; set; }
 
         /// <summary>
         /// Determine equality

@@ -126,6 +126,21 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string List = "b0323489-9a09-411a-bb55-ff283830ea1a";
 
+        /// <summary>
+        /// Represents a document 
+        /// </summary>
+        public const string Document = "7a6944f7-8937-4e98-ae0d-452b1d8124f4";
+
+        /// <summary>
+        /// Represents a section within a document
+        /// </summary>
+        public const string DocumentSection = "e86ea735-f243-41f4-bf33-aa78eb2e8466";
+
+        /// <summary>
+        /// Represents a plan of care
+        /// </summary>
+        public const string CarePlan = "042232b9-a694-42e0-9708-f387393a6c80";
+
     }
 
     /// <summary>
@@ -133,6 +148,21 @@ namespace SanteDB.Core.Model.Constants
     /// </summary>
     public static class ActClassKeys
     {
+        /// <summary>
+        /// Document class key
+        /// </summary>
+        public static readonly Guid Document = Guid.Parse(ActClassKeyStrings.Document);
+
+        /// <summary>
+        /// Document section class key
+        /// </summary>
+        public static readonly Guid DocumentSection = Guid.Parse(ActClassKeyStrings.DocumentSection);
+
+        /// <summary>
+        /// Care plan class key
+        /// </summary>
+        public static readonly Guid CarePlan = Guid.Parse(ActClassKeyStrings.CarePlan);
+
         /// <summary>
         /// The act represents generic account management such as adjudications, financial adjustments, stock counting, etc.
         /// </summary>

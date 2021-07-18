@@ -37,12 +37,6 @@ namespace SanteDB.Core.Model.Roles
     public class Provider : Person
     {
 
-        // Specialty key
-        private Guid? m_providerSpecialtyKey;
-        // Specialty value
-
-        private Concept m_providerSpeciality;
-
         /// <summary>
         /// Creates a new provider
         /// </summary>
@@ -53,45 +47,23 @@ namespace SanteDB.Core.Model.Roles
         }
 
         /// <summary>
+        /// Gets or sets the class concept
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => EntityClassKeys.Provider; set => base.ClassConceptKey = EntityClassKeys.Provider; }
+
+        /// <summary>
         /// Gets or sets the provider specialty key
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-
         [XmlElement("providerSpecialty"), JsonProperty("providerSpecialty")]
-        public Guid? ProviderSpecialtyKey
-        {
-            get
-            {
-                return this.m_providerSpecialtyKey;
-            }
-            set
-            {
-                if (this.m_providerSpecialtyKey != value)
-                {
-                    this.m_providerSpecialtyKey = value;
-                    this.m_providerSpeciality = null;
-                }
-            }
-        }
+        public Guid? ProviderSpecialtyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the provider specialty
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ProviderSpecialtyKey))]
-        public Concept ProviderSpecialty
-        {
-            get
-            {
-                this.m_providerSpeciality = base.DelayLoad(this.m_providerSpecialtyKey, this.m_providerSpeciality);
-                return this.m_providerSpeciality;
-            }
-            set
-            {
-                this.m_providerSpeciality = value;
-                this.m_providerSpecialtyKey = value?.Key;
-            }
-        }
+        public Concept ProviderSpecialty { get; set; }
 
         /// <summary>
         /// Semantic equality function

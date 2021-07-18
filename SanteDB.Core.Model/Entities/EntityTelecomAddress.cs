@@ -35,12 +35,6 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("EntityTelecomAddress", Namespace = "http://santedb.org/model"), JsonObject("EntityTelecomAddress")]
     public class EntityTelecomAddress : VersionedAssociation<Entity>
     {
-        private Concept m_useConcept;
-        private Concept m_typeConcept;
-
-        // Name use key
-        private Guid? m_useKey;
-        private Guid? m_typeKey;
 
         // Name use concept
         /// <summary>
@@ -64,80 +58,33 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(AddressUseKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept AddressUse
-        {
-            get
-            {
-                this.m_useConcept = base.DelayLoad(this.m_useKey, this.m_useConcept);
-                return this.m_useConcept;
-            }
-            set
-            {
-                this.m_useConcept = value;
-                this.m_useKey = value?.Key;
-            }
-        }
+        public Concept AddressUse { get; set; }
 
         /// <summary>
         /// Gets or sets the name use key
         /// </summary>
         [XmlElement("use"), JsonProperty("use")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(TelecomAddressUseKeys))]
-        public Guid? AddressUseKey
-        {
-            get { return this.m_useKey; }
-            set
-            {
-                if (this.m_useKey != value)
-                {
-                    this.m_useKey = value;
-                    this.m_useConcept = null;
-                }
-            }
-        }
+        public Guid? AddressUseKey { get; set; }
 
         /// <summary>
         /// Gets or sets the name use
         /// </summary>
         [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept TypeConcept
-        {
-            get
-            {
-                this.m_typeConcept = base.DelayLoad(this.m_typeKey, this.m_typeConcept);
-                return this.m_typeConcept;
-            }
-            set
-            {
-                this.m_typeConcept = value;
-                this.m_typeKey = value?.Key;
-            }
-        }
+        public Concept TypeConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the name use key
         /// </summary>
         [XmlElement("type"), JsonProperty("type")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(TelecomAddressTypeKeys))]
-        public Guid? TypeConceptKey
-        {
-            get { return this.m_typeKey; }
-            set
-            {
-                if (this.m_typeKey != value)
-                {
-                    this.m_typeKey = value;
-                    this.m_typeConcept = null;
-                }
-            }
-        }
+        public Guid? TypeConceptKey { get; set; }
+
         /// <summary>
         /// Gets or sets the value as an IETF value
         /// </summary>
-        [XmlIgnore, JsonIgnore, DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationMetadata]
         public String IETFValue
         {
             get

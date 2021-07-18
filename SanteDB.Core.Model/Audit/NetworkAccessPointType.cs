@@ -18,7 +18,7 @@
  */
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
     /// Represents the type of network access point.

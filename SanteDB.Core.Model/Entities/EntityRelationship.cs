@@ -35,18 +35,6 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
     public class EntityRelationship : VersionedAssociation<Entity>, ITargetedAssociation
     {
-        // The association type key
-        private Guid? m_associationTypeKey;
-        private Concept m_relationshipType;
-        private Guid? m_classificationKey;
-        private Concept m_classification;
-        private Guid? m_roleTypeKey;
-        private Concept m_roleType;
-
-        private Entity m_targetEntity;
-
-        // The entity key
-        private Guid? m_targetEntityKey;
 
         // The target entity
         // The association type
@@ -91,7 +79,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// The entity that this relationship targets
         /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(HolderKey)), DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(HolderKey)), SerializationMetadata]
         public Entity Holder
         {
             get
@@ -144,38 +132,14 @@ namespace SanteDB.Core.Model.Entities
         
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipTypeKey))]
-        public Concept RelationshipType
-        {
-            get
-            {
-                this.m_relationshipType = base.DelayLoad(this.m_associationTypeKey, this.m_relationshipType);
-                return this.m_relationshipType;
-            }
-            set
-            {
-                this.m_relationshipType = value;
-                this.m_associationTypeKey = value?.Key;
-            }
-        }
+        public Concept RelationshipType { get; set; }
 
         /// <summary>
         /// Association type key
         /// </summary>
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(EntityRelationshipTypeKeys))]
-        public Guid? RelationshipTypeKey
-        {
-            get { return this.m_associationTypeKey; }
-            set
-            {
-                if (this.m_associationTypeKey != value)
-                {
-                    this.m_associationTypeKey = value;
-                    this.m_relationshipType = null;
-                }
-            }
-        }
+        public Guid? RelationshipTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the association type
@@ -183,37 +147,13 @@ namespace SanteDB.Core.Model.Entities
         
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipRoleKey))]
-        public Concept RelationshipRole
-        {
-            get
-            {
-                this.m_roleType = base.DelayLoad(this.m_roleTypeKey, this.m_roleType);
-                return this.m_roleType;
-            }
-            set
-            {
-                this.m_roleType = value;
-                this.m_roleTypeKey = value?.Key;
-            }
-        }
+        public Concept RelationshipRole { get; set; }
 
         /// <summary>
         /// Association type key
         /// </summary>
         [XmlElement("relationshipRole"), JsonProperty("relationshipRole")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? RelationshipRoleKey
-        {
-            get { return this.m_roleTypeKey; }
-            set
-            {
-                if (this.m_roleTypeKey != value)
-                {
-                    this.m_roleTypeKey = value;
-                    this.m_roleType = null;
-                }
-            }
-        }
+        public Guid? RelationshipRoleKey { get; set; }
 
         /// <summary>
         /// Gets or sets the an additional (sub-type) of the relationship
@@ -227,75 +167,27 @@ namespace SanteDB.Core.Model.Entities
         
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
-        public Concept Classification
-        {
-            get
-            {
-                this.m_classification = base.DelayLoad(this.m_classificationKey, this.m_classification);
-                return this.m_classification;
-            }
-            set
-            {
-                this.m_classification = value;
-                this.m_classificationKey = value?.Key;
-            }
-        }
+        public Concept Classification { get; set; }
 
         /// <summary>
         /// Association type key
         /// </summary>
         [XmlElement("classification"), JsonProperty("classification")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(RelationshipClassKeys))]
-        public Guid? ClassificationKey
-        {
-            get { return this.m_classificationKey; }
-            set
-            {
-                if (this.m_classificationKey != value)
-                {
-                    this.m_classificationKey = value;
-                    this.m_classification = null;
-                }
-            }
-        }
+        public Guid? ClassificationKey { get; set; }
 
         /// <summary>
         /// Target entity reference
         /// </summary>
         [SerializationReference(nameof(TargetEntityKey))]
         [XmlIgnore, JsonIgnore]
-        public Entity TargetEntity
-        {
-            get
-            {
-                this.m_targetEntity = base.DelayLoad(this.m_targetEntityKey, this.m_targetEntity);
-                return this.m_targetEntity;
-            }
-            set
-            {
-                this.m_targetEntity = value;
-                this.m_targetEntityKey = value?.Key;
-            }
-        }
+        public Entity TargetEntity { get; set; }
 
         /// <summary>
         /// The target of the association
         /// </summary>
         [XmlElement("target"), JsonProperty("target")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? TargetEntityKey
-        {
-            get { return this.m_targetEntityKey; }
-            set
-            {
-                if (this.m_targetEntityKey != value)
-                {
-                    this.m_targetEntityKey = value;
-                    this.m_targetEntity = null;
-                }
-            }
-        }
+        public Guid? TargetEntityKey { get; set; }
 
         /// <summary>
         /// Gets or sets the targeted entity

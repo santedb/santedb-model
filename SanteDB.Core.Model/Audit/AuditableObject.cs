@@ -43,11 +43,15 @@ using System.ComponentModel;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
     /// Identifies an object that adds context to the audit
     /// </summary>
+	/// <remarks>
+	/// <para>In the SanteDB audit structure, an auditable object represets an object that was actioned on (read, disclosed, updated, etc.) 
+	/// or represents an audit that provides context to the audit event (query performed, name of transaction, etc.)</para>
+	/// </remarks>
     [XmlType(nameof(AuditableObject), Namespace = "http://santedb.org/audit")]
 	[JsonObject(nameof(AuditableObject))]
 	public class AuditableObject

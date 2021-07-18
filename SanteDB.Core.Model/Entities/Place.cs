@@ -56,7 +56,6 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the class concept key
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         public override Guid? ClassConceptKey
         {
@@ -64,7 +63,6 @@ namespace SanteDB.Core.Model.Entities
             {
                 return base.ClassConceptKey;
             }
-
             set
             {
                 if (value == EntityClassKeys.Place ||

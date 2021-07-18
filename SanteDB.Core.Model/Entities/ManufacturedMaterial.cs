@@ -47,6 +47,12 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => EntityClassKeys.ManufacturedMaterial; set => base.ClassConceptKey = EntityClassKeys.ManufacturedMaterial; }
+
+        /// <summary>
         /// Gets or sets the lot number of the manufactured material
         /// </summary>
         [XmlElement("lotNumber"), JsonProperty("lotNumber")]

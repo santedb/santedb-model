@@ -36,10 +36,6 @@ namespace SanteDB.Core.Model.Acts
     public class Account : Act
     {
 
-        // Backing fields
-        private Guid? m_currencyKey;
-        private Concept m_currency;
-
         /// <summary>
         /// Initializes the account
         /// </summary>
@@ -58,33 +54,13 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the currency concept UUID for this account
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? CurrencyKey
-        {
-            get => this.m_currencyKey;
-            set
-            {
-                this.m_currencyKey = value;
-                this.m_currency = null;
-            }
-        }
+        public Guid? CurrencyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the currency
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(CurrencyKey))]
-        public Concept Currency
-        {
-            get
-            {
-                this.m_currency = base.DelayLoad(this.m_currencyKey, this.m_currency);
-                return this.m_currency;
-            }
-            set
-            {
-                this.m_currency = value;
-                this.m_currencyKey = value?.Key;
-            }
-        }
+        public Concept Currency { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum balance of this account

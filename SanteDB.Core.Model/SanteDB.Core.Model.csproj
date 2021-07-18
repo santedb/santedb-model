@@ -98,7 +98,7 @@
     <Compile Include="Audit\AuditableObjectRole.cs" />
     <Compile Include="Audit\AuditActorData.cs" />
     <Compile Include="Audit\AuditCode.cs" />
-    <Compile Include="Audit\AuditData.cs" />
+    <Compile Include="Audit\AuditEventData.cs" />
     <Compile Include="Audit\AuditMetadata.cs" />
     <Compile Include="Audit\AuditSourceType.cs" />
     <Compile Include="Audit\NetworkAccessPointType.cs" />
@@ -258,9 +258,6 @@
   <ItemGroup>
     <None Include="..\SanteDB.licenseheader">
       <Link>SanteDB.licenseheader</Link>
-    </None>
-    <None Include="Doc\Query\index.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Schema\BaseTypes.xsd">
       <SubType>Designer</SubType>

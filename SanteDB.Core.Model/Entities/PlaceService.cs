@@ -32,47 +32,19 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("PlaceService", Namespace = "http://santedb.org/model"), JsonObject("PlaceService")]
     public class PlaceService : VersionedAssociation<Entity>
     {
-        private Concept m_service;
-
-        // Service key
-        private Guid? m_serviceConceptKey;
-
+       
         /// <summary>
         /// Gets or sets the service concept
         /// </summary>
         [SerializationReference(nameof(ServiceConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept ServiceConcept
-        {
-            get
-            {
-                this.m_service = base.DelayLoad(this.m_serviceConceptKey, this.m_service);
-                return this.m_service;
-            }
-            set
-            {
-                this.m_service = value;
-                this.m_serviceConceptKey = value?.Key;
-            }
-        }
+        public Concept ServiceConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the service concept key
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("serviceConcept"), JsonProperty("serviceConcept")]
-        public Guid? ServiceConceptKey
-        {
-            get { return this.m_serviceConceptKey; }
-            set
-            {
-                if (this.m_serviceConceptKey != value)
-                {
-                    this.m_serviceConceptKey = value;
-                    this.m_service = null;
-                }
-            }
-        }
+        public Guid? ServiceConceptKey { get; set; }
 
         // Service
         /// <summary>

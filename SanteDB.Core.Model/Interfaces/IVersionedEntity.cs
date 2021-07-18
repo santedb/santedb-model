@@ -41,9 +41,5 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         Guid? PreviousVersionKey { get; set; }
 
-        /// <summary>
-        /// Gets the previous version
-        /// </summary>
-        IVersionedEntity PreviousVersion { get; }
     }
 }

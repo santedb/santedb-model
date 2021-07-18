@@ -64,17 +64,6 @@ namespace SanteDB.Core.Model.Subscription
         }
 
         /// <summary>
-        /// Get locked copy of the object for sending to clients
-        /// </summary>
-        public override IdentifiedData GetLocked()
-        {
-
-            var retVal = base.GetLocked();
-            (retVal as SubscriptionDefinition).m_includeServerDefs = false;
-            return retVal;
-        }
-
-        /// <summary>
         /// Gets the time that this was modified
         /// </summary>
         public override DateTimeOffset ModifiedOn => DateTime.Now;

@@ -18,7 +18,7 @@
  */
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
     /// Classifies the type of identifier that a auditable object may have

@@ -36,14 +36,6 @@ namespace SanteDB.Core.Model.Acts
     public class Procedure : Act
     {
 
-        private Guid? m_methodKey;
-        private Guid? m_approachSiteKey;
-        private Guid? m_targetSiteKey;
-
-        private Concept m_method;
-        private Concept m_approachSite;
-        private Concept m_targetSite;
-
         /// <summary>
         /// Default ctor for procedure
         /// </summary>
@@ -53,121 +45,50 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => ActClassKeys.Procedure; set => base.ClassConceptKey = ActClassKeys.Procedure; }
+
+        /// <summary>
         /// Gets or sets te method/technique used to perform the procedure
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("method"), JsonProperty("method")]
-        public Guid? MethodKey
-        {
-            get { return this.m_methodKey; }
-            set
-            {
-                if (this.m_methodKey != value)
-                {
-                    this.m_methodKey = value;
-                    this.m_method = null;
-                }
-            }
-        }
+        public Guid? MethodKey { get; set; }
 
         /// <summary>
         /// Gets or sets the anatomical site or system through which the procedure was performed
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("approachSite"), JsonProperty("approachSite")]
-        public Guid? ApproachSiteKey
-        {
-            get
-            {
-                return this.m_approachSiteKey;
-            }
-            set
-            {
-                if (this.m_approachSiteKey != value)
-                {
-                    this.m_approachSiteKey = value;
-                    this.m_approachSite = null;
-                }
-            }
-        }
+        public Guid? ApproachSiteKey { get; set; }
 
         /// <summary>
         /// Gets or sets the anatomical site or system which is the target of the procedure
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("targetSite"), JsonProperty("targetSite")]
-        public Guid? TargetSiteKey
-        {
-            get
-            {
-                return this.m_targetSiteKey;
-            }
-            set
-            {
-                if (this.m_targetSiteKey != value)
-                {
-                    this.m_targetSiteKey = value;
-                    this.m_targetSite = null;
-                }
-            }
-        }
+        public Guid? TargetSiteKey { get; set; }
 
         /// <summary>
         /// Gets or sets te method/technique used to perform the procedure
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(MethodKey))]
-        public Concept Method
-        {
-            get
-            {
-                this.m_method = base.DelayLoad(this.m_methodKey, this.m_method);
-                return this.m_method;
-            }
-            set
-            {
-                this.m_method = value;
-                this.m_methodKey = value?.Key;
-            }
-        }
+        public Concept Method { get; set; }
 
         /// <summary>
         /// Gets or sets the anatomical site or system which is the target of the procedure
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ApproachSiteKey))]
-        public Concept ApproachSite
-        {
-            get
-            {
-                this.m_approachSite = base.DelayLoad(this.m_approachSiteKey, this.m_approachSite);
-                return this.m_approachSite;
-            }
-            set
-            {
-                this.m_approachSite = value;
-                this.m_approachSiteKey = value?.Key;
-            }
-        }
+        public Concept ApproachSite { get; set; }
 
         /// <summary>
         /// Gets or sets te method/technique used to perform the procedure
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(TargetSiteKey))]
-        public Concept TargetSite
-        {
-            get
-            {
-                this.m_targetSite = base.DelayLoad(this.m_targetSiteKey, this.m_targetSite);
-                return this.m_targetSite;
-            }
-            set
-            {
-                this.m_targetSite = value;
-                this.m_targetSiteKey = value?.Key;
-            }
-        }
+        public Concept TargetSite { get; set; }
 
     }
 }

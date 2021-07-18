@@ -27,20 +27,21 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Entities
 {
     /// <summary>
-    /// An associative entity which links a SecurityApplication to an Entity
+    /// Represents the clinical data object for Applications
     /// </summary>
+    /// <remarks>
+    /// In SanteDB's data model, all security objects (objects which may alter the state of data) are separated 
+    /// into a security object (in this example <see cref="SecurityApplication"/>) and a clinical object (<see cref="ApplicationEntity"/>).
+    /// This allows SanteDB to store provenance data (authoriship, origin, etc) without conflating the original 
+    /// device, application or user with the security user, device, or application. 
+    /// </remarks>
 
     [XmlType("ApplicationEntity", Namespace = "http://santedb.org/model"), JsonObject("ApplicationEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ApplicationEntity")]
     [ClassConceptKey(EntityClassKeyStrings.NonLivingSubject)]
     public class ApplicationEntity : Entity
     {
-        // Security application
-        private SecurityApplication m_securityApplication;
-
-        // Security application key
-        private Guid? m_securityApplicationKey;
-
+        
         /// <summary>
         /// Creates application entity
         /// </summary>
@@ -51,42 +52,24 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => EntityClassKeys.NonLivingSubject; set => base.ClassConceptKey = EntityClassKeys.NonLivingSubject; }
+
+        /// <summary>
         /// Gets or sets the security application
         /// </summary>
         [SerializationReference(nameof(SecurityApplicationKey))]
         [XmlIgnore, JsonIgnore]
-        public SecurityApplication SecurityApplication
-        {
-            get
-            {
-                this.m_securityApplication = base.DelayLoad(this.m_securityApplicationKey, this.m_securityApplication);
-                return this.m_securityApplication;
-            }
-            set
-            {
-                this.m_securityApplication = value;
-
-                this.m_securityApplicationKey = value?.Key;
-            }
-        }
+        public SecurityApplication SecurityApplication { get; set; }
 
         /// <summary>
         /// Gets or sets the security application
         /// </summary>
         [XmlElement("securityApplication"), JsonProperty("securityApplication")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? SecurityApplicationKey
-        {
-            get { return this.m_securityApplicationKey; }
-            set
-            {
-                if (this.m_securityApplicationKey != value)
-                {
-                    this.m_securityApplicationKey = value;
-                    this.m_securityApplication = null;
-                }
-            }
-        }
+        public Guid? SecurityApplicationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the software

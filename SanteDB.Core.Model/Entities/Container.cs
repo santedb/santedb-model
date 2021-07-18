@@ -46,6 +46,12 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => EntityClassKeys.Container; set => base.ClassConceptKey = EntityClassKeys.Container; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class.
         /// </summary>
         /// <param name="key">The key.</param>

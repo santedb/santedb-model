@@ -19,10 +19,10 @@
 using System;
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
-    /// Represents types of actions
+    /// Represents types of action that was performed which resulted in the audit being created
     /// </summary>
     [XmlType(nameof(ActionType), Namespace = "http://santedb.org/audit"), Flags]
 	public enum ActionType

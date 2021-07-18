@@ -129,6 +129,11 @@ namespace SanteDB.Core.Model.Constants
         /// State
         /// </summary>
         public const string State = "8cf4b0b0-84e5-4122-85fe-6afa8240c218";
+
+        /// <summary>
+        /// Person which is a user
+        /// </summary>
+        public const string UserEntity = "6a2b00ba-501b-4523-b57c-f96d8ae44684";
     }
 
 
@@ -242,6 +247,11 @@ namespace SanteDB.Core.Model.Constants
         /// Represents a precinct or sub-division of a city such as a burrogh
         /// </summary>
         public static readonly Guid PrecinctOrBorough = Guid.Parse("ACAFE0F2-E209-43BB-8633-3665FD7C90BA");
+
+        /// <summary>
+        /// Represents a person which is a user in the system
+        /// </summary>
+        public static readonly Guid UserEntity = Guid.Parse("6A2B00BA-501B-4523-B57C-F96D8AE44684");
 
     }
 }

@@ -66,20 +66,6 @@ namespace SanteDB.Core.Model.Acts
     public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IClassifiable, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
 
-        private Guid? m_classConceptKey;
-        private Guid? m_typeConceptKey;
-        private Guid? m_statusConceptKey;
-        private Guid? m_moodConceptKey;
-        private Guid? m_reasonConceptKey;
-        private Guid? m_templateKey;
-
-        private Concept m_classConcept;
-        private Concept m_typeConcept;
-        private Concept m_statusConcept;
-        private Concept m_moodConcept;
-        private Concept m_reasonConcept;
-        private TemplateDefinition m_template;
-
         /// <summary>
         /// Constructor for ACT
         /// </summary>
@@ -93,8 +79,8 @@ namespace SanteDB.Core.Model.Acts
             this.Tags = new List<ActTag>();
             this.Protocols = new List<ActProtocol>();
             this.Policies = new List<SecurityPolicyInstance>();
-
         }
+
         /// <summary>
         /// Gets or sets an indicator which identifies whether the act actually occurred, or
         /// specifically did not occur
@@ -121,42 +107,18 @@ namespace SanteDB.Core.Model.Acts
         /// classifies the type of act in a manner which allows a consumer to render the data or to validate the data.
         /// </remarks>
         [XmlElement("template"), JsonProperty("template")]
-        public Guid? TemplateKey
-        {
-            get
-            {
-                return this.m_templateKey;
-            }
-            set
-            {
-                this.m_templateKey = value;
-                if (value.HasValue && value != this.m_template?.Key)
-                    this.m_template = null;
-            }
-        }
+        public Guid? TemplateKey { get; set; }
 
         /// <summary>
         /// Gets or sets the template definition
         /// </summary>
         [SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
-        public TemplateDefinition Template
-        {
-            get
-            {
-                this.m_template = base.DelayLoad(this.m_templateKey, this.m_template);
-                return this.m_template;
-            }
-            set
-            {
-                this.m_template = value;
-                this.m_templateKey = value?.Key;
-            }
-        }
+        public TemplateDefinition Template { get; set; }
 
         /// <summary>
         /// Gets or sets the moment in time that this act occurred in ISO format
         /// </summary>
-        [DataIgnore, XmlElement("actTime"), JsonProperty("actTime")]
+        [SerializationMetadata, XmlElement("actTime"), JsonProperty("actTime")]
         public String ActTimeXml
         {
             get { return this.ActTime.ToString("o", CultureInfo.InvariantCulture); }
@@ -185,7 +147,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the time when the act should or did start ocurring in ISO format
         /// </summary>
-        [DataIgnore, XmlElement("startTime"), JsonProperty("startTime")]
+        [SerializationMetadata, XmlElement("startTime"), JsonProperty("startTime")]
         public String StartTimeXml
         {
             get { return this.StartTime?.ToString("o", CultureInfo.InvariantCulture); }
@@ -215,7 +177,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the time when the act should or did stop ocurring in ISO format
         /// </summary>
-        [DataIgnore, XmlElement("stopTime"), JsonProperty("stopTime")]
+        [SerializationMetadata, XmlElement("stopTime"), JsonProperty("stopTime")]
         public String StopTimeXml
         {
             get { return this.StopTime?.ToString("o", CultureInfo.InvariantCulture); }
@@ -240,21 +202,9 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <see cref="ClassConcept"/>
         /// <see cref="ActClassKeys"/>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(ActClassKeys))]
-        public virtual Guid? ClassConceptKey
-        {
-            get { return this.m_classConceptKey; }
-            set
-            {
-                if (this.m_classConceptKey != value)
-                {
-                    this.m_classConceptKey = value;
-                    this.m_classConcept = null;
-                }
-            }
-        }
+        public virtual Guid? ClassConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the key of the concept which specifies the mood of the act.
@@ -285,21 +235,9 @@ namespace SanteDB.Core.Model.Acts
         /// </item>
         /// </list>
         /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("moodConcept"), JsonProperty("moodConcept")]
         [Binding(typeof(ActMoodKeys))]
-        public virtual Guid? MoodConceptKey
-        {
-            get { return this.m_moodConceptKey; }
-            set
-            {
-                if (this.m_moodConceptKey != value)
-                {
-                    this.m_moodConceptKey = value;
-                    this.m_moodConcept = null;
-                }
-            }
-        }
+        public virtual Guid? MoodConceptKey { get; set; }
 
 
         /// <summary>
@@ -314,18 +252,7 @@ namespace SanteDB.Core.Model.Acts
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("reasonConcept"), JsonProperty("reasonConcept")]
         [Binding(typeof(ActReasonKeys))]
-        public Guid? ReasonConceptKey
-        {
-            get { return this.m_reasonConceptKey; }
-            set
-            {
-                if (this.m_reasonConceptKey != value)
-                {
-                    this.m_reasonConceptKey = value;
-                    this.m_reasonConcept = null;
-                }
-            }
-        }
+        public Guid? ReasonConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the key of the concept which describes the current status of the act
@@ -356,41 +283,16 @@ namespace SanteDB.Core.Model.Acts
         ///     </item>
         /// </list>
         /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
-        public Guid? StatusConceptKey
-        {
-            get { return this.m_statusConceptKey; }
-            set
-            {
-                if (this.m_statusConceptKey != value)
-                {
-                    this.m_statusConceptKey = value;
-                    this.m_statusConcept = null;
-                }
-            }
-        }
+        public Guid? StatusConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the key of the conccept which further classifies the type of act occurring
         /// </summary>
         /// <see cref="TypeConcept"/>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
-        public Guid? TypeConceptKey
-        {
-            get { return this.m_typeConceptKey; }
-            set
-            {
-                if (this.m_typeConceptKey != value)
-                {
-                    this.m_typeConceptKey = value;
-                    this.m_typeConcept = null;
-                }
-            }
-        }
-
+        public Guid? TypeConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the concept which classifies the type of act
@@ -402,19 +304,7 @@ namespace SanteDB.Core.Model.Acts
         /// <see cref="ActClassKeys"/>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassConceptKey))]
-        public Concept ClassConcept
-        {
-            get
-            {
-                this.m_classConcept = base.DelayLoad(this.m_classConceptKey, this.m_classConcept);
-                return this.m_classConcept;
-            }
-            set
-            {
-                this.m_classConcept = value;
-                this.m_classConceptKey = value?.Key;
-            }
-        }
+        public Concept ClassConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the concept which specifies the mood of the act
@@ -426,20 +316,7 @@ namespace SanteDB.Core.Model.Acts
         /// <see cref="ActMoodKeys"/>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(MoodConceptKey))]
-        public Concept MoodConcept
-        {
-            get
-            {
-                this.m_moodConcept = base.DelayLoad(this.m_moodConceptKey, this.m_moodConcept);
-                return this.m_moodConcept;
-            }
-            set
-            {
-                this.m_moodConcept = value;
-                this.m_moodConceptKey = value?.Key;
-            }
-        }
-
+        public Concept MoodConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the concept which indicates the reason of the act
@@ -450,19 +327,7 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ReasonConceptKey))]
-        public Concept ReasonConcept
-        {
-            get
-            {
-                this.m_reasonConcept = base.DelayLoad(this.m_reasonConceptKey, this.m_reasonConcept);
-                return this.m_reasonConcept;
-            }
-            set
-            {
-                this.m_reasonConcept = value;
-                this.m_reasonConceptKey = value?.Key;
-            }
-        }
+        public Concept ReasonConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the current status concept of the act
@@ -480,41 +345,14 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         [SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept StatusConcept
-        {
-            get
-            {
-                this.m_statusConcept = base.DelayLoad(this.m_statusConceptKey, this.m_statusConcept);
-                return this.m_statusConcept;
-            }
-            set
-            {
-                this.m_statusConcept = value;
-                if (value == null)
-                    this.m_statusConceptKey = Guid.Empty;
-                else
-                    this.m_statusConceptKey = value.Key;
-            }
-        }
+        public Concept StatusConcept { get; set; }
 
         /// <summary>
         /// Type concept identifier
         /// </summary>
         [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept TypeConcept
-        {
-            get
-            {
-                this.m_typeConcept = base.DelayLoad(this.m_typeConceptKey, this.m_typeConcept);
-                return this.m_typeConcept;
-            }
-            set
-            {
-                this.m_typeConceptKey = value?.Key;
-                this.m_typeConcept = value;
-            }
-        }
+        public Concept TypeConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the identifiers by which this act is known as in other systems
@@ -619,10 +457,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// True if reason concept key should be serialized
         /// </summary>
-        public bool ShouldSerializeReasonConceptKey()
-        {
-            return this.ReasonConceptKey.HasValue && this.ReasonConceptKey.GetValueOrDefault() != Guid.Empty;
-        }
+        public bool ShouldSerializeReasonConceptKey() => this.ReasonConceptKey.HasValue && this.ReasonConceptKey.GetValueOrDefault() != Guid.Empty;
 
         /// <summary>
         /// Semantic equality function
@@ -703,6 +538,9 @@ namespace SanteDB.Core.Model.Acts
         [XmlIgnore, JsonIgnore]
         IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection<EntityTag>(nameof(Act.Tags)).OfType<ITag>(); } }
 
+        /// <summary>
+        /// Get all extensions on the act
+        /// </summary>
         [XmlIgnore, JsonIgnore]
         IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection<EntityExtension>(nameof(Act.Extensions)).OfType<IModelExtension>(); } }
 

@@ -35,9 +35,6 @@ namespace SanteDB.Core.Model.Acts
     public class FinancialTransaction : Act
     {
 
-        // Backing fields
-        private Guid? m_amountCurrencyKey;
-        private Concept m_amountCurrency;
 
         /// <summary>
         /// Creates the financial transaction
@@ -48,45 +45,28 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
+        /// Class concept for financial transactions
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => ActClassKeys.FinancialTransaction; set => base.ClassConceptKey = ActClassKeys.FinancialTransaction; }
+
+        /// <summary>
         /// Gets or sets the amount of the financial transaction
         /// </summary>
         [XmlElement("amount"), JsonProperty("amount")]
-        public Decimal Amount { get; set; }
+        public Decimal? Amount { get; set; }
 
         /// <summary>
         /// Gets or sets the currency key
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
-        public Guid? CurrencyKey
-        {
-            get
-            {
-                return this.m_amountCurrencyKey;
-            }
-            set
-            {
-                this.m_amountCurrencyKey = value;
-                this.m_amountCurrency = null;
-            }
-        }
+        public Guid? CurrencyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the currency 
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(CurrencyKey))]
-        public Concept Currency
-        {
-            get
-            {
-                this.m_amountCurrency = base.DelayLoad(this.m_amountCurrencyKey, this.m_amountCurrency);
-                return this.m_amountCurrency;
-            }
-            set
-            {
-                this.m_amountCurrency = value;
-                this.m_amountCurrencyKey = value?.Key;
-            }
-        }
+        public Concept Currency { get; set; }
 
         /// <summary>
         /// Gets or sets the crediting exchange rate

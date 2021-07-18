@@ -41,17 +41,6 @@ namespace SanteDB.Core.Model.Acts
     [XmlType("ActRelationship", Namespace = "http://santedb.org/model"), JsonObject("ActRelationship")]
     public class ActRelationship : VersionedAssociation<Act>, ITargetedAssociation
     {
-        // The entity key
-        private Guid? m_targetActKey;
-        // The target entity
-
-        private Act m_targetAct;
-        // The association type key
-        private Guid? m_relationshipTypeKey;
-        // The association type
-        private Concept m_relationshipType;
-        private Guid? m_classificationKey;
-        private Concept m_classification;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActRelationship"/> class.
@@ -69,6 +58,7 @@ namespace SanteDB.Core.Model.Acts
         {
             this.RelationshipTypeKey = relationshipType;
             this.TargetAct = target;
+            this.TargetActKey = target.Key;
         }
 
         /// <summary>
@@ -95,126 +85,48 @@ namespace SanteDB.Core.Model.Acts
         
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
-        public Concept Classification
-        {
-            get
-            {
-                this.m_classification = base.DelayLoad(this.m_classificationKey, this.m_classification);
-                return this.m_classification;
-            }
-            set
-            {
-                this.m_classification = value;
-                this.m_classificationKey = value?.Key;
-            }
-        }
+        public Concept Classification { get; set; }
 
         /// <summary>
         /// Association type key
         /// </summary>
         [XmlElement("classification"), JsonProperty("classification")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(RelationshipClassKeys))]
-        public Guid? ClassificationKey
-        {
-            get { return this.m_classificationKey; }
-            set
-            {
-                if (this.m_classificationKey != value)
-                {
-                    this.m_classificationKey = value;
-                    this.m_classification = null;
-                }
-            }
-        }
+        public Guid? ClassificationKey { get; set; }
 
         /// <summary>
         /// The target of the association
         /// </summary>
         [XmlElement("target"), JsonProperty("target")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
 
-        public Guid? TargetActKey
-        {
-            get { return this.m_targetActKey; }
-            set
-            {
-                if (this.m_targetActKey != value)
-                {
-                    this.m_targetActKey = value;
-                    this.m_targetAct = null;
-                }
-            }
-        }
+        public Guid? TargetActKey { get; set; }
 
         /// <summary>
         /// Target act reference
         /// </summary>
         [SerializationReference(nameof(TargetActKey))]
         [XmlIgnore, JsonIgnore]
-        public Act TargetAct
-        {
-            get
-            {
-                this.m_targetAct = base.DelayLoad(this.m_targetActKey, this.m_targetAct);
-                return this.m_targetAct;
-            }
-            set
-            {
-                this.m_targetAct = value;
-                this.m_targetActKey = value?.Key;
-            }
-        }
+        public Act TargetAct { get; set; }
 
         /// <summary>
         /// Association type key
         /// </summary>
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(ActRelationshipTypeKeys))]
-        public Guid? RelationshipTypeKey
-        {
-            get { return this.m_relationshipTypeKey; }
-            set
-            {
-                if (this.m_relationshipTypeKey != value)
-                {
-                    this.m_relationshipTypeKey = value;
-                    this.m_relationshipType = null;
-                }
-            }
-        }
+        public Guid? RelationshipTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the association type
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipTypeKey))]
-        public Concept RelationshipType
-        {
-            get
-            {
-                this.m_relationshipType = base.DelayLoad(this.m_relationshipTypeKey, this.m_relationshipType);
-                return this.m_relationshipType;
-            }
-            set
-            {
-                this.m_relationshipType = value;
-                if (value == null)
-                    this.m_relationshipTypeKey = Guid.Empty;
-                else
-                    this.m_relationshipTypeKey = value.Key;
-            }
-        }
+        public Concept RelationshipType { get; set; }
 
         /// <summary>
         /// Empty?
         /// </summary>
-        public override bool IsEmpty()
-        {
-            return this.RelationshipType == null && this.RelationshipTypeKey == null ||
+        public override bool IsEmpty() => this.RelationshipType == null && this.RelationshipTypeKey == null ||
                 this.TargetAct == null && this.TargetActKey == null;
-        }
 
         /// <summary>
         /// Determine semantic equality

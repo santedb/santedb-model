@@ -38,76 +38,37 @@ namespace SanteDB.Core.Model
     public abstract class Association<TSourceType> : IdentifiedData, ISimpleAssociation where TSourceType : IdentifiedData, new()
     {
 
-        // Target entity key
-        private Guid? m_sourceEntityKey;
-        // The target entity
-        private TSourceType m_sourceEntity;
-
         /// <summary>
         /// Get the modification date
         /// </summary>
-        public override DateTimeOffset ModifiedOn
-        {
-            get
-            {
-                if (this.m_sourceEntity != null)
-                    return this.m_sourceEntity.ModifiedOn;
-                return DateTime.Now;
-            }
-        }
+        public override DateTimeOffset ModifiedOn => this.LoadProperty(o=>o.SourceEntity).ModifiedOn;
 
         /// <summary>
         /// Gets or sets the source entity's key (where the relationship is FROM)
         /// </summary>
         [XmlElement("source"), JsonProperty("source")]
-        public virtual Guid? SourceEntityKey
-        {
-            get
-            {
-                return this.m_sourceEntityKey;
-            }
-            set
-            {
-                if (value != this.m_sourceEntity?.Key || value != this.m_sourceEntityKey)
-                {
-                    this.m_sourceEntityKey = value;
-                    this.m_sourceEntity = null;
-                }
-            }
-        }
+        public virtual Guid? SourceEntityKey { get; set; }
 
         /// <summary>
         /// The entity that this relationship targets
         /// </summary>
         [SerializationReference(nameof(SourceEntityKey))]
-        [XmlIgnore, JsonIgnore, DataIgnore]
-        public TSourceType SourceEntity
-        {
-            get
-            {
-                this.m_sourceEntity = this.DelayLoad(this.m_sourceEntityKey, this.m_sourceEntity);
-                return this.m_sourceEntity;
-            }
-            set
-            {
-                this.m_sourceEntity = value;
-                this.m_sourceEntityKey = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore, SerializationMetadata]
+        public TSourceType SourceEntity { get; set; }
 
         /// <summary>
         /// Source entity 
         /// </summary>
-        object ISimpleAssociation.SourceEntity { get => this.SourceEntity; set => this.SourceEntity = (TSourceType)value; }
+        object ISimpleAssociation.SourceEntity { 
+            get => this.SourceEntity; 
+            set => this.SourceEntity = (TSourceType)value; 
+        }
 
 
         /// <summary>
         /// Should serialize obsolete
         /// </summary>
-        public virtual bool ShouldSerializeSourceEntityKey()
-        {
-            return this.m_sourceEntityKey.HasValue;
-        }
+        public virtual bool ShouldSerializeSourceEntityKey() => this.SourceEntityKey.HasValue;
 
         /// <summary>
         /// Determines equality of this association

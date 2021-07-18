@@ -33,86 +33,33 @@ namespace SanteDB.Core.Model.DataTypes
     public class IdentifierType : BaseEntityData
     {
 
-        // Type concept id
-        private Guid? m_typeConceptId;
-        // Scope concept identifier
-        private Guid? m_scopeConceptId;
-        // Type concept
-
-        private Concept m_typeConcept;
-        // Scope concept
-
-        private Concept m_scopeConcept;
-
         /// <summary>
         /// Gets or sets the id of the scope concept
         /// </summary>
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("scopeConcept"), JsonProperty("scopeConcept")]
-        public Guid? ScopeConceptKey
-        {
-            get { return this.m_scopeConceptId; }
-            set
-            {
-                this.m_scopeConcept = null;
-                this.m_scopeConceptId = value;
-            }
-        }
+        public Guid? ScopeConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the concept which identifies the type
         /// </summary>
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
-        public Guid? TypeConceptKey
-        {
-            get { return this.m_typeConceptId; }
-            set
-            {
-                this.m_typeConcept = null;
-                this.m_typeConceptId = value;
-            }
-        }
+        public Guid? TypeConceptKey { get; set; }
 
         /// <summary>
         /// Type concept
         /// </summary>
         [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept TypeConcept
-        {
-            get
-            {
-                this.m_typeConcept = base.DelayLoad(this.m_typeConceptId, this.m_typeConcept);
-                return this.m_typeConcept;
-            }
-            set
-            {
-                this.m_typeConcept = value;
-                this.m_typeConceptId = value?.Key;
-            }
-        }
+        public Concept TypeConcept { get; set; }
 
         /// <summary>
         /// Gets the scope of the identifier
         /// </summary>
         [SerializationReference(nameof(ScopeConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept ScopeConcept
-        {
-            get
-            {
-                this.m_typeConcept = base.DelayLoad(this.m_scopeConceptId, this.m_scopeConcept);
-                return this.m_typeConcept;
-            }
-            set
-            {
-                this.m_scopeConcept = value;
-                this.m_scopeConceptId = value?.Key;
-            }
-        }
+        public Concept ScopeConcept { get; set; }
 
     }
 }

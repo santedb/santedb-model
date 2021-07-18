@@ -27,10 +27,6 @@ namespace SanteDB.Core.Model.Interfaces
     public interface IIdentifiedEntity
     {
 
-        /// <summary>
-        /// Gets the load state of the entity
-        /// </summary>
-        LoadState LoadState { get; set; }
 
         /// <summary>
         /// Gets the identifier for the entity

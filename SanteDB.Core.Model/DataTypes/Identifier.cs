@@ -115,19 +115,7 @@ namespace SanteDB.Core.Model.DataTypes
     public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier  where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
 
-        // Identifier id
-        private Guid? m_identifierTypeId;
-        // Authority id
-
-        private Guid? m_authorityId;
-
-        // Identifier type backing type
-
-        private IdentifierType m_identifierType;
-        // Assigning authority
-
-        private AssigningAuthority m_authority;
-
+       
         /// <summary>
         /// Gets or sets the value of the identifier
         /// </summary>
@@ -137,7 +125,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Serialization property for issued date
         /// </summary>
-        [XmlElement("issued"), JsonProperty("issued"), DataIgnore, EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        [XmlElement("issued"), JsonProperty("issued"), SerializationMetadata, EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
         public String IssueDateXml
         {
             get
@@ -169,7 +157,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Serialization field for expiry date
         /// </summary>
-        [XmlElement("expires"), JsonProperty("expires"), DataIgnore, EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        [XmlElement("expires"), JsonProperty("expires"), SerializationMetadata, EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
         public String ExpiryDateXml
         {
             get
@@ -207,98 +195,34 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the assinging authority id
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlIgnore, JsonIgnore]
-        public Guid? AuthorityKey
-        {
-            get { return this.m_authorityId; }
-            set
-            {
-                if (this.m_authorityId == value)
-                    return;
-                this.m_authority = null;
-                this.m_authorityId = value;
-            }
-        }
+        public Guid? AuthorityKey { get; set; }
 
         /// <summary>
         /// Gets or sets the type identifier
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlIgnore, JsonIgnore]
-        public Guid? IdentifierTypeKey
-        {
-            get { return this.m_identifierTypeId; }
-            set
-            {
-                if (this.m_identifierTypeId == value)
-                    return;
-                this.m_identifierType = null;
-                this.m_identifierTypeId = value;
-            }
-        }
+        public Guid? IdentifierTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier type
         /// </summary>
         [SerializationReference(nameof(IdentifierTypeKey))]
         [XmlElement("type"), JsonProperty("type")]
-        public IdentifierType IdentifierType
-        {
-            get
-            {
-                this.m_identifierType = base.DelayLoad(this.m_identifierTypeId, this.m_identifierType);
-                return this.m_identifierType;
-            }
-            set
-            {
-                this.m_identifierType = value;
-                this.m_identifierTypeId = value?.Key;
-            }
-        }
+        public IdentifierType IdentifierType { get; set; }
 
         /// <summary>
         /// Gets or sets a minimal assigning authority from XML data
         /// </summary>
         //[SerializationReference(nameof(AuthorityKey))]
         [XmlElement("authority"), JsonProperty("authority")]
-        public AssigningAuthority AuthorityXml
-        {
-            get
-            {
-                if (this.m_authority == null)
-                    this.m_authority = EntitySource.Current.Get<AssigningAuthority>(this.m_authorityId); // base.DelayLoad(this.m_authorityId, this.m_authority);
-                return this.m_authority?.ToMinimal();
-            }
-            set
-            {
-                this.m_authority = value;
-                this.m_authorityId = value?.Key;
-
-                if(String.IsNullOrEmpty(this.m_authority?.DomainName) && this.m_authorityId.HasValue) // no domain - load
-                    this.m_authority = EntitySource.Current.Get<AssigningAuthority>(this.m_authorityId); // base.DelayLoad(this.m_authorityId, this.m_authority);
-
-            }
-        }
+        public AssigningAuthority AuthorityXml { get; set; }
 
         /// <summary>
         /// Represents the authority information 
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public AssigningAuthority Authority
-        {
-            get
-            {
-                //if (this.m_authority == null)
-                //    this.m_authority = EntitySource.Current.Get<AssigningAuthority>(this.m_authorityId); // base.DelayLoad(this.m_authorityId, this.m_authority);
-                return this.m_authority;
-            }
-            set
-            {
-                this.m_authority = value;
-                this.m_authorityId = value?.Key;
-            }
-        }
+        public AssigningAuthority Authority { get; set; }
 
         /// <summary>
         /// True if the identifier is empty

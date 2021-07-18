@@ -61,17 +61,6 @@ namespace SanteDB.Core.Model.DataTypes
             this.Oid = oid;
         }
 
-        // Assigning device id
-        private Guid? m_assigningApplicationKey;
-
-        // Assigning app backing field
-        private SecurityApplication m_assigningApplication;
-
-        // Assigning authortity policy
-        private Guid? m_assigningAuthorityPolicyKey;
-        // Assigning authority policy
-        private SecurityPolicy m_assigningAuthorityPolicy;
-
         /// <summary>
         /// Gets or sets the name of the assigning authority
         /// </summary>
@@ -112,46 +101,19 @@ namespace SanteDB.Core.Model.DataTypes
         /// Assigning device identifier
         /// </summary>
         [XmlElement("assigningApplication"), JsonProperty("assigningApplication")]
-        public Guid? AssigningApplicationKey
-        {
-            get { return this.m_assigningApplicationKey; }
-            set
-            {
-                this.m_assigningApplicationKey = value;
-                this.m_assigningApplication = null;
-            }
-        }
+        public Guid? AssigningApplicationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the policy 
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(PolicyKey))]
-        public SecurityPolicy Policy {
-            get
-            {
-                this.m_assigningAuthorityPolicy = base.DelayLoad(this.m_assigningAuthorityPolicyKey, this.m_assigningAuthorityPolicy);
-                return this.m_assigningAuthorityPolicy;
-            }
-            set
-            {
-                this.m_assigningAuthorityPolicy = value;
-                this.m_assigningAuthorityPolicyKey = value?.Key ?? this.m_assigningAuthorityPolicyKey;
-            }
-        }
+        public SecurityPolicy Policy { get; set; }
 
         /// <summary>
         /// Gets or sets the policy key associated with this assigning authority for disclosure
         /// </summary>
         [XmlElement("policy"), JsonProperty("policy")]
-        public Guid? PolicyKey
-        {
-            get { return this.m_assigningAuthorityPolicyKey; }
-            set
-            {
-                this.m_assigningAuthorityPolicyKey = value;
-                this.m_assigningAuthorityPolicy = null;
-            }
-        }
+        public Guid? PolicyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the validation regex
@@ -195,24 +157,12 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the assigning device
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(AssigningApplicationKey))]
-        public SecurityApplication AssigningApplication
-        {
-            get
-            {
-                this.m_assigningApplication = base.DelayLoad(this.m_assigningApplicationKey, this.m_assigningApplication);
-                return this.m_assigningApplication;
-            }
-            set
-            {
-                this.m_assigningApplication = value;
-                this.m_assigningApplicationKey = value?.Key;
-            }
-        }
+        public SecurityApplication AssigningApplication { get; set; }
 
         /// <summary>
         /// Gets concept sets to which this concept is a member
         /// </summary>
-        [DataIgnore, XmlIgnore, JsonIgnore, SerializationReference(nameof(AuthorityScopeXml))]
+        [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(AuthorityScopeXml))]
         public List<Concept> AuthorityScope
         {
             get

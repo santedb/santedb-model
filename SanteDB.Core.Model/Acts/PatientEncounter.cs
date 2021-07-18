@@ -40,11 +40,6 @@ namespace SanteDB.Core.Model.Acts
     public class PatientEncounter : Act
     {
 
-        // Disposition key
-        private Guid? m_dischargeDispositionKey;
-        // Disposition
-        private Concept m_dischargeDisposition;
-
         /// <summary>
         /// Patient encounter ctor
         /// </summary>
@@ -54,41 +49,23 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
+        /// Gets or sets the class concept for an encounter
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => ActClassKeys.Encounter; set => base.ClassConceptKey = ActClassKeys.Encounter; }
+
+        /// <summary>
         /// Gets or sets the key of discharge disposition
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("dischargeDisposition"), JsonProperty("dischargeDisposition")]
-        public Guid? DischargeDispositionKey
-        {
-            get { return this.m_dischargeDispositionKey; }
-            set
-            {
-                if (this.m_dischargeDispositionKey != value)
-                {
-                    this.m_dischargeDispositionKey = value;
-                    this.m_dischargeDisposition = null;
-                }
-            }
-        }
+        public Guid? DischargeDispositionKey { get; set; }
 
         /// <summary>
         /// Gets or sets the discharge disposition (how the patient left the encounter
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(DischargeDispositionKey))]
-        public Concept DischargeDisposition
-        {
-            get
-            {
-                this.m_dischargeDisposition = base.DelayLoad(this.m_dischargeDispositionKey, this.m_dischargeDisposition);
-                return this.m_dischargeDisposition;
-            }
-            set
-            {
-                this.m_dischargeDisposition = value;
-                this.m_dischargeDispositionKey = value?.Key;
-            }
-        }
+        public Concept DischargeDisposition { get; set; }
 
         /// <summary>
         /// Semantic equality function

@@ -40,12 +40,6 @@ namespace SanteDB.Core.Model.DataTypes
         VersionedAssociation<TBoundModel>, IModelExtension where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
 
-
-        // Extension type key
-        private Guid? m_extensionTypeKey;
-        // Extension type
-        private ExtensionType m_extensionType;
-
         /// <summary>
         /// Gets or sets the value of the extension
         /// </summary>
@@ -146,37 +140,14 @@ namespace SanteDB.Core.Model.DataTypes
         [SerializationReference(nameof(ExtensionTypeKey))]
         [XmlIgnore, JsonIgnore]
         
-        public ExtensionType ExtensionType
-        {
-            get
-            {
-                this.m_extensionType = base.DelayLoad(this.m_extensionTypeKey, this.m_extensionType);
-                return this.m_extensionType;
-            }
-            set
-            {
-                this.m_extensionType = value;
-                this.m_extensionTypeKey = value?.Key;
-            }
-        }
+        public ExtensionType ExtensionType { get; set; }
 
         /// <summary>
         /// Gets or sets the extension type key
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("extensionType"), JsonProperty("extensionType")]
-        public Guid? ExtensionTypeKey
-        {
-            get { return this.m_extensionTypeKey; }
-            set
-            {
-                if (this.m_extensionTypeKey != value)
-                {
-                    this.m_extensionTypeKey = value;
-                    this.m_extensionType = null;
-                }
-            }
-        }
+        public Guid? ExtensionTypeKey { get; set; }
 
         /// <summary>
         /// Get the type key

@@ -37,7 +37,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the protocol  to which this act belongs
         /// </summary>
         [XmlElement("protocol"), JsonProperty("protocol")]
-        public Guid ProtocolKey { get; set; }
+        public Guid? ProtocolKey { get; set; }
 
         /// <summary>
         /// Gets or sets the protocol data related to the protocol
@@ -72,9 +72,6 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Shoud serialize source
         /// </summary>
-        public override bool ShouldSerializeSourceEntityKey()
-        {
-            return false;
-        }
+        public override bool ShouldSerializeSourceEntityKey() => false;
     }
 }

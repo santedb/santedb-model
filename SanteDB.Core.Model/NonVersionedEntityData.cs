@@ -29,16 +29,15 @@ namespace SanteDB.Core.Model
     /// <summary>
     /// Updateable entity data which is not versioned
     /// </summary>
-    /// <remarks>Non versioned data in SanteDB means that data can be updated (modified) in the underlying data store and changes are not tracked.</remarks>
+    /// <remarks>
+    /// <para>In SanteDB, objects which are non-versioned don't track changes over time, and therefore provide an updated time
+    /// to allow the tracking of the last update to the object</para>
+    /// <para>Because these objects are non-versioned, updates are destructive in that data is replaced in the database
+    /// at a field level.</para></remarks>
     [XmlType(nameof(NonVersionedEntityData), Namespace = "http://santedb.org/model")]
     [JsonObject(Id = nameof(NonVersionedEntityData))]
     public class NonVersionedEntityData : BaseEntityData
     {
-
-        // The updated by id
-        private Guid? m_updatedById;
-        // The updated by user
-        private SecurityProvenance m_updatedBy;
 
         /// <summary>
         /// Updated time
@@ -50,7 +49,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets or sets the time that this object was last modified in ISO format
         /// </summary>
-        [XmlElement("updatedTime"), JsonProperty("updatedTime"), DataIgnore()]
+        [XmlElement("updatedTime"), JsonProperty("updatedTime"), SerializationMetadata()]
         public String UpdatedTimeXml
         {
             get { return this.UpdatedTime?.ToString("o", CultureInfo.InvariantCulture); }
@@ -73,59 +72,25 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets the time this item was modified
         /// </summary>
-        public override DateTimeOffset ModifiedOn
-        {
-            get
-            {
-                return this.UpdatedTime ?? this.CreationTime;
-            }
-        }
+        public override DateTimeOffset ModifiedOn => this.UpdatedTime ?? this.CreationTime;
 
         /// <summary>
         /// Gets or sets the user that updated this base data
         /// </summary>
-
-        [XmlIgnore, JsonIgnore, DataIgnore(), SerializationReference(nameof(UpdatedByKey))]
-        public SecurityProvenance UpdatedBy
-        {
-            get
-            {
-                this.m_updatedBy = base.DelayLoad(this.m_updatedById, this.m_updatedBy);
-                return m_updatedBy;
-            }
-            set
-            {
-                this.m_updatedBy = value;
-                this.m_updatedById = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore, SerializationMetadata(), SerializationReference(nameof(UpdatedByKey))]
+        public SecurityProvenance UpdatedBy { get; set; }
 
         /// <summary>
         /// Gets or sets the provenance identifier associated with the last update of this object
         /// </summary>
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("updatedBy"), JsonProperty("updatedBy")]
-        public Guid? UpdatedByKey
-        {
-            get { return this.m_updatedById; }
-            set
-            {
-                if (this.m_updatedById != value)
-                    this.m_updatedBy = null;
-                this.m_updatedById = value;
-            }
-        }
-
+        public Guid? UpdatedByKey { get; set; }
 
         /// <summary>
         /// True if key should be serialized
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializeUpdatedByKey()
-        {
-            return this.UpdatedByKey.HasValue;
-        }
+        public bool ShouldSerializeUpdatedByKey() => this.UpdatedByKey.HasValue;
 
     }
 }

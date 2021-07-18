@@ -46,14 +46,7 @@ namespace SanteDB.Core.Model.Acts
     public class ActParticipation : VersionedAssociation<Act> , ITargetedAssociation
     {
 
-        private Guid? m_playerKey;
-
-        private Entity m_player;
-        private Guid? m_participationRoleKey;
-
-        private Concept m_participationRole;
-        private Guid? m_classificationKey;
-        private Concept m_classification;
+       
         /// <summary>
         /// Default constructor for act participation
         /// </summary>
@@ -70,6 +63,7 @@ namespace SanteDB.Core.Model.Acts
         {
             this.ParticipationRoleKey = roleType;
             this.PlayerEntity = player;
+            this.PlayerEntityKey = player.Key;
         }
 
         /// <summary>
@@ -95,113 +89,41 @@ namespace SanteDB.Core.Model.Acts
         
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
-        public Concept Classification
-        {
-            get
-            {
-                this.m_classification = base.DelayLoad(this.m_classificationKey, this.m_classification);
-                return this.m_classification;
-            }
-            set
-            {
-                this.m_classification = value;
-                this.m_classificationKey = value?.Key;
-            }
-        }
+        public Concept Classification { get; set; }
 
         /// <summary>
         /// Association type key
         /// </summary>
         [XmlElement("classification"), JsonProperty("classification")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(RelationshipClassKeys))]
-        public Guid? ClassificationKey
-        {
-            get { return this.m_classificationKey; }
-            set
-            {
-                if (this.m_classificationKey != value)
-                {
-                    this.m_classificationKey = value;
-                    this.m_classification = null;
-                }
-            }
-        }
+        public Guid? ClassificationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the target entity reference
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("player"), JsonProperty("player")]
-        public Guid? PlayerEntityKey
-        {
-            get { return this.m_playerKey; }
-            set
-            {
-                if (this.m_playerKey != value)
-                {
-                    this.m_playerKey = value;
-                    this.m_player = null;
-                }
-            }
-        }
+        public Guid? PlayerEntityKey { get; set; }
 
         /// <summary>
         /// Gets or sets the participation role key
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(ActParticipationKey))]
         [XmlElement("participationRole"), JsonProperty("participationRole")]
-        public Guid? ParticipationRoleKey
-        {
-            get { return this.m_participationRoleKey; }
-            set
-            {
-                if (this.m_participationRoleKey != value)
-                {
-                    this.m_participationRoleKey = value;
-                    this.m_participationRole = null;
-                }
-            }
-        }
+        public Guid? ParticipationRoleKey { get; set; }
 
         /// <summary>
         /// Gets or sets the entity which participated in the act
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(PlayerEntityKey))]
-        public Entity PlayerEntity
-        {
-            get
-            {
-                this.m_player = base.DelayLoad(this.m_playerKey, this.m_player);
-                return this.m_player;
-            }
-            set
-            {
-                this.m_player = value;
-                this.m_playerKey = value?.Key;
-            }
-        }
+        public Entity PlayerEntity { get; set; }
 
         /// <summary>
         /// Gets or sets the role that the entity played in participating in the act
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ParticipationRoleKey))]
-        public Concept ParticipationRole
-        {
-            get
-            {
-                this.m_participationRole = base.DelayLoad(this.m_participationRoleKey, this.m_participationRole);
-                return this.m_participationRole;
-            }
-            set
-            {
-                this.m_participationRole = value;
-                this.m_participationRoleKey = value?.Key;
-            }
-        }
+        public Concept ParticipationRole { get; set; }
 
         /// <summary>
         /// The entity that this relationship targets
@@ -209,30 +131,18 @@ namespace SanteDB.Core.Model.Acts
         [JsonProperty("act"), XmlElement("act")]
         public Guid? ActKey
         {
-            get
-            {
-                return this.SourceEntityKey;
-            }
-            set
-            {
-                this.SourceEntityKey = value;
-            }
+            get => this.SourceEntityKey;
+            set => this.SourceEntityKey = value;
         }
 
         /// <summary>
         /// The entity that this relationship targets
         /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ActKey)), DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ActKey)), SerializationMetadata]
         public Act Act
         {
-            get
-            {
-                return this.SourceEntity;
-            }
-            set
-            {
-                this.SourceEntity = value;
-            }
+            get => this.SourceEntity;
+            set => this.SourceEntity = value;
         }
 
         /// <summary>
@@ -266,18 +176,12 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Don't serialize source entity
         /// </summary>
-        public override bool ShouldSerializeSourceEntityKey()
-        {
-            return false;
-        }
+        public override bool ShouldSerializeSourceEntityKey() => false;
 
         /// <summary>
         /// Should serialize quantity
         /// </summary>
-        public bool ShouldSerializeQuantity()
-        {
-            return this.Quantity.HasValue;
-        }
+        public bool ShouldSerializeQuantity() => this.Quantity.HasValue;
 
         /// <summary>
         /// Should serialize act key

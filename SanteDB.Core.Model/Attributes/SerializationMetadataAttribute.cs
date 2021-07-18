@@ -25,6 +25,6 @@ namespace SanteDB.Core.Model.Attributes
 	/// and is provided only for serialization
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
-    public class DataIgnoreAttribute : Attribute
+    public class SerializationMetadataAttribute : Attribute
     {}
 }

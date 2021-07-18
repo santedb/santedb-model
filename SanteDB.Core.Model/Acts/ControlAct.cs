@@ -19,6 +19,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using System;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -37,5 +38,11 @@ namespace SanteDB.Core.Model.Acts
         {
             this.ClassConceptKey = ActClassKeys.ControlAct;
         }
+
+        /// <summary>
+        /// Class concept key for CACT
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => ActClassKeys.ControlAct; set => base.ClassConceptKey = ActClassKeys.ControlAct; }
     }
 }

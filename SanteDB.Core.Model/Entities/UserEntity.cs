@@ -18,6 +18,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Security;
 using System;
 using System.Xml.Serialization;
@@ -31,51 +32,34 @@ namespace SanteDB.Core.Model.Entities
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "UserEntity")]
     public class UserEntity : Person
     {
-        // Security user
-        private SecurityUser m_securityUser;
 
-        // Security user key
-        private Guid? m_securityUserKey;
+        /// <summary>
+        /// Creates a new instance of user entity
+        /// </summary>
+        public UserEntity()
+        {
+            this.DeterminerConceptKey = DeterminerKeys.Specific;
+            this.ClassConceptKey = EntityClassKeys.UserEntity;
+        }
+
+        /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public override Guid? ClassConceptKey { get => EntityClassKeys.UserEntity; set => base.ClassConceptKey = EntityClassKeys.UserEntity; }
 
         /// <summary>
         /// Gets or sets the security user key
         /// </summary>
-        [XmlIgnore, JsonIgnore, DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationMetadata]
         [SerializationReference(nameof(SecurityUserKey))]
-        public SecurityUser SecurityUser
-        {
-            get
-            {
-                if (this.IsDelayLoadEnabled)
-                    this.m_securityUser = base.DelayLoad(this.m_securityUserKey, this.m_securityUser);
-                return this.m_securityUser;
-            }
-            set
-            {
-                this.m_securityUser = value;
-                this.m_securityUserKey = value?.Key;
-            }
-        }
+        public SecurityUser SecurityUser { get; set; }
 
         /// <summary>
         /// Gets or sets the security user key
         /// </summary>
         [XmlElement("securityUser"), JsonProperty("securityUser")]
-        public Guid? SecurityUserKey
-        {
-            get
-            {
-                return this.m_securityUserKey;
-            }
-            set
-            {
-                if (this.m_securityUserKey != value)
-                {
-                    this.m_securityUserKey = value;
-                    this.m_securityUser = null;
-                }
-            }
-        }
+        public Guid? SecurityUserKey { get; set; }
 
         /// <summary>
         /// Determine semantic equality

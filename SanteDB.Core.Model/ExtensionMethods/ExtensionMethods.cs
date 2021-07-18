@@ -326,7 +326,7 @@ namespace SanteDB.Core.Model
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
             {
-                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<DataIgnoreAttribute>() == null &&
+                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<SerializationMetadataAttribute>() == null &&
                     destinationPi.CanWrite).ToArray();
                 s_typePropertyCache.TryAdd(toEntity.GetType(), properties);
             }
@@ -385,7 +385,7 @@ namespace SanteDB.Core.Model
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
             {
-                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<DataIgnoreAttribute>() == null &&
+                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<SerializationMetadataAttribute>() == null &&
                     destinationPi.CanWrite).ToArray();
                 s_typePropertyCache.TryAdd(toEntity.GetType(), properties);
             }
@@ -488,7 +488,7 @@ namespace SanteDB.Core.Model
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
             {
-                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<DataIgnoreAttribute>() == null &&
+                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<SerializationMetadataAttribute>() == null &&
                     destinationPi.CanWrite).ToArray();
                 s_typePropertyCache.TryAdd(toEntity.GetType(), properties);
             }

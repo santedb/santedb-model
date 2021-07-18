@@ -30,24 +30,23 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Entities
 {
     /// <summary>
-    /// Entity address
+    /// A structured address for an entity
     /// </summary>
+    /// <remarks>
+    /// Addresses in SanteDB are structured as a collection of components. This structure
+    /// ensures that addresses a flexible when they are stored, searched and reproduced
+    /// </remarks>
     [Classifier(nameof(AddressUse))]
     [XmlType("EntityAddress", Namespace = "http://santedb.org/model"), JsonObject("EntityAddress")]
     public class EntityAddress : VersionedAssociation<Entity>
     {
-        // Address use concept
-        private Concept m_addressUseConcept;
-
-        // Address use key
-        private Guid? m_addressUseKey;
-
+        
         /// <summary>
         /// Create the address from components
         /// </summary>
         public EntityAddress(Guid useKey, String streetAddressLine, String city, String province, String country, String zipCode)
         {
-            this.m_addressUseKey = useKey;
+            this.AddressUseKey = useKey;
             this.Component = new List<EntityAddressComponent>();
             if (!String.IsNullOrEmpty(streetAddressLine))
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.StreetAddressLine, streetAddressLine));
@@ -85,45 +84,20 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(AddressUseKey))]
         [XmlIgnore, JsonIgnore]
-        
-        public Concept AddressUse
-        {
-            get
-            {
-                this.m_addressUseConcept = base.DelayLoad(this.m_addressUseKey, this.m_addressUseConcept);
-                return this.m_addressUseConcept;
-            }
-            set
-            {
-                this.m_addressUseConcept = value;
-                this.m_addressUseKey = value?.Key;
-            }
-        }
+
+        public Concept AddressUse { get; set; }
 
         /// <summary>
         /// Gets or sets the address use key
         /// </summary>
         [XmlElement("use"), JsonProperty("use")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Binding(typeof(AddressUseKeys))]
-        public Guid? AddressUseKey
-        {
-            get { return this.m_addressUseKey; }
-            set
-            {
-                if (this.m_addressUseKey != value)
-                {
-                    this.m_addressUseKey = value;
-                    this.m_addressUseConcept = null;
-                }
-            }
-        }
+        public Guid? AddressUseKey { get; set; }
 
         /// <summary>
         /// Gets or sets the component types
         /// </summary>
         [XmlElement("component"), JsonProperty("component")]
-        
         public List<EntityAddressComponent> Component { get; set; }
 
 

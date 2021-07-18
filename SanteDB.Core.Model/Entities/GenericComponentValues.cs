@@ -33,11 +33,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("GenericComponentValues")]
     public abstract class GenericComponentValues<TBoundModel> : Association<TBoundModel> where TBoundModel : IdentifiedData, new()
     {
-        private Concept m_componentType;
-
-        // Component type
-        private Guid? m_componentTypeKey;
-
+       
         // Component type
         /// <summary>
         /// Default ctor
@@ -51,7 +47,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public GenericComponentValues(Guid partType, String value)
         {
-            this.m_componentTypeKey = partType;
+            this.ComponentTypeKey = partType;
             this.Value = value;
         }
 
@@ -68,37 +64,13 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ComponentTypeKey))]
-        public Concept ComponentType
-        {
-            get
-            {
-                this.m_componentType = base.DelayLoad(this.m_componentTypeKey, this.m_componentType);
-                return this.m_componentType;
-            }
-            set
-            {
-                this.m_componentType = value;
-                this.m_componentTypeKey = value?.Key;
-            }
-        }
+        public Concept ComponentType { get; set; }
 
         /// <summary>
         /// Component type key
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("type"), JsonProperty("type")]
-        public virtual Guid? ComponentTypeKey
-        {
-            get { return this.m_componentTypeKey; }
-            set
-            {
-                if (this.m_componentTypeKey != value)
-                {
-                    this.m_componentTypeKey = value;
-                    this.m_componentType = null;
-                }
-            }
-        }
+        public virtual Guid? ComponentTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the value of the name component
@@ -134,6 +106,7 @@ namespace SanteDB.Core.Model.Entities
         {
             return this.ComponentTypeKey.HasValue;
         }
+
         /// <summary>
         /// Never need to serialize the entity source key
         /// </summary>

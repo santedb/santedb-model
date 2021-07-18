@@ -44,39 +44,6 @@ namespace SanteDB.Core.Model.Entities
     public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IClassifiable, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
 
-        private TemplateDefinition m_template;
-        private Guid? m_templateKey;
-
-        // Class concept
-        private Concept m_classConcept;
-
-        // Classe concept
-        private Guid? m_classConceptId;
-
-        // TODO: Change this to Act
-        private Act m_creationAct;
-
-        // Control act which created this
-        private Guid? m_creationActId;
-
-        // Determiner concept
-        private Concept m_determinerConcept;
-
-        // Determiner concept id
-        private Guid? m_determinerConceptId;
-
-        // Status concept
-        private Concept m_statusConcept;
-
-        // Status
-        private Guid? m_statusConceptId;
-
-        // Type concept
-        private Concept m_typeConcept;
-
-        // Type concept
-        private Guid? m_typeConceptId;
-
         /// <summary>
         /// Creates a new instance of the entity class
         /// </summary>
@@ -105,116 +72,41 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassConceptKey))]
-        public Concept ClassConcept
-        {
-            get
-            {
-                this.m_classConcept = base.DelayLoad(this.m_classConceptId, this.m_classConcept);
-                return this.m_classConcept;
-            }
-            set
-            {
-                this.m_classConcept = value;
-                this.m_classConceptId = value?.Key;
-            }
-        }
+        public Concept ClassConcept { get; set; }
 
         /// <summary>
         /// Class concept
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(EntityClassKeys))]
-        public virtual Guid? ClassConceptKey
-        {
-            get { return this.m_classConceptId; }
-            set
-            {
-                if (this.m_classConceptId != value)
-                {
-                    this.m_classConceptId = value;
-                    this.m_classConcept = null;
-                }
-            }
-        }
+        public virtual Guid? ClassConceptKey { get; set; }
 
         /// <summary>
         /// Creation act reference
         /// </summary>
         [SerializationReference(nameof(CreationActKey))]
         [XmlIgnore, JsonIgnore]
-        public Act CreationAct
-        {
-            get
-            {
-                this.m_creationAct = base.DelayLoad(this.m_creationActId, this.m_creationAct);
-                return this.m_creationAct;
-            }
-            set
-            {
-                this.m_creationAct = value;
-                this.m_creationActId = value?.Key;
-            }
-        }
+        public Act CreationAct { get; set; }
 
         /// <summary>
         /// Creation act reference
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("creationAct"), JsonProperty("creationAct")]
-        public Guid? CreationActKey
-        {
-            get { return this.m_creationActId; }
-            set
-            {
-                if (this.m_creationActId != value)
-                {
-                    this.m_creationActId = value;
-                    this.m_creationAct = null;
-                }
-            }
-        }
+        public Guid? CreationActKey { get; set; }
 
         /// <summary>
         /// Determiner concept
         /// </summary>
         [SerializationReference(nameof(DeterminerConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public virtual Concept DeterminerConcept
-        {
-            get
-            {
-                this.m_determinerConcept = base.DelayLoad(this.m_determinerConceptId, this.m_determinerConcept);
-                return this.m_determinerConcept;
-            }
-            set
-            {
-                this.m_determinerConcept = value;
-                if (value == null)
-                    this.m_determinerConceptId = Guid.Empty;
-                else
-                    this.m_determinerConceptId = value.Key;
-            }
-        }
+        public virtual Concept DeterminerConcept { get; set; }
 
         /// <summary>
         /// Determiner concept
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("determinerConcept"), JsonProperty("determinerConcept")]
         [Binding(typeof(DeterminerKeys))]
-        public virtual Guid? DeterminerConceptKey
-        {
-            get { return this.m_determinerConceptId; }
-            set
-            {
-                if (this.m_determinerConceptId != value)
-                {
-                    this.m_determinerConceptId = value;
-                    this.m_determinerConcept = null;
-                }
-            }
-        }
+        public virtual Guid? DeterminerConceptKey { get; set; }
 
         /// <summary>
         /// Gets a list of all extensions associated with the entity
@@ -265,41 +157,14 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept StatusConcept
-        {
-            get
-            {
-                this.m_statusConcept = base.DelayLoad(this.m_statusConceptId, this.m_statusConcept);
-                return this.m_statusConcept;
-            }
-            set
-            {
-                this.m_statusConcept = value;
-                if (value == null)
-                    this.m_statusConceptId = Guid.Empty;
-                else
-                    this.m_statusConceptId = value.Key;
-            }
-        }
+        public Concept StatusConcept { get; set; }
 
         /// <summary>
         /// Status concept id
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
-        public Guid? StatusConceptKey
-        {
-            get { return this.m_statusConceptId; }
-            set
-            {
-                if (this.m_statusConceptId != value)
-                {
-                    this.m_statusConceptId = value;
-                    this.m_statusConcept = null;
-                }
-            }
-        }
+        public Guid? StatusConceptKey { get; set; }
 
         /// <summary>
         /// Gets a list of all tags associated with the entity
@@ -321,73 +186,25 @@ namespace SanteDB.Core.Model.Entities
         /// Gets the template key
         /// </summary>
         [XmlElement("template"), JsonProperty("template")]
-        public Guid? TemplateKey
-        {
-            get
-            {
-                return this.m_templateKey;
-            }
-            set
-            {
-                this.m_templateKey = value;
-                if (value.HasValue && value != this.m_template?.Key)
-                    this.m_template = null;
-            }
-        }
+        public Guid? TemplateKey { get; set; }
 
         /// <summary>
         /// Gets or sets the template definition
         /// </summary>
-        public TemplateDefinition Template
-        {
-            get
-            {
-                this.m_template = base.DelayLoad(this.m_templateKey, this.m_template);
-                return this.m_template;
-            }
-            set
-            {
-                this.m_template = value;
-                this.m_templateKey = value?.Key;
-            }
-        }
+        public TemplateDefinition Template { get; set; }
 
         /// <summary>
         /// Type concept identifier
         /// </summary>
         [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept TypeConcept
-        {
-            get
-            {
-                this.m_typeConcept = base.DelayLoad(this.m_typeConceptId, this.m_typeConcept);
-                return this.m_typeConcept;
-            }
-            set
-            {
-                this.m_typeConcept = value;
-                this.m_typeConceptId = value?.Key;
-            }
-        }
+        public Concept TypeConcept { get; set; }
 
         /// <summary>
         /// Type concept identifier
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
-        public Guid? TypeConceptKey
-        {
-            get { return this.m_typeConceptId; }
-            set
-            {
-                if (this.m_typeConceptId != value)
-                {
-                    this.m_typeConceptId = value;
-                    this.m_typeConcept = null;
-                }
-            }
-        }
+        public Guid? TypeConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the security policy instances associated with the entity

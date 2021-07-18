@@ -31,17 +31,7 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlType("ConceptReferenceTerm", Namespace = "http://santedb.org/model"), JsonObject("ConceptReferenceTerm")]
     public class ConceptReferenceTerm : VersionedAssociation<Concept>
     {
-        // Reference term id
-        private Guid? m_referenceTermId;
-        // Reference term
-
-        private ReferenceTerm m_referenceTerm;
-        // ConceptRelationship type
-        private Guid? m_relationshipTypeId;
-        // Relationship type
-
-        private ConceptRelationshipType m_relationshipType;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ConceptReferenceTerm"/> class.
         /// </summary>
@@ -64,72 +54,28 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the reference term identifier
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-
         [XmlElement("term"), JsonProperty("term")]
-        public Guid? ReferenceTermKey
-        {
-            get { return this.m_referenceTermId; }
-            set
-            {
-                this.m_referenceTerm = null;
-                this.m_referenceTermId = value;
-            }
-        }
+        public Guid? ReferenceTermKey { get; set; }
 
         /// <summary>
         /// Gets or set the reference term
         /// </summary>
         [SerializationReference(nameof(ReferenceTermKey))]
         [XmlIgnore, JsonIgnore]
-        public ReferenceTerm ReferenceTerm
-        {
-            get
-            {
-                this.m_referenceTerm = base.DelayLoad(this.m_referenceTermId, this.m_referenceTerm);
-                return this.m_referenceTerm;
-            }
-            set
-            {
-                this.m_referenceTerm = value;
-                this.m_referenceTermId = value?.Key;
-            }
-        }
+        public ReferenceTerm ReferenceTerm { get; set; }
 
         /// <summary>
         /// Gets or sets the relationship type identifier
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
-        public Guid? RelationshipTypeKey
-        {
-            get { return this.m_relationshipTypeId; }
-            set
-            {
-                this.m_relationshipTypeId = value;
-                this.m_relationshipType = null;
-            }
-        }
+        public Guid? RelationshipTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the relationship type
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipTypeKey))]
-        public ConceptRelationshipType RelationshipType
-        {
-            get
-            {
-                this.m_relationshipType = base.DelayLoad(this.m_relationshipTypeId, this.m_relationshipType);
-                return this.m_relationshipType;
-            }
-            set
-            {
-                this.m_relationshipType = value;
-                this.m_relationshipTypeId = value?.Key;
-            }
-        }
-
+        public ConceptRelationshipType RelationshipType { get; set; }
 
     }
 }

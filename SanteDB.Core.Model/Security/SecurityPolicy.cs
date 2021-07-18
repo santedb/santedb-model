@@ -91,11 +91,7 @@ namespace SanteDB.Core.Model.Security
     [XmlType(nameof(SecurityPolicyInstance), Namespace = "http://santedb.org/model"), JsonObject("SecurityPolicyInstance")]
     public class SecurityPolicyInstance : Association<SecurityEntity>
     {
-        // Policy id
-        private Guid? m_policyId;
-        // Policy
-        private SecurityPolicy m_policy;
-
+      
         /// <summary>
         /// Default ctor
         /// </summary>
@@ -117,36 +113,13 @@ namespace SanteDB.Core.Model.Security
         /// Gets or sets the policy key
         /// </summary>
         [XmlElement("policy"), JsonProperty("policy")]
-        public Guid? PolicyKey
-        {
-            get
-            {
-                return this.m_policyId;
-            }
-            set
-            {
-                this.m_policyId = value;
-                this.m_policy = null;
-            }
-        }
+        public Guid? PolicyKey { get; set; }
 
         /// <summary>
         /// The policy
         /// </summary>
         [JsonIgnore, XmlIgnore, SerializationReference(nameof(PolicyKey))]
-        public SecurityPolicy Policy
-        {
-            get
-            {
-                this.m_policy = base.DelayLoad(this.m_policyId, this.m_policy);
-                return m_policy;
-            }
-            set
-            {
-                this.m_policy = value;
-                this.m_policyId = value?.Key;
-            }
-        }
+        public SecurityPolicy Policy { get; set; }
 
         /// <summary>
         /// Gets or sets whether the policy is a Deny
