@@ -174,11 +174,9 @@ namespace SanteDB.Core.Model.Collection
         public void Add(IdentifiedData data)
         {
             if (data == null) return;
-            else if (!this.m_bundleTags.Contains(data.Tag))
-            {
-                this.Item.Add(data);
+            this.Item.Add(data);
+            if (!String.IsNullOrEmpty(data.Tag))
                 this.m_bundleTags.Add(data.Tag);
-            }
         }
 
         /// <summary>
@@ -202,11 +200,9 @@ namespace SanteDB.Core.Model.Collection
         public void Insert(int index, IdentifiedData data)
         {
             if (data == null) return;
-            else if (!this.m_bundleTags.Contains(data.Tag))
-            {
-                this.Item.Insert(index, data);
+            this.Item.Insert(index, data);
+            if (!String.IsNullOrEmpty(data.Tag))
                 this.m_bundleTags.Add(data.Tag);
-            }
         }
 
         /// <summary>
