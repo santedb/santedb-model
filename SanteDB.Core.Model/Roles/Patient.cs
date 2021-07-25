@@ -331,5 +331,10 @@ namespace SanteDB.Core.Model.Roles
                 this.DeceasedDate == other.DeceasedDate &&
                 this.DeceasedDatePrecision == other.DeceasedDatePrecision;
         }
+
+        public void AddTag(object focalObjectTag, string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

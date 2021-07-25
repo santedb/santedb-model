@@ -26,6 +26,7 @@ using SanteDB.Core.Model.Security;
 using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -37,7 +38,7 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Collection
 {
     /// <summary>
-    /// Represents a collection of model items 
+    /// A bundle represents a batch of objects which are included within the bundle
     /// </summary>
     [ResourceCollection]
     [XmlType(nameof(Bundle), Namespace = "http://santedb.org/model")]
@@ -92,27 +93,22 @@ namespace SanteDB.Core.Model.Collection
         public Bundle()
         {
             this.Item = new List<IdentifiedData>();
-            this.ExpansionKeys = new List<Guid>();
+            this.FocalObjects = new List<Guid>();
         }
 
         /// <summary>
-        /// Create enw bundle
+        /// Create new bundle
         /// </summary>
         public Bundle(IEnumerable<IdentifiedData> objects)
         {
             this.Item = new List<IdentifiedData>(objects);
-            this.ExpansionKeys = new List<Guid>();
+            this.FocalObjects = new List<Guid>(objects.Select(o => o.Key).OfType<Guid>());
         }
 
-        // Lock object
-        private object m_lockObject = new object();
-
         // Property cache
-        private static Dictionary<Type, IEnumerable<PropertyInfo>> m_propertyCache = new Dictionary<System.Type, IEnumerable<PropertyInfo>>();
-        private static object s_lockObject = new object();
+        private static ConcurrentDictionary<Type, IEnumerable<PropertyInfo>> m_propertyCache = new ConcurrentDictionary<System.Type, IEnumerable<PropertyInfo>>();
 
         // Bundle contents
-        private List<IdentifiedData> m_bundleContents = new List<IdentifiedData>();
         private HashSet<String> m_bundleTags = new HashSet<string>(); // hashset of all tags
 
         // Modified now
@@ -131,29 +127,28 @@ namespace SanteDB.Core.Model.Collection
 
 
         /// <summary>
+        /// Gets the single focal object for this object
+        /// </summary>
+        public IdentifiedData GetFocalObject()
+        {
+            if (this.FocalObjects.Count == 1)
+            {
+                return this.Item.FirstOrDefault(o => o.Key == this.FocalObjects.FirstOrDefault());
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets or sets items in the bundle
         /// </summary>
         [XmlElement("resource"), JsonProperty("resource")]
-        public List<IdentifiedData> Item
-        {
-            get { return this.m_bundleContents; }
-            set { this.m_bundleContents = value; }
-        }
+        public List<IdentifiedData> Item { get; set; }
 
         /// <summary>
         /// Entry into the bundle
         /// </summary>
-        [XmlElement("entry"), JsonProperty("entry")]
-        public Guid? EntryKey { get; set; }
-
-        /// <summary>
-        /// Gets the entry object
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public IdentifiedData Entry
-        {
-            get { if (this.EntryKey.HasValue) return this.Item.Find(o => o.Key == this.EntryKey); else return null; }
-        }
+        [XmlElement("focal"), JsonProperty("focal")]
+        public List<Guid> FocalObjects { get; set; }
 
         /// <summary>
         /// Gets or sets the count in this bundle
@@ -173,13 +168,6 @@ namespace SanteDB.Core.Model.Collection
         [XmlElement("totalResults"), JsonProperty("totalResults")]
         public int TotalResults { get; set; }
 
-
-        /// <summary>
-        /// Gets or sets the keys of objects that aren't really in the bundle but are expansion items
-        /// </summary>
-        [XmlElement("ref"), JsonProperty("ref")]
-        public List<Guid> ExpansionKeys { get; set; }
-
         /// <summary>
         /// Add item to the bundle
         /// </summary>
@@ -187,7 +175,8 @@ namespace SanteDB.Core.Model.Collection
         {
             if (data == null) return;
             this.Item.Add(data);
-            this.m_bundleTags.Add(data.Tag);
+            if (!String.IsNullOrEmpty(data.Tag))
+                this.m_bundleTags.Add(data.Tag);
         }
 
         /// <summary>
@@ -197,8 +186,12 @@ namespace SanteDB.Core.Model.Collection
         {
             foreach (var itm in items)
             {
-                this.Add(itm);
+                if (!this.m_bundleTags.Contains(itm.Tag))
+                {
+                    this.Item.Add(itm);
+                }
             }
+
         }
 
         /// <summary>
@@ -208,16 +201,14 @@ namespace SanteDB.Core.Model.Collection
         {
             if (data == null) return;
             this.Item.Insert(index, data);
-            this.m_bundleTags.Add(data.Tag);
+            if (!String.IsNullOrEmpty(data.Tag))
+                this.m_bundleTags.Add(data.Tag);
         }
 
         /// <summary>
         /// True if the bundle has a tag
         /// </summary>
-        public bool HasTag(String tag)
-        {
-            return this.m_bundleTags.Contains(tag);
-        }
+        public bool HasTag(String tag) => this.m_bundleTags.Contains(tag);
 
         /// <summary>
         /// Create a bundle
@@ -229,8 +220,10 @@ namespace SanteDB.Core.Model.Collection
             retVal.Key = Guid.NewGuid();
             retVal.Count = retVal.TotalResults = 1;
             if (resourceRoot == null)
+            {
                 return retVal;
-            retVal.EntryKey = resourceRoot.Key;
+            }
+            retVal.FocalObjects.Add(resourceRoot.Key.Value);
             retVal.Add(resourceRoot);
             ProcessModel(resourceRoot, retVal, followList);
             return retVal;
@@ -254,14 +247,27 @@ namespace SanteDB.Core.Model.Collection
             {
                 if (itm == null)
                     continue;
-                if (!retVal.Item.Exists(o => o.Tag == itm.Tag) && itm.Key.HasValue)
+                if (!retVal.HasTag(itm.Tag) && itm.Key.HasValue)
                 {
-                    retVal.Add(itm.GetLocked());
-                    Bundle.ProcessModel(itm.GetLocked() as IdentifiedData, retVal);
+                    retVal.Add(itm);
+                    Bundle.ProcessModel(itm as IdentifiedData, retVal);
                 }
             }
 
             return retVal;
+        }
+
+        /// <summary>
+        /// Remove the specified keyed object
+        /// </summary>
+        public void Remove(Guid key)
+        {
+            var itm = this.Item.Find(o => o.Key == key);
+            if (itm != null)
+            {
+                this.Item.Remove(itm);
+                this.m_bundleTags.Remove(itm.Tag);
+            }
         }
 
         /// <summary>
@@ -285,7 +291,6 @@ namespace SanteDB.Core.Model.Collection
             if (context.Contains(data))
                 return;
             context.Add(data);
-            // Prevent delay loading from EntitySource (we're doing that right now)
 
             // Iterate over properties
             foreach (var pi in data.GetType().GetRuntimeProperties().Where(o => o.GetCustomAttribute<DataIgnoreAttribute>() == null))
@@ -293,22 +298,23 @@ namespace SanteDB.Core.Model.Collection
 
                 // Is this property not null? If so, we want to iterate
                 object value = pi.GetValue(data);
-                if (value is IList)
+                if (value is IList listValue)
                 {
-                    foreach (var itm in value as IList)
-                        if (itm is IdentifiedData)
-                            this.Reconstitute(itm as IdentifiedData, context);
+                    foreach (var itm in listValue)
+                    {
+                        if (itm is IdentifiedData identifiedData)
+                        {
+                            this.Reconstitute(identifiedData, context);
+                        }
+                    }
                 }
-                else if (value is IdentifiedData)
-                    this.Reconstitute(value as IdentifiedData, context);
+                else if (value is IdentifiedData identifiedData1)
+                {
+                    this.Reconstitute(identifiedData1, context);
+                }
 
                 // Is the pi a delay load? if so then get the key property
-                var keyName = pi.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty;
-                if (keyName == null || pi.SetMethod == null)
-                    continue; // Skip if there is no delay load or if we can't even set this property
-
-                // Now we get the value of the key
-                var keyPi = data.GetType().GetRuntimeProperty(keyName);
+                var keyPi = pi.GetSerializationRedirectProperty();
                 if (keyPi == null || (keyPi.PropertyType != typeof(Guid) &&
                     keyPi.PropertyType != typeof(Guid?)))
                     continue; // Invalid key link name
@@ -319,7 +325,9 @@ namespace SanteDB.Core.Model.Collection
                     continue;
                 var bundleItem = this.Item.Find(o => o.Key == key);
                 if (bundleItem != null)
+                {
                     pi.SetValue(data, bundleItem);
+                }
 
             }
 
@@ -338,16 +346,12 @@ namespace SanteDB.Core.Model.Collection
                 // Iterate over properties
                 IEnumerable<PropertyInfo> properties = null;
                 if (!m_propertyCache.TryGetValue(model.GetType(), out properties))
-                    lock (s_lockObject)
-                    {
-                        properties = model.GetType().GetRuntimeProperties().Where(p => p.GetCustomAttribute<SerializationReferenceAttribute>() != null ||
-                            typeof(IList).IsAssignableFrom(p.PropertyType) && p.GetCustomAttributes<XmlElementAttribute>().Count() > 0 && followList).ToList();
+                {
+                    properties = model.GetType().GetRuntimeProperties().Where(p => p.GetCustomAttribute<SerializationReferenceAttribute>() != null ||
+                        typeof(IList).IsAssignableFrom(p.PropertyType) && p.GetCustomAttributes<XmlElementAttribute>().Count() > 0 && followList).ToList();
 
-                        if (!m_propertyCache.ContainsKey(model.GetType()))
-                        {
-                            m_propertyCache.Add(model.GetType(), properties);
-                        }
-                    }
+                    m_propertyCache.TryAdd(model.GetType(), properties);
+                }
 
                 currentBundle.m_modifiedOn = DateTimeOffset.Now;
                 foreach (var pi in properties)
@@ -370,12 +374,12 @@ namespace SanteDB.Core.Model.Collection
                                         continue;
 
                                     if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null)
-                                        lock (currentBundle.m_lockObject)
-                                            if (!currentBundle.HasTag(iValue.Tag) && iValue.Key.HasValue)
-                                            {
-                                                currentBundle.ExpansionKeys.Add(iValue.Key.Value);
-                                                currentBundle.Insert(0, iValue);
-                                            }
+                                    {
+                                        if (!currentBundle.HasTag(iValue.Tag) && iValue.Key.HasValue)
+                                        {
+                                            currentBundle.Insert(0, iValue);
+                                        }
+                                    }
                                     ProcessModel(iValue, currentBundle, false);
                                 }
                             }
@@ -388,12 +392,12 @@ namespace SanteDB.Core.Model.Collection
                             if (iValue != null && !currentBundle.HasTag(iValue.Tag))
                             {
                                 if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null && iValue != null)
-                                    lock (currentBundle.m_lockObject)
-                                        if (!currentBundle.HasTag(iValue.Tag) && iValue.Key.HasValue)
-                                        {
-                                            currentBundle.ExpansionKeys.Add(iValue.Key.Value);
-                                            currentBundle.Insert(0, iValue);
-                                        }
+                                {
+                                    if (!currentBundle.HasTag(iValue.Tag) && iValue.Key.HasValue)
+                                    {
+                                        currentBundle.Insert(0, iValue);
+                                    }
+                                }
                                 ProcessModel(iValue, currentBundle, followList);
                             }
                         }
@@ -411,20 +415,13 @@ namespace SanteDB.Core.Model.Collection
         }
 
 
-        /// <summary>
-        /// Gets from the item set only those items which are for expansion
-        /// </summary>
-        public IEnumerable<IdentifiedData> GetExpansionItems()
-        {
-            return this.Item.Where(o => this.ExpansionKeys.Contains(o.Key.Value));
-        }
 
         /// <summary>
         /// Gets from the item set only those items which are results
         /// </summary>
-        public IEnumerable<IdentifiedData> GetResultItems()
+        public IEnumerable<IdentifiedData> GetFocalItems()
         {
-            return this.Item.Where(o => !this.ExpansionKeys.Contains(o.Key.Value));
+            return this.Item.Where(o => this.FocalObjects.Contains(o.Key.Value));
         }
 
     }
