@@ -55,6 +55,8 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityRelationship()
         {
+            this.Key = Guid.NewGuid();
+
         }
 
         /// <summary>
@@ -67,6 +69,8 @@ namespace SanteDB.Core.Model.Entities
             this.RelationshipTypeKey = relationshipType;
             this.TargetEntity = target;
             this.Strength = 1.0;
+            this.Key = Guid.NewGuid();
+
         }
 
         /// <summary>
@@ -74,6 +78,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityRelationship(Guid? relationshipType, Guid? targetKey)
         {
+            this.Key = Guid.NewGuid();
             this.RelationshipTypeKey = relationshipType;
             this.TargetEntityKey = targetKey;
             this.Strength = 1.0;
@@ -324,10 +329,10 @@ namespace SanteDB.Core.Model.Entities
         {
             var other = obj as EntityRelationship;
             if (other == null) return false;
-            return base.SemanticEquals(obj) && this.TargetEntityKey == other.TargetEntityKey &&
+            return this.Key == other.Key || base.SemanticEquals(obj) && this.TargetEntityKey == other.TargetEntityKey &&
                 this.RelationshipTypeKey == other.RelationshipTypeKey &&
                 this.Quantity == other.Quantity &&
-                this.SourceEntityKey == other.SourceEntityKey &&
+                ((this.SourceEntity == null) ^ (other.SourceEntity == null) || this.SourceEntityKey == other.SourceEntityKey) &&
                 this.ClassificationKey == other.ClassificationKey &&
                 this.RelationshipRoleKey == other.RelationshipRoleKey
                 ;
