@@ -21,14 +21,14 @@ using System;
 namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Represents a classifiable entity
+    /// Represents a type entity
     /// </summary>
-    public interface IClassifiable
+    public interface IHasTypeConcept
     {
 
         /// <summary>
         /// Gets the class concept key
         /// </summary>
-        Guid? ClassConceptKey { get; }
+        Guid? TypeConceptKey { get; }
     }
 }
