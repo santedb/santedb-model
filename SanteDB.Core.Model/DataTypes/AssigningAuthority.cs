@@ -95,7 +95,11 @@ namespace SanteDB.Core.Model.DataTypes
         /// Represents scopes to which the authority is bound
         /// </summary>
         [JsonProperty("scope"), XmlElement("scope")]
-        public List<Guid> AuthorityScopeXml { get; set; }
+        public List<Guid> AuthorityScopeXml 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Assigning device identifier

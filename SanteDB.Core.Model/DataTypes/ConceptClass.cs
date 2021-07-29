@@ -38,6 +38,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("name"), JsonProperty("name")]
         public string Name { get; set; }
+
         /// <summary>
         /// Gets or sets the mnemonic
         /// </summary>

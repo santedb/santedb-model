@@ -187,6 +187,7 @@ namespace SanteDB.Core.Model.Roles
         /// </summary>
         /// <returns></returns>
         public bool ShouldSerializeDeceasedDatePrecision() => this.DeceasedDatePrecision.HasValue;
+
         /// <summary>
         /// Should serialize deceased date?
         /// </summary>
