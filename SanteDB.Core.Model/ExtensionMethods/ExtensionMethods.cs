@@ -561,8 +561,15 @@ namespace SanteDB.Core.Model
                                     if (existing == null)
                                     {
                                         var citm = itm.Clone();
-                                        citm.Key = null;
+                                        //citm.Key = null;
                                         modifyList.Add(citm);
+                                    }
+                                    else if(existing is IVersionedAssociation ive)
+                                    {
+                                        var cve = itm as IVersionedAssociation;
+                                        ive.ObsoleteVersionSequenceId = cve.ObsoleteVersionSequenceId;
+                                        ive.EffectiveVersionSequenceId = cve.EffectiveVersionSequenceId;
+
                                     }
                                     addedObjects.Add(itm);
                                 }

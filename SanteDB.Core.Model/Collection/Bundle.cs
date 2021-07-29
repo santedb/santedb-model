@@ -174,11 +174,9 @@ namespace SanteDB.Core.Model.Collection
         public void Add(IdentifiedData data)
         {
             if (data == null) return;
-            else if (!this.m_bundleTags.Contains(data.Tag))
-            {
-                this.Item.Add(data);
+            this.Item.Add(data);
+            if (!String.IsNullOrEmpty(data.Tag))
                 this.m_bundleTags.Add(data.Tag);
-            }
         }
 
         /// <summary>
@@ -202,11 +200,9 @@ namespace SanteDB.Core.Model.Collection
         public void Insert(int index, IdentifiedData data)
         {
             if (data == null) return;
-            else if (!this.m_bundleTags.Contains(data.Tag))
-            {
-                this.Item.Insert(index, data);
+            this.Item.Insert(index, data);
+            if (!String.IsNullOrEmpty(data.Tag))
                 this.m_bundleTags.Add(data.Tag);
-            }
         }
 
         /// <summary>
@@ -259,6 +255,19 @@ namespace SanteDB.Core.Model.Collection
             }
 
             return retVal;
+        }
+
+        /// <summary>
+        /// Remove the specified keyed object
+        /// </summary>
+        public void Remove(Guid key)
+        {
+            var itm = this.Item.Find(o => o.Key == key);
+            if (itm != null)
+            {
+                this.Item.Remove(itm);
+                this.m_bundleTags.Remove(itm.Tag);
+            }
         }
 
         /// <summary>

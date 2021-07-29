@@ -37,7 +37,7 @@ namespace SanteDB.Core.Model.EntityLoader
         /// <summary>
         /// Get the specified object
         /// </summary>
-        TObject Get<TObject>(Guid? key, Guid? versionKey) where TObject : IdentifiedData, IVersionedEntity, new();
+        TObject Get<TObject>(Guid? key, Guid? versionKey) where TObject : IdentifiedData, new();
 
         /// <summary>
         /// Query the specified data from the delay load provider
