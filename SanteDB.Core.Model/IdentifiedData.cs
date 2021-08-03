@@ -19,6 +19,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections;
@@ -89,6 +90,12 @@ namespace SanteDB.Core.Model
         /// </summary>
         [XmlElement("id"), JsonProperty("id")]
         public Guid? Key { get; set; }
+
+        /// <summary>
+        /// Gets or sets the operation 
+        /// </summary>
+        [XmlAttribute("operation"), JsonProperty("operation")]
+        public BatchOperationType BatchOperation { get; set; }
 
         /// <summary>
         /// True if key should be serialized

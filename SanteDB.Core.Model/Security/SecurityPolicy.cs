@@ -83,6 +83,11 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("canOverride"), JsonProperty("canOverride")]
         public bool CanOverride { get; set; }
+
+        /// <summary>
+        /// Get the name of the object as a display string
+        /// </summary>
+        public override string ToDisplay() => $"{this.Name} [{this.Oid}]";
     }
 
     /// <summary>

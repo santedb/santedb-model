@@ -153,7 +153,6 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector, bool forceReload = false) 
             where TSource : IIdentifiedEntity
-            where TReturn : IIdentifiedEntity
         {
             if (selector is LambdaExpression lambda)
             {

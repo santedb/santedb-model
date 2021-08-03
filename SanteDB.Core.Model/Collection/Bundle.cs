@@ -144,6 +144,7 @@ namespace SanteDB.Core.Model.Collection
         [XmlElement("resource"), JsonProperty("resource")]
         public List<IdentifiedData> Item { get; set; }
 
+
         /// <summary>
         /// Entry into the bundle
         /// </summary>
@@ -425,4 +426,6 @@ namespace SanteDB.Core.Model.Collection
         }
 
     }
+
+   
 }
