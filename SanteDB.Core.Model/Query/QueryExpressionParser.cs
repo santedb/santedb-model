@@ -766,8 +766,8 @@ namespace SanteDB.Core.Model.Query
                 }
                 else
                 {
-                    var targetType = val()?.GetType();
-                    scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), targetType);
+                    var value = val();
+                    scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), value?.GetType() ?? expectedReturn);
 
                 }
             }
