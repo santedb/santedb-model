@@ -105,5 +105,10 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(LastAuthenticationXml))]
         public DateTimeOffset? LastAuthentication { get; set; }
+
+        /// <summary>
+        /// Get the name of the object as a display string
+        /// </summary>
+        public override string ToDisplay() => $"{this.Name} [{this.Key}]";
     }
 }

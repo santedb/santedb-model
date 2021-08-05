@@ -69,5 +69,10 @@ namespace SanteDB.Core.Model.Security
             return base.SemanticEquals(obj) &&
                 this.Name == other.Name;
         }
+
+        /// <summary>
+        /// Get the name of the object as a display string
+        /// </summary>
+        public override string ToDisplay() => $"{this.Name} [{this.Key}]";
     }
 }

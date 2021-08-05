@@ -250,5 +250,11 @@ namespace SanteDB.Core.Model.Security
                 this.UserName == other.UserName &&
                 (this.UserPhoto ?? new byte[0]).HashCode().Equals((other.UserPhoto ?? new byte[0]).HashCode()) == true;
         }
+
+
+        /// <summary>
+        /// Get the name of the object as a display string
+        /// </summary>
+        public override string ToDisplay() => $"{this.UserName} [{this.Key}]";
     }
 }
