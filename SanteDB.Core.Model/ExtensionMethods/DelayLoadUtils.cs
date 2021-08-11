@@ -20,6 +20,7 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.Query;
+using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -99,6 +100,19 @@ namespace SanteDB.Core.Model
         /// <typeparam name="T"></typeparam>
         /// <param name="me"></param>
         /// <returns></returns>
-        public static T GetTargetAs<T>(this EntityRelationship me) where T : Entity => me.LoadProperty<T>(nameof(EntityRelationship.TargetEntity)); 
+        public static T GetTargetAs<T>(this EntityRelationship me) where T : Entity, new()
+        {
+            var existing= me.LoadProperty(o=>o.TargetEntity);
+            if(existing is T retVal)
+            {
+                return retVal;
+            }
+            else
+            {
+                retVal = EntitySource.Current.Get<T>(me.TargetEntityKey);
+                me.TargetEntity = retVal ?? me.TargetEntity;
+                return retVal;
+            }
+        }
     }
 }

@@ -87,6 +87,16 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Build expression for specified type
+        /// </summary>
+        public static Expression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
+        {
+            var methodInfo = typeof(QueryExpressionParser).GetGenericMethod(nameof(QueryExpressionParser.BuildLinqExpression), new Type[] { modelType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Func<Object>>), typeof(bool), typeof(bool), typeof(bool) });
+            return methodInfo.Invoke(null, new object[] { httpQueryParameters, parameterName, variables, safeNullable, forceLoad, lazyExpandVariables }) as Expression;
+        }
+
+
+        /// <summary>
         /// Buidl linq expression
         /// </summary>
         /// <typeparam name="TModelType"></typeparam>
@@ -756,8 +766,8 @@ namespace SanteDB.Core.Model.Query
                 }
                 else
                 {
-                    var targetType = val()?.GetType();
-                    scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), targetType);
+                    var value = val();
+                    scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), value?.GetType() ?? expectedReturn);
 
                 }
             }

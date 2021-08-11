@@ -45,9 +45,9 @@ namespace SanteDB.Core.Model.EntityLoader
             /// <summary>
             /// Gets the specified object
             /// </summary>
-            public TObject Get<TObject>(Guid? key, Guid? versionKey) where TObject : IdentifiedData, IVersionedEntity, new()
+            public TObject Get<TObject>(Guid? key, Guid? versionKey) where TObject : IdentifiedData, new()
             {
-                return new TObject() { Key = key, VersionKey = versionKey };
+                return new TObject() { Key = key };
             }
 
             /// <summary>

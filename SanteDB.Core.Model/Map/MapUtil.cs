@@ -136,13 +136,15 @@ namespace SanteDB.Core.Model.Map
             // The type represents a wrapper for an enumeration
             Type m_destType = destType;
 
-            String convertKey = $"{value.GetType().FullName}>{destType.FullName}";
             if (value == null)
             {
                 result = null;
                 return true;
             }
-            else if (m_nonConvertable.Contains(convertKey))
+            
+            String convertKey = $"{value.GetType().FullName}>{destType.FullName}";
+            
+            if (m_nonConvertable.Contains(convertKey))
             {
                 result = null;
                 return false;

@@ -18,33 +18,17 @@
  */
 using System;
 
-namespace SanteDB.Core.Model.Attributes
+namespace SanteDB.Core.Model.Interfaces
 {
-	/// <summary>
-	/// Binding attributes to suggest what values can be used in a property
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
-    public class BindingAttribute : Attribute
+    /// <summary>
+    /// Represents a classifiable entity
+    /// </summary>
+    public interface IHasClassConcept
     {
-	    /// <summary>
-        /// Binding attribute
-        /// </summary>
-        public BindingAttribute(Type binding)
-        {
-            this.Binding = binding;
-        }
 
         /// <summary>
-        /// Binding attribute using string AQN
+        /// Gets the class concept key
         /// </summary>
-        public BindingAttribute(String typeAqn)
-        {
-            this.Binding = Type.GetType(typeAqn);
-        }
-
-	    /// <summary>
-        /// Gets or sets the type binding
-        /// </summary>
-        public Type Binding { get; set; }
+        Guid? ClassConceptKey { get; }
     }
 }

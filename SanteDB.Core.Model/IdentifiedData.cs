@@ -19,6 +19,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections;
@@ -55,6 +56,12 @@ namespace SanteDB.Core.Model
         /// </summary>
         [XmlElement("id"), JsonProperty("id")]
         public Guid? Key { get; set; }
+
+        /// <summary>
+        /// Gets or sets the operation 
+        /// </summary>
+        [XmlAttribute("operation"), JsonProperty("operation")]
+        public BatchOperationType BatchOperation { get; set; }
 
         /// <summary>
         /// True if key should be serialized
@@ -188,20 +195,32 @@ namespace SanteDB.Core.Model
         /// </summary>
         public void RemoveAnnotation(Object annotation)
         {
-            this.m_annotations.Remove(annotation);
+            lock (this.m_lock)
+            {
+                this.m_annotations.Remove(annotation);
+            }
         }
 
         /// <summary>
         /// Get annotations of specified <typeparamref name="T"/>
         /// </summary>
-        public IEnumerable<T> GetAnnotations<T>() => this.m_annotations.OfType<T>();
+        public IEnumerable<T> GetAnnotations<T>()
+        {
+            lock (this.m_lock)
+            {
+                return this.m_annotations.ToArray().OfType<T>();
+            }
+        }
 
         /// <summary>
         /// Add an annotated object
         /// </summary>
         public void AddAnnotation(Object annotation)
         {
-            this.m_annotations.Add(annotation);
+            lock (this.m_lock)
+            {
+                this.m_annotations.Add(annotation);
+            }
         }
     }
 }

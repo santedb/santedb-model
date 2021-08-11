@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]
-    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IClassifiable, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships
+    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
 
         /// <summary>
@@ -392,7 +392,7 @@ namespace SanteDB.Core.Model.Entities
         /// Render the display of this entity
         /// </summary>
         /// <returns></returns>
-        public override string ToDisplay() => $"{this.Type} : {this.LoadCollection(o=>o.Names)?.FirstOrDefault().ToDisplay()} (K:{this.Key})";
+        public override string ToDisplay() => $"{this.Type} : {this.LoadCollection(o=>o.Names)?.FirstOrDefault()?.ToDisplay()} (K:{this.Key})";
 
         /// <summary>
         /// Get the specified tag
