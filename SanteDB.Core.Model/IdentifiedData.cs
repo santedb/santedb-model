@@ -48,6 +48,9 @@ namespace SanteDB.Core.Model
         /// </summary>
         protected List<Object> m_annotations  = new List<object>();
 
+        // Lock
+        private object m_lock = new object();
+
         // Type id
         private string m_typeId = String.Empty;
 
