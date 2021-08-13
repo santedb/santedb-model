@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Get the modification date
         /// </summary>
-        public override DateTimeOffset ModifiedOn => this.LoadProperty(o=>o.SourceEntity).ModifiedOn;
+        public override DateTimeOffset ModifiedOn => this.LoadProperty(o=>o.SourceEntity)?.ModifiedOn ?? DateTimeOffset.MinValue;
 
         /// <summary>
         /// Gets or sets the source entity's key (where the relationship is FROM)
