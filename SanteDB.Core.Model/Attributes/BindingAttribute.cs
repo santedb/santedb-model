@@ -34,6 +34,14 @@ namespace SanteDB.Core.Model.Attributes
             this.Binding = binding;
         }
 
+        /// <summary>
+        /// Binding attribute using string AQN
+        /// </summary>
+        public BindingAttribute(String typeAqn)
+        {
+            this.Binding = Type.GetType(typeAqn);
+        }
+
 	    /// <summary>
         /// Gets or sets the type binding
         /// </summary>
