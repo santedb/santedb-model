@@ -20,6 +20,7 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.Query;
+using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
 using System.Text;
