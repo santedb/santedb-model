@@ -85,6 +85,17 @@ namespace SanteDB.Core.Model
         private static ConcurrentBag<Assembly> m_skipAsm = new ConcurrentBag<Assembly>();
 
         /// <summary>
+        /// Wrapper around String.Format that allows localization strings to be called via resource name and .WithParamters
+        /// </summary>
+        /// <example>
+        /// ErrorMessages.ERR_USR_CREATE_GEN.Format(userName);
+        /// </example>
+        public static String Format(this String me, params object[] objects)
+        {
+            return String.Format(me, objects);
+        }
+
+        /// <summary>
         /// Get all types
         /// </summary>
         public static IEnumerable<Type> GetAllTypes(this AppDomain me)

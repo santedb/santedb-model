@@ -50,7 +50,6 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         IQueryResultSet Skip(int count);
 
-
         /// <summary>
         /// Get the result set as a stateful query
         /// </summary>

@@ -185,7 +185,7 @@ namespace SanteDB.Core.Model.Map.Builder
             // Iterate through the inbound properties and copy them over
             foreach (var propInfo in map.DomainType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
-                if (!propInfo.PropertyType.IsPrimitive
+                if (!propInfo.PropertyType.StripNullable().IsPrimitive
                     && propInfo.PropertyType.StripNullable() != typeof(Guid) &&
                    propInfo.PropertyType.StripGeneric() != typeof(String) &&
                    propInfo.PropertyType.StripGeneric() != typeof(DateTime) &&
@@ -208,7 +208,11 @@ namespace SanteDB.Core.Model.Map.Builder
                 // Other property
                 if (otherProp == null || !otherProp.CanWrite)
                 {
-                    continue;
+                    otherProp = map.ModelType.GetProperty(propInfo.Name);
+                    if (otherProp == null || !otherProp.CanWrite) // recheck
+                    {
+                        continue;
+                    }
                 }
 
                 // Special cases
@@ -248,7 +252,7 @@ namespace SanteDB.Core.Model.Map.Builder
             // Iterate through the inbound properties and copy them over
             foreach(var propInfo in map.DomainType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
-                if (!propInfo.PropertyType.IsPrimitive
+                if (!propInfo.PropertyType.StripNullable().IsPrimitive
                     && propInfo.PropertyType.StripNullable() != typeof(Guid) &&
                    propInfo.PropertyType.StripGeneric() != typeof(String) &&
                    propInfo.PropertyType.StripGeneric() != typeof(DateTime) &&
@@ -269,7 +273,15 @@ namespace SanteDB.Core.Model.Map.Builder
                 }
 
                 // Other property
-                if(modelProp == null || !modelProp.CanWrite || !propInfo.CanWrite)
+                if(modelProp == null || !modelProp.CanWrite )
+                {
+                    modelProp = map.ModelType.GetProperty(propInfo.Name);
+                    if (modelProp == null || !modelProp.CanWrite)
+                    {
+                        continue;
+                    }
+                }
+                else if (!propInfo.CanWrite)
                 {
                     continue;
                 }
