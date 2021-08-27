@@ -21,6 +21,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -50,6 +51,7 @@ namespace SanteDB.Core.Model.DataTypes
         public ConceptName(string name)
         {
             this.Name = name;
+            this.Language = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
         }
 
         /// <summary>

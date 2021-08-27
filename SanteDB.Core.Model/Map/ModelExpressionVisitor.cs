@@ -553,12 +553,22 @@ namespace SanteDB.Core.Model.Map
                         node = Expression.MakeMemberAccess(convertExpression.Operand, node.Member);
                 }
 
-                var retVal = this.m_mapper.MapModelMember(node, newExpression);
-                if (node.NodeType == ExpressionType.MemberAccess &&
-                    (node as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
-                    retVal = Expression.Call(retVal, typeof(String).GetRuntimeMethod(nameof(String.ToLower), new Type[0]));
+                // Special case - HasValue on a nullable
+                if (node.Expression.Type != node.Expression.Type.StripNullable() &&
+                    node.Member.Name == "HasValue")
+                {
+                    return Expression.MakeBinary(ExpressionType.NotEqual, newExpression, Expression.Constant(null));
 
-                return retVal;
+                }
+                else
+                {
+                    var retVal = this.m_mapper.MapModelMember(node, newExpression);
+                    if (node.NodeType == ExpressionType.MemberAccess &&
+                        (node as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
+                        retVal = Expression.Call(retVal, typeof(String).GetRuntimeMethod(nameof(String.ToLower), new Type[0]));
+                    return retVal;
+
+                }
             }
             return node;
         }

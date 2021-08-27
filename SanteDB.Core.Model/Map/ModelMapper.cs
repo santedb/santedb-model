@@ -227,7 +227,7 @@ namespace SanteDB.Core.Model.Map
         public Expression MapModelMember(MemberExpression memberExpression, Expression accessExpression, Type modelType = null)
         {
 
-            ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType ?? memberExpression.Expression.Type);
+            ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType ?? memberExpression.Expression.Type.StripNullable());
 
             if (classMap == null)
                 return accessExpression;
