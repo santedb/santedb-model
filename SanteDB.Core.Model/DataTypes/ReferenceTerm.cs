@@ -38,6 +38,14 @@ namespace SanteDB.Core.Model.DataTypes
     {
 
         /// <summary>
+        /// Create reference term instance 
+        /// </summary>
+        public ReferenceTerm()
+        {
+            this.DisplayNames = new List<ReferenceTermName>();
+        }
+
+        /// <summary>
         /// Gets or sets the mnemonic for the reference term
         /// </summary>
         [XmlElement("mnemonic"), JsonProperty("mnemonic")]

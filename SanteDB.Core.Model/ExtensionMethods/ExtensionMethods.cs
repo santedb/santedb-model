@@ -244,6 +244,19 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Set the necessary annotation on <paramref name="me"/> to indicate that <paramref name="propertyName"/> has
+        /// been loaded
+        /// </summary>
+        public static void SetLoadIndicator(this IIdentifiedEntity me, string propertyName)
+        {
+            var loadCheck = new PropertyLoadCheck(propertyName);
+            if(!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
+            {
+                me.AddAnnotation(loadCheck);
+            }
+        }
+
+        /// <summary>
         /// Delay load property
         /// </summary>
         public static object LoadProperty(this IIdentifiedEntity me, string propertyName, bool forceReload = false)

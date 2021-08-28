@@ -22,6 +22,7 @@ using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -50,6 +51,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <param name="name">The name.</param>
         public ReferenceTermName(string name)
         {
+            this.Language = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
             this.Name = name;
         }
 

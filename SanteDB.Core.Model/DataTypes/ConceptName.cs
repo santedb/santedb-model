@@ -34,8 +34,6 @@ namespace SanteDB.Core.Model.DataTypes
     public class ConceptName : VersionedAssociation<Concept>
     {
 
-       
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ConceptName"/> class.
         /// </summary>
