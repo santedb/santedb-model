@@ -34,6 +34,25 @@ namespace SanteDB.Core.Model.DataTypes
     {
 
         /// <summary>
+        /// Serialization default constructor
+        /// </summary>
+        public ConceptRelationship()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates a new concept relationship between the holder concept and <paramref name="targetConceptKey"/>
+        /// </summary>
+        /// <param name="relationshipType">The type of relationship the source has with the <paramref name="targetConceptKey"/></param>
+        /// <param name="targetConceptKey">The type of relationship which exists between the source and target</param>
+        public ConceptRelationship(Guid relationshipType, Guid targetConceptKey)
+        {
+            this.TargetConceptKey = targetConceptKey;
+            this.RelationshipTypeKey = relationshipType;
+        }
+
+        /// <summary>
         /// Gets or sets the target concept identifier
         /// </summary>
         [XmlElement("targetConcept"), JsonProperty("targetConcept")]

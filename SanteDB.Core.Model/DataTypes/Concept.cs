@@ -120,21 +120,21 @@ namespace SanteDB.Core.Model.DataTypes
         /// Concept sets as identifiers for XML purposes only
         /// </summary>
         [XmlElement("conceptSet"), JsonProperty("conceptSet")]
-        public List<Guid> ConceptSetsXml { get; set; }
+        public List<Guid> ConceptSetKeys { get; set; }
 
         /// <summary>
         /// Gets concept sets to which this concept is a member
         /// </summary>
-        [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(ConceptSetsXml))]
+        [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(ConceptSetKeys))]
         public IEnumerable<ConceptSet> ConceptSets
         {
             get
             {
-                return this.ConceptSetsXml?.Select(o => EntitySource.Current.Get<ConceptSet>(o)).ToList();
+                return this.ConceptSetKeys?.Select(o => EntitySource.Current.Get<ConceptSet>(o)).ToList();
             }
             set
             {
-                this.ConceptSetsXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
+                this.ConceptSetKeys = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
             }
         }
 
