@@ -46,6 +46,17 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
+        /// Creates a new reference term with the specified <paramref name="mnemonic"/> in the idicated <paramref name="codeSystemKey"/>
+        /// </summary>
+        /// <param name="mnemonic">The mnemonic of the concept reference term</param>
+        /// <param name="codeSystemKey">The code system in which the reference term belongs</param>
+        public ReferenceTerm(String mnemonic, Guid codeSystemKey)
+        {
+            this.CodeSystemKey = codeSystemKey;
+            this.Mnemonic = mnemonic;
+        }
+
+        /// <summary>
         /// Gets or sets the mnemonic for the reference term
         /// </summary>
         [XmlElement("mnemonic"), JsonProperty("mnemonic")]
