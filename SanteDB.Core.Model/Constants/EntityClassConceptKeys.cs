@@ -143,107 +143,107 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Animal
         /// </summary>
-        public static readonly Guid Animal = Guid.Parse("61FCBF42-B5E0-4FB5-9392-108A5C6DBEC7");
+        public static readonly Guid Animal = Guid.Parse(EntityClassKeyStrings.Animal);
 
         /// <summary>
         /// Chemical Substance
         /// </summary>
-        public static readonly Guid ChemicalSubstance = Guid.Parse("2E9FA332-9391-48C6-9FC8-920A750B25D3");
+        public static readonly Guid ChemicalSubstance = Guid.Parse(EntityClassKeyStrings.ChemicalSubstance);
 
         /// <summary>
         /// City or town
         /// </summary>
-        public static readonly Guid CityOrTown = Guid.Parse("79DD4F75-68E8-4722-A7F5-8BC2E08F5CD6");
+        public static readonly Guid CityOrTown = Guid.Parse(EntityClassKeyStrings.CityOrTown);
 
         /// <summary>
         /// Container
         /// </summary>
-        public static readonly Guid Container = Guid.Parse("B76FF324-B174-40B7-A6AC-D1FDF8E23967");
+        public static readonly Guid Container = Guid.Parse(EntityClassKeyStrings.Container);
 
         /// <summary>
         /// Country or nation
         /// </summary>
-        public static readonly Guid Country = Guid.Parse("48B2FFB3-07DB-47BA-AD73-FC8FB8502471");
+        public static readonly Guid Country = Guid.Parse(EntityClassKeyStrings.Country);
 
         /// <summary>
         /// County or parish
         /// </summary>
-        public static readonly Guid CountyOrParish = Guid.Parse("D9489D56-DDAC-4596-B5C6-8F41D73D8DC5");
+        public static readonly Guid CountyOrParish = Guid.Parse(EntityClassKeyStrings.CountyOrParish);
 
         /// <summary>
         /// Device
         /// </summary>
-        public static readonly Guid Device = Guid.Parse("1373FF04-A6EF-420A-B1D0-4A07465FE8E8");
+        public static readonly Guid Device = Guid.Parse(EntityClassKeyStrings.Device);
 
         /// <summary>
         /// Entity
         /// </summary>
-        public static readonly Guid Entity = Guid.Parse("E29FCFAD-EC1D-4C60-A055-039A494248AE");
+        public static readonly Guid Entity = Guid.Parse(EntityClassKeyStrings.Entity);
 
         /// <summary>
         /// Food
         /// </summary>
-        public static readonly Guid Food = Guid.Parse("E5A09CC2-5AE5-40C2-8E32-687DBA06715D");
+        public static readonly Guid Food = Guid.Parse(EntityClassKeyStrings.Food);
 
         /// <summary>
         /// Living Subject
         /// </summary>
-        public static readonly Guid LivingSubject = Guid.Parse("8BA5E5C9-693B-49D4-973C-D7010F3A23EE");
+        public static readonly Guid LivingSubject = Guid.Parse(EntityClassKeyStrings.LivingSubject);
 
         /// <summary>
         /// Manufactured material
         /// </summary>
-        public static readonly Guid ManufacturedMaterial = Guid.Parse("FAFEC286-89D5-420B-9085-054ACA9D1EEF");
+        public static readonly Guid ManufacturedMaterial = Guid.Parse(EntityClassKeyStrings.ManufacturedMaterial);
 
         /// <summary>
         /// Material
         /// </summary>
-        public static readonly Guid Material = Guid.Parse("D39073BE-0F8F-440E-B8C8-7034CC138A95");
+        public static readonly Guid Material = Guid.Parse(EntityClassKeyStrings.Material);
 
         /// <summary>
         /// Non living subject
         /// </summary>
-        public static readonly Guid NonLivingSubject = Guid.Parse("9025E5C9-693B-49D4-973C-D7010F3A23EE");
+        public static readonly Guid NonLivingSubject = Guid.Parse(EntityClassKeyStrings.NonLivingSubject);
 
         /// <summary>
         /// Organization
         /// </summary>
-        public static readonly Guid Organization = Guid.Parse("7C08BD55-4D42-49CD-92F8-6388D6C4183F");
+        public static readonly Guid Organization = Guid.Parse(EntityClassKeyStrings.Organization);
 
         /// <summary>
         /// Patient
         /// </summary>
-        public static readonly Guid Patient = Guid.Parse("BACD9C6F-3FA9-481E-9636-37457962804D");
+        public static readonly Guid Patient = Guid.Parse(EntityClassKeyStrings.Patient);
 
         /// <summary>
         /// Person
         /// </summary>
-        public static readonly Guid Person = Guid.Parse("9DE2A846-DDF2-4EBC-902E-84508C5089EA");
+        public static readonly Guid Person = Guid.Parse(EntityClassKeyStrings.Person);
 
         /// <summary>
         /// Place
         /// </summary>
-        public static readonly Guid Place = Guid.Parse("21AB7873-8EF3-4D78-9C19-4582B3C40631");
+        public static readonly Guid Place = Guid.Parse(EntityClassKeyStrings.Place);
 
         /// <summary>
         /// Service delivery location
         /// </summary>
-        public static readonly Guid Provider = Guid.Parse("6B04FED8-C164-469C-910B-F824C2BDA4F0");
+        public static readonly Guid Provider = Guid.Parse(EntityClassKeyStrings.Provider);
 
         /// <summary>
         /// Service delivery location
         /// </summary>
-        public static readonly Guid ServiceDeliveryLocation = Guid.Parse("FF34DFA7-C6D3-4F8B-BC9F-14BCDC13BA6C");
+        public static readonly Guid ServiceDeliveryLocation = Guid.Parse(EntityClassKeyStrings.ServiceDeliveryLocation);
 
         /// <summary>
         /// State
         /// </summary>
-        public static readonly Guid State = Guid.Parse("8CF4B0B0-84E5-4122-85FE-6AFA8240C218");
+        public static readonly Guid State = Guid.Parse(EntityClassKeyStrings.State);
 
         /// <summary>
         /// Represents a precinct or sub-division of a city such as a burrogh
         /// </summary>
-        public static readonly Guid PrecinctOrBorough = Guid.Parse("ACAFE0F2-E209-43BB-8633-3665FD7C90BA");
+        public static readonly Guid PrecinctOrBorough = Guid.Parse(EntityClassKeyStrings.PrecinctOrBorough);
 
     }
 }
