@@ -74,7 +74,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("concept"), JsonProperty("concept")]
         //[Bundle(nameof(Concepts))]
-        public List<Guid> ConceptsXml { get; set; }
+        public List<Guid> ConceptKeys { get; set; }
 
         /// <summary>
         /// Gets the concepts in the set
@@ -84,11 +84,11 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.ConceptsXml?.Select(o => EntitySource.Current.Get<Concept>(o) ?? new Concept() { Key = o });
+                return this.ConceptKeys?.Select(o => EntitySource.Current.Get<Concept>(o) ?? new Concept() { Key = o });
             }
             set
             {
-                this.ConceptsXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
+                this.ConceptKeys = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
             }
         }
 

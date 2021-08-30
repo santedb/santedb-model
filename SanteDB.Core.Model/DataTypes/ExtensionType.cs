@@ -97,7 +97,5 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("name"), JsonProperty("name")]
         public String Name { get; set; }
 
-
-
     }
 }
