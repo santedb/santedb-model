@@ -334,25 +334,5 @@ namespace SanteDB.Core.Model.Roles
                 this.DeceasedDatePrecision == other.DeceasedDatePrecision;
         }
 
-        /// <summary>
-        /// Add a tag to this object
-        /// </summary>
-        public void AddTag(string tagName, string tagValue)
-        {
-            if(this.Tags == null)
-            {
-                this.Tags = new List<EntityTag>();
-            }
-            var existing = this.Tags.Find(o => o.TagKey == tagName);
-            if(existing == null)
-            {
-                this.Tags.Add(new EntityTag(tagName, tagValue));
-            }
-            else
-            {
-                existing.Value = tagValue;
-            } 
-                
-        }
     }
 }

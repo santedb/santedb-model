@@ -579,7 +579,9 @@ namespace SanteDB.Core.Model.Entities
                 this.Tags.Add(tag);
             }
             else
+            {
                 tag.Value = tagValue;
+            }
             return tag;
         }
 

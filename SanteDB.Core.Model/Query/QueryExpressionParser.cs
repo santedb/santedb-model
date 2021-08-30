@@ -133,6 +133,7 @@ namespace SanteDB.Core.Model.Query
         /// <param name="variables">The variables.</param>
         /// <param name="safeNullable">if set to <c>true</c> [safe nullable].</param>
         /// <returns>Expression&lt;Func&lt;TModelType, System.Boolean&gt;&gt;.</returns>
+        /// <param name="lazyExpandVariables">When true, variables are written to be expanded on evaluation of the LINQ expression - if false then variables are realized when the conversion is done</param>
         public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables, bool safeNullable, bool lazyExpandVariables = true)
         {
 
@@ -148,6 +149,11 @@ namespace SanteDB.Core.Model.Query
         /// Build LINQ expression
         /// </summary>
         /// <param name="forceLoad">When true, will assume the object is working on memory objects and will call LoadProperty on guards</param>
+        /// <param name="httpQueryParameters">The query parameters formatter as HTTP query</param>
+        /// <param name="lazyExpandVariables">When true, variables should be expanded in the LINQ expression otherwise they are realized when conversion is done</param>
+        /// <param name="parameterName">The name of the parameter on the resulting Lambda</param>
+        /// <param name="safeNullable">When true, coalesce operations will be injected into the LINQ to ensure object in-memory collections don't throw NRE</param>
+        /// <param name="variables">A list of variables which are accessed in the LambdaExpression via $variable</param>
         public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
         {
 

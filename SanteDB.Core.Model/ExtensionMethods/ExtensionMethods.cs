@@ -402,7 +402,7 @@ namespace SanteDB.Core.Model
                 var hasConstructor = false;
                 if (newValue != null && !s_parameterlessCtor.TryGetValue(newValue.GetType(), out hasConstructor))
                 {
-                    /// HACK: Some .NET types don't like to be constructed
+                    // HACK: Some .NET types don't like to be constructed
                     try
                     {
                         Activator.CreateInstance(newValue.GetType());

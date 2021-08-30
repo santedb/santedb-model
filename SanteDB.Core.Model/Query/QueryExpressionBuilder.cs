@@ -56,6 +56,7 @@ namespace SanteDB.Core.Model.Query
             /// Initializes a new instance of the <see cref="HttpQueryExpressionVisitor"/> class.
             /// </summary>
             /// <param name="workingDictionary">The working dictionary.</param>
+            /// <param name="modelType">The type of model this visitor is using</param>
             public HttpQueryExpressionVisitor(List<KeyValuePair<String, Object>> workingDictionary, Type modelType)
             {
                 this.m_query = workingDictionary;

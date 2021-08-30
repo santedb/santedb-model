@@ -47,8 +47,15 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid SameAs = Guid.Parse("2c4dafc2-566a-41ae-9ebc-3097d7d22f4a");
 
+        /// <summary>
+        /// The source concept is narrower in meaning than the target
+        /// </summary>
+
         public static readonly Guid NarrowerThan = Guid.Parse("ae8b4f2f-009f-4e0d-b35e-5a89555c5990");
 
+        /// <summary>
+        /// The source concept is wider in meaning than the target
+        /// </summary>
         public static readonly Guid WiderThan = Guid.Parse("ae8b4f2f-009f-4e0d-b35e-5a89555c5980");
     }
 }
