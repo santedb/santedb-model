@@ -1,5 +1,7 @@
 ﻿/*
- * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
+ * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-2-9
+ * Date: 2021-8-5
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
@@ -143,6 +145,7 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         [XmlElement("resource"), JsonProperty("resource")]
         public List<IdentifiedData> Item { get; set; }
+
 
         /// <summary>
         /// Entry into the bundle
@@ -425,4 +428,6 @@ namespace SanteDB.Core.Model.Collection
         }
 
     }
+
+   
 }

@@ -1,5 +1,7 @@
 ﻿/*
- * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
+ * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-2-9
+ * Date: 2021-8-5
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -67,6 +69,7 @@ namespace SanteDB.Core.Model
             public override int GetHashCode() => this.PropertyName.GetHashCode();
 
         }
+
         // Property cache
         private static ConcurrentDictionary<String, PropertyInfo> s_propertyCache = new ConcurrentDictionary<string, PropertyInfo>();
 
@@ -78,6 +81,21 @@ namespace SanteDB.Core.Model
 
         // Enumerable types
         private static ConcurrentDictionary<Type, bool> m_enumerableTypes = new ConcurrentDictionary<Type, bool>();
+
+        // Skip assemblies
+        private static ConcurrentBag<Assembly> m_skipAsm = new ConcurrentBag<Assembly>();
+
+        /// <summary>
+        /// Get all types
+        /// </summary>
+        public static IEnumerable<Type> GetAllTypes(this AppDomain me)
+        {
+            // HACK: The weird TRY/CATCH in select many is to prevent mono from throwning a fit
+            return me.GetAssemblies()
+                .Where(a => !a.IsDynamic && !m_skipAsm.Contains(a))
+                .SelectMany(a => { try { return a.ExportedTypes; } catch { m_skipAsm.Add(a);  return new List<Type>(); } });
+
+        }
 
         /// <summary>
         /// Convert a hex string to byte array
@@ -151,9 +169,8 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
         /// </summary>
-        public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector, bool forceReload = false) 
+        public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector, bool forceReload = false)
             where TSource : IIdentifiedEntity
-            where TReturn : IIdentifiedEntity
         {
             if (selector is LambdaExpression lambda)
             {
@@ -170,7 +187,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
         /// </summary>
-        public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false) 
+        public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false)
             where TSource : IIdentifiedEntity
         {
             if (selector is LambdaExpression lambda)
@@ -201,7 +218,7 @@ namespace SanteDB.Core.Model
             {
                 return currentValue;
             }
-            else if(forceReload)
+            else if (forceReload)
             {
                 currentValue = null;
             }
@@ -311,12 +328,12 @@ namespace SanteDB.Core.Model
                             {
                                 itm.Key = null;
                                 itm.SourceEntityKey = null;
-                                
+
                                 if (itm is IVersionedAssociation va)
                                     va.EffectiveVersionSequenceId = null;
                                 itm.StripAssociatedItemSources();
                             }
-                            
+
                         }
                     else if (value is ISimpleAssociation assoc)
                     {
@@ -329,7 +346,7 @@ namespace SanteDB.Core.Model
                                 va.EffectiveVersionSequenceId = null;
                             assoc.StripAssociatedItemSources();
                         }
-                        
+
                     }
                 }
 
@@ -532,7 +549,7 @@ namespace SanteDB.Core.Model
                                         //citm.Key = null;
                                         modifyList.Add(citm);
                                     }
-                                    else if(existing is IVersionedAssociation ive)
+                                    else if (existing is IVersionedAssociation ive)
                                     {
                                         var cve = itm as IVersionedAssociation;
                                         ive.ObsoleteVersionSequenceId = cve.ObsoleteVersionSequenceId;

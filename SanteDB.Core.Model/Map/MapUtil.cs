@@ -1,5 +1,7 @@
 ﻿/*
- * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
+ * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-2-9
+ * Date: 2021-8-5
  */
 using SanteDB.Core.Model.Attributes;
 using System;
@@ -136,13 +138,15 @@ namespace SanteDB.Core.Model.Map
             // The type represents a wrapper for an enumeration
             Type m_destType = destType;
 
-            String convertKey = $"{value.GetType().FullName}>{destType.FullName}";
             if (value == null)
             {
                 result = null;
                 return true;
             }
-            else if (m_nonConvertable.Contains(convertKey))
+            
+            String convertKey = $"{value.GetType().FullName}>{destType.FullName}";
+            
+            if (m_nonConvertable.Contains(convertKey))
             {
                 result = null;
                 return false;

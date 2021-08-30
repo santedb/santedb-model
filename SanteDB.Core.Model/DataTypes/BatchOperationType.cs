@@ -18,30 +18,39 @@
  * User: fyfej
  * Date: 2021-8-5
  */
-using Newtonsoft.Json;
-using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Model.Security
+namespace SanteDB.Core.Model.DataTypes
 {
     /// <summary>
-    /// Represents a security challenge
+    /// Batch operation type
     /// </summary>
-    [XmlType("SecurityChallenge", Namespace = "http://santedb.org/model"), JsonObject("SecurityChallenge")]
-    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "SecurityChallenge")]
-    public class SecurityChallenge : NonVersionedEntityData
+    [XmlType(nameof(BatchOperationType), Namespace = "http://santedb.org/model")]
+    public enum BatchOperationType
     {
-
         /// <summary>
-        /// The text for the security challenge
+        /// Automatically decide 
         /// </summary>
-        [XmlElement("text"), JsonProperty("text")]
-        public String ChallengeText { get; set; }
+        Auto = 0,
+        /// <summary>
+        /// Insert the object only
+        /// </summary>
+        Insert = 1,
+        /// <summary>
+        /// Insert the object or update it
+        /// </summary>
+        InsertOrUpdate = 2,
+        /// <summary>
+        /// Update the object only
+        /// </summary>
+        Update = 3,
+        /// <summary>
+        /// Delete the object
+        /// </summary>
+        Obsolete = 4
 
     }
 }
