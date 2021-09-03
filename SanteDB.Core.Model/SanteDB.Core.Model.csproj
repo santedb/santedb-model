@@ -64,6 +64,10 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\bin\Release\SanteDB.Core.Model.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
   <!--<ItemGroup>
     <Compile Include="Acts\Account.cs" />
     <Compile Include="Acts\Act.cs" />
@@ -276,7 +280,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3">
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

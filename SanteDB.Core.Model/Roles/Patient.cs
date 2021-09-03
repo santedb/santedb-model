@@ -1,5 +1,7 @@
 ﻿/*
- * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
+ * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-2-9
+ * Date: 2021-8-5
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -332,25 +334,5 @@ namespace SanteDB.Core.Model.Roles
                 this.DeceasedDatePrecision == other.DeceasedDatePrecision;
         }
 
-        /// <summary>
-        /// Add a tag to this object
-        /// </summary>
-        public void AddTag(string tagName, string tagValue)
-        {
-            if(this.Tags == null)
-            {
-                this.Tags = new List<EntityTag>();
-            }
-            var existing = this.Tags.Find(o => o.TagKey == tagName);
-            if(existing == null)
-            {
-                this.Tags.Add(new EntityTag(tagName, tagValue));
-            }
-            else
-            {
-                existing.Value = tagValue;
-            } 
-                
-        }
     }
 }
