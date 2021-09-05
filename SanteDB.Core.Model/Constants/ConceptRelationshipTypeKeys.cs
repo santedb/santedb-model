@@ -1,5 +1,7 @@
 ﻿/*
- * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors (See NOTICE.md)
+ * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
+ * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -14,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-2-9
+ * Date: 2021-8-5
  */
 using System;
 
@@ -45,8 +47,15 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid SameAs = Guid.Parse("2c4dafc2-566a-41ae-9ebc-3097d7d22f4a");
 
+        /// <summary>
+        /// The source concept is narrower in meaning than the target
+        /// </summary>
+
         public static readonly Guid NarrowerThan = Guid.Parse("ae8b4f2f-009f-4e0d-b35e-5a89555c5990");
 
+        /// <summary>
+        /// The source concept is wider in meaning than the target
+        /// </summary>
         public static readonly Guid WiderThan = Guid.Parse("ae8b4f2f-009f-4e0d-b35e-5a89555c5980");
     }
 }
