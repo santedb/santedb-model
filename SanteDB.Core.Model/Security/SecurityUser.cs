@@ -210,22 +210,6 @@ namespace SanteDB.Core.Model.Security
         }
 
         /// <summary>
-        /// Gets or sets the policies for the user
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public override List<SecurityPolicyInstance> Policies
-        {
-            get
-            {
-                return this.Roles.SelectMany(o => o.Policies).ToList();
-            }
-            set
-            {
-
-            }
-        }
-
-        /// <summary>
         /// Link from this security resource to an entity resource 
         /// </summary>
         [XmlIgnore, QueryParameter("userEntity"), JsonIgnore]
@@ -244,7 +228,6 @@ namespace SanteDB.Core.Model.Security
                 this.Password == other.Password &&
                 this.PhoneNumber == other.PhoneNumber &&
                 this.PhoneNumberConfirmed == other.PhoneNumberConfirmed &&
-                this.Policies?.SemanticEquals(other.Policies) == true &&
                 this.Roles?.SemanticEquals(other.Roles) == true &&
                 this.SecurityHash == other.SecurityHash &&
                 this.TwoFactorEnabled == other.TwoFactorEnabled &&

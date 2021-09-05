@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -45,7 +46,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Policies associated with the entity
         /// </summary>
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore, Obsolete("Use IPolicyInformationService.GetPolicies", true)]
         public virtual List<SecurityPolicyInstance> Policies
         {
             get
@@ -61,17 +62,15 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Add a policy to this act
         /// </summary>
+        [Obsolete("Use IPolicyInformationService.AddPolicies", true)]
         public void AddPolicy(string policyId)
         {
-            var pol = EntitySource.Current.Provider.Query<SecurityPolicy>(o => o.Oid == policyId).SingleOrDefault();
-            if (pol == null)
-                throw new KeyNotFoundException($"Policy {policyId} not found");
-            this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
         }
 
         /// <summary>
         /// Returns true if this object has the specified policy applied
         /// </summary>
+        [Obsolete("Use IPolicyInformationService.HasPolicy", true)]
         public bool HasPolicy(string policyId)
         {
             return this.Policies.Any(o => o.Policy.Oid == policyId);

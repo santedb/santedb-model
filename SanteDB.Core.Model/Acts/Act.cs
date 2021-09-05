@@ -478,7 +478,6 @@ namespace SanteDB.Core.Model.Acts
                 this.MoodConceptKey == other.MoodConceptKey &&
                 this.Notes?.SemanticEquals(other.Notes) == true &&
                 this.Participations?.SemanticEquals(other.Participations) == true &&
-                this.Policies?.SemanticEquals(other.Policies) == true &&
                 this.Protocols?.SemanticEquals(other.Protocols) == true &&
                 this.ReasonConceptKey == other.ReasonConceptKey &&
                 this.Relationships?.SemanticEquals(other.Relationships) == true &&
@@ -578,25 +577,6 @@ namespace SanteDB.Core.Model.Acts
             retVal.Tags = new List<ActTag>(this.Tags.ToArray());
             retVal.Extensions = new List<ActExtension>(this.Extensions.ToArray());
             return retVal;
-        }
-
-        /// <summary>
-        /// Add a policy to this act
-        /// </summary>
-        public void AddPolicy(string policyId)
-        {
-            var pol = EntitySource.Current.Provider.Query<SecurityPolicy>(o => o.Oid == policyId).SingleOrDefault();
-            if (pol == null)
-                throw new KeyNotFoundException($"Policy {policyId} not found");
-            this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
-        }
-
-        /// <summary>
-        /// Determines if the object has policy
-        /// </summary>
-        public bool HasPolicy(string policyId)
-        {
-            return this.LoadCollection<SecurityPolicyInstance>(nameof(Policies)).Any(o => o.LoadProperty<SecurityPolicy>(nameof(SecurityPolicyInstance.Policy)).Oid == policyId);
         }
 
         /// <summary>

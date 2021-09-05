@@ -35,16 +35,5 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         List<SecurityPolicyInstance> Policies { get; }
 
-        /// <summary>
-        /// Add a policy to the instance
-        /// </summary>
-        void AddPolicy(String policyId);
-
-        /// <summary>
-        /// True if the object has the policy applied
-        /// </summary>
-        /// <param name="policyId"></param>
-        /// <returns></returns>
-        bool HasPolicy(String policyId);
     }
 }

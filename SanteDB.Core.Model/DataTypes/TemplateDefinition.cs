@@ -28,6 +28,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a template definition
     /// </summary>
+    /// <remarks>A template definition specifies the registerd templates for entities and acts in SanteDB like 
+    /// act templates, or entity templates</remarks>
     [KeyLookup(nameof(Mnemonic))]
     [XmlRoot(nameof(TemplateDefinition), Namespace = "http://santedb.org/model")]
     [XmlType(nameof(TemplateDefinition), Namespace = "http://santedb.org/model"), JsonObject(nameof(TemplateDefinition))]
