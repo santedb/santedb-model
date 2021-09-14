@@ -32,7 +32,7 @@ namespace SanteDB.Core.Auditing
 
         /// <remarks>Use with object type code Person</remarks>
         [XmlEnum("na")]
-        NotSpecified = 0x01,
+        NotSpecified = 0x00,
 
         /// <remarks>Use with object type code Person</remarks>
         [XmlEnum("mrn")]
