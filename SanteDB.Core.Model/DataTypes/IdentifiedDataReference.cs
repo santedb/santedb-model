@@ -23,7 +23,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Get the type identifier
         /// </summary>
-        [DataIgnore, XmlIgnore, JsonProperty("$type")]
+        [XmlIgnore, JsonProperty("$type")]
         public override string Type { get => "Reference"; set { } }
 
         /// <summary>
