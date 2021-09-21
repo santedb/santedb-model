@@ -19,7 +19,6 @@
  * Date: 2021-8-5
  */
 using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.Collection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,25 +28,25 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Serialization
 {
-	/// <summary>
-	/// Serializer factory
-	/// </summary>
-	/// <remarks>Properly constructs a serializer based on all registered types</remarks>
-	public class XmlModelSerializerFactory
+    /// <summary>
+    /// Serializer factory
+    /// </summary>
+    /// <remarks>Properly constructs a serializer based on all registered types</remarks>
+    public class XmlModelSerializerFactory
     {
-	    // Current instance
-	    private static XmlModelSerializerFactory m_current;
+        // Current instance
+        private static XmlModelSerializerFactory m_current;
 
-	    // Lock
-	    private static readonly object m_lock = new object();
+        // Lock
+        private static readonly object m_lock = new object();
 
-	    // Get serializer keys for a registered type
-	    private readonly Dictionary<Type, string> m_serializerKeys = new Dictionary<Type, string>();
+        // Get serializer keys for a registered type
+        private readonly Dictionary<Type, string> m_serializerKeys = new Dictionary<Type, string>();
 
-	    // Cache of created serializers
-	    private readonly Dictionary<string, XmlSerializer> m_serializers  = new Dictionary<string, XmlSerializer>();
+        // Cache of created serializers
+        private readonly Dictionary<string, XmlSerializer> m_serializers = new Dictionary<string, XmlSerializer>();
 
-	    /// <summary>
+        /// <summary>
         /// Private ctor
         /// </summary>
         private XmlModelSerializerFactory()
@@ -55,7 +54,7 @@ namespace SanteDB.Core.Model.Serialization
 
         }
 
-	    /// <summary>
+        /// <summary>
         /// Gets the current instance of the serializer factory
         /// </summary>
         public static XmlModelSerializerFactory Current
@@ -64,20 +63,20 @@ namespace SanteDB.Core.Model.Serialization
             {
                 if (m_current == null)
                 {
-	                lock (m_lock)
-	                {
-		                if (m_current == null)
-		                {
-			                m_current = new XmlModelSerializerFactory();
-		                }
-	                }
+                    lock (m_lock)
+                    {
+                        if (m_current == null)
+                        {
+                            m_current = new XmlModelSerializerFactory();
+                        }
+                    }
                 }
 
                 return m_current;
             }
         }
 
-	    /// <summary>
+        /// <summary>
         /// Creates a new Xml Serializer to grabs an existing one (although .NET already caches this constructor)
         /// </summary>
         /// <param name="type">The primary type of the serializer</param>
@@ -92,25 +91,26 @@ namespace SanteDB.Core.Model.Serialization
                 key = type.AssemblyQualifiedName;
                 if (extraTypes != null)
                 {
-	                key += string.Join(";", extraTypes.Select(o => o.AssemblyQualifiedName));
+                    key += string.Join(";", extraTypes.Select(o => o.AssemblyQualifiedName));
                 }
             }
 
             // Exists?
             if (!this.m_serializers.TryGetValue(key, out var serializer))
             {
-                lock (m_lock) {
+                lock (m_lock)
+                {
                     if (!this.m_serializers.ContainsKey(key)) // Ensure that hasn't been generated since lock was acquired 
                     {
-                        if(type.GetCustomAttribute<ResourceCollectionAttribute>() != null && extraTypes.Length == 0)
+                        if (type.GetCustomAttribute<ResourceCollectionAttribute>() != null && extraTypes.Length == 0)
                         {
-	                        extraTypes = typeof(XmlModelSerializerFactory)
-		                        
-		                        .Assembly
-		                        .ExportedTypes
+                            extraTypes = typeof(XmlModelSerializerFactory)
+
+                                .Assembly
+                                .ExportedTypes
                                 .Where(t => typeof(IdentifiedData).IsAssignableFrom(t) && !t.IsGenericTypeDefinition && !t.IsAbstract)
                                 .Union(ModelSerializationBinder.GetRegisteredTypes())
-		                        .ToArray();
+                                .ToArray();
                         }
 
                         serializer = new XmlSerializer(type, extraTypes);
@@ -120,11 +120,11 @@ namespace SanteDB.Core.Model.Serialization
                         if (this.m_serializerKeys.TryGetValue(type, out var existingKey) &&
                             existingKey.Length < key.Length) // This one has more data than the existing
                         {
-	                        this.m_serializerKeys[type] = key;
+                            this.m_serializerKeys[type] = key;
                         }
-                        else if(existingKey == null)
+                        else if (existingKey == null)
                         {
-	                        this.m_serializerKeys.Add(type, key); // Link the key 
+                            this.m_serializerKeys.Add(type, key); // Link the key 
                         }
                     }
                 }
@@ -133,7 +133,7 @@ namespace SanteDB.Core.Model.Serialization
 
         }
 
-	    /// <summary>
+        /// <summary>
         /// Gets a serializer which can read the specified body
         /// </summary>
         public XmlSerializer GetSerializer(XmlReader bodyReader)
@@ -142,6 +142,18 @@ namespace SanteDB.Core.Model.Serialization
             if (retVal == null)
             {
                 var type = new ModelSerializationBinder().BindToType(String.Empty, bodyReader.LocalName);
+                if (type == null) // Couldn't find type so attempt to do a deep resolution
+                {
+                    var candidates = AppDomain.CurrentDomain.GetAllTypes().Where(x => x.GetCustomAttribute<XmlRootAttribute>() != null)
+                        .Select(o => new { X = o.GetCustomAttribute<XmlRootAttribute>(), T = o })
+                        .Where(x => x.X.Namespace == bodyReader.NamespaceURI && x.X.ElementName == bodyReader.LocalName);
+                    if (!candidates.Any() || candidates.Count() > 1)
+                    {
+                        throw new InvalidOperationException($"{bodyReader.NamespaceURI}#{bodyReader.LocalName} is not understood or is ambiguous - are you missing a plugin?");
+                    }
+                    type = candidates.Single().T;
+                    ModelSerializationBinder.RegisterModelType(type);
+                }
                 return this.CreateSerializer(type);
             }
             return retVal;

@@ -20,9 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.Constants;
 using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -35,7 +33,7 @@ namespace SanteDB.Core.Model.DataTypes
     public class ConceptName : VersionedAssociation<Concept>
     {
 
-       
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConceptName"/> class.
@@ -77,7 +75,7 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("value"), JsonProperty("value")]
         public String Name { get; set; }
 
-       
+
         /// <summary>
         /// Represent as a string
         /// </summary>

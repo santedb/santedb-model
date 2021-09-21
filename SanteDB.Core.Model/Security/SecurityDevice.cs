@@ -68,7 +68,7 @@ namespace SanteDB.Core.Model.Security
                 else this.Lockout = default(DateTimeOffset);
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the lockout
         /// </summary>

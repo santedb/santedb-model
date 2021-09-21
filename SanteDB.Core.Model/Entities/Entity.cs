@@ -507,22 +507,22 @@ namespace SanteDB.Core.Model.Entities
         public bool ShouldSerializeTelecoms() => this.Telecoms?.Count > 0;
 
         [XmlIgnore, JsonIgnore]
-        IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection(o=>o.Tags).OfType<ITag>(); } }
+        IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection(o => o.Tags).OfType<ITag>(); } }
 
         [XmlIgnore, JsonIgnore]
-        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection(o=>o.Extensions).OfType<IModelExtension>(); } }
+        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection(o => o.Extensions).OfType<IModelExtension>(); } }
 
         /// <summary>
         /// Has identifiers
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        IEnumerable<IExternalIdentifier> IHasIdentifiers.Identifiers => this.LoadCollection(o=>o.Identifiers);
+        IEnumerable<IExternalIdentifier> IHasIdentifiers.Identifiers => this.LoadCollection(o => o.Identifiers);
 
         /// <summary>
         /// Relationships
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        IEnumerable<ITargetedAssociation> IHasRelationships.Relationships => this.LoadCollection(o=>o.Relationships);
+        IEnumerable<ITargetedAssociation> IHasRelationships.Relationships => this.LoadCollection(o => o.Relationships);
 
         /// <summary>
         /// Copies the entity
@@ -572,7 +572,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
         {
-            var tag = this.LoadCollection(o=>o.Tags).FirstOrDefault(o => o.TagKey == tagKey);
+            var tag = this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey);
             if (tag == null)
             {
                 tag = new EntityTag(tagKey, tagValue);
@@ -592,7 +592,7 @@ namespace SanteDB.Core.Model.Entities
         {
             this.Extensions.RemoveAll(o => o.ExtensionTypeKey == extensionTypeKey);
         }
-        
+
         /// <summary>
         /// Add an extension to this entity
         /// </summary>
@@ -606,12 +606,12 @@ namespace SanteDB.Core.Model.Entities
         /// Render the display of this entity
         /// </summary>
         /// <returns></returns>
-        public override string ToDisplay() => $"{this.Type} : {this.LoadCollection(o=>o.Names)?.FirstOrDefault()?.ToDisplay()} (K:{this.Key})";
+        public override string ToDisplay() => $"{this.Type} : {this.LoadCollection(o => o.Names)?.FirstOrDefault()?.ToDisplay()} (K:{this.Key})";
 
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => this.LoadCollection(o=>o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
 
         /// <summary>
         /// Remove the specified <paramref name="tagKey"/> from this objects tags

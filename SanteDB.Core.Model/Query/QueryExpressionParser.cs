@@ -19,6 +19,7 @@
  * Date: 2021-8-5
  */
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
 using System;
 using System.Collections;
@@ -27,9 +28,8 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Xml.Serialization;
-using SanteDB.Core.Model.Interfaces;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -327,18 +327,18 @@ namespace SanteDB.Core.Model.Query
                         PropertyInfo classifierProperty = itemType.GetRuntimeProperty(classAttr.ClassifierProperty);
                         Expression guardExpression = null;
 
-                        
+
                         if (guard.Split('|').All(o => Guid.TryParse(o, out Guid _))) // TODO: Refactor this (and the entire class)
                         {
                             if (!String.IsNullOrEmpty(classAttr.ClassifierKeyProperty)) // attempt to get via classifier key
                                 classifierProperty = itemType.GetRuntimeProperty(classAttr.ClassifierKeyProperty);
-                            else 
+                            else
                                 classifierProperty = classifierProperty.GetSerializationRedirectProperty();
 
-                            if(classifierProperty == null)
+                            if (classifierProperty == null)
                                 throw new ArgumentOutOfRangeException("Cannot use UUID filter for Guard on this context");
 
-                            foreach(var g in guard.Split('|'))
+                            foreach (var g in guard.Split('|'))
                             {
                                 var expr = Expression.MakeBinary(ExpressionType.Equal, Expression.MakeMemberAccess(guardParameter, classifierProperty), Expression.Convert(Expression.Constant(Guid.Parse(g)), classifierProperty.PropertyType));
                                 if (guardExpression == null)
@@ -367,7 +367,7 @@ namespace SanteDB.Core.Model.Query
                                 {
                                     if (forceLoad)
                                     {
-                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String) , typeof(bool) });
+                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
                                         var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false));
                                         guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
                                     }

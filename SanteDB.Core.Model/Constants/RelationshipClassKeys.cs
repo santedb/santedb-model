@@ -51,7 +51,7 @@ namespace SanteDB.Core.Model.Constants
     /// </summary>
     public static class RelationshipClassKeys
     {
-       
+
         /// <summary>
         /// The target is referenced by the holder however the target exists as an independent object
         /// </summary>

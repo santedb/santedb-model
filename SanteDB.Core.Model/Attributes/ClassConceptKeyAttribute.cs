@@ -22,13 +22,13 @@ using System;
 
 namespace SanteDB.Core.Model.Attributes
 {
-	/// <summary>
-	/// Maps a class concept key to this type
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    /// <summary>
+    /// Maps a class concept key to this type
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ClassConceptKeyAttribute : Attribute
     {
-	    /// <summary>
+        /// <summary>
         /// Creates a new class concept key attribute
         /// </summary>
         public ClassConceptKeyAttribute(string classConceptGuid)
@@ -36,7 +36,7 @@ namespace SanteDB.Core.Model.Attributes
             this.ClassConcept = classConceptGuid;
         }
 
-	    /// <summary>
+        /// <summary>
         /// Gets or set teh class concept key
         /// </summary>
         public string ClassConcept { get; set; }

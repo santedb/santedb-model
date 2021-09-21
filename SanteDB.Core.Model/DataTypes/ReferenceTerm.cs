@@ -110,7 +110,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Get display name for the reference term
         /// </summary>
-        public string GetDisplayName(String language= null)
+        public string GetDisplayName(String language = null)
         {
             language = language ?? System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
             return this.LoadCollection(o => o.DisplayNames).FirstOrDefault(o => language.Equals(o.Language, StringComparison.OrdinalIgnoreCase))?.Name;

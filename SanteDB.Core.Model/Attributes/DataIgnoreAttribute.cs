@@ -22,11 +22,11 @@ using System;
 
 namespace SanteDB.Core.Model.Attributes
 {
-	/// <summary>
-	/// Identifies that a property containins no meaningful data 
-	/// and is provided only for serialization
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// Identifies that a property containins no meaningful data 
+    /// and is provided only for serialization
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public class DataIgnoreAttribute : Attribute
-    {}
+    { }
 }

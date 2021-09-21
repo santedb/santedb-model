@@ -27,36 +27,36 @@ namespace SanteDB.Core.Auditing
     /// Represents types of actions
     /// </summary>
     [XmlType(nameof(ActionType), Namespace = "http://santedb.org/audit"), Flags]
-	public enum ActionType
-	{
-		/// <summary>
-		/// Data was created in the system
-		/// </summary>
-		[XmlEnum("c")]
-		Create = 0x01,
+    public enum ActionType
+    {
+        /// <summary>
+        /// Data was created in the system
+        /// </summary>
+        [XmlEnum("c")]
+        Create = 0x01,
 
-		/// <summary>
-		/// Data was viewed, printed, displayed, etc...
-		/// </summary>
-		[XmlEnum("r")]
-		Read = 0x02,
+        /// <summary>
+        /// Data was viewed, printed, displayed, etc...
+        /// </summary>
+        [XmlEnum("r")]
+        Read = 0x02,
 
-		/// <summary>
-		/// Data was revised in the system
-		/// </summary>
-		[XmlEnum("u")]
-		Update = 0x04,
+        /// <summary>
+        /// Data was revised in the system
+        /// </summary>
+        [XmlEnum("u")]
+        Update = 0x04,
 
-		/// <summary>
-		/// Data was removed from the system
-		/// </summary>
-		[XmlEnum("d")]
-		Delete = 0x08,
+        /// <summary>
+        /// Data was removed from the system
+        /// </summary>
+        [XmlEnum("d")]
+        Delete = 0x08,
 
-		/// <summary>
-		/// A system, or application function was performed
-		/// </summary>
-		[XmlEnum("x")]
-		Execute = 0x10
-	}
+        /// <summary>
+        /// A system, or application function was performed
+        /// </summary>
+        [XmlEnum("x")]
+        Execute = 0x10
+    }
 }

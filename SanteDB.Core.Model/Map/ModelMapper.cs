@@ -19,7 +19,6 @@
  * Date: 2021-8-5
  */
 using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections;
@@ -92,7 +91,7 @@ namespace SanteDB.Core.Model.Map
             typeof(UInt32?),
             typeof(byte[])
         };
-        
+
         private static Dictionary<Type, Dictionary<String, PropertyInfo[]>> s_modelPropertyCache = new Dictionary<Type, Dictionary<String, PropertyInfo[]>>();
 
         private static Dictionary<Type, String> m_domainClassPropertyName = new Dictionary<Type, string>();
@@ -223,7 +222,7 @@ namespace SanteDB.Core.Model.Map
                             break;
                         viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
 
-                        if (via.OrderBy != null && viaExpression.Type.FindInterfaces((o,_)=>o == typeof(IEnumerable),null).Length > 0)
+                        if (via.OrderBy != null && viaExpression.Type.FindInterfaces((o, _) => o == typeof(IEnumerable), null).Length > 0)
                             viaExpression = viaExpression.Sort(via.OrderBy, via.SortOrder);
                         if (via.Aggregate != AggregationFunctionType.None)
                             viaExpression = viaExpression.Aggregate(via.Aggregate);
@@ -513,7 +512,7 @@ namespace SanteDB.Core.Model.Map
                 while (cType != null && classMap == null || !tDomain.IsAssignableFrom(Type.GetType(classMap.DomainClass)))
                 {
                     cType = cType.BaseType;
-                    if(cType != null)
+                    if (cType != null)
                         classMap = this.m_mapFile.GetModelClassMap(cType);
                 } // work up the tree
             }

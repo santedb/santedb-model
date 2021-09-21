@@ -114,7 +114,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// </summary>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("IdentifierBase")]
     [Classifier(nameof(AuthorityXml), nameof(AuthorityKey))]
-    public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier  where TBoundModel : VersionedEntityData<TBoundModel>, new()
+    public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
 
         // Identifier id
@@ -193,7 +193,7 @@ namespace SanteDB.Core.Model.DataTypes
 
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the expiration date of the identifier
         /// </summary>
@@ -277,7 +277,7 @@ namespace SanteDB.Core.Model.DataTypes
                 this.m_authority = value;
                 this.m_authorityId = value?.Key;
 
-                if(String.IsNullOrEmpty(this.m_authority?.DomainName) && this.m_authorityId.HasValue) // no domain - load
+                if (String.IsNullOrEmpty(this.m_authority?.DomainName) && this.m_authorityId.HasValue) // no domain - load
                     this.m_authority = EntitySource.Current.Get<AssigningAuthority>(this.m_authorityId); // base.DelayLoad(this.m_authorityId, this.m_authority);
 
             }
