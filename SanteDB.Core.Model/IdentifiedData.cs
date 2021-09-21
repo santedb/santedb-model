@@ -103,6 +103,11 @@ namespace SanteDB.Core.Model
         public BatchOperationType BatchOperation { get; set; }
 
         /// <summary>
+        /// Should serialize batch operation
+        /// </summary>
+        public bool ShouldSerializeBatchOperation() => this.BatchOperation != BatchOperationType.Auto;
+
+        /// <summary>
         /// True if key should be serialized
         /// </summary>
         /// <returns></returns>
