@@ -25,7 +25,6 @@ using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -64,7 +63,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// A list of custom tags which were added to this object
         /// </summary>
-        protected List<Object> m_annotations  = new List<object>();
+        protected List<Object> m_annotations = new List<object>();
 
         // Lock
         private object m_lock = new object();
@@ -207,10 +206,10 @@ namespace SanteDB.Core.Model
             retVal.m_annotations = new List<object>();
 
             // Re-initialize all arrays
-            foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 var thisValue = pi.GetValue(this);
-                if (thisValue is IList listValue && listValue.Count > 0 && 
+                if (thisValue is IList listValue && listValue.Count > 0 &&
                     pi.PropertyType.GetConstructor(new Type[] { thisValue.GetType() }) != null)
                 {
                     pi.SetValue(retVal, Activator.CreateInstance(pi.PropertyType, pi.GetValue(this)));

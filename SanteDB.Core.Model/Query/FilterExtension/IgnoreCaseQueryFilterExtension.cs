@@ -19,10 +19,8 @@
  * Date: 2021-8-5
  */
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 
 namespace SanteDB.Core.Model.Query.FilterExtension
 {
@@ -47,7 +45,7 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         /// </summary>
         public BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms)
         {
-            if(scope is MethodCallExpression callExpression) // We're calling a method so use the internal argument
+            if (scope is MethodCallExpression callExpression) // We're calling a method so use the internal argument
             {
                 return Expression.MakeBinary(comparison, Expression.Call(
                     Expression.Call(callExpression.Object, this.ExtensionMethod),
@@ -55,7 +53,7 @@ namespace SanteDB.Core.Model.Query.FilterExtension
                     Expression.Call(callExpression.Arguments[0], this.ExtensionMethod)
                 ), Expression.Constant(true));
             }
-            else 
+            else
                 return Expression.MakeBinary(comparison,
                     Expression.Call(scope, this.ExtensionMethod), Expression.Call(valueExpression, this.ExtensionMethod));
         }

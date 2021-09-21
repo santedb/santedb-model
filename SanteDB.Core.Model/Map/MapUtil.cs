@@ -143,9 +143,9 @@ namespace SanteDB.Core.Model.Map
                 result = null;
                 return true;
             }
-            
+
             String convertKey = $"{value.GetType().FullName}>{destType.FullName}";
-            
+
             if (m_nonConvertable.Contains(convertKey))
             {
                 result = null;

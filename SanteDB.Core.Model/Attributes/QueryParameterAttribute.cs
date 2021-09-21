@@ -27,7 +27,7 @@ namespace SanteDB.Core.Model.Attributes
     /// </summary>
     public class QueryParameterAttribute : Attribute
     {
-	    /// <summary>
+        /// <summary>
         /// Creates a new query parameter attribute
         /// </summary>
         public QueryParameterAttribute(string parameterName)
@@ -35,7 +35,7 @@ namespace SanteDB.Core.Model.Attributes
             this.ParameterName = parameterName;
         }
 
-	    /// <summary>
+        /// <summary>
         /// Gets or sets the name of the parameter
         /// </summary>
         public string ParameterName { get; set; }

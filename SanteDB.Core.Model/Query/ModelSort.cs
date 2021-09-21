@@ -18,14 +18,9 @@
  * User: fyfej
  * Date: 2021-8-5
  */
-using SanteDB.Core.Model;
 using SanteDB.Core.Model.Map;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SanteDB.Core.Model.Query
 {

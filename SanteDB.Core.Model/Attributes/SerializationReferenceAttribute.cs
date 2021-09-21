@@ -30,7 +30,7 @@ namespace SanteDB.Core.Model.Attributes
     [AttributeUsage(AttributeTargets.Property)]
     public class SerializationReferenceAttribute : Attribute
     {
-	    /// <summary>
+        /// <summary>
         /// The redirection attribute
         /// </summary>
         public SerializationReferenceAttribute(string redirectProperty)
@@ -38,12 +38,12 @@ namespace SanteDB.Core.Model.Attributes
             this.RedirectProperty = redirectProperty;
         }
 
-	    /// <summary>
+        /// <summary>
         /// Identifies where the serialization information can be found
         /// </summary>
         public string RedirectProperty { get; set; }
 
-	    /// <summary>
+        /// <summary>
         /// Get property from the type
         /// </summary>
         public PropertyInfo GetProperty(Type hostType)

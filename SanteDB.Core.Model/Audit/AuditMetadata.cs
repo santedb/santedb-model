@@ -113,7 +113,7 @@ namespace SanteDB.Core.Auditing
     [XmlType(nameof(AuditMetadata), Namespace = "http://santedb.org/audit")]
     [JsonObject(nameof(AuditMetadata))]
     [Classifier(nameof(Key))]
-    public class AuditMetadata 
+    public class AuditMetadata
     {
 
         /// <summary>

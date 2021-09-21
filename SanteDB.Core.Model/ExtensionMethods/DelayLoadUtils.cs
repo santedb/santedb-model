@@ -22,9 +22,7 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Model
 {
@@ -64,7 +62,7 @@ namespace SanteDB.Core.Model
         /// Gets or loads identifiers
         /// </summary>
         public static IEnumerable<EntityIdentifier> GetIdentifiers(this Entity me) => me.LoadCollection<EntityIdentifier>(nameof(Entity.Identifiers));
-        
+
         /// <summary>
         /// Gets or loads notes
         /// </summary>
@@ -89,7 +87,7 @@ namespace SanteDB.Core.Model
         /// Gets or loads relationships
         /// </summary>
         public static IEnumerable<ActRelationship> GetRelationships(this Act me) => me.LoadCollection<ActRelationship>(nameof(Act.Relationships));
-        
+
         /// <summary>
         /// Gets or loads participations
         /// </summary>
@@ -103,8 +101,8 @@ namespace SanteDB.Core.Model
         /// <returns></returns>
         public static T GetTargetAs<T>(this EntityRelationship me) where T : Entity, new()
         {
-            var existing= me.LoadProperty(o=>o.TargetEntity);
-            if(existing is T retVal)
+            var existing = me.LoadProperty(o => o.TargetEntity);
+            if (existing is T retVal)
             {
                 return retVal;
             }

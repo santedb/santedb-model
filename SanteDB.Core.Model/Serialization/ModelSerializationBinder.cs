@@ -27,17 +27,17 @@ using System.Reflection;
 
 namespace SanteDB.Core.Model.Serialization
 {
-	/// <summary>
-	/// Model binding 
-	/// </summary>
-	public class ModelSerializationBinder : ISerializationBinder
+    /// <summary>
+    /// Model binding 
+    /// </summary>
+    public class ModelSerializationBinder : ISerializationBinder
     {
-	    private static readonly object s_lock = new object();
+        private static readonly object s_lock = new object();
 
-	    private static readonly Dictionary<string, Type> s_typeCache = new Dictionary<string, Type>();
-	    private readonly Type m_hintType;
+        private static readonly Dictionary<string, Type> s_typeCache = new Dictionary<string, Type>();
+        private readonly Type m_hintType;
 
-	    /// <summary>
+        /// <summary>
         /// Create a new model serialization binder
         /// </summary>
         public ModelSerializationBinder()
@@ -45,7 +45,7 @@ namespace SanteDB.Core.Model.Serialization
 
         }
 
-	    /// <summary>
+        /// <summary>
         /// Model serialization binding with hint
         /// </summary>
         /// <param name="hintType"></param>
@@ -54,7 +54,7 @@ namespace SanteDB.Core.Model.Serialization
             this.m_hintType = hintType;
         }
 
-	    /// <summary>
+        /// <summary>
         /// Bind the type to a name
         /// </summary>
         public void BindToName(Type serializedType, out string assemblyName, out string typeName)
@@ -63,14 +63,14 @@ namespace SanteDB.Core.Model.Serialization
             typeName = s_typeCache.FirstOrDefault(o => o.Value == serializedType).Key;
             if (typeName == null)
             {
-	            typeName = serializedType.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
+                typeName = serializedType.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
             }
 
             assemblyName = null;
 
         }
 
-	    /// <summary>
+        /// <summary>
         /// Bind to type
         /// </summary>
         public Type BindToType(string assemblyName, string typeName)
@@ -79,14 +79,14 @@ namespace SanteDB.Core.Model.Serialization
             var asm = typeof(ModelSerializationBinder).Assembly;
             if (!string.IsNullOrEmpty(assemblyName))
             {
-	            asm = Assembly.Load(new AssemblyName(assemblyName));
+                asm = Assembly.Load(new AssemblyName(assemblyName));
             }
             else if (this.m_hintType != null) // use hint type
             {
                 asm = this.m_hintType.Assembly;
                 if (this.m_hintType.GetCustomAttribute<JsonObjectAttribute>()?.Id == typeName)
                 {
-	                return this.m_hintType;
+                    return this.m_hintType;
                 }
             }
 
@@ -94,36 +94,36 @@ namespace SanteDB.Core.Model.Serialization
             Type type = null;
             if (!s_typeCache.TryGetValue(typeName, out type))
             {
-	            lock (s_lock)
-	            {
-		            type = asm.ExportedTypes.SingleOrDefault(
-			            t => t.GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
-		            );
-		            if (!s_typeCache.ContainsKey(typeName) && type != null)
-		            {
-			            s_typeCache.Add(typeName, type);
-		            }
-	            }
+                lock (s_lock)
+                {
+                    type = asm.ExportedTypes.SingleOrDefault(
+                        t => t.GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
+                    );
+                    if (!s_typeCache.ContainsKey(typeName) && type != null)
+                    {
+                        s_typeCache.Add(typeName, type);
+                    }
+                }
             }
 
             if (type == null)
             {
-	            type = asm.GetType(typeName);
+                type = asm.GetType(typeName);
             }
 
             return type ?? null;
         }
 
 
-	    /// <summary>
+        /// <summary>
         /// Gets all registered types
         /// </summary>
         public static IEnumerable<Type> GetRegisteredTypes()
-	    {
-		    return s_typeCache.Values;
-	    }
+        {
+            return s_typeCache.Values;
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Register the model type
         /// </summary>
         public static void RegisterModelType(Type type)
@@ -131,10 +131,10 @@ namespace SanteDB.Core.Model.Serialization
             var typeName = type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.Name;
             if (!s_typeCache.ContainsKey(typeName))
             {
-	            lock (s_lock)
-	            {
-		            s_typeCache.Add(typeName, type);
-	            }
+                lock (s_lock)
+                {
+                    s_typeCache.Add(typeName, type);
+                }
             }
 
             //else
@@ -142,17 +142,17 @@ namespace SanteDB.Core.Model.Serialization
         }
 
 
-	    /// <summary>
+        /// <summary>
         /// Register the model type
         /// </summary>
         public static void RegisterModelType(string typeName, Type type)
         {
             if (!s_typeCache.ContainsKey(typeName))
             {
-	            lock (s_lock)
-	            {
-		            s_typeCache.Add(typeName, type);
-	            }
+                lock (s_lock)
+                {
+                    s_typeCache.Add(typeName, type);
+                }
             }
 
             //else

@@ -382,10 +382,10 @@ namespace SanteDB.Core.Model.Map
                 return null;
 
             // Does the left have ToLower() and the right not?
-            if(left.NodeType == ExpressionType.Call && node.Left.NodeType == ExpressionType.MemberAccess &&
+            if (left.NodeType == ExpressionType.Call && node.Left.NodeType == ExpressionType.MemberAccess &&
                     (node.Left as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
-                    right = Expression.Call(right, (left as MethodCallExpression).Method);
-            else if(right.NodeType == ExpressionType.Call && node.Right.NodeType == ExpressionType.MemberAccess &&
+                right = Expression.Call(right, (left as MethodCallExpression).Method);
+            else if (right.NodeType == ExpressionType.Call && node.Right.NodeType == ExpressionType.MemberAccess &&
                     (node.Right as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
                 left = Expression.Call(left, (right as MethodCallExpression).Method);
 
@@ -435,7 +435,7 @@ namespace SanteDB.Core.Model.Map
 
                             break;
                         case ExpressionType.Constant:
-                            if(right is ConstantExpression ce)
+                            if (right is ConstantExpression ce)
                             {
                                 if (ce.Value is Guid uuid)
                                     right = Expression.Constant(uuid.ToByteArray());

@@ -20,10 +20,8 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Interfaces;
 using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -36,7 +34,7 @@ namespace SanteDB.Core.Model.DataTypes
     public class ReferenceTermName : BaseEntityData, ISimpleAssociation
     {
 
-      
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReferenceTermName"/> class.

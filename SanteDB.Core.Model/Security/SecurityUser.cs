@@ -163,7 +163,7 @@ namespace SanteDB.Core.Model.Security
                     else
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
                 }
-                else this.PasswordExpiration = null ;
+                else this.PasswordExpiration = null;
             }
         }
 
@@ -172,7 +172,7 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlIgnore, JsonIgnore, QueryParameter("roles")]
         public List<SecurityRole> Roles { get; set; }
-       
+
         /// <summary>
         /// Gets or sets the patient's phone number
         /// </summary>

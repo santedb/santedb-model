@@ -25,7 +25,6 @@ using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.Roles;
 using SanteDB.Core.Model.Security;
-using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -34,7 +33,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Collection
@@ -429,5 +427,5 @@ namespace SanteDB.Core.Model.Collection
 
     }
 
-   
+
 }

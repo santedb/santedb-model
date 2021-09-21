@@ -150,9 +150,10 @@ namespace SanteDB.Core.Model.Query
         public System.Collections.Specialized.NameValueCollection ToNameValueCollection()
         {
             var retVal = new System.Collections.Specialized.NameValueCollection();
-            foreach(var itm in this)
+            foreach (var itm in this)
             {
-                foreach (var val in itm.Value) {
+                foreach (var val in itm.Value)
+                {
                     retVal.Add(itm.Key, val);
                 }
             }

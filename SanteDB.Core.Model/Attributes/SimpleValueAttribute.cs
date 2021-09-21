@@ -28,7 +28,7 @@ namespace SanteDB.Core.Model.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class SimpleValueAttribute : Attribute
     {
-	    /// <summary>
+        /// <summary>
         /// Classifier attribute property
         /// </summary>
         /// <param name="valueProperty"></param>
@@ -37,7 +37,7 @@ namespace SanteDB.Core.Model.Attributes
             this.ValueProperty = valueProperty;
         }
 
-	    /// <summary>
+        /// <summary>
         /// Gets or sets the classifier property
         /// </summary>
         public string ValueProperty { get; set; }

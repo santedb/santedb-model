@@ -49,7 +49,7 @@ namespace SanteDB.Core.Model.Attributes
             this.ClassifierKeyProperty = keyProperty;
         }
 
-	    /// <summary>
+        /// <summary>
         /// Gets or sets the classifier property
         /// </summary>
         public string ClassifierProperty { get; set; }

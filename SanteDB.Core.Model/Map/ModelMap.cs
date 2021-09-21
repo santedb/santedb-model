@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map
@@ -108,7 +107,7 @@ namespace SanteDB.Core.Model.Map
                         if (!this.m_classCache.ContainsKey(key))
                             this.m_classCache.Add(key, retVal);
             }
-          
+
             return retVal;
         }
     }
