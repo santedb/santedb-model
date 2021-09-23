@@ -169,6 +169,6 @@ namespace SanteDB.Core.Model.Security
                 this.ApplicationKey = value?.Key;
             }
         }
-        
+
     }
 }

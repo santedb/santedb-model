@@ -93,7 +93,7 @@ namespace SanteDB.Core.Model
             // HACK: The weird TRY/CATCH in select many is to prevent mono from throwning a fit
             return me.GetAssemblies()
                 .Where(a => !a.IsDynamic && !m_skipAsm.Contains(a))
-                .SelectMany(a => { try { return a.ExportedTypes; } catch { m_skipAsm.Add(a);  return new List<Type>(); } });
+                .SelectMany(a => { try { return a.ExportedTypes; } catch { m_skipAsm.Add(a); return new List<Type>(); } });
 
         }
 

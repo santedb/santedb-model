@@ -128,7 +128,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the policy 
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(PolicyKey))]
-        public SecurityPolicy Policy {
+        public SecurityPolicy Policy
+        {
             get
             {
                 this.m_assigningAuthorityPolicy = base.DelayLoad(this.m_assigningAuthorityPolicyKey, this.m_assigningAuthorityPolicy);
@@ -179,7 +180,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <returns>The validator</returns>
         public IIdentifierValidator GetCustomValidator()
         {
-            if(this.m_validator == null && !String.IsNullOrEmpty(this.CustomValidator))
+            if (this.m_validator == null && !String.IsNullOrEmpty(this.CustomValidator))
             {
                 var t = System.Type.GetType(this.CustomValidator);
                 if (t == null) throw new InvalidOperationException($"Validator {this.CustomValidator} is not valid");

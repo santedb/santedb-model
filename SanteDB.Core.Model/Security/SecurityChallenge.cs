@@ -19,12 +19,7 @@
  * Date: 2021-8-5
  */
 using Newtonsoft.Json;
-using SanteDB.Core.Model.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security

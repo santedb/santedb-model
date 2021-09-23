@@ -27,7 +27,7 @@ namespace SanteDB.Core.Model.Constants
     /// </summary>
     public static class TelecomAddressTypeKeys
     {
-       
+
         /// <summary>
         /// pager
         /// </summary>
@@ -58,6 +58,6 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid Internet = Guid.Parse("c1c0a4e9-4238-4044-b89b-9c9798995b93");
 
-       
+
     }
 }
