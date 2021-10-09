@@ -59,7 +59,7 @@ namespace SanteDB.Core.Model.DataTypes
                 if (this.ExtensionValueXml == null) return null;
                 try
                 {
-                    return BitConverter.ToString(this.ExtensionValueXml).Replace("-","");
+                    return BitConverter.ToString(this.ExtensionValueXml).Replace("-", "");
                 }
                 catch
                 {
@@ -91,7 +91,7 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.LoadProperty(o=>o.ExtensionType).ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
+                return this.LoadProperty(o => o.ExtensionType).ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
             }
             set
             {
@@ -241,7 +241,7 @@ namespace SanteDB.Core.Model.DataTypes
             this.ExtensionValueXml = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
         }
 
-       
+
     }
 
     /// <summary>

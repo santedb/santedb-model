@@ -19,11 +19,8 @@
  * Date: 2021-8-5
  */
 using Newtonsoft.Json;
-using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
-using SanteDB.Core.Model.DataTypes;
 using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
@@ -37,7 +34,7 @@ namespace SanteDB.Core.Model.Entities
     [JsonObject(nameof(Container))]
     public class Container : ManufacturedMaterial
     {
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class.
         /// </summary>

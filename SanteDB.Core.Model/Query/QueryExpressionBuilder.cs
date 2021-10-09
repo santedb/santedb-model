@@ -75,7 +75,7 @@ namespace SanteDB.Core.Model.Query
                     this.m_query.Add(new KeyValuePair<string, object>(key, value));
                 else if (cvalue.Value is IList)
                 {
-                    if(!(cvalue.Value as IList).Contains(value))
+                    if (!(cvalue.Value as IList).Contains(value))
                         (cvalue.Value as IList).Add(value);
                 }
                 else
@@ -152,7 +152,7 @@ namespace SanteDB.Core.Model.Query
             /// <returns></returns>
             protected override Expression VisitInvocation(InvocationExpression node)
             {
-                if(node.Expression is LambdaExpression)
+                if (node.Expression is LambdaExpression)
                 {
                     var callee = (node.Expression as LambdaExpression).Compile();
                     var args = node.Arguments.Select(o =>
@@ -398,7 +398,7 @@ namespace SanteDB.Core.Model.Query
                 else if (parmValue == null)
                     fParmValue = "null";
                 else if (parmValue is String && !"null".Equals(parmValue) && quoteStrings)
-                    fParmValue = $"\"{parmValue.ToString().Replace("\"","\\\"")}\"";
+                    fParmValue = $"\"{parmValue.ToString().Replace("\"", "\\\"")}\"";
                 return fParmValue;
             }
 
@@ -414,7 +414,7 @@ namespace SanteDB.Core.Model.Query
 
                 access = this.StripConvert(access);
 
-                switch(access.NodeType)
+                switch (access.NodeType)
                 {
                     case ExpressionType.Parameter:
                         return "$_";
@@ -449,7 +449,7 @@ namespace SanteDB.Core.Model.Query
                     case ExpressionType.Call:
                         return this.ExtractValue((access as MethodCallExpression).Arguments[0]);
                 }
-                return null; 
+                return null;
             }
 
             /// <summary>
@@ -475,9 +475,9 @@ namespace SanteDB.Core.Model.Query
 
                     // Member information is declread on interface
                     Type mapType = null;
-                    if(memberInfo.DeclaringType.IsInterface && this.m_interfaceHints.TryGetValue(memberInfo.DeclaringType, out mapType))
+                    if (memberInfo.DeclaringType.IsInterface && this.m_interfaceHints.TryGetValue(memberInfo.DeclaringType, out mapType))
                         memberInfo = mapType.GetRuntimeProperty(memberInfo.Name) ?? memberInfo;
-                    
+
                     // Is this a delay load?
                     var serializationReferenceAttribute = memberExpr.Member.GetCustomAttribute<SerializationReferenceAttribute>();
                     var queryParameterAttribute = memberExpr.Member.GetCustomAttribute<QueryParameterAttribute>();
@@ -489,7 +489,7 @@ namespace SanteDB.Core.Model.Query
                     var memberXattribute = memberInfo.GetCustomAttributes<XmlElementAttribute>().FirstOrDefault();
                     if (memberXattribute == null && queryParameterAttribute != null)
                         memberXattribute = new XmlElementAttribute(queryParameterAttribute.ParameterName); // We don't serialize but it does exist
-                    else if(memberExpr.Expression is ConstantExpression)
+                    else if (memberExpr.Expression is ConstantExpression)
                     {
                         return (memberExpr.Expression as ConstantExpression).Value.ToString();
                     }
@@ -539,7 +539,7 @@ namespace SanteDB.Core.Model.Query
                     }
 
                 }
-                
+
                 else if (access.NodeType == ExpressionType.TypeAs)
                 {
                     UnaryExpression ua = (UnaryExpression)access;
@@ -572,9 +572,9 @@ namespace SanteDB.Core.Model.Query
                             PropertyInfo keyProp = null;
                             if (!String.IsNullOrEmpty(classifierAttribute.ClassifierKeyProperty))
                                 keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierKeyProperty);
-                            else 
+                            else
                                 keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierProperty).GetSerializationRedirectProperty();
-                            if(keyProp?.Name != expressionMember.Member.Name)
+                            if (keyProp?.Name != expressionMember.Member.Name)
                                 throw new InvalidOperationException($"Classifier for type on {expressionMember.Member.DeclaringType.FullName} is property {classifierAttribute?.ClassifierProperty} however expression uses property {expressionMember.Member.Name}. Only {classifierAttribute?.ClassifierProperty} may be used in guard expression");
                         }
                         if (valueExpression == null)

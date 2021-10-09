@@ -55,118 +55,118 @@ namespace SanteDB.Core.Model.Audit
 	/// or represents an audit that provides context to the audit event (query performed, name of transaction, etc.)</para>
 	/// </remarks>
     [XmlType(nameof(AuditableObject), Namespace = "http://santedb.org/audit")]
-	[JsonObject(nameof(AuditableObject))]
-	public class AuditableObject
-	{
-		/// <summary>
-		/// New object data
-		/// </summary>
-		public AuditableObject()
-		{
-			this.ObjectData = new List<ObjectDataExtension>();
-		}
+    [JsonObject(nameof(AuditableObject))]
+    public class AuditableObject
+    {
+        /// <summary>
+        /// New object data
+        /// </summary>
+        public AuditableObject()
+        {
+            this.ObjectData = new List<ObjectDataExtension>();
+        }
 
-		/// <summary>
-		/// Custom id type code
-		/// </summary>
-		[XmlElement("customCode"), JsonProperty("customCode")]
-		public AuditCode CustomIdTypeCode { get; set; }
+        /// <summary>
+        /// Custom id type code
+        /// </summary>
+        [XmlElement("customCode"), JsonProperty("customCode")]
+        public AuditCode CustomIdTypeCode { get; set; }
 
-		/// <summary>
-		/// Gets or sets the id type code
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		public AuditableObjectIdType? IDTypeCode { get; set; }
+        /// <summary>
+        /// Gets or sets the id type code
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public AuditableObjectIdType? IDTypeCode { get; set; }
 
-		/// <summary>
-		/// Identifies the type of identifier supplied
-		/// </summary>
-		[XmlElement("idType"), JsonProperty("idType")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public AuditableObjectIdType IDTypeCodeXml { get { return this.IDTypeCode.GetValueOrDefault(); } set { this.IDTypeCode = value; } }
+        /// <summary>
+        /// Identifies the type of identifier supplied
+        /// </summary>
+        [XmlElement("idType"), JsonProperty("idType")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public AuditableObjectIdType IDTypeCodeXml { get { return this.IDTypeCode.GetValueOrDefault(); } set { this.IDTypeCode = value; } }
 
-		/// <summary>
-		/// Gets whether ID type code is specified
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		public bool IDTypeCodeXmlSpecified { get { return this.IDTypeCode.HasValue; } }
+        /// <summary>
+        /// Gets whether ID type code is specified
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public bool IDTypeCodeXmlSpecified { get { return this.IDTypeCode.HasValue; } }
 
-		/// <summary>
-		/// Lifecycle type
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		public AuditableObjectLifecycle? LifecycleType { get; set; }
+        /// <summary>
+        /// Lifecycle type
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public AuditableObjectLifecycle? LifecycleType { get; set; }
 
-		/// <summary>
-		/// Identifies where in the lifecycle of the object this object is currently within
-		/// </summary>
-		[XmlElement("lifecycle"), JsonProperty("lifecycle")]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public AuditableObjectLifecycle LifecycleTypeXml { get { return this.LifecycleType.GetValueOrDefault(); } set { this.LifecycleType = value; } }
+        /// <summary>
+        /// Identifies where in the lifecycle of the object this object is currently within
+        /// </summary>
+        [XmlElement("lifecycle"), JsonProperty("lifecycle")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public AuditableObjectLifecycle LifecycleTypeXml { get { return this.LifecycleType.GetValueOrDefault(); } set { this.LifecycleType = value; } }
 
-		/// <summary>
-		/// Gets whether ID type code is specified
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		public bool LifecycleTypeXmlSpecified { get { return this.LifecycleType.HasValue; } }
+        /// <summary>
+        /// Gets whether ID type code is specified
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public bool LifecycleTypeXmlSpecified { get { return this.LifecycleType.HasValue; } }
 
-		/// <summary>
-		/// Data associated with the object
-		/// </summary>
-		[XmlElement("name"), JsonProperty("name")]
-		public string NameData { get; set; }
+        /// <summary>
+        /// Data associated with the object
+        /// </summary>
+        [XmlElement("name"), JsonProperty("name")]
+        public string NameData { get; set; }
 
-		/// <summary>
-		/// Additional object data
-		/// </summary>
-		[XmlElement("dictionary"), JsonProperty("dictionary")]
-		public List<ObjectDataExtension> ObjectData { get; set; }
+        /// <summary>
+        /// Additional object data
+        /// </summary>
+        [XmlElement("dictionary"), JsonProperty("dictionary")]
+        public List<ObjectDataExtension> ObjectData { get; set; }
 
-		/// <summary>
-		/// Identifies the object in the event
-		/// </summary>
-		[XmlElement("id"), JsonProperty("id")]
-		public string ObjectId { get; set; }
+        /// <summary>
+        /// Identifies the object in the event
+        /// </summary>
+        [XmlElement("id"), JsonProperty("id")]
+        public string ObjectId { get; set; }
 
-		/// <summary>
-		/// Data associated with the object
-		/// </summary>
-		[XmlElement("queryData"), JsonProperty("queryData")]
-		public string QueryData { get; set; }
+        /// <summary>
+        /// Data associated with the object
+        /// </summary>
+        [XmlElement("queryData"), JsonProperty("queryData")]
+        public string QueryData { get; set; }
 
-		/// <summary>
-		/// Identifies the role type of the object
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		public AuditableObjectRole? Role { get; set; }
+        /// <summary>
+        /// Identifies the role type of the object
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public AuditableObjectRole? Role { get; set; }
 
-		/// <summary>
-		/// Identifies the role type of the object
-		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[XmlElement("role"), JsonProperty("role")]
-		public AuditableObjectRole RoleXml { get { return this.Role.GetValueOrDefault(); } set { this.Role = value; } }
+        /// <summary>
+        /// Identifies the role type of the object
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("role"), JsonProperty("role")]
+        public AuditableObjectRole RoleXml { get { return this.Role.GetValueOrDefault(); } set { this.Role = value; } }
 
-		/// <summary>
-		/// Gets whether ID type code is specified
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		public bool RoleXmlSpecified { get { return this.Role.HasValue; } }
+        /// <summary>
+        /// Gets whether ID type code is specified
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public bool RoleXmlSpecified { get { return this.Role.HasValue; } }
 
-		/// <summary>
-		/// Identifies the type of object being expressed
-		/// </summary>
-		[XmlElement("type"), JsonProperty("type")]
-		public AuditableObjectType Type { get; set; }
-	}
+        /// <summary>
+        /// Identifies the type of object being expressed
+        /// </summary>
+        [XmlElement("type"), JsonProperty("type")]
+        public AuditableObjectType Type { get; set; }
+    }
 
-	/// <summary>
-	/// Represents object data extension
-	/// </summary>
+    /// <summary>
+    /// Represents object data extension
+    /// </summary>
     /// <remarks>This allows auditors to affix any additional data to an audit which the default structure does not support</remarks>
-	[XmlType(nameof(ObjectDataExtension), Namespace = "http://santedb.org/audit")]
-	public class ObjectDataExtension
-	{
+    [XmlType(nameof(ObjectDataExtension), Namespace = "http://santedb.org/audit")]
+    public class ObjectDataExtension
+    {
 
         /// <summary>
         /// Default ctor
@@ -176,16 +176,16 @@ namespace SanteDB.Core.Model.Audit
 
         }
 
-		/// <summary>
-		/// Object data extension
-		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="value"></param>
-		public ObjectDataExtension(String key, byte[] value)
-		{
+        /// <summary>
+        /// Object data extension
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public ObjectDataExtension(String key, byte[] value)
+        {
             this.Key = key;
             this.Value = value;
-		}
+        }
 
         /// <summary>
 		/// Object data extension
@@ -198,12 +198,12 @@ namespace SanteDB.Core.Model.Audit
         /// Key of the extension
         /// </summary>
         [XmlAttribute("key"), JsonProperty("key")]
-		public String Key { get; set; }
+        public String Key { get; set; }
 
-		/// <summary>
-		/// Value of the extension
-		/// </summary>
-		[XmlAttribute("value"), JsonProperty("value")]
-		public Byte[] Value { get; set; }
-	}
+        /// <summary>
+        /// Value of the extension
+        /// </summary>
+        [XmlAttribute("value"), JsonProperty("value")]
+        public Byte[] Value { get; set; }
+    }
 }

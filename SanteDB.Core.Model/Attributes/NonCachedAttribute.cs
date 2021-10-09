@@ -27,5 +27,5 @@ namespace SanteDB.Core.Model.Attributes
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class NonCachedAttribute : Attribute
-    {}
+    { }
 }

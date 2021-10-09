@@ -2,19 +2,19 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
@@ -39,7 +39,6 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlRoot(nameof(AssigningAuthority), Namespace = "http://santedb.org/model")]
     public class AssigningAuthority : NonVersionedEntityData
     {
-
         private bool m_minimal = false;
 
         // private validator
@@ -50,11 +49,10 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public AssigningAuthority()
         {
-
         }
 
         /// <summary>
-        /// Creates a new assigning authority 
+        /// Creates a new assigning authority
         /// </summary>
         public AssigningAuthority(String domainName, String name, String oid)
         {
@@ -97,10 +95,10 @@ namespace SanteDB.Core.Model.DataTypes
         /// Represents scopes to which the authority is bound
         /// </summary>
         [JsonProperty("scope"), XmlElement("scope")]
-        public List<Guid> AuthorityScopeXml 
-        { 
-            get; 
-            set; 
+        public List<Guid> AuthorityScopeXml
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -110,7 +108,7 @@ namespace SanteDB.Core.Model.DataTypes
         public Guid? AssigningApplicationKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the policy 
+        /// Gets or sets the policy
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(PolicyKey))]
         public SecurityPolicy Policy { get; set; }
@@ -134,7 +132,7 @@ namespace SanteDB.Core.Model.DataTypes
         public bool IsUnique { get; set; }
 
         /// <summary>
-        /// Gets or sets the IIdentifierValidator instance to use for this solution 
+        /// Gets or sets the IIdentifierValidator instance to use for this solution
         /// </summary>
         [XmlElement("customValidator"), JsonProperty("customValidator")]
         public string CustomValidator { get; set; }
@@ -145,7 +143,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <returns>The validator</returns>
         public IIdentifierValidator GetCustomValidator()
         {
-            if(this.m_validator == null && !String.IsNullOrEmpty(this.CustomValidator))
+            if (this.m_validator == null && !String.IsNullOrEmpty(this.CustomValidator))
             {
                 var t = System.Type.GetType(this.CustomValidator);
                 if (t == null) throw new InvalidOperationException($"Validator {this.CustomValidator} is not valid");
@@ -208,8 +206,6 @@ namespace SanteDB.Core.Model.DataTypes
                 this.Url == other.Url ||
                 this.AssigningApplicationKey == other.AssigningApplicationKey;
         }
-
-
 
 #pragma warning disable CS1591
         public bool ShouldSerializeAuthorityScopeXml() => !this.m_minimal;

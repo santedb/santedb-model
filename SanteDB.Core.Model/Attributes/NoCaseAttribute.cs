@@ -22,10 +22,10 @@ using System;
 
 namespace SanteDB.Core.Model.Attributes
 {
-	/// <summary>
-	/// Indicates that a particular property has no case
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// Indicates that a particular property has no case
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public class NoCaseAttribute : Attribute
-    {}
+    { }
 }

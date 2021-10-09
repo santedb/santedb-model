@@ -21,7 +21,6 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
-using SanteDB.Core.Model.DataTypes;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -35,7 +34,7 @@ namespace SanteDB.Core.Model.Entities
     [JsonObject("EntityNameComponent")]
     public class EntityNameComponent : GenericComponentValues<EntityName>
     {
-       
+
         /// <summary>
         /// Entity name component
         /// </summary>

@@ -30,60 +30,60 @@ namespace SanteDB.Core.Model.Audit
 	/// <remarks><para>In SanteDB an actor represents an individual participant in the action which can include a user, 
 	/// a system, a device, etc.</para></remarks>
     [XmlType(nameof(AuditActorData), Namespace = "http://santedb.org/audit")]
-	[JsonObject(nameof(AuditActorData))]
-	public class AuditActorData
-	{
-		/// <summary>
-		/// Default ctor
-		/// </summary>
-		public AuditActorData() { ActorRoleCode = new List<AuditCode>(); }
+    [JsonObject(nameof(AuditActorData))]
+    public class AuditActorData
+    {
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public AuditActorData() { ActorRoleCode = new List<AuditCode>(); }
 
-		/// <summary>
-		/// Identifies the role(s) that the actor has played
-		/// </summary>
-		[XmlElement("role"), JsonProperty("role")]
-		public List<AuditCode> ActorRoleCode { get; set; }
+        /// <summary>
+        /// Identifies the role(s) that the actor has played
+        /// </summary>
+        [XmlElement("role"), JsonProperty("role")]
+        public List<AuditCode> ActorRoleCode { get; set; }
 
-		/// <summary>
-		/// Alternative user identifier
-		/// </summary>
-		[XmlAttribute("altUid"), JsonProperty("altUid")]
-		public string AlternativeUserId { get; set; }
+        /// <summary>
+        /// Alternative user identifier
+        /// </summary>
+        [XmlAttribute("altUid"), JsonProperty("altUid")]
+        public string AlternativeUserId { get; set; }
 
-		/// <summary>
-		/// Identifies the network access point from which the user accessed the system
-		/// </summary>
-		[XmlElement("apId"), JsonProperty("apId")]
-		public string NetworkAccessPointId { get; set; }
+        /// <summary>
+        /// Identifies the network access point from which the user accessed the system
+        /// </summary>
+        [XmlElement("apId"), JsonProperty("apId")]
+        public string NetworkAccessPointId { get; set; }
 
-		/// <summary>
-		/// Identifies the type of network access point
-		/// </summary>
-		[XmlElement("apType"), JsonProperty("apType")]
-		public NetworkAccessPointType NetworkAccessPointType { get; set; }
+        /// <summary>
+        /// Identifies the type of network access point
+        /// </summary>
+        [XmlElement("apType"), JsonProperty("apType")]
+        public NetworkAccessPointType NetworkAccessPointType { get; set; }
 
-		/// <summary>
-		/// Network access point type
-		/// </summary>
-		[XmlIgnore, JsonIgnore]
-		public bool NetworkAccessPointTypeSpecified { get { return (int)this.NetworkAccessPointType != 0; } }
+        /// <summary>
+        /// Network access point type
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public bool NetworkAccessPointTypeSpecified { get { return (int)this.NetworkAccessPointType != 0; } }
 
-		/// <summary>
-		/// The unique identifier for the user in the system
-		/// </summary>
-		[XmlElement("uid"), JsonProperty("uid")]
-		public string UserIdentifier { get; set; }
+        /// <summary>
+        /// The unique identifier for the user in the system
+        /// </summary>
+        [XmlElement("uid"), JsonProperty("uid")]
+        public string UserIdentifier { get; set; }
 
-		/// <summary>
-		/// True if the user is the primary requestor
-		/// </summary>
-		[XmlElement("isReq"), JsonProperty("isReq")]
-		public bool UserIsRequestor { get; set; }
+        /// <summary>
+        /// True if the user is the primary requestor
+        /// </summary>
+        [XmlElement("isReq"), JsonProperty("isReq")]
+        public bool UserIsRequestor { get; set; }
 
-		/// <summary>
-		/// The name of the user in the system
-		/// </summary>
-		[XmlElement("uname"), JsonProperty("uname")]
-		public string UserName { get; set; }
-	}
+        /// <summary>
+        /// The name of the user in the system
+        /// </summary>
+        [XmlElement("uname"), JsonProperty("uname")]
+        public string UserName { get; set; }
+    }
 }
