@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -39,9 +40,9 @@ namespace SanteDB.Core.Model.Roles
     [ClassConceptKey(EntityClassKeyStrings.Patient)]
     public class Patient : Person
     {
-
         // Marital statuses
         private Guid? m_maritalStatusKey;
+
         private Concept m_maritalStatus;
         private Guid? m_educationLevelKey;
         private Concept m_educationLevel;
@@ -53,6 +54,8 @@ namespace SanteDB.Core.Model.Roles
         private Concept m_ethnicGroup;
         private Guid? m_vipStatusKey;
         private Concept m_vipStatus;
+        private Guid? m_nationalityKey;
+        private Concept m_nationality;
 
         /// <summary>
         /// Represents a patient
@@ -91,9 +94,9 @@ namespace SanteDB.Core.Model.Roles
                 }
                 else
                     this.DeceasedDate = null;
-
             }
         }
+
         /// <summary>
         /// Gets or sets the precision of the date of deceased
         /// </summary>
@@ -101,7 +104,7 @@ namespace SanteDB.Core.Model.Roles
         public DatePrecision? DeceasedDatePrecision { get; set; }
 
         /// <summary>
-        /// Gets or sets the multiple birth order of the patient 
+        /// Gets or sets the multiple birth order of the patient
         /// </summary>
         [XmlElement("multipleBirthOrder"), JsonProperty("multipleBirthOrder")]
         public int? MultipleBirthOrder { get; set; }
@@ -119,7 +122,6 @@ namespace SanteDB.Core.Model.Roles
                 this.m_vipStatus = null;
             }
         }
-
 
         /// <summary>
         /// Gets or sets the key of the marital status concept
@@ -174,6 +176,38 @@ namespace SanteDB.Core.Model.Roles
             {
                 this.m_religiousAffiliationKey = value;
                 this.m_religiousAffiliation = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the religious affiliation
+        /// </summary>
+        [XmlElement("nationality"), JsonProperty("nationality"), EditorBrowsable(EditorBrowsableState.Never)]
+        public Guid? NationalityKey
+        {
+            get => this.m_nationalityKey;
+            set
+            {
+                this.m_nationalityKey = value;
+                this.m_nationality = null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the marital status code
+        /// </summary>
+        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(NationalityKey))]
+        public Concept Nationality
+        {
+            get
+            {
+                this.m_nationality = base.DelayLoad(this.m_nationalityKey, this.m_nationality);
+                return this.m_nationality;
+            }
+            set
+            {
+                this.m_nationality = value;
+                this.m_nationalityKey = value?.Key;
             }
         }
 
@@ -312,6 +346,7 @@ namespace SanteDB.Core.Model.Roles
         /// </summary>
         /// <returns></returns>
         public bool ShouldSerializeDeceasedDatePrecision() => this.DeceasedDatePrecision.HasValue;
+
         /// <summary>
         /// Should serialize deceased date?
         /// </summary>
@@ -319,7 +354,6 @@ namespace SanteDB.Core.Model.Roles
         {
             return this.MultipleBirthOrder.HasValue;
         }
-
 
         /// <summary>
         /// Semantic equality function
@@ -332,6 +366,5 @@ namespace SanteDB.Core.Model.Roles
                 this.DeceasedDate == other.DeceasedDate &&
                 this.DeceasedDatePrecision == other.DeceasedDatePrecision;
         }
-
     }
 }
