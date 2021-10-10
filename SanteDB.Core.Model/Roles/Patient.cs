@@ -146,7 +146,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets the nationality of the patient
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(NationalityKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(NationalityKey))]
         public Concept Nationality
         {
             get; set;
