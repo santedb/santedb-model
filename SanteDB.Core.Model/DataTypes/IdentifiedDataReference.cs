@@ -9,15 +9,14 @@ namespace SanteDB.Core.Model.DataTypes
     /// A reference to any identified data object
     /// </summary>
     /// <remarks>
-    /// The identified data reference class is not persisted as an object per se, rather it 
+    /// The identified data reference class is not persisted as an object per se, rather it
     /// serves as a link to a piece of data which already exists where the type may not
     /// be known or where the type is known but limited fields are required to reference the data
     /// </remarks>
-    [XmlType(nameof(IdentifiedDataReference), Namespace = "http://santedb.org/model"), JsonObject(nameof(IdentifiedDataReference))]
+    [XmlType("Reference", Namespace = "http://santedb.org/model"), JsonObject("Reference")]
     [XmlRoot("Reference", Namespace = "http://santedb.org/model")]
     public class IdentifiedDataReference : IdentifiedData
     {
-
         /// <summary>
         /// Get the type identifier
         /// </summary>

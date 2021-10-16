@@ -96,7 +96,7 @@ namespace SanteDB.Core.Model.Serialization
             {
                 lock (s_lock)
                 {
-                    type = asm.ExportedTypes.SingleOrDefault(
+                    type = typeof(ModelSerializationBinder).Assembly.ExportedTypes.Union(asm.ExportedTypes).FirstOrDefault(
                         t => t.GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
                     );
                     if (!s_typeCache.ContainsKey(typeName) && type != null)
