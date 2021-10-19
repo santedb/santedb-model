@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
@@ -31,6 +32,31 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
 {
+    /// <summary>
+    /// Reliability of the identifier
+    /// </summary>
+    [XmlType("IdentifierReliability", Namespace = "http://santedb.org/model")]
+    public enum IdentifierReliability
+    {
+        /// <summary>
+        /// Unspecified
+        /// </summary>
+        [XmlEnum("u")]
+        Unspecified,
+
+        /// <summary>
+        /// Authoritative
+        /// </summary>
+        [XmlEnum("a")]
+        Authoritative,
+
+        /// <summary>
+        /// Informative
+        /// </summary>
+        [XmlEnum("i")]
+        Informative
+    }
+
     /// <summary>
     /// Entity identifiers
     /// </summary>
@@ -217,6 +243,17 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlIgnore, JsonIgnore]
         public AssigningAuthority Authority { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reliability of the identifier
+        /// </summary>
+        [XmlElement("reliability"), JsonProperty("reliability")]
+        public IdentifierReliability Reliability { get; set; }
+
+        /// <summary>
+        /// Authority XML
+        /// </summary>
+        AssigningAuthority IExternalIdentifier.Authority => this.AuthorityXml ?? this.LoadProperty(o => o.Authority);
 
         /// <summary>
         /// True if the identifier is empty
