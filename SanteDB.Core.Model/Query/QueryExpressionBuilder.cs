@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections;
@@ -39,7 +40,6 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         private class HttpQueryExpressionVisitor : ExpressionVisitor
         {
-
             // Readonly names
             private static readonly String[] s_reservedNames =
             {
@@ -110,25 +110,34 @@ namespace SanteDB.Core.Model.Query
                     case ExpressionType.Or:
                     case ExpressionType.OrElse:
                         return this.VisitBinary((BinaryExpression)node);
+
                     case ExpressionType.MemberAccess:
                         return this.VisitMemberAccess((MemberExpression)node);
+
                     case ExpressionType.Parameter:
                         return this.VisitParameter((ParameterExpression)node);
+
                     case ExpressionType.Call:
                         return this.VisitMethodCall((MethodCallExpression)node);
+
                     case ExpressionType.Lambda:
                         return this.VisitLambdaGeneric((LambdaExpression)node);
+
                     case ExpressionType.Invoke:
                         return this.VisitInvocation((InvocationExpression)node);
+
                     case ExpressionType.Constant:
                     case ExpressionType.Convert:
                     case ExpressionType.TypeAs:
                         return node;
+
                     case ExpressionType.Not:
                         return this.VisitUnary((UnaryExpression)node);
+
                     case ExpressionType.Coalesce:
                         // We coalesce for nulls so we want the first
                         return this.Visit(((BinaryExpression)node).Left);
+
                     default:
                         throw new InvalidOperationException($"Don't know how to conver type of {node.Type}");
                 }
@@ -162,6 +171,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             case ExpressionType.Constant:
                                 return (o as ConstantExpression).Value;
+
                             case ExpressionType.Call:
                                 {
                                     var ie = o as MethodCallExpression;
@@ -182,7 +192,6 @@ namespace SanteDB.Core.Model.Query
                     else if (retVal is Func<dynamic> fn)
                         retVal = fn();
                     return Expression.Constant(retVal);
-
                 }
                 else
                 {
@@ -204,6 +213,7 @@ namespace SanteDB.Core.Model.Query
 
                         this.AddCondition(parmName, "null");
                         return null;
+
                     default:
                         throw new NotSupportedException("Unary expressions cannot be represented as key/value pair filters");
                 }
@@ -220,7 +230,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             if (node.Object == null && node.Method.DeclaringType == typeof(Enumerable))
                             {
-                                // Array contains 
+                                // Array contains
                                 // value=X&value=Y&value=Z
                                 Expression array = node.Arguments[0],
                                     bindParameter = node.Arguments[1];
@@ -267,7 +277,6 @@ namespace SanteDB.Core.Model.Query
                             }
                             else
                                 return null;
-
                         }
                     default: // extended fn?
                         {
@@ -277,7 +286,6 @@ namespace SanteDB.Core.Model.Query
                             return null;
                         }
                 }
-
             }
 
             /// <summary>
@@ -350,15 +358,19 @@ namespace SanteDB.Core.Model.Query
                         case ExpressionType.GreaterThan:
                             fParmValue = ">" + fParmValue;
                             break;
+
                         case ExpressionType.GreaterThanOrEqual:
                             fParmValue = ">=" + fParmValue;
                             break;
+
                         case ExpressionType.LessThan:
                             fParmValue = "<" + fParmValue;
                             break;
+
                         case ExpressionType.LessThanOrEqual:
                             fParmValue = "<=" + fParmValue;
                             break;
+
                         case ExpressionType.NotEqual:
                             fParmValue = "!" + fParmValue;
                             break;
@@ -418,8 +430,10 @@ namespace SanteDB.Core.Model.Query
                 {
                     case ExpressionType.Parameter:
                         return "$_";
+
                     case ExpressionType.Constant:
                         return ((ConstantExpression)access).Value;
+
                     case ExpressionType.MemberAccess:
                         MemberExpression expr = access as MemberExpression;
                         var expressionValue = this.ExtractValue(expr.Expression);
@@ -442,10 +456,13 @@ namespace SanteDB.Core.Model.Query
                             return (expr.Member as FieldInfo).GetValue(expressionValue);
                         }
                         break;
+
                     case ExpressionType.Coalesce:
                         return this.ExtractValue((access as BinaryExpression).Left);
+
                     case ExpressionType.Invoke:
                         return this.ExtractValue(this.VisitInvocation(access as InvocationExpression));
+
                     case ExpressionType.Call:
                         return this.ExtractValue((access as MethodCallExpression).Arguments[0]);
                 }
@@ -527,7 +544,6 @@ namespace SanteDB.Core.Model.Query
                         // Is the expression the guard?
                         String guardString = this.BuildGuardExpression(binaryExpression);
                         return String.Format("{0}[{1}]", path, guardString);
-
                     }
                     else
                     {
@@ -537,9 +553,7 @@ namespace SanteDB.Core.Model.Query
                         else if (!s_reservedNames.Contains(callExpr.Method.Name))
                             throw new InvalidOperationException($"Can't find extended method handler for {callExpr.Method.Name}");
                     }
-
                 }
-
                 else if (access.NodeType == ExpressionType.TypeAs)
                 {
                     UnaryExpression ua = (UnaryExpression)access;
@@ -555,11 +569,12 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             private string BuildGuardExpression(BinaryExpression binaryExpression)
             {
-
                 switch (binaryExpression.NodeType)
                 {
                     case ExpressionType.Or:
+                    case ExpressionType.OrElse:
                         return $"{this.BuildGuardExpression(binaryExpression.Left as BinaryExpression)}|{this.BuildGuardExpression(binaryExpression.Right as BinaryExpression)}";
+
                     case ExpressionType.Equal:
                         var expressionMember = binaryExpression.Left as MemberExpression;
                         var valueExpression = this.ExtractValue(binaryExpression.Right);
@@ -580,11 +595,10 @@ namespace SanteDB.Core.Model.Query
                         if (valueExpression == null)
                             throw new InvalidOperationException("Only constant expressions are supported on guards");
                         return valueExpression.ToString();
+
                     default:
                         throw new InvalidOperationException($"Binary expressions of {binaryExpression.NodeType} are not permitted");
-
                 }
-
             }
         }
 
@@ -605,7 +619,6 @@ namespace SanteDB.Core.Model.Query
             return retVal;
         }
 
-
         /// <summary>
         /// Builds an HTTP sorting expression
         /// </summary>
@@ -621,8 +634,6 @@ namespace SanteDB.Core.Model.Query
                 throw new InvalidOperationException("Cannot convert sort expression");
             else
                 return $"{((memberExpression as MemberExpression).Member as PropertyInfo).GetSerializationName()}:{(sort.SortOrder == Map.SortOrderType.OrderBy ? "asc" : "desc")}";
-
         }
     }
 }
-
