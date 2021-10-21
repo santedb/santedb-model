@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
@@ -97,12 +98,21 @@ namespace SanteDB.Core.Model.Collection
         }
 
         /// <summary>
+        /// Represent the bundle as
+        /// </summary>
+        public Bundle(IEnumerable<IdentifiedData> objects, int offset, int total) : this(objects)
+        {
+            this.Offset = offset;
+            this.TotalResults = total;
+        }
+
+        /// <summary>
         /// Create new bundle
         /// </summary>
         public Bundle(IEnumerable<IdentifiedData> objects)
         {
             this.Item = new List<IdentifiedData>(objects);
-            this.FocalObjects = new List<Guid>(objects.Select(o => o.Key).OfType<Guid>());
+            this.FocalObjects = new List<Guid>(this.Item.Select(o => o.Key).OfType<Guid>());
         }
 
         // Property cache
@@ -125,7 +135,6 @@ namespace SanteDB.Core.Model.Collection
             }
         }
 
-
         /// <summary>
         /// Gets the single focal object for this object
         /// </summary>
@@ -143,7 +152,6 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         [XmlElement("resource"), JsonProperty("resource")]
         public List<IdentifiedData> Item { get; set; }
-
 
         /// <summary>
         /// Entry into the bundle
@@ -192,7 +200,6 @@ namespace SanteDB.Core.Model.Collection
                     this.Item.Add(itm);
                 }
             }
-
         }
 
         /// <summary>
@@ -296,7 +303,6 @@ namespace SanteDB.Core.Model.Collection
             // Iterate over properties
             foreach (var pi in data.GetType().GetRuntimeProperties().Where(o => o.GetCustomAttribute<DataIgnoreAttribute>() == null))
             {
-
                 // Is this property not null? If so, we want to iterate
                 object value = pi.GetValue(data);
                 if (value is IList listValue)
@@ -329,11 +335,9 @@ namespace SanteDB.Core.Model.Collection
                 {
                     pi.SetValue(data, bundleItem);
                 }
-
             }
 
             context.Remove(data);
-
         }
 
         /// <summary>
@@ -343,7 +347,6 @@ namespace SanteDB.Core.Model.Collection
         {
             try
             {
-
                 // Iterate over properties
                 IEnumerable<PropertyInfo> properties = null;
                 if (!m_propertyCache.TryGetValue(model.GetType(), out properties))
@@ -362,12 +365,10 @@ namespace SanteDB.Core.Model.Collection
                         object rawValue = pi.GetValue(model);
                         if (rawValue == null) continue;
 
-
                         if (rawValue is IList && followList)
                         {
                             foreach (var itm in rawValue as IList)
                             {
-
                                 var iValue = itm as IdentifiedData;
                                 if (iValue != null)
                                 {
@@ -415,8 +416,6 @@ namespace SanteDB.Core.Model.Collection
             }
         }
 
-
-
         /// <summary>
         /// Gets from the item set only those items which are results
         /// </summary>
@@ -424,8 +423,5 @@ namespace SanteDB.Core.Model.Collection
         {
             return this.Item.Where(o => this.FocalObjects.Contains(o.Key.Value));
         }
-
     }
-
-
 }
