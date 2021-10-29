@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
@@ -38,14 +39,13 @@ namespace SanteDB.Core.Model.Entities
     /// Represents the base class of all entities (persons, places, things) in SanteDB
     /// </summary>
     /// <remarks>
-    /// In SanteDB, an entity represents a physical object which can be acted upon or can participate in an act. 
+    /// In SanteDB, an entity represents a physical object which can be acted upon or can participate in an act.
     /// </remarks>
     [XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]
     public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
-
         private TemplateDefinition m_template;
         private Guid? m_templateKey;
 
@@ -422,14 +422,13 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the security policy instances associated with the entity
         /// </summary>
         /// <remarks>
-        /// This property allows authors to tag an act with a particular security policy. Here the 
+        /// This property allows authors to tag an act with a particular security policy. Here the
         /// security policies may be something akin to "Taboo information" or "Research Only". From there
         /// the SanteDB policy decision point will determine whether or not the particular piece of
         /// data should be exposed or masked based on user credentials.
         /// </remarks>
         [XmlElement("policy"), JsonProperty("policy")]
         public List<SecurityPolicyInstance> Policies { get; set; }
-
 
         /// <summary>
         /// Semantic equality function
@@ -617,5 +616,14 @@ namespace SanteDB.Core.Model.Entities
         /// Remove the specified <paramref name="tagKey"/> from this objects tags
         /// </summary>
         public void RemoveTag(string tagKey) => this.Tags.RemoveAll(o => o.TagKey == tagKey);
+
+        /// <summary>
+        /// Try to fetch the tag
+        /// </summary>
+        public bool TryGetTag(string tagKey, out ITag tag)
+        {
+            tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            return tag != null;
+        }
     }
 }
