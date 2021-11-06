@@ -111,12 +111,19 @@ namespace SanteDB.Core.Model.Serialization
                         else if (extraTypes.Length == 0)
                         {
                             extraTypes = AppDomain.CurrentDomain.GetAllTypes()
-                                .Where(t => !t.IsGenericTypeDefinition && !t.IsAbstract && type.IsAssignableFrom(t))
+                                .Where(t => t.GetCustomAttribute<XmlTypeAttribute>() != null)
+                                .Where(t => !t.IsGenericTypeDefinition && !t.IsAbstract && (type.IsAssignableFrom(t) || type.GetProperties().Select(p => p.PropertyType.StripGeneric()).Any(p => typeof(IdentifiedData).IsAssignableFrom(p) && p.IsAssignableFrom(t))))
                                 .ToArray();
                         }
 
-                        serializer = new XmlSerializer(type, extraTypes);
-
+                        try
+                        {
+                            serializer = new XmlSerializer(type, extraTypes);
+                        }
+                        catch
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
                         this.m_serializers.Add(key, serializer);
 
                         if (this.m_serializerKeys.TryGetValue(type, out var existingKey) &&
