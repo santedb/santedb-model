@@ -108,6 +108,12 @@ namespace SanteDB.Core.Model.Serialization
                                 .Union(ModelSerializationBinder.GetRegisteredTypes())
                                 .ToArray();
                         }
+                        else if (extraTypes.Length == 0)
+                        {
+                            extraTypes = AppDomain.CurrentDomain.GetAllTypes()
+                                .Where(t => !t.IsGenericTypeDefinition && !t.IsAbstract && type.IsAssignableFrom(t))
+                                .ToArray();
+                        }
 
                         serializer = new XmlSerializer(type, extraTypes);
 
