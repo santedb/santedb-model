@@ -116,14 +116,7 @@ namespace SanteDB.Core.Model.Serialization
                                 .ToArray();
                         }
 
-                        try
-                        {
-                            serializer = new XmlSerializer(type, extraTypes);
-                        }
-                        catch
-                        {
-                            System.Diagnostics.Debugger.Break();
-                        }
+                        serializer = new XmlSerializer(type, extraTypes);
                         this.m_serializers.Add(key, serializer);
 
                         if (this.m_serializerKeys.TryGetValue(type, out var existingKey) &&
