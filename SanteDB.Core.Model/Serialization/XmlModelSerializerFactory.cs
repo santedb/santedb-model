@@ -104,7 +104,7 @@ namespace SanteDB.Core.Model.Serialization
                         if (type.GetCustomAttribute<ResourceCollectionAttribute>() != null && extraTypes.Length == 0)
                         {
                             extraTypes = AppDomain.CurrentDomain.GetAllTypes()
-                                .Where(t => !t.IsGenericTypeDefinition && !t.IsAbstract && (typeof(IdentifiedData).IsAssignableFrom(t) || t.GetCustomAttribute<XmlRootAttribute>() != null))
+                                .Where(t => t.GetCustomAttribute<XmlRootAttribute>() != null && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface)
                                 .Union(ModelSerializationBinder.GetRegisteredTypes())
                                 .ToArray();
                         }
@@ -112,7 +112,7 @@ namespace SanteDB.Core.Model.Serialization
                         {
                             extraTypes = AppDomain.CurrentDomain.GetAllTypes()
                                 .Where(t => t.GetCustomAttribute<XmlTypeAttribute>() != null)
-                                .Where(t => !t.IsGenericTypeDefinition && !t.IsAbstract && (type.IsAssignableFrom(t) || type.GetProperties().Select(p => p.PropertyType.StripGeneric()).Any(p => typeof(IdentifiedData).IsAssignableFrom(p) && p.IsAssignableFrom(t))))
+                                .Where(t => t.GetConstructor(Type.EmptyTypes) != null && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface && (type.IsAssignableFrom(t) || type.GetProperties().Select(p => p.PropertyType.StripGeneric()).Any(p => !p.IsAbstract && !p.IsInterface && typeof(IdentifiedData).IsAssignableFrom(p) && p.IsAssignableFrom(t))))
                                 .ToArray();
                         }
 
