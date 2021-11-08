@@ -6,8 +6,6 @@ using System.Text;
 
 namespace SanteDB.Core.Model.Query
 {
-
-
     /// <summary>
     /// Query result set without type parameters
     /// </summary>
@@ -71,7 +69,6 @@ namespace SanteDB.Core.Model.Query
     /// </summary>
     public interface IQueryResultSet<TData> : IQueryResultSet, IEnumerable<TData>
     {
-
         /// <summary>
         /// Filter the result set where the specified condition matches
         /// </summary>
@@ -145,6 +142,5 @@ namespace SanteDB.Core.Model.Query
         /// Get the result set as a stateful query
         /// </summary>
         IQueryResultSet<TData> AsStateful(Guid stateId);
-
     }
 }

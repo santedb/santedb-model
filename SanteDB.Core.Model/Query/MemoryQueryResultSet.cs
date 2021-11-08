@@ -7,7 +7,6 @@ using System.Text;
 
 namespace SanteDB.Core.Model.Query
 {
-
     /// <summary>
     /// Wrapped query result set
     /// </summary>
@@ -40,7 +39,7 @@ namespace SanteDB.Core.Model.Query
         public int Count() => this.m_wrapped.Count();
 
         /// <summary>
-        /// Get the first 
+        /// Get the first
         /// </summary>
         public object First() => this.m_wrapped.First();
 
@@ -88,15 +87,13 @@ namespace SanteDB.Core.Model.Query
     /// </summary>
     public class MemoryQueryResultSet<TData> : MemoryQueryResultSet, IQueryResultSet<TData>
     {
-
         // Wraped object
         private IEnumerable<TData> m_wrapped;
-
 
         /// <summary>
         /// New query result set
         /// </summary>
-        public MemoryQueryResultSet() : base (new TData[0])
+        public MemoryQueryResultSet() : base(new TData[0])
         {
             this.m_wrapped = new TData[0];
         }
@@ -114,7 +111,6 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public IQueryResultSet<TData> Intersect(Expression<Func<TData, bool>> query)
         {
-
             throw new NotSupportedException();
         }
 
@@ -127,12 +123,11 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
-        /// Order by 
+        /// Order by
         /// </summary>
         public IQueryResultSet<TData> OrderBy(Expression<Func<TData, dynamic>> sortExpression)
         {
             return new MemoryQueryResultSet<TData>(this.m_wrapped.OrderBy(sortExpression.Compile()));
-
         }
 
         /// <summary>
@@ -141,7 +136,6 @@ namespace SanteDB.Core.Model.Query
         public IQueryResultSet<TData> OrderByDescending(Expression<Func<TData, dynamic>> sortExpression)
         {
             return new MemoryQueryResultSet<TData>(this.m_wrapped.OrderByDescending(sortExpression.Compile()));
-
         }
 
         /// <summary>
@@ -203,6 +197,9 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         IQueryResultSet<TData> IQueryResultSet<TData>.Skip(int count) => new MemoryQueryResultSet<TData>(this.m_wrapped.Skip(count));
 
+        /// <summary>
+        /// Take only <paramref name="count"/>
+        /// </summary>
         IQueryResultSet<TData> IQueryResultSet<TData>.Take(int count) => new MemoryQueryResultSet<TData>(this.m_wrapped.Take(count));
     }
 }
