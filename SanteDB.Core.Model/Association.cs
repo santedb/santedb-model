@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
@@ -32,13 +33,18 @@ namespace SanteDB.Core.Model
     /// <remarks></remarks>
     /// <typeparam name="TSourceType">The source type which indicates the type of object being associated from</typeparam>
     /// <remarks>
-    /// <para>In SanteDB's data store, complex objects are associated with one another using this class. For example, when associating identifiers with an 
+    /// <para>In SanteDB's data store, complex objects are associated with one another using this class. For example, when associating identifiers with an
     /// <see cref="SanteDB.Core.Model.Acts.Act"/> with an <see cref="SanteDB.Core.Model.DataTypes.ActIdentifier"/> the ActIdentifier is an association</para>
     /// <para>This version of the assoication is used between non-versioned objects or for versioned objects where the version has no bearing on the association</para>
     /// </remarks>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Association")]
     public abstract class Association<TSourceType> : IdentifiedData, ISimpleAssociation where TSourceType : IdentifiedData, new()
     {
+
+        /// <summary>
+        /// Gets the source type
+        /// </summary>
+        public Type SourceType => typeof(TSourceType);
 
         /// <summary>
         /// Get the modification date
@@ -59,13 +65,12 @@ namespace SanteDB.Core.Model
         public TSourceType SourceEntity { get; set; }
 
         /// <summary>
-        /// Source entity 
+        /// Source entity
         /// </summary>
         object ISimpleAssociation.SourceEntity { 
             get => this.SourceEntity; 
             set => this.SourceEntity = (TSourceType)value; 
         }
-
 
         /// <summary>
         /// Should serialize obsolete

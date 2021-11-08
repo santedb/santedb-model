@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -38,10 +39,27 @@ namespace SanteDB.Core.Model.Acts
     /// <para>
     /// It is not recommended to use this class directly, rather one of its sub classes based on the type of observation being made such as:
     /// </para>
-    /// <list type="bullet">
-    ///     <resource>Coded observation (<see cref="CodedObservation"/>) for observations whose values are codified (example: blood type, presentation, etc.), </resource>
-    ///     <resource>Quantity observations (<see cref="QuantityObservation"/>) for observations whose values are quantified values (example: weight, height, etc.), </resource>
-    ///     <resource>Text observations (<see cref="TextObservation"/>) for observations whose values are textual in nature.</resource>
+    /// <list type="table">
+    ///     <listheader>
+    ///         <term>Observation</term>
+    ///         <term>Type</term>
+    ///         <term>Description</term>
+    ///     </listheader>
+    ///     <item>
+    ///         <term>Coded</term>
+    ///         <term><see cref="CodedObservation"/></term>
+    ///         <term>Observations whose values are codified (example: blood type, presentation, etc.)</term>
+    ///     </item>
+    ///     <item>
+    ///         <term>Quantity</term>
+    ///         <term><see cref="QuantityObservation"/></term>
+    ///         <term>Observations whose values are codified (example: blood type, presentation, etc.)</term>
+    ///     </item>
+    ///     <item>
+    ///         <term>Text</term>
+    ///         <term><see cref="TextObservation"/></term>
+    ///         <term>Observations whose values are codified (example: blood type, presentation, etc.)</term>
+    ///     </item>
     /// </list>
     /// <para>
     /// No matter what type of value an observation carries (coded, quantity, text) it is always classified by the type concept (<see cref="Act.TypeConceptKey"/>).
@@ -65,7 +83,6 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the interpretation concept
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-
         [XmlElement("interpretationConcept"), JsonProperty("interpretationConcept")]
         public Guid? InterpretationConceptKey { get; set; }
 
@@ -102,7 +119,7 @@ namespace SanteDB.Core.Model.Acts
     /// Represents an observation that contains a quantity
     /// </summary>
     /// <remarks>
-    /// The quantity observation class should be used whenever you wish to store an observation which carries a numerical value 
+    /// The quantity observation class should be used whenever you wish to store an observation which carries a numerical value
     /// and an optional unit of measure (example: length = 3.2 ft, weight = 1.2 kg, etc.)
     /// </remarks>
     [XmlType("QuantityObservation", Namespace = "http://santedb.org/model"), JsonObject("QuantityObservation")]
@@ -157,7 +174,7 @@ namespace SanteDB.Core.Model.Acts
     /// Represents an observation with a text value
     /// </summary>
     /// <remarks>
-    /// The text observation type represents an observation made with a textual value. This is done whenever an observation type 
+    /// The text observation type represents an observation made with a textual value. This is done whenever an observation type
     /// cannot be quantified or classified using either a coded or observed value. Please note that this type should not be used
     /// for taking notes, rather it is a specific type of thing observed about a patient. For example: Interpretation of patient's mood
     /// </remarks>
@@ -165,7 +182,6 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "TextObservation")]
     public class TextObservation : Observation
     {
-
         /// <summary>
         /// Value type
         /// </summary>
@@ -200,7 +216,7 @@ namespace SanteDB.Core.Model.Acts
     /// Represents an observation with a concept value
     /// </summary>
     /// <remarks>
-    /// A coded observation represents an observation whose value is classified using a coded concept. For example: fetal presentation, 
+    /// A coded observation represents an observation whose value is classified using a coded concept. For example: fetal presentation,
     /// stage of pregnancy, etc.
     /// </remarks>
     [XmlType("CodedObservation", Namespace = "http://santedb.org/model"), JsonObject("CodedObservation")]
@@ -245,5 +261,4 @@ namespace SanteDB.Core.Model.Acts
             return base.SemanticEquals(obj) && other.ValueKey == this.ValueKey;
         }
     }
-
 }

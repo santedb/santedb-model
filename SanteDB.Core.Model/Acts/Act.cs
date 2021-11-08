@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -46,18 +47,18 @@ namespace SanteDB.Core.Model.Acts
     /// Examples of Acts Include:
     /// </para>
     /// <list type="bullet">
-    ///     <item><see cref="SubstanceAdministration"/> - The administration of a substance to a patient</item>
-    ///     <item><see cref="Observation"/> - The observing of a value for the patient</item>
-    ///     <item><see cref="PatientEncounter"/> - An encounter or visit that occurs where the patient receives one or more services</item>
-    ///     <item><see cref="Act"/> - Any other action such as supply request, or problem recordation</item>
+    ///     <item><term><see cref="SubstanceAdministration"/></term><description>The administration of a substance to a patient</description> </item>
+    ///     <item><term><see cref="Observation"/></term><description>The observing of a value for the patient</description></item>
+    ///     <item><term><see cref="PatientEncounter"/></term><description>An encounter or visit that occurs where the patient receives one or more services</description></item>
+    ///     <item><term><see cref="Act"/></term><description>Any other action such as supply request, or problem recordation</description></item>
     /// </list>
     /// <para>
     /// The property which classifies what specific type of action an act represents is its <see cref="ClassConceptKey"/>, which dictates
     /// what type an act is. Class concept keys can be found in here <see cref="ActClassKeys"/>.
     /// </para>
     /// <para>
-    /// This structure is used to represent events, proposals, and requests. That is to say, the Act structure can represent the request to 
-    /// do an act, the intent to perform an act, or the actual act being performed itself. This classification of mode happens based on the 
+    /// This structure is used to represent events, proposals, and requests. That is to say, the Act structure can represent the request to
+    /// do an act, the intent to perform an act, or the actual act being performed itself. This classification of mode happens based on the
     /// <see cref="MoodConceptKey"/> mood concept. Mood concept keys can be found on the <see cref="ActMoodKeys"/> structure.
     /// </para>
     /// </remarks>
@@ -175,7 +176,6 @@ namespace SanteDB.Core.Model.Acts
         [XmlIgnore, JsonIgnore]
         public DateTimeOffset? StopTime { get; set; }
 
-
         /// <summary>
         /// Gets or sets the time when the act should or did stop ocurring in ISO format
         /// </summary>
@@ -241,7 +241,6 @@ namespace SanteDB.Core.Model.Acts
         [Binding(typeof(ActMoodKeys))]
         public virtual Guid? MoodConceptKey { get; set; }
 
-
         /// <summary>
         /// Gets or sets the key of the concept which defines the reason why the act is or didn't occur
         /// </summary>
@@ -300,7 +299,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the concept which classifies the type of act
         /// </summary>
         /// <remarks>
-        /// The class concept is used to classify the overall type of the act. This code will specify whether the 
+        /// The class concept is used to classify the overall type of the act. This code will specify whether the
         /// act is a substance administration, financial transaction, observation, etc.
         /// </remarks>
         /// <see cref="ActClassKeys"/>
@@ -312,7 +311,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the concept which specifies the mood of the act
         /// </summary>
         /// <remarks>
-        /// Here the mood of the act is used to describe the mode of the act or specifically to classify 
+        /// Here the mood of the act is used to describe the mode of the act or specifically to classify
         /// whether the act did occur (event ocurrence), should occur (propose), will occur (intent), or being requested to occur (request).
         /// </remarks>
         /// <see cref="ActMoodKeys"/>
@@ -335,7 +334,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the current status concept of the act
         /// </summary>
         /// <remarks>
-        /// The status of the act will dictate which part of the lifecycle an act is 
+        /// The status of the act will dictate which part of the lifecycle an act is
         /// currently operating in.
         /// <list type="bullet">
         ///     <item>New - The Act is brand new and has yet to start ocurring</item>
@@ -360,7 +359,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the identifiers by which this act is known as in other systems
         /// </summary>
         /// <remarks>
-        /// The identifiers field is used to assign alternate identifiers to the act itself. These identifiers can 
+        /// The identifiers field is used to assign alternate identifiers to the act itself. These identifiers can
         /// be used internally for tracking the act, or can be used to correlate an act in a way that an external system
         /// will know it.
         /// </remarks>
@@ -371,7 +370,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets a list of all associated acts for this act
         /// </summary>
         /// <remarks>
-        /// The relationships of an act are used to relate one or more acts together either 
+        /// The relationships of an act are used to relate one or more acts together either
         /// directly as in an encounter with component acts, or between care episodes for chronic
         /// care.
         /// </remarks>
@@ -382,7 +381,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the security policy instances associated with the act
         /// </summary>
         /// <remarks>
-        /// This property allows authors to tag an act with a particular security policy. Here the 
+        /// This property allows authors to tag an act with a particular security policy. Here the
         /// security policies may be something akin to "Taboo information" or "Research Only". From there
         /// the SanteDB policy decision point will determine whether or not the particular piece of
         /// data should be exposed or masked based on user credentials.
@@ -395,8 +394,8 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <remarks>
         /// An extension allows developers to store additional data about a particular act in a manner
-        /// which the original SanteDB authors did not intend. This can be things such as equipment 
-        /// used to record an observation, etc. 
+        /// which the original SanteDB authors did not intend. This can be things such as equipment
+        /// used to record an observation, etc.
         /// <para>
         /// The key difference beetween an extension and a tag is that extensions are versioned whereas tags
         /// are not
@@ -416,9 +415,9 @@ namespace SanteDB.Core.Model.Acts
         /// Gets a list of all tags associated with the act
         /// </summary>
         /// <remarks>
-        /// A tag is a simple piece of data which is appended to an act which allows developers to 
+        /// A tag is a simple piece of data which is appended to an act which allows developers to
         /// extend the underlying application in ways not imagined by the original SanteDB team. Tags differ
-        /// from extensions in that they can only carry simple values (strings) and they are not versioned. 
+        /// from extensions in that they can only carry simple values (strings) and they are not versioned.
         /// </remarks>
         [XmlElement("tag"), JsonProperty("tag")]
         public List<ActTag> Tags { get; set; }
@@ -427,7 +426,7 @@ namespace SanteDB.Core.Model.Acts
         /// Identifies protocols attached to the act
         /// </summary>
         /// <remarks>
-        /// The protocols element is used to track which clinical protocols where linked with 
+        /// The protocols element is used to track which clinical protocols where linked with
         /// the act.
         /// </remarks>
         [XmlElement("protocol"), JsonProperty("protocol")]
@@ -441,7 +440,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the entities and participations they play in the act
         /// </summary>
         /// <remarks>
-        /// In an Act, one or more entities participate in the carrying out of the act. This property is used to 
+        /// In an Act, one or more entities participate in the carrying out of the act. This property is used to
         /// track that information. Examples of participations include:
         /// <list type="bullet">
         ///     <item>Consumable - An entity that was consumed in the process of carrying out the act</item>
@@ -489,32 +488,37 @@ namespace SanteDB.Core.Model.Acts
                 this.TypeConceptKey == other.TypeConceptKey;
         }
 
-
         /// <summary>
         /// Should serialize relationships?
         /// </summary>
         /// <returns></returns>
         public bool ShouldSerializeRelationships() => this.Relationships?.Count > 0;
+
         /// <summary>
         /// Should serialize identifiers
         /// </summary>
         public bool ShouldSerializeIdentifiers() => this.Identifiers?.Count > 0;
+
         /// <summary>
         /// Should serialize extensions?
         /// </summary>
         public bool ShouldSerializeExtensions() => this.Extensions?.Count > 0;
+
         /// <summary>
         /// Should serialize notes
         /// </summary>
         public bool ShouldSerializeNotes() => this.Notes?.Count > 0;
+
         /// <summary>
         /// Should serialize participations
         /// </summary>
         public bool ShouldSerializeParticipations() => this.Participations?.Count > 0;
+
         /// <summary>
         /// Should serialize tags
         /// </summary>
         public bool ShouldSerializeTags() => this.Tags?.Count > 0;
+
         /// <summary>
         /// Should serialize protocols
         /// </summary>
@@ -618,5 +622,14 @@ namespace SanteDB.Core.Model.Acts
         /// Remove <paramref name="tagKey"/> from the tag collection
         /// </summary>
         public void RemoveTag(string tagKey) => this.Tags.RemoveAll(o => o.TagKey == tagKey);
+
+        /// <summary>
+        /// Try to fetch the tag
+        /// </summary>
+        public bool TryGetTag(string tagKey, out ITag tag)
+        {
+            tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            return tag != null;
+        }
     }
 }

@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
@@ -35,6 +36,11 @@ namespace SanteDB.Core.Model.DataTypes
     [Classifier(nameof(Language)), SimpleValue(nameof(Name))]
     public class ReferenceTermName : BaseEntityData, ISimpleAssociation
     {
+        /// <summary>
+        /// Gets the source type of this relationship
+        /// </summary>
+        public Type SourceType => typeof(ReferenceTerm);
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ReferenceTermName"/> class.
         /// </summary>

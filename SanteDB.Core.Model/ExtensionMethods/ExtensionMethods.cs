@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -44,13 +45,11 @@ namespace SanteDB.Core.Model
     /// </summary>
     public static class ExtensionMethods
     {
-
         /// <summary>
-        /// Indicates a properly was load/checked 
+        /// Indicates a properly was load/checked
         /// </summary>
         private struct PropertyLoadCheck
         {
-
             /// <summary>
             /// Creates a new laod check struct
             /// </summary>
@@ -60,7 +59,7 @@ namespace SanteDB.Core.Model
             }
 
             /// <summary>
-            /// Gets or sets the name of the property 
+            /// Gets or sets the name of the property
             /// </summary>
             public String PropertyName { get; set; }
 
@@ -68,7 +67,6 @@ namespace SanteDB.Core.Model
             /// Get the property hash code
             /// </summary>
             public override int GetHashCode() => this.PropertyName.GetHashCode();
-
         }
 
         // Property cache
@@ -106,7 +104,6 @@ namespace SanteDB.Core.Model
             return me.GetAssemblies()
                 .Where(a => !a.IsDynamic && !m_skipAsm.Contains(a))
                 .SelectMany(a => { try { return a.ExportedTypes; } catch { m_skipAsm.Add(a); return new List<Type>(); } });
-
         }
 
         /// <summary>
@@ -174,7 +171,6 @@ namespace SanteDB.Core.Model
         {
             return System.Convert.ToBase64String(array)
                     .TrimEnd(new Char[] { '=' }).Replace('+', '-').Replace('/', '_');
-
         }
 
         /// <summary>
@@ -210,7 +206,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
+        /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector, bool forceReload = false)
             where TSource : IIdentifiedEntity
@@ -228,7 +224,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/> 
+        /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false)
             where TSource : IIdentifiedEntity
@@ -284,8 +280,17 @@ namespace SanteDB.Core.Model
             {
                 if ((currentValue == null || (currentValue as IList)?.Count == 0) && me.Key.HasValue)
                 {
-                    var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.GetRelations), new Type[] { propertyToLoad.PropertyType.StripGeneric() }, new Type[] { typeof(Guid?) });
-                    var loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { me.Key.Value }));
+                    var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.GetRelations), new Type[] { propertyToLoad.PropertyType.StripGeneric() }, new Type[] { typeof(Guid?[]) });
+
+                    object loaded = null;
+                    if (me is ITaggable taggable && taggable.TryGetTag(SanteDBConstants.AlternateKeysTag, out ITag altKeys))
+                    {
+                        loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new Object[] { altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).Union(new Guid?[] { me.Key }).ToArray() }));
+                    }
+                    else
+                    {
+                        loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { new Guid?[] { me.Key.Value }  }));
+                    }
                     propertyToLoad.SetValue(me, loaded);
                     return loaded;
                 }
@@ -305,8 +310,7 @@ namespace SanteDB.Core.Model
                 }
             }
             else return currentValue;
-            // Now we want to 
-
+            // Now we want to
         }
 
         /// <summary>
@@ -355,7 +359,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Strips all version information from the specified object. 
+        /// Strips all version information from the specified object.
         /// </summary>
         public static TObject StripAssociatedItemSources<TObject>(this TObject toEntity)
         {
@@ -379,7 +383,6 @@ namespace SanteDB.Core.Model
                     if (value is IList list)
                         foreach (ISimpleAssociation itm in list)
                         {
-
                             if (itm.SourceEntityKey != identifiedData.Key)
                             {
                                 itm.Key = null;
@@ -389,11 +392,9 @@ namespace SanteDB.Core.Model
                                     va.EffectiveVersionSequenceId = null;
                                 itm.StripAssociatedItemSources();
                             }
-
                         }
                     else if (value is ISimpleAssociation assoc)
                     {
-
                         if (assoc.SourceEntityKey != identifiedData.Key)
                         {
                             assoc.Key = null;
@@ -402,10 +403,8 @@ namespace SanteDB.Core.Model
                                 va.EffectiveVersionSequenceId = null;
                             assoc.StripAssociatedItemSources();
                         }
-
                     }
                 }
-
             }
 
             return toEntity;
@@ -459,12 +458,7 @@ namespace SanteDB.Core.Model
                 if (newValue != null && !s_parameterlessCtor.TryGetValue(newValue.GetType(), out hasConstructor))
                 {
                     // HACK: Some .NET types don't like to be constructed
-                    try
-                    {
-                        Activator.CreateInstance(newValue.GetType());
-                        hasConstructor = true;
-                    }
-                    catch { hasConstructor = false; }
+                    hasConstructor = newValue.GetType().GetConstructor(Type.EmptyTypes) != null;
                     s_parameterlessCtor.TryAdd(newValue.GetType(), hasConstructor);
                 }
                 if (newValue != null && hasConstructor)
@@ -482,7 +476,6 @@ namespace SanteDB.Core.Model
                     destinationPi.SetValue(toEntity, newValue);
                 else if (newValue == null && oldValue != null && overwritePopulatedWithNull)
                     destinationPi.SetValue(toEntity, newValue);
-
             }
             return toEntity;
         }
@@ -546,7 +539,6 @@ namespace SanteDB.Core.Model
                     (fieldNames == null || fieldNames.Contains(destinationPi.Name)))
                     foreach (var fromEntity in fromEntities.OrderBy(k => k.ModifiedOn))
                     {
-
                         var sourcePi = fromEntity.GetType().GetRuntimeProperty(destinationPi.Name);
                         // Skip properties no in the source
                         if (sourcePi == null)
@@ -568,12 +560,12 @@ namespace SanteDB.Core.Model
                         if ((newValue as IList)?.Count == 0)
                             newValue = null;
 
-                        if (newValue != null) // The new value has something 
+                        if (newValue != null) // The new value has something
                         {
                             // The destination is a list, so we should add if the item doesn't exist in the list
                             if (typeof(IList).IsAssignableFrom(destinationPi.PropertyType))
                             {
-                                // No current value 
+                                // No current value
                                 if (oldValue == null)
                                 {
                                     oldValue = Activator.CreateInstance(destinationPi.PropertyType);
@@ -610,11 +602,9 @@ namespace SanteDB.Core.Model
                                         var cve = itm as IVersionedAssociation;
                                         ive.ObsoleteVersionSequenceId = cve.ObsoleteVersionSequenceId;
                                         ive.EffectiveVersionSequenceId = cve.EffectiveVersionSequenceId;
-
                                     }
                                     addedObjects.Add(itm);
                                 }
-
                             }
                             else if (newValue is IdentifiedData &&
                                 !(newValue as IdentifiedData).SemanticEquals(oldValue))
@@ -658,7 +648,6 @@ namespace SanteDB.Core.Model
                 m_enumerableTypes.TryAdd(me, retVal);
             }
             return retVal;
-
         }
 
         /// <summary>
@@ -696,6 +685,7 @@ namespace SanteDB.Core.Model
                 ?? me.GetCustomAttributes<XmlElementAttribute>().FirstOrDefault()?.ElementName
                 ?? me.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName;
         }
+
         /// <summary>
         /// Get the serialization type name
         /// </summary>
@@ -941,7 +931,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Return the age 
+        /// Return the age
         /// </summary>
         /// <remarks>This exists for the extended query filter only</remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
