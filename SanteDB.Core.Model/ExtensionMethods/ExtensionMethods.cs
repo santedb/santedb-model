@@ -85,17 +85,6 @@ namespace SanteDB.Core.Model
         private static ConcurrentBag<Assembly> m_skipAsm = new ConcurrentBag<Assembly>();
 
         /// <summary>
-        /// Wrapper around String.Format that allows localization strings to be called via resource name and .WithParamters
-        /// </summary>
-        /// <example>
-        /// ErrorMessages.ERR_USR_CREATE_GEN.Format(userName);
-        /// </example>
-        public static String Format(this String me, params object[] objects)
-        {
-            return String.Format(me, objects);
-        }
-
-        /// <summary>
         /// Get all types
         /// </summary>
         public static IEnumerable<Type> GetAllTypes(this AppDomain me)
@@ -146,7 +135,6 @@ namespace SanteDB.Core.Model
                 return new MemoryQueryResultSet<TData>(me);
             }
         }
-
 
         /// <summary>
         /// Parse base 64 encode
@@ -248,7 +236,7 @@ namespace SanteDB.Core.Model
         public static void SetLoadIndicator(this IIdentifiedEntity me, string propertyName)
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
-            if(!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
+            if (!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
             {
                 me.AddAnnotation(loadCheck);
             }
@@ -289,7 +277,7 @@ namespace SanteDB.Core.Model
                     }
                     else
                     {
-                        loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { new Guid?[] { me.Key.Value }  }));
+                        loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { new Guid?[] { me.Key.Value } }));
                     }
                     propertyToLoad.SetValue(me, loaded);
                     return loaded;

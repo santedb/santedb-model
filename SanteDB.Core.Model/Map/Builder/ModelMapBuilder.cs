@@ -1,5 +1,5 @@
 ﻿using SanteDB.Core.Exceptions;
-using SanteDB.Core.Model.Resources;
+using SanteDB.Core.i18n;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace SanteDB.Core.Model.Map.Builder
     /// Model map builder
     /// </summary>
     /// <remarks>
-    /// The old version of the model mapping class used reflection which was extremely inefficient for mapping 
-    /// large sets of data. As part of the nuado refactoring, the model mapping is now handled by programmatically 
-    /// generated model mapping classes which contain explicit instructions on how to map the data from the source 
+    /// The old version of the model mapping class used reflection which was extremely inefficient for mapping
+    /// large sets of data. As part of the nuado refactoring, the model mapping is now handled by programmatically
+    /// generated model mapping classes which contain explicit instructions on how to map the data from the source
     /// model into the target model
     /// </remarks>
     public class ModelMapBuilder
@@ -31,7 +31,12 @@ namespace SanteDB.Core.Model.Map.Builder
         private static readonly CodeTypeReference s_tIdentifiedData = new CodeTypeReference(typeof(IdentifiedData));
         private static readonly CodeTypeReference s_tType = new CodeTypeReference(typeof(Type));
 
-
+        /// <summary>
+        /// Model map builder
+        /// </summary>
+        public ModelMapBuilder()
+        {
+        }
 
         /// <summary>
         /// Creates a String.Format() expression
@@ -54,7 +59,6 @@ namespace SanteDB.Core.Model.Map.Builder
                     new CodeAssignStatement(targetObject, new CodeCastExpression(new CodeTypeReference(toType), sourceObject)),
                 },
                 new CodeCatchClause[] {
-
                 new CodeCatchClause("e", new CodeTypeReference(typeof(Exception)),
                     failExpression)
                 });
@@ -86,7 +90,6 @@ namespace SanteDB.Core.Model.Map.Builder
         {
             return new CodeMethodInvokeExpression(new CodeTypeReferenceExpression(typeof(Convert)), methodName, parameter);
         }
-
 
         /// <summary>
         /// Create an equals statement
@@ -136,7 +139,6 @@ namespace SanteDB.Core.Model.Map.Builder
         /// </summary>
         public CodeTypeDeclaration CreateMapper(ClassMap map)
         {
-
             // Cannot process this type
             if (map.DomainType == null || map.ModelType == null)
                 return null;
@@ -220,7 +222,7 @@ namespace SanteDB.Core.Model.Map.Builder
                 {
                     retVal.Statements.Add(this.CreateCheckedAssignment(propInfo.PropertyType, new CodePropertyReferenceExpression(_instance, propInfo.Name), otherProp.PropertyType, new CodePropertyReferenceExpression(s_retVal, otherProp.Name)));
                 }
-                catch(InvalidOperationException e)
+                catch (InvalidOperationException e)
                 {
                     throw new ModelMapValidationException(new ValidationResultDetail[] { new ValidationResultDetail(ResultDetailType.Error, $"{map.ModelType.FullName}.{otherProp.Name} = {map.DomainType.FullName}.{propInfo.Name} - {e.Message}", e, "") });
                 }
@@ -245,12 +247,12 @@ namespace SanteDB.Core.Model.Map.Builder
             retVal.Parameters.Add(new CodeParameterDeclarationExpression(map.ModelType, "instance"));
 
             var _instance = new CodeVariableReferenceExpression("instance");
-            
+
             retVal.Statements.Add(new CodeConditionStatement(new CodeBinaryOperatorExpression(_instance, CodeBinaryOperatorType.IdentityEquality, s_null), new CodeMethodReturnStatement(new CodeDefaultValueExpression(new CodeTypeReference(map.DomainType)))));
             retVal.Statements.Add(new CodeVariableDeclarationStatement(new CodeTypeReference(map.DomainType), "retVal", new CodeObjectCreateExpression(new CodeTypeReference(map.DomainType))));
 
             // Iterate through the inbound properties and copy them over
-            foreach(var propInfo in map.DomainType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            foreach (var propInfo in map.DomainType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 if (!propInfo.PropertyType.StripNullable().IsPrimitive
                     && propInfo.PropertyType.StripNullable() != typeof(Guid) &&
@@ -273,7 +275,7 @@ namespace SanteDB.Core.Model.Map.Builder
                 }
 
                 // Other property
-                if(modelProp == null || !modelProp.CanWrite )
+                if (modelProp == null || !modelProp.CanWrite)
                 {
                     modelProp = map.ModelType.GetProperty(propInfo.Name);
                     if (modelProp == null || !modelProp.CanWrite)
@@ -295,8 +297,6 @@ namespace SanteDB.Core.Model.Map.Builder
                 {
                     throw new ModelMapValidationException(new ValidationResultDetail[] { new ValidationResultDetail(ResultDetailType.Error, $"{map.DomainType.FullName}.{propInfo.Name} = {map.ModelType.FullName}.{modelProp.Name} - {e.Message}", e, "") });
                 }
-
-                
             }
             retVal.Statements.Add(new CodeMethodReturnStatement(s_retVal));
             return retVal;
@@ -323,14 +323,13 @@ namespace SanteDB.Core.Model.Map.Builder
         /// </summary>
         private CodeStatement CreateCheckedAssignment(Type fromType, CodeExpression fromObject, Type toType, CodeExpression toObject)
         {
-
             // BYTE[] <-- GUID
             if (typeof(byte[]).Equals(toType) && typeof(Guid).Equals(fromType))
             {
                 return new CodeAssignStatement(toObject, this.CreateMethodCallExpression(fromObject, nameof(Guid.ToByteArray)));
             }
             // GUID <-- BYTE[]
-            else if(typeof(Guid).Equals(toType.StripNullable()) && typeof(byte[]).Equals(fromType))
+            else if (typeof(Guid).Equals(toType.StripNullable()) && typeof(byte[]).Equals(fromType))
             {
                 return new CodeAssignStatement(toObject, new CodeObjectCreateExpression(typeof(Guid), fromObject));
             }
@@ -339,32 +338,32 @@ namespace SanteDB.Core.Model.Map.Builder
                 return new CodeAssignStatement(toObject, this.CreateMethodCallExpression(new CodeTypeReferenceExpression(typeof(Type)), "GetType", fromObject));
             }
             // ENUM <-- INT
-            else if(toType.StripNullable().IsEnum && typeof(Int32).Equals(fromType))
+            else if (toType.StripNullable().IsEnum && typeof(Int32).Equals(fromType))
             {
                 return new CodeAssignStatement(toObject, new CodeCastExpression(new CodeTypeReference(toType), fromObject));
             }
             // DATETIME <-- DATETIMEOFFSET
-            else if(typeof(DateTime).Equals(toType.StripNullable()) && typeof(DateTimeOffset).IsAssignableFrom(fromType))
+            else if (typeof(DateTime).Equals(toType.StripNullable()) && typeof(DateTimeOffset).IsAssignableFrom(fromType))
             {
                 return new CodeAssignStatement(toObject, new CodePropertyReferenceExpression(fromObject, nameof(DateTimeOffset.DateTime)));
             }
             // DATETIMEOFFST <== DATETIME
-            else if(typeof(DateTimeOffset).Equals(toType.StripNullable()) && typeof(DateTime).IsAssignableFrom(fromType))
+            else if (typeof(DateTimeOffset).Equals(toType.StripNullable()) && typeof(DateTime).IsAssignableFrom(fromType))
             {
                 return new CodeAssignStatement(toObject, new CodeCastExpression(typeof(DateTimeOffset), fromObject));
             }
             // INT <== ENUM
-            else if(typeof(Int32).Equals(toType.StripNullable()) && fromType.IsEnum)
+            else if (typeof(Int32).Equals(toType.StripNullable()) && fromType.IsEnum)
             {
                 return new CodeAssignStatement(toObject, new CodeCastExpression(typeof(Int32), fromObject));
             }
             // ENUM <== STRING
-            else if(toType.StripNullable().IsEnum && typeof(String).Equals(fromType))
+            else if (toType.StripNullable().IsEnum && typeof(String).Equals(fromType))
             {
-                if(toType.StripNullable().GetFields().Any(f=>f.GetCustomAttribute<XmlEnumAttribute>() != null))
+                if (toType.StripNullable().GetFields().Any(f => f.GetCustomAttribute<XmlEnumAttribute>() != null))
                 {
                     CodeConditionStatement retVal = null;
-                    foreach(var f in toType.StripNullable().GetFields())
+                    foreach (var f in toType.StripNullable().GetFields())
                     {
                         var enumV = f.GetCustomAttribute<XmlEnumAttribute>();
                         if (enumV == null)
@@ -382,7 +381,6 @@ namespace SanteDB.Core.Model.Map.Builder
                             logicExpression.FalseStatements.Add(retVal);
                             retVal = logicExpression;
                         }
-
                     }
 
                     return retVal;
@@ -393,13 +391,13 @@ namespace SanteDB.Core.Model.Map.Builder
                 }
             }
             // STRING <== ENUM
-            else if(typeof(String).Equals(toType) && fromType.IsEnum)
+            else if (typeof(String).Equals(toType) && fromType.IsEnum)
             {
                 // Use the XML enum?
-                if(fromType.GetFields().Any(f=>f.GetCustomAttribute<XmlEnumAttribute>() != null))
+                if (fromType.GetFields().Any(f => f.GetCustomAttribute<XmlEnumAttribute>() != null))
                 {
                     CodeConditionStatement retVal = null;
-                    foreach(var f in fromType.GetFields())
+                    foreach (var f in fromType.GetFields())
                     {
                         var enumV = f.GetCustomAttribute<XmlEnumAttribute>();
                         if (enumV == null)
@@ -408,9 +406,9 @@ namespace SanteDB.Core.Model.Map.Builder
                         }
 
                         // Convert with an if
-                        var logicExpression = new CodeConditionStatement(new CodeBinaryOperatorExpression(fromObject, CodeBinaryOperatorType.ValueEquality, new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(fromType), f.Name)), 
+                        var logicExpression = new CodeConditionStatement(new CodeBinaryOperatorExpression(fromObject, CodeBinaryOperatorType.ValueEquality, new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(fromType), f.Name)),
                             new CodeAssignStatement(toObject, new CodePrimitiveExpression(enumV.Name)));
-                        if(retVal == null)
+                        if (retVal == null)
                         {
                             retVal = logicExpression;
                         }
@@ -429,12 +427,12 @@ namespace SanteDB.Core.Model.Map.Builder
                 }
             }
             // STRING <== TYPE
-            else if(typeof(String).Equals(toType) && fromType.Equals(typeof(Type)))
+            else if (typeof(String).Equals(toType) && fromType.Equals(typeof(Type)))
             {
                 return new CodeAssignStatement(toObject, new CodePropertyReferenceExpression(fromObject, nameof(Type.AssemblyQualifiedName)));
             }
             // TYPE? <== TYPE
-            else if (fromType.IsGenericType && 
+            else if (fromType.IsGenericType &&
                 typeof(Nullable<>).IsAssignableFrom(fromType.GetGenericTypeDefinition())) // generic
             {
                 return new CodeConditionStatement(
@@ -449,10 +447,10 @@ namespace SanteDB.Core.Model.Map.Builder
             }
             else
             {
-                throw new InvalidOperationException(String.Format(ErrorMessages.ERR_MAP_INCOMPATIBLE_TYPE, fromType, toType));
+                throw new InvalidOperationException(String.Format(ErrorMessages.MAP_INCOMPATIBLE_TYPE, fromType, toType));
             }
         }
-        
+
         /// <summary>
         /// Creates a non-generic form of the MapToX method, casting to appropriate <paramref name="parameterType"/>
         /// </summary>
@@ -473,15 +471,14 @@ namespace SanteDB.Core.Model.Map.Builder
             retVal.Statements.Add(this.CreateArgumentNullCheckStatement(_o));
             retVal.Statements.Add(new CodeVariableDeclarationStatement(parameterType, "instance"));
             var _instance = new CodeVariableReferenceExpression("instance");
-            
+
             // Cast the object to the correct type
-            retVal.Statements.Add(this.CreateCastTryCatch(parameterType, _instance, _o, this.CreateThrowException(typeof(ArgumentException), new CodePrimitiveExpression("instance"), this.CreateStringFormatExpression(ErrorMessages.ERR_MAP_INVALID_TYPE, this.CreateGetTypeExpression(_o)), new CodeVariableReferenceExpression("e"))));
+            retVal.Statements.Add(this.CreateCastTryCatch(parameterType, _instance, _o, this.CreateThrowException(typeof(ArgumentException), new CodePrimitiveExpression("instance"), this.CreateStringFormatExpression(ErrorMessages.MAP_INVALID_TYPE, this.CreateGetTypeExpression(_o)), new CodeVariableReferenceExpression("e"))));
 
             // Call and return
             retVal.Statements.Add(new CodeMethodReturnStatement(this.CreateMethodCallExpression(s_this, methodName, _instance)));
 
             return retVal;
-            
         }
 
         /// <summary>
@@ -492,7 +489,7 @@ namespace SanteDB.Core.Model.Map.Builder
         /// <remarks>Checks that <paramref name="argumentToCheck"/> is null, and if so, then throws an argumentnullexception</remarks>
         private CodeConditionStatement CreateArgumentNullCheckStatement(CodeVariableReferenceExpression argumentToCheck)
         {
-            return new CodeConditionStatement(new CodeBinaryOperatorExpression(argumentToCheck, CodeBinaryOperatorType.IdentityEquality, s_null), this.CreateThrowException(typeof(ArgumentNullException), new CodePrimitiveExpression(argumentToCheck.VariableName), this.CreateStringFormatExpression(ErrorMessages.ERR_ARGUMENT_NULL, new CodePrimitiveExpression(argumentToCheck.VariableName))));
+            return new CodeConditionStatement(new CodeBinaryOperatorExpression(argumentToCheck, CodeBinaryOperatorType.IdentityEquality, s_null), this.CreateThrowException(typeof(ArgumentNullException), new CodePrimitiveExpression(argumentToCheck.VariableName)));
         }
 
         /// <summary>
@@ -524,6 +521,5 @@ namespace SanteDB.Core.Model.Map.Builder
             retVal.GetStatements.Add(new CodeMethodReturnStatement(new CodeTypeOfExpression(type)));
             return retVal;
         }
-
     }
 }

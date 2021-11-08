@@ -1,5 +1,4 @@
-﻿using SanteDB.Core.Model.Resources;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,6 @@ namespace SanteDB.Core.Model.Map.Builder
     /// </summary>
     public class ReflectionModelMapper : IModelMapper
     {
-
         // The map configuration
         private ClassMap m_classMap;
 
@@ -26,7 +24,6 @@ namespace SanteDB.Core.Model.Map.Builder
         /// </summary>
         public ReflectionModelMapper(ClassMap map, ModelMapper context)
         {
-
             this.m_classMap = map;
             this.m_context = context;
         }
@@ -40,7 +37,6 @@ namespace SanteDB.Core.Model.Map.Builder
         /// Gets the target type
         /// </summary>
         public Type TargetType => this.m_classMap.DomainType;
-
 
         /// <summary>
         /// Map to source
@@ -56,7 +52,6 @@ namespace SanteDB.Core.Model.Map.Builder
             // Iterate the properties and map
             foreach (var sourceProperty in domainInstance.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-
                 // Map property
                 PropertyInfo modelProperty = null;
                 if (!m_classMap.TryGetModelProperty(sourceProperty.Name, out PropertyMap propMap))
@@ -73,7 +68,6 @@ namespace SanteDB.Core.Model.Map.Builder
                     continue;
                 }
 
-
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Mapping property ({0}[{1}]).{2} = {3}", typeof(TDomain).Name, idEnt.Key, modelPropertyInfo.Name, originalValue);
 #endif
@@ -82,11 +76,9 @@ namespace SanteDB.Core.Model.Map.Builder
                 var originalValue = sourceProperty.GetValue(domainInstance);
 
                 this.Set(retVal, modelProperty, originalValue, sourceProperty);
-
             }
 
             return retVal;
-
         }
 
         /// <summary>
@@ -102,7 +94,6 @@ namespace SanteDB.Core.Model.Map.Builder
             // Iterate through properties
             foreach (var propInfo in modelInstance.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
             {
-
                 var propValue = propInfo.GetValue(modelInstance);
                 // Property info
                 if (propValue == null)
@@ -128,14 +119,12 @@ namespace SanteDB.Core.Model.Map.Builder
                 else
                 {
                     domainProperty = this.m_classMap.DomainType.GetRuntimeProperty(propInfo.Name);
-
                 }
                 Object targetObject = retVal;
 
                 object domainValue = null;
 
                 this.Set(targetObject, domainProperty, propValue, propInfo);
-                
             }
 
             return retVal;
@@ -163,19 +152,19 @@ namespace SanteDB.Core.Model.Map.Builder
                 targetProperty.SetValue(targetObject, (sourceObject as Type).AssemblyQualifiedName);
             else if (MapUtil.TryConvert(sourceObject, targetProperty.PropertyType, out object domainValue))
                 targetProperty.SetValue(targetObject, domainValue);
-            else if (targetProperty.PropertyType== typeof(String) && sourceProperty.PropertyType.StripNullable().IsEnum)
+            else if (targetProperty.PropertyType == typeof(String) && sourceProperty.PropertyType.StripNullable().IsEnum)
             {
                 // Is XML Enum?
                 var fields = sourceProperty.PropertyType.StripNullable().GetFields();
                 object value = sourceObject.ToString();
-                if(fields.Any(f=>f.GetCustomAttribute<XmlEnumAttribute>() != null))
+                if (fields.Any(f => f.GetCustomAttribute<XmlEnumAttribute>() != null))
                 {
                     var fn = Enum.GetName(sourceProperty.PropertyType.StripNullable(), sourceObject);
                     value = fields.First(o => o.Name == fn).GetCustomAttribute<XmlEnumAttribute>().Name;
                 }
                 targetProperty.SetValue(targetObject, value);
             }
-            else if(targetProperty.PropertyType.StripNullable().IsEnum && sourceProperty.PropertyType == typeof(String))
+            else if (targetProperty.PropertyType.StripNullable().IsEnum && sourceProperty.PropertyType == typeof(String))
             {
                 // Is XML Enum?
                 var fields = targetProperty.PropertyType.StripNullable().GetFields();
@@ -183,7 +172,6 @@ namespace SanteDB.Core.Model.Map.Builder
                     Enum.Parse(targetProperty.PropertyType.StripNullable(), sourceObject.ToString());
                 targetProperty.SetValue(targetObject, value);
             }
-
         }
     }
 }
