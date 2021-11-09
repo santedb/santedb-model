@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
@@ -35,13 +36,11 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Tag")]
     public abstract class Tag<TSourceType> : BaseEntityData, ITag, ISimpleAssociation where TSourceType : IdentifiedData, new()
     {
-
         /// <summary>
         /// Default ctor for serialization
         /// </summary>
         public Tag()
         {
-
         }
 
         /// <summary>
@@ -52,6 +51,12 @@ namespace SanteDB.Core.Model.DataTypes
             this.TagKey = key;
             this.Value = value;
         }
+
+        /// <summary>
+        /// Get the source type
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public Type SourceType => typeof(TSourceType);
 
         /// <summary>
         /// Gets or sets the key of the tag
@@ -67,6 +72,7 @@ namespace SanteDB.Core.Model.DataTypes
 
         // Target entity key
         private Guid? m_sourceEntityKey;
+
         // The target entity
 
         private TSourceType m_sourceEntity;
@@ -116,7 +122,7 @@ namespace SanteDB.Core.Model.DataTypes
         object ISimpleAssociation.SourceEntity { get => this.SourceEntity; set => this.SourceEntity = (TSourceType)value; }
 
         /// <summary>
-        /// Semantic equality 
+        /// Semantic equality
         /// </summary>
         public override bool SemanticEquals(object obj)
         {
@@ -152,13 +158,11 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlType("EntityTag", Namespace = "http://santedb.org/model"), JsonObject("EntityTag")]
     public class EntityTag : Tag<Entity>
     {
-
         /// <summary>
         /// Default ctor
         /// </summary>
         public EntityTag()
         {
-
         }
 
         /// <summary>
@@ -170,7 +174,6 @@ namespace SanteDB.Core.Model.DataTypes
             this.Value = value;
         }
     }
-
 
     /// <summary>
     /// Represents a tag on an act
@@ -184,7 +187,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public ActTag()
         {
-
         }
 
         /// <summary>
@@ -196,5 +198,4 @@ namespace SanteDB.Core.Model.DataTypes
             this.Value = value;
         }
     }
-
 }

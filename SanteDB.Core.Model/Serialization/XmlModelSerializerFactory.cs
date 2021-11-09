@@ -21,6 +21,7 @@
 
 using SanteDB.Core.Model.Attributes;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -42,10 +43,10 @@ namespace SanteDB.Core.Model.Serialization
         private static readonly object m_lock = new object();
 
         // Get serializer keys for a registered type
-        private readonly Dictionary<Type, string> m_serializerKeys = new Dictionary<Type, string>();
+        private readonly ConcurrentDictionary<Type, string> m_serializerKeys = new ConcurrentDictionary<Type, string>();
 
         // Cache of created serializers
-        private readonly Dictionary<string, XmlSerializer> m_serializers = new Dictionary<string, XmlSerializer>();
+        private readonly ConcurrentDictionary<string, XmlSerializer> m_serializers = new ConcurrentDictionary<string, XmlSerializer>();
 
         /// <summary>
         /// Private ctor
@@ -97,31 +98,34 @@ namespace SanteDB.Core.Model.Serialization
             // Exists?
             if (!this.m_serializers.TryGetValue(key, out var serializer))
             {
-                lock (m_lock)
+                if (!this.m_serializers.ContainsKey(key)) // Ensure that hasn't been generated since lock was acquired
                 {
-                    if (!this.m_serializers.ContainsKey(key)) // Ensure that hasn't been generated since lock was acquired
+                    if (type.GetCustomAttribute<ResourceCollectionAttribute>() != null && extraTypes.Length == 0)
                     {
-                        if (type.GetCustomAttribute<ResourceCollectionAttribute>() != null && extraTypes.Length == 0)
-                        {
-                            extraTypes = AppDomain.CurrentDomain.GetAllTypes()
-                                .Where(t => !t.IsGenericTypeDefinition && !t.IsAbstract && (typeof(IdentifiedData).IsAssignableFrom(t) || t.GetCustomAttribute<XmlRootAttribute>() != null))
-                                .Union(ModelSerializationBinder.GetRegisteredTypes())
-                                .ToArray();
-                        }
+                        extraTypes = AppDomain.CurrentDomain.GetAllTypes()
+                            .Where(t => t.GetCustomAttribute<XmlRootAttribute>() != null && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface)
+                            .Union(ModelSerializationBinder.GetRegisteredTypes())
+                            .ToArray();
+                    }
+                    else if (extraTypes.Length == 0)
+                    {
+                        extraTypes = AppDomain.CurrentDomain.GetAllTypes()
+                            .Where(t => t.GetCustomAttribute<XmlTypeAttribute>() != null)
+                            .Where(t => t.GetConstructor(Type.EmptyTypes) != null && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface && (type.IsAssignableFrom(t) || type.GetProperties().Select(p => p.PropertyType.StripGeneric()).Any(p => !p.IsAbstract && !p.IsInterface && typeof(IdentifiedData).IsAssignableFrom(p) && p.IsAssignableFrom(t))))
+                            .ToArray();
+                    }
 
-                        serializer = new XmlSerializer(type, extraTypes);
+                    serializer = new XmlSerializer(type, extraTypes);
+                    this.m_serializers.TryAdd(key, serializer);
 
-                        this.m_serializers.Add(key, serializer);
-
-                        if (this.m_serializerKeys.TryGetValue(type, out var existingKey) &&
-                            existingKey.Length < key.Length) // This one has more data than the existing
-                        {
-                            this.m_serializerKeys[type] = key;
-                        }
-                        else if (existingKey == null)
-                        {
-                            this.m_serializerKeys.Add(type, key); // Link the key
-                        }
+                    if (this.m_serializerKeys.TryGetValue(type, out var existingKey) &&
+                        existingKey.Length < key.Length) // This one has more data than the existing
+                    {
+                        this.m_serializerKeys[type] = key;
+                    }
+                    else if (existingKey == null)
+                    {
+                        this.m_serializerKeys.TryAdd(type, key); // Link the key
                     }
                 }
             }
