@@ -81,7 +81,7 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the sequence of this object in the component
         /// </summary>
         [XmlElement("sequence"), JsonProperty("sequence")]
-        public decimal Sequence { get; set; }
+        public decimal OrderSequence { get; set; }
 
         /// <summary>
         /// Value of the name

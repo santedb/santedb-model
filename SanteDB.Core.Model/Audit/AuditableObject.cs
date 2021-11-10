@@ -63,7 +63,7 @@ namespace SanteDB.Core.Model.Audit
         /// </summary>
         public AuditableObject()
         {
-            this.ObjectData = new List<ObjectDataExtension>();
+            
         }
 
         /// <summary>

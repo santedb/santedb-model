@@ -46,10 +46,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public Concept()
         {
-            this.ReferenceTerms = new List<ConceptReferenceTerm>();
-            this.ConceptNames = new List<ConceptName>();
-            this.Relationship = new List<ConceptRelationship>();
-            this.ConceptSets = new List<ConceptSet>();
+           
         }
 
        

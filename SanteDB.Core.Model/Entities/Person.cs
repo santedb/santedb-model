@@ -48,7 +48,6 @@ namespace SanteDB.Core.Model.Entities
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
             base.ClassConceptKey = EntityClassKeys.Person;
-            this.LanguageCommunication = new List<PersonLanguageCommunication>();
 
         }
 

@@ -79,7 +79,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityAddress()
         {
-            this.Component = new List<EntityAddressComponent>();
+            
         }
 
         /// <summary>

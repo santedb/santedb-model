@@ -31,11 +31,11 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Effective version sequence
         /// </summary>
-        Int32? EffectiveVersionSequenceId { get; set; }
+        Int64? EffectiveVersionSequenceId { get; set; }
 
         /// <summary>
         /// Obsolete version sequence
         /// </summary>
-        Int32? ObsoleteVersionSequenceId { get; set; }
+        Int64? ObsoleteVersionSequenceId { get; set; }
     }
 }

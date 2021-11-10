@@ -75,7 +75,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityName()
         {
-            this.Component = new List<EntityNameComponent>();
+            
         }
 
         /// <summary>

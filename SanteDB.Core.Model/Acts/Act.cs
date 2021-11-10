@@ -68,20 +68,11 @@ namespace SanteDB.Core.Model.Acts
     [Classifier(nameof(ClassConcept))]
     public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
-
         /// <summary>
         /// Constructor for ACT
         /// </summary>
         public Act()
         {
-            this.Relationships = new List<ActRelationship>();
-            this.Identifiers = new List<ActIdentifier>();
-            this.Extensions = new List<ActExtension>();
-            this.Notes = new List<ActNote>();
-            this.Participations = new List<ActParticipation>();
-            this.Tags = new List<ActTag>();
-            this.Protocols = new List<ActProtocol>();
-            this.Policies = new List<SecurityPolicyInstance>();
         }
 
         /// <summary>
@@ -452,7 +443,6 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         /// <see cref="ActParticipationKey"/>
         [XmlElement("participation"), JsonProperty("participation")]
-        
         public List<ActParticipation> Participations { get; set; }
 
         /// <summary>

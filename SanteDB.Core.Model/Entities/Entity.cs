@@ -46,22 +46,11 @@ namespace SanteDB.Core.Model.Entities
     [Classifier(nameof(ClassConcept))]
     public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
-
         /// <summary>
         /// Creates a new instance of the entity class
         /// </summary>
         public Entity()
         {
-            this.Identifiers = new List<EntityIdentifier>();
-            this.Addresses = new List<EntityAddress>();
-            this.Extensions = new List<EntityExtension>();
-            this.Names = new List<EntityName>();
-            this.Notes = new List<EntityNote>();
-            this.Participations = new List<ActParticipation>();
-            this.Relationships = new List<EntityRelationship>();
-            this.Telecoms = new List<EntityTelecomAddress>();
-            this.Tags = new List<EntityTag>();
-            this.Policies = new List<SecurityPolicyInstance>();
         }
 
         /// <summary>
@@ -398,14 +387,14 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Remove the specified <paramref name="tagKey"/> from this objects tags
         /// </summary>
-        public void RemoveTag(string tagKey) => this.Tags.RemoveAll(o => o.TagKey == tagKey);
+        public void RemoveTag(string tagKey) => this.Tags?.RemoveAll(o => o.TagKey == tagKey);
 
         /// <summary>
         /// Try to fetch the tag
         /// </summary>
         public bool TryGetTag(string tagKey, out ITag tag)
         {
-            tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            tag = this.Tags?.FirstOrDefault(o => o.TagKey == tagKey);
             return tag != null;
         }
     }

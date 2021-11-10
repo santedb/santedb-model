@@ -73,6 +73,6 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the order in which this element appears
         /// </summary>
         [XmlElement("sequence"), JsonProperty("sequence")]
-        public decimal Sequence { get; set; }
+        public decimal OrderSequence { get; set; }
     }
 }

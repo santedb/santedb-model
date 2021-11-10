@@ -44,7 +44,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public ReferenceTerm()
         {
-            this.DisplayNames = new List<ReferenceTermName>();
         }
 
         /// <summary>

@@ -44,7 +44,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public ConceptSet()
         {
-            this.Concepts = new List<Concept>();
+            
         }
 
         /// <summary>
