@@ -96,6 +96,17 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Get member
+        /// </summary>
+        public static MemberInfo GetMember(this Expression me)
+        {
+            if (me is UnaryExpression ue) return ue.Operand.GetMember();
+            else if (me is LambdaExpression le) return le.Body.GetMember();
+            else if (me is MemberExpression ma) return ma.Member;
+            else throw new InvalidOperationException($"{me} not supported, please use a member access expression");
+        }
+
+        /// <summary>
         /// Convert a hex string to byte array
         /// </summary>
         public static byte[] ParseHexString(this String hexString)

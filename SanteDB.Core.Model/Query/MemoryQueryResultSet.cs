@@ -139,6 +139,22 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Perform a select
+        /// </summary>
+        public IEnumerable<TReturn> Select<TReturn>(Expression<Func<TData, TReturn>> selector)
+        {
+            return this.m_wrapped.Select(selector.Compile());
+        }
+
+        /// <summary>
+        /// Select a C# expressions
+        /// </summary>
+        public IEnumerable<TReturn> Select<TReturn>(Func<TData, TReturn> selector)
+        {
+            return this.m_wrapped.Select(selector);
+        }
+
+        /// <summary>
         /// Union with another
         /// </summary>
         public IQueryResultSet<TData> Union(Expression<Func<TData, bool>> query)

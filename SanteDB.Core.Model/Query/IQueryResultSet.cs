@@ -142,5 +142,10 @@ namespace SanteDB.Core.Model.Query
         /// Get the result set as a stateful query
         /// </summary>
         IQueryResultSet<TData> AsStateful(Guid stateId);
+
+        /// <summary>
+        /// Select a single object from the object
+        /// </summary>
+        IEnumerable<TReturn> Select<TReturn>(Expression<Func<TData, TReturn>> selector);
     }
 }
