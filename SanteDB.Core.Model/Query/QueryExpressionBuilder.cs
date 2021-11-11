@@ -207,13 +207,19 @@ namespace SanteDB.Core.Model.Query
                 switch (node.NodeType)
                 {
                     case ExpressionType.Not:
-                        var parmName = this.ExtractPath(node.Operand, true);
-                        if (!parmName.EndsWith("]"))
-                            throw new InvalidOperationException("Only guard conditions can (i.e. Any statements) support unary NOT");
 
-                        this.AddCondition(parmName, "null");
+                        if (node.Operand is MethodCallExpression callExpression)
+                        {
+                            this.ParseArrayContains(callExpression, true);
+                        }
+                        else
+                        {
+                            var parmName = this.ExtractPath(node.Operand, true);
+                            if (!parmName.EndsWith("]"))
+                                throw new InvalidOperationException("Only guard conditions can (i.e. Any statements) support unary NOT");
+                            this.AddCondition(parmName, "null");
+                        }
                         return null;
-
                     default:
                         throw new NotSupportedException("Unary expressions cannot be represented as key/value pair filters");
                 }
@@ -230,20 +236,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             if (node.Object == null && node.Method.DeclaringType == typeof(Enumerable))
                             {
-                                // Array contains
-                                // value=X&value=Y&value=Z
-                                Expression array = node.Arguments[0],
-                                    bindParameter = node.Arguments[1];
-                                var parmName = this.ExtractPath(bindParameter, false);
-                                var valueList = this.ExtractValue(array);
-                                if (valueList is IEnumerable enumerable)
-                                {
-                                    foreach (var i in enumerable)
-                                        this.AddCondition(parmName, i);
-                                    return null;
-                                }
-                                else
-                                    throw new InvalidOperationException("Cannot understand this enumerable object");
+                                return this.ParseArrayContains(node, false);
                             }
                             else
                             {
@@ -286,6 +279,40 @@ namespace SanteDB.Core.Model.Query
                             return null;
                         }
                 }
+            }
+
+            /// <summary>
+            /// Parse a Contains call
+            /// </summary>
+            private Expression ParseArrayContains(MethodCallExpression node, bool inverse)
+            {
+
+                // Array contains
+                // value=X&value=Y&value=Z
+                Expression array = node.Arguments[0],
+                    bindParameter = node.Arguments[1];
+                var parmName = this.ExtractPath(bindParameter, false);
+                var valueList = this.ExtractValue(array);
+                if (valueList is IEnumerable enumerable)
+                {
+                    foreach (var i in enumerable)
+                    {
+                        if (inverse)
+                        {
+                            this.AddCondition(parmName, $"!{i}");
+                        }
+                        else
+                        {
+                            this.AddCondition(parmName, i);
+
+                        }
+
+                    }
+                    return null;
+                }
+                else
+                    throw new InvalidOperationException("Cannot understand this enumerable object");
+
             }
 
             /// <summary>
