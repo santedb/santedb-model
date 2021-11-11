@@ -39,6 +39,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets the source type of this relationship
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         public Type SourceType => typeof(ReferenceTerm);
 
         /// <summary>

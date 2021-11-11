@@ -55,6 +55,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Get the source type
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         public Type SourceType => typeof(TSourceType);
 
         /// <summary>
