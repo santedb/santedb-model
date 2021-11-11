@@ -241,16 +241,45 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Set the load state
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void SetLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
+            where TSource : IIdentifiedEntity
+        {
+            me.SetLoaded(propertySelector.GetMember().Name);
+        }
+
+        /// <summary>
         /// Set the necessary annotation on <paramref name="me"/> to indicate that <paramref name="propertyName"/> has
         /// been loaded
         /// </summary>
-        public static void SetLoadIndicator(this IIdentifiedEntity me, string propertyName)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void SetLoaded(this IIdentifiedEntity me, string propertyName)
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
             if (!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
             {
                 me.AddAnnotation(loadCheck);
             }
+        }
+
+        /// <summary>
+        /// Returns true if the property is loaded
+        /// </summary>
+        public static bool WasLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
+            where TSource : IIdentifiedEntity
+        {
+            return me.WasLoaded(propertySelector.GetMember().Name);
+        }
+
+        /// <summary>
+        /// Returns true if the property has been loaded
+        /// </summary>
+        public static bool WasLoaded(this IIdentifiedEntity me, String propertyName)
+        {
+            var loadCheck = new PropertyLoadCheck(propertyName);
+            return me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck);
         }
 
         /// <summary>
