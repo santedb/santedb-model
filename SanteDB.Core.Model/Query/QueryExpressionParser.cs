@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
@@ -33,19 +34,18 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Query
 {
-
-
     /// <summary>
     /// A class which is responsible for translating a series of Query Parmaeters to a LINQ expression
     /// to be passed to the persistence layer
     /// </summary>
     public static class QueryExpressionParser
     {
-
         // Member cache
         private static Dictionary<Type, Dictionary<String, PropertyInfo>> m_memberCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+
         // Cast cache
         private static Dictionary<String, Type> m_castCache = new Dictionary<string, Type>();
+
         // Redirect cache
         private static Dictionary<Type, Dictionary<String, PropertyInfo>> m_redirectCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
 
@@ -54,28 +54,10 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         private static readonly Dictionary<String, Func<object>> m_builtInVars = new Dictionary<string, Func<object>>();
 
-        /// Static CTOR        
+        /// Static CTOR
         static QueryExpressionParser()
         {
             m_builtInVars.Add("now", () => DateTime.Now);
-        }
-
-        /// <summary>
-        /// Build the order by expression
-        /// </summary>
-        public static ModelSort<TModelType>[] BuildSort<TModelType>(List<String> orderBy)
-        {
-            // Order by
-            List<ModelSort<TModelType>> retVal = new List<ModelSort<TModelType>>();
-            foreach (var itm in orderBy)
-            {
-                var sortData = itm.Split(':');
-                retVal.Add(new ModelSort<TModelType>(
-                    QueryExpressionParser.BuildPropertySelector<TModelType>(sortData[0]),
-                    sortData.Length == 1 || sortData[1] == "asc" ? Core.Model.Map.SortOrderType.OrderBy : Core.Model.Map.SortOrderType.OrderByDescending
-                ));
-            }
-            return retVal.ToArray();
         }
 
         /// <summary>
@@ -83,7 +65,6 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public static Expression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters)
         {
-
             var methodInfo = typeof(QueryExpressionParser).GetGenericMethod(nameof(QueryExpressionParser.BuildLinqExpression), new Type[] { modelType }, new Type[] { typeof(NameValueCollection) });
             return methodInfo.Invoke(null, new object[] { httpQueryParameters }) as Expression;
         }
@@ -96,7 +77,6 @@ namespace SanteDB.Core.Model.Query
             var methodInfo = typeof(QueryExpressionParser).GetGenericMethod(nameof(QueryExpressionParser.BuildLinqExpression), new Type[] { modelType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Func<Object>>), typeof(bool), typeof(bool), typeof(bool) });
             return methodInfo.Invoke(null, new object[] { httpQueryParameters, parameterName, variables, safeNullable, forceLoad, lazyExpandVariables }) as Expression;
         }
-
 
         /// <summary>
         /// Buidl linq expression
@@ -116,13 +96,13 @@ namespace SanteDB.Core.Model.Query
         {
             return BuildLinqExpression<TModelType>(NameValueCollection.ParseQueryString(filter), null);
         }
+
         /// <summary>
         /// Build a LINQ expression
         /// </summary>
         public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables)
         {
             return BuildLinqExpression<TModelType>(httpQueryParameters, variables, true);
-
         }
 
         /// <summary>
@@ -136,7 +116,6 @@ namespace SanteDB.Core.Model.Query
         /// <param name="lazyExpandVariables">When true, variables are written to be expanded on evaluation of the LINQ expression - if false then variables are realized when the conversion is done</param>
         public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables, bool safeNullable, bool lazyExpandVariables = true)
         {
-
             var expression = BuildLinqExpression<TModelType>(httpQueryParameters, "o", variables, safeNullable: safeNullable, lazyExpandVariables: lazyExpandVariables);
 
             if (expression == null) // No query!
@@ -156,11 +135,10 @@ namespace SanteDB.Core.Model.Query
         /// <param name="variables">A list of variables which are accessed in the LambdaExpression via $variable</param>
         public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
         {
-
             var parameterExpression = Expression.Parameter(typeof(TModelType), parameterName);
             Expression retVal = null;
             List<KeyValuePair<String, String[]>> workingValues = new List<KeyValuePair<string, string[]>>();
-            // Iterate 
+            // Iterate
             foreach (var nvc in httpQueryParameters.Where(p => !p.Key.StartsWith("_")).Distinct())
                 workingValues.Add(new KeyValuePair<string, string[]>(nvc.Key, nvc.Value?.ToArray()));
 
@@ -273,7 +251,6 @@ namespace SanteDB.Core.Model.Query
                             memberInfo = backingFor;
                     }
 
-
                     // Force loading of properties
                     if (forceLoad)
                     {
@@ -295,7 +272,6 @@ namespace SanteDB.Core.Model.Query
 
                     if (!String.IsNullOrEmpty(cast))
                     {
-
                         Type castType = null;
                         if (!m_castCache.TryGetValue(cast, out castType))
                         {
@@ -327,7 +303,6 @@ namespace SanteDB.Core.Model.Query
                         PropertyInfo classifierProperty = itemType.GetRuntimeProperty(classAttr.ClassifierProperty);
                         Expression guardExpression = null;
 
-
                         if (guard.Split('|').All(o => Guid.TryParse(o, out Guid _))) // TODO: Refactor this (and the entire class)
                         {
                             if (!String.IsNullOrEmpty(classAttr.ClassifierKeyProperty)) // attempt to get via classifier key
@@ -346,8 +321,6 @@ namespace SanteDB.Core.Model.Query
                                 else
                                     guardExpression = Expression.MakeBinary(ExpressionType.OrElse, guardExpression, expr);
                             }
-
-
                         }
                         else
                         {
@@ -373,11 +346,9 @@ namespace SanteDB.Core.Model.Query
                                     }
                                     else
                                         guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
-
                                 }
                                 else
                                     guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
-
 
                                 classAttr = classifierProperty.PropertyType.GetCustomAttribute<ClassifierAttribute>();
                                 if (classAttr != null && guard != null)
@@ -392,7 +363,7 @@ namespace SanteDB.Core.Model.Query
                             else
                                 foreach (var g in guard.Split('|'))
                                 {
-                                    // HACK: Some types use enums as their classifier 
+                                    // HACK: Some types use enums as their classifier
                                     object value = g;
                                     if (guardAccessor.Type.IsEnum)
                                         value = Enum.Parse(guardAccessor.Type, g);
@@ -403,7 +374,6 @@ namespace SanteDB.Core.Model.Query
                                     else
                                         guardExpression = Expression.MakeBinary(ExpressionType.Or, guardExpression, expr);
                                 }
-
                         }
 
                         MethodInfo whereMethod = typeof(Enumerable).GetGenericMethod("Where",
@@ -420,14 +390,11 @@ namespace SanteDB.Core.Model.Query
                             accessExpression = Expression.Call(anyMethod, accessExpression);
                             currentValue.Value[0] = currentValue.Value[0].Replace("null", "false");
                         }
-
                     }
                     // List expression, we want the Any() operator
                     if (accessExpression.Type.IsEnumerable() &&
                         accessExpression.Type.IsGenericType)
                     {
-
-
                         // First or default
                         if (currentValue.Value == null)
                         {
@@ -521,7 +488,6 @@ namespace SanteDB.Core.Model.Query
                             var opMatch = QueryFilterExtensions.ExtendedFilterRegex.Match(value);
                             if (opMatch.Success)
                             {
-
                                 // Extract
                                 String fnName = opMatch.Groups[1].Value,
                                     parms = opMatch.Groups[3].Value,
@@ -558,6 +524,7 @@ namespace SanteDB.Core.Model.Query
                                     pValue = pValue.Substring(1);
                                 }
                                 break;
+
                             case '>':
                                 et = ExpressionType.GreaterThan;
                                 pValue = value.Substring(1);
@@ -567,6 +534,7 @@ namespace SanteDB.Core.Model.Query
                                     pValue = pValue.Substring(1);
                                 }
                                 break;
+
                             case '^':
                                 et = ExpressionType.Equal;
                                 if (thisAccessExpression.Type == typeof(String))
@@ -579,6 +547,7 @@ namespace SanteDB.Core.Model.Query
                                     throw new InvalidOperationException("^ can only be applied to string properties");
 
                                 break;
+
                             case '~':
                                 et = ExpressionType.Equal;
                                 if (thisAccessExpression.Type == typeof(String))
@@ -618,6 +587,7 @@ namespace SanteDB.Core.Model.Query
                                     throw new InvalidOperationException($"~ can only be applied to string and date properties not {thisAccessExpression.Type}");
 
                                 break;
+
                             case '!':
                                 et = ExpressionType.NotEqual;
                                 pValue = value.Substring(1);
@@ -662,7 +632,6 @@ namespace SanteDB.Core.Model.Query
                                 valueExpr = Expression.Constant(Enum.ToObject(operandType, Int32.Parse(pValue)));
                             else
                                 valueExpr = Expression.Constant(Enum.Parse(operandType, pValue));
-
                         }
                         else
                         {
@@ -738,14 +707,12 @@ namespace SanteDB.Core.Model.Query
                     retVal = keyExpression;
                 else
                     retVal = Expression.MakeBinary(ExpressionType.AndAlso, retVal, keyExpression);
-
             }
             //Debug.WriteLine(String.Format("Converted {0} to {1}", httpQueryParameters, retVal));
 
             if (retVal == null)
                 return null;
             return Expression.Lambda(retVal, parameterExpression);
-
         }
 
         /// <summary>
@@ -776,14 +743,12 @@ namespace SanteDB.Core.Model.Query
                 {
                     var value = val();
                     scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), value?.GetType() ?? expectedReturn);
-
                 }
             }
             else
                 return null;
 
             Expression retVal = scope;
-
 
             if (String.IsNullOrEmpty(varPath))
                 return Expression.Convert(retVal, expectedReturn);
@@ -820,7 +785,7 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
-        /// Build a property selector 
+        /// Build a property selector
         /// </summary>
         public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false)
         {

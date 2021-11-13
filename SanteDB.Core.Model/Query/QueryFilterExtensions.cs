@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,66 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Apply result instructions
+        /// </summary>
+        public static IQueryResultSet ApplyResultInstructions(this IQueryResultSet me, NameValueCollection query, out int offset, out int totalCount)
+        {
+            // Next sort
+            if (query.TryGetValue("_orderBy", out List<String> queryList) && me is IOrderableQueryResultSet orderable)
+            {
+                foreach (var itm in queryList)
+                {
+                    var sortParts = itm.Split(':');
+                    var sortExpr = QueryExpressionParser.BuildPropertySelector(me.GetType().GetGenericArguments()[0], sortParts[0], false);
+                    if (sortParts.Length == 1 || sortParts[1].Equals("ASC", StringComparison.OrdinalIgnoreCase))
+                    {
+                        me = orderable.OrderBy(sortExpr);
+                    }
+                    else
+                    {
+                        me = orderable.OrderByDescending(sortExpr);
+                    }
+                }
+            }
+            // Next state
+            if (query.TryGetValue("_queryId", out queryList) && Guid.TryParse(queryList.First(), out Guid queryId))
+            {
+                me = me.AsStateful(queryId);
+            }
+
+            // Include total count?
+            if (query.TryGetValue("_includeTotal", out queryList) && Boolean.TryParse(queryList.First(), out bool includeTotal) == true)
+            {
+                totalCount = me.Count();
+            }
+            else
+            {
+                totalCount = 0;
+                includeTotal = false;
+            }
+
+            // Next offset
+            if (query.TryGetValue("_offset", out queryList) && Int32.TryParse(queryList.First(), out offset))
+            {
+                me = me.Skip(offset);
+            }
+            else offset = 0;
+
+            if (!query.TryGetValue("_count", out queryList) || !Int32.TryParse(queryList.First(), out int count))
+            {
+                count = 100;
+            }
+
+            // Total count wasn't requested so do a quick count.
+            if (!includeTotal)
+            {
+                totalCount = me.Skip(offset).Take(count + 1).Count() + offset;
+            }
+
+            return me.Take(count);
+        }
+
+        /// <summary>
         /// Initialize filters
         /// </summary>
         private static void InitializeFilters()
@@ -76,7 +137,6 @@ namespace SanteDB.Core.Model.Query
             lock (s_extensionMethods)
                 if (!s_extensionMethods.ContainsKey(methName))
                     s_extensionMethods.Add(methName, extensionInfo);
-
         }
 
         /// <summary>

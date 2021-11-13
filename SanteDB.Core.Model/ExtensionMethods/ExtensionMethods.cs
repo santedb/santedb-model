@@ -148,6 +148,25 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// As a result set
+        /// </summary>
+        public static IQueryResultSet<TTo> TransformResultSet<TFrom, TTo>(this IQueryResultSet<TFrom> me)
+        {
+            if (me is IQueryResultSet<TTo> qre)
+            {
+                return qre;
+            }
+            else if (typeof(TTo).IsAssignableFrom(typeof(TFrom)))
+            {
+                return new TransformQueryResultSet<TFrom, TTo>(me, (o) => (TTo)(object)o);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Type {typeof(TFrom)} and {typeof(TTo)} are not compatible");
+            }
+        }
+
+        /// <summary>
         /// Parse base 64 encode
         /// </summary>
         /// <param name="base64String"></param>
@@ -509,9 +528,9 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-		/// Update property data with data from <paramref name="fromEntities"/> if the property is not semantically equal
-		/// </summary>
-		public static TObject SemanticCopy<TObject>(this TObject toEntity, params TObject[] fromEntities) where TObject : IdentifiedData
+        /// Update property data with data from <paramref name="fromEntities"/> if the property is not semantically equal
+        /// </summary>
+        public static TObject SemanticCopy<TObject>(this TObject toEntity, params TObject[] fromEntities) where TObject : IdentifiedData
         {
             return SemanticCopyInternal(toEntity, false, null, fromEntities);
         }
@@ -712,6 +731,14 @@ namespace SanteDB.Core.Model
             return me.GetCustomAttributes<QueryParameterAttribute>().FirstOrDefault()?.ParameterName
                 ?? me.GetCustomAttributes<XmlElementAttribute>().FirstOrDefault()?.ElementName
                 ?? me.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName;
+        }
+
+        /// <summary>
+        /// Get all allowed class keys for the specified type
+        /// </summary>
+        public static Guid[] GetClassKeys(this Type type)
+        {
+            return type.GetCustomAttributes<ClassConceptKeyAttribute>().Select(o => Guid.Parse(o.ClassConcept)).ToArray();
         }
 
         /// <summary>

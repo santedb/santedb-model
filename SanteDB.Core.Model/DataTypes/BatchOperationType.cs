@@ -47,7 +47,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Delete the object
         /// </summary>
-        Obsolete = 4
+        Delete = 4
 
     }
 }

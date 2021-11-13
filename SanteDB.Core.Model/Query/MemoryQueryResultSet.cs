@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SanteDB.Core.i18n;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace SanteDB.Core.Model.Query
     /// <summary>
     /// Wrapped query result set
     /// </summary>
-    public class MemoryQueryResultSet : IQueryResultSet
+    public class MemoryQueryResultSet : IQueryResultSet, IOrderableQueryResultSet
     {
         // The underlying result set
         private IEnumerable<Object> m_wrapped;
@@ -54,6 +55,54 @@ namespace SanteDB.Core.Model.Query
         public IEnumerator GetEnumerator() => this.m_wrapped.GetEnumerator();
 
         /// <summary>
+        /// Intersect the sets
+        /// </summary>
+        public IQueryResultSet Intersect(IQueryResultSet other)
+        {
+            return new MemoryQueryResultSet(this.m_wrapped.Intersect(other.OfType<object>()));
+        }
+
+        /// <summary>
+        /// Return object of the specified type
+        /// </summary>
+        public IEnumerable<TType> OfType<TType>()
+        {
+            return this.m_wrapped.OfType<TType>();
+        }
+
+        /// <summary>
+        /// Order by descending order
+        /// </summary>
+        public IOrderableQueryResultSet OrderBy(Expression expression)
+        {
+            if (expression is LambdaExpression le)
+            {
+                var lex = le.Compile();
+                return new MemoryQueryResultSet(this.m_wrapped.OrderBy(o => lex.DynamicInvoke(o)));
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.INVALID_EXPRESSION_TYPE, typeof(LambdaExpression), expression.GetType()));
+            }
+        }
+
+        /// <summary>
+        /// Order by descending
+        /// </summary>
+        public IOrderableQueryResultSet OrderByDescending(Expression expression)
+        {
+            if (expression is LambdaExpression le)
+            {
+                var lex = le.Compile();
+                return new MemoryQueryResultSet(this.m_wrapped.OrderByDescending(o => lex.DynamicInvoke(o)));
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.INVALID_EXPRESSION_TYPE, typeof(LambdaExpression), expression.GetType()));
+            }
+        }
+
+        /// <summary>
         /// Get single result
         /// </summary>
         public object Single() => this.m_wrapped.Single();
@@ -74,18 +123,34 @@ namespace SanteDB.Core.Model.Query
         public IQueryResultSet Take(int count) => new MemoryQueryResultSet(this.m_wrapped.Take(count));
 
         /// <summary>
+        /// Union records
+        /// </summary>
+        public IQueryResultSet Union(IQueryResultSet other)
+        {
+            return new MemoryQueryResultSet(this.m_wrapped.Union(other.OfType<object>()));
+        }
+
+        /// <summary>
         /// Where clause
         /// </summary>
         public IQueryResultSet Where(Expression query)
         {
-            throw new NotImplementedException();
+            if (query is LambdaExpression le)
+            {
+                var lex = le.Compile();
+                return new MemoryQueryResultSet(this.m_wrapped.Where(o => lex.DynamicInvoke(o).Equals(true)));
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.INVALID_EXPRESSION_TYPE, typeof(LambdaExpression), query.GetType()));
+            }
         }
     }
 
     /// <summary>
     /// A memory query result set
     /// </summary>
-    public class MemoryQueryResultSet<TData> : MemoryQueryResultSet, IQueryResultSet<TData>
+    public class MemoryQueryResultSet<TData> : MemoryQueryResultSet, IQueryResultSet<TData>, IOrderableQueryResultSet<TData>
     {
         // Wraped object
         private IEnumerable<TData> m_wrapped;
@@ -125,7 +190,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Order by
         /// </summary>
-        public IQueryResultSet<TData> OrderBy(Expression<Func<TData, dynamic>> sortExpression)
+        public IOrderableQueryResultSet<TData> OrderBy(Expression<Func<TData, dynamic>> sortExpression)
         {
             return new MemoryQueryResultSet<TData>(this.m_wrapped.OrderBy(sortExpression.Compile()));
         }
@@ -133,7 +198,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Order by descending or
         /// </summary>
-        public IQueryResultSet<TData> OrderByDescending(Expression<Func<TData, dynamic>> sortExpression)
+        public IOrderableQueryResultSet<TData> OrderByDescending(Expression<Func<TData, dynamic>> sortExpression)
         {
             return new MemoryQueryResultSet<TData>(this.m_wrapped.OrderByDescending(sortExpression.Compile()));
         }
