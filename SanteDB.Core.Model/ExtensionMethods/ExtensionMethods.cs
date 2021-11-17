@@ -102,7 +102,17 @@ namespace SanteDB.Core.Model
         {
             if (me is UnaryExpression ue) return ue.Operand.GetMember();
             else if (me is LambdaExpression le) return le.Body.GetMember();
-            else if (me is MemberExpression ma) return ma.Member;
+            else if (me is MemberExpression ma)
+            {
+                if (ma.Member.Name == "Value" && ma.Expression.Type.IsGenericType && ma.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    return ma.Expression.GetMember();
+                }
+                else
+                {
+                    return ma.Member;
+                }
+            }
             else throw new InvalidOperationException($"{me} not supported, please use a member access expression");
         }
 

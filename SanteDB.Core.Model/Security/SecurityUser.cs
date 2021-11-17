@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -31,7 +32,7 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Security
 {
     /// <summary>
-    /// Security user represents a user for the purpose of security 
+    /// Security user represents a user for the purpose of security
     /// </summary>
     [XmlType("SecurityUser", Namespace = "http://santedb.org/model"), JsonObject("SecurityUser")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "SecurityUser")]
@@ -51,16 +52,19 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("email"), JsonProperty("email"), NoCase]
         public String Email { get; set; }
+
         /// <summary>
         /// Gets or sets whether the email address is confirmed
         /// </summary>
         [XmlElement("emailConfirmed"), JsonProperty("emailConfirmed")]
         public Boolean EmailConfirmed { get; set; }
+
         /// <summary>
         /// Gets or sets the number of invalid login attempts by the user
         /// </summary>
         [XmlElement("invalidLoginAttempts"), JsonProperty("invalidLoginAttempts")]
         public Int32 InvalidLoginAttempts { get; set; }
+
         /// <summary>
         /// Gets or sets whether the account is locked out
         /// </summary>
@@ -90,7 +94,7 @@ namespace SanteDB.Core.Model.Security
         public String Password { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the security has is enabled
+        /// Gets or sets a value which indicates whether the security data for the user has changed
         /// </summary>
         [XmlElement("securityStamp"), JsonProperty("securityStamp")]
         public String SecurityHash { get; set; }
@@ -100,11 +104,13 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("twoFactorEnabled"), JsonProperty("twoFactorEnabled")]
         public Boolean TwoFactorEnabled { get; set; }
+
         /// <summary>
         /// Gets or sets the logical user name ofthe user
         /// </summary>
         [XmlElement("userName"), JsonProperty("userName"), NoCase]
         public String UserName { get; set; }
+
         /// <summary>
         /// Gets or sets the binary representation of the user's photo
         /// </summary>
@@ -210,7 +216,7 @@ namespace SanteDB.Core.Model.Security
         }
 
         /// <summary>
-        /// Link from this security resource to an entity resource 
+        /// Link from this security resource to an entity resource
         /// </summary>
         [XmlIgnore, QueryParameter("userEntity"), JsonIgnore]
         public UserEntity UserEntity { get; set; }
@@ -235,7 +241,6 @@ namespace SanteDB.Core.Model.Security
                 this.UserName == other.UserName &&
                 (this.UserPhoto ?? new byte[0]).HashCode().Equals((other.UserPhoto ?? new byte[0]).HashCode()) == true;
         }
-
 
         /// <summary>
         /// Get the name of the object as a display string
