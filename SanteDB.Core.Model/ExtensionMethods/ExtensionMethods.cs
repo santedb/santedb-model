@@ -91,7 +91,7 @@ namespace SanteDB.Core.Model
             // HACK: The weird TRY/CATCH in select many is to prevent mono from throwning a fit
             return me.GetAssemblies()
                 .Where(a => !a.IsDynamic && !m_skipAsm.Contains(a))
-                .SelectMany(a => { try { return a.ExportedTypes; } catch { m_skipAsm.Add(a); return new List<Type>(); } });
+                .SelectMany(a => { try { return a.ExportedTypes.Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null); } catch { m_skipAsm.Add(a); return new List<Type>(); } });
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace SanteDB.Core.Model
                     }
                     else
                     {
-                        loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { new Guid?[] { me.Key.Value }  }));
+                        loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { new Guid?[] { me.Key.Value } }));
                     }
                     propertyToLoad.SetValue(me, loaded);
                     return loaded;
