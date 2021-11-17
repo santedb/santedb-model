@@ -92,6 +92,14 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Get extended filters
+        /// </summary>
+        public static IEnumerable<IQueryFilterExtension> GetExtendedFilters()
+        {
+            return s_extensionMethods.Values;
+        }
+
+        /// <summary>
         /// Get extneded filter by the method is uses in LINQ
         /// </summary>
         internal static IQueryFilterExtension GetExtendedFilterByMethod(MethodInfo method)
