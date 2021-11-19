@@ -183,6 +183,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the template definition
         /// </summary>
+        [SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
         public TemplateDefinition Template { get; set; }
 
         /// <summary>
