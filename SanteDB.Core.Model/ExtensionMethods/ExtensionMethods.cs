@@ -433,7 +433,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Update property data with data from <paramref name="fromEntities"/> if the property is not semantically equal
+        /// Update property data with data from <paramref name="fromEntities"/> if the property is not semantically equal - only if the field on the inbound <paramref name="toEntity"/> is null
         /// </summary>
         public static TObject SemanticCopyNullFields<TObject>(this TObject toEntity, params TObject[] fromEntities) where TObject : IdentifiedData
         {
