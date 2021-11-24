@@ -179,13 +179,13 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the time when the act should or did start ocurring
+        /// Gets or sets the time when the act should or did start to occur
         /// </summary>
         [XmlIgnore, JsonIgnore]
         public DateTimeOffset? StartTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the time when the act should or did start ocurring in ISO format
+        /// Gets or sets the time when the act should or did start occur in ISO format
         /// </summary>
         [DataIgnore, XmlElement("startTime"), JsonProperty("startTime")]
         public String StartTimeXml
@@ -214,7 +214,7 @@ namespace SanteDB.Core.Model.Acts
         public DateTimeOffset? StopTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the time when the act should or did stop ocurring in ISO format
+        /// Gets or sets the time when the act should or did stop occur in ISO format
         /// </summary>
         [DataIgnore, XmlElement("stopTime"), JsonProperty("stopTime")]
         public String StopTimeXml
@@ -241,7 +241,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <see cref="ClassConcept"/>
         /// <see cref="ActClassKeys"/>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(ActClassKeys))]
         public virtual Guid? ClassConceptKey
@@ -262,7 +262,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <see cref="ActMoodKeys"/>
         /// <remarks>
-        /// <para>In SanteDB, a mood of an act describes the mode of that act. The mood of the act clasifies whether the act did occur, is intended to occur, is requested to occur or proposed. Mood codes may include:</para>
+        /// <para>In SanteDB, a mood of an act describes the mode of that act. The mood of the act classifies whether the act did occur, is intended to occur, is requested to occur or proposed. Mood codes may include:</para>
         /// <list type="bullet">
         /// <item>
         ///     <term>Event Occurence</term>
@@ -286,7 +286,8 @@ namespace SanteDB.Core.Model.Acts
         /// </item>
         /// </list>
         /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        /// <seealso cref="MoodConcept"/>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("moodConcept"), JsonProperty("moodConcept")]
         [Binding(typeof(ActMoodKeys))]
         public virtual Guid? MoodConceptKey
@@ -311,7 +312,9 @@ namespace SanteDB.Core.Model.Acts
         /// <para>The reason concept on an act indicates why something should, or did/did not occur. For example, when used in conjunction with IsNegated, this concept typically indicates WHY the action did not occur
         /// (safety concern, etc.)</para>
         /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        /// <seealso cref="ReasonConcept"/>
+        ///
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("reasonConcept"), JsonProperty("reasonConcept")]
         [Binding(typeof(ActReasonKeys))]
         public Guid? ReasonConceptKey
@@ -356,7 +359,9 @@ namespace SanteDB.Core.Model.Acts
         ///     </item>
         /// </list>
         /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        /// <seealso cref="StatusConcept"/>
+        ///
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
         public Guid? StatusConceptKey
@@ -373,10 +378,10 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the key of the conccept which further classifies the type of act occurring
+        /// Gets or sets the key of the concept which further classifies the type of act occurring
         /// </summary>
         /// <see cref="TypeConcept"/>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
         public Guid? TypeConceptKey
         {
@@ -398,7 +403,8 @@ namespace SanteDB.Core.Model.Acts
         /// The class concept is used to classify the overall type of the act. This code will specify whether the
         /// act is a substance administration, financial transaction, observation, etc.
         /// </remarks>
-        /// <see cref="ActClassKeys"/>
+        /// <seealso cref="ActClassKeys"/>
+        /// <seealso cref="ClassConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [AutoLoad, SerializationReference(nameof(ClassConceptKey))]
         public Concept ClassConcept
@@ -423,6 +429,7 @@ namespace SanteDB.Core.Model.Acts
         /// whether the act did occur (event ocurrence), should occur (propose), will occur (intent), or being requested to occur (request).
         /// </remarks>
         /// <see cref="ActMoodKeys"/>
+        /// <seealso cref="MoodConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [AutoLoad, SerializationReference(nameof(MoodConceptKey))]
         public Concept MoodConcept
@@ -446,6 +453,8 @@ namespace SanteDB.Core.Model.Acts
         /// This concept is used to dictate why the act did occur (or if the negation indicator or mood concept indicate, why it didn't or shouldn't occur). Examples
         /// of reason codes may be "patient was too old", "out of stock", "patient has allergy", etc.
         /// </remarks>
+        /// <seealso cref="ActReasonKeys"/>
+        /// <seealso cref="ReasonConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [AutoLoad, SerializationReference(nameof(ReasonConceptKey))]
         public Concept ReasonConcept
@@ -476,6 +485,8 @@ namespace SanteDB.Core.Model.Acts
         ///     <item>Nullified - The Act never occurred, this record was created in error</item>
         /// </list>
         /// </remarks>
+        /// <seealso cref="StatusConceptKey"/>
+        ///
         [AutoLoad, SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept StatusConcept

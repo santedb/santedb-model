@@ -169,7 +169,7 @@ namespace SanteDB.Core.Model.Entities
         /// Association type key
         /// </summary>
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(EntityRelationshipTypeKeys))]
         public Guid? RelationshipTypeKey
         {
@@ -208,7 +208,7 @@ namespace SanteDB.Core.Model.Entities
         /// Association type key
         /// </summary>
         [XmlElement("relationshipRole"), JsonProperty("relationshipRole")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? RelationshipRoleKey
         {
             get { return this.m_roleTypeKey; }
@@ -252,7 +252,7 @@ namespace SanteDB.Core.Model.Entities
         /// Association type key
         /// </summary>
         [XmlElement("classification"), JsonProperty("classification")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(RelationshipClassKeys))]
         public Guid? ClassificationKey
         {
@@ -290,7 +290,7 @@ namespace SanteDB.Core.Model.Entities
         /// The target of the association
         /// </summary>
         [XmlElement("target"), JsonProperty("target")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? TargetEntityKey
         {
             get { return this.m_targetEntityKey; }

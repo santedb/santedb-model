@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 
 /*
@@ -78,14 +79,16 @@ namespace SanteDB.Core.Auditing
         /// Identifies the type of identifier supplied
         /// </summary>
         [XmlElement("idType"), JsonProperty("idType")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public AuditableObjectIdType IDTypeCodeXml { get { return this.IDTypeCode.GetValueOrDefault(); } set { this.IDTypeCode = value; } }
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public AuditableObjectIdType IDTypeCodeXml
+        { get { return this.IDTypeCode.GetValueOrDefault(); } set { this.IDTypeCode = value; } }
 
         /// <summary>
         /// Gets whether ID type code is specified
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public bool IDTypeCodeXmlSpecified { get { return this.IDTypeCode.HasValue; } }
+        public bool IDTypeCodeXmlSpecified
+        { get { return this.IDTypeCode.HasValue; } }
 
         /// <summary>
         /// Lifecycle type
@@ -97,14 +100,16 @@ namespace SanteDB.Core.Auditing
         /// Identifies where in the lifecycle of the object this object is currently within
         /// </summary>
         [XmlElement("lifecycle"), JsonProperty("lifecycle")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public AuditableObjectLifecycle LifecycleTypeXml { get { return this.LifecycleType.GetValueOrDefault(); } set { this.LifecycleType = value; } }
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public AuditableObjectLifecycle LifecycleTypeXml
+        { get { return this.LifecycleType.GetValueOrDefault(); } set { this.LifecycleType = value; } }
 
         /// <summary>
         /// Gets whether ID type code is specified
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public bool LifecycleTypeXmlSpecified { get { return this.LifecycleType.HasValue; } }
+        public bool LifecycleTypeXmlSpecified
+        { get { return this.LifecycleType.HasValue; } }
 
         /// <summary>
         /// Data associated with the object
@@ -139,15 +144,17 @@ namespace SanteDB.Core.Auditing
         /// <summary>
         /// Identifies the role type of the object
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("role"), JsonProperty("role")]
-        public AuditableObjectRole RoleXml { get { return this.Role.GetValueOrDefault(); } set { this.Role = value; } }
+        public AuditableObjectRole RoleXml
+        { get { return this.Role.GetValueOrDefault(); } set { this.Role = value; } }
 
         /// <summary>
         /// Gets whether ID type code is specified
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public bool RoleXmlSpecified { get { return this.Role.HasValue; } }
+        public bool RoleXmlSpecified
+        { get { return this.Role.HasValue; } }
 
         /// <summary>
         /// Identifies the type of object being expressed
@@ -163,13 +170,11 @@ namespace SanteDB.Core.Auditing
     [XmlType(nameof(ObjectDataExtension), Namespace = "http://santedb.org/audit")]
     public class ObjectDataExtension
     {
-
         /// <summary>
         /// Default ctor
         /// </summary>
         public ObjectDataExtension()
         {
-
         }
 
         /// <summary>
