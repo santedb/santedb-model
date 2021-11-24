@@ -107,7 +107,7 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the address use key
         /// </summary>
         [XmlElement("use"), JsonProperty("use")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(AddressUseKeys))]
         public Guid? AddressUseKey
         {

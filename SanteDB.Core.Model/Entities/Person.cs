@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -42,11 +43,12 @@ namespace SanteDB.Core.Model.Entities
     {
         // Gender concept key
         private Guid? m_genderConceptKey;
-        private Concept m_genderConcept;
 
+        private Concept m_genderConcept;
 
         // Backing fields for occupation
         private Guid? m_occupationConceptKey;
+
         private Concept m_occupationConcept;
 
         /// <summary>
@@ -57,14 +59,14 @@ namespace SanteDB.Core.Model.Entities
             base.DeterminerConceptKey = DeterminerKeys.Specific;
             base.ClassConceptKey = EntityClassKeys.Person;
             this.LanguageCommunication = new List<PersonLanguageCommunication>();
-
         }
 
         /// <summary>
         /// Gets the security user account associated with this person if applicable
         /// </summary>
         [XmlIgnore, JsonIgnore, DataIgnore]
-        public virtual SecurityUser AsSecurityUser { get { return null; } }
+        public virtual SecurityUser AsSecurityUser
+        { get { return null; } }
 
         /// <summary>
         /// Gets or sets the person's date of birth
@@ -82,13 +84,12 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the gender concept key
         /// </summary>
         [XmlElement("genderConcept"), JsonProperty("genderConcept")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? GenderConceptKey
         {
             get { return this.m_genderConceptKey; }
             set
             {
-
                 this.m_genderConceptKey = value;
                 this.m_genderConcept = null;
             }
@@ -112,7 +113,6 @@ namespace SanteDB.Core.Model.Entities
                 this.m_genderConceptKey = value?.Key;
             }
         }
-
 
         /// <summary>
         /// Gets the date of birth as XML
@@ -148,7 +148,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [XmlElement("occupation"), JsonProperty("occupation"), EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("occupation"), JsonProperty("occupation"), EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? OccupationKey
         {
             get => this.m_occupationConceptKey;

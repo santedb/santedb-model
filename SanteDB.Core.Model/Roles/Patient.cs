@@ -112,7 +112,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the VIP code
         /// </summary>
-        [XmlElement("vipStatus"), JsonProperty("vipStatus"), EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("vipStatus"), JsonProperty("vipStatus"), EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? VipStatusKey
         {
             get => this.m_vipStatusKey;
@@ -126,7 +126,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the key of the marital status concept
         /// </summary>
-        [XmlElement("maritalStatus"), JsonProperty("maritalStatus"), EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("maritalStatus"), JsonProperty("maritalStatus"), EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? MaritalStatusKey
         {
             get => this.m_maritalStatusKey;
@@ -140,7 +140,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the key of the education level
         /// </summary>
-        [XmlElement("educationLevel"), JsonProperty("educationLevel"), EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("educationLevel"), JsonProperty("educationLevel"), EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? EducationLevelKey
         {
             get => this.m_educationLevelKey;
@@ -154,7 +154,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the living arrangement
         /// </summary>
-        [XmlElement("livingArrangement"), JsonProperty("livingArrangement"), EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("livingArrangement"), JsonProperty("livingArrangement"), EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? LivingArrangementKey
         {
             get => this.m_livingArrangementKey;
@@ -168,7 +168,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [XmlElement("religion"), JsonProperty("religion"), EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("religion"), JsonProperty("religion"), EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? ReligiousAffiliationKey
         {
             get => this.m_religiousAffiliationKey;
@@ -182,7 +182,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [XmlElement("nationality"), JsonProperty("nationality"), EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("nationality"), JsonProperty("nationality"), EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? NationalityKey
         {
             get => this.m_nationalityKey;

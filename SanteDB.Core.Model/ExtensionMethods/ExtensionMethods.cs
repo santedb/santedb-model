@@ -878,7 +878,7 @@ namespace SanteDB.Core.Model
         /// Return the age
         /// </summary>
         /// <remarks>This exists for the extended query filter only</remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static TimeSpan Age(this DateTime me, DateTime atDateTime)
         {
             return me.Subtract(atDateTime);
