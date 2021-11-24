@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
@@ -29,7 +30,6 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model
 {
-
     /// <summary>
     /// Represents the root of all model classes in the SanteDB Core
     /// </summary>
@@ -42,13 +42,15 @@ namespace SanteDB.Core.Model
     [XmlType("BaseEntityData", Namespace = "http://santedb.org/model"), JsonObject("BaseEntityData")]
     public abstract class BaseEntityData : IdentifiedData, IBaseEntityData
     {
-
         // Created by identifier
         private Guid? m_createdById;
+
         // Created by
         private SecurityProvenance m_createdBy;
+
         // Obsoleted by
         private Guid? m_obsoletedById;
+
         // Obsoleted by user
         private SecurityProvenance m_obsoletedBy;
 
@@ -121,7 +123,6 @@ namespace SanteDB.Core.Model
             }
         }
 
-
         /// <summary>
         /// Gets or sets the user that created this base data
         /// </summary>
@@ -145,7 +146,6 @@ namespace SanteDB.Core.Model
         /// Gets the time that the object was last modified (from base data, default to CreationTime)
         /// </summary>
         [JsonIgnore, XmlIgnore]
-
         public override DateTimeOffset ModifiedOn
         {
             get
@@ -153,7 +153,6 @@ namespace SanteDB.Core.Model
                 return this.CreationTime;
             }
         }
-
 
         /// <summary>
         /// True if key should be serialized
@@ -172,7 +171,6 @@ namespace SanteDB.Core.Model
         {
             return this.ObsoletedByKey.HasValue;
         }
-
 
         /// <summary>
         /// Gets or sets the user that obsoleted this base data
@@ -193,7 +191,6 @@ namespace SanteDB.Core.Model
                     this.m_obsoletedById = Guid.Empty;
                 else
                     this.m_obsoletedById = value.Key;
-
             }
         }
 
@@ -201,7 +198,7 @@ namespace SanteDB.Core.Model
         /// Gets or sets the security provenance object which represents the creation of this object
         /// </summary>
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("createdBy"), JsonProperty("createdBy")]
         public virtual Guid? CreatedByKey
         {
@@ -218,7 +215,7 @@ namespace SanteDB.Core.Model
         /// Gets or sets the security provenance object which represents the obsoletion of this data
         /// </summary>
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("obsoletedBy"), JsonProperty("obsoletedBy")]
         public virtual Guid? ObsoletedByKey
         {
@@ -231,7 +228,6 @@ namespace SanteDB.Core.Model
             }
         }
 
-
         /// <summary>
         /// Represent the data as a string
         /// </summary>
@@ -239,6 +235,5 @@ namespace SanteDB.Core.Model
         {
             return String.Format("{0} (K:{1})", this.GetType().Name, this.Key);
         }
-
     }
 }

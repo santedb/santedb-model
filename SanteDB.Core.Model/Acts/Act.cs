@@ -363,7 +363,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <see cref="ActMoodKeys"/>
         /// <remarks>
-        /// <para>In SanteDB, a mood of an act describes the mode of that act. The mood of the act clasifies whether the act did occur, is intended to occur, is requested to occur or proposed. Mood codes may include:</para>
+        /// <para>In SanteDB, a mood of an act describes the mode of that act. The mood of the act classifies whether the act did occur, is intended to occur, is requested to occur or proposed. Mood codes may include:</para>
         /// <list type="bullet">
         /// <item>
         ///     <term>Event Occurence</term>
@@ -389,7 +389,7 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         /// <seealso cref="MoodConcept"/>
         /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/mood-concepts"/>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("moodConcept"), JsonProperty("moodConcept")]
         [Binding(typeof(ActMoodKeys))]
         public virtual Guid? MoodConceptKey
@@ -417,7 +417,9 @@ namespace SanteDB.Core.Model.Acts
         /// set) and can be used to indicate an override of a proposal by the user (i.e. patient safety or religious exception), or some other
         /// extenuating factor (i.e. value negative inifinity)</para>
         /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        /// <seealso cref="ReasonConcept"/>
+        ///
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("reasonConcept"), JsonProperty("reasonConcept")]
         [Binding(typeof(ActReasonKeys))]
         public Guid? ReasonConceptKey
@@ -466,7 +468,7 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso cref="StatusKeys" />
         /// <seealso cref="StatusConcept"/>
         /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/state-machine"/>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
         public Guid? StatusConceptKey
@@ -483,10 +485,10 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Identifies
+        /// Gets or sets the key of the concept which further classifies the type of act occurring
         /// </summary>
         /// <see cref="TypeConcept"/>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
         public Guid? TypeConceptKey
         {
@@ -510,7 +512,8 @@ namespace SanteDB.Core.Model.Acts
         /// using the <c>LoadProperty</c> method, such as:
         /// <code>act.LoadProperty(o=>o.ClassConcept)</code></para>
         /// </remarks>
-        /// <see cref="ClassConceptKey"/>
+        /// <seealso cref="ActClassKeys"/>
+        /// <seealso cref="ClassConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [AutoLoad, SerializationReference(nameof(ClassConceptKey))]
         public Concept ClassConcept
@@ -536,7 +539,8 @@ namespace SanteDB.Core.Model.Acts
         /// using the <c>LoadProperty</c> method, such as:
         /// <code>act.LoadProperty(o=>o.MoodConcept)</code></para>
         /// </remarks>
-        /// <see cref="MoodConceptKey"/>
+        /// <see cref="ActMoodKeys"/>
+        /// <seealso cref="MoodConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [AutoLoad, SerializationReference(nameof(MoodConceptKey))]
         public Concept MoodConcept
@@ -562,7 +566,8 @@ namespace SanteDB.Core.Model.Acts
         /// using the <c>LoadProperty</c> method, such as:
         /// <code>act.LoadProperty(o=>o.ReasonConcept)</code></para>
         /// </remarks>
-        /// <see cref="ReasonConceptKey"/>
+        /// <seealso cref="ActReasonKeys"/>
+        /// <seealso cref="ReasonConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [AutoLoad, SerializationReference(nameof(ReasonConceptKey))]
         public Concept ReasonConcept
@@ -588,7 +593,8 @@ namespace SanteDB.Core.Model.Acts
         /// using the <c>LoadProperty</c> method, such as:
         /// <code>act.LoadProperty(o=>o.StatusConcept)</code></para>
         /// </remarks>
-        /// <see cref="StatusConceptKey"/>
+        /// <seealso cref="StatusConceptKey"/>
+        ///
         [AutoLoad, SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept StatusConcept

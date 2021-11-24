@@ -87,7 +87,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the interpretation concept
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("interpretationConcept"), JsonProperty("interpretationConcept")]
         public Guid? InterpretationConceptKey
         {
@@ -106,7 +106,8 @@ namespace SanteDB.Core.Model.Acts
         /// Value type
         /// </summary>
         [XmlElement("valueType"), JsonProperty("valueType")]
-        public virtual String ValueType { get { return "NA"; } set { } }
+        public virtual String ValueType
+        { get { return "NA"; } set { } }
 
         /// <summary>
         /// Gets or sets the concept which indicates the interpretation of the observtion
@@ -183,7 +184,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the key of the uom concept
         /// </summary>
         [XmlElement("unitOfMeasure"), JsonProperty("unitOfMeasure")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? UnitOfMeasureKey
         {
             get { return this.m_unitOfMeasureKey; }
@@ -303,7 +304,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the key of the uom concept
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid ValueKey
         {
             get { return this.m_valueKey; }
