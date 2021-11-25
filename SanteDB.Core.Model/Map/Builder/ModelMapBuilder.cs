@@ -127,7 +127,7 @@ namespace SanteDB.Core.Model.Map.Builder
 
             foreach (var t in map.Class)
             {
-                var ctdecl = this.CreateMapper(t);
+                var ctdecl = this.CreateMapper(t, map.Class.Where(o => o != t && o.ModelType.IsAssignableFrom(t.ModelType)));
                 if (ctdecl != null)
                     retVal.Types.Add(ctdecl);
             }
@@ -137,7 +137,7 @@ namespace SanteDB.Core.Model.Map.Builder
         /// <summary>
         /// Creates a view model serializer
         /// </summary>
-        public CodeTypeDeclaration CreateMapper(ClassMap map)
+        public CodeTypeDeclaration CreateMapper(ClassMap map, IEnumerable<ClassMap> otherMappedTypes)
         {
             // Cannot process this type
             if (map.DomainType == null || map.ModelType == null)
@@ -151,6 +151,7 @@ namespace SanteDB.Core.Model.Map.Builder
             retVal.BaseTypes.Add(typeof(IModelMapper));
             retVal.BaseTypes.Add(typeof(IModelMapper<,>).MakeGenericType(map.ModelType, map.DomainType));
 
+            // Map up the field count
             retVal.Members.Add(new CodeMemberField(typeof(ModelMapper), "m_mapper") { Attributes = MemberAttributes.Private });
             retVal.Members.Add(this.CreateInitializorConstructor(className));
             // Add methods
@@ -159,9 +160,27 @@ namespace SanteDB.Core.Model.Map.Builder
 
             retVal.Members.Add(this.CreateObjectMapMethod("MapToSource", map.DomainType));
             retVal.Members.Add(this.CreateObjectMapMethod("MapToTarget", map.ModelType));
+
             retVal.Members.Add(this.CreateMapToTargetMethod(map));
             retVal.Members.Add(this.CreateMapToSourceMethod(map));
 
+            // Add other maps to match the to/from
+            foreach (var t in otherMappedTypes)
+            {
+                var interfaceDefinition = new CodeTypeReference(typeof(IModelMapper<,>).MakeGenericType(map.ModelType, t.DomainType));
+                retVal.BaseTypes.Add(interfaceDefinition);
+                var newMap = new ClassMap()
+                {
+                    Cast = t.Cast,
+                    CollapseKey = t.CollapseKey,
+                    DomainClass = t.DomainClass,
+                    ModelClass = map.ModelClass,
+                    ParentDomainProperty = t.ParentDomainProperty,
+                    Property = t.Property
+                };
+                retVal.Members.Add(this.CreateMapToTargetMethod(newMap, interfaceDefinition));
+                retVal.Members.Add(this.CreateMapToSourceMethod(newMap, interfaceDefinition));
+            }
             return retVal;
         }
 
@@ -169,15 +188,18 @@ namespace SanteDB.Core.Model.Map.Builder
         /// Create MapToSource Method based on the instructions in the <paramref name="map"/>
         /// </summary>
         /// <param name="map">The map to use</param>
+        /// <param name="implementedInterface">The interface this type implements</param>
         /// <returns>The type member</returns>
-        private CodeMemberMethod CreateMapToSourceMethod(ClassMap map)
+        private CodeMemberMethod CreateMapToSourceMethod(ClassMap map, CodeTypeReference implementedInterface = null)
         {
             var retVal = new CodeMemberMethod()
             {
+                PrivateImplementationType = implementedInterface,
                 Name = "MapToSource",
                 ReturnType = new CodeTypeReference(map.ModelType),
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
             };
+
             retVal.Parameters.Add(new CodeParameterDeclarationExpression(map.DomainType, "instance"));
             var _instance = new CodeVariableReferenceExpression("instance");
 
@@ -235,15 +257,18 @@ namespace SanteDB.Core.Model.Map.Builder
         /// Create the MapToTarget method
         /// </summary>
         /// <param name="map">The map to use</param>
+        /// <param name="implementedType">The implemented type for explicit interface implementation</param>
         /// <returns>The target map method</returns>
-        private CodeMemberMethod CreateMapToTargetMethod(ClassMap map)
+        private CodeMemberMethod CreateMapToTargetMethod(ClassMap map, CodeTypeReference implementedType = null)
         {
             var retVal = new CodeMemberMethod()
             {
+                PrivateImplementationType = implementedType,
                 Name = "MapToTarget",
                 ReturnType = new CodeTypeReference(map.DomainType),
                 Attributes = MemberAttributes.Public | MemberAttributes.Final
             };
+
             retVal.Parameters.Add(new CodeParameterDeclarationExpression(map.ModelType, "instance"));
 
             var _instance = new CodeVariableReferenceExpression("instance");

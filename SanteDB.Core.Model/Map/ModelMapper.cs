@@ -18,8 +18,10 @@
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Microsoft.CSharp;
 using SanteDB.Core.Exceptions;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map.Builder;
@@ -138,15 +140,15 @@ namespace SanteDB.Core.Model.Map
                         this.ProcessAssembly(results.CompiledAssembly);
                         m_loadedMaps.TryAdd(name, results.CompiledAssembly);
                     }
-                    catch(ModelMapCompileException)
+                    catch (ModelMapCompileException)
                     {
                         throw;
                     }
-                    catch(ModelMapValidationException)
+                    catch (ModelMapValidationException)
                     {
                         throw;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         this.InitializeReflection(this.m_mapFile);
                     }
@@ -163,7 +165,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         private void InitializeReflection(ModelMap mapFile)
         {
-            foreach(var map in mapFile.Class)
+            foreach (var map in mapFile.Class)
             {
                 var mapper = new ReflectionModelMapper(map, this);
                 this.m_mappers.TryAdd(map.DomainType, mapper);
@@ -429,14 +431,18 @@ namespace SanteDB.Core.Model.Map
             where TDomain : new()
             where TModel : new()
         {
-            if(modelInstance == null)
+            if (modelInstance == null)
             {
                 throw new ArgumentNullException(nameof(modelInstance));
             }
 
-            if (this.m_mappers.TryGetValue(typeof(TModel), out IModelMapper modelMapper) ||
-                this.m_mappers.TryGetValue(modelInstance.GetType(), out modelMapper) ||
-                this.m_mappers.TryGetValue(typeof(TDomain), out modelMapper))
+            // Can we find a map between the type and another?
+            if (this.m_mappers.TryGetValue(typeof(TModel), out IModelMapper modelMapper) && modelMapper is IModelMapper<TModel, TDomain> preferredMapper)
+            {
+                return preferredMapper.MapToTarget(modelInstance);
+            }
+            else if (this.m_mappers.TryGetValue(typeof(TDomain), out modelMapper) ||
+                this.m_mappers.TryGetValue(modelInstance.GetType(), out modelMapper))
             {
                 if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
                     return smodelMapper.MapToTarget(modelInstance);
@@ -445,7 +451,7 @@ namespace SanteDB.Core.Model.Map
             }
             else
             {
-                return default(TDomain);
+                throw new InvalidOperationException(String.Format(ErrorMessages.MAP_NOT_FOUND, typeof(TModel), typeof(TDomain)));
             }
             /*
             ClassMap classMap = this.m_mapFile.GetModelClassMap(typeof(TModel), typeof(TDomain));
@@ -553,9 +559,13 @@ namespace SanteDB.Core.Model.Map
                 throw new ArgumentNullException(nameof(domainInstance));
             }
 
-            if (this.m_mappers.TryGetValue(domainInstance.GetType(), out IModelMapper modelMapper) ||
-                this.m_mappers.TryGetValue(typeof(TDomain), out modelMapper) ||
-                this.m_mappers.TryGetValue(typeof(TModel), out modelMapper))
+            if (this.m_mappers.TryGetValue(typeof(TDomain), out IModelMapper modelMapper) && modelMapper is IModelMapper<TModel, TDomain> preferredMapper)
+            {
+                return preferredMapper.MapToSource(domainInstance);
+            }
+            else if (this.m_mappers.TryGetValue(typeof(TModel), out modelMapper) ||
+                this.m_mappers.TryGetValue(domainInstance.GetType(), out modelMapper)
+                )
             {
                 if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
                     return smodelMapper.MapToSource(domainInstance);
@@ -564,7 +574,7 @@ namespace SanteDB.Core.Model.Map
             }
             else
             {
-                return default(TModel);
+                throw new InvalidOperationException(String.Format(ErrorMessages.MAP_NOT_FOUND, typeof(TModel), typeof(TDomain)));
             }
         }
 

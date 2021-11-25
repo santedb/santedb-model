@@ -48,7 +48,7 @@ namespace SanteDB.Core.Model.Audit
         public AuditEventData()
         {
             this.Timestamp = DateTime.Now;
-            
+            this.Metadata = new List<AuditMetadata>();
 
         }
 
