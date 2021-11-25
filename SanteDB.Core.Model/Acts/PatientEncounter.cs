@@ -42,7 +42,6 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.Encounter)]
     public class PatientEncounter : Act
     {
-
         /// <summary>
         /// Patient encounter ctor
         /// </summary>
@@ -60,7 +59,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the key of discharge disposition
         /// </summary>
-        [AutoLoad, EditorBrowsable(EditorBrowsableState.Advanced)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("dischargeDisposition"), JsonProperty("dischargeDisposition")]
         public Guid? DischargeDispositionKey { get; set; }
 
