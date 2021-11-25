@@ -115,7 +115,7 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid Inactive = Guid.Parse(StatusKeyStrings.Inactive);
 
         /// <summary>
-        /// States which indicate that a record is inactive
+        /// States which indicate that a record is active
         /// </summary>
         public static readonly Guid[] ActiveStates = new Guid[]
         {

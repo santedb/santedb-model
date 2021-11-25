@@ -69,6 +69,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Class concept
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(EntityClassKeys))]
         public virtual Guid? ClassConceptKey { get; set; }
@@ -83,6 +84,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Creation act reference
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("creationAct"), JsonProperty("creationAct")]
         public Guid? CreationActKey { get; set; }
 
@@ -96,6 +98,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Determiner concept
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("determinerConcept"), JsonProperty("determinerConcept")]
         [Binding(typeof(DeterminerKeys))]
         public virtual Guid? DeterminerConceptKey { get; set; }
@@ -154,6 +157,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Status concept id
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
         public Guid? StatusConceptKey { get; set; }
@@ -196,6 +200,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Type concept identifier
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
         public Guid? TypeConceptKey { get; set; }
 

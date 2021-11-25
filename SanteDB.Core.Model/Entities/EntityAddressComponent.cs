@@ -53,7 +53,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the component type key
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("type"), JsonProperty("type")]
         [Binding(typeof(AddressComponentKeys))]
         public override Guid? ComponentTypeKey

@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
@@ -59,6 +60,8 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets or sets the UUID of the previous version of this record
         /// </summary>
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("previousVersion"), JsonProperty("previousVersion")]
         public virtual Guid? PreviousVersionKey { get; set; }
 

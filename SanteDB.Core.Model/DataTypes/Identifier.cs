@@ -147,7 +147,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Serialization property for issued date
         /// </summary>
-        [XmlElement("issued"), JsonProperty("issued"), SerializationMetadata, EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        [XmlElement("issued"), JsonProperty("issued"), SerializationMetadata, EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
         public String IssueDateXml
         {
             get
@@ -178,7 +178,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Serialization field for expiry date
         /// </summary>
-        [XmlElement("expires"), JsonProperty("expires"), SerializationMetadata, EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        [XmlElement("expires"), JsonProperty("expires"), SerializationMetadata, EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
         public String ExpiryDateXml
         {
             get
@@ -215,12 +215,14 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the assinging authority id
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlIgnore, JsonIgnore]
         public Guid? AuthorityKey { get; set; }
 
         /// <summary>
         /// Gets or sets the type identifier
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlIgnore, JsonIgnore]
         public Guid? IdentifierTypeKey { get; set; }
 
@@ -251,7 +253,7 @@ namespace SanteDB.Core.Model.DataTypes
         public IdentifierReliability Reliability { get; set; }
 
         /// <summary>
-        /// Authority XML
+        /// Represents the authority information
         /// </summary>
         AssigningAuthority IExternalIdentifier.Authority => this.AuthorityXml ?? this.LoadProperty(o => o.Authority);
 

@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -33,8 +34,8 @@ namespace SanteDB.Core.Model.Acts
     /// Represents an act whereby a substance is administered to the patient
     /// </summary>
     /// <remarks>
-    /// <para>The substance administration act is used whenever a clinician administers, plans to administer or should administer to a patient, a substance. 
-    /// The substance that is administered is open but should be represented as either a Consumable (something that was consumed in the act of administration 
+    /// <para>The substance administration act is used whenever a clinician administers, plans to administer or should administer to a patient, a substance.
+    /// The substance that is administered is open but should be represented as either a Consumable (something that was consumed in the act of administration
     /// like a manufactured material (<see cref="ManufacturedMaterial"/>) or a product (if proposing or planning)).</para>
     /// <para>
     /// The type of administration (immunization, drug therapy, treatment, etc.) is classified by the substance administration's type concept (<see cref="Act.TypeConceptKey"/>). In some cases
@@ -65,12 +66,14 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the key for route
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("route"), JsonProperty("route")]
         public Guid? RouteKey { get; set; }
 
         /// <summary>
         /// Gets or sets the key for dosing unit
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("doseUnit"), JsonProperty("doseUnit")]
         public Guid? DoseUnitKey { get; set; }
 
@@ -99,7 +102,6 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlElement("doseSequence"), JsonProperty("doseSequence")]
         public int SequenceId { get; set; }
-
 
         /// <summary>
         /// Gets or sets the site

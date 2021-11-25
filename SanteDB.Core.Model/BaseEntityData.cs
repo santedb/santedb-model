@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
@@ -29,7 +30,6 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model
 {
-
     /// <summary>
     /// Represents the root of all model classes in the SanteDB Core
     /// </summary>
@@ -111,7 +111,6 @@ namespace SanteDB.Core.Model
             }
         }
 
-
         /// <summary>
         /// Gets or sets the user that created this base data
         /// </summary>
@@ -145,12 +144,16 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets or sets the security provenance object which represents the creation of this object
         /// </summary>
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("createdBy"), JsonProperty("createdBy")]
         public virtual Guid? CreatedByKey { get; set; }
 
         /// <summary>
         /// Gets or sets the security provenance object which represents the obsoletion of this data
         /// </summary>
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("obsoletedBy"), JsonProperty("obsoletedBy")]
         public virtual Guid? ObsoletedByKey { get; set; }
 
@@ -161,6 +164,5 @@ namespace SanteDB.Core.Model
         {
             return String.Format("{0} (K:{1})", this.GetType().Name, this.Key);
         }
-
     }
 }

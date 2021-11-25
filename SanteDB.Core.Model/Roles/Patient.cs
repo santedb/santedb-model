@@ -131,7 +131,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [XmlElement("nationality"), JsonProperty("nationality"), EditorBrowsable(EditorBrowsableState.Never)]
+        [XmlElement("nationality"), JsonProperty("nationality"), EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? NationalityKey
         {
             get; set;

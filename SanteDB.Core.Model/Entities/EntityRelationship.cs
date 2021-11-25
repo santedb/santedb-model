@@ -144,6 +144,7 @@ namespace SanteDB.Core.Model.Entities
         /// Association type key
         /// </summary>
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(EntityRelationshipTypeKeys))]
         public Guid? RelationshipTypeKey { get; set; }
 
@@ -179,6 +180,7 @@ namespace SanteDB.Core.Model.Entities
         /// Association type key
         /// </summary>
         [XmlElement("classification"), JsonProperty("classification")]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(RelationshipClassKeys))]
         public Guid? ClassificationKey { get; set; }
 

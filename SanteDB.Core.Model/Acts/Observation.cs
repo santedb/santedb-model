@@ -70,7 +70,6 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.Observation)]
     public class Observation : Act
     {
-
         /// <summary>
         /// Observation ctor
         /// </summary>
@@ -82,7 +81,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the interpretation concept
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("interpretationConcept"), JsonProperty("interpretationConcept")]
         public Guid? InterpretationConceptKey { get; set; }
 
@@ -90,7 +89,8 @@ namespace SanteDB.Core.Model.Acts
         /// Value type
         /// </summary>
         [XmlElement("valueType"), JsonProperty("valueType")]
-        public virtual String ValueType { get { return "NA"; } set { } }
+        public virtual String ValueType
+        { get { return "NA"; } set { } }
 
         /// <summary>
         /// Gets or sets the concept which indicates the interpretation of the observtion
@@ -126,7 +126,6 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "QuantityObservation")]
     public class QuantityObservation : Observation
     {
-
         /// <summary>
         /// Gets or sets the observed quantity
         /// </summary>
@@ -223,7 +222,6 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "CodedObservation")]
     public class CodedObservation : Observation
     {
-
         /// <summary>
         /// Value type
         /// </summary>
@@ -241,7 +239,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the key of the uom concept
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? ValueKey { get; set; }
 
         /// <summary>

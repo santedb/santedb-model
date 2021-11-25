@@ -53,13 +53,18 @@ namespace SanteDB.Core.Model.Acts
     ///     <item><term><see cref="Act"/></term><description>Any other action such as supply request, or problem recordation</description></item>
     /// </list>
     /// <para>
-    /// The property which classifies what specific type of action an act represents is its <see cref="ClassConceptKey"/>, which dictates
-    /// what type an act is. Class concept keys can be found in here <see cref="ActClassKeys"/>.
+    /// The property which classifies what specific type of action an act represents is its <see cref="ClassConceptKey"/>, which indicates whether
+    /// the act is an observation, substance administration, etc. Class concept keys can be found in the <see cref="ActClassKeys"/> constants declaration.
     /// </para>
     /// <para>
-    /// This structure is used to represent events, proposals, and requests. That is to say, the Act structure can represent the request to
-    /// do an act, the intent to perform an act, or the actual act being performed itself. This classification of mode happens based on the
-    /// <see cref="MoodConceptKey"/> mood concept. Mood concept keys can be found on the <see cref="ActMoodKeys"/> structure.
+    /// Furthermore, the <see cref="Act"/> structure is used to represent events, proposals, requests, goals, etc. That is to say, the Act structure
+    /// can represent the request to do an act, the intent to perform an act, or the actual act being performed itself. This classification of mode
+    /// happens based on the <see cref="MoodConceptKey"/> mood concept. Mood concept keys can be found on the <see cref="ActMoodKeys"/> structure.
+    /// </para>
+    /// <para>
+    /// Acts may also be further classified by their <see cref="TypeConceptKey"/>. The <see cref="TypeConceptKey"/> is an implementation specific value
+    /// which is used by implementers to determine whether a particular act (for example, a <see cref="Observation"/>) was an observation of weight,
+    /// of height, etc.
     /// </para>
     /// </remarks>
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "Act")]
@@ -76,42 +81,112 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets an indicator which identifies whether the act actually occurred, or
-        /// specifically did not occur
+        /// Identifies whether the act represented in this instance actually occurred
         /// </summary>
         /// <remarks>
-        /// The isNegated flag is important when the SanteDB system needs to keep track that an event
-        /// specifically DID NOT OCCUR, or SHOULD NOT OCCUR. Typically this is paired with a reason concept (<see cref="ReasonConceptKey"/>)
-        /// which describes why  the act did not or should not occur.
+        /// <para>Whenever an implementation requires the representation of an act which <strong>DID NOT</strong> occur,
+        /// the <see cref="IsNegated"/> property is set to TRUE. This indicator has the following semantic meanings based on <see cref="MoodConceptKey"/>
+        /// </para>
+        /// <list type="table">
+        ///     <item>
+        ///         <term>EventOccurence</term>
+        ///         <description>The act DID NOT occur</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Propose</term>
+        ///         <description>The act SHOULD NOT occur</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Intent</term>
+        ///         <description>The act WILL NOT occur</description>
+        ///     </item>
+        ///     <item>
+        ///         <term>Goal</term>
+        ///         <description>The goal is for the act TO NOT OCCUR</description>
+        ///     </item>
+        /// </list>
         /// </remarks>
+        /// <seealso cref="MoodConceptKey"/>
         [XmlElement("isNegated"), JsonProperty("isNegated")]
         public Boolean IsNegated { get; set; }
 
         /// <summary>
-        /// Gets or sets the instant in time when the act occurred (if applicable)
+        /// The instant when the act occurred, or will occur
         /// </summary>
+        /// <remarks>
+        /// <para>The act time property is used to determine when the act being represented occurred. Based on the <see cref="MoodConceptKey"/> specified,
+        /// the semantic meaning of the property differs slightly:</para>
+        /// <list type="table">
+        ///     <item>
+        ///        <term>EventOccurence</term>
+        ///        <description>The time that the act did occur (or if negation is false, the time the act did not occur)</description>
+        ///     </item>
+        ///     <item>
+        ///        <term>Propose</term>
+        ///        <description>The time that the act should occur</description>
+        ///     </item>
+        ///     <item>
+        ///        <term>Goal</term>
+        ///        <description>The due date/time for the goal statement</description>
+        ///     </item>
+        ///     <item>
+        ///        <term>Intent</term>
+        ///        <description>The time the indicated act is intended to be performed/occur</description>
+        ///     </item>
+        ///     <item>
+        ///        <term>Request</term>
+        ///        <description>The time that the specified request was made</description>
+        ///     </item>
+        /// </list>
+        /// <para>If the desire is to represent the act as a time bounds (start and stop time) then use of the <see cref="StartTime"/> and <see cref="StopTime"/> should be
+        /// used.</para>
+        /// </remarks>
+        /// <seealso cref="StartTime"/>
+        /// <seealso cref="StopTime"/>
         [XmlIgnore, JsonIgnore]
         public DateTimeOffset ActTime { get; set; }
 
         /// <summary>
-        /// Gets the template UUID upon which this act is based
+        /// The template on which the act is based
         /// </summary>
         /// <remarks>
+        /// <para>
         /// Templates are used to classify the specific rules and input forms used to create the act. It further
         /// classifies the type of act in a manner which allows a consumer to render the data or to validate the data.
+        /// </para>
         /// </remarks>
+        /// <seealso cref="Template"/>
         [XmlElement("template"), JsonProperty("template")]
         public Guid? TemplateKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the template definition
+        /// Delay load property for the template
         /// </summary>
+        /// <remarks>
+        /// <para>This property is used for easy access to the structured template information for the template
+        /// on which the act is based. This property is loaded based on the UUID specified in <see cref="TemplateKey"/></para>
+        /// <para>Templates are used to define:</para>
+        /// <list type="bullet">
+        ///     <item>The overall structure/seed data to be included in the instance</item>
+        ///     <item>The implementation specific constraints on the instance (example: act.immunization vs. act.immunization.booster)</item>
+        ///     <item>User interface forms and views to be rendered </item>
+        /// </list>
+        /// </remarks>
+        /// <seealso cref="TemplateKey" />
+        /// <example lang="C#">
+        /// <![CDATA[
+        ///     var act = persistenceService.Find(o => o.ClassConceptKey == ClassConceptKeys.SubstanceAdministration).FirstOrDefault();
+        ///     Console.WriteLine("This substance administration is based on template {0}", act.LoadProperty(o => o.Template).Name);
+        /// ]]>
+        /// </example>
         [SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
         public TemplateDefinition Template { get; set; }
 
         /// <summary>
-        /// Gets or sets the moment in time that this act occurred in ISO format
+        /// The moment in time that this act occurred in ISO format
         /// </summary>
+        /// <seealso cref="ActTime"/>
+        /// <exception cref="FormatException">When the format of the provided string does not conform to ISO date format</exception>
         [SerializationMetadata, XmlElement("actTime"), JsonProperty("actTime")]
         public String ActTimeXml
         {
@@ -133,14 +208,25 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the time when the act should or did start ocurring
+        /// The date/time when the act started to occur
         /// </summary>
+        /// <remarks><para>When the act is a long running action, or if the act is ongoing, then the <see cref="StartTime"/>
+        /// may be set to indicate the beginning of the act.</para>
+        /// <para>When the <see cref="MoodConceptKey"/> is set to <c>Propose</c> then this value represents the minimum safe
+        /// start time of the activity represented.</para>
+        /// <para>This property is typically used in conjunction with the <see cref="StopTime"/> property, which indicates the
+        /// time and date when the activity stopped occurring (additionally, when <see cref="MoodConceptKey"/> is set, then
+        /// the maximum safe time of the activity represented).</para>
+        /// </remarks>
+        /// <seealso cref="StopTime"/>
         [XmlIgnore, JsonIgnore]
         public DateTimeOffset? StartTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the time when the act should or did start ocurring in ISO format
+        /// The time when the act should or did start ocurring in ISO format
         /// </summary>
+        /// <seealso cref="StartTime"/>
+        /// <exception cref="FormatException">When the format of the provided string does not conform to ISO date format</exception>
         [SerializationMetadata, XmlElement("startTime"), JsonProperty("startTime")]
         public String StartTimeXml
         {
@@ -162,14 +248,22 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the time when the act did or should stop occurring
+        /// The time and date when the act did or should stop occurring
         /// </summary>
+        /// <remarks>
+        /// <para>This property is used in conjunction with the <see cref="StartTime"/> to represent the
+        /// date and time when the activity described in this act stopped, or should stop occurring. When the <see cref="MoodConceptKey"/>
+        /// is Propose then this property represents the maximum safe time for the act to occur.</para>
+        /// </remarks>
         [XmlIgnore, JsonIgnore]
         public DateTimeOffset? StopTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the time when the act should or did stop ocurring in ISO format
+        /// The time when the act should or did stop ocurring in ISO format
         /// </summary>
+        /// <see cref="StopTime"/>
+        /// <exception cref="FormatException">When the provided value does not conform to ISO formatted date</exception>
+
         [SerializationMetadata, XmlElement("stopTime"), JsonProperty("stopTime")]
         public String StopTimeXml
         {
@@ -191,20 +285,28 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the key of the concept which classifies the act.
+        /// The classification key of the activity
         /// </summary>
-        /// <see cref="ClassConcept"/>
-        /// <see cref="ActClassKeys"/>
+        /// <remarks>
+        /// <para>The classification concept is used to dictate the overall structure and properties of the activity. The act loader
+        /// in SanteDB will load the appropriate class instance of the act using this information. For example, calling <c>Get()</c> on
+        /// an act which is a <see cref="SubstanceAdministration"/> will result in a SubstanceAdministration instance being loaded.</para>
+        /// <para>Class concepts in SanteDB dictate the major classification of the object, for implementation specific or extended
+        /// classifications (or sub-types) it is recommended that implementers use the <see cref="TypeConceptKey"/> property. </para>
+        /// </remarks>
+        /// <seealso cref="ClassConcept"/>
+        /// <seealso cref="ActClassKeys"/>
+        /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/class-concepts"/>
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(ActClassKeys))]
         public virtual Guid? ClassConceptKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the key of the concept which specifies the mood of the act.
+        /// The mood (or mode) of the Act instance
         /// </summary>
         /// <see cref="ActMoodKeys"/>
         /// <remarks>
-        /// <para>In SanteDB, a mood of an act describes the mode of that act. The mood of the act clasifies whether the act did occur, is intended to occur, is requested to occur or proposed. Mood codes may include:</para>
+        /// <para>In SanteDB, a mood of an act describes the mode of that act. The mood of the act classifies whether the act did occur, is intended to occur, is requested to occur or proposed. Mood codes may include:</para>
         /// <list type="bullet">
         /// <item>
         ///     <term>Event Occurence</term>
@@ -228,30 +330,38 @@ namespace SanteDB.Core.Model.Acts
         /// </item>
         /// </list>
         /// </remarks>
+        /// <seealso cref="MoodConcept"/>
+        /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/mood-concepts"/>
         [XmlElement("moodConcept"), JsonProperty("moodConcept")]
         [Binding(typeof(ActMoodKeys))]
         public virtual Guid? MoodConceptKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the key of the concept which defines the reason why the act is or didn't occur
+        /// Identifies a codified reason as to why this act did (or did not, or should or should not) occur.
         /// </summary>
         /// <see cref="ActReasonKeys"/>
         /// <see cref="NullReasonKeys"/>
         /// <remarks>
-        /// <para>The reason concept on an act indicates why something should, or did/did not occur. For example, when used in conjunction with IsNegated, this concept typically indicates WHY the action did not occur
-        /// (safety concern, etc.)</para>
+        /// <para>The reason concept is used to provide contextual information about why the act exists in its current state. For example: patient request,
+        /// saftey concern, required by law, etc.</para>
+        /// <para>Additionally, the reason code in SanteDB also allows for an indication of why an act did not occur (i.e. when the negation indicator is
+        /// set) and can be used to indicate an override of a proposal by the user (i.e. patient safety or religious exception), or some other
+        /// extenuating factor (i.e. value negative inifinity)</para>
         /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        /// <seealso cref="ReasonConcept"/>
+        ///
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("reasonConcept"), JsonProperty("reasonConcept")]
         [Binding(typeof(ActReasonKeys))]
         public Guid? ReasonConceptKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the key of the concept which describes the current status of the act
+        /// The concept which describes the current status of the act
         /// </summary>
         /// <see cref="StatusKeys"/>
         /// <remarks>
-        /// <para>The status concepts for an act allow for a basic state machine to be represented in SanteDB. Common states for an act are:</para>
+        /// <para>The status concepts for an act allow for a basic state machine to be represented in SanteDB. The state machine for acts in SanteDB comprise of the
+        /// following codes (defined in <see cref="StatusKeys"/>):</para>
         /// <list type="bullet">
         ///     <item>
         ///         <term>New</term>
@@ -275,85 +385,114 @@ namespace SanteDB.Core.Model.Acts
         ///     </item>
         /// </list>
         /// </remarks>
+        /// <seealso cref="StatusKeys" />
+        /// <seealso cref="StatusConcept"/>
+        /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/state-machine"/>
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
         public Guid? StatusConceptKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the key of the conccept which further classifies the type of act occurring
+        /// Gets or sets the key of the concept which further classifies the type of act occurring
         /// </summary>
         /// <see cref="TypeConcept"/>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
         public Guid? TypeConceptKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the concept which classifies the type of act
+        /// Gets the delay-loaded value of the <see cref="ClassConceptKey"/>
         /// </summary>
         /// <remarks>
-        /// The class concept is used to classify the overall type of the act. This code will specify whether the
-        /// act is a substance administration, financial transaction, observation, etc.
+        /// <para>The loading of this delay-loaded property is based on the configuration of the SanteDB host environment (i.e.
+        /// whether deep-loading of lazy-loading of properties is enabled). It is good practice to load any delay-load properties
+        /// using the <c>LoadProperty</c> method, such as:
+        /// <code>act.LoadProperty(o=>o.ClassConcept)</code></para>
         /// </remarks>
-        /// <see cref="ActClassKeys"/>
+        /// <seealso cref="ActClassKeys"/>
+        /// <seealso cref="ClassConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassConceptKey))]
         public Concept ClassConcept { get; set; }
 
         /// <summary>
-        /// Gets or sets the concept which specifies the mood of the act
+        /// Gets the delay-loaded value of the <see cref="MoodConceptKey"/> property
         /// </summary>
         /// <remarks>
-        /// Here the mood of the act is used to describe the mode of the act or specifically to classify
-        /// whether the act did occur (event ocurrence), should occur (propose), will occur (intent), or being requested to occur (request).
+        /// <para>The loading of this delay-loaded property is based on the configuration of the SanteDB host environment (i.e.
+        /// whether deep-loading of lazy-loading of properties is enabled). It is good practice to load any delay-load properties
+        /// using the <c>LoadProperty</c> method, such as:
+        /// <code>act.LoadProperty(o=>o.MoodConcept)</code></para>
         /// </remarks>
         /// <see cref="ActMoodKeys"/>
+        /// <seealso cref="MoodConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(MoodConceptKey))]
         public Concept MoodConcept { get; set; }
 
         /// <summary>
-        /// Gets or sets the concept which indicates the reason of the act
+        /// Delay loads the concept from <see cref="ReasonConceptKey"/>
         /// </summary>
         /// <remarks>
-        /// This concept is used to dictate why the act did occur (or if the negation indicator or mood concept indicate, why it didn't or shouldn't occur). Examples
-        /// of reason codes may be "patient was too old", "out of stock", "patient has allergy", etc.
+        /// <para>The loading of this delay-loaded property is based on the configuration of the SanteDB host environment (i.e.
+        /// whether deep-loading of lazy-loading of properties is enabled). It is good practice to load any delay-load properties
+        /// using the <c>LoadProperty</c> method, such as:
+        /// <code>act.LoadProperty(o=>o.ReasonConcept)</code></para>
         /// </remarks>
+        /// <seealso cref="ActReasonKeys"/>
+        /// <seealso cref="ReasonConceptKey"/>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ReasonConceptKey))]
         public Concept ReasonConcept { get; set; }
 
         /// <summary>
-        /// Gets or sets the current status concept of the act
+        /// Delay loads the concept represented in <see cref="StatusConceptKey"/>
         /// </summary>
         /// <remarks>
-        /// The status of the act will dictate which part of the lifecycle an act is
-        /// currently operating in.
-        /// <list type="bullet">
-        ///     <item>New - The Act is brand new and has yet to start ocurring</item>
-        ///     <item>Active - The Act is still occurring</item>
-        ///     <item>Completed - The Act has completed or is in the past</item>
-        ///     <item>Obsolete - The Act did occur, however it is no longer accurate</item>
-        ///     <item>Nullified - The Act never occurred, this record was created in error</item>
-        /// </list>
+        /// <para>The loading of this delay-loaded property is based on the configuration of the SanteDB host environment (i.e.
+        /// whether deep-loading of lazy-loading of properties is enabled). It is good practice to load any delay-load properties
+        /// using the <c>LoadProperty</c> method, such as:
+        /// <code>act.LoadProperty(o=>o.StatusConcept)</code></para>
         /// </remarks>
+        /// <seealso cref="StatusConceptKey"/>
+        ///
         [SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept StatusConcept { get; set; }
 
         /// <summary>
-        /// Type concept identifier
+        /// Delay loads the concept represented in <see cref="TypeConceptKey"/>
         /// </summary>
+        /// <remarks>
+        /// <para>The loading of this delay-loaded property is based on the configuration of the SanteDB host environment (i.e.
+        /// whether deep-loading of lazy-loading of properties is enabled). It is good practice to load any delay-load properties
+        /// using the <c>LoadProperty</c> method, such as:
+        /// <code>act.LoadProperty(o=>o.TypeConcept)</code></para>
+        /// </remarks>
+        /// <see cref="TypeConceptKey"/>
         [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept TypeConcept { get; set; }
 
         /// <summary>
-        /// Gets or sets the identifiers by which this act is known as in other systems
+        /// Identifiers by which this act is known
         /// </summary>
         /// <remarks>
-        /// The identifiers field is used to assign alternate identifiers to the act itself. These identifiers can
-        /// be used internally for tracking the act, or can be used to correlate an act in a way that an external system
-        /// will know it.
+        /// <para>
+        /// The identifiers property is used to collect identifiers issued by other systems which also maintian copies/links to
+        /// it. The identifiers property, for example:
+        /// </para>
+        /// <list type="bullet">
+        ///     <item>Accession numbers for the object on a PACS or RIS</item>
+        ///     <item>Legal/Accounting tracking numbers</item>
+        ///     <item>Original submission identification from third party systems</item>
+        /// </list>
+        /// <para>
+        /// Identifiers are stored as a combinatin of an identity domain (the authority under which the identifier is issued) and
+        /// the identifier value.
+        /// </para>
         /// </remarks>
+        /// <seealso cref="ActIdentifier"/>
         [XmlElement("identifier"), JsonProperty("identifier")]
         public List<ActIdentifier> Identifiers { get; set; }
 
