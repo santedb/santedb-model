@@ -49,7 +49,6 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ApplicationEntity()
         {
-            this.ClassConceptKey = EntityClassKeys.NonLivingSubject;
             this.DeterminerConceptKey = DeterminerKeys.Specific;
         }
 
