@@ -52,6 +52,7 @@ namespace SanteDB.Core.Model.Parameters
             XmlElement("date", typeof(DateTime)),
             XmlElement("string", typeof(string)),
             XmlElement("float", typeof(float)),
+            XmlElement("other", typeof(object))
         ]
         public Object Value
         {
@@ -78,7 +79,7 @@ namespace SanteDB.Core.Model.Parameters
                     }
                     else
                     {
-                        this.m_value = jt.ToString();
+                        this.m_value = jt;
                     }
                 }
                 else
