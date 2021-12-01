@@ -27,36 +27,16 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Identified entity
     /// </summary>
-    public interface IIdentifiedEntity
+    public interface IResourceCollection
     {
         /// <summary>
-        /// Gets the load state of the entity
+        /// Gets the items in the collection
         /// </summary>
-        LoadState LoadState { get; set; }
+        IEnumerable<IIdentifiedEntity> Item { get; }
 
         /// <summary>
-        /// Gets the identifier for the entity
+        /// Add the <paramref name="annotation"/> to all objects
         /// </summary>
-        Guid? Key { get; set; }
-
-        /// <summary>
-        /// Remove annotation
-        /// </summary>
-        void RemoveAnnotation(Object annotation);
-
-        /// <summary>
-        /// Get annotations of specified <typeparamref name="T"/>
-        /// </summary>
-        IEnumerable<T> GetAnnotations<T>();
-
-        /// <summary>
-        /// Add an annotated object
-        /// </summary>
-        void AddAnnotation(Object annotation);
-
-        /// <summary>
-        /// Copy annotations
-        /// </summary>
-        IIdentifiedEntity CopyAnnotations(IIdentifiedEntity other);
+        void AddAnnotationToAll(object annotation);
     }
 }
