@@ -210,7 +210,7 @@ namespace SanteDB.Core.Model
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
-            if (!forceReload && me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
+            if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBConstants.NoDynamicLoadAnnotation)))
             {
                 return currentValue;
             }

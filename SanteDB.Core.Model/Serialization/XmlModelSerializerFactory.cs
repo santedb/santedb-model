@@ -100,7 +100,7 @@ namespace SanteDB.Core.Model.Serialization
             {
                 if (!this.m_serializers.ContainsKey(key)) // Ensure that hasn't been generated since lock was acquired
                 {
-                    if (type.GetCustomAttribute<ResourceCollectionAttribute>() != null && extraTypes.Length == 0)
+                    if (type.GetCustomAttribute<AddDependentSerializersAttribute>() != null && extraTypes.Length == 0)
                     {
                         extraTypes = AppDomain.CurrentDomain.GetAllTypes()
                             .Where(t => t.GetCustomAttribute<XmlRootAttribute>() != null && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface)

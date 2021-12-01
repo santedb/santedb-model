@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
@@ -32,7 +33,6 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model
 {
-
     /// <summary>
     /// Identifies the state of loading of the object from persistence
     /// </summary>
@@ -42,10 +42,12 @@ namespace SanteDB.Core.Model
         /// Newly created, not persisted, no data loaded
         /// </summary>
         New = 0,
+
         /// <summary>
         /// Object was partially loaded meaning some properties are not populated
         /// </summary>
         PartialLoad = 1,
+
         /// <summary>
         /// The object was fully loaded
         /// </summary>
@@ -58,7 +60,6 @@ namespace SanteDB.Core.Model
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
     public abstract class IdentifiedData : IIdentifiedEntity
     {
-
         // Annotations
         /// <summary>
         /// A list of custom tags which were added to this object
@@ -96,7 +97,7 @@ namespace SanteDB.Core.Model
         public Guid? Key { get; set; }
 
         /// <summary>
-        /// Gets or sets the operation 
+        /// Gets or sets the operation
         /// </summary>
         [XmlAttribute("operation"), JsonProperty("operation")]
         public BatchOperationType BatchOperation { get; set; }
@@ -234,9 +235,9 @@ namespace SanteDB.Core.Model
         /// <returns>True if this object is semantically the same as <paramref name="obj"/></returns>
         /// <remarks>
         /// In SanteDB's data model, an object is semantically equal when the two objects clinically mean the
-        /// same thing. This differs from reference equality (when two objects are the same instance) and value equality 
+        /// same thing. This differs from reference equality (when two objects are the same instance) and value equality
         /// (when two objects carry all the same values). For example, two <see cref="ActParticipation"/> instances may
-        /// be semantically equal when they both represent the same entity playing the same role in the same act as one another, 
+        /// be semantically equal when they both represent the same entity playing the same role in the same act as one another,
         /// even though their keys and effective / obsolete version properties may be different.
         /// </remarks>
         public virtual bool SemanticEquals(object obj)
@@ -254,7 +255,6 @@ namespace SanteDB.Core.Model
         {
             return this.Key.ToString();
         }
-
 
         /// <summary>
         /// Quality Comparer
@@ -282,7 +282,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Remove annotation
         /// </summary>
-        public void RemoveAnnotation(Object annotation)
+        public virtual void RemoveAnnotation(Object annotation)
         {
             lock (this.m_lock)
             {
@@ -293,7 +293,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Get annotations of specified <typeparamref name="T"/>
         /// </summary>
-        public IEnumerable<T> GetAnnotations<T>()
+        public virtual IEnumerable<T> GetAnnotations<T>()
         {
             lock (this.m_lock)
             {
@@ -304,12 +304,24 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Add an annotated object
         /// </summary>
-        public void AddAnnotation(Object annotation)
+        public virtual void AddAnnotation(Object annotation)
         {
             lock (this.m_lock)
             {
                 this.m_annotations.Add(annotation);
             }
+        }
+
+        /// <summary>
+        /// Copy annotations from another resource
+        /// </summary>
+        public virtual IIdentifiedEntity CopyAnnotations(IIdentifiedEntity other)
+        {
+            if (other is IdentifiedData id)
+            {
+                this.m_annotations.AddRange(id.m_annotations);
+            }
+            return this;
         }
     }
 }
