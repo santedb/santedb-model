@@ -36,7 +36,7 @@ namespace SanteDB.Core.Model.Entities
     [Classifier(nameof(RelationshipType)), NonCached]
     [XmlRoot("EntityRelationship", Namespace = "http://santedb.org/model")]
     [XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
-    public class EntityRelationship : VersionedAssociation<Entity>, ITargetedAssociation
+    public class EntityRelationship : VersionedAssociation<Entity>, ITargetedVersionedExtension
     {
         // The association type key
         private Guid? m_associationTypeKey;
