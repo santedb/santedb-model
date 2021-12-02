@@ -42,6 +42,7 @@ namespace SanteDB.Core.Model.Collection
     /// <summary>
     /// A bundle represents a batch of objects which are included within the bundle
     /// </summary>
+    [AddDependentSerializers]
     [XmlType(nameof(Bundle), Namespace = "http://santedb.org/model")]
     [XmlRoot(nameof(Bundle), Namespace = "http://santedb.org/model")]
     [JsonObject("Bundle")]

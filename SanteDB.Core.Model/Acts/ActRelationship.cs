@@ -42,7 +42,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [Classifier(nameof(RelationshipType)), NonCached]
     [XmlType("ActRelationship", Namespace = "http://santedb.org/model"), JsonObject("ActRelationship")]
-    public class ActRelationship : VersionedAssociation<Act>, ITargetedAssociation
+    public class ActRelationship : VersionedAssociation<Act>, ITargetedVersionedExtension
     {
         // The entity key
         private Guid? m_targetActKey;

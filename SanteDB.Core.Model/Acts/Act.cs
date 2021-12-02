@@ -865,6 +865,38 @@ namespace SanteDB.Core.Model.Acts
         IEnumerable<ITargetedAssociation> IHasRelationships.Relationships => this.Relationships;
 
         /// <summary>
+        /// Add a relationship to this relationship container
+        /// </summary>
+        /// <param name="association">The association to be added</param>
+        void IHasRelationships.AddRelationship(ITargetedAssociation association)
+        {
+            if (association is ActRelationship ar)
+            {
+                this.LoadProperty(o => o.Relationships).Add(ar);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Expected ActRelationship but got {association.GetType()}");
+            }
+        }
+
+        /// <summary>
+        /// Remove a relationship from this relationship container
+        /// </summary>
+        /// <param name="association">The association to be removed</param>
+        void IHasRelationships.RemoveRelationship(ITargetedAssociation association)
+        {
+            if (association is ActRelationship ar)
+            {
+                this.LoadProperty(o => o.Relationships).Remove(ar);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Expected ActRelationship but got {association.GetType()}");
+            }
+        }
+
+        /// <summary>
         /// Copies the entity
         /// </summary>
         /// <returns></returns>
