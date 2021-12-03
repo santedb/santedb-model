@@ -342,7 +342,6 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso cref="ClassConcept"/>
         /// <seealso cref="ActClassKeys"/>
         /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/class-concepts"/>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(ActClassKeys))]
         public virtual Guid? ClassConceptKey
