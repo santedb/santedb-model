@@ -376,8 +376,14 @@ namespace SanteDB.Core.Model
         public static PropertyInfo GetSerializationRedirectProperty(this PropertyInfo me)
         {
             var xsr = me.GetCustomAttribute<SerializationReferenceAttribute>();
-            if (xsr == null) return null;
-            return me.DeclaringType.GetRuntimeProperty(xsr.RedirectProperty);
+            if (xsr != null)
+            {
+                return me.DeclaringType.GetRuntimeProperty(xsr.RedirectProperty);
+            }
+            else
+            {
+                return me.DeclaringType.GetRuntimeProperty($"{me.Name}Key");
+            }
         }
 
         /// <summary>

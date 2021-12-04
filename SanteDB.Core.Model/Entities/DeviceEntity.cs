@@ -87,6 +87,12 @@ namespace SanteDB.Core.Model.Entities
         public GeoTag GeoTag { get; set; }
 
         /// <summary>
+        /// Gets the geo tag key
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public Guid? GeoTagKey { get; set; }
+
+        /// <summary>
         /// Determine semantic equality
         /// </summary>
         public override bool SemanticEquals(object obj)
