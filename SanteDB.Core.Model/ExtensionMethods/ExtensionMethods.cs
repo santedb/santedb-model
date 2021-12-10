@@ -635,7 +635,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static String GetSerializationName(this Type type)
         {
-            return type.GetCustomAttribute<XmlRootAttribute>()?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>()?.Id ?? type.Name;
+            return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.Name;
         }
 
         /// <summary>
