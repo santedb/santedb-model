@@ -51,12 +51,6 @@ namespace SanteDB.Core.Model
         public Int64? ObsoleteVersionSequenceId { get; set; }
 
         /// <summary>
-        /// When true, instructs that the sequences be serialized
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public bool VersionSeqeuncesSpecified { get; set; }
-
-        /// <summary>
         /// Should serialize obsolete
         /// </summary>
         public bool ShouldSerializeObsoleteVersionSequenceId() => this.VersionSeqeuncesSpecified || this.ObsoleteVersionSequenceId.HasValue;

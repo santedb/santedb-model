@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -13,6 +15,9 @@ namespace SanteDB.Core.Model.Parameters
     [JsonObject(nameof(Parameter))]
     public class Parameter
     {
+        // Value of the object
+        private object m_value;
+
         /// <summary>
         /// Serialization ctor
         /// </summary>
@@ -40,7 +45,48 @@ namespace SanteDB.Core.Model.Parameters
         /// <summary>
         /// Gets or sets the value of the parameter
         /// </summary>
-        [XmlElement("value"), JsonProperty("value")]
-        public Object Value { get; set; }
+        [JsonProperty("value"),
+            XmlElement("int", typeof(int)),
+            XmlElement("bool", typeof(bool)),
+            XmlElement("array", typeof(string[])),
+            XmlElement("date", typeof(DateTime)),
+            XmlElement("string", typeof(string)),
+            XmlElement("float", typeof(float)),
+            XmlElement("other", typeof(object))
+        ]
+        public Object Value
+        {
+            get => this.m_value;
+            set
+            {
+                if (value is JToken jt)
+                {
+                    if (jt.Type == JTokenType.Array)
+                    {
+                        this.m_value = jt.Select(o => o.ToString()).ToArray();
+                    }
+                    else if (jt.Type == JTokenType.Boolean)
+                    {
+                        this.m_value = jt.Value<Boolean>();
+                    }
+                    else if (jt.Type == JTokenType.Date)
+                    {
+                        this.m_value = jt.Value<DateTime>();
+                    }
+                    else if (jt.Type == JTokenType.String)
+                    {
+                        this.m_value = jt.Value<String>();
+                    }
+                    else
+                    {
+                        this.m_value = jt;
+                    }
+                }
+                else
+                {
+                    this.m_value = value;
+                }
+            }
+        }
     }
 }

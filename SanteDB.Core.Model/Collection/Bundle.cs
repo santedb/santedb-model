@@ -24,6 +24,7 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Roles;
 using SanteDB.Core.Model.Security;
 using System;
@@ -41,7 +42,7 @@ namespace SanteDB.Core.Model.Collection
     /// <summary>
     /// A bundle represents a batch of objects which are included within the bundle
     /// </summary>
-    [ResourceCollection]
+    [AddDependentSerializers]
     [XmlType(nameof(Bundle), Namespace = "http://santedb.org/model")]
     [XmlRoot(nameof(Bundle), Namespace = "http://santedb.org/model")]
     [JsonObject("Bundle")]
@@ -86,7 +87,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(SecurityRole))]
     [XmlInclude(typeof(SecurityChallenge))]
     [XmlInclude(typeof(CodeSystem))]
-    public class Bundle : IdentifiedData
+    public class Bundle : IdentifiedData, IResourceCollection
     {
         /// <summary>
         /// Create new bundle
@@ -176,6 +177,11 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         [XmlElement("totalResults"), JsonProperty("totalResults")]
         public int TotalResults { get; set; }
+
+        /// <summary>
+        /// Generic resource entity
+        /// </summary>
+        IEnumerable<IIdentifiedEntity> IResourceCollection.Item => this.Item;
 
         /// <summary>
         /// Add item to the bundle
@@ -304,21 +310,6 @@ namespace SanteDB.Core.Model.Collection
             foreach (var pi in data.GetType().GetRuntimeProperties().Where(o => o.GetCustomAttribute<SerializationMetadataAttribute>() == null))
             {
                 // Is this property not null? If so, we want to iterate
-                object value = pi.GetValue(data);
-                if (value is IList listValue)
-                {
-                    foreach (var itm in listValue)
-                    {
-                        if (itm is IdentifiedData identifiedData)
-                        {
-                            this.Reconstitute(identifiedData, context);
-                        }
-                    }
-                }
-                else if (value is IdentifiedData identifiedData1)
-                {
-                    this.Reconstitute(identifiedData1, context);
-                }
 
                 // Is the pi a delay load? if so then get the key property
                 var keyPi = pi.GetSerializationRedirectProperty();
@@ -422,6 +413,18 @@ namespace SanteDB.Core.Model.Collection
         public IEnumerable<IdentifiedData> GetFocalItems()
         {
             return this.Item.Where(o => this.FocalObjects.Contains(o.Key.Value));
+        }
+
+        /// <summary>
+        /// Add annotation
+        /// </summary>
+        public void AddAnnotationToAll(object annotation)
+        {
+            base.AddAnnotation(annotation);
+            foreach (var itm in this.Item)
+            {
+                itm.AddAnnotation(annotation);
+            }
         }
     }
 }

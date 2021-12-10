@@ -19,28 +19,24 @@
  * Date: 2021-8-5
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Relationship target
+    /// Identified entity
     /// </summary>
-    public interface IHasRelationships
+    public interface IResourceCollection
     {
         /// <summary>
-        /// Gets the relationshp
+        /// Gets the items in the collection
         /// </summary>
-        IEnumerable<ITargetedAssociation> Relationships { get; }
+        IEnumerable<IIdentifiedEntity> Item { get; }
 
         /// <summary>
-        /// Remove a relationship from the object
+        /// Add the <paramref name="annotation"/> to all objects
         /// </summary>
-        void RemoveRelationship(ITargetedAssociation association);
-
-        /// <summary>
-        /// Add a relationship
-        /// </summary>
-        void AddRelationship(ITargetedAssociation association);
+        void AddAnnotationToAll(object annotation);
     }
 }

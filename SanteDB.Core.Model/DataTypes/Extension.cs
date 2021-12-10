@@ -91,7 +91,7 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.LoadProperty(o => o.ExtensionType).ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
+                return this.LoadProperty(o => o.ExtensionType)?.ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
             }
             set
             {

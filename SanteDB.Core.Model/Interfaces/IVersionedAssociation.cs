@@ -38,4 +38,11 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         Int64? ObsoleteVersionSequenceId { get; set; }
     }
+
+    /// <summary>
+    /// Both a targetd and versioned association
+    /// </summary>
+    public interface ITargetedVersionedExtension : IVersionedAssociation, ITargetedAssociation
+    {
+    }
 }

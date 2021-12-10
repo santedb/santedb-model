@@ -323,7 +323,7 @@ namespace SanteDB.Core.Model
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
-            if (!forceReload && me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
+            if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBConstants.NoDynamicLoadAnnotation)))
             {
                 return currentValue;
             }
@@ -762,7 +762,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static String GetSerializationName(this Type type)
         {
-            return type.GetCustomAttribute<XmlRootAttribute>()?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>()?.Id ?? type.Name;
+            return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.Name;
         }
 
         /// <summary>

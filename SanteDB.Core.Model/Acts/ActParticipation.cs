@@ -46,7 +46,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [Classifier(nameof(ParticipationRole)), NonCached]
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "ActParticipation"), JsonObject(nameof(ActParticipation))]
-    public class ActParticipation : VersionedAssociation<Act>, ITargetedAssociation
+    public class ActParticipation : VersionedAssociation<Act>, ITargetedVersionedExtension
     {
 
        
