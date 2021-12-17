@@ -81,10 +81,20 @@ namespace SanteDB.Core.Extensions
         /// </summary>
         public byte[] Serialize(object data)
         {
-            DateTime dt = (DateTime)data;
-            if (dt.Kind == DateTimeKind.Local)
-                dt = dt.ToUniversalTime(); // adjust to UTC ticks
-            return BitConverter.GetBytes(dt.Ticks);
+            switch (data)
+            {
+                case DateTime time:
+                {
+                    DateTime dt = time;
+                    if (dt.Kind == DateTimeKind.Local)
+                        dt = dt.ToUniversalTime(); // adjust to UTC ticks
+                    return BitConverter.GetBytes(dt.Ticks);
+                }
+                case DateTimeOffset dto:
+                    return BitConverter.GetBytes(dto.UtcTicks);
+                default:
+                    throw new ArgumentOutOfRangeException($"{data.GetType()} cannot be converted to a {typeof(DateTime).Name}");
+            }
         }
     }
 }

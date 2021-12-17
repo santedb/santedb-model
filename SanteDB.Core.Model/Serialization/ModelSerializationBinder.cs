@@ -2,22 +2,23 @@
  * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you 
- * may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations under 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * User: fyfej
  * Date: 2021-8-5
  */
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -28,7 +29,7 @@ using System.Reflection;
 namespace SanteDB.Core.Model.Serialization
 {
     /// <summary>
-    /// Model binding 
+    /// Model binding
     /// </summary>
     public class ModelSerializationBinder : ISerializationBinder
     {
@@ -42,7 +43,6 @@ namespace SanteDB.Core.Model.Serialization
         /// </summary>
         public ModelSerializationBinder()
         {
-
         }
 
         /// <summary>
@@ -63,11 +63,10 @@ namespace SanteDB.Core.Model.Serialization
             typeName = s_typeCache.FirstOrDefault(o => o.Value == serializedType).Key;
             if (typeName == null)
             {
-                typeName = serializedType.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? serializedType.Name;
+                typeName = serializedType.GetSerializationName() ?? serializedType.Name;
             }
 
             assemblyName = null;
-
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace SanteDB.Core.Model.Serialization
             else if (this.m_hintType != null) // use hint type
             {
                 asm = this.m_hintType.Assembly;
-                if (this.m_hintType.GetCustomAttribute<JsonObjectAttribute>()?.Id == typeName)
+                if (this.m_hintType.GetSerializationName() == typeName)
                 {
                     return this.m_hintType;
                 }
@@ -97,8 +96,12 @@ namespace SanteDB.Core.Model.Serialization
                 lock (s_lock)
                 {
                     type = typeof(ModelSerializationBinder).Assembly.ExportedTypes.Union(asm.ExportedTypes).FirstOrDefault(
-                        t => t.GetCustomAttribute<JsonObjectAttribute>(false)?.Id == typeName
+                        t => t.GetSerializationName() == typeName
                     );
+                    if (type == null) // deep look
+                    {
+                        type = AppDomain.CurrentDomain.GetAllTypes().FirstOrDefault(o => o.GetSerializationName() == typeName);
+                    }
                     if (!s_typeCache.ContainsKey(typeName) && type != null)
                     {
                         s_typeCache.Add(typeName, type);
@@ -114,7 +117,6 @@ namespace SanteDB.Core.Model.Serialization
             return type ?? null;
         }
 
-
         /// <summary>
         /// Gets all registered types
         /// </summary>
@@ -128,7 +130,7 @@ namespace SanteDB.Core.Model.Serialization
         /// </summary>
         public static void RegisterModelType(Type type)
         {
-            var typeName = type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.Name;
+            var typeName = type.GetSerializationName() ?? type.Name;
             if (!s_typeCache.ContainsKey(typeName))
             {
                 lock (s_lock)
@@ -140,7 +142,6 @@ namespace SanteDB.Core.Model.Serialization
             //else
             //    throw new ArgumentException($"Type {typeName} is already registered");
         }
-
 
         /// <summary>
         /// Register the model type
