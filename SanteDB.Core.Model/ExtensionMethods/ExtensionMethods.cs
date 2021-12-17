@@ -327,6 +327,11 @@ namespace SanteDB.Core.Model
                     if (value is IList list)
                         foreach (ISimpleAssociation itm in list)
                         {
+                            if(itm is ITargetedAssociation itgt && itgt.TargetEntityKey == identifiedData.Key)
+                            {
+                                continue; // We're just pointing at ourselves and we don't want to change the direction of flow
+                            }
+                            //
                             if (itm.SourceEntityKey != identifiedData.Key)
                             {
                                 itm.Key = null;
@@ -647,9 +652,9 @@ namespace SanteDB.Core.Model
             var key = String.Format("{0}.{1}[{2}]", type.FullName, propertyName, followReferences);
             if (!s_propertyCache.TryGetValue(key, out retVal))
             {
-                retVal = type.GetRuntimeProperties().FirstOrDefault(o => o.GetCustomAttributes<XmlElementAttribute>()?.FirstOrDefault()?.ElementName == propertyName || o.GetCustomAttribute<QueryParameterAttribute>()?.ParameterName == propertyName);
+                retVal = type.GetRuntimeProperties().FirstOrDefault(o => o.GetCustomAttributes<XmlElementAttribute>()?.FirstOrDefault()?.ElementName == propertyName || o.GetCustomAttribute<QueryParameterAttribute>()?.ParameterName == propertyName || o.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName == propertyName);
                 if (retVal == null)
-                    throw new MissingMemberException($"{type.FullName}.{propertyName}");
+                    return null;
                 if (followReferences) retVal = type.GetRuntimeProperties().FirstOrDefault(o => o.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty == retVal.Name) ?? retVal;
 
                 if (retVal.Name.EndsWith("Xml"))
