@@ -41,7 +41,6 @@ namespace SanteDB.Core.Model.Entities
         public Container()
         {
             this.ClassConceptKey = EntityClassKeys.Container;
-            this.DeterminerConceptKey = DeterminerKeys.Specific;
         }
 
         /// <summary>

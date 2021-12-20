@@ -38,7 +38,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("DeviceEntity", Namespace = "http://santedb.org/model"), JsonObject("DeviceEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "DeviceEntity")]
     [ClassConceptKey(EntityClassKeyStrings.Device)]
-    public class DeviceEntity : Entity, IGeoTagged
+    public class DeviceEntity : Entity
     {
         /// <summary>
         /// Device entity ctor
@@ -79,18 +79,6 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("securityDevice"), JsonProperty("securityDevice")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? SecurityDeviceKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the geo tag
-        /// </summary>
-        [XmlElement("geo"), JsonProperty("geo")]
-        public GeoTag GeoTag { get; set; }
-
-        /// <summary>
-        /// Gets the geo tag key
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public Guid? GeoTagKey { get; set; }
 
         /// <summary>
         /// Determine semantic equality

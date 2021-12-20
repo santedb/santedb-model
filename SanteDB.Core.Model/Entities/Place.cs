@@ -127,12 +127,6 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// Gets the geographic tag
-        /// </summary>
-        [XmlElement("geo"), JsonProperty("geo")]
-        public GeoTag GeoTag { get; set; }
-
-        /// <summary>
         /// Should serialize mobile
         /// </summary>
         /// <returns></returns>

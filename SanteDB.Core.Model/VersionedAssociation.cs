@@ -53,12 +53,12 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Should serialize obsolete
         /// </summary>
-        public bool ShouldSerializeObsoleteVersionSequenceId() => this.VersionSeqeuncesSpecified || this.ObsoleteVersionSequenceId.HasValue;
+        public bool ShouldSerializeObsoleteVersionSequenceId() =>  this.ObsoleteVersionSequenceId.HasValue;
 
         /// <summary>
         /// Should serialize obsolete
         /// </summary>
-        public bool ShouldSerializeEffectiveVersionSequenceId() => this.VersionSeqeuncesSpecified || this.EffectiveVersionSequenceId.HasValue;
+        public bool ShouldSerializeEffectiveVersionSequenceId() => this.EffectiveVersionSequenceId.HasValue;
 
         /// <summary>
         /// Determines equality

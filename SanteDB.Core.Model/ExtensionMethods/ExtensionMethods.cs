@@ -476,7 +476,8 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Update property data if required
         /// </summary>
-        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull, bool ignoreTypeMismatch = false)
+        /// TODO: Write a version of this that can use the CODE-DOM to pre-compile a copy function instead of using reflection which is slow
+        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull, bool ignoreTypeMismatch = false, bool declaredOnly = false)
         {
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
@@ -486,7 +487,9 @@ namespace SanteDB.Core.Model
                 throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntity.GetType().FullName}", nameof(fromEntity));
 
             PropertyInfo[] properties = null;
-            if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
+            if (declaredOnly)
+                properties = typeof(TObject).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly) ;
+            else if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
             {
                 properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<SerializationMetadataAttribute>() == null &&
                     destinationPi.CanWrite).ToArray();

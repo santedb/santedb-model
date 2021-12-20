@@ -44,7 +44,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]
-    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships
+    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged
     {
         /// <summary>
         /// Creates a new instance of the entity class
@@ -435,5 +435,19 @@ namespace SanteDB.Core.Model.Entities
             tag = this.Tags?.FirstOrDefault(o => o.TagKey == tagKey);
             return tag != null;
         }
+
+
+        /// <summary>
+        /// Gets or sets the geo tag
+        /// </summary>
+        [XmlElement("geo"), JsonProperty("geo")]
+        public GeoTag GeoTag { get; set; }
+
+        /// <summary>
+        /// Gets the geo tag key
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public Guid? GeoTagKey { get; set; }
+
     }
 }

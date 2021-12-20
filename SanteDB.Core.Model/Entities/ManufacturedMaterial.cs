@@ -44,7 +44,6 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ManufacturedMaterial()
         {
-            base.DeterminerConceptKey = DeterminerKeys.Specific;
             base.ClassConceptKey = EntityClassKeys.ManufacturedMaterial;
         }
 

@@ -265,14 +265,5 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid List = Guid.Parse(ActClassKeyStrings.List);
 
-        /// <summary>
-        /// Clinical document
-        /// </summary>
-        public static readonly Guid Document = Guid.Parse(ActClassKeyStrings.Document);
-
-        /// <summary>
-        /// Clinical Document Section
-        /// </summary>
-        public static readonly Guid DocumentSection = Guid.Parse(ActClassKeyStrings.DocumentSection);
     }
 }
