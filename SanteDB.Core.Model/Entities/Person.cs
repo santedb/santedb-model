@@ -56,12 +56,6 @@ namespace SanteDB.Core.Model.Entities
         protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Person;
 
         /// <summary>
-        /// Gets the security user account associated with this person if applicable
-        /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationMetadata]
-        public virtual SecurityUser AsSecurityUser { get { return null; } }
-
-        /// <summary>
         /// Gets or sets the person's date of birth
         /// </summary>
         [XmlIgnore, JsonIgnore]
