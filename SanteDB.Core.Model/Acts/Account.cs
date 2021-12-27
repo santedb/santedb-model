@@ -45,7 +45,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public Account()
         {
-            this.ClassConceptKey = ActClassKeys.Account;
+            this.m_classConceptKey = ActClassKeys.Account;
         }
 
         /// <summary>

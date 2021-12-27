@@ -53,14 +53,13 @@ namespace SanteDB.Core.Model.Acts
         {
             this.Key = Guid.NewGuid();
             this.MoodConceptKey = ActMoodKeys.Propose;
-            base.ClassConceptKey = ActClassKeys.CarePlan;
+            base.m_classConceptKey = ActClassKeys.CarePlan;
         }
 
         /// <summary>
         /// Gets or sets the class concept key
         /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => ActClassKeys.CarePlan; set => base.ClassConceptKey = ActClassKeys.CarePlan; }
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.CarePlan;
 
         /// <summary>
         /// Create care plan with acts

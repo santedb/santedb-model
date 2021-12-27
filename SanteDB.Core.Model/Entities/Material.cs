@@ -44,16 +44,14 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public Material()
         {
-            this.ClassConceptKey = EntityClassKeys.Material;
+            this.m_classConceptKey = EntityClassKeys.Material;
             this.DeterminerConceptKey = DeterminerKeys.Described;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => EntityClassKeys.Material; set => base.ClassConceptKey = EntityClassKeys.Material; }
-
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Material ||
+            classKey == EntityClassKeys.ManufacturedMaterial ||
+            classKey == EntityClassKeys.Container;
 
         /// <summary>
         /// Gets or sets the expiry date of the material

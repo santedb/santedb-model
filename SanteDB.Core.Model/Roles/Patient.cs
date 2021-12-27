@@ -46,14 +46,11 @@ namespace SanteDB.Core.Model.Roles
         public Patient()
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
-            base.ClassConceptKey = EntityClassKeys.Patient;
+            base.m_classConceptKey = EntityClassKeys.Patient;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => EntityClassKeys.Patient; set => base.ClassConceptKey = EntityClassKeys.Patient; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Patient;
 
         /// <summary>
         /// Gets or sets the date the patient was deceased

@@ -54,14 +54,11 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public SubstanceAdministration()
         {
-            base.ClassConceptKey = ActClassKeys.SubstanceAdministration;
+            base.m_classConceptKey = ActClassKeys.SubstanceAdministration;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => ActClassKeys.SubstanceAdministration; set => base.ClassConceptKey = ActClassKeys.SubstanceAdministration; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.SubstanceAdministration;
 
         /// <summary>
         /// Gets or sets the key for route

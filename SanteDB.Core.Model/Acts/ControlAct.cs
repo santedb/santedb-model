@@ -38,13 +38,13 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public ControlAct()
         {
-            this.ClassConceptKey = ActClassKeys.ControlAct;
+            this.m_classConceptKey = ActClassKeys.ControlAct;
         }
 
         /// <summary>
-        /// Class concept key for CACT
+        /// Gets or sets the class concept key
         /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => ActClassKeys.ControlAct; set => base.ClassConceptKey = ActClassKeys.ControlAct; }
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.ControlAct;
+
     }
 }

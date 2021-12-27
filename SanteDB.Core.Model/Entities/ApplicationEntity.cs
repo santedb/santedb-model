@@ -49,14 +49,12 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ApplicationEntity()
         {
+            this.m_classConceptKey = EntityClassKeys.NonLivingSubject;
             this.DeterminerConceptKey = DeterminerKeys.Specific;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => EntityClassKeys.NonLivingSubject; set => base.ClassConceptKey = EntityClassKeys.NonLivingSubject; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.NonLivingSubject;
 
         /// <summary>
         /// Gets or sets the security application

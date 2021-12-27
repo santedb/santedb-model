@@ -44,14 +44,11 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public InvoiceElement()
         {
-            this.ClassConceptKey = ActClassKeys.InvoiceElement;
+            this.m_classConceptKey = ActClassKeys.InvoiceElement;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => ActClassKeys.InvoiceElement; set => base.ClassConceptKey = ActClassKeys.InvoiceElement; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.InvoiceElement;
 
         /// <summary>
         /// Gets or sets the modifier

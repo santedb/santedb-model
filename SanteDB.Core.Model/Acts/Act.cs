@@ -20,6 +20,7 @@
  */
 
 using Newtonsoft.Json;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
@@ -73,6 +74,10 @@ namespace SanteDB.Core.Model.Acts
     [Classifier(nameof(ClassConcept))]
     public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
+
+        // Class concept key backing field
+        protected Guid? m_classConceptKey;
+
         /// <summary>
         /// Constructor for ACT
         /// </summary>
@@ -299,7 +304,21 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/class-concepts"/>
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(ActClassKeys))]
-        public virtual Guid? ClassConceptKey { get; set; }
+        public Guid? ClassConceptKey 
+        {
+            get => this.m_classConceptKey;
+            set
+            {
+                if(!this.ValidateClassKey(value))
+                {
+                    throw new InvalidOperationException(ErrorMessages.INVALID_CLASS_CODE);
+                }
+                else
+                {
+                    this.m_classConceptKey = value;
+                }
+            }
+        }
 
         /// <summary>
         /// The mood (or mode) of the Act instance
@@ -792,5 +811,10 @@ namespace SanteDB.Core.Model.Acts
             tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
             return tag != null;
         }
+
+        /// <summary>
+        /// Validate the class key
+        /// </summary>
+        protected virtual bool ValidateClassKey(Guid? classKey) => true;
     }
 }

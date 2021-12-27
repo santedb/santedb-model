@@ -20,6 +20,7 @@
  */
 
 using Newtonsoft.Json;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -46,6 +47,10 @@ namespace SanteDB.Core.Model.Entities
     [Classifier(nameof(ClassConcept))]
     public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged
     {
+
+        // Class concept key
+        protected Guid? m_classConceptKey;
+
         /// <summary>
         /// Creates a new instance of the entity class
         /// </summary>
@@ -72,7 +77,21 @@ namespace SanteDB.Core.Model.Entities
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(EntityClassKeys))]
-        public virtual Guid? ClassConceptKey { get; set; }
+        public Guid? ClassConceptKey
+        {
+            get => this.m_classConceptKey;
+            set
+            {
+                if (value.HasValue && !this.ValidateClassKey(value))
+                {
+                    throw new InvalidOperationException(ErrorMessages.INVALID_CLASS_CODE);
+                }
+                else
+                {
+                    this.m_classConceptKey = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Creation act reference
@@ -449,5 +468,11 @@ namespace SanteDB.Core.Model.Entities
         [XmlIgnore, JsonIgnore]
         public Guid? GeoTagKey { get; set; }
 
+        /// <summary>
+        /// Validate the class key
+        /// </summary>
+        /// <param name="classKey">The UUID of the class concept</param>
+        /// <returns>True if the <paramref name="classKey"/> is valid for this type of object</returns>
+        protected virtual bool ValidateClassKey(Guid? classKey) => true;
     }
 }

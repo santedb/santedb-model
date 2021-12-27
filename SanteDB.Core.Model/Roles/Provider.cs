@@ -46,14 +46,11 @@ namespace SanteDB.Core.Model.Roles
         public Provider()
         {
             this.DeterminerConceptKey = DeterminerKeys.Specific;
-            this.ClassConceptKey = EntityClassKeys.Provider;
+            this.m_classConceptKey = EntityClassKeys.Provider;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => EntityClassKeys.Provider; set => base.ClassConceptKey = EntityClassKeys.Provider; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Provider;
 
         /// <summary>
         /// Gets or sets the provider specialty key

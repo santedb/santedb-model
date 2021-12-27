@@ -482,7 +482,7 @@ namespace SanteDB.Core.Model
         /// Update property data if required
         /// </summary>
         /// TODO: Write a version of this that can use the CODE-DOM to pre-compile a copy function instead of using reflection which is slow
-        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull, bool ignoreTypeMismatch = false, bool declaredOnly = false)
+        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull = false, bool ignoreTypeMismatch = false, bool declaredOnly = false, bool onlyNullFields = false)
         {
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
@@ -534,6 +534,16 @@ namespace SanteDB.Core.Model
                 }
                 if (newValue != null && hasConstructor)
                     defaultValue = Activator.CreateInstance(newValue.GetType());
+
+
+                if (onlyNullFields &&
+                    oldValue != null &&
+                    oldValue != defaultValue &&
+                    !default(bool).Equals(oldValue) &&
+                    !default(int).Equals(oldValue))
+                {
+                    continue;
+                }
 
                 if (newValue is IList && oldValue is IList)
                 {

@@ -47,14 +47,12 @@ namespace SanteDB.Core.Model.Entities
         public Organization()
         {
             this.DeterminerConceptKey = DeterminerKeys.Specific;
-            this.ClassConceptKey = EntityClassKeys.Organization;
+            this.m_classConceptKey = EntityClassKeys.Organization;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => EntityClassKeys.Organization; set => base.ClassConceptKey = EntityClassKeys.Organization; }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Organization;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Organization"/> class.

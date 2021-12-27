@@ -47,14 +47,11 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public PatientEncounter()
         {
-            base.ClassConceptKey = ActClassKeys.Encounter;
+            base.m_classConceptKey = ActClassKeys.Encounter;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept for an encounter
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => ActClassKeys.Encounter; set => base.ClassConceptKey = ActClassKeys.Encounter; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.Encounter;
 
         /// <summary>
         /// Gets or sets the key of discharge disposition

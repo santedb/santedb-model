@@ -21,29 +21,8 @@ namespace SanteDB.Core.Model.Acts
     [JsonObject(nameof(Narrative))]
     public class Narrative : Act
     {
-        /// <summary>
-        /// Gets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        [Binding(typeof(ActClassKeys))]
-        public override Guid? ClassConceptKey
-        {
-            get
-            {
-                return base.ClassConceptKey;
-            }
-            set
-            {
-                if (value == ActClassKeys.Document || value == ActClassKeys.DocumentSection)
-                {
-                    base.ClassConceptKey = value;
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException($"Class key {value} is not valid for this type");
-                }
-            }
-        }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.Document || classKey == ActClassKeys.DocumentSection;
 
         /// <summary>
         /// The external version number of the structured document

@@ -44,14 +44,12 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public FinancialTransaction()
         {
-            base.ClassConceptKey = ActClassKeys.FinancialTransaction;
+            base.m_classConceptKey = ActClassKeys.FinancialTransaction;
         }
 
-        /// <summary>
-        /// Class concept for financial transactions
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => ActClassKeys.FinancialTransaction; set => base.ClassConceptKey = ActClassKeys.FinancialTransaction; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.FinancialTransaction;
+
 
         /// <summary>
         /// Gets or sets the amount of the financial transaction

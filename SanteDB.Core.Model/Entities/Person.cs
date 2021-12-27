@@ -48,15 +48,12 @@ namespace SanteDB.Core.Model.Entities
         public Person()
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
-            base.ClassConceptKey = EntityClassKeys.Person;
+            base.m_classConceptKey = EntityClassKeys.Person;
 
         }
 
-        /// <summary>
-        /// Gets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => EntityClassKeys.Person; set => base.ClassConceptKey = EntityClassKeys.Person; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Person;
 
         /// <summary>
         /// Gets the security user account associated with this person if applicable

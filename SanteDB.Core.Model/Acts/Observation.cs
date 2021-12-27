@@ -75,7 +75,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public Observation()
         {
-            this.ClassConceptKey = ActClassKeys.Observation;
+            this.m_classConceptKey = ActClassKeys.Observation;
         }
 
         /// <summary>

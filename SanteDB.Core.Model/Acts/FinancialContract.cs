@@ -44,14 +44,11 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public FinancialContract()
         {
-            base.ClassConceptKey = ActClassKeys.FinancialContract;
+            base.m_classConceptKey = ActClassKeys.FinancialContract;
         }
 
-        /// <summary>
-        /// Class concept for financial contract
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => ActClassKeys.FinancialContract; set => base.ClassConceptKey = ActClassKeys.FinancialContract; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.FinancialContract;
 
         /// <summary>
         /// Gets or sets the payment terms

@@ -23,29 +23,11 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.LivingSubject)]
     public class NonPersonLivingSubject : Entity
     {
-        // Strain
-        private Guid? m_strainKey;
 
-        // The strain of the non-person living subject
-        private Concept m_strain;
 
         /// <inheritdoc/>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey
-        {
-            get => base.ClassConceptKey;
-            set
-            {
-                if (value == EntityClassKeys.Animal || value == EntityClassKeys.LivingSubject)
-                {
-                    base.ClassConceptKey = value;
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Class concept {value} is no permitted in this context");
-                }
-            }
-        }
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.LivingSubject || classKey == EntityClassKeys.Animal || classKey == EntityClassKeys.Food;
+
 
         /// <summary>
         /// Gets the description of the strain
@@ -53,31 +35,16 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("strain"), JsonProperty("strain")]
         public Guid? StrainKey
         {
-            get => this.m_strainKey;
-            set
-            {
-                this.m_strain = null;
-                this.m_strainKey = value;
-            }
+            get;set;
         }
 
         /// <summary>
         /// Strain
         /// </summary>
         [SerializationReference(nameof(StrainKey))]
-        [XmlIgnore, JsonIgnore, AutoLoad]
         public Concept Strain
         {
-            get
-            {
-                this.m_strain = base.DelayLoad(this.m_strainKey, this.m_strain);
-                return this.m_strain;
-            }
-            set
-            {
-                this.m_strain = value;
-                this.m_strainKey = value?.Key;
-            }
+            get;set;
         }
     }
 }

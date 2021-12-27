@@ -46,13 +46,11 @@ namespace SanteDB.Core.Model.Entities
         public DeviceEntity()
         {
             this.DeterminerConceptKey = DeterminerKeys.Specific;
+            this.m_classConceptKey = EntityClassKeys.Device;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => EntityClassKeys.Device; set => base.ClassConceptKey = EntityClassKeys.Device; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Device;
 
         /// <summary>
         /// Gets or sets the manufacturer model name

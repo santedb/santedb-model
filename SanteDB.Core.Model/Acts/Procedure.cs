@@ -44,14 +44,11 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public Procedure()
         {
-            base.ClassConceptKey = ActClassKeys.Procedure;
+            base.m_classConceptKey = ActClassKeys.Procedure;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => ActClassKeys.Procedure; set => base.ClassConceptKey = ActClassKeys.Procedure; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.Procedure;
 
         /// <summary>
         /// Gets or sets te method/technique used to perform the procedure

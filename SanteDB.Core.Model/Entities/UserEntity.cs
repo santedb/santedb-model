@@ -43,14 +43,11 @@ namespace SanteDB.Core.Model.Entities
         public UserEntity()
         {
             this.DeterminerConceptKey = DeterminerKeys.Specific;
-            this.ClassConceptKey = EntityClassKeys.UserEntity;
+            this.m_classConceptKey = EntityClassKeys.UserEntity;
         }
 
-        /// <summary>
-        /// Gets or sets the class concept key
-        /// </summary>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey { get => EntityClassKeys.UserEntity; set => base.ClassConceptKey = EntityClassKeys.UserEntity; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.UserEntity;
 
         /// <summary>
         /// Gets or sets the security user key
