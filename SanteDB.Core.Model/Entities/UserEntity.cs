@@ -35,6 +35,7 @@ namespace SanteDB.Core.Model.Entities
     /// may use the system - a person with whom a user is associated</remarks>
     [XmlType("UserEntity", Namespace = "http://santedb.org/model"), JsonObject("UserEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "UserEntity")]
+    [ClassConceptKey(EntityClassKeyStrings.UserEntity)]
     public class UserEntity : Person
     {
         /// <summary>
