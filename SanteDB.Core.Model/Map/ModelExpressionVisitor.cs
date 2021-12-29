@@ -191,6 +191,8 @@ namespace SanteDB.Core.Model.Map
                 case ExpressionType.Equal:
                 case ExpressionType.NotEqual:
                 case ExpressionType.AndAlso:
+                case ExpressionType.And:
+                case ExpressionType.Or:
                 case ExpressionType.OrElse:
                     return this.VisitBinary((BinaryExpression)node);
                 case ExpressionType.MemberAccess:

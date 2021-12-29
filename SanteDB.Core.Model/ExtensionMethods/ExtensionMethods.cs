@@ -487,7 +487,7 @@ namespace SanteDB.Core.Model
             if (toEntity == null)
                 throw new ArgumentNullException(nameof(toEntity));
             else if (fromEntity == null)
-                throw new ArgumentNullException(nameof(fromEntity));
+                return toEntity;// nothing to copy
             else if (!ignoreTypeMismatch && !fromEntity.GetType().IsAssignableFrom(toEntity.GetType()))
                 throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntity.GetType().FullName}", nameof(fromEntity));
 

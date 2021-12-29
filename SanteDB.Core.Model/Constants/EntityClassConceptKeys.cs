@@ -253,7 +253,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Represents a person which is a user in the system
         /// </summary>
-        public static readonly Guid UserEntity = Guid.Parse("6A2B00BA-501B-4523-B57C-F96D8AE44684");
+        public static readonly Guid UserEntity = Guid.Parse(EntityClassKeyStrings.UserEntity);
 
     }
 }

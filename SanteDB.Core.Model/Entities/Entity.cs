@@ -56,6 +56,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public Entity()
         {
+            this.DeterminerConceptKey = DeterminerKeys.Specific;
         }
 
         /// <summary>

@@ -21,9 +21,18 @@ namespace SanteDB.Core.Model.Entities
     [XmlRoot(nameof(NonPersonLivingSubject), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(NonPersonLivingSubject))]
     [ClassConceptKey(EntityClassKeyStrings.LivingSubject)]
+    [ClassConceptKey(EntityClassKeyStrings.Food)]
+    [ClassConceptKey(EntityClassKeyStrings.Animal)]
     public class NonPersonLivingSubject : Entity
     {
 
+        /// <summary>
+        /// Living subject
+        /// </summary>
+        public NonPersonLivingSubject()
+        {
+            this.m_classConceptKey = EntityClassKeys.LivingSubject;
+        }
 
         /// <inheritdoc/>
         protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.LivingSubject || classKey == EntityClassKeys.Animal || classKey == EntityClassKeys.Food;
@@ -41,7 +50,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Strain
         /// </summary>
-        [SerializationReference(nameof(StrainKey))]
+        [SerializationReference(nameof(StrainKey)), XmlIgnore, JsonIgnore]
         public Concept Strain
         {
             get;set;

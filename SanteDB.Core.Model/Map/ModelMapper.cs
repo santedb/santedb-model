@@ -433,7 +433,7 @@ namespace SanteDB.Core.Model.Map
         {
             if (modelInstance == null)
             {
-                throw new ArgumentNullException(nameof(modelInstance));
+                return default(TDomain);
             }
 
             // Can we find a map between the type and another?
@@ -556,7 +556,7 @@ namespace SanteDB.Core.Model.Map
         {
             if (domainInstance == null)
             {
-                throw new ArgumentNullException(nameof(domainInstance));
+                return default(TModel);
             }
 
             if (this.m_mappers.TryGetValue(typeof(TDomain), out IModelMapper modelMapper) && modelMapper is IModelMapper<TModel, TDomain> preferredMapper)

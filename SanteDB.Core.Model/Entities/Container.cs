@@ -19,6 +19,7 @@
  * Date: 2021-8-5
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using System;
 using System.Xml.Serialization;
@@ -32,7 +33,8 @@ namespace SanteDB.Core.Model.Entities
     [XmlType(nameof(Container), Namespace = "http://santedb.org/model")]
     [XmlRoot(nameof(Container), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(Container))]
-    public class Container : ManufacturedMaterial
+    [ClassConceptKey(EntityClassKeyStrings.Container)]
+    public class Container : Material
     {
 
         /// <summary>
