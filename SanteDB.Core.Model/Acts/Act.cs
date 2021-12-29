@@ -704,6 +704,12 @@ namespace SanteDB.Core.Model.Acts
         public GeoTag GeoTag { get; set; }
 
         /// <summary>
+        /// Gets the geo tag key
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public Guid? GeoTagKey { get; set; }
+
+        /// <summary>
         /// Has identifiers
         /// </summary>
         [JsonIgnore, XmlIgnore]
