@@ -177,12 +177,12 @@ namespace SanteDB.Core.Model.Roles
         /// Gets or sets the ethnicity codes
         /// </summary>
         [XmlElement("ethnicity"), JsonProperty("ethnicity")]
-        public Guid? EthnicGroupCodeKey { get; set; }
+        public Guid? EthnicGroupKey { get; set; }
 
         /// <summary>
         /// Gets the ethic group concepts
         /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EthnicGroupCodeKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EthnicGroupKey))]
         public Concept EthnicGroup
         {
             get; set;
