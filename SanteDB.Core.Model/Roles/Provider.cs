@@ -56,14 +56,14 @@ namespace SanteDB.Core.Model.Roles
         /// Gets or sets the provider specialty key
         /// </summary>
         [XmlElement("providerSpecialty"), JsonProperty("providerSpecialty")]
-        public Guid? ProviderSpecialtyKey { get; set; }
+        public Guid? SpecialtyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the provider specialty
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [SerializationReference(nameof(ProviderSpecialtyKey))]
-        public Concept ProviderSpecialty { get; set; }
+        [SerializationReference(nameof(SpecialtyKey))]
+        public Concept Specialty { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -74,7 +74,7 @@ namespace SanteDB.Core.Model.Roles
             if (other == null)
                 return false;
             return base.SemanticEquals(obj) &&
-                this.ProviderSpecialtyKey == other.ProviderSpecialtyKey;
+                this.SpecialtyKey == other.SpecialtyKey;
         }
     }
 }
