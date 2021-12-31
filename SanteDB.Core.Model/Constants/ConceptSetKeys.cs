@@ -123,6 +123,16 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid TelecomAddressType = Guid.Parse("0D79B02C-6444-40B5-ACA4-4009FB03AD54");
 
         /// <summary>
+        /// Codes for capturing nationality (Canadian, Serbian, Saudi, etc.)
+        /// </summary>
+        public static readonly Guid Nationality = Guid.Parse("7F4E7366-A0E6-4A5E-B2B1-82187447E792");
+
+        /// <summary>
+        /// Country codes
+        /// </summary>
+        public static readonly Guid Countries = Guid.Parse("AF4E7366-A0E6-4A5E-B2B1-82187447E792");
+
+        /// <summary>
         /// Represents concept which classify the intended use of a telecommunications address
         /// </summary>
         public static readonly Guid TelecomAddressUse = Guid.Parse("1DABE3E2-44B8-4C45-9102-25EA147E5710");
