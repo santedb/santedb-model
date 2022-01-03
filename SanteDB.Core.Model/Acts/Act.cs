@@ -802,7 +802,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => this.Tags.FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value;
 
         /// <summary>
         /// Remove <paramref name="tagKey"/> from the tag collection
@@ -814,7 +814,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public bool TryGetTag(string tagKey, out ITag tag)
         {
-            tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            tag = this.Tags?.FirstOrDefault(o => o.TagKey == tagKey);
             return tag != null;
         }
 
