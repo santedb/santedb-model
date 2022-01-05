@@ -158,6 +158,42 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Order result set
+        /// </summary>
+        /// <remarks>
+        /// This interface prevents the default .NET IEnumerable OrderByDescending being called on a normal IQueryResultSet
+        /// </remarks>
+        public static IOrderableQueryResultSet<TData> OrderByDescending<TData, TKey>(this IQueryResultSet<TData> me, Expression<Func<TData, TKey>> sortExpression)
+        {
+            if(me is IOrderableQueryResultSet<TData> qre)
+            {
+                return qre.OrderByDescending(sortExpression);
+            }
+            else
+            {
+                return me.OrderByDescending(sortExpression);
+            }
+        }
+
+        /// <summary>
+        /// Order result set
+        /// </summary>
+        /// <remarks>
+        /// This interface prevents the default .NET IEnumerable OrderByDescending being called on a normal IQueryResultSet
+        /// </remarks>
+        public static IOrderableQueryResultSet<TData> OrderBy<TData, TKey>(this IQueryResultSet<TData> me, Expression<Func<TData, TKey>> sortExpression)
+        {
+            if (me is IOrderableQueryResultSet<TData> qre)
+            {
+                return qre.OrderBy(sortExpression);
+            }
+            else
+            {
+                return me.OrderBy(sortExpression);
+            }
+        }
+
+        /// <summary>
         /// As a result set
         /// </summary>
         public static IQueryResultSet<TTo> TransformResultSet<TFrom, TTo>(this IQueryResultSet<TFrom> me)

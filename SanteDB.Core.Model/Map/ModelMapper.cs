@@ -267,19 +267,23 @@ namespace SanteDB.Core.Model.Map
                 MemberInfo domainMember = accessExpression.Type.GetRuntimeProperty(memberExpression.Member.Name);
                 if (domainMember != null)
                     return Expression.MakeMemberAccess(accessExpression, domainMember);
-                else
+                else if (accessExpression is ParameterExpression pe)
                 {
                     // Try on the base?
-                    if (classMap.ParentDomainProperty != null)
+                    var baseType = modelType?.BaseType ?? memberExpression.Expression.Type.BaseType;
+                    var scanType = this.MapModelType(baseType);
+                    if (baseType == scanType) // No mapping
                     {
-                        domainMember = domainType.GetRuntimeProperty(classMap.ParentDomainProperty.DomainName);
-                        return MapModelMember(memberExpression, Expression.MakeMemberAccess(accessExpression, domainMember), (modelType ?? memberExpression.Expression.Type).BaseType);
-                    }
-                    else
-                    {
-                        //Debug.WriteLine(String.Format("Cannot find property information for {0}({1}).{2}", memberExpression.Expression, memberExpression.Expression.Type.Name, memberExpression.Member.Name));
                         return null;
                     }
+                    else
+                    {  // try to map
+                        return MapModelMember(memberExpression, Expression.Parameter(scanType, "o"), baseType);
+                    }
+                }
+                else
+                {
+                    return null;
                 }
             }
         }

@@ -113,7 +113,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the participation role key
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [Binding(typeof(ActParticipationKey))]
+        [Binding(typeof(ActParticipationKeys))]
         [XmlElement("participationRole"), JsonProperty("participationRole")]
         public Guid? ParticipationRoleKey { get; set; }
 

@@ -540,7 +540,8 @@ namespace SanteDB.Core.Model.Map
 
             if (node.Expression == null) // Constant?
                 return node;
-            // Convert the expression
+            
+            // Convert the expression 
             Expression newExpression = this.Visit(node.Expression);
 
             if (newExpression == null)
@@ -566,6 +567,7 @@ namespace SanteDB.Core.Model.Map
                 }
                 else
                 {
+
                     var retVal = this.m_mapper.MapModelMember(node, newExpression);
                     if (node.NodeType == ExpressionType.MemberAccess &&
                         (node as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)

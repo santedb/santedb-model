@@ -72,5 +72,6 @@ namespace SanteDB.Core.Model.Constants
         /// The observation represents a finding site where a problem or other observtion was made
         /// </summary>
         public static readonly Guid FindingSite = Guid.Parse("25D9F855-F0C8-4718-884D-04D3B6439E5C");
+
     }
 }

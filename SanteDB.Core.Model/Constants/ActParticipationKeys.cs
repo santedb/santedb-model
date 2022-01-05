@@ -25,7 +25,7 @@ namespace SanteDB.Core.Model.Constants
     /// <summary>
     /// Represents the participation concepts which an entity can participate in an act
     /// </summary>
-    public static class ActParticipationKey
+    public static class ActParticipationKeys
     {
         /// <summary>
         /// The player entity was the person who was responsible for admitting the patient into a facility or care scenario.

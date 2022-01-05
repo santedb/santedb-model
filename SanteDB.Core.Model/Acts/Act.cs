@@ -149,7 +149,7 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso cref="StartTime"/>
         /// <seealso cref="StopTime"/>
         [XmlIgnore, JsonIgnore]
-        public DateTimeOffset ActTime { get; set; }
+        public DateTimeOffset? ActTime { get; set; }
 
         /// <summary>
         /// The template on which the act is based
@@ -195,7 +195,7 @@ namespace SanteDB.Core.Model.Acts
         [SerializationMetadata, XmlElement("actTime"), JsonProperty("actTime")]
         public String ActTimeXml
         {
-            get { return this.ActTime.ToString("o", CultureInfo.InvariantCulture); }
+            get { return this.ActTime?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
                 DateTimeOffset val = default(DateTimeOffset);
@@ -208,7 +208,7 @@ namespace SanteDB.Core.Model.Acts
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
                 }
                 else
-                    this.ActTime = default(DateTimeOffset);
+                    this.ActTime = null;
             }
         }
 
@@ -599,7 +599,7 @@ namespace SanteDB.Core.Model.Acts
         ///     <item>Location - Where the act took place</item>
         /// </list>
         /// </remarks>
-        /// <see cref="ActParticipationKey"/>
+        /// <see cref="ActParticipationKeys"/>
         [XmlElement("participation"), JsonProperty("participation")]
         public List<ActParticipation> Participations { get; set; }
 

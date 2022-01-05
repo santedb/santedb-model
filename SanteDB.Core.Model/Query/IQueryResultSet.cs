@@ -339,12 +339,12 @@ namespace SanteDB.Core.Model.Query
         /// Order the result set by the specified sort expression
         /// </summary>
         /// <param name="sortExpression">The expression to sort by</param>
-        IOrderableQueryResultSet<TData> OrderBy(Expression<Func<TData, dynamic>> sortExpression);
+        IOrderableQueryResultSet<TData> OrderBy<TKey>(Expression<Func<TData, TKey>> sortExpression);
 
         /// <summary>
         /// Order the result set by descending
         /// </summary>
         /// <param name="sortExpression">The sort expression</param>
-        IOrderableQueryResultSet<TData> OrderByDescending(Expression<Func<TData, dynamic>> sortExpression);
+        IOrderableQueryResultSet<TData> OrderByDescending<TKey>(Expression<Func<TData, TKey>> sortExpression);
     }
 }

@@ -175,7 +175,6 @@ namespace SanteDB.Core.Model.Map.Builder
                     CollapseKey = t.CollapseKey,
                     DomainClass = t.DomainClass,
                     ModelClass = map.ModelClass,
-                    ParentDomainProperty = t.ParentDomainProperty,
                     Property = t.Property
                 };
                 retVal.Members.Add(this.CreateMapToTargetMethod(newMap, interfaceDefinition));

@@ -208,7 +208,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Order by
         /// </summary>
-        public IOrderableQueryResultSet<TData> OrderBy(Expression<Func<TData, dynamic>> sortExpression)
+        public IOrderableQueryResultSet<TData> OrderBy<TKey>(Expression<Func<TData, TKey>> sortExpression)
         {
             if (this.m_wrapped is IOrderableQueryResultSet<TData> orderable)
             {
@@ -223,7 +223,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Order by descending or
         /// </summary>
-        public IOrderableQueryResultSet<TData> OrderByDescending(Expression<Func<TData, dynamic>> sortExpression)
+        public IOrderableQueryResultSet<TData> OrderByDescending<TKey>(Expression<Func<TData, TKey>> sortExpression)
         {
             if (this.m_wrapped is IOrderableQueryResultSet<TData> orderable)
             {

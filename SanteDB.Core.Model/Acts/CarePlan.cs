@@ -67,7 +67,7 @@ namespace SanteDB.Core.Model.Acts
         public CarePlan(Patient p, IEnumerable<Act> acts) : this()
         {
             this.Relationships.AddRange(acts.Select(o => new ActRelationship(ActRelationshipTypeKeys.HasComponent, o)));
-            this.Participations.Add(new ActParticipation(ActParticipationKey.RecordTarget, p));
+            this.Participations.Add(new ActParticipation(ActParticipationKeys.RecordTarget, p));
         }
 
         /// <summary>
