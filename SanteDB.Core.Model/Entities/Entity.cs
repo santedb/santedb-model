@@ -642,7 +642,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags.FirstOrDefault(o=>o.TagKey == tagKey)?.Value : this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
 
         /// <summary>
         /// Remove the specified <paramref name="tagKey"/> from this objects tags
