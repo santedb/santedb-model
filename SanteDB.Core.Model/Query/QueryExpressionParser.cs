@@ -91,73 +91,9 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build expression for specified type
         /// </summary>
-        public static Expression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
+        public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
         {
-            var methodInfo = typeof(QueryExpressionParser).GetGenericMethod(nameof(QueryExpressionParser.BuildLinqExpression), new Type[] { modelType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Func<Object>>), typeof(bool), typeof(bool), typeof(bool) });
-            return methodInfo.Invoke(null, new object[] { httpQueryParameters, parameterName, variables, safeNullable, forceLoad, lazyExpandVariables }) as Expression;
-        }
-
-
-        /// <summary>
-        /// Buidl linq expression
-        /// </summary>
-        /// <typeparam name="TModelType"></typeparam>
-        /// <param name="httpQueryParameters"></param>
-        /// <returns></returns>
-        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters)
-        {
-            return BuildLinqExpression<TModelType>(httpQueryParameters, null);
-        }
-
-        /// <summary>
-        /// Build linq expression from string
-        /// </summary>
-        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(String filter)
-        {
-            return BuildLinqExpression<TModelType>(NameValueCollection.ParseQueryString(filter), null);
-        }
-        /// <summary>
-        /// Build a LINQ expression
-        /// </summary>
-        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables)
-        {
-            return BuildLinqExpression<TModelType>(httpQueryParameters, variables, true);
-
-        }
-
-        /// <summary>
-        /// Builds the linq expression.
-        /// </summary>
-        /// <typeparam name="TModelType">The type of the t model type.</typeparam>
-        /// <param name="httpQueryParameters">The HTTP query parameters.</param>
-        /// <param name="variables">The variables.</param>
-        /// <param name="safeNullable">if set to <c>true</c> [safe nullable].</param>
-        /// <returns>Expression&lt;Func&lt;TModelType, System.Boolean&gt;&gt;.</returns>
-        /// <param name="lazyExpandVariables">When true, variables are written to be expanded on evaluation of the LINQ expression - if false then variables are realized when the conversion is done</param>
-        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables, bool safeNullable, bool lazyExpandVariables = true)
-        {
-
-            var expression = BuildLinqExpression<TModelType>(httpQueryParameters, "o", variables, safeNullable: safeNullable, lazyExpandVariables: lazyExpandVariables);
-
-            if (expression == null) // No query!
-                return (TModelType o) => true;
-            else
-                return Expression.Lambda<Func<TModelType, bool>>(expression.Body, expression.Parameters);
-        }
-
-        /// <summary>
-        /// Build LINQ expression
-        /// </summary>
-        /// <param name="forceLoad">When true, will assume the object is working on memory objects and will call LoadProperty on guards</param>
-        /// <param name="httpQueryParameters">The query parameters formatter as HTTP query</param>
-        /// <param name="lazyExpandVariables">When true, variables should be expanded in the LINQ expression otherwise they are realized when conversion is done</param>
-        /// <param name="parameterName">The name of the parameter on the resulting Lambda</param>
-        /// <param name="safeNullable">When true, coalesce operations will be injected into the LINQ to ensure object in-memory collections don't throw NRE</param>
-        /// <param name="variables">A list of variables which are accessed in the LambdaExpression via $variable</param>
-        public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
-        {
-
-            var parameterExpression = Expression.Parameter(typeof(TModelType), parameterName);
+            var parameterExpression = Expression.Parameter(modelType, parameterName);
             Expression retVal = null;
             List<KeyValuePair<String, String[]>> workingValues = new List<KeyValuePair<string, string[]>>();
             // Iterate 
@@ -465,7 +401,7 @@ namespace SanteDB.Core.Model.Query
 
                             var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Func<Object>>), typeof(bool), typeof(bool), typeof(bool) });
 
-                            Expression predicate = (builderMethod.Invoke(null, new object[] { subFilter, pMember, variables, safeNullable, forceLoad, lazyExpandVariables }) as LambdaExpression);
+                            Expression predicate = BuildLinqExpression(itemType, subFilter, pMember, variables, safeNullable, forceLoad, lazyExpandVariables);
                             if (predicate == null) // No predicate so just ANY()
                                 continue;
 
@@ -748,6 +684,69 @@ namespace SanteDB.Core.Model.Query
 
         }
 
+
+        /// <summary>
+        /// Buidl linq expression
+        /// </summary>
+        /// <typeparam name="TModelType"></typeparam>
+        /// <param name="httpQueryParameters"></param>
+        /// <returns></returns>
+        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters)
+        {
+            return BuildLinqExpression<TModelType>(httpQueryParameters, null);
+        }
+
+        /// <summary>
+        /// Build linq expression from string
+        /// </summary>
+        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(String filter)
+        {
+            return BuildLinqExpression<TModelType>(NameValueCollection.ParseQueryString(filter), null);
+        }
+        /// <summary>
+        /// Build a LINQ expression
+        /// </summary>
+        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables)
+        {
+            return BuildLinqExpression<TModelType>(httpQueryParameters, variables, true);
+
+        }
+
+        /// <summary>
+        /// Builds the linq expression.
+        /// </summary>
+        /// <typeparam name="TModelType">The type of the t model type.</typeparam>
+        /// <param name="httpQueryParameters">The HTTP query parameters.</param>
+        /// <param name="variables">The variables.</param>
+        /// <param name="safeNullable">if set to <c>true</c> [safe nullable].</param>
+        /// <returns>Expression&lt;Func&lt;TModelType, System.Boolean&gt;&gt;.</returns>
+        /// <param name="lazyExpandVariables">When true, variables are written to be expanded on evaluation of the LINQ expression - if false then variables are realized when the conversion is done</param>
+        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables, bool safeNullable, bool lazyExpandVariables = true)
+        {
+
+            var expression = BuildLinqExpression<TModelType>(httpQueryParameters, "o", variables, safeNullable: safeNullable, lazyExpandVariables: lazyExpandVariables);
+
+            if (expression == null) // No query!
+                return (TModelType o) => true;
+            else
+                return Expression.Lambda<Func<TModelType, bool>>(expression.Body, expression.Parameters);
+        }
+
+        /// <summary>
+        /// Build LINQ expression
+        /// </summary>
+        /// <param name="forceLoad">When true, will assume the object is working on memory objects and will call LoadProperty on guards</param>
+        /// <param name="httpQueryParameters">The query parameters formatter as HTTP query</param>
+        /// <param name="lazyExpandVariables">When true, variables should be expanded in the LINQ expression otherwise they are realized when conversion is done</param>
+        /// <param name="parameterName">The name of the parameter on the resulting Lambda</param>
+        /// <param name="safeNullable">When true, coalesce operations will be injected into the LINQ to ensure object in-memory collections don't throw NRE</param>
+        /// <param name="variables">A list of variables which are accessed in the LambdaExpression via $variable</param>
+        public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
+        {
+            return BuildLinqExpression(typeof(TModelType), httpQueryParameters, parameterName, variables, safeNullable, forceLoad, lazyExpandVariables);
+        }
+
+
         /// <summary>
         /// Get variable expression
         /// </summary>
@@ -789,12 +788,9 @@ namespace SanteDB.Core.Model.Query
                 return Expression.Convert(retVal, expectedReturn);
             else
             {
-                var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildPropertySelector), new Type[] { scope.Type }, new Type[] { typeof(String), typeof(Boolean) });
-                retVal = Expression.Invoke(builderMethod.Invoke(null, new object[]
-                {
-                        varPath.Substring(1),
-                        true
-                }) as Expression, retVal);
+                retVal = Expression.Invoke(
+                    BuildPropertySelector(scope.Type, varPath.Substring(1))
+                    , retVal);
                 if (retVal.Type.IsConstructedGenericType &&
                     retVal.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
                     retVal = Expression.Coalesce(retVal, Expression.Default(retVal.Type.GenericTypeArguments[0]));
@@ -828,10 +824,7 @@ namespace SanteDB.Core.Model.Query
             var nvc = new NameValueCollection();
             nvc.Add(propertyName, "null");
             nvc[propertyName] = null;
-            return builderMethod.Invoke(null, new object[]
-            {
-                nvc, "__xinstance", null, false, forceLoad, false
-            }) as LambdaExpression;
+            return BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad,false);
         }
     }
 }
