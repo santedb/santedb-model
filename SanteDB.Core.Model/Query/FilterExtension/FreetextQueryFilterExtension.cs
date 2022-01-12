@@ -27,17 +27,17 @@ namespace SanteDB.Core.Model.Query.FilterExtension
     /// <summary>
     /// Represents a filter extension that uses the age of an object
     /// </summary>
-    public class AgeQueryFilterExtension : IQueryFilterExtension
+    public class FreetextQueryFilterExtension : IQueryFilterExtension
     {
         /// <summary>
         /// Get the name of the extendion
         /// </summary>
-        public string Name => "age";
+        public string Name => "freetext";
 
         /// <summary>
         /// Get the extension method
         /// </summary>
-        public MethodInfo ExtensionMethod => typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.Age));
+        public MethodInfo ExtensionMethod => typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.FreetextSearch));
 
         /// <summary>
         /// Compose the expression
@@ -46,14 +46,30 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         {
             // Is there a reference data?
             var rawParm = parms[0] as ConstantExpression;
-            if (rawParm == null || !DateTime.TryParse(rawParm.Value.ToString(), out DateTime parsedParm))
-                parsedParm = DateTime.Now;
+            if (rawParm == null)
+            {
+                throw new InvalidOperationException("Freetext requires a constant string expression");
+            }
 
-
-            if (scope.Type == typeof(DateTimeOffset))
-                scope = Expression.MakeMemberAccess(scope, typeof(DateTimeOffset).GetProperty(nameof(DateTimeOffset.DateTime)));
-            return Expression.MakeBinary(comparison, Expression.Call(null, this.ExtensionMethod, scope, Expression.Constant(parsedParm)), valueExpression);
-
+            if (scope.Type.StripNullable() == typeof(Guid) && scope is MemberExpression mae) // We are anchored to the holder
+            {
+                while(mae != null && !typeof(IdentifiedData).IsAssignableFrom(mae.Expression.Type))
+                {
+                    mae = mae.Expression as MemberExpression;
+                }
+                if (mae != null)
+                {
+                    return Expression.MakeBinary(comparison, Expression.Call(null, this.ExtensionMethod, mae.Expression, rawParm), valueExpression);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Freetext searches must be anchored on an id property - example: relationship.target.id=:(freetext... or id=:(freetext...");
+                }
+            }
+            else
+            {
+                return Expression.MakeBinary(comparison, Expression.Call(null, this.ExtensionMethod, scope, rawParm), valueExpression);
+            }
         }
     }
 }

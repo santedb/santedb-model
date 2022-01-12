@@ -52,6 +52,7 @@ namespace SanteDB.Core.Model.Parameters
             XmlElement("date", typeof(DateTime)),
             XmlElement("string", typeof(string)),
             XmlElement("float", typeof(float)),
+            XmlElement("uuid", typeof(Guid)),
             XmlElement("other", typeof(object))
         ]
         public Object Value
