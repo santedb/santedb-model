@@ -175,7 +175,7 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// True if the object is empty
+        /// Determines w
         /// </summary>
         /// <returns></returns>
         public virtual bool IsEmpty() => false;

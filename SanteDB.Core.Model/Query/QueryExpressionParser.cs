@@ -648,6 +648,7 @@ namespace SanteDB.Core.Model.Query
                             }).ToArray();
 
                             singleExpression = extendedFilter.Compose(thisAccessExpression, et, valueExpr, parms);
+                            
                         }
                         else
                         {

@@ -162,7 +162,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the date of issue
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        public DateTime? IssueDate { get; set; }
+        public DateTimeOffset? IssueDate { get; set; }
 
         /// <summary>
         /// Serialization field for expiry date
@@ -193,7 +193,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the expiration date of the identifier
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public DateTime? ExpiryDate { get; set; }
+        public DateTimeOffset? ExpiryDate { get; set; }
 
         /// <summary>
         /// Gets or sets the check-digit if it is stored separate from the identifier
