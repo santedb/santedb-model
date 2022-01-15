@@ -440,12 +440,23 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value : this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
 
         /// <summary>
         /// Remove the specified <paramref name="tagKey"/> from this objects tags
         /// </summary>
-        public void RemoveTag(string tagKey) => this.Tags?.RemoveAll(o => o.TagKey == tagKey);
+        public void RemoveTag(string tagKey)
+        {
+            if (tagKey.StartsWith("$"))
+            {
+                this.Tags?.RemoveAll(o => o.TagKey == tagKey);
+            }
+            else
+            {
+                this.LoadProperty(o => o.Tags).RemoveAll(t => t.TagKey == tagKey);
+            }
+        }
+
 
         /// <summary>
         /// Try to fetch the tag

@@ -40,7 +40,7 @@ namespace SanteDB.Core.Model.Acts
     /// player (<see cref="PlayerEntityKey"/>) participates in the act (<see cref="ActKey"/>) in a particular role (<see cref="ParticipationRoleKey"/>).
     /// </para>
     /// <para>
-    /// Act participations can also be quantified. For example, if 100 doses of a particlar material (<see cref="ManufacturedMaterial"/>) were consumed
+    /// Act participations can also be quantified. For example, if 100 doses of a particular material (<see cref="ManufacturedMaterial"/>) were consumed
     /// as part of an act, then the quantity would be 100.
     /// </para>
     /// </remarks>
@@ -95,45 +95,91 @@ namespace SanteDB.Core.Model.Acts
         public Concept Classification { get; set; }
 
         /// <summary>
-        /// Association type key
+        /// Identifies the classification of the participation.
         /// </summary>
+        /// <remarks><para>Classifications are used to further specify the meaning and class of the participation between
+        /// the holder <see cref="Act"/> and the player <see cref="Entity"/>. For example, classifiers may indicate that the
+        /// participation is private (should not be disclosed), contained (cannot exist without the holder), etc.</para></remarks>
+        /// <seealso cref="RelationshipClassKeys"/>
         [XmlElement("classification"), JsonProperty("classification")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(RelationshipClassKeys))]
         public Guid? ClassificationKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the target entity reference
+        /// Identifies the entity which played the <see cref="ParticipationRoleKey"/>
         /// </summary>
+        /// <remarks>
+        /// <para>The player represents the <see cref="Entity"/> which plays the <see cref="ParticipationRoleKey"/> in the act. The player 
+        /// is related to the act in this (and only this) manner. It should not be assumed that a player, for example, playing the role of <see cref="ActParticipationKey.Admitter"/> is 
+        /// also the <see cref="ActParticipationKey.Authororiginator"/> of the Act. Rather these participations would be represented as separate instances of <see cref="ActParticipation"/> 
+        /// on the <see cref="Act"/></para>
+        /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("player"), JsonProperty("player")]
         public Guid? PlayerEntityKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the participation role key
+        /// Identifies the role which the <see cref="PlayerEntityKey"/> performs in the <see cref="ActKey"/>
         /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The participation role indicates the type of role which the <see cref="PlayerEntityKey"/> plays in the containing Act. Roles of
+        /// a player entity can vary from <see cref="ActParticipationKey.Admitter"/> (the Entity which admitted the patient), to <see cref="ActParticipationKey.RecordTarget"/>
+        /// (the entity about which the act exists), or even <see cref="ActParticipationKey.Product"/> (the Entity representing the product which was used
+        /// or administered in the act).
+        /// </para>
+        /// <para>Participation roles are validated based on the <see cref="Entity.ClassConceptKey"/> for the player and the <see cref="Act.ClassConceptKey"/>. </para>
+        /// </remarks>
+        /// <seealso cref="ActParticipationKey"/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(ActParticipationKeys))]
         [XmlElement("participationRole"), JsonProperty("participationRole")]
         public Guid? ParticipationRoleKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the entity which participated in the act
+        /// The delay-load property for <see cref="PlayerEntityKey"/>
         /// </summary>
+        /// <example>
+        /// <code language="cs">
+        /// <![CDATA[
+        /// void DoSomething(ActParticipation foo) {
+        ///     // This property is used with .LoadProperty to provide convenient loading of data
+        ///     var playerType = foo.LoadProperty(o=>o.PlayerEntity).TypeConceptKey;
+        /// }
+        /// ]]>
+        /// </code>
+        /// </example>
+        /// <seealso cref="PlayerEntityKey"/>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(PlayerEntityKey))]
         public Entity PlayerEntity { get; set; }
 
         /// <summary>
-        /// Gets or sets the role that the entity played in participating in the act
+        /// Delay load point for <see cref="ParticipationRoleKey"/>
         /// </summary>
+        /// <seealso cref="ParticipationRoleKey"/>
+        /// <example>
+        /// <code language="cs">
+        /// <![CDATA[
+        /// void DoSomething(ActParticipation foo) {
+        ///     // This property is used to load nested data
+        ///     var roleMnemonic = foo.LoadProperty(o=>o.ParticipationRole).Mnemonic;
+        /// }
+        /// ]]>
+        /// </code>
+        /// </example>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ParticipationRoleKey))]
         public Concept ParticipationRole { get; set; }
 
         /// <summary>
-        /// The entity that this relationship targets
+        /// Identifies the <see cref="Act"/> to which the participation belongs
         /// </summary>
+        /// <remarks>
+        /// <para>The <see cref="Act"/> is the holder of this type of relationship. An <see cref="ActParticipation"/> is a relationship
+        /// between <see cref="Act"/> and <see cref="Entity"/>.</para>
+        /// </remarks>
         [JsonProperty("act"), XmlElement("act")]
         public Guid? ActKey
         {
@@ -142,8 +188,17 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// The entity that this relationship targets
+        /// Delay load property for <see cref="ActKey"/>
         /// </summary>
+        /// <seealso cref="ActKey"/>
+        /// <example>
+        /// <code language="cs">
+        /// <![CDATA[
+        /// void DoSomething(ActParticipation foo) {
+        ///     // This property is used to delay-load nested data
+        ///     var typeOfConcept = foo.LoadProperty(o=>o.Act).TypeConceptKey;
+        /// }
+        /// ]]></code></example>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(ActKey)), SerializationMetadata]
         public Act Act
         {
@@ -152,15 +207,18 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Gets or sets the quantity of player in the act
+        /// Identifies the number of <see cref="PlayerEntityKey"/> which participates in <see cref="ActKey"/>
         /// </summary>
+        /// <remarks>The quantity property is used to express the number of entities which are participating in the 
+        /// act. Some examples where quantity may be used:
+        /// <list type="bullet">
+        /// <item><term>30 Syringes were shipped</term><description>A <see cref="Act"/> with class <see cref="ActClassKeys.Supply"/> has a participation of type <see cref="ActParticipationKey.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 30</description></item>
+        /// <item><term>1 dose of BCG administered</term><description>A <see cref="SubstanceAdministration"/> has a participation of type <see cref="ActParticipationKey.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 1</description></item>
+        /// </list></remarks>
         [XmlElement("quantity"), JsonProperty("quantity")]
         public int? Quantity { get; set; }
 
-        /// <summary>
-        /// Determine if this is empty
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public override bool IsEmpty()
         {
             return !this.ParticipationRoleKey.HasValue && this.ParticipationRole == null ||

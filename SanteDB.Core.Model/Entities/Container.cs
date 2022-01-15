@@ -48,6 +48,13 @@ namespace SanteDB.Core.Model.Entities
         /// <inheritdoc/>
         protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Container;
 
+
+        /// <summary>
+        /// Gets or sets the lot number of the manufactured material
+        /// </summary>
+        [XmlElement("lotNumber"), JsonProperty("lotNumber")]
+        public String LotNumber { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class.
         /// </summary>

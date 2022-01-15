@@ -33,7 +33,7 @@ namespace SanteDB.Core.Model.Acts
     /// Represents an Account
     /// </summary>
     /// <remarks>An account represents a simple structure for tracking balance and one or more invoice entries
-    /// against a record target.</remarks>
+    /// against a record target (the entity for which the account is owned).</remarks>
     [XmlType("Account", Namespace = "http://santedb.org/model"), JsonObject("Account")]
     [XmlRoot("Account", Namespace = "http://santedb.org/model")]
     [ClassConceptKey(ActClassKeyStrings.Account)]

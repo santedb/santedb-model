@@ -802,12 +802,22 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value : this.LoadProperty(o=>o.Tags).FirstOrDefault(t=>t.TagKey == tagKey)?.Value;
 
         /// <summary>
         /// Remove <paramref name="tagKey"/> from the tag collection
         /// </summary>
-        public void RemoveTag(string tagKey) => this.Tags.RemoveAll(o => o.TagKey == tagKey);
+        public void RemoveTag(string tagKey)
+        {
+            if (tagKey.StartsWith("$"))
+            {
+                this.Tags?.RemoveAll(o => o.TagKey == tagKey);
+            }
+            else
+            {
+                this.LoadProperty(o => o.Tags).RemoveAll(t => t.TagKey == tagKey);
+            }
+        }
 
         /// <summary>
         /// Try to fetch the tag

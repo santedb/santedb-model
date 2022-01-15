@@ -1,23 +1,23 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
- * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
- * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you
- * may not use this file except in compliance with the License. You may
- * obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- *
- * User: fyfej
- * Date: 2021-8-5
- */
+* Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+* Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
+* Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You may
+* obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+* License for the specific language governing permissions and limitations under
+* the License.
+*
+* User: fyfej
+* Date: 2021-8-5
+*/
 
 using SanteDB.Core.Model.Attributes;
 using System;
@@ -204,13 +204,16 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             protected override Expression VisitUnary(UnaryExpression node)
             {
+
                 switch (node.NodeType)
                 {
                     case ExpressionType.Not:
+                    case ExpressionType.IsFalse:
 
                         if (node.Operand is MethodCallExpression callExpression)
                         {
-                            this.ParseArrayContains(callExpression, true);
+                            this.VisitMethodCall(callExpression, true);
+
                         }
                         else
                         {
@@ -220,6 +223,7 @@ namespace SanteDB.Core.Model.Query
                             this.AddCondition(parmName, "null");
                         }
                         return null;
+
                     default:
                         throw new NotSupportedException("Unary expressions cannot be represented as key/value pair filters");
                 }
@@ -228,7 +232,12 @@ namespace SanteDB.Core.Model.Query
             /// <summary>
             /// Visit method call
             /// </summary>
-            protected override Expression VisitMethodCall(MethodCallExpression node)
+            protected override Expression VisitMethodCall(MethodCallExpression node) => this.VisitMethodCall(node, false);
+
+            /// <summary>
+            /// Visit method call optionally negating any values parsed
+            /// </summary>
+            private Expression VisitMethodCall(MethodCallExpression node, bool negate)
             {
                 switch (node.Method.Name)
                 {
@@ -236,13 +245,13 @@ namespace SanteDB.Core.Model.Query
                         {
                             if (node.Object == null && node.Method.DeclaringType == typeof(Enumerable))
                             {
-                                return this.ParseArrayContains(node, false);
+                                return this.ParseArrayContains(node, negate);
                             }
                             else
                             {
                                 var parmName = this.ExtractPath(node.Object, false);
                                 object parmValue = this.ExtractValue(node.Arguments[0]);
-                                this.AddCondition(parmName, "~" + parmValue.ToString());
+                                this.AddCondition(parmName, (negate ? "!" : "~") + parmValue.ToString());
                                 return null;
                             }
                         }
@@ -250,7 +259,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             var parmName = this.ExtractPath(node.Object, false);
                             object parmValue = this.ExtractValue(node.Arguments[0]);
-                            this.AddCondition(parmName, "^" + parmValue.ToString());
+                            this.AddCondition(parmName, (negate ? "!" : "^") + parmValue.ToString());
                             return null;
                         }
                     case "Any":
@@ -265,7 +274,7 @@ namespace SanteDB.Core.Model.Query
 
                                 // Result
                                 foreach (var itm in result)
-                                    this.AddCondition(String.Format("{0}.{1}", parmName, itm.Key), itm.Value);
+                                    this.AddCondition(String.Format("{0}.{1}", parmName, itm.Key), negate ? $"!{itm.Value}" : itm.Value);
                                 return null;
                             }
                             else
@@ -276,6 +285,26 @@ namespace SanteDB.Core.Model.Query
                             var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(node.Method);
                             if (extendedFn == null)
                                 throw new MissingMemberException($"Cannot find extension method {node.Method}");
+
+                            if (extendedFn.ExtensionMethod.ReturnType == typeof(bool))
+                            {
+                                var parmName = this.ExtractPath(node.Arguments[0], false);
+                                if (parmName == null && typeof(IdentifiedData).IsAssignableFrom(node.Arguments[0].Type))
+                                {
+                                    parmName = "id";
+                                }
+                                else if (parmName == null)
+                                {
+                                    throw new InvalidOperationException($"Cannot determine how to map {extendedFn.Name}");
+                                }
+                                var callValue = $"{(negate ? "!" : "")}:({extendedFn.Name}";
+                                if (node.Arguments.Count > 1)
+                                    callValue += $"|{String.Join(",", node.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o), true)))}";
+                                callValue += ")";
+
+                                this.AddCondition(parmName, callValue);
+                                return node;
+                            }
                             return null;
                         }
                 }
@@ -344,8 +373,8 @@ namespace SanteDB.Core.Model.Query
             /// <param name="node">Node.</param>
             protected override Expression VisitBinary(BinaryExpression node)
             {
-                this.Visit(node.Left);
-                this.Visit(node.Right);
+                var left = this.Visit(node.Left);
+                var right = this.Visit(node.Right);
 
                 String parmName = this.ExtractPath(node.Left, false);
                 Object parmValue = this.ExtractValue(node.Right);
@@ -404,17 +433,23 @@ namespace SanteDB.Core.Model.Query
                     }
 
                     // Is this an extended method?
-                    if (node.Left is MethodCallExpression)
+                    if (node.Left is MethodCallExpression mce) 
                     {
-                        var methodCall = node.Left as MethodCallExpression;
-                        var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(methodCall.Method);
-                        if (extendedFn != null)
+                        if (left != null)
                         {
-                            var callValue = $":({extendedFn.Name}";
-                            if (methodCall.Arguments.Count > 1)
-                                callValue += $"|{String.Join(",", methodCall.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o), true)))}";
-                            callValue += ")";
-                            fParmValue = callValue + fParmValue;
+                            return node;
+                        }
+                        else // we have to add it as it hasn't alread been added
+                        {
+                            var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(mce.Method);
+                            if (extendedFn != null)
+                            {
+                                var callValue = $":({extendedFn.Name}";
+                                if (mce.Arguments.Count > 1)
+                                    callValue += $"|{String.Join(",", mce.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o), true)))}";
+                                callValue += ")";
+                                fParmValue = callValue + fParmValue;
+                            }
                         }
                     }
 
