@@ -22,6 +22,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -33,7 +34,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// </summary>
     [Classifier(nameof(RelationshipType))]
     [XmlType("ConceptRelationship", Namespace = "http://santedb.org/model"), JsonObject("ConceptRelationship")]
-    public class ConceptRelationship : VersionedAssociation<Concept>
+    public class ConceptRelationship : VersionedAssociation<Concept>, ITargetedAssociation
     {
 
         /// <summary>
@@ -83,6 +84,36 @@ namespace SanteDB.Core.Model.DataTypes
         [SerializationReference(nameof(RelationshipTypeKey))]
         [XmlIgnore, JsonIgnore]
         public ConceptRelationshipType RelationshipType { get; set; }
+ 
+        /// <summary>
+        /// Target entity entity
+        /// </summary>
+        Guid? ITargetedAssociation.TargetEntityKey
+        {
+            get => this.TargetConceptKey;
+            set => this.TargetConceptKey = value;
+        }
+        /// <summary>
+        /// Classification of the relationship
+        /// </summary>
+        Guid? ITargetedAssociation.ClassificationKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        /// <summary>
+        /// Association type
+        /// </summary>
+        Guid? ITargetedAssociation.AssociationTypeKey
+        {
+            get => this.RelationshipTypeKey;
+            set => this.RelationshipTypeKey = value;
+        }
+
+        /// <summary>
+        /// Gets the target entity
+        /// </summary>
+        object ITargetedAssociation.TargetEntity
+        { 
+            get => this.TargetConcept; 
+            set => this.TargetConcept = (Concept)value; 
+        }
     }
 }

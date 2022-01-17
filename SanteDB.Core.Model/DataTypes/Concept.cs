@@ -76,7 +76,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets a list of concept relationships
         /// </summary>
         [XmlElement("relationship"), JsonProperty("relationship")]
-        public List<ConceptRelationship> Relationship { get; set; }
+        public List<ConceptRelationship> Relationships { get; set; }
 
         /// <summary>
         /// True if concept is empty
@@ -157,7 +157,7 @@ namespace SanteDB.Core.Model.DataTypes
                 this.ClassKey == other.ClassKey &&
                 this.ConceptNames?.SemanticEquals(other.ConceptNames) == true &&
                 this.ConceptSets?.SemanticEquals(other.ConceptSets) == true &&
-                this.Relationship?.SemanticEquals(other.Relationship) == true;
+                this.Relationships?.SemanticEquals(other.Relationships) == true;
         }
 
         /// <summary>

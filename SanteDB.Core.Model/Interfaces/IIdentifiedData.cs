@@ -20,27 +20,40 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Versioned entity
+    /// Identified entity
     /// </summary>
-    public interface IVersionedEntity : IIdentifiedEntity
+    public interface IIdentifiedData
     {
-        /// <summary>
-        /// Gets the version sequence
-        /// </summary>
-        Int64? VersionSequence { get; set; }
+
 
         /// <summary>
-        /// Gets the version key
+        /// Gets the identifier for the entity
         /// </summary>
-        Guid? VersionKey { get; set; }
+        Guid? Key { get; set; }
 
         /// <summary>
-        /// Gets the previous version's key
+        /// Remove annotation
         /// </summary>
-        Guid? PreviousVersionKey { get; set; }
+        void RemoveAnnotation(Object annotation);
+
+        /// <summary>
+        /// Get annotations of specified <typeparamref name="T"/>
+        /// </summary>
+        IEnumerable<T> GetAnnotations<T>();
+
+        /// <summary>
+        /// Add an annotated object
+        /// </summary>
+        void AddAnnotation(Object annotation);
+
+        /// <summary>
+        /// Copy annotations
+        /// </summary>
+        IIdentifiedData CopyAnnotations(IIdentifiedData other);
     }
 }

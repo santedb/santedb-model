@@ -40,7 +40,7 @@ namespace SanteDB.Core.Model
     /// and is the class from which all other business object model instances are derived.
     /// </para><para>This class contains </para></remarks>
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
-    public abstract class IdentifiedData : IIdentifiedEntity
+    public abstract class IdentifiedData : IIdentifiedData
     {
         // Annotations
         /// <summary>
@@ -234,7 +234,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Copy annotations from another resource
         /// </summary>
-        public virtual IIdentifiedEntity CopyAnnotations(IIdentifiedEntity other)
+        public virtual IIdentifiedData CopyAnnotations(IIdentifiedData other)
         {
             if (other is IdentifiedData id)
             {

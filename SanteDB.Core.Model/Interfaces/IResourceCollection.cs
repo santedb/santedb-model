@@ -32,7 +32,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets the items in the collection
         /// </summary>
-        IEnumerable<IIdentifiedEntity> Item { get; }
+        IEnumerable<IIdentifiedData> Item { get; }
 
         /// <summary>
         /// Add the <paramref name="annotation"/> to all objects

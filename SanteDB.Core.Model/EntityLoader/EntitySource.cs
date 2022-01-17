@@ -115,7 +115,7 @@ namespace SanteDB.Core.Model.EntityLoader
         /// <summary>
         /// Get the specified object / version
         /// </summary>
-        public TObject Get<TObject>(Guid? key, Guid? version) where TObject : IdentifiedData, IVersionedEntity, new()
+        public TObject Get<TObject>(Guid? key, Guid? version) where TObject : IdentifiedData, IVersionedData, new()
         {
             if (key == null)
                 return null;

@@ -45,7 +45,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Person constructor
         /// </summary>
-        public Person()
+        public Person() 
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
             base.m_classConceptKey = EntityClassKeys.Person;

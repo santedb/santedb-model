@@ -43,7 +43,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Represents a patient
         /// </summary>
-        public Patient()
+        public Patient() 
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
             base.m_classConceptKey = EntityClassKeys.Patient;

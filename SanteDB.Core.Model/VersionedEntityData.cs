@@ -40,7 +40,7 @@ namespace SanteDB.Core.Model
     /// <para>The previous versions (representations of this object) can be retrieved using the <see cref="P:PreviousVersion"/> property</para>
     /// </remarks>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("VersionedEntityData")]
-    public abstract class VersionedEntityData<THistoryModelType> : BaseEntityData, IVersionedEntity where THistoryModelType : VersionedEntityData<THistoryModelType>, new()
+    public abstract class VersionedEntityData<THistoryModelType> : BaseEntityData, IVersionedData where THistoryModelType : VersionedEntityData<THistoryModelType>, new()
     {
         // Previous version
         private THistoryModelType m_previousVersion;

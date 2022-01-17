@@ -256,7 +256,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static TReturn LoadProperty<TReturn>(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
+        public static TReturn LoadProperty<TReturn>(this IIdentifiedData me, string propertyName, bool forceReload = false)
         {
             return (TReturn)me.LoadProperty(propertyName, forceReload);
         }
@@ -264,7 +264,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
+        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IIdentifiedData me, string propertyName, bool forceReload = false)
         {
             return me.LoadProperty(propertyName, forceReload) as IEnumerable<TReturn> ?? new List<TReturn>();
         }
@@ -273,7 +273,7 @@ namespace SanteDB.Core.Model
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector, bool forceReload = false)
-            where TSource : IIdentifiedEntity
+            where TSource : IIdentifiedData
         {
             if (selector is LambdaExpression lambda)
             {
@@ -291,7 +291,7 @@ namespace SanteDB.Core.Model
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false)
-            where TSource : IIdentifiedEntity
+            where TSource : IIdentifiedData
         {
             if (selector is LambdaExpression lambda)
             {
@@ -310,7 +310,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedEntity
+            where TSource : IIdentifiedData
         {
             me.SetLoaded(propertySelector.GetMember().Name);
         }
@@ -320,7 +320,7 @@ namespace SanteDB.Core.Model
         /// been loaded
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetLoaded(this IIdentifiedEntity me, string propertyName)
+        public static void SetLoaded(this IIdentifiedData me, string propertyName)
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
             if (!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
@@ -333,7 +333,7 @@ namespace SanteDB.Core.Model
         /// Returns true if the property is loaded
         /// </summary>
         public static bool WasLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedEntity
+            where TSource : IIdentifiedData
         {
             return me.WasLoaded(propertySelector.GetMember().Name);
         }
@@ -341,7 +341,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Returns true if the property has been loaded
         /// </summary>
-        public static bool WasLoaded(this IIdentifiedEntity me, String propertyName)
+        public static bool WasLoaded(this IIdentifiedData me, String propertyName)
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
             return me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck);
@@ -350,7 +350,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static object LoadProperty(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
+        public static object LoadProperty(this IIdentifiedData me, string propertyName, bool forceReload = false)
         {
             if (me == null) return null;
 
@@ -968,7 +968,7 @@ namespace SanteDB.Core.Model
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <returns>Returns the latest version only of the versioned entity data.</returns>
-        public static IEnumerable<T> LatestVersionOnly<T>(this IEnumerable<T> source) where T : IVersionedEntity
+        public static IEnumerable<T> LatestVersionOnly<T>(this IEnumerable<T> source) where T : IVersionedData
         {
             if (source == null)
             {

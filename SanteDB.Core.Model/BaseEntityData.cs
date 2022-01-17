@@ -39,7 +39,7 @@ namespace SanteDB.Core.Model
     /// events occurred.</para>
     /// </remarks>
     [XmlType("BaseEntityData", Namespace = "http://santedb.org/model"), JsonObject("BaseEntityData")]
-    public abstract class BaseEntityData : IdentifiedData, IBaseEntityData
+    public abstract class BaseEntityData : IdentifiedData, IBaseData
     {
 
         /// <summary>

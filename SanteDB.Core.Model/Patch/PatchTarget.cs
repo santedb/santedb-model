@@ -48,7 +48,7 @@ namespace SanteDB.Core.Model.Patch
         {
             this.Type = existing.GetType();
             this.Key = existing.Key;
-            this.VersionKey = (existing as IVersionedEntity)?.VersionKey;
+            this.VersionKey = (existing as IVersionedData)?.VersionKey;
             this.Tag = existing.Tag;
         }
 

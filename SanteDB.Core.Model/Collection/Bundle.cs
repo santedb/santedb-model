@@ -181,7 +181,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Generic resource entity
         /// </summary>
-        IEnumerable<IIdentifiedEntity> IResourceCollection.Item => this.Item;
+        IEnumerable<IIdentifiedData> IResourceCollection.Item => this.Item;
 
         /// <summary>
         /// Add item to the bundle

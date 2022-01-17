@@ -58,6 +58,7 @@ namespace SanteDB.Core.Model.Entities
         {
             this.RelationshipTypeKey = relationshipType;
             this.TargetEntity = target;
+            this.TargetEntityKey = target.Key;
             this.Strength = 1.0;
             this.Key = Guid.NewGuid();
         }
