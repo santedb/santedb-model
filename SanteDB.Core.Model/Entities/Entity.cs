@@ -48,7 +48,9 @@ namespace SanteDB.Core.Model.Entities
     public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged
     {
 
-        // Class concept key
+        /// <summary>
+        /// Internal reference for class concept
+        /// </summary>
         protected Guid? m_classConceptKey;
 
         /// <summary>

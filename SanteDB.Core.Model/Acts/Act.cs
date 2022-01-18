@@ -75,7 +75,9 @@ namespace SanteDB.Core.Model.Acts
     public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships
     {
 
-        // Class concept key backing field
+        /// <summary>
+        /// Internal class key
+        /// </summary>
         protected Guid? m_classConceptKey;
 
         /// <summary>

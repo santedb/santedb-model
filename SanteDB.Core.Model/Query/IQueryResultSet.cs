@@ -227,7 +227,8 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Get the result set as a stateful query
         /// </summary>
-        IQueryResultSet<TData> AsStateful(Guid stateId);
+        /// <param name="stateId">The state identifier for the stateful result set</param>
+        new IQueryResultSet<TData> AsStateful(Guid stateId);
 
         /// <summary>
         /// Select a single object from the object

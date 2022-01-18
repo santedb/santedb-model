@@ -111,8 +111,8 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <remarks>
         /// <para>The player represents the <see cref="Entity"/> which plays the <see cref="ParticipationRoleKey"/> in the act. The player 
-        /// is related to the act in this (and only this) manner. It should not be assumed that a player, for example, playing the role of <see cref="ActParticipationKey.Admitter"/> is 
-        /// also the <see cref="ActParticipationKey.Authororiginator"/> of the Act. Rather these participations would be represented as separate instances of <see cref="ActParticipation"/> 
+        /// is related to the act in this (and only this) manner. It should not be assumed that a player, for example, playing the role of <see cref="ActParticipationKeys.Admitter"/> is 
+        /// also the <see cref="ActParticipationKeys.Authororiginator"/> of the Act. Rather these participations would be represented as separate instances of <see cref="ActParticipation"/> 
         /// on the <see cref="Act"/></para>
         /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -125,13 +125,13 @@ namespace SanteDB.Core.Model.Acts
         /// <remarks>
         /// <para>
         /// The participation role indicates the type of role which the <see cref="PlayerEntityKey"/> plays in the containing Act. Roles of
-        /// a player entity can vary from <see cref="ActParticipationKey.Admitter"/> (the Entity which admitted the patient), to <see cref="ActParticipationKey.RecordTarget"/>
-        /// (the entity about which the act exists), or even <see cref="ActParticipationKey.Product"/> (the Entity representing the product which was used
+        /// a player entity can vary from <see cref="ActParticipationKeys.Admitter"/> (the Entity which admitted the patient), to <see cref="ActParticipationKeys.RecordTarget"/>
+        /// (the entity about which the act exists), or even <see cref="ActParticipationKeys.Product"/> (the Entity representing the product which was used
         /// or administered in the act).
         /// </para>
         /// <para>Participation roles are validated based on the <see cref="Entity.ClassConceptKey"/> for the player and the <see cref="Act.ClassConceptKey"/>. </para>
         /// </remarks>
-        /// <seealso cref="ActParticipationKey"/>
+        /// <seealso cref="ActParticipationKeys"/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(ActParticipationKeys))]
         [XmlElement("participationRole"), JsonProperty("participationRole")]
@@ -212,8 +212,8 @@ namespace SanteDB.Core.Model.Acts
         /// <remarks>The quantity property is used to express the number of entities which are participating in the 
         /// act. Some examples where quantity may be used:
         /// <list type="bullet">
-        /// <item><term>30 Syringes were shipped</term><description>A <see cref="Act"/> with class <see cref="ActClassKeys.Supply"/> has a participation of type <see cref="ActParticipationKey.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 30</description></item>
-        /// <item><term>1 dose of BCG administered</term><description>A <see cref="SubstanceAdministration"/> has a participation of type <see cref="ActParticipationKey.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 1</description></item>
+        /// <item><term>30 Syringes were shipped</term><description>A <see cref="Act"/> with class <see cref="ActClassKeys.Supply"/> has a participation of type <see cref="ActParticipationKeys.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 30</description></item>
+        /// <item><term>1 dose of BCG administered</term><description>A <see cref="SubstanceAdministration"/> has a participation of type <see cref="ActParticipationKeys.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 1</description></item>
         /// </list></remarks>
         [XmlElement("quantity"), JsonProperty("quantity")]
         public int? Quantity { get; set; }

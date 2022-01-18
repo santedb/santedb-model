@@ -148,7 +148,7 @@ namespace SanteDB.Core.Model.Map
                     {
                         throw;
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         this.InitializeReflection(this.m_mapFile);
                     }

@@ -72,7 +72,6 @@ namespace SanteDB.Core.Model.Map.Builder
                 Debug.WriteLine("Mapping property ({0}[{1}]).{2} = {3}", typeof(TDomain).Name, idEnt.Key, modelPropertyInfo.Name, originalValue);
 #endif
                 // Set value
-                object pValue = null;
                 var originalValue = sourceProperty.GetValue(domainInstance);
 
                 this.Set(retVal, modelProperty, originalValue, sourceProperty);
@@ -82,7 +81,7 @@ namespace SanteDB.Core.Model.Map.Builder
         }
 
         /// <summary>
-        /// Map <paramref name="modelInstance"/> to <typeparamref name="TTarget"/>
+        /// Map <paramref name="modelInstance"/> to whatever target is configured
         /// </summary>
         public object MapToTarget(object modelInstance)
         {
@@ -121,8 +120,6 @@ namespace SanteDB.Core.Model.Map.Builder
                     domainProperty = this.m_classMap.DomainType.GetRuntimeProperty(propInfo.Name);
                 }
                 Object targetObject = retVal;
-
-                object domainValue = null;
 
                 this.Set(targetObject, domainProperty, propValue, propInfo);
             }
