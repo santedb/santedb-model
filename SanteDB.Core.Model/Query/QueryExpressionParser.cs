@@ -821,7 +821,6 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false)
         {
-            var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { type }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Func<Object>>), typeof(bool), typeof(bool), typeof(bool) });
             var nvc = new NameValueCollection();
             nvc.Add(propertyName, "null");
             nvc[propertyName] = null;
