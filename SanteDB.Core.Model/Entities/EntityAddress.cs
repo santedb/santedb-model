@@ -138,13 +138,14 @@ namespace SanteDB.Core.Model.Entities
             return comps.FirstOrDefault(o => o.ComponentTypeKey == key)?.Value;
         }
 
+
         /// <summary>
         /// True if empty
         /// </summary>
         /// <returns></returns>
         public override bool IsEmpty()
         {
-            return this.Component.Count == 0;
+            return this.Component.Count == 0 || this.Component?.All(c => c.IsEmpty()) == true;
         }
 
         /// <summary>

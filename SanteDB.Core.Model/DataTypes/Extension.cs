@@ -53,6 +53,16 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("value"), JsonProperty("value")]
         public byte[] ExtensionValueXml { get; set; }
 
+
+        /// <summary>
+        /// Empty
+        /// </summary>
+        /// <returns></returns>
+        public override bool IsEmpty()
+        {
+            return this.ExtensionValueXml == null || this.ExtensionValueXml.Length == 0;
+        }
+
         /// <summary>
         /// Value as string of bytes
         /// </summary>
