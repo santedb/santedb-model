@@ -26,6 +26,7 @@ using SanteDB.Core.Model.DataTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
@@ -131,7 +132,7 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public override bool IsEmpty()
         {
-            return this.Component.Count == 0;
+            return this.Component.Count == 0 || this.Component?.All(c=>c.IsEmpty()) == true;
         }
 
         /// <summary>

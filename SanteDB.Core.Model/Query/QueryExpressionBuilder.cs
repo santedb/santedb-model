@@ -532,6 +532,16 @@ namespace SanteDB.Core.Model.Query
             }
 
             /// <summary>
+            /// Extract the property path 
+            /// </summary>
+            /// <param name="accessExpression">The expression to extract the path from</param>
+            /// <returns>The extracted path</returns>
+            public String ExtractPropertySelector(LambdaExpression accessExpression)
+            {
+                return this.ExtractPath(accessExpression.Body, true);
+            }
+
+            /// <summary>
             /// Extract the path
             /// </summary>
             /// <returns>The path.</returns>
@@ -594,7 +604,7 @@ namespace SanteDB.Core.Model.Query
                     MethodCallExpression callExpr = access as MethodCallExpression;
 
                     if (callExpr.Method.Name == "Where" ||
-                        fromUnary && callExpr.Method.Name == "Any")
+                        fromUnary && (callExpr.Method.Name == "Any"))
                     {
                         String path = this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
                         var guardExpression = callExpr.Arguments[1] as LambdaExpression;
@@ -606,6 +616,12 @@ namespace SanteDB.Core.Model.Query
                         // Is the expression the guard?
                         String guardString = this.BuildGuardExpression(binaryExpression);
                         return String.Format("{0}[{1}]", path, guardString);
+                    }
+                    else if(callExpr.Method.Name == "First" ||
+                        callExpr.Method.Name == "FirstOrDefault")
+                    {
+                        String path = this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
+                        return path;
                     }
                     else
                     {
@@ -623,6 +639,11 @@ namespace SanteDB.Core.Model.Query
                 }
                 else if (access.NodeType == ExpressionType.Parameter && fromOperand)
                     return "$_";
+                else if(access.NodeType == ExpressionType.Coalesce)
+                {
+                    BinaryExpression ba = (BinaryExpression)access;
+                    return this.ExtractPath(ba.Left, fromUnary, fromOperand) ?? this.ExtractPath(ba.Right, fromUnary, fromOperand);
+                }
                 return null;
             }
 
@@ -679,6 +700,17 @@ namespace SanteDB.Core.Model.Query
             if (stripNullChecks)
                 retVal.RemoveAll(o => retVal.Any(c => c.Key == o.Key && c.Value != o.Value) && o.Value.Equals("!null"));
             return retVal;
+        }
+
+        /// <summary>
+        /// Builds the query dictionary .
+        /// </summary>
+        /// <returns>The query.</returns>
+        /// <param name="model">Model.</param>
+        public static String BuildPropertySelector(LambdaExpression model)
+        {
+            var visitor = new HttpQueryExpressionVisitor(new List<KeyValuePair<string, object>>(), model.Parameters[0].Type);
+            return visitor.ExtractPropertySelector(model);
         }
 
         /// <summary>

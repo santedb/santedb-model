@@ -70,7 +70,7 @@ namespace SanteDB.Core.Model
         {
             get
             {
-                return this.VersionKey?.ToString("N");
+                return $"{this.Type}.{this.VersionKey?.ToString("N")}";
             }
         }
 

@@ -78,6 +78,9 @@ namespace SanteDB.Core.Model
         // Load state
         private LoadState m_loadState = LoadState.New;
 
+        // batch operation mode
+        private BatchOperationType m_batchMode = BatchOperationType.Auto;
+
         /// <summary>
         /// True if the class is currently loading associations when accessed
         /// </summary>
@@ -100,7 +103,14 @@ namespace SanteDB.Core.Model
         /// Gets or sets the operation
         /// </summary>
         [XmlAttribute("operation"), JsonProperty("operation")]
-        public BatchOperationType BatchOperation { get; set; }
+        public BatchOperationType BatchOperation {
+            get => this.m_batchMode;
+            set
+            {
+                
+                this.m_batchMode = value;
+            }
+        }
 
         /// <summary>
         /// Should serialize batch operation
@@ -170,7 +180,7 @@ namespace SanteDB.Core.Model
         {
             get
             {
-                return this.Key?.ToString("N");
+                return $"{this.Type}.{this.Key?.ToString("N")}";
             }
         }
 
