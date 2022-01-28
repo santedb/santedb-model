@@ -493,6 +493,8 @@ namespace SanteDB.Core.Model.Query
                     case ExpressionType.Parameter:
                         return "$_";
 
+                    case ExpressionType.TypeAs:
+                        return this.ExtractValue(((UnaryExpression)access).Operand);
                     case ExpressionType.Constant:
                         return ((ConstantExpression)access).Value;
 
