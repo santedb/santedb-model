@@ -157,7 +157,12 @@ namespace SanteDB.Core.Model.Map
             }
 
             // Is there a cast?
-            if (destType.IsAssignableFrom(value.GetType())) //  (m_destType.IsAssignableFrom(value.GetType())) // Same type
+            if("null".Equals(value?.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = null;
+                return true;
+            }
+            else if (destType.IsAssignableFrom(value.GetType())) //  (m_destType.IsAssignableFrom(value.GetType())) // Same type
             {
                 result = value;
                 return true;

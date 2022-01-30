@@ -254,7 +254,7 @@ namespace SanteDB.Core.Auditing
         /// Event timestamp
         /// </summary>
         [XmlElement("timestamp"), JsonProperty("timestamp")]
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>
         /// Metadata about the audit 

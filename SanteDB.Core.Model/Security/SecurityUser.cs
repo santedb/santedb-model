@@ -65,7 +65,7 @@ namespace SanteDB.Core.Model.Security
         /// Gets or sets whether the account is locked out
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(LockoutXml))]
-        public DateTime? Lockout { get; set; }
+        public DateTimeOffset? Lockout { get; set; }
 
         /// <summary>
         /// Gets or sets the creation time in XML format
