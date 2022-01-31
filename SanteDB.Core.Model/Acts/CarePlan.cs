@@ -65,7 +65,7 @@ namespace SanteDB.Core.Model.Acts
         {
             this.Action = new List<Act>();
             this.Key = Guid.NewGuid();
-            this.CreationTime = DateTime.Now;
+            this.CreationTime = DateTimeOffset.Now;
         }
 
         /// <summary>
