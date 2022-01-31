@@ -61,7 +61,7 @@ namespace SanteDB.Core.Model
             {
                 if (this.m_sourceEntity != null)
                     return this.m_sourceEntity.ModifiedOn;
-                return DateTime.Now;
+                return DateTimeOffset.Now;
             }
         }
 

@@ -186,7 +186,7 @@ namespace SanteDB.Core.Auditing
         /// </summary>
         public AuditData()
         {
-            this.Timestamp = DateTime.Now;
+            this.Timestamp = DateTimeOffset.Now;
             this.Actors = new List<AuditActorData>();
             this.AuditableObjects = new List<AuditableObject>();
             this.Metadata = new List<AuditMetadata>();
@@ -201,7 +201,7 @@ namespace SanteDB.Core.Auditing
         /// <param name="outcome">The outcome.</param>
         /// <param name="eventIdentifier">The event identifier.</param>
         /// <param name="eventTypeCode">The event type code.</param>
-        public AuditData(DateTime timeStamp, ActionType actionCode, OutcomeIndicator outcome,
+        public AuditData(DateTimeOffset timeStamp, ActionType actionCode, OutcomeIndicator outcome,
             EventIdentifierType eventIdentifier, AuditCode eventTypeCode)
             : this()
         {
@@ -254,6 +254,33 @@ namespace SanteDB.Core.Auditing
         /// Event timestamp
         /// </summary>
         [XmlElement("timestamp"), JsonProperty("timestamp")]
+        public String TimestampXml
+        {
+            get
+            {
+                return this.Timestamp.ToString("o");
+            }
+            set
+            {
+                if(string.IsNullOrEmpty(value))
+                {
+                    this.Timestamp = DateTimeOffset.MinValue;
+                }
+                else if(DateTimeOffset.TryParse(value, out var result))
+                {
+                    this.Timestamp = result;
+                }
+                else
+                {
+                    throw new FormatException($"Cannot parse {value} as timestamp");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Timestamp backing property (since XML Serializer does not like DTO)
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
         public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>

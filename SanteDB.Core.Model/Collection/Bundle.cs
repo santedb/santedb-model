@@ -123,7 +123,7 @@ namespace SanteDB.Core.Model.Collection
         private HashSet<String> m_bundleTags = new HashSet<string>(); // hashset of all tags
 
         // Modified now
-        private DateTimeOffset m_modifiedOn = DateTime.Now;
+        private DateTimeOffset m_modifiedOn = DateTimeOffset.Now;
 
         /// <summary>
         /// Gets the time the bundle was modified

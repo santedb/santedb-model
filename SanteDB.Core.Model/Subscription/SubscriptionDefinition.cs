@@ -76,7 +76,7 @@ namespace SanteDB.Core.Model.Subscription
         /// <summary>
         /// Gets the time that this was modified
         /// </summary>
-        public override DateTimeOffset ModifiedOn => DateTime.Now;
+        public override DateTimeOffset ModifiedOn => DateTimeOffset.Now;
 
         /// <summary>
         /// Gets or sets the resource type
