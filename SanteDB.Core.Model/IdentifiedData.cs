@@ -214,7 +214,7 @@ namespace SanteDB.Core.Model
             var retVal = this.MemberwiseClone() as IdentifiedData;
             retVal.m_delayLoad = true;
             retVal.m_annotations = new List<object>();
-
+            
             // Re-initialize all arrays
             foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {

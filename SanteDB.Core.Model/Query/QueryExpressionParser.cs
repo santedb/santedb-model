@@ -802,7 +802,7 @@ namespace SanteDB.Core.Model.Query
             else
             {
                 retVal = Expression.Invoke(
-                    BuildPropertySelector(scope.Type, varPath.Substring(1))
+                    BuildPropertySelector(scope.Type, varPath.Substring(1), true)
                     , retVal);
                 if (retVal.Type.IsConstructedGenericType &&
                     retVal.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
