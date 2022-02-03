@@ -16,43 +16,44 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-1-28
  */
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 
-namespace SanteDB.Core.Model.Query
+namespace SanteDB.Core.Model.Query.FilterExtension
 {
     /// <summary>
-    /// Represents a query filter extension
+    /// Filter expression that truncates a date 
     /// </summary>
-    public interface IQueryFilterExtension
+    public class DateTruncateFilterExtension : IQueryFilterExtension
     {
+        /// <summary>
+        /// The name of the query filter extension
+        /// </summary>
+        public string Name => "date_trunc";
 
         /// <summary>
-        /// Gets the name of the extension
+        /// Gets the extension method
         /// </summary>
-        String Name { get; }
+        public MethodInfo ExtensionMethod => typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.DateTrunc));
 
         /// <summary>
-        /// Gets the return type of the function
+        /// Compose the expression
         /// </summary>
-        MethodInfo ExtensionMethod { get; }
-
-        /// <summary>
-        /// Construct the expression from the parameters on the query string
-        /// </summary>
-        /// <param name="scope">The scope of the current property</param>
-        /// <param name="parms">The parameters on the query string</param>
-        /// <param name="valueExpression">The operand</param>
-        /// <param name="comparison">The type of comparison to be made</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Basically this will take seomthing like <code>dateOfBirth=:(diff|&lt;=3w)2018-01-01</code> and
-        /// turn it into <code>o.DateOfBirth.Diff("2018-01-01", "w") &lt;= 3</code>
-        /// </remarks>
-        BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms);
-
+        public BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms)
+        {
+            if (parms.Length == 0)
+                throw new InvalidOperationException("Date truncation requires precision");
+            else
+            {
+                return Expression.MakeBinary(ExpressionType.Equal,
+                    Expression.Call(this.ExtensionMethod, Expression.Convert(scope, typeof(DateTime)), parms[0]),
+                    Expression.Call(this.ExtensionMethod, valueExpression, parms[0]));
+            }
+        }
     }
 }

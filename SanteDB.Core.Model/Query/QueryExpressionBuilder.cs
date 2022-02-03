@@ -1,24 +1,23 @@
 ﻿/*
-* Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
-* Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
-* Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You may
-* obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-* License for the specific language governing permissions and limitations under
-* the License.
-*
-* User: fyfej
-* Date: 2021-8-5
-*/
-
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
+ * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you 
+ * may not use this file except in compliance with the License. You may 
+ * obtain a copy of the License at 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations under 
+ * the License.
+ * 
+ * User: fyfej
+ * Date: 2021-8-27
+ */
 using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections;
@@ -493,6 +492,8 @@ namespace SanteDB.Core.Model.Query
                     case ExpressionType.Parameter:
                         return "$_";
 
+                    case ExpressionType.TypeAs:
+                        return this.ExtractValue(((UnaryExpression)access).Operand);
                     case ExpressionType.Constant:
                         return ((ConstantExpression)access).Value;
 
@@ -529,6 +530,16 @@ namespace SanteDB.Core.Model.Query
                         return this.ExtractValue((access as MethodCallExpression).Arguments[0]);
                 }
                 return null;
+            }
+
+            /// <summary>
+            /// Extract the property path 
+            /// </summary>
+            /// <param name="accessExpression">The expression to extract the path from</param>
+            /// <returns>The extracted path</returns>
+            public String ExtractPropertySelector(LambdaExpression accessExpression)
+            {
+                return this.ExtractPath(accessExpression.Body, true);
             }
 
             /// <summary>
@@ -594,7 +605,7 @@ namespace SanteDB.Core.Model.Query
                     MethodCallExpression callExpr = access as MethodCallExpression;
 
                     if (callExpr.Method.Name == "Where" ||
-                        fromUnary && callExpr.Method.Name == "Any")
+                        fromUnary && (callExpr.Method.Name == "Any"))
                     {
                         String path = this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
                         var guardExpression = callExpr.Arguments[1] as LambdaExpression;
@@ -606,6 +617,12 @@ namespace SanteDB.Core.Model.Query
                         // Is the expression the guard?
                         String guardString = this.BuildGuardExpression(binaryExpression);
                         return String.Format("{0}[{1}]", path, guardString);
+                    }
+                    else if(callExpr.Method.Name == "First" ||
+                        callExpr.Method.Name == "FirstOrDefault")
+                    {
+                        String path = this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
+                        return path;
                     }
                     else
                     {
@@ -623,6 +640,11 @@ namespace SanteDB.Core.Model.Query
                 }
                 else if (access.NodeType == ExpressionType.Parameter && fromOperand)
                     return "$_";
+                else if(access.NodeType == ExpressionType.Coalesce)
+                {
+                    BinaryExpression ba = (BinaryExpression)access;
+                    return this.ExtractPath(ba.Left, fromUnary, fromOperand) ?? this.ExtractPath(ba.Right, fromUnary, fromOperand);
+                }
                 return null;
             }
 
@@ -679,6 +701,17 @@ namespace SanteDB.Core.Model.Query
             if (stripNullChecks)
                 retVal.RemoveAll(o => retVal.Any(c => c.Key == o.Key && c.Value != o.Value) && o.Value.Equals("!null"));
             return retVal;
+        }
+
+        /// <summary>
+        /// Builds the query dictionary .
+        /// </summary>
+        /// <returns>The query.</returns>
+        /// <param name="model">Model.</param>
+        public static String BuildPropertySelector(LambdaExpression model)
+        {
+            var visitor = new HttpQueryExpressionVisitor(new List<KeyValuePair<string, object>>(), model.Parameters[0].Type);
+            return visitor.ExtractPropertySelector(model);
         }
 
         /// <summary>
