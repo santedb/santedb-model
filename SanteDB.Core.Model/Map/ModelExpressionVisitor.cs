@@ -302,9 +302,16 @@ namespace SanteDB.Core.Model.Map
                 switch(node.Method.Name)
                 {
                     case "Contains": // Enumerable contains
-                        var newParam = node.Arguments.Select(o => Expression.Convert(this.Visit(o), node.Method.GetParameters()[node.Arguments.IndexOf(o)].ParameterType));
-                        
-                        return Expression.Call(node.Method, newParam.ToArray());
+                        try
+                        {
+                            var newParam = node.Arguments.Select(o => Expression.Convert(this.Visit(o), node.Method.GetParameters()[node.Arguments.IndexOf(o)].ParameterType));
+
+                            return Expression.Call(node.Method, newParam.ToArray());
+                        }
+                        catch
+                        {
+                            return null; 
+                        }
                 }
                 return null;
             }
