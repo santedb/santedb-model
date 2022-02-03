@@ -202,7 +202,8 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static object LoadProperty(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
         {
-            if (me == null) return null;
+            if (me == null) 
+                return null;
 
             var propertyToLoad = me.GetType().GetRuntimeProperty(propertyName);
             if (propertyToLoad == null) return null;
@@ -217,42 +218,48 @@ namespace SanteDB.Core.Model
             {
                 currentValue = null;
             }
-            me.AddAnnotation(loadCheck);
 
-            if (typeof(IList).IsAssignableFrom(propertyToLoad.PropertyType)) // Collection we load by key
+            try
             {
-                if ((currentValue == null || (currentValue as IList)?.Count == 0) && me.Key.HasValue)
+                if (typeof(IList).IsAssignableFrom(propertyToLoad.PropertyType)) // Collection we load by key
                 {
-                    var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.GetRelations), new Type[] { propertyToLoad.PropertyType.StripGeneric() }, new Type[] { typeof(Guid?[]) });
-
-                    object loaded = null;
-                    if (me is ITaggable taggable && taggable.TryGetTag(SanteDBConstants.AlternateKeysTag, out ITag altKeys))
+                    if ((currentValue == null || (currentValue as IList)?.Count == 0) && me.Key.HasValue)
                     {
-                        loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new Object[] { altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).Union(new Guid?[] { me.Key }).ToArray() }));
+                        var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.GetRelations), new Type[] { propertyToLoad.PropertyType.StripGeneric() }, new Type[] { typeof(Guid?[]) });
+
+                        object loaded = null;
+                        if (me is ITaggable taggable && taggable.TryGetTag(SanteDBConstants.AlternateKeysTag, out ITag altKeys))
+                        {
+                            loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new Object[] { altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).Union(new Guid?[] { me.Key }).ToArray() }));
+                        }
+                        else
+                        {
+                            loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { new Guid?[] { me.Key.Value } }));
+                        }
+                        propertyToLoad.SetValue(me, loaded);
+                        return loaded;
                     }
+                    return currentValue;
+                }
+                else if (currentValue == null)
+                {
+                    var keyValue = propertyToLoad.GetSerializationRedirectProperty()?.GetValue(me) as Guid?;
+                    if (keyValue.GetValueOrDefault() == default(Guid))
+                        return currentValue;
                     else
                     {
-                        loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { new Guid?[] { me.Key.Value } }));
+                        var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.Get), new Type[] { propertyToLoad.PropertyType }, new Type[] { typeof(Guid?) });
+                        var loaded = mi.Invoke(EntitySource.Current.Provider, new object[] { keyValue });
+                        propertyToLoad.SetValue(me, loaded);
+                        return loaded;
                     }
-                    propertyToLoad.SetValue(me, loaded);
-                    return loaded;
                 }
-                return currentValue;
+                else return currentValue;
             }
-            else if (currentValue == null)
+            finally
             {
-                var keyValue = propertyToLoad.GetSerializationRedirectProperty()?.GetValue(me) as Guid?;
-                if (keyValue.GetValueOrDefault() == default(Guid))
-                    return currentValue;
-                else
-                {
-                    var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.Get), new Type[] { propertyToLoad.PropertyType }, new Type[] { typeof(Guid?) });
-                    var loaded = mi.Invoke(EntitySource.Current.Provider, new object[] { keyValue });
-                    propertyToLoad.SetValue(me, loaded);
-                    return loaded;
-                }
+                me.AddAnnotation(loadCheck);
             }
-            else return currentValue;
             // Now we want to
         }
 

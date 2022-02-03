@@ -57,7 +57,7 @@ namespace SanteDB.Core.Model
     /// Represents data that is identified by a key
     /// </summary>
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
-    public abstract class IdentifiedData : IIdentifiedEntity
+    public abstract class IdentifiedData : IIdentifiedEntity, ICanDeepCopy
     {
         // Annotations
         /// <summary>
@@ -207,8 +207,56 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Clone the specified data
+        /// Provide a deep copy of the specified data
         /// </summary>
+        public virtual ICanDeepCopy DeepCopy()
+        {
+            var retVal = this.MemberwiseClone() as IdentifiedData;
+            retVal.m_annotations = new List<object>();
+
+            foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (!pi.CanWrite || pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) continue; // can't and not important to serialization write so continue 
+
+                var thisValue = pi.GetValue(this);
+                if(thisValue is IList list)
+                {
+                    if (pi.PropertyType.GetConstructor(System.Type.EmptyTypes) != null)
+                    {
+                        var newList = Activator.CreateInstance(thisValue.GetType()) as IList;
+                        foreach (var itm in list)
+                        {
+                            if (itm is IdentifiedData id)
+                            {
+                                newList.Add(id.DeepCopy());
+                            }
+                            else
+                            {
+                                newList.Add(itm);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        pi.SetValue(retVal, list);
+                    }
+                }
+                else if(thisValue is IdentifiedData id)
+                {
+                    pi.SetValue(retVal, id.DeepCopy());
+                }
+                else
+                {
+                    pi.SetValue(retVal, thisValue);
+                }
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// Clone this object
+        /// </summary>
+        /// <remarks>This performs a shallow clone on only the root object. If a full independent copy of the object is desired use the <see cref="DeepCopy"/> method</remarks>
         public virtual IdentifiedData Clone()
         {
             var retVal = this.MemberwiseClone() as IdentifiedData;
