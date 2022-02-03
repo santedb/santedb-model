@@ -42,6 +42,11 @@ namespace SanteDB.Core.Model.Interfaces
         void RemoveAnnotation(Object annotation);
 
         /// <summary>
+        /// Remove annotations of <typeparamref name="T"/>
+        /// </summary>
+        void RemoveAnnotations<T>();
+
+        /// <summary>
         /// Get annotations of specified <typeparamref name="T"/>
         /// </summary>
         IEnumerable<T> GetAnnotations<T>();
@@ -49,7 +54,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Add an annotated object
         /// </summary>
-        void AddAnnotation(Object annotation);
+        void AddAnnotation<T>(T annotation);
 
         /// <summary>
         /// Copy annotations

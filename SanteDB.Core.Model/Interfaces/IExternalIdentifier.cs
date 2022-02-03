@@ -35,6 +35,11 @@ namespace SanteDB.Core.Model.Interfaces
         AssigningAuthority Authority { get; }
 
         /// <summary>
+        /// Get the authority key
+        /// </summary>
+        Guid? AuthorityKey { get; }
+        
+        /// <summary>
         /// Gets the value of the identity
         /// </summary>
         String Value { get; }

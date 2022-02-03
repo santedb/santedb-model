@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
+using System.Collections.Concurrent;
 
 namespace SanteDB.Core.Model
 {
@@ -46,7 +47,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// A list of custom tags which were added to this object
         /// </summary>
-        protected List<Object> m_annotations = new List<object>();
+        protected ConcurrentDictionary<Type, List<Object>> m_annotations = new ConcurrentDictionary<Type, List<object>>();
 
         // Lock
         private object m_lock = new object();
@@ -132,11 +133,14 @@ namespace SanteDB.Core.Model
         public virtual IdentifiedData Clone()
         {
             var retVal = this.MemberwiseClone() as IdentifiedData;
-            retVal.m_annotations = new List<object>();
+            retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
 
             // Re-initialize all arrays
             foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
+                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) // No sense of reading
+                    continue;
+
                 var thisValue = pi.GetValue(this);
                 if (thisValue is IList listValue && listValue.Count > 0 &&
                     pi.PropertyType.GetConstructor(new Type[] { thisValue.GetType() }) != null)
@@ -203,9 +207,20 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual void RemoveAnnotation(Object annotation)
         {
-            lock (this.m_lock)
+            if(this.m_annotations.TryGetValue(annotation.GetType(), out var values))
             {
-                this.m_annotations.Remove(annotation);
+                values.Remove(annotation);
+            }
+        }
+
+        /// <summary>
+        /// Remove annotation
+        /// </summary>
+        public virtual void RemoveAnnotations<T>()
+        {
+            if(this.m_annotations.TryGetValue(typeof(T), out var values))
+            {
+                values.Clear();
             }
         }
 
@@ -214,21 +229,32 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual IEnumerable<T> GetAnnotations<T>()
         {
-            lock (this.m_lock)
+            if(this.m_annotations.TryGetValue(typeof(T), out var values)) 
             {
-                return this.m_annotations.ToArray().OfType<T>();
+                return values.OfType<T>();
+            }
+            else
+            {
+                return new T[0];
             }
         }
 
         /// <summary>
         /// Add an annotated object
         /// </summary>
-        public virtual void AddAnnotation(Object annotation)
+        public virtual void AddAnnotation<T>(T annotation)
         {
-            lock (this.m_lock)
+            if (annotation == null)
             {
-                this.m_annotations.Add(annotation);
+                return;
             }
+            if(!this.m_annotations.TryGetValue(typeof(T), out var values))
+            {
+                values = new List<object>();
+                this.m_annotations.TryAdd(typeof(T), values);
+            }
+            values.Add(annotation);
+
         }
 
         /// <summary>
@@ -238,7 +264,17 @@ namespace SanteDB.Core.Model
         {
             if (other is IdentifiedData id)
             {
-                this.m_annotations.AddRange(id.m_annotations);
+                foreach (var itm in id.m_annotations)
+                {
+                    if (this.m_annotations.TryGetValue(itm.Key, out var values))
+                    {
+                        values.AddRange(itm.Value);
+                    }
+                    else
+                    {
+                        this.m_annotations.TryAdd(itm.Key, itm.Value);
+                    }
+                }
             }
             return this;
         }

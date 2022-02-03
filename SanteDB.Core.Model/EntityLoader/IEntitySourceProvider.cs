@@ -21,6 +21,7 @@
 
 using SanteDB.Core.Model.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
@@ -51,5 +52,13 @@ namespace SanteDB.Core.Model.EntityLoader
         /// Get relationships
         /// </summary>
         IEnumerable<TObject> GetRelations<TObject>(params Guid?[] sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new();
+
+
+        /// <summary>
+        /// Get relationships
+        /// </summary>
+        /// <param name="sourceKey">The source keys to load relationships for</param>
+        /// <param name="tobject">The type of object to load</param>
+        IEnumerable GetRelations(Type relatedType, params Guid?[] sourceKey);
     }
 }

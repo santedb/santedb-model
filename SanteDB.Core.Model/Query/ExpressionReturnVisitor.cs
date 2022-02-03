@@ -64,8 +64,10 @@ namespace SanteDB.Core.Model.Query
         /// <inheritdoc/>
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            var newParameter = convertedParameters[node.Name];
-            return newParameter;
+            if(convertedParameters.TryGetValue(node.Name, out var newNode)) {
+                return newNode;
+            }
+            return node;
         }
 
         /// <inheritdoc/>

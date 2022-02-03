@@ -21,6 +21,7 @@
 
 using SanteDB.Core.Model.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
@@ -66,6 +67,12 @@ namespace SanteDB.Core.Model.EntityLoader
             public IEnumerable<TObject> GetRelations<TObject>(params Guid?[] sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new()
             {
                 return new List<TObject>();
+            }
+
+            /// <inheritdoc/>
+            public IEnumerable GetRelations(Type tobject, params Guid?[] sourceKey)
+            {
+                yield break;
             }
 
             /// <summary>

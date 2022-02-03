@@ -126,7 +126,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets concept sets to which this concept is a member
         /// </summary>
         [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(ConceptSetsXml))]
-        public IEnumerable<ConceptSet> ConceptSets
+        public List<ConceptSet> ConceptSets
         {
             get
             {

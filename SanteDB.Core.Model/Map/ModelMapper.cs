@@ -208,11 +208,7 @@ namespace SanteDB.Core.Model.Map
             PropertyMap castMap = classMap.Cast?.Find(o => o.ModelType == sourceExpression.Type);
             if (castMap == null) throw new InvalidCastException();
             Expression accessExpr = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(castMap.DomainName));
-            while (castMap.Via != null)
-            {
-                castMap = castMap.Via;
-                accessExpr = Expression.MakeMemberAccess(accessExpr, accessExpr.Type.GetRuntimeProperty(castMap.DomainName));
-            }
+
             return accessExpr;
         }
 
@@ -235,28 +231,7 @@ namespace SanteDB.Core.Model.Map
                 return Expression.MakeMemberAccess(accessExpressionAsMember.Expression, accessExpressionAsMember.Expression.Type.GetRuntimeProperty(collapseKey.KeyName));
             else if (classMap.TryGetModelProperty(memberExpression.Member.Name, out propertyMap))
             {
-                // We have to map through an associative table
-                if (propertyMap.Via != null)
-                {
-                    Expression viaExpression = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(propertyMap.DomainName));
-                    var via = propertyMap.Via;
-                    while (via != null)
-                    {
-                        MemberInfo viaMember = viaExpression.Type.GetRuntimeProperty(via.DomainName);
-                        if (viaMember == null)
-                            break;
-                        viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
-
-                        if (via.OrderBy != null && viaExpression.Type.FindInterfaces((o, _) => o == typeof(IEnumerable), null).Length > 0)
-                            viaExpression = viaExpression.Sort(via.OrderBy, via.SortOrder);
-                        if (via.Aggregate != AggregationFunctionType.None)
-                            viaExpression = viaExpression.Aggregate(via.Aggregate);
-                        via = via.Via;
-                    }
-                    return viaExpression;
-                }
-                else
-                    return Expression.MakeMemberAccess(accessExpression, this.ExtractDomainType(accessExpression.Type).GetRuntimeProperty(propertyMap.DomainName));
+                return Expression.MakeMemberAccess(accessExpression, this.ExtractDomainType(accessExpression.Type).GetRuntimeProperty(propertyMap.DomainName));
             }
             else
             {
@@ -353,22 +328,8 @@ namespace SanteDB.Core.Model.Map
                     }
                 }
 
-                // Is there a VIA that we need to express?
-                if (propertyMap.Via != null)
-                {
-                    Expression viaExpression = lambdaParameterExpression;
-                    var via = propertyMap.Via;
-                    while (via != null)
-                    {
-                        MemberInfo viaMember = viaExpression.Type.GetRuntimeProperty(via.DomainName);
-                        if (viaMember != null)
-                            viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
-                        via = via.Via;
-                    }
-                    return viaExpression;
-                }
-                else
-                    return lambdaParameterExpression;
+
+                return lambdaParameterExpression;
             }
             else
             {

@@ -655,7 +655,7 @@ namespace SanteDB.Core.Model.Query
                                 throw new InvalidOperationException($"Classifier for type on {expressionMember.Member.DeclaringType.FullName} is property {classifierAttribute?.ClassifierProperty} however expression uses property {expressionMember.Member.Name}. Only {classifierAttribute?.ClassifierProperty} may be used in guard expression");
                         }
                         if (valueExpression == null)
-                            throw new InvalidOperationException("Only constant expressions are supported on guards");
+                            throw new InvalidOperationException($"Could not extract right hand side of guard expression {binaryExpression.Right} - is the value passed null (guard values must not be null)?");
                         return valueExpression.ToString();
 
                     default:

@@ -44,12 +44,6 @@ namespace SanteDB.Core.Model.Map
         public String DomainName { get; set; }
 
         /// <summary>
-        /// Identifies the route 
-        /// </summary>
-        [XmlElement("via")]
-        public PropertyMap Via { get; set; }
-
-        /// <summary>
         /// When this property is a via then traverse this
         /// </summary>
         [XmlAttribute("dontLoad")]
@@ -102,10 +96,6 @@ namespace SanteDB.Core.Model.Map
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", modelClass?.Name, this.ModelName), null, null));
             if (domainClass?.GetRuntimeProperty(this.DomainName ?? "") == null)
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", domainClass?.Name, this.DomainName), null, null));
-
-            // 2. All property maps should exist
-            if (this.Via != null)
-                retVal.AddRange(this.Via.Validate(modelClass?.GetRuntimeProperty(this.ModelName ?? "")?.PropertyType ?? modelClass, domainClass?.GetRuntimeProperty(this.DomainName)?.PropertyType));
 
             // Order by?
             if (!String.IsNullOrEmpty(this.OrderBy) && domainClass != null)

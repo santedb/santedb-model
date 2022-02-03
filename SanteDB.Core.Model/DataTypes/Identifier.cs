@@ -85,17 +85,10 @@ namespace SanteDB.Core.Model.DataTypes
         public EntityIdentifier(AssigningAuthority authority, String value)
         {
             this.Authority = authority;
+            this.AuthorityKey = authority?.Key;
             this.Value = value;
         }
 
-        /// <summary>
-        /// Creates a new entity identifier with specified nsid
-        /// </summary>
-        public EntityIdentifier(String nsid, String value)
-        {
-            this.Authority = new AssigningAuthority() { DomainName = nsid };
-            this.Value = value;
-        }
     }
 
     /// <summary>
@@ -135,7 +128,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents an external assigned identifier
     /// </summary>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("IdentifierBase")]
-    [Classifier(nameof(AuthorityXml), nameof(AuthorityKey))]
+    [Classifier(nameof(Authority), nameof(AuthorityKey))]
     public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
         /// <summary>
@@ -216,7 +209,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the assinging authority id
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [XmlIgnore, JsonIgnore]
+        [XmlElement("domain"), JsonProperty("domain")]
         public Guid? AuthorityKey { get; set; }
 
         /// <summary>
@@ -234,16 +227,10 @@ namespace SanteDB.Core.Model.DataTypes
         public IdentifierType IdentifierType { get; set; }
 
         /// <summary>
-        /// Gets or sets a minimal assigning authority from XML data
-        /// </summary>
-        //[SerializationReference(nameof(AuthorityKey))]
-        [XmlElement("authority"), JsonProperty("authority")]
-        public AssigningAuthority AuthorityXml { get; set; }
-
-        /// <summary>
         /// Represents the authority information
         /// </summary>
         [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(AuthorityKey))]
         public AssigningAuthority Authority { get; set; }
 
         /// <summary>
@@ -255,7 +242,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents the authority information
         /// </summary>
-        AssigningAuthority IExternalIdentifier.Authority => this.AuthorityXml ?? this.LoadProperty(o => o.Authority);
+        AssigningAuthority IExternalIdentifier.Authority => this.LoadProperty(o => o.Authority);
 
         /// <summary>
         /// True if the identifier is empty

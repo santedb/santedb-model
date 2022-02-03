@@ -131,6 +131,20 @@ namespace SanteDB.Core.Model.Constants
         {
             StatusKeys.Inactive,
             StatusKeys.Nullified,
+            StatusKeys.Obsolete
+        };
+
+        /// <summary>
+        /// Any status
+        /// </summary>
+        public static readonly Guid[] AllStates = new Guid[]
+        {
+            StatusKeys.Active,
+            StatusKeys.Completed,
+            StatusKeys.New,
+            StatusKeys.Inactive,
+            StatusKeys.Nullified,
+            StatusKeys.Obsolete,
             StatusKeys.Purged
         };
     }
