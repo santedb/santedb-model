@@ -224,7 +224,7 @@ namespace SanteDB.Core.Model
                     if (pi.PropertyType.GetConstructor(System.Type.EmptyTypes) != null)
                     {
                         var newList = Activator.CreateInstance(thisValue.GetType()) as IList;
-                        foreach (var itm in list)
+                        foreach (var itm in list.OfType<Object>().ToArray())
                         {
                             if (itm is IdentifiedData id)
                             {
