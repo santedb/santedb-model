@@ -48,7 +48,7 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         {
             if (parms.Length == 0)
                 throw new InvalidOperationException("Date truncation requires precision");
-            else if(parms[0].Type == typeof(DateTime))
+            else if(valueExpression.Type == typeof(DateTime))
             {
                 var func = typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.DateTrunc), new Type[] { typeof(DateTime), typeof(String) });
                 return Expression.MakeBinary(ExpressionType.Equal,
