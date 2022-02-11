@@ -52,8 +52,8 @@ namespace SanteDB.Core.Model.Query.FilterExtension
             {
                 var func = typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.DateTrunc), new Type[] { typeof(DateTime), typeof(String) });
                 return Expression.MakeBinary(ExpressionType.Equal,
-                    Expression.Call(this.ExtensionMethod, Expression.Convert(scope, typeof(DateTime)), parms[0]),
-                    Expression.Call(this.ExtensionMethod, valueExpression, parms[0]));
+                    Expression.Call(func, Expression.Convert(scope, typeof(DateTime)), parms[0]),
+                    Expression.Call(func, valueExpression, parms[0]));
             }
             else
             {
