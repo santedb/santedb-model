@@ -57,7 +57,8 @@ namespace SanteDB.Core.Model.Query
         /// Static CTOR        
         static QueryExpressionParser()
         {
-            m_builtInVars.Add("now", () => DateTime.Now);
+            m_builtInVars.Add("now", () => DateTimeOffset.Now);
+            m_builtInVars.Add("today", () => DateTimeOffset.Now.Date);
         }
 
         /// <summary>

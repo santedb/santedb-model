@@ -49,6 +49,11 @@ namespace SanteDB.Core.Model.Interfaces
         void RemoveTag(string tagKey);
 
         /// <summary>
+        /// Remove the specified tag
+        /// </summary>
+        void RemoveAllTags(Predicate<ITag> predicate);
+
+        /// <summary>
         /// Try to get a tag
         /// </summary>
         /// <param name="tagName">The name of the tag to try to get</param>
