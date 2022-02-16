@@ -58,7 +58,7 @@ namespace SanteDB.Core.Model.Query
         static QueryExpressionParser()
         {
             m_builtInVars.Add("now", () => DateTimeOffset.Now);
-            m_builtInVars.Add("today", () => DateTimeOffset.Now.Date);
+            m_builtInVars.Add("today", () => DateTime.Now.Date);
         }
 
         /// <summary>
