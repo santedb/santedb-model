@@ -140,13 +140,13 @@ namespace SanteDB.Core.Model.Map
                         this.ProcessAssembly(results.CompiledAssembly);
                         m_loadedMaps.TryAdd(name, results.CompiledAssembly);
                     }
-                    catch (ModelMapCompileException)
+                    catch (ModelMapCompileException e)
                     {
-                        throw;
+                        throw new Exception($"Could not compile model map {name}", e);
                     }
-                    catch (ModelMapValidationException)
+                    catch (ModelMapValidationException e)
                     {
-                        throw;
+                        throw new Exception($"Could not validate model map {name}", e);
                     }
                     catch (Exception)
                     {
@@ -217,10 +217,22 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public Expression MapModelMember(MemberExpression memberExpression, Expression accessExpression, Type modelType = null)
         {
+            if(accessExpression.Type.StripNullable() == (modelType ?? memberExpression.Expression.Type).StripNullable())
+            {
+                return accessExpression;
+            }
+
             ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType ?? memberExpression.Expression.Type.StripNullable());
 
             if (classMap == null)
-                return accessExpression;
+            {
+                // Is there a different map we could use
+                classMap = this.m_mapFile.Class.FirstOrDefault(o=>o.DomainType == accessExpression.Type);
+                if(classMap == null || !classMap.ModelType.IsAssignableFrom(modelType ?? memberExpression.Expression.Type))
+                {
+                    throw new InvalidOperationException(string.Format(ErrorMessages.MAP_NOT_FOUND, modelType ?? memberExpression.Type, accessExpression.Type));
+                }
+            }
 
             // Expression is the same class? Collapse if it is a key
             MemberExpression accessExpressionAsMember = accessExpression as MemberExpression;
@@ -280,9 +292,17 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public Type MapModelType(Type modelType)
         {
-            ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType);
-            if (classMap == null)
+            // Just a value type - don't look for a map
+            if (modelType.BaseType == typeof(ValueType))
                 return modelType;
+
+            ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType);
+            // No class mapping so go up the tree
+            if (classMap == null && modelType.BaseType != typeof(Object))
+                return MapModelType(modelType.BaseType);
+            else if (classMap == null)
+                throw new InvalidOperationException($"Cannot map {modelType.FullName} to a domain type");
+
             Type domainType = classMap.DomainType;
             if (domainType == null)
                 throw new InvalidOperationException(String.Format("Cannot find class {0}", classMap.DomainClass));
@@ -369,7 +389,14 @@ namespace SanteDB.Core.Model.Map
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Error converting {0}. {1}", expression, e);
 #endif
-                throw;
+                if (throwOnError)
+                {
+                    throw;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 

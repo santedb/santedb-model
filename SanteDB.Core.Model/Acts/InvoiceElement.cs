@@ -84,6 +84,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the currency of the invoice line item
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Binding(typeof(CurrencyKeys))]
         public Guid? CurrencyKey { get; set; }
 
         /// <summary>

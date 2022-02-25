@@ -61,5 +61,6 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(PaymentTermsKey))]
         public Concept PaymentTerms { get; set; }
+
     }
 }

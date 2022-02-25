@@ -48,6 +48,12 @@ namespace SanteDB.Core.Model.Acts
         public Protocol Protocol { get; set; }
 
         /// <summary>
+        /// Gets the version of the protocol that was used to generate the 
+        /// </summary>
+        [XmlElement("version"), JsonProperty("version")]
+        public string Version { get; set; }
+
+        /// <summary>
         /// Represents the sequence of the act in the protocol
         /// </summary>
         [XmlElement("sequence"), JsonProperty("sequence")]

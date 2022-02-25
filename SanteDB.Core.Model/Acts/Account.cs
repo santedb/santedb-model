@@ -57,6 +57,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the currency concept UUID for this account
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(CurrencyKeys))]
         public Guid? CurrencyKey { get; set; }
 
         /// <summary>

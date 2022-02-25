@@ -37,7 +37,6 @@ namespace SanteDB.Core.Model.Acts
     public class FinancialTransaction : Act
     {
 
-
         /// <summary>
         /// Creates the financial transaction
         /// </summary>
@@ -49,7 +48,6 @@ namespace SanteDB.Core.Model.Acts
         /// <inheritdoc/>
         protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.FinancialTransaction;
 
-
         /// <summary>
         /// Gets or sets the amount of the financial transaction
         /// </summary>
@@ -60,6 +58,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the currency key
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(CurrencyKeys))]
         public Guid? CurrencyKey { get; set; }
 
         /// <summary>

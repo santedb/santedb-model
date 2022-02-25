@@ -127,7 +127,7 @@ namespace SanteDB.Core.Model.Map.Builder
 
             foreach (var t in map.Class)
             {
-                var ctdecl = this.CreateMapper(t, map.Class.Where(o => o != t && o.ModelType.IsAssignableFrom(t.ModelType)));
+                var ctdecl = this.CreateMapper(t, map.Class.Where(o => o != t && o.ModelType.IsAssignableFrom(t.ModelType) && o.DomainType != t.DomainType));
                 if (ctdecl != null)
                     retVal.Types.Add(ctdecl);
             }
@@ -154,6 +154,7 @@ namespace SanteDB.Core.Model.Map.Builder
             // Map up the field count
             retVal.Members.Add(new CodeMemberField(typeof(ModelMapper), "m_mapper") { Attributes = MemberAttributes.Private });
             retVal.Members.Add(this.CreateInitializorConstructor(className));
+
             // Add methods
             retVal.Members.Add(this.CreateTypeGetProperty("SourceType", map.ModelType));
             retVal.Members.Add(this.CreateTypeGetProperty("TargetType", map.DomainType));
@@ -168,6 +169,7 @@ namespace SanteDB.Core.Model.Map.Builder
             foreach (var t in otherMappedTypes)
             {
                 var interfaceDefinition = new CodeTypeReference(typeof(IModelMapper<,>).MakeGenericType(map.ModelType, t.DomainType));
+               
                 retVal.BaseTypes.Add(interfaceDefinition);
                 var newMap = new ClassMap()
                 {
