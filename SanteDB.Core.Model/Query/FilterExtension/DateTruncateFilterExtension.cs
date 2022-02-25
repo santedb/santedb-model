@@ -39,7 +39,7 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         /// <summary>
         /// Gets the extension method
         /// </summary>
-        public MethodInfo ExtensionMethod => typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.DateTrunc));
+        public MethodInfo ExtensionMethod => typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.DateTrunc), new Type[] { typeof(DateTimeOffset), typeof(String) });
 
         /// <summary>
         /// Compose the expression
@@ -48,10 +48,17 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         {
             if (parms.Length == 0)
                 throw new InvalidOperationException("Date truncation requires precision");
+            else if(valueExpression.Type == typeof(DateTime))
+            {
+                var func = typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.DateTrunc), new Type[] { typeof(DateTime), typeof(String) });
+                return Expression.MakeBinary(ExpressionType.Equal,
+                    Expression.Call(func, Expression.Convert(scope, typeof(DateTime)), parms[0]),
+                    Expression.Call(func, valueExpression, parms[0]));
+            }
             else
             {
                 return Expression.MakeBinary(ExpressionType.Equal,
-                    Expression.Call(this.ExtensionMethod, Expression.Convert(scope, typeof(DateTime)), parms[0]),
+                    Expression.Call(this.ExtensionMethod, Expression.Convert(scope, typeof(DateTimeOffset)), parms[0]),
                     Expression.Call(this.ExtensionMethod, valueExpression, parms[0]));
             }
         }

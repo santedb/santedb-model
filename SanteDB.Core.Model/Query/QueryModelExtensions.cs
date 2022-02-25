@@ -68,6 +68,25 @@ namespace SanteDB.Core.Model.Query
             }
         }
 
+
+        /// <summary>
+        /// Gets the date contains function
+        /// </summary>
+        public static DateTimeOffset DateTrunc(this DateTimeOffset me, String precision)
+        {
+            switch (precision)
+            {
+                case "y":
+                    return new DateTime(me.Year, 01, 01);
+                case "M":
+                    return new DateTime(me.Year, me.Month, 01);
+                case "d":
+                    return me.Date;
+                default:
+                    throw new NotImplementedException("Precision for DateContains is implemented to DAY precision");
+            }
+        }
+
         /// <summary>
         /// Calculate the difference between two dates
         /// </summary>

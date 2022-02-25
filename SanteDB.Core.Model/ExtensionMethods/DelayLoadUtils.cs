@@ -23,6 +23,7 @@ using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.Query;
 using SanteDB.Core.Model.EntityLoader;
+using System;
 using System.Collections.Generic;
 
 namespace SanteDB.Core.Model
@@ -35,62 +36,74 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Load the person's languages
         /// </summary>
-        public static IEnumerable<PersonLanguageCommunication> GetPersonLanguages(this Person me) => me.LoadCollection<PersonLanguageCommunication>(nameof(Person.LanguageCommunication)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<PersonLanguageCommunication> GetPersonLanguages(this Person me) => me.LoadCollection<PersonLanguageCommunication>(nameof(Person.LanguageCommunication));
 
         /// <summary>
         /// Gets or loads addresses attached to an entity
         /// </summary>
-        public static IEnumerable<EntityAddress> GetAddresses(this Entity me) => me.LoadCollection<EntityAddress>(nameof(Entity.Addresses)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<EntityAddress> GetAddresses(this Entity me) => me.LoadCollection<EntityAddress>(nameof(Entity.Addresses));
 
         /// <summary>
         /// Gets or loads names attached to an entity
         /// </summary>
-        public static IEnumerable<EntityName> GetNames(this Entity me) => me.LoadCollection<EntityName>(nameof(Entity.Names)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<EntityName> GetNames(this Entity me) => me.LoadCollection<EntityName>(nameof(Entity.Names));
 
         /// <summary>
         /// Gets or loads telecoms attached to an entity
         /// </summary>
-        public static IEnumerable<EntityTelecomAddress> GetTelecoms(this Entity me) => me.LoadCollection<EntityTelecomAddress>(nameof(Entity.Telecoms)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<EntityTelecomAddress> GetTelecoms(this Entity me) => me.LoadCollection<EntityTelecomAddress>(nameof(Entity.Telecoms));
 
         /// <summary>
         /// Gets or loads relationships
         /// </summary>
-        public static IEnumerable<EntityRelationship> GetRelationships(this Entity me) => me.LoadCollection<EntityRelationship>(nameof(Entity.Relationships)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<EntityRelationship> GetRelationships(this Entity me) => me.LoadCollection<EntityRelationship>(nameof(Entity.Relationships));
 
         /// <summary>
         /// Gets or loads identifiers
         /// </summary>
-        public static IEnumerable<EntityIdentifier> GetIdentifiers(this Entity me) => me.LoadCollection<EntityIdentifier>(nameof(Entity.Identifiers)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<EntityIdentifier> GetIdentifiers(this Entity me) => me.LoadCollection<EntityIdentifier>(nameof(Entity.Identifiers));
 
         /// <summary>
         /// Gets or loads notes
         /// </summary>
-        public static IEnumerable<EntityNote> GetNotes(this Entity me) => me.LoadCollection<EntityNote>(nameof(Entity.Notes)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<EntityNote> GetNotes(this Entity me) => me.LoadCollection<EntityNote>(nameof(Entity.Notes));
 
         /// <summary>
         /// Gets or loads tags
         /// </summary>
-        public static IEnumerable<EntityTag> GetTags(this Entity me) => me.LoadCollection<EntityTag>(nameof(Entity.Tags)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<EntityTag> GetTags(this Entity me) => me.LoadCollection<EntityTag>(nameof(Entity.Tags));
 
         /// <summary>
         /// Gets or loads extensions
         /// </summary>
-        public static IEnumerable<EntityExtension> GetExtensions(this Entity me) => me.LoadCollection<EntityExtension>(nameof(Entity.Extensions)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<EntityExtension> GetExtensions(this Entity me) => me.LoadCollection<EntityExtension>(nameof(Entity.Extensions));
 
         /// <summary>
         /// Gets or loads identifiers
         /// </summary>
-        public static IEnumerable<ActIdentifier> GetIdentifiers(this Act me) => me.LoadCollection<ActIdentifier>(nameof(Act.Identifiers)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<ActIdentifier> GetIdentifiers(this Act me) => me.LoadCollection<ActIdentifier>(nameof(Act.Identifiers));
 
         /// <summary>
         /// Gets or loads relationships
         /// </summary>
-        public static IEnumerable<ActRelationship> GetRelationships(this Act me) => me.LoadCollection<ActRelationship>(nameof(Act.Relationships)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<ActRelationship> GetRelationships(this Act me) => me.LoadCollection<ActRelationship>(nameof(Act.Relationships));
 
         /// <summary>
         /// Gets or loads participations
         /// </summary>
-        public static IEnumerable<ActParticipation> GetParticipations(this Act me) => me.LoadCollection<ActParticipation>(nameof(Act.Participations)).AsResultSet();
+        [Obsolete("User LoadProperty()")]
+        public static IEnumerable<ActParticipation> GetParticipations(this Act me) => me.LoadCollection<ActParticipation>(nameof(Act.Participations));
 
         /// <summary>
         /// Get the target of the relationship
@@ -98,6 +111,7 @@ namespace SanteDB.Core.Model
         /// <typeparam name="T"></typeparam>
         /// <param name="me"></param>
         /// <returns></returns>
+        [Obsolete("User LoadProperty()")]
         public static T GetTargetAs<T>(this EntityRelationship me) where T : Entity, new()
         {
             var existing = me.LoadProperty(o => o.TargetEntity);

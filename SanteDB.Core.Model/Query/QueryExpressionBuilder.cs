@@ -527,7 +527,15 @@ namespace SanteDB.Core.Model.Query
                         return this.ExtractValue(this.VisitInvocation(access as InvocationExpression));
 
                     case ExpressionType.Call:
-                        return this.ExtractValue((access as MethodCallExpression).Arguments[0]);
+                        var invoke = access as MethodCallExpression;
+                        if (invoke.Arguments.Count > 0)
+                        {
+                            return this.ExtractValue(invoke.Arguments[0]);
+                        }
+                        else 
+                        {
+                            return invoke.Method.Invoke(this.ExtractValue(invoke.Object), new object[0]);
+                        }
                 }
                 return null;
             }

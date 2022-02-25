@@ -271,6 +271,48 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Set the load state
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void SetLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
+            where TSource : IIdentifiedEntity
+        {
+            me.SetLoaded(propertySelector.GetMember().Name);
+        }
+
+        /// <summary>
+        /// Set the necessary annotation on <paramref name="me"/> to indicate that <paramref name="propertyName"/> has
+        /// been loaded
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void SetLoaded(this IIdentifiedEntity me, string propertyName)
+        {
+            var loadCheck = new PropertyLoadCheck(propertyName);
+            if (!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
+            {
+                me.AddAnnotation(loadCheck);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the property is loaded
+        /// </summary>
+        public static bool WasLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
+            where TSource : IIdentifiedEntity
+        {
+            return me.WasLoaded(propertySelector.GetMember().Name);
+        }
+
+        /// <summary>
+        /// Returns true if the property has been loaded
+        /// </summary>
+        public static bool WasLoaded(this IIdentifiedEntity me, String propertyName)
+        {
+            var loadCheck = new PropertyLoadCheck(propertyName);
+            return me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck);
+        }
+
+        /// <summary>
         /// Delay load property
         /// </summary>
         public static TReturn LoadProperty<TReturn>(this IIdentifiedData me, string propertyName, bool forceReload = false)
@@ -285,6 +327,28 @@ namespace SanteDB.Core.Model
         {
             return me.LoadProperty(propertyName, forceReload) as IEnumerable<TReturn> ?? new List<TReturn>();
         }
+
+        /// <summary>
+        /// Get member
+        /// </summary>
+        public static MemberInfo GetMember(this Expression me)
+        {
+            if (me is UnaryExpression ue) return ue.Operand.GetMember();
+            else if (me is LambdaExpression le) return le.Body.GetMember();
+            else if (me is MemberExpression ma)
+            {
+                if (ma.Member.Name == "Value" && ma.Expression.Type.IsGenericType && ma.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    return ma.Expression.GetMember();
+                }
+                else
+                {
+                    return ma.Member;
+                }
+            }
+            else throw new InvalidOperationException($"{me} not supported, please use a member access expression");
+        }
+
 
         /// <summary>
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>

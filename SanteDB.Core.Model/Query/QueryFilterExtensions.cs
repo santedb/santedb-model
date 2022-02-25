@@ -164,7 +164,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         internal static IQueryFilterExtension GetExtendedFilterByMethod(MethodInfo method)
         {
-            return s_extensionMethods.Values.FirstOrDefault(o => o.ExtensionMethod == method);
+            return s_extensionMethods.Values.FirstOrDefault(o => o.ExtensionMethod.Name == method.Name && o.ExtensionMethod.GetParameters().Length == method.GetParameters().Length);
         }
     }
 }

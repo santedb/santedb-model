@@ -821,6 +821,12 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
+        /// Remove tags matching <paramref name="predicate"/> from the tag collection
+        /// </summary>
+        public void RemoveAllTags(Predicate<ITag> predicate) => this.Tags.RemoveAll(predicate);
+
+
+        /// <summary>
         /// Try to fetch the tag
         /// </summary>
         public bool TryGetTag(string tagKey, out ITag tag)
