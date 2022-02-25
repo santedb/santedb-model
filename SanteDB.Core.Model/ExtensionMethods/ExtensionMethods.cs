@@ -113,27 +113,6 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Get member
-        /// </summary>
-        public static MemberInfo GetMember(this Expression me)
-        {
-            if (me is UnaryExpression ue) return ue.Operand.GetMember();
-            else if (me is LambdaExpression le) return le.Body.GetMember();
-            else if (me is MemberExpression ma)
-            {
-                if (ma.Member.Name == "Value" && ma.Expression.Type.IsGenericType && ma.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
-                {
-                    return ma.Expression.GetMember();
-                }
-                else
-                {
-                    return ma.Member;
-                }
-            }
-            else throw new InvalidOperationException($"{me} not supported, please use a member access expression");
-        }
-
-        /// <summary>
         /// Convert a hex string to byte array
         /// </summary>
         public static byte[] ParseHexString(this String hexString)
@@ -275,30 +254,17 @@ namespace SanteDB.Core.Model
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedEntity
+            where TSource : IIdentifiedData
         {
             me.SetLoaded(propertySelector.GetMember().Name);
         }
 
-        /// <summary>
-        /// Set the necessary annotation on <paramref name="me"/> to indicate that <paramref name="propertyName"/> has
-        /// been loaded
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetLoaded(this IIdentifiedEntity me, string propertyName)
-        {
-            var loadCheck = new PropertyLoadCheck(propertyName);
-            if (!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
-            {
-                me.AddAnnotation(loadCheck);
-            }
-        }
 
         /// <summary>
         /// Returns true if the property is loaded
         /// </summary>
         public static bool WasLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedEntity
+            where TSource : IIdentifiedData
         {
             return me.WasLoaded(propertySelector.GetMember().Name);
         }
@@ -306,7 +272,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Returns true if the property has been loaded
         /// </summary>
-        public static bool WasLoaded(this IIdentifiedEntity me, String propertyName)
+        public static bool WasLoaded(this IIdentifiedData me, String propertyName)
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
             return me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck);
@@ -386,15 +352,6 @@ namespace SanteDB.Core.Model
                 throw new InvalidOperationException("Unknown expression passed");
         }
 
-        /// <summary>
-        /// Set the load state
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedData
-        {
-            me.SetLoaded(propertySelector.GetMember().Name);
-        }
 
         /// <summary>
         /// Set the necessary annotation on <paramref name="me"/> to indicate that <paramref name="propertyName"/> has
@@ -408,24 +365,6 @@ namespace SanteDB.Core.Model
             {
                 me.AddAnnotation(loadCheck);
             }
-        }
-
-        /// <summary>
-        /// Returns true if the property is loaded
-        /// </summary>
-        public static bool WasLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedData
-        {
-            return me.WasLoaded(propertySelector.GetMember().Name);
-        }
-
-        /// <summary>
-        /// Returns true if the property has been loaded
-        /// </summary>
-        public static bool WasLoaded(this IIdentifiedData me, String propertyName)
-        {
-            var loadCheck = new PropertyLoadCheck(propertyName);
-            return me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck);
         }
 
         /// <summary>

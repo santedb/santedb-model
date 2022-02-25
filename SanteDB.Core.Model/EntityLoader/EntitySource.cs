@@ -19,6 +19,7 @@
  * Date: 2021-8-27
  */
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Query;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,23 +64,24 @@ namespace SanteDB.Core.Model.EntityLoader
             /// <summary>
             /// Gets the specified relations
             /// </summary>
-            public IEnumerable<TObject> GetRelations<TObject>(params Guid?[] sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new()
+            public IQueryResultSet<TObject> GetRelations<TObject>(params Guid?[] sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new()
             {
-                return new List<TObject>();
+                return new MemoryQueryResultSet<TObject>(new List<TObject>());
             }
 
             /// <inheritdoc/>
-            public IEnumerable GetRelations(Type tobject, params Guid?[] sourceKey)
+            public IQueryResultSet GetRelations(Type tobject, params Guid?[] sourceKey)
             {
-                yield break;
+                return new MemoryQueryResultSet(new Object[0]);
+
             }
 
             /// <summary>
             /// Query
             /// </summary>
-            public IEnumerable<TObject> Query<TObject>(Expression<Func<TObject, bool>> query) where TObject : IdentifiedData, new()
+            public IQueryResultSet<TObject> Query<TObject>(Expression<Func<TObject, bool>> query) where TObject : IdentifiedData, new()
             {
-                return new List<TObject>();
+                return new MemoryQueryResultSet<TObject>(new TObject[0]);
             }
         }
 

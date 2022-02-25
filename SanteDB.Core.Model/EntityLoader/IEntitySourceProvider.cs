@@ -19,6 +19,7 @@
  * Date: 2021-8-27
  */
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Query;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,20 +45,20 @@ namespace SanteDB.Core.Model.EntityLoader
         /// <summary>
         /// Query the specified data from the delay load provider
         /// </summary>
-        IEnumerable<TObject> Query<TObject>(Expression<Func<TObject, bool>> query) where TObject : IdentifiedData, new();
-
-    
-        /// <summary>
-        /// Get relationships
-        /// </summary>
-        IEnumerable<TObject> GetRelations<TObject>(params Guid?[] sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new();
+        IQueryResultSet<TObject> Query<TObject>(Expression<Func<TObject, bool>> query) where TObject : IdentifiedData, new();
 
 
         /// <summary>
         /// Get relationships
         /// </summary>
+        IQueryResultSet<TObject> GetRelations<TObject>(params Guid?[] sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new();
+
+
+        /// <summary>
+        /// Get relationships
+        /// </summary>
+        /// <param name="relatedType">The related type to load</param>
         /// <param name="sourceKey">The source keys to load relationships for</param>
-        /// <param name="tobject">The type of object to load</param>
-        IEnumerable GetRelations(Type relatedType, params Guid?[] sourceKey);
+        IQueryResultSet GetRelations(Type relatedType, params Guid?[] sourceKey);
     }
 }
