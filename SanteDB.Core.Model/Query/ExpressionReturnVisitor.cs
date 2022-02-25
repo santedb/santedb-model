@@ -12,12 +12,16 @@ namespace SanteDB.Core.Model.Query
     /// <remarks>
     /// Quick and dirty solution from https://stackoverflow.com/questions/14437239/change-a-linq-expression-predicate-from-one-type-to-another
     /// </remarks>
-    public class ExpressionReturnConverter<TFrom, TTo, TReturn> : ExpressionVisitor
+    public class ExpressionReturnVisitor<TFrom, TTo, TReturn> : ExpressionVisitor
     {
         private Dictionary<string, ParameterExpression> convertedParameters;
         private Expression<Func<TFrom, TReturn>> expression;
 
-        public ExpressionReturnConverter(Expression<Func<TFrom, TReturn>> expresionToConvert)
+        /// <summary>
+        /// Creates a new expression return visitor
+        /// </summary>
+        /// <param name="expresionToConvert">The type of expression to conviert</param>
+        public ExpressionReturnVisitor(Expression<Func<TFrom, TReturn>> expresionToConvert)
         {
             //for each parameter in the original expression creates a new parameter with the same name but with changed type
             convertedParameters = expresionToConvert.Parameters
@@ -29,12 +33,20 @@ namespace SanteDB.Core.Model.Query
             expression = expresionToConvert;
         }
 
+        /// <summary>
+        /// Perform the conversion logic 
+        /// </summary>
+        /// <returns>The converted expression with converted return type</returns>
         public Expression<Func<TTo, TReturn>> Convert()
         {
             return (Expression<Func<TTo, TReturn>>)Visit(expression);
         }
 
-        //handles Properties and Fields accessors
+        /// <summary>
+        /// Visit the specified member
+        /// </summary>
+        /// <param name="node">The node to visit</param>
+        /// <returns>The mapped expressio</returns>
         protected override Expression VisitMember(MemberExpression node)
         {
             if (node.Member.DeclaringType == typeof(TFrom))
@@ -49,12 +61,16 @@ namespace SanteDB.Core.Model.Query
             }
         }
 
+        /// <inheritdoc/>
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            var newParameter = convertedParameters[node.Name];
-            return newParameter;
+            if(convertedParameters.TryGetValue(node.Name, out var newNode)) {
+                return newNode;
+            }
+            return node;
         }
 
+        /// <inheritdoc/>
         protected override Expression VisitLambda<T>(Expression<T> node)
         {
             var newExp = Visit(node.Body);

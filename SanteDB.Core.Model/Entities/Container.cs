@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -47,6 +47,13 @@ namespace SanteDB.Core.Model.Entities
 
         /// <inheritdoc/>
         protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Container;
+
+
+        /// <summary>
+        /// Gets or sets the lot number of the manufactured material
+        /// </summary>
+        [XmlElement("lotNumber"), JsonProperty("lotNumber")]
+        public String LotNumber { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class.

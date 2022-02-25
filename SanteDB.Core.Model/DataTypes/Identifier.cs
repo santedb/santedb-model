@@ -1,24 +1,23 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you
- * may not use this file except in compliance with the License. You may
- * obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you 
+ * may not use this file except in compliance with the License. You may 
+ * obtain a copy of the License at 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations under 
  * the License.
- *
+ * 
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
-
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
@@ -85,17 +84,10 @@ namespace SanteDB.Core.Model.DataTypes
         public EntityIdentifier(AssigningAuthority authority, String value)
         {
             this.Authority = authority;
+            this.AuthorityKey = authority?.Key;
             this.Value = value;
         }
 
-        /// <summary>
-        /// Creates a new entity identifier with specified nsid
-        /// </summary>
-        public EntityIdentifier(String nsid, String value)
-        {
-            this.Authority = new AssigningAuthority() { DomainName = nsid };
-            this.Value = value;
-        }
     }
 
     /// <summary>
@@ -135,7 +127,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents an external assigned identifier
     /// </summary>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("IdentifierBase")]
-    [Classifier(nameof(AuthorityXml), nameof(AuthorityKey))]
+    [Classifier(nameof(Authority), nameof(AuthorityKey))]
     public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
         /// <summary>
@@ -173,7 +165,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the date of issue
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        public DateTime? IssueDate { get; set; }
+        public DateTimeOffset? IssueDate { get; set; }
 
         /// <summary>
         /// Serialization field for expiry date
@@ -204,7 +196,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the expiration date of the identifier
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public DateTime? ExpiryDate { get; set; }
+        public DateTimeOffset? ExpiryDate { get; set; }
 
         /// <summary>
         /// Gets or sets the check-digit if it is stored separate from the identifier
@@ -216,7 +208,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the assinging authority id
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [XmlIgnore, JsonIgnore]
+        [XmlElement("domain"), JsonProperty("domain")]
         public Guid? AuthorityKey { get; set; }
 
         /// <summary>
@@ -234,16 +226,10 @@ namespace SanteDB.Core.Model.DataTypes
         public IdentifierType IdentifierType { get; set; }
 
         /// <summary>
-        /// Gets or sets a minimal assigning authority from XML data
-        /// </summary>
-        //[SerializationReference(nameof(AuthorityKey))]
-        [XmlElement("authority"), JsonProperty("authority")]
-        public AssigningAuthority AuthorityXml { get; set; }
-
-        /// <summary>
         /// Represents the authority information
         /// </summary>
         [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(AuthorityKey))]
         public AssigningAuthority Authority { get; set; }
 
         /// <summary>
@@ -255,7 +241,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents the authority information
         /// </summary>
-        AssigningAuthority IExternalIdentifier.Authority => this.AuthorityXml ?? this.LoadProperty(o => o.Authority);
+        AssigningAuthority IExternalIdentifier.Authority => this.LoadProperty(o => o.Authority);
 
         /// <summary>
         /// True if the identifier is empty

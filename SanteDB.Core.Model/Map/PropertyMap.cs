@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
 using System;
 using System.Collections.Generic;
@@ -42,12 +42,6 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         [XmlAttribute("domainName")]
         public String DomainName { get; set; }
-
-        /// <summary>
-        /// Identifies the route 
-        /// </summary>
-        [XmlElement("via")]
-        public PropertyMap Via { get; set; }
 
         /// <summary>
         /// When this property is a via then traverse this
@@ -102,10 +96,6 @@ namespace SanteDB.Core.Model.Map
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", modelClass?.Name, this.ModelName), null, null));
             if (domainClass?.GetRuntimeProperty(this.DomainName ?? "") == null)
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", domainClass?.Name, this.DomainName), null, null));
-
-            // 2. All property maps should exist
-            if (this.Via != null)
-                retVal.AddRange(this.Via.Validate(modelClass?.GetRuntimeProperty(this.ModelName ?? "")?.PropertyType ?? modelClass, domainClass?.GetRuntimeProperty(this.DomainName)?.PropertyType));
 
             // Order by?
             if (!String.IsNullOrEmpty(this.OrderBy) && domainClass != null)

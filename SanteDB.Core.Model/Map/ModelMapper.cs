@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  *
@@ -16,7 +16,7 @@
  * the License.
  *
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
 
 using Microsoft.CSharp;
@@ -148,7 +148,7 @@ namespace SanteDB.Core.Model.Map
                     {
                         throw new Exception($"Could not validate model map {name}", e);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         this.InitializeReflection(this.m_mapFile);
                     }
@@ -208,11 +208,7 @@ namespace SanteDB.Core.Model.Map
             PropertyMap castMap = classMap.Cast?.Find(o => o.ModelType == sourceExpression.Type);
             if (castMap == null) throw new InvalidCastException();
             Expression accessExpr = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(castMap.DomainName));
-            while (castMap.Via != null)
-            {
-                castMap = castMap.Via;
-                accessExpr = Expression.MakeMemberAccess(accessExpr, accessExpr.Type.GetRuntimeProperty(castMap.DomainName));
-            }
+
             return accessExpr;
         }
 
@@ -247,28 +243,7 @@ namespace SanteDB.Core.Model.Map
                 return Expression.MakeMemberAccess(accessExpressionAsMember.Expression, accessExpressionAsMember.Expression.Type.GetRuntimeProperty(collapseKey.KeyName));
             else if (classMap.TryGetModelProperty(memberExpression.Member.Name, out propertyMap))
             {
-                // We have to map through an associative table
-                if (propertyMap.Via != null)
-                {
-                    Expression viaExpression = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(propertyMap.DomainName));
-                    var via = propertyMap.Via;
-                    while (via != null)
-                    {
-                        MemberInfo viaMember = viaExpression.Type.GetRuntimeProperty(via.DomainName);
-                        if (viaMember == null)
-                            break;
-                        viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
-
-                        if (via.OrderBy != null && viaExpression.Type.FindInterfaces((o, _) => o == typeof(IEnumerable), null).Length > 0)
-                            viaExpression = viaExpression.Sort(via.OrderBy, via.SortOrder);
-                        if (via.Aggregate != AggregationFunctionType.None)
-                            viaExpression = viaExpression.Aggregate(via.Aggregate);
-                        via = via.Via;
-                    }
-                    return viaExpression;
-                }
-                else
-                    return Expression.MakeMemberAccess(accessExpression, this.ExtractDomainType(accessExpression.Type).GetRuntimeProperty(propertyMap.DomainName));
+                return Expression.MakeMemberAccess(accessExpression, this.ExtractDomainType(accessExpression.Type).GetRuntimeProperty(propertyMap.DomainName));
             }
             else
             {
@@ -373,22 +348,8 @@ namespace SanteDB.Core.Model.Map
                     }
                 }
 
-                // Is there a VIA that we need to express?
-                if (propertyMap.Via != null)
-                {
-                    Expression viaExpression = lambdaParameterExpression;
-                    var via = propertyMap.Via;
-                    while (via != null)
-                    {
-                        MemberInfo viaMember = viaExpression.Type.GetRuntimeProperty(via.DomainName);
-                        if (viaMember != null)
-                            viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
-                        via = via.Via;
-                    }
-                    return viaExpression;
-                }
-                else
-                    return lambdaParameterExpression;
+
+                return lambdaParameterExpression;
             }
             else
             {

@@ -458,8 +458,7 @@ namespace SanteDB.Core.Model.Map.Builder
                 return new CodeAssignStatement(toObject, new CodePropertyReferenceExpression(fromObject, nameof(Type.AssemblyQualifiedName)));
             }
             // TYPE? <== TYPE
-            else if (fromType.IsGenericType &&
-                typeof(Nullable<>).IsAssignableFrom(fromType.GetGenericTypeDefinition())) // generic
+            else if (Nullable.GetUnderlyingType(fromType) != null) // generic
             {
                 return new CodeConditionStatement(
                     new CodePropertyReferenceExpression(fromObject, "HasValue"),

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
 using SanteDB.Core.Model.Attributes;
 using System;
@@ -299,27 +299,48 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            Expression newExpression = this.Visit(node.Object);
-            if (newExpression == null)
-                return null;
-            IEnumerable<Expression> args = this.VisitExpressionList(node.Arguments);
-            if (args == null)
-                return null;
-
-            if (newExpression != node.Object || args != node.Arguments)
+            if (node.Object == null) // static method
             {
-                // Re-bind the parameter types
-                MethodInfo methodInfo = node.Method;
-                if (methodInfo.IsGenericMethod) // Generic re-bind
+                switch(node.Method.Name)
                 {
-                    // HACK: Find a more appropriate way of doing this
-                    Type bindType = this.m_mapper.ExtractDomainType(args.First().Type);
-                    methodInfo = methodInfo.GetGenericMethodDefinition().MakeGenericMethod(new Type[] { bindType });
-                }
+                    case "Contains": // Enumerable contains
+                        try
+                        {
+                            var newParam = node.Arguments.Select(o => Expression.Convert(this.Visit(o), node.Method.GetParameters()[node.Arguments.IndexOf(o)].ParameterType));
 
-                return Expression.Call(newExpression, methodInfo, args);
+                            return Expression.Call(node.Method, newParam.ToArray());
+                        }
+                        catch
+                        {
+                            return null; 
+                        }
+                }
+                return null;
             }
-            return base.VisitMethodCall(node);
+            else
+            {
+                Expression newExpression = this.Visit(node.Object);
+                if (newExpression == null)
+                    return null;
+                IEnumerable<Expression> args = this.VisitExpressionList(node.Arguments);
+                if (args == null)
+                    return null;
+
+                if (newExpression != node.Object || args != node.Arguments)
+                {
+                    // Re-bind the parameter types
+                    MethodInfo methodInfo = node.Method;
+                    if (methodInfo.IsGenericMethod) // Generic re-bind
+                    {
+                        // HACK: Find a more appropriate way of doing this
+                        Type bindType = this.m_mapper.ExtractDomainType(args.First().Type);
+                        methodInfo = methodInfo.GetGenericMethodDefinition().MakeGenericMethod(new Type[] { bindType });
+                    }
+
+                    return Expression.Call(newExpression, methodInfo, args);
+                }
+                return base.VisitMethodCall(node);
+            }
         }
 
         /// <summary>

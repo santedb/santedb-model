@@ -1,24 +1,23 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you
- * may not use this file except in compliance with the License. You may
- * obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you 
+ * may not use this file except in compliance with the License. You may 
+ * obtain a copy of the License at 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations under 
  * the License.
- *
+ * 
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
-
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
@@ -30,6 +29,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
+using System.Collections.Concurrent;
 
 namespace SanteDB.Core.Model
 {
@@ -40,13 +40,13 @@ namespace SanteDB.Core.Model
     /// and is the class from which all other business object model instances are derived.
     /// </para><para>This class contains </para></remarks>
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
-    public abstract class IdentifiedData : IIdentifiedEntity
+    public abstract class IdentifiedData : IIdentifiedEntity, ICanDeepCopy
     {
         // Annotations
         /// <summary>
         /// A list of custom tags which were added to this object
         /// </summary>
-        protected List<Object> m_annotations = new List<object>();
+        protected ConcurrentDictionary<Type, List<Object>> m_annotations = new ConcurrentDictionary<Type, List<object>>();
 
         // Lock
         private object m_lock = new object();
@@ -64,7 +64,14 @@ namespace SanteDB.Core.Model
         /// Gets or sets the operation
         /// </summary>
         [XmlAttribute("operation"), JsonProperty("operation")]
-        public BatchOperationType BatchOperation { get; set; }
+        public BatchOperationType BatchOperation {
+            get => this.m_batchMode;
+            set
+            {
+                
+                this.m_batchMode = value;
+            }
+        }
 
         /// <summary>
         /// Should serialize batch operation
@@ -117,26 +124,94 @@ namespace SanteDB.Core.Model
         {
             get
             {
-                return this.Key?.ToString("N");
+                return $"{this.Type}.{this.Key?.ToString("N")}";
             }
         }
 
         /// <summary>
-        /// True if the object is empty
+        /// Determines w
         /// </summary>
         public virtual bool IsEmpty() => false;
 
         /// <summary>
-        /// Clone the specified data
+        /// Gets or sets whether the object was partial loaded
         /// </summary>
-        public virtual IdentifiedData Clone()
+        [XmlIgnore, JsonIgnore]
+        public LoadState LoadState
+        {
+            get
+            {
+                return this.m_loadState;
+            }
+            set
+            {
+                if (value >= this.m_loadState)
+                    this.m_loadState = value;
+            }
+        }
+
+        /// <summary>
+        /// Provide a deep copy of the specified data
+        /// </summary>
+        public virtual ICanDeepCopy DeepCopy()
         {
             var retVal = this.MemberwiseClone() as IdentifiedData;
             retVal.m_annotations = new List<object>();
 
+            foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (!pi.CanWrite || pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) continue; // can't and not important to serialization write so continue 
+
+                var thisValue = pi.GetValue(this);
+                if(thisValue is IList list)
+                {
+                    if (pi.PropertyType.GetConstructor(System.Type.EmptyTypes) != null)
+                    {
+                        var newList = Activator.CreateInstance(thisValue.GetType()) as IList;
+                        foreach (var itm in list)
+                        {
+                            if (itm is IdentifiedData id)
+                            {
+                                newList.Add(id.DeepCopy());
+                            }
+                            else
+                            {
+                                newList.Add(itm);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        pi.SetValue(retVal, list);
+                    }
+                }
+                else if(thisValue is IdentifiedData id)
+                {
+                    pi.SetValue(retVal, id.DeepCopy());
+                }
+                else
+                {
+                    pi.SetValue(retVal, thisValue);
+                }
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// Clone this object
+        /// </summary>
+        /// <remarks>This performs a shallow clone on only the root object. If a full independent copy of the object is desired use the <see cref="DeepCopy"/> method</remarks>
+        public virtual IdentifiedData Clone()
+        {
+            var retVal = this.MemberwiseClone() as IdentifiedData;
+            retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
+
             // Re-initialize all arrays
             foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
+                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) // No sense of reading
+                    continue;
+
                 var thisValue = pi.GetValue(this);
                 if (thisValue is IList listValue && listValue.Count > 0 &&
                     pi.PropertyType.GetConstructor(new Type[] { thisValue.GetType() }) != null)
@@ -203,9 +278,20 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual void RemoveAnnotation(Object annotation)
         {
-            lock (this.m_lock)
+            if(this.m_annotations.TryGetValue(annotation.GetType(), out var values))
             {
-                this.m_annotations.Remove(annotation);
+                values.Remove(annotation);
+            }
+        }
+
+        /// <summary>
+        /// Remove annotation
+        /// </summary>
+        public virtual void RemoveAnnotations<T>()
+        {
+            if(this.m_annotations.TryGetValue(typeof(T), out var values))
+            {
+                values.Clear();
             }
         }
 
@@ -214,31 +300,52 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual IEnumerable<T> GetAnnotations<T>()
         {
-            lock (this.m_lock)
+            if(this.m_annotations.TryGetValue(typeof(T), out var values)) 
             {
-                return this.m_annotations.ToArray().OfType<T>();
+                return values.OfType<T>();
+            }
+            else
+            {
+                return new T[0];
             }
         }
 
         /// <summary>
         /// Add an annotated object
         /// </summary>
-        public virtual void AddAnnotation(Object annotation)
+        public virtual void AddAnnotation<T>(T annotation)
         {
-            lock (this.m_lock)
+            if (annotation == null)
             {
-                this.m_annotations.Add(annotation);
+                return;
             }
+            if(!this.m_annotations.TryGetValue(typeof(T), out var values))
+            {
+                values = new List<object>();
+                this.m_annotations.TryAdd(typeof(T), values);
+            }
+            values.Add(annotation);
+
         }
 
         /// <summary>
         /// Copy annotations from another resource
         /// </summary>
-        public virtual IIdentifiedEntity CopyAnnotations(IIdentifiedEntity other)
+        public virtual IIdentifiedData CopyAnnotations(IIdentifiedData other)
         {
             if (other is IdentifiedData id)
             {
-                this.m_annotations.AddRange(id.m_annotations);
+                foreach (var itm in id.m_annotations)
+                {
+                    if (this.m_annotations.TryGetValue(itm.Key, out var values))
+                    {
+                        values.AddRange(itm.Value);
+                    }
+                    else
+                    {
+                        this.m_annotations.TryAdd(itm.Key, itm.Value);
+                    }
+                }
             }
             return this;
         }

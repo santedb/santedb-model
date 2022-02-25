@@ -1,24 +1,23 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you
- * may not use this file except in compliance with the License. You may
- * obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you 
+ * may not use this file except in compliance with the License. You may 
+ * obtain a copy of the License at 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations under 
  * the License.
- *
+ * 
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
-
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -76,7 +75,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets a list of concept relationships
         /// </summary>
         [XmlElement("relationship"), JsonProperty("relationship")]
-        public List<ConceptRelationship> Relationship { get; set; }
+        public List<ConceptRelationship> Relationships { get; set; }
 
         /// <summary>
         /// True if concept is empty
@@ -120,21 +119,21 @@ namespace SanteDB.Core.Model.DataTypes
         /// Concept sets as identifiers for XML purposes only
         /// </summary>
         [XmlElement("conceptSet"), JsonProperty("conceptSet")]
-        public List<Guid> ConceptSetKeys { get; set; }
+        public List<Guid> ConceptSetsXml { get; set; }
 
         /// <summary>
         /// Gets concept sets to which this concept is a member
         /// </summary>
-        [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(ConceptSetKeys))]
-        public IEnumerable<ConceptSet> ConceptSets
+        [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(ConceptSetsXml))]
+        public List<ConceptSet> ConceptSets
         {
             get
             {
-                return this.ConceptSetKeys?.Select(o => EntitySource.Current.Get<ConceptSet>(o)).ToList();
+                return this.ConceptSetsXml?.Select(o => EntitySource.Current.Get<ConceptSet>(o)).ToList();
             }
             set
             {
-                this.ConceptSetKeys = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
+                this.ConceptSetsXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
             }
         }
 
@@ -157,7 +156,7 @@ namespace SanteDB.Core.Model.DataTypes
                 this.ClassKey == other.ClassKey &&
                 this.ConceptNames?.SemanticEquals(other.ConceptNames) == true &&
                 this.ConceptSets?.SemanticEquals(other.ConceptSets) == true &&
-                this.Relationship?.SemanticEquals(other.Relationship) == true;
+                this.Relationships?.SemanticEquals(other.Relationships) == true;
         }
 
         /// <summary>

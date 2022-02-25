@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -76,7 +76,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("concept"), JsonProperty("concept")]
         //[Bundle(nameof(Concepts))]
-        public List<Guid> ConceptKeys { get; set; }
+        public List<Guid> ConceptsXml { get; set; }
 
         /// <summary>
         /// Gets the concepts in the set
@@ -86,11 +86,11 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.ConceptKeys?.Select(o => EntitySource.Current.Get<Concept>(o) ?? new Concept() { Key = o });
+                return this.ConceptsXml?.Select(o => EntitySource.Current.Get<Concept>(o) ?? new Concept() { Key = o });
             }
             set
             {
-                this.ConceptKeys = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
+                this.ConceptsXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
             }
         }
 

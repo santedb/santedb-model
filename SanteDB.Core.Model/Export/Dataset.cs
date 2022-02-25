@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Collection;
@@ -78,7 +78,14 @@ namespace SanteDB.Core.Model.Export
         /// </summary>
         [XmlArray("sql")]
         [XmlArrayItem("exec")]
-        public List<DataExecuteAction> Exec { get; set; }
+        public List<DataExecuteAction> SqlExec { get; set; }
+
+        /// <summary>
+        /// Execute a service action on install
+        /// </summary>
+        [XmlArray("exec")]
+        [XmlArrayItem("service")]
+        public List<ServiceExecuteAction> ServiceExec { get; set; }
 
         /// <summary>
         /// Loads the specified file to dataset
@@ -87,6 +94,32 @@ namespace SanteDB.Core.Model.Export
         {
             return m_xsz.Deserialize(str) as Dataset;
         }
+    }
+
+    /// <summary>
+    /// Service execution actions
+    /// </summary>
+    [XmlType(nameof(ServiceExecuteAction), Namespace = "http://santedb.org/data")]
+    public class ServiceExecuteAction
+    {
+
+        /// <summary>
+        /// Gets or sets the service which should be executed
+        /// </summary>
+        [XmlAttribute("type")]
+        public String ServiceType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the method to be executed
+        /// </summary>
+        [XmlAttribute("method")]
+        public String Method { get; set; }
+
+        /// <summary>
+        /// Gets the arguments
+        /// </summary>
+        [XmlArray("args"), XmlArrayItem("string", typeof(String)), XmlArrayItem("int", typeof(Int32)), XmlArrayItem("bool", typeof(Boolean))]
+        public List<Object> Arguments { get; set; }
     }
 
     /// <summary>

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2021, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  *
@@ -16,44 +16,31 @@
  * the License.
  *
  * User: fyfej
- * Date: 2021-8-5
+ * Date: 2021-8-27
  */
 
 using System;
-using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Identified entity
+    /// Versioned entity
     /// </summary>
-    public interface IIdentifiedEntity
+    public interface IVersionedData : IIdentifiedData
     {
-
+        /// <summary>
+        /// Gets the version sequence
+        /// </summary>
+        Int64? VersionSequence { get; set; }
 
         /// <summary>
-        /// Gets the identifier for the entity
+        /// Gets the version key
         /// </summary>
-        Guid? Key { get; set; }
+        Guid? VersionKey { get; set; }
 
         /// <summary>
-        /// Remove annotation
+        /// Gets the previous version's key
         /// </summary>
-        void RemoveAnnotation(Object annotation);
-
-        /// <summary>
-        /// Get annotations of specified <typeparamref name="T"/>
-        /// </summary>
-        IEnumerable<T> GetAnnotations<T>();
-
-        /// <summary>
-        /// Add an annotated object
-        /// </summary>
-        void AddAnnotation(Object annotation);
-
-        /// <summary>
-        /// Copy annotations
-        /// </summary>
-        IIdentifiedEntity CopyAnnotations(IIdentifiedEntity other);
+        Guid? PreviousVersionKey { get; set; }
     }
 }
