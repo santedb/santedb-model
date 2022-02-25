@@ -433,7 +433,7 @@ namespace SanteDB.Core.Model
             }
             finally
             {
-                me.LoadProperty(loadCheck);
+                me.AddAnnotation(loadCheck);
             }
             // Now we want to
         }

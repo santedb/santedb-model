@@ -40,7 +40,7 @@ namespace SanteDB.Core.Model
     /// and is the class from which all other business object model instances are derived.
     /// </para><para>This class contains </para></remarks>
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
-    public abstract class IdentifiedData : IIdentifiedEntity, ICanDeepCopy
+    public abstract class IdentifiedData : IIdentifiedData, ICanDeepCopy
     {
         // Annotations
         /// <summary>
@@ -64,14 +64,7 @@ namespace SanteDB.Core.Model
         /// Gets or sets the operation
         /// </summary>
         [XmlAttribute("operation"), JsonProperty("operation")]
-        public BatchOperationType BatchOperation {
-            get => this.m_batchMode;
-            set
-            {
-                
-                this.m_batchMode = value;
-            }
-        }
+        public BatchOperationType BatchOperation { get; set; }
 
         /// <summary>
         /// Should serialize batch operation
@@ -134,33 +127,16 @@ namespace SanteDB.Core.Model
         public virtual bool IsEmpty() => false;
 
         /// <summary>
-        /// Gets or sets whether the object was partial loaded
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public LoadState LoadState
-        {
-            get
-            {
-                return this.m_loadState;
-            }
-            set
-            {
-                if (value >= this.m_loadState)
-                    this.m_loadState = value;
-            }
-        }
-
-        /// <summary>
         /// Provide a deep copy of the specified data
         /// </summary>
         public virtual ICanDeepCopy DeepCopy()
         {
             var retVal = this.MemberwiseClone() as IdentifiedData;
-            retVal.m_annotations = new List<object>();
-
+            retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
+            retVal.BatchOperation = BatchOperationType.Auto;
             foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                if (!pi.CanWrite || pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) continue; // can't and not important to serialization write so continue 
+                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) continue; // can't and not important to serialization write so continue 
 
                 var thisValue = pi.GetValue(this);
                 if(thisValue is IList list)

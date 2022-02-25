@@ -106,7 +106,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Indicates that the entity or act did exist at one point, however it no longer exists
         /// </summary>
-        public static readonly Guid Purged = Guid.Parse(StatusKeyStrings.Purged);
+        public static readonly Guid Deleted = Guid.Parse(StatusKeyStrings.Purged);
 
         /// <summary>
         /// Indicates that the entity or act did exist at one point, however it no longer exists - and the reason is unknown
@@ -144,7 +144,7 @@ namespace SanteDB.Core.Model.Constants
             StatusKeys.Inactive,
             StatusKeys.Nullified,
             StatusKeys.Obsolete,
-            StatusKeys.Purged
+            StatusKeys.Deleted
         };
     }
 }

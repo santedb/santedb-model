@@ -60,7 +60,7 @@ namespace SanteDB.Core.Model.Audit
         /// <param name="outcome">The outcome.</param>
         /// <param name="eventIdentifier">The event identifier.</param>
         /// <param name="eventTypeCode">The event type code.</param>
-        public AuditEventData(DateTime timeStamp, ActionType actionCode, OutcomeIndicator outcome,
+        public AuditEventData(DateTimeOffset timeStamp, ActionType actionCode, OutcomeIndicator outcome,
             EventIdentifierType eventIdentifier, AuditCode eventTypeCode)
             : this()
         {
@@ -126,7 +126,7 @@ namespace SanteDB.Core.Model.Audit
         /// </summary>
         /// <remarks>This is the time that the event occurred</remarks>
         [XmlElement("timestamp"), JsonProperty("timestamp")]
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>
         /// Gets or sets metadata about the audit 

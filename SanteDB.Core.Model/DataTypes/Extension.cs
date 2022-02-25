@@ -94,7 +94,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the ignore value
         /// </summary>
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore, SerializationMetadataAttribute]
         public Object ExtensionValue
         {
             get

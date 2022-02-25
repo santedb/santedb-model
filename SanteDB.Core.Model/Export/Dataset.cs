@@ -69,7 +69,7 @@ namespace SanteDB.Core.Model.Export
         /// Actions to be performed
         /// </summary>
         [XmlElement("insert", Type = typeof(DataInsert))]
-        [XmlElement("obsolete", Type = typeof(DataObsolete))]
+        [XmlElement("obsolete", Type = typeof(DataDelete))]
         [XmlElement("update", Type = typeof(DataUpdate))]
         public List<DataInstallAction> Action { get; set; }
 
@@ -257,8 +257,8 @@ namespace SanteDB.Core.Model.Export
     /// <summary>
     /// Obsoletes the specified data elements
     /// </summary>
-    [XmlType(nameof(DataObsolete), Namespace = "http://santedb.org/data")]
-    public class DataObsolete : DataInstallAction
+    [XmlType(nameof(DataDelete), Namespace = "http://santedb.org/data")]
+    public class DataDelete : DataInstallAction
     {
         /// <summary>
         /// Gets the action name
