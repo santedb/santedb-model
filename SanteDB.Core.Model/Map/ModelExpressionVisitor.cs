@@ -516,6 +516,7 @@ namespace SanteDB.Core.Model.Map
         {
 
             Type mappedType = this.m_mapper.MapModelType(node.Type);
+
             var parameterRef = this.m_parameters.FirstOrDefault(p => p.Name == node.Name && p.Type == mappedType);
 
             if (parameterRef != null)

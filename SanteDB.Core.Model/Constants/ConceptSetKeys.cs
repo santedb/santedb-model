@@ -85,6 +85,11 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Represents concepts which are used to classify entities
         /// </summary>
+        public static readonly Guid EntityDeterminer = Guid.Parse("effc9f86-56e2-4920-a75a-fec310aa1430");
+
+        /// <summary>
+        /// Represents concepts which are used to classify entities
+        /// </summary>
         public static readonly Guid EntityClass = Guid.Parse("4E6DA567-0094-4F23-8555-11DA499593AF");
 
         /// <summary>
@@ -176,5 +181,10 @@ namespace SanteDB.Core.Model.Constants
         /// Language codes
         /// </summary>
         public static readonly Guid LanguageCodes = Guid.Parse("48b4d375-0dca-4c58-9f45-66abfbc196a1");
+
+        /// <summary>
+        /// Currency codes
+        /// </summary>
+        public static readonly Guid Currencies = Guid.Parse("B6BC75AD-ADF4-4101-B4A1-E9AEA74AB257");
     }
 }

@@ -20,6 +20,7 @@
  */
 
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Roles;
 using System;
@@ -44,6 +45,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlInclude(typeof(CodedObservation))]
     [XmlInclude(typeof(TextObservation))]
     [XmlInclude(typeof(PatientEncounter))]
+    [ClassConceptKey(ActClassKeyStrings.CarePlan)]
     public class CarePlan : Act
     {
         /// <summary>
