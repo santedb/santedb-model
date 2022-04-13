@@ -58,7 +58,7 @@ namespace SanteDB.Core.Model.Constants
         public const String Obsolete = "BDEF5F90-5497-4F26-956C-8F818CCE2BD2";
 
         /// <summary>
-        /// Indicates that the data was purged (i.e. it did exist, however no longer exists)
+        /// Indicates that the data was logically deleted (i.e. it did exist, however no longer exists)
         /// </summary>
         public const String Purged = "39995C08-0A5C-4549-8BA7-D187F9B3C4FD";
 
@@ -106,7 +106,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Indicates that the entity or act did exist at one point, however it no longer exists
         /// </summary>
-        public static readonly Guid Deleted = Guid.Parse(StatusKeyStrings.Purged);
+        public static readonly Guid Purged = Guid.Parse(StatusKeyStrings.Purged);
 
         /// <summary>
         /// Indicates that the entity or act did exist at one point, however it no longer exists - and the reason is unknown
@@ -144,7 +144,7 @@ namespace SanteDB.Core.Model.Constants
             StatusKeys.Inactive,
             StatusKeys.Nullified,
             StatusKeys.Obsolete,
-            StatusKeys.Deleted
+            StatusKeys.Purged
         };
     }
 }

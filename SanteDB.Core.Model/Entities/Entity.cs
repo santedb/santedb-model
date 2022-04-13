@@ -462,7 +462,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Remove tags matching <paramref name="predicate"/> from the tag collection
         /// </summary>
-        public void RemoveAllTags(Predicate<ITag> predicate) => this.Tags.RemoveAll(predicate);
+        public void RemoveAllTags(Predicate<ITag> predicate) => this.Tags?.RemoveAll(predicate);
 
         /// <summary>
         /// Try to fetch the tag
