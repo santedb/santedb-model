@@ -201,7 +201,7 @@ namespace SanteDB.Core.Model.Security
         /// Gets or sets the user class key
         /// </summary>
         [XmlElement("userClass"), JsonProperty("userClass")]
-        [Binding(typeof(UserClassKeys))]
+        [Binding(typeof(ActorTypeKeys))]
         public Guid UserClass { get; set; }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace SanteDB.Core.Model.Constants
     /// <summary>
     /// Represents user classification keys
     /// </summary>
-    public static class UserClassKeys
+    public static class ActorTypeKeys
     {
         /// <summary>
         /// Represents a user which is an application
@@ -41,5 +41,11 @@ namespace SanteDB.Core.Model.Constants
         /// Represents a user which is a system user
         /// </summary>
         public static readonly Guid SystemUser = Guid.Parse("9F71BB34-9691-440F-8249-9C831EA16D58");
+
+        /// <summary>
+        /// Is a device user
+        /// </summary>
+        public static readonly Guid DeviceUser = Guid.Parse("5D584BEC-7CFE-4D24-A6D7-EFAF7F315C1F");
+
     }
 }
