@@ -129,7 +129,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the observed quantity
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
-        public Decimal Value { get; set; }
+        public Decimal? Value { get; set; }
 
         /// <summary>
         /// Value type
@@ -188,7 +188,7 @@ namespace SanteDB.Core.Model.Acts
         {
             get
             {
-                return "ED";
+                return "ST";
             }
             set { }
         }
