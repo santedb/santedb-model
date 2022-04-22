@@ -30,7 +30,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Represents a user which is an application
         /// </summary>
-        public static readonly Guid ApplicationUser = Guid.Parse("E9CD4DAD-2759-4022-AB07-92FCFB236A98");
+        public static readonly Guid Application = Guid.Parse("E9CD4DAD-2759-4022-AB07-92FCFB236A98");
 
         /// <summary>
         /// Represents a user which is a human
@@ -40,12 +40,12 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// Represents a user which is a system user
         /// </summary>
-        public static readonly Guid SystemUser = Guid.Parse("9F71BB34-9691-440F-8249-9C831EA16D58");
+        public static readonly Guid System = Guid.Parse("9F71BB34-9691-440F-8249-9C831EA16D58");
 
         /// <summary>
         /// Is a device user
         /// </summary>
-        public static readonly Guid DeviceUser = Guid.Parse("5D584BEC-7CFE-4D24-A6D7-EFAF7F315C1F");
+        public static readonly Guid Device = Guid.Parse("5D584BEC-7CFE-4D24-A6D7-EFAF7F315C1F");
 
     }
 }

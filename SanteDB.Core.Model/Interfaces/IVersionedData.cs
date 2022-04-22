@@ -42,5 +42,10 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets the previous version's key
         /// </summary>
         Guid? PreviousVersionKey { get; set; }
+
+        /// <summary>
+        /// True if this version is the HEAD version
+        /// </summary>
+        bool IsHeadVersion { get; set;  }
     }
 }

@@ -19,6 +19,7 @@
  * Date: 2021-8-27
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using System;
@@ -63,6 +64,12 @@ namespace SanteDB.Core.Model
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("previousVersion"), JsonProperty("previousVersion")]
         public virtual Guid? PreviousVersionKey { get; set; }
+
+        /// <summary>
+        /// True if the object is the head version
+        /// </summary>
+        [XmlElement("_head"), JsonProperty("$head"), QueryParameter("head")]
+        public bool IsHeadVersion { get; set; }
 
         /// <summary>
         /// Should serialize previous version?

@@ -186,5 +186,15 @@ namespace SanteDB.Core.Model.Constants
         /// Currency codes
         /// </summary>
         public static readonly Guid Currencies = Guid.Parse("B6BC75AD-ADF4-4101-B4A1-E9AEA74AB257");
+
+        /// <summary>
+        /// Body site or system 
+        /// </summary>
+        public static readonly Guid BodySiteOrSystem = Guid.Parse("9BC75B1C-FF3F-41DC-A908-68763BD355DA");
+
+        /// <summary>
+        /// Procedure techniques
+        /// </summary>
+        public static readonly Guid ProcedureTechnique = Guid.Parse("581511D1-1B8D-42A2-A08E-746F5365803E");
     }
 }
