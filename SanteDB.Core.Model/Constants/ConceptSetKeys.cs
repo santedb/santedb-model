@@ -48,6 +48,11 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid ActRelationshipType = Guid.Parse("CF686A21-86E5-41E7-AF07-0016A054227A");
 
         /// <summary>
+        /// Participations of entities in acts
+        /// </summary>
+        public static readonly Guid ActParticipationType = Guid.Parse("592431F5-BBBD-44D6-9C63-5A80A410C738");
+
+        /// <summary>
         /// Represents codes which are used to dictate the status of an act
         /// </summary>
         public static readonly Guid ActStatus = Guid.Parse("93A48F6A-6808-4C70-83A2-D02178C2A883");
