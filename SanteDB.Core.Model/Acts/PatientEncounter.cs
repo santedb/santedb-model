@@ -23,6 +23,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -60,11 +61,32 @@ namespace SanteDB.Core.Model.Acts
         public Guid? DischargeDispositionKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the admission source type
+        /// </summary>
+        [XmlElement("admissionSource"), JsonProperty("admissionSource")]
+        public Guid? AdmissionSourceTypeKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the discharge disposition (how the patient left the encounter
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(DischargeDispositionKey))]
         public Concept DischargeDisposition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the code indicating the type of place which was responsible for care prior to admission
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(AdmissionSourceTypeKey))]
+        public Concept AdmissionSourceType { get; set; }
+
+        /// <summary>
+        /// A list of special arrangements which are to be made to the patient during the encounter
+        /// </summary>
+        /// <remarks>These are special arrangements which should be made for this encounter. These can be 
+        /// special considerations (VIP, private room, etc.) or other codes indicating care for the patient (seeing eye dog, attendant, interpreter, etc.)</remarks>
+        [XmlElement("specialArrangement"), JsonProperty("specialArrangement")]
+        public List<PatientEncounterArrangement> SpecialArrangements { get; set; }
 
         /// <summary>
         /// Semantic equality function

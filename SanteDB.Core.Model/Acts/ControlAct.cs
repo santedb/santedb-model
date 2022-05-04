@@ -29,6 +29,11 @@ namespace SanteDB.Core.Model.Acts
     /// <summary>
     /// Represents an act which indicates why data was created/changed
     /// </summary>
+    /// <remarks>
+    /// Control acts are typically container acts which are used to illustrate an event which occurs on the system to 
+    /// change state, create data, or update it. The use of control acts in SanteDB are not required however may be 
+    /// useful in contexts where event metadata is collected (similar to the EVN segment in HL7v2).
+    /// </remarks>
     [XmlType(nameof(ControlAct), Namespace = "http://santedb.org/model"), JsonObject("ControlAct")]
     [ClassConceptKey(ActClassKeyStrings.ControlAct)]
     public class ControlAct : Act
@@ -45,6 +50,5 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the class concept key
         /// </summary>
         protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.ControlAct;
-
     }
 }

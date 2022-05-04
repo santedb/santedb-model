@@ -605,7 +605,10 @@ namespace SanteDB.Core.Model
                     oldValue != null &&
                     oldValue != defaultValue &&
                     !default(bool).Equals(oldValue) &&
-                    !default(int).Equals(oldValue))
+                    !default(int).Equals(oldValue) &&
+                    !default(DateTime).Equals(oldValue) &&
+                    !default(decimal).Equals(oldValue) &&
+                    !default(double).Equals(oldValue))
                 {
                     continue;
                 }
