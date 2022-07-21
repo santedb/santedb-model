@@ -13,6 +13,9 @@ namespace SanteDB.Core.Model.Constants
         /// Unit of measure is MMHG (for blood pressure)
         /// </summary>
         public static readonly Guid MillimetersOfMercury = Guid.Parse("BB1D639D-AEA8-4750-A24C-B2548D2B6FE4");
+        /// <summary>
+        /// Millimeters of Mercury
+        /// </summary>
         public static readonly Guid MmHg = MillimetersOfMercury;
         /// <summary>
         /// Unit of measure is a /min

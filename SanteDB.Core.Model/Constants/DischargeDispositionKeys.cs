@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SanteDB.Core.Model.Constants
 {
+    /// <summary>
+    /// Dispositions where a patient is discharged from an encounter/visit
+    /// </summary>
     public static class DischargeDispositionKeys
     {
 
