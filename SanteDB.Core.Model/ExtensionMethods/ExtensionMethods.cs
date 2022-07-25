@@ -236,10 +236,18 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Convert a hex string to byte array
         /// </summary>
-        public static String ToHexString(this byte[] array)
+        public static String HexEncode(this byte[] array)
         {
             return BitConverter.ToString(array).Replace("-", "");
         }
+
+        /// <summary>
+        /// Decode <paramref name="encodedData"/> to a byte array
+        /// </summary>
+        public static byte[] HexDecode(this string encodedData) => Enumerable.Range(0, encodedData.Length)
+                                    .Where(x => x % 2 == 0)
+                                    .Select(x => System.Convert.ToByte(encodedData.Substring(x, 2), 16))
+                                    .ToArray();
 
         /// <summary>
         /// Get postal code

@@ -38,9 +38,6 @@ namespace SanteDB.Core.Model.Subscription
         // XmlSerializer
         private static XmlSerializer m_xsz = XmlModelSerializerFactory.Current.CreateSerializer(typeof(SubscriptionDefinition));
 
-        // True if server definitions should be included
-        private bool m_includeServerDefs = true;
-
         /// <summary>
         /// Gets or sets the uuid
         /// </summary>
@@ -86,18 +83,13 @@ namespace SanteDB.Core.Model.Subscription
         public List<SubscriptionServerDefinition> ServerDefinitions { get; set; }
 
         /// <summary>
-        /// Should serialize
-        /// </summary>
-        public bool ShouldSerializeServerDefinitions() => this.m_includeServerDefs;
-
-        /// <summary>
         /// Gets or sets the client side definitions
         /// </summary>
         [XmlArray("client"), XmlArrayItem("definition"), JsonProperty("definitions")]
         public List<SubscriptionClientDefinition> ClientDefinitions { get; set; }
 
         /// <summary>
-        /// Load the specified subscription definition 
+        /// Load the specified subscription definition  
         /// </summary>
         public static SubscriptionDefinition Load(MemoryStream ms)
         {
