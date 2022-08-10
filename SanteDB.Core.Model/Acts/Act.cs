@@ -684,7 +684,7 @@ namespace SanteDB.Core.Model.Acts
         /// Should serialize policies
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializePolicies() => this.Policies.Count > 0;
+        public bool ShouldSerializePolicies() => !this.Policies.IsNullOrEmpty();
 
         /// <summary>
         /// Gets the tags
@@ -776,7 +776,7 @@ namespace SanteDB.Core.Model.Acts
         public ITag AddTag(String tagKey, String tagValue)
         {
             var tag = new ActTag(tagKey, tagValue);
-            this.Tags.Add(tag);
+            this.LoadProperty(o=>o.Tags).Add(tag);
             return tag;
         }
 

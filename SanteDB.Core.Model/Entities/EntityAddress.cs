@@ -108,7 +108,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public string GetComponent(Guid key)
         {
-            var comps = this.LoadCollection<EntityAddressComponent>("Component");
+            var comps = this.LoadProperty(o=>o.Component);
             return comps.FirstOrDefault(o => o.ComponentTypeKey == key)?.Value;
         }
 
@@ -119,7 +119,7 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public override bool IsEmpty()
         {
-            return this.Component.Count == 0 || this.Component?.All(c => c.IsEmpty()) == true;
+            return this.Component.IsNullOrEmpty() || this.Component?.All(c => c.IsEmpty()) == true;
         }
 
         /// <summary>

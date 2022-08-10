@@ -362,24 +362,7 @@ namespace SanteDB.Core.Model.Entities
             }
         }
 
-        /// <summary>
-        /// Copies the entity
-        /// </summary>
-        /// <returns></returns>
-        public virtual IdentifiedData Copy()
-        {
-            var retVal = base.Clone() as Entity;
-            retVal.Relationships = new List<EntityRelationship>(this.Relationships.ToArray());
-            retVal.Identifiers = new List<EntityIdentifier>(this.Identifiers.ToArray());
-            retVal.Names = new List<EntityName>(this.Names.ToArray());
-            retVal.Notes = new List<EntityNote>(this.Notes.ToArray());
-            retVal.Participations = new List<ActParticipation>(this.Participations.ToArray());
-            retVal.Addresses = new List<EntityAddress>(this.Addresses.ToArray());
-            retVal.Tags = new List<EntityTag>(this.Tags.ToArray());
-            retVal.Extensions = new List<EntityExtension>(this.Extensions.ToArray());
-            return retVal;
-        }
-
+       
         /// <summary>
         /// Should serialize template key
         /// </summary>

@@ -87,6 +87,11 @@ namespace SanteDB.Core.Model
         private static ConcurrentDictionary<Assembly, Type[]> m_types = new ConcurrentDictionary<Assembly, Type[]>();
 
         /// <summary>
+        /// Returns true if the <see cref="IList"/> is null or has no elements
+        /// </summary>
+        public static bool IsNullOrEmpty(this IList me) => me == null || me.Count == 0;
+
+        /// <summary>
         /// Get all types
         /// </summary>
         public static IEnumerable<Type> GetAllTypes(this AppDomain me, bool includeObsolete = true)
@@ -401,7 +406,8 @@ namespace SanteDB.Core.Model
             {
                 if (typeof(IList).IsAssignableFrom(propertyToLoad.PropertyType)) // Collection we load by key
                 {
-                    if ((currentValue == null || (currentValue as IList)?.Count == 0))
+                    if ((currentValue == null || currentValue is IList cle && cle.IsNullOrEmpty()) && 
+                        typeof(IdentifiedData).IsAssignableFrom(propertyToLoad.PropertyType.StripGeneric()))
                     {
                         IList loaded = Activator.CreateInstance(propertyToLoad.PropertyType) as IList;
                         if (me.Key.HasValue)

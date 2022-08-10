@@ -106,7 +106,7 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public override bool IsEmpty()
         {
-            return this.Component.Count == 0 || this.Component?.All(c=>c.IsEmpty()) == true;
+            return this.Component.IsNullOrEmpty() || this.Component?.All(c=>c.IsEmpty()) == true;
         }
 
         /// <summary>
@@ -135,8 +135,14 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public override string ToString()
         {
-            if (this.Component.Count == 1)
+            if (this.LoadProperty(o=>o.Component).IsNullOrEmpty())
+            {
+                return "";
+            }
+            else if (this.Component.Count == 1)
+            {
                 return this.Component[0].Value;
+            }
             else
             {
                 return $"{this.Component.Find(o => o.ComponentTypeKey == NameComponentKeys.Given)?.Value} {this.Component.Find(o => o.ComponentTypeKey == NameComponentKeys.Family)?.Value}";
