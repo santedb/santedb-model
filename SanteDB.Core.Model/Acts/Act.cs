@@ -775,8 +775,17 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
         {
-            var tag = new ActTag(tagKey, tagValue);
-            this.LoadProperty(o=>o.Tags).Add(tag);
+            var tag = this.LoadProperty(o => o.Tags)?.FirstOrDefault(o => o.TagKey == tagKey);
+            this.Tags = this.Tags ?? new List<ActTag>();
+            if (tag == null)
+            {
+                tag = new ActTag(tagKey, tagValue);
+                this.Tags.Add(tag);
+            }
+            else
+            {
+                tag.Value = tagValue;
+            }
             return tag;
         }
 

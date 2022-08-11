@@ -385,7 +385,8 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
         {
-            var tag = this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey);
+            var tag = this.LoadProperty(o => o.Tags)?.FirstOrDefault(o => o.TagKey == tagKey);
+            this.Tags = this.Tags ?? new List<EntityTag>();
             if (tag == null)
             {
                 tag = new EntityTag(tagKey, tagValue);
