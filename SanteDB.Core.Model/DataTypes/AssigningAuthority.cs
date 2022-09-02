@@ -20,142 +20,26 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
 {
     /// <summary>
-    /// Represents a model class which is an assigning authority
+    /// Indicates the reliability of an application to assign identifiers in a particular identity domain
     /// </summary>
-    /// TODO: Refactor for V3 -> Identity Domain
-    [Classifier(nameof(DomainName)), KeyLookup(nameof(DomainName))]
-    [XmlType(nameof(AssigningAuthority), Namespace = "http://santedb.org/model"), JsonObject("AssigningAuthority")]
+    [XmlType(nameof(AssigningAuthority), Namespace = "http://santedb.org/model"), JsonObject(nameof(AssigningAuthority))]
     [XmlRoot(nameof(AssigningAuthority), Namespace = "http://santedb.org/model")]
-    public class AssigningAuthority : NonVersionedEntityData
+    public class AssigningAuthority : BaseEntityData, ISimpleAssociation
     {
-        private bool m_minimal = false;
-
-        // private validator
-        private IIdentifierValidator m_validator;
 
         /// <summary>
-        /// Assigning authority
-        /// </summary>
-        public AssigningAuthority()
-        {
-        }
-
-        /// <summary>
-        /// Creates a new assigning authority
-        /// </summary>
-        public AssigningAuthority(String domainName, String name, String oid)
-        {
-            this.DomainName = domainName;
-            this.Name = name;
-            this.Oid = oid;
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the assigning authority
-        /// </summary>
-        [XmlElement("name"), JsonProperty("name")]
-        public String Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the domain name of the assigning authority
-        /// </summary>
-        [XmlElement("domainName"), JsonProperty("domainName")]
-        public String DomainName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the description of the assigning authority
-        /// </summary>
-        [XmlElement("description"), JsonProperty("description")]
-        public String Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the oid of the assigning authority
-        /// </summary>
-        [XmlElement("oid"), JsonProperty("oid")]
-        public String Oid { get; set; }
-
-        /// <summary>
-        /// The URL of the assigning authority
-        /// </summary>
-        [XmlElement("url"), JsonProperty("url")]
-        public String Url { get; set; }
-
-        /// <summary>
-        /// Represents scopes to which the authority is bound
-        /// </summary>
-        [JsonProperty("scope"), XmlElement("scope")]
-        public List<Guid> AuthorityScopeXml
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Assigning device identifier
+        /// Gets or sets the application which can assign identity
         /// </summary>
         [XmlElement("assigningApplication"), JsonProperty("assigningApplication")]
         public Guid? AssigningApplicationKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the policy
-        /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(PolicyKey))]
-        public SecurityPolicy Policy { get; set; }
-
-        /// <summary>
-        /// Gets or sets the policy key associated with this assigning authority for disclosure
-        /// </summary>
-        [XmlElement("policy"), JsonProperty("policy")]
-        public Guid? PolicyKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the validation regex
-        /// </summary>
-        [XmlElement("validation"), JsonProperty("validation")]
-        public String ValidationRegex { get; set; }
-
-        /// <summary>
-        /// True if the assigning authority values should be unique
-        /// </summary>
-        [XmlElement("isUnique"), JsonProperty("isUnique")]
-        public bool IsUnique { get; set; }
-
-        /// <summary>
-        /// Gets or sets the IIdentifierValidator instance to use for this solution
-        /// </summary>
-        [XmlElement("customValidator"), JsonProperty("customValidator")]
-        public string CustomValidator { get; set; }
-
-        /// <summary>
-        /// Gets the custom validator
-        /// </summary>
-        /// <returns>The validator</returns>
-        public IIdentifierValidator GetCustomValidator()
-        {
-            if (this.m_validator == null && !String.IsNullOrEmpty(this.CustomValidator))
-            {
-                var t = System.Type.GetType(this.CustomValidator);
-                if (t == null) throw new InvalidOperationException($"Validator {this.CustomValidator} is not valid");
-                this.m_validator = Activator.CreateInstance(t) as IIdentifierValidator;
-            }
-            return this.m_validator;
-        }
-
-        /// <summary>
-        /// Should serialize IsUnique
-        /// </summary>
-        public bool ShouldSerializeIsUnique() => this.IsUnique;
 
         /// <summary>
         /// Gets or sets the assigning device
@@ -164,63 +48,35 @@ namespace SanteDB.Core.Model.DataTypes
         public SecurityApplication AssigningApplication { get; set; }
 
         /// <summary>
-        /// Gets concept sets to which this concept is a member
+        /// Gets or sets the reliability of identifiers assigned by this application
         /// </summary>
-        [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(AuthorityScopeXml))]
-        public List<Concept> AuthorityScope
+        [XmlElement("reliability"), JsonProperty("reliability")]
+        public IdentifierReliability Reliability { get; set; }
+
+
+        /// <summary>
+        /// Gets the source entity key
+        /// </summary>
+        [XmlElement("source"), JsonProperty("source")]
+        public Guid? SourceEntityKey
         {
-            get
-            {
-                return this.AuthorityScopeXml?.Select(o => EntitySource.Current.Get<Concept>(o)).ToList();
-            }
-            set
-            {
-                this.AuthorityScopeXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
-            }
+            get; set;
         }
 
         /// <summary>
-        /// Represent the AA as a minimal info
+        /// Gets or sets the source entity
         /// </summary>
-        public AssigningAuthority ToMinimal()
-        {
-            return new AssigningAuthority()
-            {
-                Key = this.Key,
-                DomainName = this.DomainName,
-                Name = this.Name,
-                Oid = this.Oid,
-                m_minimal = true
-            };
-        }
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(SourceEntityKey))]
+        public IdentityDomain SourceEntity { get; set; }
 
         /// <summary>
-        /// Returns whether <paramref name="obj"/> has the same meaning as this object
+        /// Source type of authority
         /// </summary>
-        public override bool SemanticEquals(object obj)
-        {
-            var other = obj as AssigningAuthority;
-            if (other == null) return false;
-            return other.DomainName == this.DomainName ||
-                this.Oid == other.Oid ||
-                this.Url == other.Url ||
-                this.AssigningApplicationKey == other.AssigningApplicationKey;
-        }
-
-#pragma warning disable CS1591
-        public bool ShouldSerializeAuthorityScopeXml() => !this.m_minimal;
-        public bool ShouldSerializeUrl() => !this.m_minimal;
-        public bool ShouldSerializeOid() => !this.m_minimal;
-        public bool ShouldSerializeValidationRegex() => !this.m_minimal;
-        public bool ShouldSerializeAssigningDeviceKey() => !this.m_minimal && this.AssigningApplicationKey.HasValue;
-#pragma warning restore CS1591
+        public Type SourceType => typeof(IdentityDomain);
 
         /// <summary>
-        /// Represent this as a string
+        /// Source entity
         /// </summary>
-        public override string ToString()
-        {
-            return $"{this.DomainName},{this.Oid}";
-        }
+        object ISimpleAssociation.SourceEntity { get => null; set { } }
     }
 }

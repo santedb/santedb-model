@@ -32,7 +32,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets the assigning authority
         /// </summary>
-        AssigningAuthority Authority { get; }
+        IdentityDomain Authority { get; }
 
         /// <summary>
         /// Get the authority key

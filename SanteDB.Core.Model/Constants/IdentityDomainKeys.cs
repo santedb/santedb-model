@@ -25,7 +25,7 @@ namespace SanteDB.Core.Model.Constants
     /// <summary>
     /// Represents built in assigning authorities
     /// </summary>
-    public static class AssigningAuthorityKeys
+    public static class IdentityDomainKeys
     {
 
         /// <summary>

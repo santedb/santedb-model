@@ -113,7 +113,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets or sets the user that created this base data
         /// </summary>
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(CreatedByKey)), SerializationMetadata]
         public virtual SecurityProvenance CreatedBy { get; set; }
 
         /// <summary>

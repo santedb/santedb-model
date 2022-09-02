@@ -60,6 +60,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(DeviceEntity))]
     [XmlInclude(typeof(Entity))]
     [XmlInclude(typeof(Patient))]
+    [XmlInclude(typeof(AssigningAuthority))]
     [XmlInclude(typeof(ControlAct))]
     [XmlInclude(typeof(Account))]
     [XmlInclude(typeof(InvoiceElement))]

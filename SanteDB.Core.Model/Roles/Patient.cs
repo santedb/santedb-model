@@ -220,5 +220,6 @@ namespace SanteDB.Core.Model.Roles
                 this.DeceasedDate == other.DeceasedDate &&
                 this.DeceasedDatePrecision == other.DeceasedDatePrecision;
         }
+
     }
 }

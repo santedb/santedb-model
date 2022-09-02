@@ -41,19 +41,19 @@ namespace SanteDB.Core.Model.DataTypes
         /// Unspecified
         /// </summary>
         [XmlEnum("u")]
-        Unspecified,
+        Unspecified = 0,
 
         /// <summary>
         /// Authoritative
         /// </summary>
         [XmlEnum("a")]
-        Authoritative,
+        Authoritative = 1,
 
         /// <summary>
         /// Informative
         /// </summary>
         [XmlEnum("i")]
-        Informative
+        Informative = 2
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Creates a new entity identifier
         /// </summary>
-        public EntityIdentifier(AssigningAuthority authority, String value)
+        public EntityIdentifier(IdentityDomain authority, String value)
         {
             this.Authority = authority;
             this.AuthorityKey = authority?.Key;
@@ -116,7 +116,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Creates a new entity identifier
         /// </summary>
-        public ActIdentifier(AssigningAuthority authority, String value)
+        public ActIdentifier(IdentityDomain authority, String value)
         {
             this.Authority = authority;
             this.Value = value;
@@ -230,7 +230,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(AuthorityKey))]
-        public AssigningAuthority Authority { get; set; }
+        public IdentityDomain Authority { get; set; }
 
         /// <summary>
         /// Gets or sets the reliability of the identifier
@@ -241,7 +241,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents the authority information
         /// </summary>
-        AssigningAuthority IExternalIdentifier.Authority => this.LoadProperty(o => o.Authority);
+        IdentityDomain IExternalIdentifier.Authority => this.LoadProperty(o => o.Authority);
 
         /// <summary>
         /// True if the identifier is empty

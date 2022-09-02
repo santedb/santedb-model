@@ -164,6 +164,7 @@ namespace SanteDB.Core.Model.Export
         [XmlElement("ConceptSet", typeof(ConceptSet), Namespace = "http://santedb.org/model")]
         [XmlElement("ConceptRelationship", typeof(ConceptRelationship), Namespace = "http://santedb.org/model")]
         [XmlElement("AssigningAuthority", typeof(AssigningAuthority), Namespace = "http://santedb.org/model")]
+        [XmlElement("IdentityDomain", typeof(IdentityDomain), Namespace = "http://santedb.org/model")]
         [XmlElement("ConceptClass", typeof(ConceptClass), Namespace = "http://santedb.org/model")]
         [XmlElement("SecurityPolicy", typeof(SecurityPolicy), Namespace = "http://santedb.org/model")]
         [XmlElement("SecurityRole", typeof(SecurityRole), Namespace = "http://santedb.org/model")]
