@@ -81,7 +81,7 @@ namespace SanteDB.Core.Model.Query
             // Is the <TDestination> compatible with <TReturn>
             if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
             {
-                var convertedExpression = new ExpressionReturnVisitor<TDestination, TSource, TReturn>(selector).Convert();
+                var convertedExpression = new ExpressionReturnRewriter<TDestination, TSource, TReturn>(selector).Convert();
                 foreach (var itm in this.m_sourceResultSet.Select(convertedExpression)) // pass through
                 {
                     yield return itm;
@@ -218,7 +218,7 @@ namespace SanteDB.Core.Model.Query
             // Is the <TDestination> compatible with <TReturn>
             if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
             {
-                var convertedExpression = new ExpressionReturnVisitor<TDestination, TSource, bool>(query).Convert();
+                var convertedExpression = new ExpressionReturnRewriter<TDestination, TSource, bool>(query).Convert();
                 return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.Where(convertedExpression), this.m_transform);
             }
             else
@@ -237,7 +237,7 @@ namespace SanteDB.Core.Model.Query
             // Is the <TDestination> compatible with <TReturn>
             if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
             {
-                var convertedExpression = new ExpressionReturnVisitor<TDestination, TSource, bool>(query).Convert();
+                var convertedExpression = new ExpressionReturnRewriter<TDestination, TSource, bool>(query).Convert();
                 return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.Intersect(convertedExpression), this.m_transform);
             }
             else
@@ -254,7 +254,7 @@ namespace SanteDB.Core.Model.Query
             // Is the <TDestination> compatible with <TReturn>
             if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
             {
-                var convertedExpression = new ExpressionReturnVisitor<TDestination, TSource, bool>(query).Convert();
+                var convertedExpression = new ExpressionReturnRewriter<TDestination, TSource, bool>(query).Convert();
                 return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.Union(convertedExpression), this.m_transform);
             }
             else

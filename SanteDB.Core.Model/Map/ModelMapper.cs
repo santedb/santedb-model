@@ -358,15 +358,13 @@ namespace SanteDB.Core.Model.Map
         }
 
         /// <summary>
-        /// Convert the specified lambda expression from model into query
+        /// Automap the model expression using the configured mapper type
         /// </summary>
-        /// <param name="expression">The expression to be converted</param>
-        /// <param name="throwOnError">When true, throw an exception of the expression can't be converted, otherwise return null when expression cannot be parsed</param>
-        public Expression<Func<TTo, TReturn>> MapModelExpression<TFrom, TTo, TReturn>(Expression<Func<TFrom, TReturn>> expression, bool throwOnError = true)
+        public LambdaExpression MapModelExpression<TFrom, TReturn>(Expression<Func<TFrom, TReturn>> expression, Type toType, bool throwOnError = true)
         {
             try
             {
-                var parameter = Expression.Parameter(typeof(TTo), expression.Parameters[0].Name);
+                var parameter = Expression.Parameter(toType, expression.Parameters[0].Name);
 
                 Expression expr = new ModelExpressionVisitor(this, parameter).Visit(expression.Body);
                 if (expr == null && throwOnError)
@@ -377,7 +375,7 @@ namespace SanteDB.Core.Model.Map
                 {
                     if (typeof(TReturn) != expr.Type)
                         expr = Expression.Convert(expr, typeof(TReturn));
-                    var retVal = Expression.Lambda<Func<TTo, TReturn>>(expr, parameter);
+                    var retVal = Expression.Lambda(expr, parameter);
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Map Expression: {0} > {1}", expression, retVal);
 #endif
@@ -399,6 +397,13 @@ namespace SanteDB.Core.Model.Map
                 }
             }
         }
+
+        /// <summary>
+        /// Convert the specified lambda expression from model into query
+        /// </summary>
+        /// <param name="expression">The expression to be converted</param>
+        /// <param name="throwOnError">When true, throw an exception of the expression can't be converted, otherwise return null when expression cannot be parsed</param>
+        public Expression<Func<TTo, TReturn>> MapModelExpression<TFrom, TTo, TReturn>(Expression<Func<TFrom, TReturn>> expression, bool throwOnError = true) => (Expression<Func<TTo, TReturn>>)this.MapModelExpression(expression, typeof(TTo), throwOnError);
 
         /// <summary>
         /// Map model instance
