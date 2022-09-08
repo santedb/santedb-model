@@ -7,6 +7,7 @@ namespace SanteDB.Core.Model.Constants
     /// <summary>
     /// Relgion concept keys for default religions registered with the default SanteDB instance
     /// </summary>
+#pragma warning disable CS1591
     public static class ReligionKeys
     {
         public static readonly Guid ChristianAmericanBaptistChurch = Guid.Parse("494572CE-58A2-4376-8A7C-51DA073CB8C6");
@@ -94,4 +95,5 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid ChristianWesleyan = Guid.Parse("F30F1461-7631-4297-8977-E7C48C72F665");
         public static readonly Guid ChristianWesleyanMethodist = Guid.Parse("601E4BED-1DCC-4B5B-AAED-CD2BE33C024D");
     }
+#pragma warning restore
 }

@@ -7,6 +7,7 @@ namespace SanteDB.Core.Model.Constants
     /// <summary>
     /// Country concepts which are used for nationalities 
     /// </summary>
+#pragma warning disable CS1591
     public static class NationalityKeys
     {
         public static readonly Guid Andorra = Guid.Parse("9193FCD0-6983-11EC-90D6-0242AC120003");
@@ -255,4 +256,5 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid Zimbabwe = Guid.Parse("9195BA3E-6983-11EC-90D6-0242AC120003");
 
     }
+#pragma warning restore
 }
