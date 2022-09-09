@@ -20,6 +20,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -58,7 +59,7 @@ namespace SanteDB.Core.Model.Query
         public static IQueryResultSet ApplyResultInstructions(this IQueryResultSet me, NameValueCollection query, out int offset, out int totalCount)
         {
             // Next sort
-            if (query.TryGetValue("_orderBy", out List<String> queryList) && me is IOrderableQueryResultSet orderable)
+            if (query.TryGetValue("_orderBy", out var queryList) && me is IOrderableQueryResultSet orderable)
             {
                 foreach (var itm in queryList)
                 {

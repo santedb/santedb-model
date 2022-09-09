@@ -19,6 +19,7 @@
  * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Entities;
@@ -37,7 +38,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Model
+namespace SanteDB
 {
     /// <summary>
     /// Reflection tools

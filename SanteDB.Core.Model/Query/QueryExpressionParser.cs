@@ -24,6 +24,7 @@ using SanteDB.Core.Model.Map;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -98,8 +99,8 @@ namespace SanteDB.Core.Model.Query
             Expression retVal = null;
             List<KeyValuePair<String, String[]>> workingValues = new List<KeyValuePair<string, string[]>>();
             // Iterate 
-            foreach (var nvc in httpQueryParameters.Where(p => !p.Key.StartsWith("_")).Distinct())
-                workingValues.Add(new KeyValuePair<string, string[]>(nvc.Key, nvc.Value?.ToArray()));
+            foreach (var nvc in httpQueryParameters.AllKeys.Where(p => !p.StartsWith("_")))
+                workingValues.Add(new KeyValuePair<string, string[]>(nvc, httpQueryParameters.GetValues(nvc)));
 
             // Get the first values
             while (workingValues.Count > 0)
@@ -387,16 +388,20 @@ namespace SanteDB.Core.Model.Query
 
                             // Default to id
                             if (currentValue.Key.Length + 1 > path.Length)
-                                subFilter.Add(currentValue.Key.Substring(path.Length), new List<String>(currentValue.Value));
+                            {
+                                var keyName = currentValue.Key.Substring(path.Length);
+                                Array.ForEach(currentValue.Value, o => subFilter.Add(keyName, o));
+                            }
                             else if (currentValue.Value.All(o => Guid.TryParse(o, out Guid _)))
-                                subFilter.Add("id", new List<String>(currentValue.Value));
+                                Array.ForEach(currentValue.Value, o => subFilter.Add("id", o));
                             else if (currentValue.Key.Length == path.Length - 1) // just the same property so is simple
-                                subFilter.Add("", new List<String>(currentValue.Value));
+                                Array.ForEach(currentValue.Value, o => subFilter.Add(String.Empty, o));
 
                             // Add collect other parameters
                             foreach (var wv in workingValues.Where(o => o.Key.StartsWith(path)).ToList())
                             {
-                                subFilter.Add(wv.Key.Substring(path.Length), new List<String>(wv.Value));
+                                var keyName = wv.Key.Substring(path.Length);
+                                Array.ForEach(wv.Value, o => subFilter.Add(keyName, o));
                                 workingValues.Remove(wv);
                             }
 
@@ -715,7 +720,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(String filter)
         {
-            return BuildLinqExpression<TModelType>(NameValueCollection.ParseQueryString(filter), null);
+            return BuildLinqExpression<TModelType>(filter.ParseQueryString(), null);
         }
         /// <summary>
         /// Build a LINQ expression
@@ -835,8 +840,7 @@ namespace SanteDB.Core.Model.Query
         public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false)
         {
             var nvc = new NameValueCollection();
-            nvc.Add(propertyName, "null");
-            nvc[propertyName] = null;
+            nvc.Add(propertyName, null);
             return BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad,false);
         }
     }

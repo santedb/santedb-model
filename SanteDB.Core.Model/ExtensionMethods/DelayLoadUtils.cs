@@ -26,7 +26,7 @@ using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
 
-namespace SanteDB.Core.Model
+namespace SanteDB
 {
     /// <summary>
     /// Delay load utilities
