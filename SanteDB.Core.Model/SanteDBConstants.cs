@@ -27,7 +27,7 @@ namespace SanteDB.Core.Model
     /// <summary>
     /// Constants
     /// </summary>
-    public static class SanteDBConstants
+    public static class SanteDBModelConstants
     {
         /// <summary>
         /// Alternate keys tag for loading alternate objects from the database

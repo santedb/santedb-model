@@ -393,7 +393,7 @@ namespace SanteDB.Core.Model
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
-            if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBConstants.NoDynamicLoadAnnotation)))
+            if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBModelConstants.NoDynamicLoadAnnotation)))
             {
                 return currentValue;
             }
@@ -412,7 +412,7 @@ namespace SanteDB.Core.Model
                         IList loaded = Activator.CreateInstance(propertyToLoad.PropertyType) as IList;
                         if (me.Key.HasValue)
                         {
-                            if (me is ITaggable taggable && taggable.TryGetTag(SanteDBConstants.AlternateKeysTag, out ITag altKeys))
+                            if (me is ITaggable taggable && taggable.TryGetTag(SanteDBModelConstants.AlternateKeysTag, out ITag altKeys))
                             {
                                 foreach (var itm in EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray()))
                                 {
@@ -976,5 +976,24 @@ namespace SanteDB.Core.Model
             return Nullable.GetUnderlyingType(t) ?? t;
         }
 
+
+        /// <summary>
+        /// Validates that this object has a target entity
+        /// </summary>
+        public static IEnumerable<ValidationResultDetail> Validate<TSourceType>(this VersionedAssociation<TSourceType> me) where TSourceType : VersionedEntityData<TSourceType>, new()
+        {
+            var validResults = new List<ValidationResultDetail>();
+            if (me.SourceEntityKey == Guid.Empty)
+                validResults.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} required", me.GetType().Name, "SourceEntityKey"), null, null));
+            return validResults;
+        }
+
+        /// <summary>
+        /// Validate the state of this object
+        /// </summary>
+        public static IEnumerable<ValidationResultDetail> Validate(this IdentifiedData me)
+        {
+            return new List<ValidationResultDetail>();
+        }
     }
 }
