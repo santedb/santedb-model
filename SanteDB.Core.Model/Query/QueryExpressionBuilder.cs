@@ -22,6 +22,7 @@ using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -432,7 +433,7 @@ namespace SanteDB.Core.Model.Query
                     }
 
                     // Is this an extended method?
-                    if (node.Left is MethodCallExpression mce) 
+                    if (node.Left is MethodCallExpression mce)
                     {
                         if (left != null)
                         {
@@ -532,7 +533,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             return this.ExtractValue(invoke.Arguments[0]);
                         }
-                        else 
+                        else
                         {
                             return invoke.Method.Invoke(this.ExtractValue(invoke.Object), new object[0]);
                         }
@@ -626,7 +627,7 @@ namespace SanteDB.Core.Model.Query
                         String guardString = this.BuildGuardExpression(binaryExpression);
                         return String.Format("{0}[{1}]", path, guardString);
                     }
-                    else if(callExpr.Method.Name == "First" ||
+                    else if (callExpr.Method.Name == "First" ||
                         callExpr.Method.Name == "FirstOrDefault")
                     {
                         String path = this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
@@ -648,7 +649,7 @@ namespace SanteDB.Core.Model.Query
                 }
                 else if (access.NodeType == ExpressionType.Parameter && fromOperand)
                     return "$_";
-                else if(access.NodeType == ExpressionType.Coalesce)
+                else if (access.NodeType == ExpressionType.Coalesce)
                 {
                     BinaryExpression ba = (BinaryExpression)access;
                     return this.ExtractPath(ba.Left, fromUnary, fromOperand) ?? this.ExtractPath(ba.Right, fromUnary, fromOperand);
@@ -694,6 +695,7 @@ namespace SanteDB.Core.Model.Query
             }
         }
 
+
         /// <summary>
         /// Builds the query dictionary .
         /// </summary>
@@ -701,14 +703,19 @@ namespace SanteDB.Core.Model.Query
         /// <param name="model">Model.</param>
         /// <param name="stripNullChecks">True if null checks should not be included in the output</param>
         /// <typeparam name="TModel">The 1st type parameter.</typeparam>
-        public static IEnumerable<KeyValuePair<String, Object>> BuildQuery<TModel>(Expression<Func<TModel, bool>> model, bool stripNullChecks = false)
+        public static NameValueCollection BuildQuery<TModel>(Expression<Func<TModel, bool>> model, bool stripNullChecks = false) => BuildQuery(typeof(TModel), model, stripNullChecks);
+
+        /// <summary>
+        /// Build query non-generic version
+        /// </summary>
+        public static NameValueCollection BuildQuery(Type tmodel, LambdaExpression model, bool stripNullChecks = false)
         {
             List<KeyValuePair<String, Object>> retVal = new List<KeyValuePair<string, Object>>();
-            var visitor = new HttpQueryExpressionVisitor(retVal, typeof(TModel));
+            var visitor = new HttpQueryExpressionVisitor(retVal, tmodel);
             visitor.Visit(model);
             if (stripNullChecks)
                 retVal.RemoveAll(o => retVal.Any(c => c.Key == o.Key && c.Value != o.Value) && o.Value.Equals("!null"));
-            return retVal;
+            return retVal.ToNameValueCollection();
         }
 
         /// <summary>

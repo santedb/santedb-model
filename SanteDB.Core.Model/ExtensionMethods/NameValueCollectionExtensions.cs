@@ -32,7 +32,7 @@ namespace SanteDB
         /// </summary>
         /// <param name="me">The <see cref="NameValueCollection"/> to convert</param>
         /// <returns>The converted dictionary</returns>
-        public static IDictionary<String, String[]> ToDictionary(this NameValueCollection me) => me.AllKeys.ToDictionary(o => o, o => me.GetValues(o));
+        public static IDictionary<String, Object> ToDictionary(this NameValueCollection me) => me.AllKeys.ToDictionary(o => o, o => (object)me.GetValues(o));
 
         /// <summary>
         /// Creates a new name value collection from the kvp array

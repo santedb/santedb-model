@@ -83,11 +83,9 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build expression for specified type
         /// </summary>
-        public static Expression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters)
+        public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters)
         {
-
-            var methodInfo = typeof(QueryExpressionParser).GetGenericMethod(nameof(QueryExpressionParser.BuildLinqExpression), new Type[] { modelType }, new Type[] { typeof(NameValueCollection) });
-            return methodInfo.Invoke(null, new object[] { httpQueryParameters }) as Expression;
+            return BuildLinqExpression(modelType, httpQueryParameters, "o");
         }
 
         /// <summary>
