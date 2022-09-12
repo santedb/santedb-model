@@ -47,7 +47,7 @@ namespace SanteDB.Core.Model.Query
             };
 
             // The dictionary
-            private List<KeyValuePair<String, Object>> m_query;
+            private NameValueCollection m_query;
 
             // Interface hints
             private Dictionary<Type, Type> m_interfaceHints = new Dictionary<Type, Type>();
@@ -57,7 +57,7 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             /// <param name="workingDictionary">The working dictionary.</param>
             /// <param name="modelType">The type of model this visitor is using</param>
-            public HttpQueryExpressionVisitor(List<KeyValuePair<String, Object>> workingDictionary, Type modelType)
+            public HttpQueryExpressionVisitor(NameValueCollection workingDictionary, Type modelType)
             {
                 this.m_query = workingDictionary;
 
@@ -70,18 +70,19 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             private void AddCondition(String key, Object value)
             {
-                var cvalue = this.m_query.FirstOrDefault(o => o.Key == key);
-                if (cvalue.Value == null)
-                    this.m_query.Add(new KeyValuePair<string, object>(key, value));
-                else if (cvalue.Value is IList)
+                if(this.m_query.GetValues(key)?.Contains("value") != true)
                 {
-                    if (!(cvalue.Value as IList).Contains(value))
-                        (cvalue.Value as IList).Add(value);
-                }
-                else
-                {
-                    this.m_query.Remove(cvalue);
-                    this.m_query.Add(new KeyValuePair<String, Object>(key, new List<Object>() { cvalue.Value, value }));
+                    if (value is IList le)
+                    {
+                        foreach (var itm in le)
+                        {
+                            this.m_query.Add(key, itm.ToString());
+                        }
+                    }
+                    else
+                    {
+                        this.m_query.Add(key, value.ToString());
+                    }
                 }
             }
 
@@ -266,15 +267,15 @@ namespace SanteDB.Core.Model.Query
                         {
                             var parmName = this.ExtractPath(node.Arguments[0], false);
                             // Process lambda
-                            var result = new List<KeyValuePair<string, object>>();
+                            var result = new NameValueCollection();
                             var subQueryExpressionVisitor = new HttpQueryExpressionVisitor(result, node.Arguments[0].Type);
                             if (node.Arguments.Count == 2)
                             {
                                 subQueryExpressionVisitor.Visit(node.Arguments[1]);
 
                                 // Result
-                                foreach (var itm in result)
-                                    this.AddCondition(String.Format("{0}.{1}", parmName, itm.Key), negate ? $"!{itm.Value}" : itm.Value);
+                                foreach (var itm in result.AllKeys)
+                                    this.AddCondition(String.Format("{0}.{1}", parmName, itm), result.GetValues(itm).Select( o=> negate ? $"!{o}" : o).ToList());
                                 return null;
                             }
                             else
@@ -710,12 +711,12 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public static NameValueCollection BuildQuery(Type tmodel, LambdaExpression model, bool stripNullChecks = false)
         {
-            List<KeyValuePair<String, Object>> retVal = new List<KeyValuePair<string, Object>>();
+            var retVal = new NameValueCollection();
             var visitor = new HttpQueryExpressionVisitor(retVal, tmodel);
             visitor.Visit(model);
             if (stripNullChecks)
-                retVal.RemoveAll(o => retVal.Any(c => c.Key == o.Key && c.Value != o.Value) && o.Value.Equals("!null"));
-            return retVal.ToNameValueCollection();
+                retVal.ToList().Where(o=>!"!null".Equals(o.Value)).ToNameValueCollection();
+            return retVal;
         }
 
         /// <summary>
@@ -725,7 +726,7 @@ namespace SanteDB.Core.Model.Query
         /// <param name="model">Model.</param>
         public static String BuildPropertySelector(LambdaExpression model)
         {
-            var visitor = new HttpQueryExpressionVisitor(new List<KeyValuePair<string, object>>(), model.Parameters[0].Type);
+            var visitor = new HttpQueryExpressionVisitor(new NameValueCollection(), model.Parameters[0].Type);
             return visitor.ExtractPropertySelector(model);
         }
 

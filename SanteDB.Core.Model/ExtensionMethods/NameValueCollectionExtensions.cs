@@ -32,7 +32,38 @@ namespace SanteDB
         /// </summary>
         /// <param name="me">The <see cref="NameValueCollection"/> to convert</param>
         /// <returns>The converted dictionary</returns>
-        public static IDictionary<String, Object> ToDictionary(this NameValueCollection me) => me.AllKeys.ToDictionary(o => o, o => (object)me.GetValues(o));
+        public static IDictionary<String, String[]> ToDictionary(this NameValueCollection me) => me.ToDictionary(o => o, o => o);
+
+        /// <summary>
+        /// Convert the collection of key value pairs into a proper dictionary
+        /// </summary>
+        /// <param name="me">The dictionary to convert</param>
+        /// <returns>The converted dictionary</returns>
+        /// <remarks>In OpenIZ (SanteDB 1.0) there were mixed use of dictionaries, collections and <see cref="NameValueCollection"/> this is a helper method to correct 
+        /// duplicate keys in some of these collections.</remarks>
+        public static IDictionary<String, String[]> ToParameterDictionary(this IEnumerable<KeyValuePair<String, String[]>> me) => me.GroupBy(o => o.Key).ToDictionary(o => o.Key, o => o.SelectMany(v => v.Value).ToArray());
+
+        /// <summary>
+        /// Convert the name value collection to a dictionary
+        /// </summary>
+        /// <param name="me">The <see cref="NameValueCollection"/> to convert</param>
+        /// <param name="keySelector">The transformer for the key</param>
+        /// <param name="valueSelector">The transformer for the value</param>
+        /// <returns>The converted dictionary</returns>
+        public static IDictionary<String, TValue> ToDictionary<TValue>(this NameValueCollection me, Func<String, String> keySelector, Func<String[], TValue> valueSelector) => me.AllKeys.ToDictionary(o => keySelector(o), o => valueSelector(me.GetValues(o)));
+
+
+        /// <summary>
+        /// Creates a new name value collection from the kvp array
+        /// </summary>
+        public static NameValueCollection ToNameValueCollection(this IEnumerable<KeyValuePair<string, string>> kvpa)
+        {
+            var retVal = new NameValueCollection();
+            foreach (var kv in kvpa)
+                retVal.Add(kv.Key, kv.Value?.ToString());
+            return retVal;
+        }
+
 
         /// <summary>
         /// Creates a new name value collection from the kvp array
@@ -41,15 +72,19 @@ namespace SanteDB
         {
             var retVal = new NameValueCollection();
             foreach (var kv in kvpa)
-                if (kv.Value is IList li)
+            {
+                if (kv.Value is IList le)
                 {
-                    foreach (var v in li)
+                    foreach (var val in le)
                     {
-                        retVal.Add(kv.Key, v.ToString());
+                        retVal.Add(kv.Key, val.ToString());
                     }
                 }
                 else
+                {
                     retVal.Add(kv.Key, kv.Value?.ToString());
+                }
+            }
             return retVal;
         }
 
@@ -125,5 +160,24 @@ namespace SanteDB
             queryString.Remove(queryString.Length - 1, 1);
             return queryString.ToString();
         }
+
+        /// <summary>
+        /// Convert query types
+        /// </summary>
+        public static List<KeyValuePair<String, String>> ToList(this System.Collections.Specialized.NameValueCollection nvc)
+        {
+            var retVal = new List<KeyValuePair<String, String>>();
+            foreach (var k in nvc.AllKeys)
+                foreach (var v in nvc.GetValues(k))
+                    retVal.Add(new KeyValuePair<String, String>(k, v));
+            return retVal;
+        }
+
+        /// <summary>
+        /// Convert the name value collection to an array
+        /// </summary>
+        /// <param name="me">The <see cref="NameValueCollection"/> to be converted</param>
+        /// <returns>The converted namevalue collection</returns>
+        public static KeyValuePair<String, String>[] ToArray(this NameValueCollection me) => me.ToList().ToArray();
     }
 }

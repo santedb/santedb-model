@@ -278,7 +278,7 @@ namespace SanteDB.Core.Model
         {
             if(this.m_annotations.TryGetValue(typeof(T), out var values)) 
             {
-                return values.OfType<T>();
+                return values.OfType<T>().ToArray();
             }
             else
             {
