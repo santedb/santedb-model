@@ -101,14 +101,14 @@ namespace SanteDB.Core.Model.Serialization
                 {
                     if (type.GetCustomAttribute<AddDependentSerializersAttribute>() != null && extraTypes.Length == 0)
                     {
-                        extraTypes = AppDomain.CurrentDomain.GetAllTypes(false)
+                        extraTypes = AppDomain.CurrentDomain.GetAllTypes()
                             .Where(t => t.GetCustomAttribute<XmlRootAttribute>() != null && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface)
                             .Union(ModelSerializationBinder.GetRegisteredTypes())
                             .ToArray();
                     }
                     else if (extraTypes.Length == 0)
                     {
-                        extraTypes = AppDomain.CurrentDomain.GetAllTypes(false)
+                        extraTypes = AppDomain.CurrentDomain.GetAllTypes()
                             .Where(t => t.GetCustomAttribute<XmlTypeAttribute>() != null)
                             .Where(t => t.GetConstructor(Type.EmptyTypes) != null && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface && (type.IsAssignableFrom(t) || type.GetProperties().Select(p => p.PropertyType.StripGeneric()).Any(p => !p.IsAbstract && !p.IsInterface && typeof(IdentifiedData).IsAssignableFrom(p) && p.IsAssignableFrom(t))))
                             .ToArray();

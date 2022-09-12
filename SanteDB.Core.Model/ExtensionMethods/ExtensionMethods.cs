@@ -95,7 +95,7 @@ namespace SanteDB
         /// <summary>
         /// Get all types
         /// </summary>
-        public static IEnumerable<Type> GetAllTypes(this AppDomain me, bool includeObsolete = true)
+        public static IEnumerable<Type> GetAllTypes(this AppDomain me)
         {
             // HACK: The weird TRY/CATCH in select many is to prevent mono from throwning a fit
             return me.GetAssemblies()
@@ -106,14 +106,14 @@ namespace SanteDB
                     {
                         if (!m_types.TryGetValue(a, out var typ))
                         {
-                            typ = a.GetTypes();
+                            typ = a.GetTypes().Where(t=>t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
                             m_types.TryAdd(a, typ);
                         }
-                        return includeObsolete ? typ : typ.Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null);
+                        return typ;
                     }
                     catch
                     {
-                        m_skipAsm.Add(a); return new List<Type>();
+                        m_skipAsm.Add(a); return Type.EmptyTypes;
                     }
                 });
         }
