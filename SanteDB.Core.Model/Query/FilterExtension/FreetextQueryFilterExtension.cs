@@ -29,10 +29,16 @@ namespace SanteDB.Core.Model.Query.FilterExtension
     /// </summary>
     public class FreetextQueryFilterExtension : IQueryFilterExtension
     {
+
+        /// <summary>
+        /// The name of this filter extension
+        /// </summary>
+        public const string FilterName = "freetext";
+
         /// <summary>
         /// Get the name of the extendion
         /// </summary>
-        public string Name => "freetext";
+        public string Name => FilterName;
 
         /// <summary>
         /// Get the extension method
