@@ -25,6 +25,7 @@ using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Audit
@@ -128,6 +129,23 @@ namespace SanteDB.Core.Model.Audit
         /// </summary>
         /// <remarks>This is the time that the event occurred</remarks>
         [XmlElement("timestamp"), JsonProperty("timestamp")]
+        public string TimestampXml
+        {
+            get => XmlConvert.ToString(this.Timestamp);
+            set
+            {
+                if(!DateTimeOffset.TryParse(value, out var parsed))
+                {
+                    parsed = XmlConvert.ToDateTimeOffset(value);
+                }
+                this.Timestamp = parsed;
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the timestamp for the object
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
         public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>

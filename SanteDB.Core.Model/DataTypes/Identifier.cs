@@ -19,6 +19,7 @@
  * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Entities;
@@ -74,7 +75,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public EntityIdentifier(Guid authorityId, String value)
         {
-            this.AuthorityKey = authorityId;
+            this.IdentityDomainKey = authorityId;
             this.Value = value;
         }
 
@@ -83,8 +84,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public EntityIdentifier(IdentityDomain authority, String value)
         {
-            this.Authority = authority;
-            this.AuthorityKey = authority?.Key;
+            this.IdentityDomain = authority;
+            this.IdentityDomainKey = authority?.Key;
             this.Value = value;
         }
 
@@ -109,7 +110,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public ActIdentifier(Guid authorityId, String value)
         {
-            this.AuthorityKey = authorityId;
+            this.IdentityDomainKey = authorityId;
             this.Value = value;
         }
 
@@ -118,7 +119,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public ActIdentifier(IdentityDomain authority, String value)
         {
-            this.Authority = authority;
+            this.IdentityDomain = authority;
             this.Value = value;
         }
     }
@@ -127,7 +128,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents an external assigned identifier
     /// </summary>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("IdentifierBase")]
-    [Classifier(nameof(Authority), nameof(AuthorityKey))]
+    [Classifier(nameof(IdentityDomain), nameof(IdentityDomainKey))]
     public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
         /// <summary>
@@ -209,7 +210,23 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("domain"), JsonProperty("domain")]
-        public Guid? AuthorityKey { get; set; }
+        public Guid? IdentityDomainKey { get; set; }
+
+
+        /// <summary>
+        /// Authority - used for backwards compatibility only
+        /// </summary>
+        [XmlElement("authority"), JsonIgnore, SerializationMetadataAttribute]
+        public IdentityDomain AuthorityCompatibilityDoNotUse
+        {
+            get => this.IdentityDomain;
+            set => this.IdentityDomain = value;
+        }
+
+        /// <summary>
+        /// True if the authority attribute should be serialized
+        /// </summary>
+        public bool ShouldSerializeAuthorityCompatibilityDoNotUse() => false;
 
         /// <summary>
         /// Gets or sets the type identifier
@@ -229,8 +246,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// Represents the authority information
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [SerializationReference(nameof(AuthorityKey))]
-        public IdentityDomain Authority { get; set; }
+        [SerializationReference(nameof(IdentityDomainKey))]
+        public IdentityDomain IdentityDomain { get; set; }
 
         /// <summary>
         /// Gets or sets the reliability of the identifier
@@ -241,7 +258,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents the authority information
         /// </summary>
-        IdentityDomain IExternalIdentifier.Authority => this.LoadProperty(o => o.Authority);
+        IdentityDomain IExternalIdentifier.Authority => this.LoadProperty(o => o.IdentityDomain);
 
         /// <summary>
         /// True if the identifier is empty
@@ -259,7 +276,7 @@ namespace SanteDB.Core.Model.DataTypes
         {
             var other = obj as IdentifierBase<TBoundModel>;
             if (other == null) return false;
-            return base.SemanticEquals(obj) && this.Value == other.Value && this.AuthorityKey == other.AuthorityKey;
+            return base.SemanticEquals(obj) && this.Value == other.Value && this.IdentityDomainKey == other.IdentityDomainKey;
         }
 
         /// <summary>
@@ -267,7 +284,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public override string ToString()
         {
-            return $"{this.Value} [{this.Authority}]";
+            return $"{this.Value} [{this.IdentityDomain}]";
         }
     }
 }
