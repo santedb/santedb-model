@@ -140,7 +140,7 @@ namespace SanteDB.Core.Model.Entities
 
         /// <summary>
         /// Gets or sets the value as an IETF value
-        /// </summary>
+        /// </summary>FIE
         [XmlIgnore, JsonIgnore, DataIgnore]
         public String IETFValue
         {
