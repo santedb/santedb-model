@@ -118,16 +118,7 @@ namespace SanteDB
                 });
         }
 
-        /// <summary>
-        /// Convert a hex string to byte array
-        /// </summary>
-        public static byte[] ParseHexString(this String hexString)
-        {
-            return Enumerable.Range(0, hexString.Length)
-                                   .Where(x => x % 2 == 0)
-                                   .Select(x => System.Convert.ToByte(hexString.Substring(x, 2), 16))
-                                   .ToArray();
-        }
+        
 
         /// <summary>
         /// As result set
