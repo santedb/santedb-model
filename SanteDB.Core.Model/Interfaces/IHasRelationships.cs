@@ -41,5 +41,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// Add a relationship
         /// </summary>
         void AddRelationship(ITargetedAssociation association);
+
     }
 }
