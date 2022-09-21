@@ -279,7 +279,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
     </PackageReference>
-    <PackageReference Include="System.CodeDom" Version="5.0.0" />
+    <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
   <Choose>
     <When Condition="$(SolutionName.Contains('-ext'))">
