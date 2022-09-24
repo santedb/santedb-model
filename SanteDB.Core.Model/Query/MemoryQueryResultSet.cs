@@ -83,6 +83,22 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Non-generic select method
+        /// </summary>
+        public IEnumerable<TReturn> Select<TReturn>(Expression selector) {
+            if (selector is LambdaExpression le)
+            {
+                var dyn = le.Compile();
+                return this.m_wrapped.Select(o => (TReturn)dyn.DynamicInvoke(o));
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.ARGUMENT_INCOMPATIBLE_TYPE, typeof(LambdaExpression), selector.GetType()));
+            }
+        }
+
+
+        /// <summary>
         /// Return object of the specified type
         /// </summary>
         public IEnumerable<TType> OfType<TType>()

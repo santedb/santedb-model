@@ -94,6 +94,21 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Non-generic select method
+        /// </summary>
+        public IEnumerable<TReturn> Select<TReturn>(Expression selector)
+        {
+            if(selector is Expression<Func<TDestination, TReturn>> se)
+            {
+                return this.Select(se);
+            }
+            else
+            {
+                throw new NotSupportedException(String.Format(ErrorMessages.ARGUMENT_INCOMPATIBLE_TYPE, typeof(Expression<Func<TDestination, TReturn>>), selector.GetType()));
+            }
+        }
+
+        /// <summary>
         /// Select the specified objects
         /// </summary>
         public IEnumerable<TReturn> Select<TReturn>(Expression<Func<TDestination, TReturn>> selector)
@@ -101,7 +116,7 @@ namespace SanteDB.Core.Model.Query
             // Is the <TDestination> compatible with <TReturn>
             if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
             {
-                var convertedExpression = new ExpressionReturnRewriter<TDestination, TSource, TReturn>(selector).Convert();
+                var convertedExpression = new ExpressionParameterRewriter<TDestination, TSource, TReturn>(selector).Convert();
                 foreach (var itm in this.m_sourceResultSet.Select(convertedExpression)) // pass through
                 {
                     yield return itm;
@@ -238,7 +253,7 @@ namespace SanteDB.Core.Model.Query
             // Is the <TDestination> compatible with <TReturn>
             if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
             {
-                var convertedExpression = new ExpressionReturnRewriter<TDestination, TSource, bool>(query).Convert();
+                var convertedExpression = new ExpressionParameterRewriter<TDestination, TSource, bool>(query).Convert();
                 return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.Where(convertedExpression), this.m_transform);
             }
             else
@@ -257,7 +272,7 @@ namespace SanteDB.Core.Model.Query
             // Is the <TDestination> compatible with <TReturn>
             if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
             {
-                var convertedExpression = new ExpressionReturnRewriter<TDestination, TSource, bool>(query).Convert();
+                var convertedExpression = new ExpressionParameterRewriter<TDestination, TSource, bool>(query).Convert();
                 return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.Intersect(convertedExpression), this.m_transform);
             }
             else
@@ -274,7 +289,7 @@ namespace SanteDB.Core.Model.Query
             // Is the <TDestination> compatible with <TReturn>
             if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
             {
-                var convertedExpression = new ExpressionReturnRewriter<TDestination, TSource, bool>(query).Convert();
+                var convertedExpression = new ExpressionParameterRewriter<TDestination, TSource, bool>(query).Convert();
                 return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.Union(convertedExpression), this.m_transform);
             }
             else

@@ -124,7 +124,13 @@ namespace SanteDB
         /// <param name="me">The <see cref="NameValueCollection"/> to add the values to</param>
         /// <param name="name">The name of the values</param>
         /// <param name="values">The values</param>
-        public static void Add(this NameValueCollection me, String name, params String[] values) => me.Add(name, values.AsEnumerable());
+        public static void Add(this NameValueCollection me, String name, params String[] values)
+        {
+            if (values != null)
+            {
+                me.Add(name, values.AsEnumerable());
+            }
+        }
 
 
         /// <summary>

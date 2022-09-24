@@ -367,7 +367,7 @@ namespace SanteDB.Core.Model.Map
 
                 Expression expr = new ModelExpressionVisitor(this, parameter).Visit(expression.Body);
                 if (expr == null && throwOnError)
-                    throw new InvalidOperationException("Could not map expressions");
+                    throw new ArgumentException(ErrorMessages.MAP_EXPRESSION_NOT_POSSIBLE);
                 else if (expr == null)
                     return null;
                 else

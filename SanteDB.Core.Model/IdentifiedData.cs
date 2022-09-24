@@ -112,12 +112,12 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets a tag which changes whenever the object is updated
         /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationMetadata]
+        [XmlIgnore, JsonIgnore, SerializationMetadata, QueryParameter("tag")]
         public virtual String Tag
         {
             get
             {
-                return $"{this.Type}.{this.Key?.ToString("N")}";
+                return $"{this.Type}.{this.Key?.ToString()}";
             }
         }
 

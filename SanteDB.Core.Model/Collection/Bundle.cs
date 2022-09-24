@@ -101,7 +101,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Represent the bundle as
         /// </summary>
-        public Bundle(IEnumerable<IdentifiedData> objects, int offset, int total) : this(objects)
+        public Bundle(IEnumerable<IdentifiedData> objects, int offset, int? total) : this(objects)
         {
             this.Offset = offset;
             this.TotalResults = total;
@@ -176,7 +176,7 @@ namespace SanteDB.Core.Model.Collection
         /// Gets or sets the total results
         /// </summary>
         [XmlElement("totalResults"), JsonProperty("totalResults")]
-        public int TotalResults { get; set; }
+        public int? TotalResults { get; set; }
 
         /// <summary>
         /// Generic resource entity
@@ -232,7 +232,8 @@ namespace SanteDB.Core.Model.Collection
             if (resourceRoot is Bundle) return resourceRoot as Bundle;
             Bundle retVal = new Bundle();
             retVal.Key = Guid.NewGuid();
-            retVal.Count = retVal.TotalResults = 1;
+            retVal.Count = 1;
+            retVal.TotalResults = 1;
             if (resourceRoot == null)
             {
                 return retVal;

@@ -257,11 +257,16 @@ namespace SanteDB.Core.Model.Map
 
             if (newOperand != convert.Operand)
             {
-                Type targetType = m_mapper.MapModelType(convert.Type);
-                if (targetType == convert.Type) // No map
+                if (convert.Type == typeof(Object)) // We're just mapping to object 
                     return newOperand;
+                else
+                {
+                    Type targetType = m_mapper.MapModelType(convert.Type);
+                    if (targetType == convert.Type) // No map
+                        return newOperand;
 
-                return Expression.Convert(newOperand, targetType);
+                    return Expression.Convert(newOperand, targetType);
+                }
             }
             return convert;
         }

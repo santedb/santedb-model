@@ -32,7 +32,7 @@ namespace SanteDB.Core.Model.Query
     /// <remarks>
     /// Quick and dirty solution from https://stackoverflow.com/questions/14437239/change-a-linq-expression-predicate-from-one-type-to-another
     /// </remarks>
-    public class ExpressionReturnRewriter<TFrom, TTo, TReturn> : ExpressionVisitor
+    public class ExpressionParameterRewriter<TFrom, TTo, TReturn> : ExpressionVisitor
     {
         private Dictionary<string, ParameterExpression> convertedParameters;
         private Expression<Func<TFrom, TReturn>> expression;
@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model.Query
         /// Creates a new expression return visitor
         /// </summary>
         /// <param name="expresionToConvert">The type of expression to conviert</param>
-        public ExpressionReturnRewriter(Expression<Func<TFrom, TReturn>> expresionToConvert)
+        public ExpressionParameterRewriter(Expression<Func<TFrom, TReturn>> expresionToConvert)
         {
             //for each parameter in the original expression creates a new parameter with the same name but with changed type
             convertedParameters = expresionToConvert.Parameters

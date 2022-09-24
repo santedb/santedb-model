@@ -54,6 +54,11 @@ namespace SanteDB.Core.Model.Query
         object SingleOrDefault();
 
         /// <summary>
+        /// Select a single object from the object
+        /// </summary>
+        IEnumerable<TReturn> Select<TReturn>(Expression selector);
+
+        /// <summary>
         /// Take only <paramref name="count"/> results
         /// </summary>
         IQueryResultSet Take(int count);

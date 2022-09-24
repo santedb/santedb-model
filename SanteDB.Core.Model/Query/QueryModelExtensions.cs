@@ -107,7 +107,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Gets the first characters
         /// </summary>
-        public static String Substr(this String me, int start, int? length)
+        public static String Substr(this String me, int start, int? length = null)
         {
             if (length.HasValue && start + length > me.Length)
                 length = me.Length - start;

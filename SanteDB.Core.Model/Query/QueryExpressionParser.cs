@@ -835,11 +835,19 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build a property selector 
         /// </summary>
-        public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false)
+        public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false, Type convertReturn = null)
         {
             var nvc = new NameValueCollection();
             nvc.Add(propertyName, null);
-            return BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad,false);
+            if (convertReturn == null)
+            {
+                return BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad, false);
+            }
+            else
+            {
+                var le = BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad, false);
+                return Expression.Lambda(Expression.Convert(le.Body, convertReturn), le.Parameters);
+            }
         }
     }
 }

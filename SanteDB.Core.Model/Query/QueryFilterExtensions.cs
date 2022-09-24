@@ -53,65 +53,6 @@ namespace SanteDB.Core.Model.Query
             InitializeFilters();
         }
 
-        /// <summary>
-        /// Apply result instructions
-        /// </summary>
-        public static IQueryResultSet ApplyResultInstructions(this IQueryResultSet me, NameValueCollection query, out int offset, out int totalCount)
-        {
-            // Next sort
-            if (query.TryGetValue("_orderBy", out var queryList) && me is IOrderableQueryResultSet orderable)
-            {
-                foreach (var itm in queryList)
-                {
-                    var sortParts = itm.Split(':');
-                    var sortExpr = QueryExpressionParser.BuildPropertySelector(me.GetType().GetGenericArguments()[0], sortParts[0], false);
-                    if (sortParts.Length == 1 || sortParts[1].Equals("ASC", StringComparison.OrdinalIgnoreCase))
-                    {
-                        me = orderable.OrderBy(sortExpr);
-                    }
-                    else
-                    {
-                        me = orderable.OrderByDescending(sortExpr);
-                    }
-                }
-            }
-            // Next state
-            if (query.TryGetValue("_queryId", out queryList) && Guid.TryParse(queryList.First(), out Guid queryId))
-            {
-                me = me.AsStateful(queryId);
-            }
-
-            // Include total count?
-            if (query.TryGetValue("_includeTotal", out queryList) && Boolean.TryParse(queryList.First(), out bool includeTotal) == true)
-            {
-                totalCount = me.Count();
-            }
-            else
-            {
-                totalCount = 0;
-                includeTotal = false;
-            }
-
-            // Next offset
-            if (query.TryGetValue("_offset", out queryList) && Int32.TryParse(queryList.First(), out offset))
-            {
-                me = me.Skip(offset);
-            }
-            else offset = 0;
-
-            if (!query.TryGetValue("_count", out queryList) || !Int32.TryParse(queryList.First(), out int count))
-            {
-                count = 100;
-            }
-
-            // Total count wasn't requested so do a quick count.
-            if (!includeTotal)
-            {
-                totalCount = me.Skip(offset).Take(count + 1).Count() + offset;
-            }
-
-            return me.Take(count);
-        }
 
         /// <summary>
         /// Initialize filters

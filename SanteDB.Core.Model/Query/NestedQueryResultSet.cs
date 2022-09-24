@@ -115,6 +115,11 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Non-generic select method
+        /// </summary>
+        public IEnumerable<TReturn> Select<TReturn>(Expression selector) => this.m_wrapped.Select<TReturn>(selector);
+
+        /// <summary>
         /// Order the wrapped result set
         /// </summary>
         public IOrderableQueryResultSet OrderBy(Expression expression)

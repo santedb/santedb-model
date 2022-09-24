@@ -55,7 +55,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Override the ETag
         /// </summary>
-        public override string Tag => $"{this.Type}.{this.VersionKey?.ToString("N")}";
+        public override string Tag => $"{this.Type}.{this.VersionKey?.ToString()}";
 
         /// <summary>
         /// Gets or sets the UUID of the previous version of this record
