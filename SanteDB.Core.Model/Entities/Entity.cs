@@ -245,19 +245,19 @@ namespace SanteDB.Core.Model.Entities
             var other = obj as Entity;
             if (other == null) return false;
             return base.SemanticEquals(obj) &&
-                this.Addresses?.SemanticEquals(other.Addresses) == true &&
+                this.Addresses?.SemanticEquals(other.Addresses) != false &&
                 this.ClassConceptKey == other.ClassConceptKey &&
                 this.CreationActKey == other.CreationActKey &&
                 this.DeterminerConceptKey == other.DeterminerConceptKey &&
-                this.Extensions?.SemanticEquals(other.Extensions) == true &&
-                this.Identifiers?.SemanticEquals(other.Identifiers) == true &&
-                this.Names?.SemanticEquals(other.Names) == true &&
-                this.Notes?.SemanticEquals(other.Notes) == true &&
-                this.Participations?.SemanticEquals(other.Participations) == true &&
-                this.Relationships?.SemanticEquals(other.Relationships) == true &&
+                this.Extensions?.SemanticEquals(other.Extensions) != false &&
+                this.Identifiers?.SemanticEquals(other.Identifiers) != false &&
+                this.Names?.SemanticEquals(other.Names) != false &&
+                this.Notes?.SemanticEquals(other.Notes) != false &&
+                this.Participations?.SemanticEquals(other.Participations) != false &&
+                this.Relationships?.SemanticEquals(other.Relationships) != false &&
                 this.StatusConceptKey == other.StatusConceptKey &&
-                this.Tags?.SemanticEquals(other.Tags) == true &&
-                this.Telecoms?.SemanticEquals(other.Telecoms) == true &&
+                this.Tags?.SemanticEquals(other.Tags) != false &&
+                this.Telecoms?.SemanticEquals(other.Telecoms) != false &&
                 this.TemplateKey == other.TemplateKey &&
                 this.TypeConceptKey == other.TypeConceptKey;
         }

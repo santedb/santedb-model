@@ -980,12 +980,5 @@ namespace SanteDB
             return validResults;
         }
 
-        /// <summary>
-        /// Validate the state of this object
-        /// </summary>
-        public static IEnumerable<ValidationResultDetail> Validate(this IdentifiedData me)
-        {
-            return new List<ValidationResultDetail>();
-        }
     }
 }

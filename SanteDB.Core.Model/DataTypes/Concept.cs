@@ -154,9 +154,9 @@ namespace SanteDB.Core.Model.DataTypes
             if (other == null) return false;
             return base.SemanticEquals(obj) && other.Mnemonic == this.Mnemonic &&
                 this.ClassKey == other.ClassKey &&
-                this.ConceptNames?.SemanticEquals(other.ConceptNames) == true &&
-                this.ConceptSets?.SemanticEquals(other.ConceptSets) == true &&
-                this.Relationships?.SemanticEquals(other.Relationships) == true;
+                this.ConceptNames?.SemanticEquals(other.ConceptNames) != false &&
+                this.ConceptSets?.SemanticEquals(other.ConceptSets) != false &&
+                this.Relationships?.SemanticEquals(other.Relationships) != false;
         }
 
         /// <summary>

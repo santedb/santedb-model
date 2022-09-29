@@ -118,7 +118,7 @@ namespace SanteDB.Core.Model.Entities
             if (other == null) return false;
             return base.SemanticEquals(obj) &&
                 this.NameUseKey == other.NameUseKey &&
-                this.Component?.SemanticEquals(other.Component) == true;
+                this.Component?.SemanticEquals(other.Component) != false;
         }
 
         /// <summary>

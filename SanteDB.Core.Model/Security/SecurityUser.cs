@@ -233,7 +233,7 @@ namespace SanteDB.Core.Model.Security
                 this.Password == other.Password &&
                 this.PhoneNumber == other.PhoneNumber &&
                 this.PhoneNumberConfirmed == other.PhoneNumberConfirmed &&
-                this.Roles?.SemanticEquals(other.Roles) == true &&
+                this.Roles?.SemanticEquals(other.Roles) != false &&
                 this.SecurityHash == other.SecurityHash &&
                 this.TwoFactorEnabled == other.TwoFactorEnabled &&
                 this.UserClass == other.UserClass &&

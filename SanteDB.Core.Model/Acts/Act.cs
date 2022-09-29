@@ -620,20 +620,20 @@ namespace SanteDB.Core.Model.Acts
             return base.SemanticEquals(obj) &&
                 this.ActTime == other.ActTime &&
                 this.ClassConceptKey == other.ClassConceptKey &&
-                this.Extensions?.SemanticEquals(other.Extensions) == true &&
-                this.Identifiers?.SemanticEquals(other.Identifiers) == true &&
+                this.Extensions?.SemanticEquals(other.Extensions) != false &&
+                this.Identifiers?.SemanticEquals(other.Identifiers) != false &&
                 this.IsNegated == other.IsNegated &&
                 this.MoodConceptKey == other.MoodConceptKey &&
-                this.Notes?.SemanticEquals(other.Notes) == true &&
-                this.Participations?.SemanticEquals(other.Participations) == true &&
-                this.Protocols?.SemanticEquals(other.Protocols) == true &&
+                this.Notes?.SemanticEquals(other.Notes) != false &&
+                this.Participations?.SemanticEquals(other.Participations) != false &&
+                this.Protocols?.SemanticEquals(other.Protocols) != false &&
                 this.ReasonConceptKey == other.ReasonConceptKey &&
-                this.Relationships?.SemanticEquals(other.Relationships) == true &&
+                this.Relationships?.SemanticEquals(other.Relationships) != false &&
                 this.StartTime == other.StartTime &&
                 this.StatusConceptKey == other.StatusConceptKey &&
                 this.StopTime == other.StopTime &&
-                this.Tags?.SemanticEquals(other.Tags) == true &&
-                this.Template?.SemanticEquals(other.Template) == true &&
+                this.Tags?.SemanticEquals(other.Tags) != false &&
+                this.Template?.SemanticEquals(other.Template) != false &&
                 this.TypeConceptKey == other.TypeConceptKey;
         }
 

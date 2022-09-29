@@ -141,7 +141,7 @@ namespace SanteDB.Core.Model.Entities
                 this.DateOfBirth == other.DateOfBirth &&
                 this.GenderConceptKey == other.GenderConceptKey &&
                 this.DateOfBirthPrecision == other.DateOfBirthPrecision &&
-                this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) == true;
+                this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) != false;
         }
     }
 }

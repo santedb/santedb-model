@@ -104,7 +104,7 @@ namespace SanteDB.Core.Model.Entities
                 this.IsMobile == other.IsMobile &&
                 this.GeoTag?.Lat == other.GeoTag?.Lat &&
                 this.GeoTag?.Lng == other.GeoTag?.Lng &&
-                this.Services?.SemanticEquals(other.Services) == true;
+                this.Services?.SemanticEquals(other.Services) != false;
         }
     }
 }

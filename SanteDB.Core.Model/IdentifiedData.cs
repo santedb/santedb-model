@@ -131,7 +131,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual ICanDeepCopy DeepCopy()
         {
-            var retVal = this.MemberwiseClone() as IdentifiedData;
+            var retVal = Activator.CreateInstance(this.GetType()) as IdentifiedData;
             retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
             retVal.BatchOperation = BatchOperationType.Auto;
             foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
@@ -155,6 +155,7 @@ namespace SanteDB.Core.Model
                                 newList.Add(itm);
                             }
                         }
+                        pi.SetValue(retVal, newList);
                     }
                     else
                     {
