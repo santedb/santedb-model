@@ -33,24 +33,24 @@ namespace SanteDB.Core.Model.Audit
         /// Successful operation.
         /// </summary>
         [XmlEnum("ok")]
-        Success = 1,
+        Success = 0x1,
 
         /// <summary>
         /// Minor failure, action should be restarted.
         /// </summary>
         [XmlEnum("fail.minor")]
-        MinorFail = 2,
+        MinorFail = 0x2,
 
         /// <summary>
         /// Action was terminated.
         /// </summary>
         [XmlEnum("fail.major")]
-        SeriousFail = 4,
+        SeriousFail = 0x4,
 
         /// <summary>
         /// Major failure, action is made unavailable.
         /// </summary>
         [XmlEnum("fail.epic")]
-        EpicFail = 8
+        EpicFail = 0x8
     }
 }
