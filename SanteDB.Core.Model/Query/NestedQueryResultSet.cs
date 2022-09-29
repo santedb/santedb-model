@@ -53,6 +53,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public bool Any() => this.m_wrapped.Any();
 
+
         /// <summary>
         /// As stateful query
         /// </summary>
@@ -221,6 +222,11 @@ namespace SanteDB.Core.Model.Query
         {
             return new NestedQueryResultSet<TData>(this.m_wrapped.Intersect(query), this.m_yielder);
         }
+
+
+        /// <inheritdoc/>
+        public IQueryResultSet<TData> Distinct() => new NestedQueryResultSet<TData>(this.m_wrapped.Distinct(), this.m_yielder);
+
 
         /// <summary>
         /// Intersect with another

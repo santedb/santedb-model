@@ -49,6 +49,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public bool Any() => this.m_wrapped.Any();
 
+
         /// <summary>
         /// As stateful query
         /// </summary>
@@ -230,6 +231,11 @@ namespace SanteDB.Core.Model.Query
         {
             return new MemoryQueryResultSet<TData>(this.m_wrapped.OrderBy(sortExpression.Compile()));
         }
+
+
+        /// <inheritdoc/>
+        public IQueryResultSet<TData> Distinct() => new MemoryQueryResultSet<TData>(this.m_wrapped.Distinct());
+
 
         /// <summary>
         /// Order by descending or

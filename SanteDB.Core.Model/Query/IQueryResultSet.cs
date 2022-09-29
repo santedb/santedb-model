@@ -241,6 +241,12 @@ namespace SanteDB.Core.Model.Query
         new IQueryResultSet<TData> Take(int count);
 
         /// <summary>
+        /// Get only distinct objects in the collection
+        /// </summary>
+        IQueryResultSet<TData> Distinct();
+
+
+        /// <summary>
         /// Skip <paramref name="count"/> results
         /// </summary>
         /// <remarks>

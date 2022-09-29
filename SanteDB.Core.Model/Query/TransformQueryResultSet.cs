@@ -56,6 +56,9 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public bool Any() => this.m_sourceResultSet.Any();
 
+        /// <inheritdoc/>
+        public IQueryResultSet<TDestination> Distinct() => new MemoryQueryResultSet<TDestination>(((IEnumerable)this).OfType<TDestination>().Distinct());
+
         /// <summary>
         /// Return as stateful
         /// </summary>
