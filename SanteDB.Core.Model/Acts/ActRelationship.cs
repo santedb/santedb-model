@@ -136,7 +136,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as ActRelationship;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.TargetActKey == other.TargetActKey &&
                 this.RelationshipTypeKey == other.RelationshipTypeKey &&
                 this.SourceEntityKey == other.SourceEntityKey;

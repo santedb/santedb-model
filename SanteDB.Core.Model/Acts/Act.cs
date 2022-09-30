@@ -23,7 +23,6 @@ using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
-using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
@@ -204,12 +203,18 @@ namespace SanteDB.Core.Model.Acts
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.ActTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
+                {
                     this.ActTime = null;
+                }
             }
         }
 
@@ -244,12 +249,18 @@ namespace SanteDB.Core.Model.Acts
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.StartTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
+                {
                     this.StartTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -281,12 +292,18 @@ namespace SanteDB.Core.Model.Acts
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.StopTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
+                {
                     this.StopTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -305,12 +322,12 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/class-concepts"/>
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(ActClassKeys))]
-        public Guid? ClassConceptKey 
+        public Guid? ClassConceptKey
         {
             get => this.m_classConceptKey;
             set
             {
-                if(!this.ValidateClassKey(value))
+                if (!this.ValidateClassKey(value))
                 {
                     throw new InvalidOperationException(ErrorMessages.INVALID_CLASS_CODE);
                 }
@@ -616,7 +633,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Act;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.ActTime == other.ActTime &&
                 this.ClassConceptKey == other.ClassConceptKey &&
@@ -812,7 +833,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value : this.LoadProperty(o=>o.Tags).FirstOrDefault(t=>t.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value : this.LoadProperty(o => o.Tags).FirstOrDefault(t => t.TagKey == tagKey)?.Value;
 
         /// <summary>
         /// Remove <paramref name="tagKey"/> from the tag collection

@@ -68,7 +68,10 @@ namespace SanteDB.Core.Model.Patch
         {
             StringBuilder builder = new StringBuilder();
             foreach (var itm in this.Operation)
+            {
                 builder.AppendFormat("{0}\r\n", itm);
+            }
+
             return builder.ToString();
         }
     }

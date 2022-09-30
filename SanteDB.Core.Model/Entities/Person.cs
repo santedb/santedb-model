@@ -22,10 +22,8 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
-using SanteDB.Core.Model.Security;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
 
@@ -40,11 +38,11 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Person)]
     public class Person : Entity
     {
-       
+
         /// <summary>
         /// Person constructor
         /// </summary>
-        public Person() 
+        public Person()
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
             base.m_classConceptKey = EntityClassKeys.Person;
@@ -95,12 +93,18 @@ namespace SanteDB.Core.Model.Entities
                 {
                     // Try to parse ISO date
                     if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    {
                         this.DateOfBirth = dt;
+                    }
                     else
+                    {
                         throw new FormatException($"Cannot parse {value} as a date");
+                    }
                 }
                 else
+                {
                     this.DateOfBirth = null;
+                }
             }
         }
 
@@ -136,7 +140,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Person;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.DateOfBirth == other.DateOfBirth &&
                 this.GenderConceptKey == other.GenderConceptKey &&

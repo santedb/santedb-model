@@ -45,10 +45,10 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public Concept()
         {
-           
+
         }
 
-       
+
         /// <summary>
         /// Gets or sets the unchanging mnemonic for the concept
         /// </summary>
@@ -151,7 +151,11 @@ namespace SanteDB.Core.Model.DataTypes
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Concept;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.Mnemonic == this.Mnemonic &&
                 this.ClassKey == other.ClassKey &&
                 this.ConceptNames?.SemanticEquals(other.ConceptNames) != false &&

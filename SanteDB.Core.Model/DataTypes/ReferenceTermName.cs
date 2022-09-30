@@ -22,7 +22,6 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using System;
-using System.ComponentModel;
 using System.Threading;
 using System.Xml.Serialization;
 

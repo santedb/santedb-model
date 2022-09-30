@@ -93,7 +93,11 @@ namespace SanteDB.Core.Model.DataTypes
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Tag<TSourceType>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return
                 other.TagKey == this.TagKey &&
                 other.Value == this.Value;

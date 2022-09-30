@@ -62,7 +62,9 @@ namespace SanteDB.Core.Model.Query
                 this.m_query = workingDictionary;
 
                 foreach (var itm in modelType.GetInterfaces())
+                {
                     this.m_interfaceHints.Add(itm, modelType);
+                }
             }
 
             /// <summary>
@@ -70,7 +72,7 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             private void AddCondition(String key, Object value)
             {
-                if(this.m_query.GetValues(key)?.Contains("value") != true)
+                if (this.m_query.GetValues(key)?.Contains("value") != true)
                 {
                     if (value is IList le)
                     {
@@ -95,7 +97,9 @@ namespace SanteDB.Core.Model.Query
             public override Expression Visit(Expression node)
             {
                 if (node == null)
+                {
                     return node;
+                }
 
                 // Convert node type
                 switch (node.NodeType)
@@ -151,7 +155,10 @@ namespace SanteDB.Core.Model.Query
             {
                 while (node.NodeType == ExpressionType.Convert ||
                     node.NodeType == ExpressionType.ConvertChecked)
+                {
                     node = (node as UnaryExpression).Operand;
+                }
+
                 return node;
             }
 
@@ -189,9 +196,14 @@ namespace SanteDB.Core.Model.Query
                 {
                     var retVal = this.ExtractValue(constant);
                     if (retVal is MethodInfo mi)
+                    {
                         retVal = mi.Invoke(null, new object[0]);
+                    }
                     else if (retVal is Func<dynamic> fn)
+                    {
                         retVal = fn();
+                    }
+
                     return Expression.Constant(retVal);
                 }
                 else
@@ -220,7 +232,10 @@ namespace SanteDB.Core.Model.Query
                         {
                             var parmName = this.ExtractPath(node.Operand, true);
                             if (!parmName.EndsWith("]"))
+                            {
                                 throw new InvalidOperationException("Only guard conditions can (i.e. Any statements) support unary NOT");
+                            }
+
                             this.AddCondition(parmName, "null");
                         }
                         return null;
@@ -275,17 +290,24 @@ namespace SanteDB.Core.Model.Query
 
                                 // Result
                                 foreach (var itm in result.AllKeys)
-                                    this.AddCondition(String.Format("{0}.{1}", parmName, itm), result.GetValues(itm).Select( o=> negate ? $"!{o}" : o).ToList());
+                                {
+                                    this.AddCondition(String.Format("{0}.{1}", parmName, itm), result.GetValues(itm).Select(o => negate ? $"!{o}" : o).ToList());
+                                }
+
                                 return null;
                             }
                             else
+                            {
                                 return null;
+                            }
                         }
                     default: // extended fn?
                         {
                             var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(node.Method);
                             if (extendedFn == null)
+                            {
                                 throw new MissingMemberException($"Cannot find extension method {node.Method}");
+                            }
 
                             if (extendedFn.ExtensionMethod.ReturnType == typeof(bool))
                             {
@@ -300,7 +322,10 @@ namespace SanteDB.Core.Model.Query
                                 }
                                 var callValue = $"{(negate ? "!" : "")}:({extendedFn.Name}";
                                 if (node.Arguments.Count > 1)
+                                {
                                     callValue += $"|{String.Join(",", node.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o), true)))}";
+                                }
+
                                 callValue += ")";
 
                                 this.AddCondition(parmName, callValue);
@@ -341,8 +366,9 @@ namespace SanteDB.Core.Model.Query
                     return null;
                 }
                 else
+                {
                     throw new InvalidOperationException("Cannot understand this enumerable object");
-
+                }
             }
 
             /// <summary>
@@ -390,24 +416,38 @@ namespace SanteDB.Core.Model.Query
                     if (node.Right is ConstantExpression cci)
                     {
                         if (node.NodeType == ExpressionType.NotEqual)
+                        {
                             this.AddCondition(parmName, true.Equals(cci.Value) ? "null" : "!null");
+                        }
                         else if (node.NodeType == ExpressionType.Equal)
+                        {
                             this.AddCondition(parmName, true.Equals(cci.Value) ? "!null" : "null");
+                        }
                         else
+                        {
                             throw new InvalidOperationException($"Cannot determine how to convert ANY() function '{node}'");
+                        }
                     }
                     else
+                    {
                         this.AddCondition(parmName, "null");
+                    }
                 }
                 else if (!String.IsNullOrEmpty(parmName))
                 {
                     Object fParmValue = this.PrepareValue(parmValue, false);
                     if (parmValue is DateTime)
+                    {
                         fParmValue = ((DateTime)parmValue).ToString("o");
+                    }
                     else if (parmValue is DateTimeOffset)
+                    {
                         fParmValue = ((DateTimeOffset)parmValue).ToString("o");
+                    }
                     else if (parmValue == null)
+                    {
                         fParmValue = "null";
+                    }
 
                     // Node type
                     switch (node.NodeType)
@@ -447,7 +487,10 @@ namespace SanteDB.Core.Model.Query
                             {
                                 var callValue = $":({extendedFn.Name}";
                                 if (mce.Arguments.Count > 1)
+                                {
                                     callValue += $"|{String.Join(",", mce.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o), true)))}";
+                                }
+
                                 callValue += ")";
                                 fParmValue = callValue + fParmValue;
                             }
@@ -467,13 +510,22 @@ namespace SanteDB.Core.Model.Query
             {
                 Object fParmValue = parmValue;
                 if (parmValue is DateTime)
+                {
                     fParmValue = ((DateTime)parmValue).ToString("o");
+                }
                 else if (parmValue is DateTimeOffset)
+                {
                     fParmValue = ((DateTimeOffset)parmValue).ToString("o");
+                }
                 else if (parmValue == null)
+                {
                     fParmValue = "null";
+                }
                 else if (parmValue is String && !"null".Equals(parmValue) && quoteStrings)
+                {
                     fParmValue = $"\"{parmValue.ToString().Replace("\"", "\\\"")}\"";
+                }
+
                 return fParmValue;
             }
 
@@ -485,7 +537,9 @@ namespace SanteDB.Core.Model.Query
             protected Object ExtractValue(Expression access)
             {
                 if (access == null)
+                {
                     return null;
+                }
 
                 access = this.StripConvert(access);
 
@@ -504,7 +558,9 @@ namespace SanteDB.Core.Model.Query
                         var expressionValue = this.ExtractValue(expr.Expression);
                         // Is this a ref to a parameter or variable? If so, we must extract it
                         if (expressionValue?.ToString().StartsWith("$_") == true)
+                        {
                             return this.ExtractPath(expr, false, true);
+                        }
                         else if (expr.Member is PropertyInfo)
                         {
                             try
@@ -567,7 +623,9 @@ namespace SanteDB.Core.Model.Query
                     MemberExpression memberExpr = access as MemberExpression;
                     String path = this.ExtractPath(memberExpr.Expression, fromUnary, fromOperand); // get the chain if required
                     if (memberExpr.Expression.Type.IsGenericType && memberExpr.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
                         return path;
+                    }
 
                     // XML property?
                     var memberInfo = memberExpr.Expression.Type.GetRuntimeProperty(memberExpr.Member.Name + "Xml") ??
@@ -576,19 +634,25 @@ namespace SanteDB.Core.Model.Query
                     // Member information is declread on interface
                     Type mapType = null;
                     if (memberInfo.DeclaringType.IsInterface && this.m_interfaceHints.TryGetValue(memberInfo.DeclaringType, out mapType))
+                    {
                         memberInfo = mapType.GetRuntimeProperty(memberInfo.Name) ?? memberInfo;
+                    }
 
                     // Is this a delay load?
                     var serializationReferenceAttribute = memberExpr.Member.GetCustomAttribute<SerializationReferenceAttribute>();
                     var queryParameterAttribute = memberExpr.Member.GetCustomAttribute<QueryParameterAttribute>();
                     var xmlIgnoreAttribute = memberExpr.Member.GetCustomAttribute<XmlIgnoreAttribute>();
                     if (xmlIgnoreAttribute != null && serializationReferenceAttribute != null && !String.IsNullOrEmpty(serializationReferenceAttribute.RedirectProperty))
+                    {
                         memberInfo = memberExpr.Expression.Type.GetRuntimeProperty(serializationReferenceAttribute.RedirectProperty);
+                    }
 
                     // TODO: Delay and bound properties!!
                     var memberXattribute = memberInfo.GetCustomAttributes<XmlElementAttribute>().FirstOrDefault();
                     if (memberXattribute == null && queryParameterAttribute != null)
+                    {
                         memberXattribute = new XmlElementAttribute(queryParameterAttribute.ParameterName); // We don't serialize but it does exist
+                    }
                     else if (memberExpr.Expression is ConstantExpression)
                     {
                         return (memberExpr.Expression as ConstantExpression).Value.ToString();
@@ -597,17 +661,26 @@ namespace SanteDB.Core.Model.Query
                     {
                         if (memberExpr.Expression.Type.StripNullable() == typeof(DateTimeOffset) &&
                             memberExpr.Member.Name == "DateTime")
+                        {
                             return path;
+                        }
+
                         throw new InvalidOperationException($"The path {access} cannot be translated, ensure the property is XML navigable or has a QueryParameter attribute"); // TODO: When this occurs?
                     }
 
                     // Return path
                     if (String.IsNullOrEmpty(path))
+                    {
                         return memberXattribute.ElementName;
+                    }
                     else if (memberXattribute.ElementName == "id") // ID can be ignored
+                    {
                         return path;
+                    }
                     else
+                    {
                         return String.Format("{0}.{1}", path, memberXattribute.ElementName);
+                    }
                 }
                 else if (access.NodeType == ExpressionType.Call)
                 {
@@ -622,7 +695,9 @@ namespace SanteDB.Core.Model.Query
                         // Where should be a guard so we just grab the unary equals only!
                         var binaryExpression = guardExpression.Body as BinaryExpression;
                         if (binaryExpression == null)
+                        {
                             throw new InvalidOperationException("Cannot translate non-binary expression guards");
+                        }
 
                         // Is the expression the guard?
                         String guardString = this.BuildGuardExpression(binaryExpression);
@@ -638,9 +713,13 @@ namespace SanteDB.Core.Model.Query
                     {
                         var extendedFilter = QueryFilterExtensions.GetExtendedFilterByMethod(callExpr.Method);
                         if (extendedFilter != null)
+                        {
                             return this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
+                        }
                         else if (!s_reservedNames.Contains(callExpr.Method.Name))
+                        {
                             throw new InvalidOperationException($"Can't find extended method handler for {callExpr.Method.Name}");
+                        }
                     }
                 }
                 else if (access.NodeType == ExpressionType.TypeAs)
@@ -649,7 +728,9 @@ namespace SanteDB.Core.Model.Query
                     return String.Format("{0}@{1}", this.ExtractPath(ua.Operand, false, fromOperand), ua.Type.GetCustomAttribute<XmlTypeAttribute>().TypeName);
                 }
                 else if (access.NodeType == ExpressionType.Parameter && fromOperand)
+                {
                     return "$_";
+                }
                 else if (access.NodeType == ExpressionType.Coalesce)
                 {
                     BinaryExpression ba = (BinaryExpression)access;
@@ -674,20 +755,32 @@ namespace SanteDB.Core.Model.Query
                         var valueExpression = this.ExtractValue(binaryExpression.Right);
                         var classifierAttribute = expressionMember.Member.DeclaringType.GetCustomAttribute<ClassifierAttribute>();
                         if (classifierAttribute == null)
+                        {
                             throw new InvalidOperationException($"No classifier is defined on {expressionMember.Expression.Type.FullName}");
+                        }
                         else if (classifierAttribute.ClassifierProperty != expressionMember.Member.Name)
                         {
                             // Lookup the key property
                             PropertyInfo keyProp = null;
                             if (!String.IsNullOrEmpty(classifierAttribute.ClassifierKeyProperty))
+                            {
                                 keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierKeyProperty);
+                            }
                             else
+                            {
                                 keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierProperty).GetSerializationRedirectProperty();
+                            }
+
                             if (keyProp?.Name != expressionMember.Member.Name)
+                            {
                                 throw new InvalidOperationException($"Classifier for type on {expressionMember.Member.DeclaringType.FullName} is property {classifierAttribute?.ClassifierProperty} however expression uses property {expressionMember.Member.Name}. Only {classifierAttribute?.ClassifierProperty} may be used in guard expression");
+                            }
                         }
                         if (valueExpression == null)
+                        {
                             throw new InvalidOperationException($"Could not extract right hand side of guard expression {binaryExpression.Right} - is the value passed null (guard values must not be null)?");
+                        }
+
                         return valueExpression.ToString();
 
                     default:
@@ -715,7 +808,10 @@ namespace SanteDB.Core.Model.Query
             var visitor = new HttpQueryExpressionVisitor(retVal, tmodel);
             visitor.Visit(model);
             if (stripNullChecks)
-                retVal.ToList().Where(o=>!"!null".Equals(o.Value)).ToNameValueCollection();
+            {
+                retVal.ToList().Where(o => !"!null".Equals(o.Value)).ToNameValueCollection();
+            }
+
             return retVal;
         }
 
@@ -739,12 +835,18 @@ namespace SanteDB.Core.Model.Query
         {
             var memberExpression = (sort.SortProperty as LambdaExpression)?.Body;
             while (!(memberExpression is MemberExpression) && memberExpression != null)
+            {
                 memberExpression = (memberExpression as UnaryExpression)?.Operand;
+            }
 
             if (memberExpression == null)
+            {
                 throw new InvalidOperationException("Cannot convert sort expression");
+            }
             else
+            {
                 return $"{((memberExpression as MemberExpression).Member as PropertyInfo).GetSerializationName()}:{(sort.SortOrder == Map.SortOrderType.OrderBy ? "asc" : "desc")}";
+            }
         }
     }
 }

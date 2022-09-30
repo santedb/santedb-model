@@ -25,7 +25,6 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map.Builder
@@ -65,7 +64,10 @@ namespace SanteDB.Core.Model.Map.Builder
         {
             var retVal = new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(typeof(String)), "Format"), new CodePrimitiveExpression(formatString));
             foreach (var p in parms)
+            {
                 retVal.Parameters.Add(p);
+            }
+
             return retVal;
         }
 
@@ -91,7 +93,10 @@ namespace SanteDB.Core.Model.Map.Builder
         {
             var retVal = new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(target, methodName));
             foreach (var p in simpleParameters)
+            {
                 retVal.Parameters.Add(new CodePrimitiveExpression(p));
+            }
+
             return retVal;
         }
 
@@ -149,7 +154,9 @@ namespace SanteDB.Core.Model.Map.Builder
             {
                 var ctdecl = this.CreateMapper(t, map.Class.Where(o => o != t && o.ModelType.IsAssignableFrom(t.ModelType) && o.DomainType != t.DomainType));
                 if (ctdecl != null)
+                {
                     retVal.Types.Add(ctdecl);
+                }
             }
             return retVal;
         }
@@ -161,7 +168,9 @@ namespace SanteDB.Core.Model.Map.Builder
         {
             // Cannot process this type
             if (map.DomainType == null || map.ModelType == null)
+            {
                 return null;
+            }
 
             // Generate the type definition
             string className = $"{map.ModelType.Name}To{map.DomainType.Name}ModelMapper";
@@ -189,7 +198,7 @@ namespace SanteDB.Core.Model.Map.Builder
             foreach (var t in otherMappedTypes)
             {
                 var interfaceDefinition = new CodeTypeReference(typeof(IModelMapper<,>).MakeGenericType(map.ModelType, t.DomainType));
-               
+
                 retVal.BaseTypes.Add(interfaceDefinition);
                 var newMap = new ClassMap()
                 {

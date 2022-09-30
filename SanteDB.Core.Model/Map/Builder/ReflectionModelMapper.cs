@@ -19,11 +19,8 @@
  * Date: 2022-9-7
  */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Map.Builder
@@ -64,7 +61,9 @@ namespace SanteDB.Core.Model.Map.Builder
         public object MapToSource(object domainInstance)
         {
             if (domainInstance == null)
+            {
                 return null;
+            }
 
             // Now the property maps
             var retVal = Activator.CreateInstance(this.m_classMap.ModelType);
@@ -106,7 +105,9 @@ namespace SanteDB.Core.Model.Map.Builder
         public object MapToTarget(object modelInstance)
         {
             if (m_classMap == null || modelInstance == null)
+            {
                 return null;
+            }
 
             var retVal = Activator.CreateInstance(this.m_classMap.DomainType);
 
@@ -116,7 +117,9 @@ namespace SanteDB.Core.Model.Map.Builder
                 var propValue = propInfo.GetValue(modelInstance);
                 // Property info
                 if (propValue == null)
+                {
                     continue;
+                }
 
                 if (!propInfo.PropertyType.IsPrimitive && propInfo.PropertyType != typeof(Guid) &&
                     (!propInfo.PropertyType.IsGenericType || propInfo.PropertyType.GetGenericTypeDefinition() != typeof(Nullable<>)) &&
@@ -127,7 +130,9 @@ namespace SanteDB.Core.Model.Map.Builder
                     propInfo.PropertyType.StripNullable() != typeof(Decimal) &&
                     propInfo.PropertyType.StripNullable() != typeof(byte[]) &&
                     !propInfo.PropertyType.StripNullable().IsEnum)
+                {
                     continue;
+                }
 
                 // Map property
                 PropertyInfo domainProperty = null;
@@ -153,10 +158,14 @@ namespace SanteDB.Core.Model.Map.Builder
         private void Set(Object targetObject, PropertyInfo targetProperty, Object sourceObject, PropertyInfo sourceProperty)
         {
             if (targetProperty == null || !targetProperty.CanWrite || sourceObject == null)
+            {
                 return;
+            }
             //Debug.WriteLine ("Unmapped property ({0}).{1}", typeof(TModel).Name, propInfo.Name);
             else if (targetProperty.PropertyType == typeof(byte[]) && sourceProperty.PropertyType.StripNullable() == typeof(Guid))
+            {
                 targetProperty.SetValue(targetObject, ((Guid)sourceObject).ToByteArray());
+            }
             else if (
                 (targetProperty.PropertyType == typeof(DateTime) || targetProperty.PropertyType == typeof(DateTime?))
                 && (sourceProperty.PropertyType == typeof(DateTimeOffset) || sourceProperty.PropertyType == typeof(DateTimeOffset?)))
@@ -164,11 +173,17 @@ namespace SanteDB.Core.Model.Map.Builder
                 targetProperty.SetValue(targetObject, ((DateTimeOffset)sourceObject).DateTime);
             }
             else if (targetProperty.PropertyType.IsAssignableFrom(sourceProperty.PropertyType))
+            {
                 targetProperty.SetValue(targetObject, sourceObject);
+            }
             else if (sourceProperty.PropertyType == typeof(Type) && targetProperty.PropertyType == typeof(String))
+            {
                 targetProperty.SetValue(targetObject, (sourceObject as Type).AssemblyQualifiedName);
+            }
             else if (MapUtil.TryConvert(sourceObject, targetProperty.PropertyType, out object domainValue))
+            {
                 targetProperty.SetValue(targetObject, domainValue);
+            }
             else if (targetProperty.PropertyType == typeof(String) && sourceProperty.PropertyType.StripNullable().IsEnum)
             {
                 // Is XML Enum?

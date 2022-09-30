@@ -87,9 +87,13 @@ namespace SanteDB.Core.Model.DataTypes
             set
             {
                 if (value == null)
+                {
                     this.ExtensionHandler = null;
+                }
                 else
+                {
                     this.ExtensionHandler = System.Type.GetType(value);
+                }
             }
         }
 

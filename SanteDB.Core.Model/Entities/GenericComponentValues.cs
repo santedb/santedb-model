@@ -35,7 +35,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("GenericComponentValues")]
     public abstract class GenericComponentValues<TBoundModel> : Association<TBoundModel> where TBoundModel : IdentifiedData, new()
     {
-       
+
         // Component type
         /// <summary>
         /// Default ctor
@@ -96,7 +96,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as GenericComponentValues<TBoundModel>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.Value == other.Value &&
                 this.ComponentTypeKey == other.ComponentTypeKey;

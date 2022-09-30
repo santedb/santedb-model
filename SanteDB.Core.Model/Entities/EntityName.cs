@@ -40,7 +40,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("EntityName", Namespace = "http://santedb.org/model"), JsonObject("EntityName")]
     public class EntityName : VersionedAssociation<Entity>
     {
-        
+
         // Name use concept
         /// <summary>
         /// Creates a new name
@@ -51,10 +51,17 @@ namespace SanteDB.Core.Model.Entities
             this.Component = new List<EntityNameComponent>();
 
             if (!String.IsNullOrEmpty(family))
+            {
                 this.Component.Add(new EntityNameComponent(NameComponentKeys.Family, family));
+            }
+
             foreach (var nm in given)
+            {
                 if (!String.IsNullOrEmpty(nm))
+                {
                     this.Component.Add(new EntityNameComponent(NameComponentKeys.Given, nm));
+                }
+            }
         }
 
         /// <summary>
@@ -76,7 +83,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityName()
         {
-            
+
         }
 
         /// <summary>
@@ -106,7 +113,7 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public override bool IsEmpty()
         {
-            return this.Component.IsNullOrEmpty() || this.Component?.All(c=>c.IsEmpty()) == true;
+            return this.Component.IsNullOrEmpty() || this.Component?.All(c => c.IsEmpty()) == true;
         }
 
         /// <summary>
@@ -115,7 +122,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as EntityName;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.NameUseKey == other.NameUseKey &&
                 this.Component?.SemanticEquals(other.Component) != false;
@@ -135,7 +146,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public override string ToString()
         {
-            if (this.LoadProperty(o=>o.Component).IsNullOrEmpty())
+            if (this.LoadProperty(o => o.Component).IsNullOrEmpty())
             {
                 return "";
             }

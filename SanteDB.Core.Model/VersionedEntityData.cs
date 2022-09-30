@@ -84,7 +84,10 @@ namespace SanteDB.Core.Model
         {
             if (this.PreviousVersionKey.HasValue &&
                 this.m_previousVersion == null)
+            {
                 this.m_previousVersion = EntitySource.Current.Get<THistoryModelType>(this.Key, this.PreviousVersionKey.Value);
+            }
+
             return this.m_previousVersion;
         }
 

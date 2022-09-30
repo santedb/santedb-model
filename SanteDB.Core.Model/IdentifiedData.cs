@@ -25,11 +25,11 @@ using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
-using System.Collections.Concurrent;
 
 namespace SanteDB.Core.Model
 {
@@ -91,7 +91,10 @@ namespace SanteDB.Core.Model
             get
             {
                 if (String.IsNullOrEmpty(this.m_typeId))
+                {
                     this.m_typeId = this.GetType().GetSerializationName();
+                }
+
                 return this.m_typeId;
             }
             set { }
@@ -134,12 +137,15 @@ namespace SanteDB.Core.Model
             var retVal = Activator.CreateInstance(this.GetType()) as IdentifiedData;
             retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
             retVal.BatchOperation = BatchOperationType.Auto;
-            foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) continue; // can't and not important to serialization write so continue 
+                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null)
+                {
+                    continue; // can't and not important to serialization write so continue 
+                }
 
                 var thisValue = pi.GetValue(this);
-                if(thisValue is IList list)
+                if (thisValue is IList list)
                 {
                     if (pi.PropertyType.GetConstructor(System.Type.EmptyTypes) != null)
                     {
@@ -162,7 +168,7 @@ namespace SanteDB.Core.Model
                         pi.SetValue(retVal, list);
                     }
                 }
-                else if(thisValue is IdentifiedData id)
+                else if (thisValue is IdentifiedData id)
                 {
                     pi.SetValue(retVal, id.DeepCopy());
                 }
@@ -187,7 +193,9 @@ namespace SanteDB.Core.Model
             foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) // No sense of reading
+                {
                     continue;
+                }
 
                 var thisValue = pi.GetValue(this);
                 if (thisValue is IList listValue && listValue.Count > 0 &&
@@ -215,7 +223,10 @@ namespace SanteDB.Core.Model
         {
             var other = obj as IdentifiedData;
             if (other == null)
+            {
                 return false;
+            }
+
             return this.Type == other.Type;
         }
 
@@ -255,7 +266,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual void RemoveAnnotation(Object annotation)
         {
-            if(this.m_annotations.TryGetValue(annotation.GetType(), out var values))
+            if (this.m_annotations.TryGetValue(annotation.GetType(), out var values))
             {
                 values.Remove(annotation);
             }
@@ -266,7 +277,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual void RemoveAnnotations<T>()
         {
-            if(this.m_annotations.TryGetValue(typeof(T), out var values))
+            if (this.m_annotations.TryGetValue(typeof(T), out var values))
             {
                 values.Clear();
             }
@@ -277,7 +288,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual IEnumerable<T> GetAnnotations<T>()
         {
-            if(this.m_annotations.TryGetValue(typeof(T), out var values)) 
+            if (this.m_annotations.TryGetValue(typeof(T), out var values))
             {
                 return values.OfType<T>().ToArray();
             }
@@ -296,7 +307,7 @@ namespace SanteDB.Core.Model
             {
                 return;
             }
-            if(!this.m_annotations.TryGetValue(typeof(T), out var values))
+            if (!this.m_annotations.TryGetValue(typeof(T), out var values))
             {
                 values = new List<object>();
                 this.m_annotations.TryAdd(typeof(T), values);

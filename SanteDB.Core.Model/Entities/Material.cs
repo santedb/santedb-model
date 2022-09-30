@@ -23,7 +23,6 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
@@ -37,7 +36,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Material)]
     public class Material : Entity
     {
-        
+
         /// <summary>
         /// Material ctor
         /// </summary>
@@ -103,7 +102,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Material;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.Quantity == other.Quantity &&
                 this.QuantityConceptKey == other.QuantityConceptKey &&

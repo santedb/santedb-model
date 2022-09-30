@@ -141,7 +141,7 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public IdentifiedData GetFocalObject()
         {
-            if(!this.FocalObjects.IsNullOrEmpty())
+            if (!this.FocalObjects.IsNullOrEmpty())
             {
                 return this.Item.FirstOrDefault(o => o.Key == this.FocalObjects.FirstOrDefault());
             }
@@ -188,10 +188,16 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public void Add(IdentifiedData data)
         {
-            if (data == null) return;
+            if (data == null)
+            {
+                return;
+            }
+
             this.Item.Add(data);
             if (!String.IsNullOrEmpty(data.Tag))
+            {
                 this.m_bundleTags.Add(data.Tag);
+            }
         }
 
         /// <summary>
@@ -213,10 +219,16 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public void Insert(int index, IdentifiedData data)
         {
-            if (data == null) return;
+            if (data == null)
+            {
+                return;
+            }
+
             this.Item.Insert(index, data);
             if (!String.IsNullOrEmpty(data.Tag))
+            {
                 this.m_bundleTags.Add(data.Tag);
+            }
         }
 
         /// <summary>
@@ -229,7 +241,11 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public static Bundle CreateBundle(IdentifiedData resourceRoot, bool followList = true)
         {
-            if (resourceRoot is Bundle) return resourceRoot as Bundle;
+            if (resourceRoot is Bundle)
+            {
+                return resourceRoot as Bundle;
+            }
+
             Bundle retVal = new Bundle();
             retVal.Key = Guid.NewGuid();
             retVal.Count = 1;
@@ -255,13 +271,18 @@ namespace SanteDB.Core.Model.Collection
             retVal.Offset = offset;
             retVal.TotalResults = totalResults;
             if (resourceRoot == null)
+            {
                 return retVal;
+            }
 
             // Resource root
             foreach (var itm in resourceRoot)
             {
                 if (itm == null)
+                {
                     continue;
+                }
+
                 if (!retVal.HasTag(itm.Tag) && itm.Key.HasValue)
                 {
                     retVal.Add(itm);
@@ -304,7 +325,10 @@ namespace SanteDB.Core.Model.Collection
         private void Reconstitute(IdentifiedData data, HashSet<IdentifiedData> context)
         {
             if (context.Contains(data))
+            {
                 return;
+            }
+
             context.Add(data);
 
             // Iterate over properties
@@ -316,12 +340,17 @@ namespace SanteDB.Core.Model.Collection
                 var keyPi = pi.GetSerializationRedirectProperty();
                 if (keyPi == null || (keyPi.PropertyType != typeof(Guid) &&
                     keyPi.PropertyType != typeof(Guid?)))
+                {
                     continue; // Invalid key link name
+                }
 
                 // Get the key and find a match
                 var key = (Guid?)keyPi.GetValue(data);
                 if (key == null)
+                {
                     continue;
+                }
+
                 var bundleItem = this.Item.Find(o => o.Key == key);
                 if (bundleItem != null)
                 {
@@ -355,7 +384,10 @@ namespace SanteDB.Core.Model.Collection
                     try
                     {
                         object rawValue = pi.GetValue(model);
-                        if (rawValue == null) continue;
+                        if (rawValue == null)
+                        {
+                            continue;
+                        }
 
                         if (rawValue is IList && followList)
                         {
@@ -365,7 +397,9 @@ namespace SanteDB.Core.Model.Collection
                                 if (iValue != null)
                                 {
                                     if (currentBundle.Item.Exists(o => o?.Tag == iValue?.Tag))
+                                    {
                                         continue;
+                                    }
 
                                     if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null)
                                     {

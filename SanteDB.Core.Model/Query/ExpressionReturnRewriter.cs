@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -84,7 +83,8 @@ namespace SanteDB.Core.Model.Query
         /// <inheritdoc/>
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            if(convertedParameters.TryGetValue(node.Name, out var newNode)) {
+            if (convertedParameters.TryGetValue(node.Name, out var newNode))
+            {
                 return newNode;
             }
             return node;

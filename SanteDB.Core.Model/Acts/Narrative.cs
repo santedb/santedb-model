@@ -22,8 +22,6 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -55,7 +53,7 @@ namespace SanteDB.Core.Model.Acts
             return new Narrative()
             {
                 ClassConceptKey = ActClassKeys.Document,
-                    MoodConceptKey = ActMoodKeys.Eventoccurrence,
+                MoodConceptKey = ActMoodKeys.Eventoccurrence,
                 Title = title,
                 ActTime = DateTime.Now,
                 LanguageCode = language,

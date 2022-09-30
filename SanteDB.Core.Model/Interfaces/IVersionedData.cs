@@ -45,6 +45,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// True if this version is the HEAD version
         /// </summary>
-        bool IsHeadVersion { get; set;  }
+        bool IsHeadVersion { get; set; }
     }
 }

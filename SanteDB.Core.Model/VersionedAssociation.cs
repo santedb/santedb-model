@@ -52,7 +52,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Should serialize obsolete
         /// </summary>
-        public bool ShouldSerializeObsoleteVersionSequenceId() =>  this.ObsoleteVersionSequenceId.HasValue;
+        public bool ShouldSerializeObsoleteVersionSequenceId() => this.ObsoleteVersionSequenceId.HasValue;
 
         /// <summary>
         /// Should serialize obsolete
@@ -65,7 +65,11 @@ namespace SanteDB.Core.Model
         public override bool SemanticEquals(object obj)
         {
             var other = obj as VersionedAssociation<TSourceType>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj);
         }
     }

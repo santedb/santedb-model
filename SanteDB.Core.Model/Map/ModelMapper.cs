@@ -21,16 +21,12 @@
 using Microsoft.CSharp;
 using SanteDB.Core.Exceptions;
 using SanteDB.Core.i18n;
-using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map.Builder;
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -67,9 +63,13 @@ namespace SanteDB.Core.Model.Map
             tdomain = tdomain ?? classMap?.DomainType;
             PropertyMap propMap = null;
             if (classMap?.TryGetModelProperty(propertyInfo.Name, out propMap) == true)
+            {
                 return tdomain?.GetRuntimeProperty(propMap.DomainName);
+            }
             else
+            {
                 return tdomain?.GetRuntimeProperty(propertyInfo.Name);
+            }
         }
 
         // The map file
@@ -192,7 +192,10 @@ namespace SanteDB.Core.Model.Map
         public IModelMapper GetModelMapper(Type forType)
         {
             if (this.m_mappers.TryGetValue(forType, out IModelMapper retVal))
+            {
                 return retVal;
+            }
+
             return null;
         }
 
@@ -205,7 +208,11 @@ namespace SanteDB.Core.Model.Map
             ClassMap classMap = this.m_mapFile.GetModelClassMap(sourceExpression.Operand.Type);
 
             PropertyMap castMap = classMap.Cast?.Find(o => o.ModelType == sourceExpression.Type);
-            if (castMap == null) throw new InvalidCastException();
+            if (castMap == null)
+            {
+                throw new InvalidCastException();
+            }
+
             Expression accessExpr = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(castMap.DomainName));
 
             return accessExpr;
@@ -216,7 +223,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public Expression MapModelMember(MemberExpression memberExpression, Expression accessExpression, Type modelType = null)
         {
-            if(accessExpression.Type.StripNullable() == (modelType ?? memberExpression.Expression.Type).StripNullable())
+            if (accessExpression.Type.StripNullable() == (modelType ?? memberExpression.Expression.Type).StripNullable())
             {
                 return accessExpression;
             }
@@ -226,8 +233,8 @@ namespace SanteDB.Core.Model.Map
             if (classMap == null)
             {
                 // Is there a different map we could use
-                classMap = this.m_mapFile.Class.FirstOrDefault(o=>o.DomainType == accessExpression.Type);
-                if(classMap == null || !classMap.ModelType.IsAssignableFrom(modelType ?? memberExpression.Expression.Type))
+                classMap = this.m_mapFile.Class.FirstOrDefault(o => o.DomainType == accessExpression.Type);
+                if (classMap == null || !classMap.ModelType.IsAssignableFrom(modelType ?? memberExpression.Expression.Type))
                 {
                     throw new InvalidOperationException(string.Format(ErrorMessages.MAP_NOT_FOUND, modelType ?? memberExpression.Type, accessExpression.Type));
                 }
@@ -239,7 +246,9 @@ namespace SanteDB.Core.Model.Map
             PropertyMap propertyMap = null;
 
             if (memberExpression.Member.Name == "Key" && classMap.TryGetCollapseKey(accessExpressionAsMember?.Member.Name, out collapseKey))
+            {
                 return Expression.MakeMemberAccess(accessExpressionAsMember.Expression, accessExpressionAsMember.Expression.Type.GetRuntimeProperty(collapseKey.KeyName));
+            }
             else if (classMap.TryGetModelProperty(memberExpression.Member.Name, out propertyMap))
             {
                 return Expression.MakeMemberAccess(accessExpression, this.ExtractDomainType(accessExpression.Type).GetRuntimeProperty(propertyMap.DomainName));
@@ -252,7 +261,9 @@ namespace SanteDB.Core.Model.Map
                 // Get domain member and map
                 MemberInfo domainMember = accessExpression.Type.GetRuntimeProperty(memberExpression.Member.Name);
                 if (domainMember != null)
+                {
                     return Expression.MakeMemberAccess(accessExpression, domainMember);
+                }
                 else if (accessExpression is ParameterExpression pe)
                 {
                     // Try on the base?
@@ -279,11 +290,18 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public Type ExtractDomainType(Type domainType)
         {
-            if (!domainType.IsConstructedGenericType) return domainType;
+            if (!domainType.IsConstructedGenericType)
+            {
+                return domainType;
+            }
             else if (domainType.GenericTypeArguments.Length == 1)
+            {
                 return this.ExtractDomainType(domainType.GenericTypeArguments[0]);
+            }
             else
+            {
                 throw new InvalidOperationException("Cannot determine domain model type");
+            }
         }
 
         /// <summary>
@@ -293,18 +311,27 @@ namespace SanteDB.Core.Model.Map
         {
             // Just a value type - don't look for a map
             if (modelType.BaseType == typeof(ValueType))
+            {
                 return modelType;
+            }
 
             ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType);
             // No class mapping so go up the tree
             if (classMap == null && modelType.BaseType != typeof(Object))
+            {
                 return MapModelType(modelType.BaseType);
+            }
             else if (classMap == null)
+            {
                 throw new InvalidOperationException($"Cannot map {modelType.FullName} to a domain type");
+            }
 
             Type domainType = classMap.DomainType;
             if (domainType == null)
+            {
                 throw new InvalidOperationException(String.Format("Cannot find class {0}", classMap.DomainClass));
+            }
+
             return domainType;
         }
 
@@ -315,10 +342,16 @@ namespace SanteDB.Core.Model.Map
         {
             ClassMap classMap = this.m_mapFile.Class.FirstOrDefault(o => o.DomainType == domainType);
             if (classMap == null)
+            {
                 return domainType;
+            }
+
             Type modelType = classMap.ModelType;
             if (domainType == null)
+            {
                 throw new InvalidOperationException(String.Format("Cannot find class {0}", classMap.DomainClass));
+            }
+
             return modelType;
         }
 
@@ -333,7 +366,9 @@ namespace SanteDB.Core.Model.Map
                 ClassMap classMap = this.m_mapFile.GetModelClassMap(this.ExtractDomainType(propertyExpression.Expression.Type));
 
                 if (classMap == null)
+                {
                     return lambdaParameterExpression;
+                }
 
                 // Expression is the same class? Collapse if it is a key
                 PropertyMap propertyMap = null;
@@ -367,13 +402,20 @@ namespace SanteDB.Core.Model.Map
 
                 Expression expr = new ModelExpressionVisitor(this, parameter).Visit(expression.Body);
                 if (expr == null && throwOnError)
+                {
                     throw new ArgumentException(ErrorMessages.MAP_EXPRESSION_NOT_POSSIBLE);
+                }
                 else if (expr == null)
+                {
                     return null;
+                }
                 else
                 {
                     if (typeof(TReturn) != expr.Type)
+                    {
                         expr = Expression.Convert(expr, typeof(TReturn));
+                    }
+
                     var retVal = Expression.Lambda(expr, parameter);
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Map Expression: {0} > {1}", expression, retVal);
@@ -441,9 +483,13 @@ namespace SanteDB.Core.Model.Map
                 this.m_mappers.TryGetValue(modelInstance.GetType(), out modelMapper))
             {
                 if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
+                {
                     return smodelMapper.MapToTarget(modelInstance);
+                }
                 else
+                {
                     return (TDomain)modelMapper.MapToTarget(modelInstance);
+                }
             }
             else
             {
@@ -564,9 +610,13 @@ namespace SanteDB.Core.Model.Map
                 )
             {
                 if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
+                {
                     return smodelMapper.MapToSource(domainInstance);
+                }
                 else
+                {
                     return (TModel)modelMapper.MapToSource(domainInstance);
+                }
             }
             else
             {

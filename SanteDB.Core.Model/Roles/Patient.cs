@@ -42,7 +42,7 @@ namespace SanteDB.Core.Model.Roles
         /// <summary>
         /// Represents a patient
         /// </summary>
-        public Patient() 
+        public Patient()
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
             base.m_classConceptKey = EntityClassKeys.Patient;
@@ -73,12 +73,18 @@ namespace SanteDB.Core.Model.Roles
                 {
                     // Try to parse ISO date
                     if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    {
                         this.DeceasedDate = dt;
+                    }
                     else
+                    {
                         throw new FormatException($"Cannot parse {value} as a date");
+                    }
                 }
                 else
+                {
                     this.DeceasedDate = null;
+                }
             }
         }
 
@@ -215,7 +221,11 @@ namespace SanteDB.Core.Model.Roles
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Patient;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.DeceasedDate == other.DeceasedDate &&
                 this.DeceasedDatePrecision == other.DeceasedDatePrecision;

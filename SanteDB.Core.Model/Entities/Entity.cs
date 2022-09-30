@@ -243,7 +243,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Entity;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.Addresses?.SemanticEquals(other.Addresses) != false &&
                 this.ClassConceptKey == other.ClassConceptKey &&
@@ -362,7 +366,7 @@ namespace SanteDB.Core.Model.Entities
             }
         }
 
-       
+
         /// <summary>
         /// Should serialize template key
         /// </summary>
@@ -376,7 +380,10 @@ namespace SanteDB.Core.Model.Entities
         {
             var pol = EntitySource.Current.Provider.Query<SecurityPolicy>(o => o.Oid == policyId).SingleOrDefault();
             if (pol == null)
+            {
                 throw new KeyNotFoundException($"Policy {policyId} not found");
+            }
+
             this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
         }
 

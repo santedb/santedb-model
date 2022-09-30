@@ -21,8 +21,6 @@
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Query;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace SanteDB.Core.Model.EntityLoader

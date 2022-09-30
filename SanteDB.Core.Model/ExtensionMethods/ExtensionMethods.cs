@@ -106,7 +106,7 @@ namespace SanteDB
                     {
                         if (!m_types.TryGetValue(a, out var typ))
                         {
-                            typ = a.GetTypes().Where(t=>t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
+                            typ = a.GetTypes().Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
                             m_types.TryAdd(a, typ);
                         }
                         return typ;
@@ -118,7 +118,7 @@ namespace SanteDB
                 });
         }
 
-        
+
 
         /// <summary>
         /// As result set
@@ -304,8 +304,14 @@ namespace SanteDB
         /// </summary>
         public static MemberInfo GetMember(this Expression me)
         {
-            if (me is UnaryExpression ue) return ue.Operand.GetMember();
-            else if (me is LambdaExpression le) return le.Body.GetMember();
+            if (me is UnaryExpression ue)
+            {
+                return ue.Operand.GetMember();
+            }
+            else if (me is LambdaExpression le)
+            {
+                return le.Body.GetMember();
+            }
             else if (me is MemberExpression ma)
             {
                 if (ma.Member.Name == "Value" && ma.Expression.Type.IsGenericType && ma.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -317,7 +323,10 @@ namespace SanteDB
                     return ma.Member;
                 }
             }
-            else throw new InvalidOperationException($"{me} not supported, please use a member access expression");
+            else
+            {
+                throw new InvalidOperationException($"{me} not supported, please use a member access expression");
+            }
         }
 
 
@@ -331,12 +340,18 @@ namespace SanteDB
             {
                 var body = lambda.Body as MemberExpression;
                 if (body != null)
+                {
                     return me.LoadCollection<TReturn>(body.Member.Name, forceReload);
+                }
                 else
+                {
                     throw new InvalidOperationException("Must be simple property selector");
+                }
             }
             else
+            {
                 throw new InvalidOperationException("Unknown expression passed");
+            }
         }
 
         /// <summary>
@@ -349,12 +364,18 @@ namespace SanteDB
             {
                 var body = lambda.Body as MemberExpression;
                 if (body != null)
+                {
                     return me.LoadProperty<TReturn>(body.Member.Name, forceReload);
+                }
                 else
+                {
                     throw new InvalidOperationException("Must be simple property selector");
+                }
             }
             else
+            {
                 throw new InvalidOperationException("Unknown expression passed");
+            }
         }
 
 
@@ -377,11 +398,17 @@ namespace SanteDB
         /// </summary>
         public static object LoadProperty(this IIdentifiedData me, string propertyName, bool forceReload = false)
         {
-            if (me == null) 
+            if (me == null)
+            {
                 return null;
+            }
 
             var propertyToLoad = me.GetType().GetProperty(propertyName);
-            if (propertyToLoad == null) return null;
+            if (propertyToLoad == null)
+            {
+                return null;
+            }
+
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
@@ -398,7 +425,7 @@ namespace SanteDB
             {
                 if (typeof(IList).IsAssignableFrom(propertyToLoad.PropertyType)) // Collection we load by key
                 {
-                    if ((currentValue == null || currentValue is IList cle && cle.IsNullOrEmpty()) && 
+                    if ((currentValue == null || currentValue is IList cle && cle.IsNullOrEmpty()) &&
                         typeof(IdentifiedData).IsAssignableFrom(propertyToLoad.PropertyType.StripGeneric()))
                     {
                         IList loaded = Activator.CreateInstance(propertyToLoad.PropertyType) as IList;
@@ -429,7 +456,9 @@ namespace SanteDB
                 {
                     var keyValue = propertyToLoad.GetSerializationRedirectProperty()?.GetValue(me) as Guid?;
                     if (keyValue.GetValueOrDefault() == default(Guid))
+                    {
                         return currentValue;
+                    }
                     else
                     {
                         var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.Get), new Type[] { propertyToLoad.PropertyType }, new Type[] { typeof(Guid?) });
@@ -438,7 +467,10 @@ namespace SanteDB
                         return loaded;
                     }
                 }
-                else return currentValue;
+                else
+                {
+                    return currentValue;
+                }
             }
             finally
             {
@@ -481,7 +513,10 @@ namespace SanteDB
         /// </summary>
         public static TReturn Convert<TReturn>(this Object me) where TReturn : new()
         {
-            if (me is TReturn) return (TReturn)me;
+            if (me is TReturn)
+            {
+                return (TReturn)me;
+            }
             else
             {
                 var retVal = new TReturn();
@@ -504,9 +539,14 @@ namespace SanteDB
         public static TObject StripAssociatedItemSources<TObject>(this TObject toEntity)
         {
             if (toEntity == null)
+            {
                 throw new ArgumentNullException(nameof(toEntity));
+            }
+
             if (!(toEntity is IdentifiedData identifiedData))
+            {
                 return toEntity;
+            }
 
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
@@ -521,6 +561,7 @@ namespace SanteDB
                 {
                     var value = destinationPi.GetValue(toEntity);
                     if (value is IList list)
+                    {
                         foreach (ISimpleAssociation itm in list)
                         {
                             if (itm is ITargetedAssociation itgt && itgt.TargetEntityKey == identifiedData.Key)
@@ -534,10 +575,14 @@ namespace SanteDB
                                 itm.SourceEntityKey = null;
 
                                 if (itm is IVersionedAssociation va)
+                                {
                                     va.EffectiveVersionSequenceId = null;
+                                }
+
                                 itm.StripAssociatedItemSources();
                             }
                         }
+                    }
                     else if (value is ISimpleAssociation assoc)
                     {
                         if (assoc.SourceEntityKey != identifiedData.Key)
@@ -545,7 +590,10 @@ namespace SanteDB
                             assoc.Key = null;
                             assoc.SourceEntityKey = null;
                             if (assoc is IVersionedAssociation va)
+                            {
                                 va.EffectiveVersionSequenceId = null;
+                            }
+
                             assoc.StripAssociatedItemSources();
                         }
                     }
@@ -562,15 +610,23 @@ namespace SanteDB
         public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull = false, bool ignoreTypeMismatch = false, bool declaredOnly = false, bool onlyNullFields = false)
         {
             if (toEntity == null)
+            {
                 throw new ArgumentNullException(nameof(toEntity));
+            }
             else if (fromEntity == null)
+            {
                 return toEntity;// nothing to copy
+            }
             else if (!ignoreTypeMismatch && !fromEntity.GetType().IsAssignableFrom(toEntity.GetType()))
+            {
                 throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntity.GetType().FullName}", nameof(fromEntity));
+            }
 
             PropertyInfo[] properties = null;
             if (declaredOnly)
+            {
                 properties = typeof(TObject).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            }
             else if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
             {
                 properties = toEntity.GetType().GetProperties().Where(destinationPi => destinationPi.GetCustomAttribute<SerializationMetadataAttribute>() == null &&
@@ -586,14 +642,18 @@ namespace SanteDB
                 var sourcePi = sameType ? destinationPi : fromEntity.GetType().GetProperty(destinationPi.Name);
                 // Skip properties no in the source
                 if (sourcePi == null)
+                {
                     continue;
+                }
 
                 object newValue = sourcePi.GetValue(fromEntity),
                     oldValue = destinationPi.GetValue(toEntity);
 
                 // HACK: New value wrap for nullables
                 if (newValue is IList lst && lst.Count == 0)
+                {
                     newValue = null;
+                }
 
                 object defaultValue = null;
                 var hasConstructor = false;
@@ -604,8 +664,9 @@ namespace SanteDB
                     s_parameterlessCtor.TryAdd(newValue.GetType(), hasConstructor);
                 }
                 if (newValue != null && hasConstructor)
+                {
                     defaultValue = Activator.CreateInstance(newValue.GetType());
-
+                }
 
                 if (onlyNullFields &&
                     oldValue != null &&
@@ -622,15 +683,21 @@ namespace SanteDB
                 if (newValue is IList && oldValue is IList)
                 {
                     if (!Enumerable.SequenceEqual<Object>(((IList)newValue).OfType<Object>(), ((IList)oldValue).OfType<Object>()))
+                    {
                         destinationPi.SetValue(toEntity, newValue);
+                    }
                 }
                 else if (
                     newValue != null &&
                     !newValue.Equals(oldValue) == true &&
                     (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || typeof(String) == destinationPi.PropertyType && !String.IsNullOrEmpty(newValue.ToString()) || !newValue.Equals(defaultValue) || !destinationPi.PropertyType.IsValueType))
+                {
                     destinationPi.SetValue(toEntity, newValue);
+                }
                 else if (newValue == null && oldValue != null && overwritePopulatedWithNull)
+                {
                     destinationPi.SetValue(toEntity, newValue);
+                }
             }
             return toEntity;
         }
@@ -666,13 +733,21 @@ namespace SanteDB
         private static TObject SemanticCopyInternal<TObject>(this TObject toEntity, bool onlyIfNull, String[] fieldNames, params TObject[] fromEntities) where TObject : IdentifiedData
         {
             if (toEntity == null)
+            {
                 throw new ArgumentNullException(nameof(toEntity));
+            }
             else if (fromEntities == null)
+            {
                 throw new ArgumentNullException(nameof(fromEntities));
+            }
             else if (fromEntities.Length == 0)
+            {
                 return toEntity;
+            }
             else if (!fromEntities.Any(e => e.GetType().IsAssignableFrom(toEntity.GetType())))
+            {
                 throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntities.GetType().FullName}", nameof(fromEntities));
+            }
 
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
@@ -692,28 +767,37 @@ namespace SanteDB
                 object oldValue = destinationPi.GetValue(toEntity);
                 if ((onlyIfNull && (oldValue == null || (oldValue as IList)?.Count == 0) || !onlyIfNull) &&
                     (fieldNames == null || fieldNames.Contains(destinationPi.Name)))
+                {
                     foreach (var fromEntity in fromEntities.OrderBy(k => k.ModifiedOn))
                     {
                         var sourcePi = fromEntity.GetType().GetProperty(destinationPi.Name);
                         // Skip properties no in the source
                         if (sourcePi == null)
+                        {
                             continue;
+                        }
 
                         // Skip data ignore
                         if (destinationPi.PropertyType.IsGenericType &&
                             destinationPi.PropertyType.GetGenericTypeDefinition().Namespace.StartsWith("System.Data.Linq") ||
                             destinationPi.PropertyType.Namespace.StartsWith("SanteDB.Persistence"))
+                        {
                             continue;
+                        }
 
                         object newValue = sourcePi.GetValue(fromEntity);
 
                         // HACK: New value wrap for nullables
                         if (newValue is Guid? && newValue != null)
+                        {
                             newValue = (newValue as Guid?).Value;
+                        }
 
                         // HACK: Empty lists are NULL
                         if ((newValue as IList)?.Count == 0)
+                        {
                             newValue = null;
+                        }
 
                         if (newValue != null) // The new value has something
                         {
@@ -763,12 +847,17 @@ namespace SanteDB
                             }
                             else if (newValue is IdentifiedData &&
                                 !(newValue as IdentifiedData).SemanticEquals(oldValue))
+                            {
                                 destinationPi.SetValue(toEntity, newValue);
+                            }
                             else if (!newValue.Equals(oldValue) &&
                                 (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.IsValueType))
+                            {
                                 destinationPi.SetValue(toEntity, newValue);
+                            }
                         }
                     }
+                }
             }
 
             return toEntity;
@@ -815,11 +904,17 @@ namespace SanteDB
             {
                 var refName = me.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty;
                 if (refName == null)
+                {
                     return null;
+                }
+
                 xmlName = me.DeclaringType.GetProperty(refName)?.GetCustomAttribute<XmlElementAttribute>()?.ElementName;
             }
             else if (xmlName == String.Empty)
+            {
                 xmlName = me.Name;
+            }
+
             return xmlName;
         }
 
@@ -868,11 +963,19 @@ namespace SanteDB
             {
                 retVal = type.GetProperties().FirstOrDefault(o => o.GetCustomAttributes<XmlElementAttribute>()?.FirstOrDefault()?.ElementName == propertyName || o.GetCustomAttribute<QueryParameterAttribute>()?.ParameterName == propertyName || o.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName == propertyName);
                 if (retVal == null)
+                {
                     return null;
-                if (followReferences) retVal = type.GetProperties().FirstOrDefault(o => o.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty == retVal.Name) ?? retVal;
+                }
+
+                if (followReferences)
+                {
+                    retVal = type.GetProperties().FirstOrDefault(o => o.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty == retVal.Name) ?? retVal;
+                }
 
                 if (retVal.Name.EndsWith("Xml"))
+                {
                     retVal = type.GetProperty(retVal.Name.Substring(0, retVal.Name.Length - 3));
+                }
 
                 s_propertyCache.TryAdd(key, retVal);
             }
@@ -886,7 +989,10 @@ namespace SanteDB
         {
             long hash = 1009;
             foreach (var b in me)
+            {
                 hash = ((hash << 5) + hash) ^ b;
+            }
+
             return BitConverter.ToString(BitConverter.GetBytes(hash)).Replace("-", "");
         }
 
@@ -938,12 +1044,21 @@ namespace SanteDB
         /// </summary>
         public static bool SemanticEquals<TEntity>(this IEnumerable<TEntity> me, IEnumerable<TEntity> other) where TEntity : IdentifiedData
         {
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             bool equals = me.Count() == other.Count();
             foreach (var itm in me)
+            {
                 equals &= other.Any(o => o.SemanticEquals(itm));
+            }
+
             foreach (var itm in other)
+            {
                 equals &= me.Any(o => o.SemanticEquals(itm));
+            }
 
             return equals;
         }
@@ -976,7 +1091,10 @@ namespace SanteDB
         {
             var validResults = new List<ValidationResultDetail>();
             if (me.SourceEntityKey == Guid.Empty)
+            {
                 validResults.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} required", me.GetType().Name, "SourceEntityKey"), null, null));
+            }
+
             return validResults;
         }
 

@@ -18,16 +18,13 @@
  * User: fyfej
  * Date: 2022-5-30
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
     /// An interface which defines an object which can deep-copy itself
     /// </summary>
-    public interface ICanDeepCopy 
+    public interface ICanDeepCopy
     {
 
         /// <summary>

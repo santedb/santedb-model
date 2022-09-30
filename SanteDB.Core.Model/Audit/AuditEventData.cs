@@ -19,8 +19,6 @@
  * Date: 2022-5-30
  */
 using Newtonsoft.Json;
-using SanteDB.Core.Model;
-using SanteDB.Core.Model.Audit;
 using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections.Generic;
@@ -30,7 +28,7 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Audit
 {
-    
+
     /// <summary>
     /// Represents a single audit event 
     /// </summary>
@@ -134,14 +132,14 @@ namespace SanteDB.Core.Model.Audit
             get => XmlConvert.ToString(this.Timestamp);
             set
             {
-                if(!DateTimeOffset.TryParse(value, out var parsed))
+                if (!DateTimeOffset.TryParse(value, out var parsed))
                 {
                     parsed = XmlConvert.ToDateTimeOffset(value);
                 }
                 this.Timestamp = parsed;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the timestamp for the object
         /// </summary>

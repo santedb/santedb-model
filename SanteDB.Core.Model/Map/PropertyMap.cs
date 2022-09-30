@@ -82,20 +82,32 @@ namespace SanteDB.Core.Model.Map
             Debug.WriteLine(String.Format("\t Property {0}>{1}", this.ModelName, this.DomainName));
 #endif
             if (domainClass?.IsConstructedGenericType == true)
+            {
                 domainClass = domainClass.GenericTypeArguments[0];
+            }
+
             if (modelClass?.IsConstructedGenericType == true)
+            {
                 modelClass = modelClass.GenericTypeArguments[0];
+            }
 
             List<ValidationResultDetail> retVal = new List<ValidationResultDetail>();
             // 0. Property and model names should exist
             if (String.IsNullOrEmpty(this.DomainName))
+            {
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, "@domainName not set", null, null));
+            }
 
             // 1. The property should exist
             if (!String.IsNullOrEmpty(this.ModelName) && modelClass?.GetRuntimeProperty(this.ModelName ?? "") == null)
+            {
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", modelClass?.Name, this.ModelName), null, null));
+            }
+
             if (domainClass?.GetRuntimeProperty(this.DomainName ?? "") == null)
+            {
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", domainClass?.Name, this.DomainName), null, null));
+            }
 
             // Order by?
             if (!String.IsNullOrEmpty(this.OrderBy) && domainClass != null)
@@ -103,12 +115,16 @@ namespace SanteDB.Core.Model.Map
 
                 var orderProperty = domainClass.GetRuntimeProperty(this.DomainName);
                 if (!orderProperty.PropertyType.IsEnumerable())
+                {
                     retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Sort Property {0}.{1} is not enumerable", domainClass?.Name, this.OrderBy), null, null));
+                }
                 else
                 {
                     orderProperty = orderProperty.PropertyType.GenericTypeArguments[0].GetRuntimeProperty(this.OrderBy);
                     if (orderProperty == null)
+                    {
                         retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Sort Property {0}.{1} not found", domainClass?.Name, this.OrderBy), null, null));
+                    }
                 }
             }
             return retVal;

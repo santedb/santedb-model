@@ -59,7 +59,7 @@ namespace SanteDB.Core.Model.Query.FilterExtension
 
             if (scope.Type.StripNullable() == typeof(Guid) && scope is MemberExpression mae) // We are anchored to the holder
             {
-                while(mae != null && !typeof(IdentifiedData).IsAssignableFrom(mae.Expression.Type))
+                while (mae != null && !typeof(IdentifiedData).IsAssignableFrom(mae.Expression.Type))
                 {
                     mae = mae.Expression as MemberExpression;
                 }

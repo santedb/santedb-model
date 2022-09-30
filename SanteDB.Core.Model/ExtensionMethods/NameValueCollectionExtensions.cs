@@ -60,7 +60,10 @@ namespace SanteDB
         {
             var retVal = new NameValueCollection();
             foreach (var kv in kvpa)
+            {
                 retVal.Add(kv.Key, kv.Value?.ToString());
+            }
+
             return retVal;
         }
 
@@ -94,8 +97,15 @@ namespace SanteDB
         public static NameValueCollection ParseQueryString(this String me)
         {
             NameValueCollection retVal = new NameValueCollection();
-            if (String.IsNullOrEmpty(me)) return retVal;
-            if (me.StartsWith("?")) me = me.Substring(1);
+            if (String.IsNullOrEmpty(me))
+            {
+                return retVal;
+            }
+
+            if (me.StartsWith("?"))
+            {
+                me = me.Substring(1);
+            }
 
             // Escape regex
             var escapeRegex = new Regex("%([A-Fa-f0-9]{2})");
@@ -107,7 +117,10 @@ namespace SanteDB
                 expr[1] = Uri.UnescapeDataString(expr[1]).Trim();
 
                 if (expr[0].EndsWith("[]")) // JQUERY Hack:
+                {
                     expr[0] = expr[0].Substring(0, expr[0].Length - 2);
+                }
+
                 var value = escapeRegex.Replace(expr[1], (m) => System.Text.Encoding.UTF8.GetString(new byte[] { Convert.ToByte(m.Groups[1].Value, 16) }, 0, 1));
                 // HACK: Replace this later
                 if (!String.IsNullOrEmpty(value))
@@ -159,7 +172,11 @@ namespace SanteDB
             {
                 foreach (var val in me.GetValues(kv))
                 {
-                    if (string.IsNullOrEmpty(val)) continue;
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        continue;
+                    }
+
                     queryString.AppendFormat("{0}={1}&", kv, Uri.EscapeDataString(val));
                 }
             }
@@ -174,8 +191,13 @@ namespace SanteDB
         {
             var retVal = new List<KeyValuePair<String, String>>();
             foreach (var k in nvc.AllKeys)
+            {
                 foreach (var v in nvc.GetValues(k))
+                {
                     retVal.Add(new KeyValuePair<String, String>(k, v));
+                }
+            }
+
             return retVal;
         }
 

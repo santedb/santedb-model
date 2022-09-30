@@ -54,9 +54,13 @@ namespace SanteDB.Core.Model.Security
             get
             {
                 if (this.CreationTime == default(DateTimeOffset))
+                {
                     return null;
+                }
                 else
+                {
                     return this.CreationTime.ToString("o", CultureInfo.InvariantCulture);
+                }
             }
             set
             {
@@ -65,11 +69,18 @@ namespace SanteDB.Core.Model.Security
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.CreationTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.CreationTime = default(DateTimeOffset);
+                else
+                {
+                    this.CreationTime = default(DateTimeOffset);
+                }
             }
         }
 

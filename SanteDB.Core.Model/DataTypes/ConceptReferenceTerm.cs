@@ -33,7 +33,7 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlType("ConceptReferenceTerm", Namespace = "http://santedb.org/model"), JsonObject("ConceptReferenceTerm")]
     public class ConceptReferenceTerm : VersionedAssociation<Concept>
     {
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConceptReferenceTerm"/> class.
         /// </summary>

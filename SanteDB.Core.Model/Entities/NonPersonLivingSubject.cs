@@ -23,8 +23,6 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
@@ -64,7 +62,7 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("strain"), JsonProperty("strain")]
         public Guid? StrainKey
         {
-            get;set;
+            get; set;
         }
 
         /// <summary>
@@ -73,7 +71,7 @@ namespace SanteDB.Core.Model.Entities
         [SerializationReference(nameof(StrainKey)), XmlIgnore, JsonIgnore]
         public Concept Strain
         {
-            get;set;
+            get; set;
         }
     }
 }

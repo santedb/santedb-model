@@ -19,11 +19,9 @@
  * Date: 2022-5-30
  */
 using Newtonsoft.Json;
-using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Entities;
-using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
@@ -153,12 +151,18 @@ namespace SanteDB.Core.Model.DataTypes
                 {
                     // Try to parse ISO date
                     if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    {
                         this.IssueDate = dt;
+                    }
                     else
+                    {
                         throw new FormatException($"Cannot parse {value} as a date");
+                    }
                 }
                 else
+                {
                     this.IssueDate = null;
+                }
             }
         }
 
@@ -184,12 +188,18 @@ namespace SanteDB.Core.Model.DataTypes
                 {
                     // Try to parse ISO date
                     if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    {
                         this.ExpiryDate = dt;
+                    }
                     else
+                    {
                         throw new FormatException($"Cannot parse {value} as a date");
+                    }
                 }
                 else
+                {
                     this.ExpiryDate = null;
+                }
             }
         }
 
@@ -275,7 +285,11 @@ namespace SanteDB.Core.Model.DataTypes
         public override bool SemanticEquals(object obj)
         {
             var other = obj as IdentifierBase<TBoundModel>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.Value == other.Value && this.IdentityDomainKey == other.IdentityDomainKey;
         }
 

@@ -54,7 +54,10 @@ namespace SanteDB.Core.Model
             get
             {
                 if (this.SourceEntity != null)
+                {
                     return this.SourceEntity.ModifiedOn;
+                }
+
                 return DateTimeOffset.Now;
             }
         }
@@ -75,9 +78,10 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Source entity
         /// </summary>
-        object ISimpleAssociation.SourceEntity { 
-            get => this.SourceEntity; 
-            set => this.SourceEntity = (TSourceType)value; 
+        object ISimpleAssociation.SourceEntity
+        {
+            get => this.SourceEntity;
+            set => this.SourceEntity = (TSourceType)value;
         }
 
         /// <summary>
@@ -91,7 +95,11 @@ namespace SanteDB.Core.Model
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Association<TSourceType>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj);
         }
     }

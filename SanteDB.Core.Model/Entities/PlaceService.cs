@@ -34,7 +34,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("PlaceService", Namespace = "http://santedb.org/model"), JsonObject("PlaceService")]
     public class PlaceService : VersionedAssociation<Entity>
     {
-       
+
         /// <summary>
         /// Gets or sets the service concept
         /// </summary>
@@ -62,7 +62,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as PlaceService;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.ServiceConceptKey == other.ServiceConceptKey &&
                 this.ServiceSchedule == other.ServiceSchedule;

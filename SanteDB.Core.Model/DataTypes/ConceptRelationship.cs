@@ -83,7 +83,7 @@ namespace SanteDB.Core.Model.DataTypes
         [SerializationReference(nameof(RelationshipTypeKey))]
         [XmlIgnore, JsonIgnore]
         public ConceptRelationshipType RelationshipType { get; set; }
- 
+
         /// <summary>
         /// Target entity entity
         /// </summary>
@@ -110,9 +110,9 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets the target entity
         /// </summary>
         object ITargetedAssociation.TargetEntity
-        { 
-            get => this.TargetConcept; 
-            set => this.TargetConcept = (Concept)value; 
+        {
+            get => this.TargetConcept;
+            set => this.TargetConcept = (Concept)value;
         }
     }
 }

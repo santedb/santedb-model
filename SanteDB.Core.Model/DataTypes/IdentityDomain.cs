@@ -146,7 +146,11 @@ namespace SanteDB.Core.Model.DataTypes
             if (this.m_validator == null && !String.IsNullOrEmpty(this.CustomValidator))
             {
                 var t = System.Type.GetType(this.CustomValidator);
-                if (t == null) throw new InvalidOperationException($"Validator {this.CustomValidator} is not valid");
+                if (t == null)
+                {
+                    throw new InvalidOperationException($"Validator {this.CustomValidator} is not valid");
+                }
+
                 this.m_validator = Activator.CreateInstance(t) as IIdentifierValidator;
             }
             return this.m_validator;
@@ -194,7 +198,11 @@ namespace SanteDB.Core.Model.DataTypes
         public override bool SemanticEquals(object obj)
         {
             var other = obj as IdentityDomain;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return other.DomainName == this.DomainName ||
                 this.Oid == other.Oid ||
                 this.Url == other.Url ||

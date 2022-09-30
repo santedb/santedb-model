@@ -24,7 +24,6 @@ using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Roles
@@ -71,7 +70,10 @@ namespace SanteDB.Core.Model.Roles
         {
             var other = obj as Provider;
             if (other == null)
+            {
                 return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.SpecialtyKey == other.SpecialtyKey;
         }

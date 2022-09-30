@@ -24,7 +24,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -92,7 +91,9 @@ namespace SanteDB.Core.Model.Query
             foreach (var itm in this)
             {
                 if (itm is TType typ)
+                {
                     yield return typ;
+                }
             }
         }
 
@@ -101,7 +102,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public IEnumerable<TReturn> Select<TReturn>(Expression selector)
         {
-            if(selector is Expression<Func<TDestination, TReturn>> se)
+            if (selector is Expression<Func<TDestination, TReturn>> se)
             {
                 return this.Select(se);
             }

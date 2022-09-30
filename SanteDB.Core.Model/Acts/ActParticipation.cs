@@ -48,7 +48,7 @@ namespace SanteDB.Core.Model.Acts
     public class ActParticipation : VersionedAssociation<Act>, ITargetedVersionedExtension
     {
 
-       
+
         /// <summary>
         /// Default constructor for act participation
         /// </summary>
@@ -88,7 +88,7 @@ namespace SanteDB.Core.Model.Acts
         /// formal relationship, whereas Patient->NextOfKin[EmergencyContact]->Person may indicate that NOK record is only for
         /// use as a contact and no other relationship can be inferred from the entry.</para>
         /// </remarks>
-        
+
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
         public Concept Classification { get; set; }
@@ -230,7 +230,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as ActParticipation;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.ActKey == this.ActKey &&
                 other.PlayerEntityKey == this.PlayerEntityKey &&
                 other.ParticipationRoleKey == this.ParticipationRoleKey;

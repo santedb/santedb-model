@@ -37,7 +37,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// Get the authority key
         /// </summary>
         Guid? IdentityDomainKey { get; }
-        
+
         /// <summary>
         /// Gets the value of the identity
         /// </summary>

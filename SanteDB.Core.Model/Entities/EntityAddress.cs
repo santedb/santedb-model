@@ -42,7 +42,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("EntityAddress", Namespace = "http://santedb.org/model"), JsonObject("EntityAddress")]
     public class EntityAddress : VersionedAssociation<Entity>
     {
-        
+
         /// <summary>
         /// Create the address from components
         /// </summary>
@@ -51,15 +51,29 @@ namespace SanteDB.Core.Model.Entities
             this.AddressUseKey = useKey;
             this.Component = new List<EntityAddressComponent>();
             if (!String.IsNullOrEmpty(streetAddressLine))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.StreetAddressLine, streetAddressLine));
+            }
+
             if (!String.IsNullOrEmpty(city))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.City, city));
+            }
+
             if (!String.IsNullOrEmpty(province))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.State, province));
+            }
+
             if (!String.IsNullOrEmpty(country))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.Country, country));
+            }
+
             if (!String.IsNullOrEmpty(zipCode))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.PostalCode, zipCode));
+            }
         }
 
         /// <summary>
@@ -68,9 +82,14 @@ namespace SanteDB.Core.Model.Entities
         public EntityAddress(Guid useKey, String streetAddressLine, String precinct, String city, String county, String province, String country, String zipCode) : this(useKey, streetAddressLine, city, province, country, zipCode)
         {
             if (!String.IsNullOrEmpty(precinct))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.Precinct, precinct));
+            }
+
             if (!String.IsNullOrEmpty(county))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.County, county));
+            }
         }
 
         /// <summary>
@@ -78,7 +97,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityAddress()
         {
-            
+
         }
 
         /// <summary>
@@ -108,7 +127,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public string GetComponent(Guid key)
         {
-            var comps = this.LoadProperty(o=>o.Component);
+            var comps = this.LoadProperty(o => o.Component);
             return comps.FirstOrDefault(o => o.ComponentTypeKey == key)?.Value;
         }
 
@@ -128,7 +147,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as EntityAddress;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.AddressUseKey == other.AddressUseKey &&
                 this.Component?.SemanticEquals(other.Component) != false;
@@ -150,24 +173,50 @@ namespace SanteDB.Core.Model.Entities
         {
             StringBuilder sb = new StringBuilder();
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.StreetAddressLine)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.StreetAddressLine));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.AddressLine)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.AddressLine));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.Precinct)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.Precinct));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.City)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.City));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.County)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.County));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.State)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.State));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.Country)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.Country));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.PostalCode)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.PostalCode));
+            }
 
             if (sb.Length > 2)
+            {
                 sb.Remove(sb.Length - 2, 2);
+            }
+
             return sb.ToString();
         }
 

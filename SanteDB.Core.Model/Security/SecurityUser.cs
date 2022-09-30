@@ -25,7 +25,6 @@ using SanteDB.Core.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security
@@ -80,9 +79,13 @@ namespace SanteDB.Core.Model.Security
             set
             {
                 if (value != null)
+                {
                     this.Lockout = DateTime.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                }
                 else
+                {
                     this.Lockout = default(DateTime);
+                }
             }
         }
 
@@ -136,11 +139,18 @@ namespace SanteDB.Core.Model.Security
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.LastLoginTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.LastLoginTime = default(DateTimeOffset);
+                else
+                {
+                    this.LastLoginTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -164,11 +174,18 @@ namespace SanteDB.Core.Model.Security
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.PasswordExpiration = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.PasswordExpiration = null;
+                else
+                {
+                    this.PasswordExpiration = null;
+                }
             }
         }
 
@@ -226,7 +243,11 @@ namespace SanteDB.Core.Model.Security
         public override bool SemanticEquals(object obj)
         {
             var other = obj as SecurityUser;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.Email == other.Email &&
                 this.EmailConfirmed == other.EmailConfirmed &&

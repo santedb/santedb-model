@@ -24,7 +24,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -86,7 +85,8 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Non-generic select method
         /// </summary>
-        public IEnumerable<TReturn> Select<TReturn>(Expression selector) {
+        public IEnumerable<TReturn> Select<TReturn>(Expression selector)
+        {
             if (selector is LambdaExpression le)
             {
                 var dyn = le.Compile();

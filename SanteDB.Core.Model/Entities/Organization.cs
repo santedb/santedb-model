@@ -37,7 +37,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Organization)]
     public class Organization : Entity
     {
-        
+
 
         // Industry Concept
         /// <summary>
@@ -96,7 +96,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Organization;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.IndustryConceptKey == other.IndustryConceptKey;
         }

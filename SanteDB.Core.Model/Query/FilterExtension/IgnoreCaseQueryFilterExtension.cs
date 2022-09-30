@@ -54,8 +54,10 @@ namespace SanteDB.Core.Model.Query.FilterExtension
                 ), Expression.Constant(true));
             }
             else
+            {
                 return Expression.MakeBinary(comparison,
                     Expression.Call(scope, this.ExtensionMethod), Expression.Call(valueExpression, this.ExtensionMethod));
+            }
         }
     }
 }

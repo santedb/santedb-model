@@ -21,7 +21,6 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
-using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

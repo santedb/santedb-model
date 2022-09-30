@@ -20,8 +20,6 @@
  */
 using SanteDB.Core.Model.Serialization;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Model.Attributes
 {

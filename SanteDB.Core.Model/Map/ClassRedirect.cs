@@ -41,7 +41,10 @@ namespace SanteDB.Core.Model.Map
             get
             {
                 if (this.m_fromType == null)
+                {
                     this.m_fromType = Type.GetType(this.FromClass);
+                }
+
                 return this.m_fromType;
             }
         }

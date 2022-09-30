@@ -63,9 +63,13 @@ namespace SanteDB.Core.Model
             get
             {
                 if (this.CreationTime == default(DateTimeOffset))
+                {
                     return null;
+                }
                 else
+                {
                     return this.CreationTime.ToString("o", CultureInfo.InvariantCulture);
+                }
             }
             set
             {
@@ -74,11 +78,18 @@ namespace SanteDB.Core.Model
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.CreationTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.CreationTime = default(DateTimeOffset);
+                else
+                {
+                    this.CreationTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -102,11 +113,18 @@ namespace SanteDB.Core.Model
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.ObsoletionTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.ObsoletionTime = null;
+                else
+                {
+                    this.ObsoletionTime = null;
+                }
             }
         }
 
@@ -131,7 +149,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// True if key should be serialized
         /// </summary>
-        public bool ShouldSerializeObsoletedByKey()=>this.ObsoletedByKey.HasValue;
+        public bool ShouldSerializeObsoletedByKey() => this.ObsoletedByKey.HasValue;
 
         /// <summary>
         /// Gets or sets the user that obsoleted this base data

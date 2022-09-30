@@ -135,7 +135,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the association type
         /// </summary>
-        
+
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipTypeKey))]
         public Concept RelationshipType { get; set; }
@@ -151,7 +151,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the association type
         /// </summary>
-        
+
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipRoleKey))]
         public Concept RelationshipRole { get; set; }
@@ -171,7 +171,7 @@ namespace SanteDB.Core.Model.Entities
         /// formal relationship, whereas Patient->NextOfKin[EmergencyContact]->Person may indicate that NOK record is only for
         /// use as a contact and no other relationship can be inferred from the entry.</para>
         /// </remarks>
-        
+
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
         public Concept Classification { get; set; }
@@ -223,7 +223,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as EntityRelationship;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return this.Key == other.Key || base.SemanticEquals(obj) && this.TargetEntityKey == other.TargetEntityKey &&
                 this.RelationshipTypeKey == other.RelationshipTypeKey &&
                 this.Quantity == other.Quantity &&

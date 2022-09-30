@@ -55,7 +55,10 @@ namespace SanteDB.Core.Extensions
                 string sdata = Encoding.UTF8.GetString(extensionData, 0, extensionData.Length);
                 DateTime dt = DateTime.MinValue;
                 if (DateTime.TryParse(sdata, out dt))
+                {
                     return dt;
+                }
+
                 throw new InvalidOperationException("Cannot parse data");
             }
         }
@@ -84,12 +87,15 @@ namespace SanteDB.Core.Extensions
             switch (data)
             {
                 case DateTime time:
-                {
-                    DateTime dt = time;
-                    if (dt.Kind == DateTimeKind.Local)
-                        dt = dt.ToUniversalTime(); // adjust to UTC ticks
-                    return BitConverter.GetBytes(dt.Ticks);
-                }
+                    {
+                        DateTime dt = time;
+                        if (dt.Kind == DateTimeKind.Local)
+                        {
+                            dt = dt.ToUniversalTime(); // adjust to UTC ticks
+                        }
+
+                        return BitConverter.GetBytes(dt.Ticks);
+                    }
                 case DateTimeOffset dto:
                     return BitConverter.GetBytes(dto.UtcTicks);
                 default:

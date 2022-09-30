@@ -64,7 +64,11 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                if (this.ExtensionValueXml == null) return null;
+                if (this.ExtensionValueXml == null)
+                {
+                    return null;
+                }
+
                 try
                 {
                     return BitConverter.ToString(this.ExtensionValueXml).Replace("-", "");
@@ -76,10 +80,18 @@ namespace SanteDB.Core.Model.DataTypes
             }
             set
             {
-                if (value == null) this.ExtensionValueXml = null;
+                if (value == null)
+                {
+                    this.ExtensionValueXml = null;
+                }
+
                 try
                 {
-                    if (value.Length % 2 == 1) value = "0" + value;
+                    if (value.Length % 2 == 1)
+                    {
+                        value = "0" + value;
+                    }
+
                     this.ExtensionValueXml = Enumerable.Range(0, value.Length)
                                  .Where(x => x % 2 == 0)
                                  .Select(x => Convert.ToByte(value.Substring(x, 2), 16)).ToArray();
@@ -104,7 +116,9 @@ namespace SanteDB.Core.Model.DataTypes
             set
             {
                 if (this.LoadProperty(o => o.ExtensionType).ExtensionHandlerInstance != null)
+                {
                     this.ExtensionValueXml = this.ExtensionType?.ExtensionHandlerInstance?.Serialize(value);
+                }
             }
         }
 
@@ -126,8 +140,13 @@ namespace SanteDB.Core.Model.DataTypes
         {
             var handler = this.LoadProperty<ExtensionType>("ExtensionType")?.ExtensionHandlerInstance;
             if (handler != null)
+            {
                 return handler.DeSerialize<T>(this.ExtensionValueXml);
-            else return default(T);
+            }
+            else
+            {
+                return default(T);
+            }
         }
 
         /// <summary>
@@ -149,7 +168,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [SerializationReference(nameof(ExtensionTypeKey))]
         [XmlIgnore, JsonIgnore]
-        
+
         public ExtensionType ExtensionType { get; set; }
 
         /// <summary>
@@ -209,7 +228,11 @@ namespace SanteDB.Core.Model.DataTypes
         public override bool SemanticEquals(object obj)
         {
             Extension<TBoundModel> other = obj as Extension<TBoundModel>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.ExtensionTypeKey == this.ExtensionTypeKey &&
                 this.ExtensionValueString == other.ExtensionValueString;
         }

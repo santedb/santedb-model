@@ -88,12 +88,18 @@ namespace SanteDB.Core.Model.Acts
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.StartTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
+                {
                     this.StartTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -121,12 +127,18 @@ namespace SanteDB.Core.Model.Acts
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.StopTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
+                {
                     this.StopTime = default(DateTimeOffset);
+                }
             }
         }
     }

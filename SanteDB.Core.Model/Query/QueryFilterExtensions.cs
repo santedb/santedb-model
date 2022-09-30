@@ -20,7 +20,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -65,7 +64,9 @@ namespace SanteDB.Core.Model.Query
                     .SelectMany(a => { try { return a.ExportedTypes; } catch { return Type.EmptyTypes; } })
                     .Where(t => typeof(IQueryFilterExtension).IsAssignableFrom(t) && !t.IsAbstract)
                     .Select(t => Activator.CreateInstance(t) as IQueryFilterExtension))
+            {
                 QueryFilterExtensions.AddExtendedFilter(ext);
+            }
         }
 
         /// <summary>
@@ -76,8 +77,12 @@ namespace SanteDB.Core.Model.Query
         {
             string methName = extensionInfo.Name;
             lock (s_extensionMethods)
+            {
                 if (!s_extensionMethods.ContainsKey(methName))
+                {
                     s_extensionMethods.Add(methName, extensionInfo);
+                }
+            }
         }
 
         /// <summary>
@@ -86,7 +91,10 @@ namespace SanteDB.Core.Model.Query
         public static IQueryFilterExtension GetExtendedFilter(String name)
         {
             if (s_extensionMethods.Count == 0)
+            {
                 InitializeFilters();
+            }
+
             IQueryFilterExtension retVal = null;
             s_extensionMethods.TryGetValue(name, out retVal);
             return retVal;

@@ -21,7 +21,6 @@
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Query;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
@@ -116,7 +115,9 @@ namespace SanteDB.Core.Model.EntityLoader
             set
             {
                 lock (s_lockObject)
+                {
                     s_instance = value;
+                }
             }
         }
 
@@ -126,7 +127,10 @@ namespace SanteDB.Core.Model.EntityLoader
         public TObject Get<TObject>(Guid? key, Guid? version) where TObject : IdentifiedData, IVersionedData, new()
         {
             if (key == null)
+            {
                 return null;
+            }
+
             return this.m_provider.Get<TObject>(key, version);
         }
 
@@ -136,9 +140,13 @@ namespace SanteDB.Core.Model.EntityLoader
         public TObject Get<TObject>(Guid? key) where TObject : IdentifiedData, new()
         {
             if (key == null)
+            {
                 return null;
+            }
             else
+            {
                 return this.m_provider.Get<TObject>(key);
+            }
         }
 
         /// <summary>

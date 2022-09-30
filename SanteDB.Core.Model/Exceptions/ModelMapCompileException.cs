@@ -21,7 +21,6 @@
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Exceptions
 {
@@ -42,7 +41,7 @@ namespace SanteDB.Core.Exceptions
         internal ModelMapCompileException(CompilerErrorCollection errors)
         {
             var errorList = new List<String>(errors.Count);
-            foreach(CompilerError itm in errors)
+            foreach (CompilerError itm in errors)
             {
                 errorList.Add($"{(itm.IsWarning ? "W" : "E")}: {itm.ErrorText} @ {itm.FileName}:{itm.Line}:{itm.Column}");
             }

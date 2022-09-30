@@ -18,7 +18,6 @@
  * User: fyfej
  * Date: 2022-5-30
  */
-using SanteDB.Core.Model.DataTypes;
 using System;
 
 namespace SanteDB.Core.Model.Interfaces

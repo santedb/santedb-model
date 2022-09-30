@@ -47,7 +47,7 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.SubstanceAdministration)]
     public class SubstanceAdministration : Act
     {
-        
+
         /// <summary>
         /// Substance administration ctor
         /// </summary>
@@ -118,7 +118,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as SubstanceAdministration;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.SiteKey == this.SiteKey &&
                 other.RouteKey == this.RouteKey &&
                 other.DoseUnitKey == this.DoseUnitKey &&

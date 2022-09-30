@@ -19,8 +19,6 @@
  * Date: 2022-9-7
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Model.Map.Builder
 {
@@ -57,8 +55,8 @@ namespace SanteDB.Core.Model.Map.Builder
     /// Model mapper
     /// </summary>
     public interface IModelMapper<TSource, TTarget> : IModelMapper
-        where TSource: new ()
-        where TTarget: new()
+        where TSource : new()
+        where TTarget : new()
     {
 
         /// <summary>
