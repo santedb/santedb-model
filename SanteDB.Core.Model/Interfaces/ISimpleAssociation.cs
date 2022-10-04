@@ -19,6 +19,7 @@
  * Date: 2022-5-30
  */
 using System;
+using System.Linq.Expressions;
 
 namespace SanteDB.Core.Model.Interfaces
 {
@@ -41,5 +42,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets or sets the source entity
         /// </summary>
         object SourceEntity { get; set; }
+
     }
 }

@@ -45,7 +45,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityRelationship()
         {
-            this.Key = Guid.NewGuid();
+            //this.Key = Guid.NewGuid();
         }
 
         /// <summary>

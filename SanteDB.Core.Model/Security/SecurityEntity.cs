@@ -34,45 +34,8 @@ namespace SanteDB.Core.Model.Security
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "SecurityEntity")]
     [JsonObject(nameof(SecurityEntity))]
     [NonCached]
-    public class SecurityEntity : NonVersionedEntityData, ISecurable
+    public class SecurityEntity : NonVersionedEntityData
     {
 
-        /// <summary>
-        /// Policies applied to this entity
-        /// </summary>
-        protected List<SecurityPolicyInstance> m_policies = new List<SecurityPolicyInstance>();
-
-        /// <summary>
-        /// Policies associated with the entity
-        /// </summary>
-        [XmlIgnore, JsonIgnore, Obsolete("Use IPolicyInformationService.GetPolicies", true)]
-        public virtual List<SecurityPolicyInstance> Policies
-        {
-            get
-            {
-                return this.m_policies;
-            }
-            set
-            {
-                this.m_policies = value;
-            }
-        }
-
-        /// <summary>
-        /// Add a policy to this act
-        /// </summary>
-        [Obsolete("Use IPolicyInformationService.AddPolicies", true)]
-        public void AddPolicy(string policyId)
-        {
-        }
-
-        /// <summary>
-        /// Returns true if this object has the specified policy applied
-        /// </summary>
-        [Obsolete("Use IPolicyInformationService.HasPolicy", true)]
-        public bool HasPolicy(string policyId)
-        {
-            return this.Policies.Any(o => o.Policy.Oid == policyId);
-        }
     }
 }

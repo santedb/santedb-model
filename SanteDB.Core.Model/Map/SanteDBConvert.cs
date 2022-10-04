@@ -63,6 +63,22 @@ namespace SanteDB.Core.Model.Map
         }
 
         /// <summary>
+        /// Boolean to int
+        /// </summary>
+        public static long BooleanToLong(bool i)
+        {
+            return i ? 1 : 0;
+        }
+
+        /// <summary>
+        /// Boolean to int
+        /// </summary>
+        public static Boolean LongToBoolean(long i)
+        {
+            return i != 0;
+        }
+
+        /// <summary>
         /// Guid > Byte[]
         /// </summary>
         public static byte[] GuidToByte(Guid g)
@@ -111,39 +127,36 @@ namespace SanteDB.Core.Model.Map
             return dto.DateTime;
         }
 
-        // Constant epoch
-        private static readonly DateTime EPOCH = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
         /// <summary>
         /// Parse a date time into an object
         /// </summary>
-        public static Int32 ToDateTime(DateTime date)
+        public static long ToDateTime(DateTime date)
         {
-            return (int)(date.ToUniversalTime() - EPOCH).TotalSeconds;
+            return ((DateTimeOffset)date).ToUniversalTime().ToUnixTimeSeconds();
         }
 
         /// <summary>
         /// Parse a date time from an object
         /// </summary>
-        public static DateTime ParseDateTime(Int32 date)
+        public static DateTime ParseDateTime(long date)
         {
-            return EPOCH.AddSeconds(date).ToLocalTime();
+            return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime().DateTime;
         }
 
         /// <summary>
         /// Parse a date time into an object
         /// </summary>
-        public static Int32 ToDateTimeOffset(DateTimeOffset date)
+        public static long ToDateTimeOffset(DateTimeOffset date)
         {
-            return (int)(date.ToLocalTime() - EPOCH).TotalSeconds;
+            return date.ToUniversalTime().ToUnixTimeSeconds();
         }
 
         /// <summary>
         /// Parse a date time from an object
         /// </summary>
-        public static DateTimeOffset ParseDateTimeOffset(Int32 date)
+        public static DateTimeOffset ParseDateTimeOffset(long date)
         {
-            return EPOCH.AddSeconds(date).ToLocalTime();
+            return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime();
         }
 
         /// <summary>

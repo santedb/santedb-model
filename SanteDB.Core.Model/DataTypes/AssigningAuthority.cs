@@ -72,11 +72,26 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Source type of authority
         /// </summary>
+        [JsonIgnore]
         public Type SourceType => typeof(IdentityDomain);
 
         /// <summary>
         /// Source entity
         /// </summary>
+        [JsonIgnore]
         object ISimpleAssociation.SourceEntity { get => null; set { } }
+
+        /// <summary>
+        /// Determine semantic equality
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            if (obj is AssigningAuthority aa)
+            {
+                return base.SemanticEquals(obj) &&
+                    this.AssigningApplicationKey == aa.AssigningApplicationKey;
+            }
+            return base.SemanticEquals(obj);
+        }
     }
 }

@@ -44,7 +44,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]
-    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged
+    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged
     {
 
         /// <summary>
