@@ -268,7 +268,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents the authority information
         /// </summary>
-        IdentityDomain IExternalIdentifier.Authority => this.LoadProperty(o => o.IdentityDomain);
+        IdentityDomain IExternalIdentifier.IdentityDomain => this.LoadProperty(o => o.IdentityDomain);
 
         /// <summary>
         /// True if the identifier is empty

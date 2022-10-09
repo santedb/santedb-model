@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2022-5-30
  */
+using SanteDB.Core.Model.Attributes;
 using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
@@ -31,6 +32,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Get the xternal identifiers
         /// </summary>
+        [QueryParameter("identifier")]
         IEnumerable<IExternalIdentifier> Identifiers { get; }
     }
 }

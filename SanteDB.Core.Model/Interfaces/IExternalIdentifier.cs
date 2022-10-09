@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2022-5-30
  */
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
 using System;
 
@@ -31,7 +32,8 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets the assigning authority
         /// </summary>
-        IdentityDomain Authority { get; }
+        [QueryParameter("domain")]
+        IdentityDomain IdentityDomain { get; }
 
         /// <summary>
         /// Get the authority key
@@ -41,6 +43,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets the value of the identity
         /// </summary>
+        [QueryParameter("value")]
         String Value { get; }
 
         /// <summary>
@@ -51,6 +54,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets or sets the reliability
         /// </summary>
+        [QueryParameter("reliability")]
         IdentifierReliability Reliability { get; set; }
     }
 }
