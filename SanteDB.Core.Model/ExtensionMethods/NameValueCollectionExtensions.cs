@@ -180,7 +180,7 @@ namespace SanteDB
                     queryString.AppendFormat("{0}={1}&", kv, Uri.EscapeDataString(val));
                 }
             }
-            if (queryString.ToString().EndsWith("?"))
+            if (me.AllKeys.Any())
             {
                 queryString.Remove(queryString.Length - 1, 1);
             }
