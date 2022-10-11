@@ -213,7 +213,6 @@ namespace SanteDB.Core.Model
         {
             var retVal = this.MemberwiseClone() as IdentifiedData;
             retVal.m_annotations = new List<object>();
-
             foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 if (!pi.CanWrite || pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) continue; // can't and not important to serialization write so continue 
