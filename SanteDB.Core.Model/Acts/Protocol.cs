@@ -89,7 +89,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the narrative description of the protocol
         /// </summary>
-        [XmlIgnore, JsonProperty, SerializationReference(nameof(NarrativeKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(NarrativeKey))]
         public Narrative Narrative { get; set; }
 
         /// <summary>
