@@ -440,9 +440,13 @@ namespace SanteDB
                             }
                             else
                             {
-                                foreach (var itm in EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value))
+                                var delayLoad = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value);
+                                if (delayLoad != null)
                                 {
-                                    loaded.Add(itm);
+                                    foreach (var itm in delayLoad)
+                                    {
+                                        loaded.Add(itm);
+                                    }
                                 }
                             }
 
