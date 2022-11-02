@@ -12,11 +12,13 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets or sets the resource key for this resource.
         /// </summary>
-        string Key { get; set;  }
+        Guid? Key { get; set;  }
+
         /// <summary>
         /// Gets the tag for this resource. The tag is used to calculate whether a resource has changed or not.
         /// </summary>
         string Tag { get; }
+
         /// <summary>
         /// Gets the last modified timestamp for this resource.
         /// </summary>

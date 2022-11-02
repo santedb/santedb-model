@@ -64,7 +64,16 @@ namespace SanteDB.Core.Model.Parameters
         public bool TryGet<TValue>(String parameterName, out TValue value)
         {
             var p = this.Parameters?.Find(o => o.Name == parameterName);
-            value = (TValue)(p?.Value ?? default(TValue));
+            // HACK: Sometimes the value is an LONG but the type is INT and this does not like that condition
+            if(Map.MapUtil.TryConvert(p?.Value, typeof(TValue), out var tvalue))
+            {
+                value = (TValue)tvalue;
+            }
+            else
+            {
+                value = (TValue)(p?.Value ?? default(TValue));
+            }
+
             return p != null;
         }
     }

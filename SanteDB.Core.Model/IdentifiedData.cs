@@ -42,7 +42,7 @@ namespace SanteDB.Core.Model
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
     public abstract class IdentifiedData : IIdentifiedData, ICanDeepCopy
     {
-        // Annotations
+
         /// <summary>
         /// A list of custom tags which were added to this object
         /// </summary>

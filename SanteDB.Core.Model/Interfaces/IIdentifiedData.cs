@@ -26,14 +26,8 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Identified entity
     /// </summary>
-    public interface IIdentifiedData
+    public interface IIdentifiedData : IIdentifiedResource
     {
-
-
-        /// <summary>
-        /// Gets the identifier for the entity
-        /// </summary>
-        Guid? Key { get; set; }
 
         /// <summary>
         /// Remove annotation

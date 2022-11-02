@@ -714,7 +714,14 @@ namespace SanteDB.Core.Model.Query
                         var extendedFilter = QueryFilterExtensions.GetExtendedFilterByMethod(callExpr.Method);
                         if (extendedFilter != null)
                         {
-                            return this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
+                            if (callExpr.Arguments.Count > 0)
+                            {
+                                return this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
+                            }
+                            else
+                            {
+                                return this.ExtractPath(callExpr.Object, false, fromOperand); // get the chain if required
+                            }
                         }
                         else if (!s_reservedNames.Contains(callExpr.Method.Name))
                         {
