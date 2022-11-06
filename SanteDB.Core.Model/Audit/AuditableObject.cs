@@ -123,7 +123,7 @@ namespace SanteDB.Core.Model.Audit
         /// <summary>
         /// Additional object data
         /// </summary>
-        [XmlElement("dictionary"), JsonProperty("dictionary")]
+        [XmlArray("data"), XmlArrayItem("d"), JsonProperty("data")]
         public List<ObjectDataExtension> ObjectData { get; set; }
 
         /// <summary>

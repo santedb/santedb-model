@@ -76,5 +76,25 @@ namespace SanteDB.Core.Model.Parameters
 
             return p != null;
         }
+
+        /// <summary>
+        /// Set the specified <paramref name="parameterName"/>
+        /// </summary>
+        /// <param name="parameterName">The name of the parameter to set</param>
+        /// <param name="value">The value of the parameter</param>
+        public void Set(string parameterName, object value)
+        {
+            var existingParameter = this.Parameters.Find(o => o.Name == parameterName);
+            if(existingParameter == null)
+            {
+                existingParameter = new Parameter(parameterName, value);
+                this.Parameters.Add(existingParameter);
+            }
+            else
+            {
+                existingParameter.Value = value;
+            }
+
+        }
     }
 }

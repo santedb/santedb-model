@@ -884,7 +884,7 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid Aliquot = Guid.Parse(EntityRelationshipTypeKeyStrings.Aliquot);
 
         /// <summary>
-        /// The target is an entity acting under the employ of the source entity
+        /// The target is an entity acting under role or assignment of the source 
         /// </summary>
         public static readonly Guid AssignedEntity = Guid.Parse(EntityRelationshipTypeKeyStrings.AssignedEntity);
 
