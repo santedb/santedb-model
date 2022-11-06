@@ -1102,5 +1102,13 @@ namespace SanteDB
             return validResults;
         }
 
+        public static bool HasCustomAttribute<TAttribute>(this Type t)
+            => HasCustomAttribute(t, typeof(TAttribute));
+
+        public static bool HasCustomAttribute(this Type t, Type attributeType)
+            => t.GetCustomAttribute(attributeType) != null;
+            //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
+
+
     }
 }
