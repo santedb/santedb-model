@@ -65,6 +65,12 @@ namespace SanteDB.Core.Model.Subscription
         public override DateTimeOffset ModifiedOn => DateTimeOffset.Now;
 
         /// <summary>
+        /// Gets the name of the subscription
+        /// </summary>
+        [XmlAttribute("name"), JsonProperty("name")]
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the resource type
         /// </summary>
         [XmlAttribute("resource"), JsonIgnore]
