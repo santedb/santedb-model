@@ -31,7 +31,7 @@ namespace SanteDB.Core.Model.Query
     /// A query result set which wraps another and allows a constructor to execute a Func on each
     /// yield return iteration of the underlying result set.
     /// </summary>
-    public class TransformQueryResultSet<TSource, TDestination> : IQueryResultSet<TDestination>
+    public class TransformQueryResultSet<TSource, TDestination> : IQueryResultSet<TDestination>, IOrderableQueryResultSet
     {
         // Wraped object
         private readonly IQueryResultSet<TSource> m_sourceResultSet;
@@ -105,6 +105,20 @@ namespace SanteDB.Core.Model.Query
             if (selector is Expression<Func<TDestination, TReturn>> se)
             {
                 return this.Select(se);
+            }
+            else if (selector is Expression<Func<TDestination, dynamic>> de)
+            {
+                // Strip body convert
+                return this.Select(Expression.Lambda<Func<TDestination, TReturn>>(Expression.Convert(de.Body, typeof(TReturn)).Reduce(), de.Parameters));
+            }
+            else if(selector is Expression<Func<TSource, TReturn>> se2)
+            {
+                return this.m_sourceResultSet.Select(se2);
+            }
+            else if (selector is Expression<Func<TSource, dynamic>> de2)
+            {
+                // Strip body convert
+                return this.m_sourceResultSet.Select(Expression.Lambda<Func<TSource, TReturn>>(Expression.Convert(de2.Body, typeof(TReturn)).Reduce(), de2.Parameters));
             }
             else
             {
@@ -345,6 +359,40 @@ namespace SanteDB.Core.Model.Query
             else
             {
                 throw new InvalidOperationException(String.Format(ErrorMessages.INVALID_EXPRESSION_TYPE, typeof(Expression<Func<TDestination, bool>>), query.GetType()));
+            }
+        }
+
+        /// <inheritdoc/>
+        public IOrderableQueryResultSet OrderBy(Expression expression)
+        {
+            if (expression is Expression<Func<TSource, object>> se)
+            {
+                return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.OrderBy(se), this.m_transform);
+            }
+            else if(this.m_sourceResultSet is IOrderableQueryResultSet iqr)
+            {
+                return new TransformQueryResultSet<TSource, TDestination>((IQueryResultSet<TSource>)iqr.OrderBy(expression), this.m_transform);
+            }
+            else
+            {
+                throw new ArgumentException(nameof(expression), ErrorMessages.ARGUMENT_INCOMPATIBLE_TYPE);
+            }
+        }
+
+        /// <inheritdoc/>
+        public IOrderableQueryResultSet OrderByDescending(Expression expression)
+        {
+            if (expression is Expression<Func<TSource, object>> se)
+            {
+                return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.OrderByDescending(se), this.m_transform);
+            }
+            else if (this.m_sourceResultSet is IOrderableQueryResultSet iqr)
+            {
+                return new TransformQueryResultSet<TSource, TDestination>((IQueryResultSet<TSource>)iqr.OrderByDescending(expression), this.m_transform);
+            }
+            else
+            {
+                throw new ArgumentException(nameof(expression), ErrorMessages.ARGUMENT_INCOMPATIBLE_TYPE);
             }
         }
     }
