@@ -50,7 +50,8 @@ namespace SanteDB.Core.Model.Audit
         {
             this.Timestamp = DateTime.Now;
             this.Metadata = new List<AuditMetadata>();
-
+            this.AuditableObjects = new List<AuditableObject>();
+            this.Actors = new List<AuditActorData>();
         }
 
         /// <summary>
