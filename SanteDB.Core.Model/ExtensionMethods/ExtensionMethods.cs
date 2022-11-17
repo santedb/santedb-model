@@ -247,7 +247,7 @@ namespace SanteDB
                                     .ToArray();
 
         /// <summary>
-        /// Get postal code
+        /// Gets the value of a component of an <see cref="EntityAddress"/> with the given <paramref name="addressType"/>.
         /// </summary>
         public static String Value(this EntityAddress me, Guid addressType)
         {
