@@ -137,6 +137,8 @@ namespace SanteDB.Core.Model.Query
                         return node;
 
                     case ExpressionType.Not:
+                    case ExpressionType.IsTrue:
+
                         return this.VisitUnary((UnaryExpression)node);
 
                     case ExpressionType.Coalesce:
@@ -144,7 +146,7 @@ namespace SanteDB.Core.Model.Query
                         return this.Visit(((BinaryExpression)node).Left);
 
                     default:
-                        throw new InvalidOperationException($"Don't know how to conver type of {node.Type}");
+                        throw new InvalidOperationException($"Don't know how to convert type of {node.Type}");
                 }
             }
 
@@ -222,11 +224,14 @@ namespace SanteDB.Core.Model.Query
                 {
                     case ExpressionType.Not:
                     case ExpressionType.IsFalse:
-
+                    case ExpressionType.IsTrue:
                         if (node.Operand is MethodCallExpression callExpression)
                         {
                             this.VisitMethodCall(callExpression, true);
-
+                        }
+                        else if(node.Operand is UnaryExpression unaryExpression)
+                        {
+                            this.Visit(unaryExpression.Operand);
                         }
                         else
                         {
@@ -257,6 +262,13 @@ namespace SanteDB.Core.Model.Query
             {
                 switch (node.Method.Name)
                 {
+                    case "WithControl":
+                        {
+                            object parmName = this.ExtractValue(node.Arguments[1]);
+                            object parmValue = this.ExtractValue(node.Arguments[2]);
+                            this.AddCondition(parmName.ToString(), parmValue);
+                            return null;
+                        }
                     case "Contains":
                         {
                             if (node.Object == null && node.Method.DeclaringType == typeof(Enumerable))
@@ -687,7 +699,11 @@ namespace SanteDB.Core.Model.Query
                     //CallExpression callExpr = access as MemberExpression;
                     MethodCallExpression callExpr = access as MethodCallExpression;
 
-                    if (callExpr.Method.Name == "Where" ||
+                    if(callExpr.Method.Name == "WithControl")
+                    {
+                        return null;
+                    }
+                    else if (callExpr.Method.Name == "Where" ||
                         fromUnary && (callExpr.Method.Name == "Any"))
                     {
                         String path = this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required

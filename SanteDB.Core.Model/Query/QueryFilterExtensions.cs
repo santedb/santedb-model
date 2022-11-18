@@ -52,6 +52,13 @@ namespace SanteDB.Core.Model.Query
             InitializeFilters();
         }
 
+        /// <summary>
+        /// With control parameter is used as a wrapper for _ parameters
+        /// </summary>
+        internal static object WithControl(this object me, string controlParameter, object value)
+        {
+            return true;
+        }
 
         /// <summary>
         /// Initialize filters
