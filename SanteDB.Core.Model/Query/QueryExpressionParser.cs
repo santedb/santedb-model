@@ -37,7 +37,7 @@ namespace SanteDB.Core.Model.Query
 
 
     /// <summary>
-    /// A class which is responsible for translating a series of Query Parmaeters to a LINQ expression
+    /// A class which is responsible for translating a series of Query Parameters to a LINQ expression
     /// to be passed to the persistence layer
     /// </summary>
     public static class QueryExpressionParser

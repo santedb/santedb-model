@@ -236,7 +236,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         /// <param name="count">The number of records to take from the result set</param>
         /// <remarks>This method results in a new query result set which has a <code>FETCH FIRST <paramref name="count"/> ROWS ONLY</code> clause
-        /// appended to it.</remarks>
+        /// appended to it. In HTTP to upstream, this sets the <code>_count=<paramref name="count"/></code> query string variable.</remarks>
         new IQueryResultSet<TData> Take(int count);
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         /// <remarks>
         /// <para>This method skips <paramref name="count"/> records in the result set by sending an offset command to the persistence technology. In
-        /// SQL this equates to <code>OFFSET <paramref name="count"/> ROWS</code> clause</para>
+        /// SQL this equates to <code>OFFSET <paramref name="count"/> ROWS</code> clause. In HTTP to Upstream, this sets the <code>_offset=<paramref name="count"/></code> query string variable.</para>
         /// </remarks>
         new IQueryResultSet<TData> Skip(int count);
 
