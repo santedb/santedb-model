@@ -190,12 +190,12 @@ namespace SanteDB.Core.Model.Map
                 result = value;
                 return true;
             }
-            else if (m_destType == typeof(int) && value.GetType().IsEnum)
+            else if ((m_destType == typeof(int) || m_destType == typeof(long)) && value.GetType().IsEnum)
             {
                 result = (int)value;
                 return true;
             }
-            else if (m_destType.IsEnum && value.GetType() == typeof(int))
+            else if (m_destType.IsEnum && (value is int || value is long))
             {
                 result = Enum.ToObject(m_destType, value);
                 return true;
