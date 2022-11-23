@@ -259,7 +259,7 @@ namespace SanteDB
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedData
+            where TSource : IAnnotatedResource
         {
             me.SetLoaded(propertySelector.GetMember().Name);
         }
@@ -269,7 +269,7 @@ namespace SanteDB
         /// Returns true if the property is loaded
         /// </summary>
         public static bool WasLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedData
+            where TSource : IAnnotatedResource
         {
             return me.WasLoaded(propertySelector.GetMember().Name);
         }
@@ -277,7 +277,7 @@ namespace SanteDB
         /// <summary>
         /// Returns true if the property has been loaded
         /// </summary>
-        public static bool WasLoaded(this IIdentifiedData me, String propertyName)
+        public static bool WasLoaded(this IAnnotatedResource me, String propertyName)
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
             return me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck);
@@ -286,7 +286,7 @@ namespace SanteDB
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static TReturn LoadProperty<TReturn>(this IIdentifiedData me, string propertyName, bool forceReload = false)
+        public static TReturn LoadProperty<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false)
         {
             return (TReturn)me.LoadProperty(propertyName, forceReload);
         }
@@ -294,7 +294,7 @@ namespace SanteDB
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IIdentifiedData me, string propertyName, bool forceReload = false)
+        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false)
         {
             return me.LoadProperty(propertyName, forceReload) as IEnumerable<TReturn> ?? new List<TReturn>();
         }
@@ -334,7 +334,7 @@ namespace SanteDB
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector, bool forceReload = false)
-            where TSource : IIdentifiedData
+            where TSource : IAnnotatedResource
         {
             if (selector is LambdaExpression lambda)
             {
@@ -358,7 +358,7 @@ namespace SanteDB
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false)
-            where TSource : IIdentifiedData
+            where TSource : IAnnotatedResource
         {
             if (selector is LambdaExpression lambda)
             {
@@ -384,7 +384,7 @@ namespace SanteDB
         /// been loaded
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetLoaded(this IIdentifiedData me, string propertyName)
+        public static void SetLoaded(this IAnnotatedResource me, string propertyName)
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
             if (!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
@@ -396,7 +396,7 @@ namespace SanteDB
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static object LoadProperty(this IIdentifiedData me, string propertyName, bool forceReload = false)
+        public static object LoadProperty(this IAnnotatedResource me, string propertyName, bool forceReload = false)
         {
             if (me == null)
             {
@@ -955,6 +955,23 @@ namespace SanteDB
         {
             return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.FullName;
         }
+
+        /// <summary>
+        /// Get the classifier property on <paramref name="type"/>
+        /// </summary>
+        public static PropertyInfo GetSanteDBProperty<AttributeType>(this Type type) where AttributeType : Attribute, IPropertyReference
+        {
+            var classifierAttribute = type.GetCustomAttribute<AttributeType>();
+            if(classifierAttribute == null)
+            {
+                return null;
+            }
+            else
+            {
+                return type.GetProperty(classifierAttribute.PropertyName);
+            }
+        }
+
 
         /// <summary>
         /// Get a property based on XML property and/or serialization redirect and/or query parameter

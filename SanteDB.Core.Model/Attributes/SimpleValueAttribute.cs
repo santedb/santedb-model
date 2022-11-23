@@ -26,7 +26,7 @@ namespace SanteDB.Core.Model.Attributes
     /// Identifies the simple value
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class SimpleValueAttribute : Attribute
+    public class SimpleValueAttribute : Attribute, IPropertyReference
     {
         /// <summary>
         /// Classifier attribute property
@@ -41,5 +41,11 @@ namespace SanteDB.Core.Model.Attributes
         /// Gets or sets the classifier property
         /// </summary>
         public string ValueProperty { get; set; }
+
+
+        /// <summary>
+        /// Gets the classifier property
+        /// </summary>
+        string IPropertyReference.PropertyName => this.ValueProperty;
     }
 }

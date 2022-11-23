@@ -26,7 +26,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Entity has external identifiers
     /// </summary>
-    public interface IHasIdentifiers : IIdentifiedData
+    public interface IHasIdentifiers : IAnnotatedResource
     {
 
         /// <summary>

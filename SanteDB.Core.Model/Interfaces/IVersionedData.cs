@@ -25,7 +25,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Versioned entity
     /// </summary>
-    public interface IVersionedData : IIdentifiedData
+    public interface IVersionedData : IAnnotatedResource
     {
         /// <summary>
         /// Gets the version sequence

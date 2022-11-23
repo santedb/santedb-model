@@ -26,7 +26,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Represents bound relational data
     /// </summary>
-    public interface ISimpleAssociation : IIdentifiedData
+    public interface ISimpleAssociation : IAnnotatedResource
     {
         /// <summary>
         /// Get the source type of the association

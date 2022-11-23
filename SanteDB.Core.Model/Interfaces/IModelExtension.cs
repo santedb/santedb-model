@@ -25,7 +25,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Model extension
     /// </summary>
-    public interface IModelExtension : IIdentifiedData
+    public interface IModelExtension : IAnnotatedResource
     {
 
         /// <summary>

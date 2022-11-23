@@ -18,43 +18,17 @@
  * User: fyfej
  * Date: 2022-5-30
  */
-using System;
-using System.Reflection;
-
 namespace SanteDB.Core.Model.Attributes
 {
     /// <summary>
-    /// Identifies where tools can find the serialization information
-    /// for an ignored property
+    /// Represents a class which references a property
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class SerializationReferenceAttribute : Attribute, IPropertyReference
+    public interface IPropertyReference 
     {
         /// <summary>
-        /// The redirection attribute
+        /// Get the property name
         /// </summary>
-        public SerializationReferenceAttribute(string redirectProperty)
-        {
-            this.RedirectProperty = redirectProperty;
-        }
+        string PropertyName { get; }
 
-        /// <summary>
-        /// Identifies where the serialization information can be found
-        /// </summary>
-        public string RedirectProperty { get; set; }
-
-        /// <summary>
-        /// Get property from the type
-        /// </summary>
-        public PropertyInfo GetProperty(Type hostType)
-        {
-            return hostType.GetRuntimeProperty(this.RedirectProperty);
-        }
-
-
-        /// <summary>
-        /// Gets the classifier property
-        /// </summary>
-        string IPropertyReference.PropertyName => this.RedirectProperty;
     }
 }

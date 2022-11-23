@@ -26,7 +26,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Identified entity
     /// </summary>
-    public interface IIdentifiedData : IIdentifiedResource
+    public interface IAnnotatedResource : IIdentifiedResource
     {
 
         /// <summary>
@@ -52,6 +52,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Copy annotations
         /// </summary>
-        IIdentifiedData CopyAnnotations(IIdentifiedData other);
+        IAnnotatedResource CopyAnnotations(IAnnotatedResource other);
     }
 }

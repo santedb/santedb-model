@@ -26,7 +26,7 @@ namespace SanteDB.Core.Model.Attributes
     /// Identifies to the persistence layer what property can be used for lookup when a key is not present
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class KeyLookupAttribute : Attribute
+    public class KeyLookupAttribute : Attribute, IPropertyReference
     {
         /// <summary>
         /// Default constructor
@@ -40,5 +40,11 @@ namespace SanteDB.Core.Model.Attributes
         /// Gets or sets whether the persistence engine should throw an exception when persisting duplicates
         /// </summary>
         public string UniqueProperty { get; set; }
+
+
+        /// <summary>
+        /// Gets the classifier property
+        /// </summary>
+        string IPropertyReference.PropertyName => this.UniqueProperty;
     }
 }
