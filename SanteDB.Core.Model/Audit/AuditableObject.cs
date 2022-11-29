@@ -195,7 +195,7 @@ namespace SanteDB.Core.Model.Audit
         /// <summary>
 		/// Object data extension
 		/// </summary>
-		public ObjectDataExtension(String key, string value) : this(key, Encoding.UTF8.GetBytes(value))
+		public ObjectDataExtension(String key, string value) : this(key, null == value ? Array.Empty<byte>() : Encoding.UTF8.GetBytes(value))
         {
         }
 
