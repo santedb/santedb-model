@@ -77,8 +77,11 @@ namespace SanteDB
                     accessorDelegate = propertyAccessor.Compile();
                     setterDelegates.TryAdd(match.Groups[0].Value, accessorDelegate);
                 }
+
                 var currentValue = accessorDelegate.DynamicInvoke(focalObject);
                 var originalValue = currentValue;
+                sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
+                var sourcePropertyValue = sourceProperty.GetValue(focalObject);
 
                 // Is the property value not set so we want to create it if needed
                 if (currentValue == null)
@@ -89,8 +92,6 @@ namespace SanteDB
                     // 3. name
                     // 4. component
                     // 5. value
-                    sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
-                    var sourceValue = sourceProperty.GetValue(focalObject);
 
                     // Chained?
                     if (match.NextMatch().Success && sourceProperty.PropertyType.StripNullable() == typeof(Guid))
@@ -103,7 +104,7 @@ namespace SanteDB
                         sourceProperty = redirect;
                     }
 
-                    if (sourceValue == null && (sourceProperty.PropertyType.Implements(typeof(IIdentifiedResource)) ||
+                    if (sourcePropertyValue == null && (sourceProperty.PropertyType.Implements(typeof(IIdentifiedResource)) ||
                         sourceProperty.PropertyType.Implements(typeof(IList))))
                     {
 
@@ -114,18 +115,18 @@ namespace SanteDB
                         {
                             propertyType = new ModelSerializationBinder().BindToType(typeof(ModelSerializationBinder).Assembly.FullName, match.Groups[3].Value);
                         }
-                        sourceValue = Activator.CreateInstance(propertyType);
-                        sourceProperty.SetValue(focalObject, sourceValue);
+                        sourcePropertyValue = Activator.CreateInstance(propertyType);
+                        sourceProperty.SetValue(focalObject, sourcePropertyValue);
                     }
 
                     // If the new object is a list then we want to add
-                    if (sourceValue is IList listObject)
+                    if (sourcePropertyValue is IList listObject)
                     {
-                        sourceValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
-                        listObject.Add(sourceValue);
+                        sourcePropertyValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
+                        listObject.Add(sourcePropertyValue);
                     }
 
-                    currentValue = sourceValue;
+                    currentValue = sourcePropertyValue;
                     // Is there a guard?
                     // 1. [Mother]
                     // 3. [OfficialRecord]
@@ -146,10 +147,7 @@ namespace SanteDB
                     //          name[OfficialRecord].component[Given].value=Mary , replace=false
                     //          name[OfficialRecord].component[Given].value=Elizabeth , replace=false
                     //       the result is that name[OfficialRecord] should have 2 components rather than one
-
-                    sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
-                    var sourceValue = sourceProperty.GetValue(focalObject);
-                    if (sourceValue is IList list)
+                    if (sourcePropertyValue is IList list)
                     {
                         currentValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
                         if (currentValue is IdentifiedData && !String.IsNullOrEmpty(match.Groups[2].Value))
@@ -161,7 +159,7 @@ namespace SanteDB
                     }
                 }
                 
-                if ((currentValue == null || replace) && valueToSet != null)
+                if ((currentValue == null || replace && !match.NextMatch().Success) && valueToSet != null)
                 {
                     currentValue = valueToSet;
                     if (MapUtil.TryConvert(currentValue, sourceProperty.PropertyType, out var result))
