@@ -485,8 +485,6 @@ namespace SanteDB.Core.Model.Query
                                     workingValues.Remove(wv);
                                 }
 
-                                var builderMethod = typeof(QueryExpressionParser).GetGenericMethod(nameof(BuildLinqExpression), new Type[] { itemType }, new Type[] { typeof(NameValueCollection), typeof(String), typeof(Dictionary<String, Func<Object>>), typeof(bool), typeof(bool), typeof(bool) });
-
                                 Expression predicate = BuildLinqExpression(itemType, subFilter, pMember, variables, safeNullable, forceLoad, lazyExpandVariables);
                                 if (predicate == null) // No predicate so just ANY()
                                 {

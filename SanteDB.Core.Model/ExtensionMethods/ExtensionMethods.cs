@@ -45,6 +45,8 @@ namespace SanteDB
     /// </summary>
     public static class ExtensionMethods
     {
+
+
         /// <summary>
         /// Indicates a properly was load/checked
         /// </summary>
@@ -68,6 +70,9 @@ namespace SanteDB
             /// </summary>
             public override int GetHashCode() => this.PropertyName.GetHashCode();
         }
+
+        private static ConcurrentDictionary<String, MethodBase> s_genericMethodCache = new ConcurrentDictionary<string, MethodBase>();
+
 
         // Property cache
         private static ConcurrentDictionary<String, PropertyInfo> s_propertyCache = new ConcurrentDictionary<string, PropertyInfo>();
@@ -882,7 +887,6 @@ namespace SanteDB
             methods = methods.Where(m => Enumerable.Range(0, argTypes.Length).All(i => m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.IsAssignableFrom(argTypes[i]))).ToList();
 
             return methods.FirstOrDefault();
-            //return Type.DefaultBinder.SelectMethod(flags, methods.ToArray(), argTypes, null);
         }
 
         /// <summary>
@@ -962,7 +966,7 @@ namespace SanteDB
         public static PropertyInfo GetSanteDBProperty<AttributeType>(this Type type) where AttributeType : Attribute, IPropertyReference
         {
             var classifierAttribute = type.GetCustomAttribute<AttributeType>();
-            if(classifierAttribute == null)
+            if (classifierAttribute == null)
             {
                 return null;
             }
@@ -1124,7 +1128,7 @@ namespace SanteDB
 
         public static bool HasCustomAttribute(this Type t, Type attributeType)
             => t.GetCustomAttribute(attributeType) != null;
-            //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
+        //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
 
 
     }

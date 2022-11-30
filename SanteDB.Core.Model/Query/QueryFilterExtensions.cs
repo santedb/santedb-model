@@ -34,12 +34,12 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Filter regular expression for query parameter syntax
         /// </summary>
-        public static readonly Regex ExtendedFilterRegex = new Regex(@":\((\w*?)(\|((?:"".*(?:[^\\]""))|(?:.*?))\)|\))(.*)");
+        public static readonly Regex ExtendedFilterRegex = new Regex(@":\((\w*?)(\|((?:"".*(?:[^\\]""))|(?:.*?))\)|\))(.*)", RegexOptions.Compiled);
 
         /// <summary>
         /// Filter for parameter extraction
         /// </summary>
-        public static readonly Regex ParameterExtractRegex = new Regex(@"((?:"".*?(?:[^\\]""))|(?:.*?)),(.*)");
+        public static readonly Regex ParameterExtractRegex = new Regex(@"((?:"".*?(?:[^\\]""))|(?:.*?)),(.*)", RegexOptions.Compiled);
 
         // The extension methods
         private static Dictionary<String, IQueryFilterExtension> s_extensionMethods = new Dictionary<string, IQueryFilterExtension>();

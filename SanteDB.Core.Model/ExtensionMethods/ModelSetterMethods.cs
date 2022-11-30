@@ -2,10 +2,12 @@
 using SanteDB.Core.Model;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Map;
 using SanteDB.Core.Model.Query;
 using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -20,8 +22,12 @@ namespace SanteDB
     /// </summary>
     public static class ModelSetterMethods
     {
+
+        // Model setter cache
+        private static ConcurrentDictionary<Type, ConcurrentDictionary<String, Delegate>> s_modelSetterCache = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Delegate>>();
+
         // Property selector
-        private static Regex s_hdsiPropertySelector = new Regex(@"(\w+)(?:\[([\w\|\-]+)\])?(?:\@(\w+))?\.?");
+        private static Regex s_hdsiPropertySelector = new Regex(@"(\w+)(?:\[([\w\|\-]+)\])?(?:\@(\w+))?\.?", RegexOptions.Compiled);
 
         /// <summary>
         /// Get the property value 
@@ -32,7 +38,7 @@ namespace SanteDB
         /// <param name="valueToSet">The value to set the property to if no value at the <paramref name="hdsiExpressionPath"/> exists. Null if no value is to be set</param>
         /// <remarks>This method differs from the query expression parser in that it will actually modify 
         /// <paramref name="root"/> to set properties until it gets to the path expressed</remarks>
-        public static object GetOrSetValueAtPath(this IdentifiedData root, string hdsiExpressionPath, object valueToSet = null)
+        public static object GetOrSetValueAtPath(this IdentifiedData root, string hdsiExpressionPath, object valueToSet = null, bool replace = true)
         {
             var matches = s_hdsiPropertySelector.Matches(hdsiExpressionPath);
             if (matches.Count == 0)
@@ -54,13 +60,25 @@ namespace SanteDB
                 // 3. name[Given]
                 // 4. component[Family]
                 // 5. value
-                var propertyAccessor = QueryExpressionParser.BuildPropertySelector(focalObject.GetType(), match.Groups[0].Value, true);
-                if (propertyAccessor.Body.NodeType == System.Linq.Expressions.ExpressionType.Coalesce && propertyAccessor.Body is BinaryExpression be) // Strip off the coalesce
-                {
-                    propertyAccessor = Expression.Lambda(be.Left, propertyAccessor.Parameters[0]);
-                }
 
-                var currentValue = propertyAccessor.Compile().DynamicInvoke(focalObject);
+                if (!s_modelSetterCache.TryGetValue(focalObject.GetType(), out var setterDelegates))
+                {
+                    setterDelegates = new ConcurrentDictionary<string, Delegate>();
+                    s_modelSetterCache.TryAdd(focalObject.GetType(), setterDelegates);
+                }
+                if (!setterDelegates.TryGetValue(match.Groups[0].Value, out var accessorDelegate))
+                {
+                    var propertyAccessor = QueryExpressionParser.BuildPropertySelector(focalObject.GetType(), match.Groups[0].Value, true);
+                    if (propertyAccessor.Body.NodeType == System.Linq.Expressions.ExpressionType.Coalesce && propertyAccessor.Body is BinaryExpression be) // Strip off the coalesce
+                    {
+                        propertyAccessor = Expression.Lambda(be.Left, propertyAccessor.Parameters[0]);
+                    }
+
+                    accessorDelegate = propertyAccessor.Compile();
+                    setterDelegates.TryAdd(match.Groups[0].Value, accessorDelegate);
+                }
+                var currentValue = accessorDelegate.DynamicInvoke(focalObject);
+                var originalValue = currentValue;
 
                 // Is the property value not set so we want to create it if needed
                 if (currentValue == null)
@@ -75,7 +93,7 @@ namespace SanteDB
                     var sourceValue = sourceProperty.GetValue(focalObject);
 
                     // Chained?
-                    if (match.NextMatch() != null && sourceProperty.PropertyType.StripNullable() == typeof(Guid))
+                    if (match.NextMatch().Success && sourceProperty.PropertyType.StripNullable() == typeof(Guid))
                     {
                         var redirect = sourceProperty.DeclaringType.GetProperties().FirstOrDefault(o => o.GetSerializationRedirectProperty() == sourceProperty);
                         if (redirect == null)
@@ -112,34 +130,70 @@ namespace SanteDB
                     // 1. [Mother]
                     // 3. [OfficialRecord]
                     // 4. [Family]
-                    if (sourceValue is IdentifiedData && !String.IsNullOrEmpty(match.Groups[2].Value))
-                    {
-                        var classifierValue = match.Groups[2].Value;
-                        var classifierProperty = sourceValue.GetType().GetSanteDBProperty<ClassifierAttribute>();
-                        if (Guid.TryParse(classifierValue, out Guid guidValue))
-                        {
-                            classifierProperty = classifierProperty.GetSerializationRedirectProperty();
-                            classifierProperty.SetValue(sourceValue, guidValue);
-                        }
-                        else
-                        {
-                            sourceValue = Activator.CreateInstance(classifierProperty.PropertyType);
-                            classifierProperty.SetValue(currentValue, sourceValue);
-                            var simpleProperty = classifierProperty.PropertyType.GetSanteDBProperty<KeyLookupAttribute>();
-                            simpleProperty.SetValue(sourceValue, classifierValue);
-                        }
 
+                    if (currentValue is IdentifiedData && !String.IsNullOrEmpty(match.Groups[2].Value))
+                    {
+                        SetClassifier(currentValue, match.Groups[2].Value);
                     }
                 }
+                else if (!replace &&
+                    match.NextMatch().Success &&
+                    !match.NextMatch().NextMatch().Success) // We have a classifier property which is 
+                {
+                    // HACK: Figure out a better way to do this - basically 
+                    //        when we are near the terminal part of the path and the value is a collection 
+                    //        we don't want to replace - we want to add the value - for example:
+                    //          name[OfficialRecord].component[Given].value=Mary , replace=false
+                    //          name[OfficialRecord].component[Given].value=Elizabeth , replace=false
+                    //       the result is that name[OfficialRecord] should have 2 components rather than one
 
-                if (currentValue == null && valueToSet != null)
+                    sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
+                    var sourceValue = sourceProperty.GetValue(focalObject);
+                    if (sourceValue is IList list)
+                    {
+                        currentValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
+                        if (currentValue is IdentifiedData && !String.IsNullOrEmpty(match.Groups[2].Value))
+                        {
+                            SetClassifier(currentValue, match.Groups[2].Value);
+                        }
+
+                        list.Add(currentValue);
+                    }
+                }
+                
+                if ((currentValue == null || replace) && valueToSet != null)
                 {
                     currentValue = valueToSet;
-                    sourceProperty.SetValue(focalObject, currentValue);
+                    if (MapUtil.TryConvert(currentValue, sourceProperty.PropertyType, out var result))
+                    {
+                        sourceProperty.SetValue(focalObject, result);
+                    }
+                    else
+                    {
+                        sourceProperty.SetValue(focalObject, currentValue);
+                    }
                 }
                 focalObject = currentValue;
             }
             return focalObject;
+        }
+
+        private static void SetClassifier(object sourceValue, String classifierValue)
+        {
+            var classifierProperty = sourceValue.GetType().GetSanteDBProperty<ClassifierAttribute>();
+            if (Guid.TryParse(classifierValue, out Guid guidValue))
+            {
+                classifierProperty = classifierProperty.GetSerializationRedirectProperty();
+                classifierProperty.SetValue(sourceValue, guidValue);
+            }
+            else
+            {
+                var currentValue = sourceValue;
+                sourceValue = Activator.CreateInstance(classifierProperty.PropertyType);
+                classifierProperty.SetValue(currentValue, sourceValue);
+                var simpleProperty = classifierProperty.PropertyType.GetSanteDBProperty<KeyLookupAttribute>();
+                simpleProperty.SetValue(sourceValue, classifierValue);
+            }
         }
     }
 }

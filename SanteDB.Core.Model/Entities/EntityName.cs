@@ -156,7 +156,7 @@ namespace SanteDB.Core.Model.Entities
             }
             else
             {
-                return $"{this.Component.Find(o => o.ComponentTypeKey == NameComponentKeys.Given)?.Value} {this.Component.Find(o => o.ComponentTypeKey == NameComponentKeys.Family)?.Value}";
+                return $"{String.Join(" ", this.Component.Where(o => o.ComponentTypeKey == NameComponentKeys.Given).OrderBy(o => o.OrderSequence))} {String.Join(" ", this.Component.Where(o => o.ComponentTypeKey == NameComponentKeys.Family).OrderBy(o => o.OrderSequence))}";
             }
         }
 
