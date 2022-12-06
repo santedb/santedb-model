@@ -1108,6 +1108,15 @@ namespace SanteDB
             return Nullable.GetUnderlyingType(t) ?? t;
         }
 
+        /// <summary>
+        /// Determine if <paramref name="t"/> is a nullable type
+        /// </summary>
+        /// <param name="t">The type of the nullable</param>
+        /// <returns>True if the type is nullable</returns>
+        public static bool IsNullable(this Type t)
+        {
+            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
 
         /// <summary>
         /// Validates that this object has a target entity

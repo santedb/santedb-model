@@ -179,5 +179,10 @@ namespace SanteDB.Core.Model.Audit
                 return sw.ToString();
             }
         }
+
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString() => $"AUDIT [OUTCOME={this.Outcome}, EVENT={this.EventIdentifier}]";
     }
 }

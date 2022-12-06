@@ -131,6 +131,7 @@ namespace SanteDB.Core.Model.Map
 
         // Parameters
         private readonly ParameterExpression[] m_parameters;
+        private readonly Type m_targetType;
 
         // Scope stack
         private Stack<ParameterExpression> m_scope = new Stack<ParameterExpression>();
@@ -188,10 +189,11 @@ namespace SanteDB.Core.Model.Map
         /// <summary>
         /// Model conversion visitor 
         /// </summary>
-        public ModelExpressionVisitor(ModelMapper mapData, params ParameterExpression[] parameters)
+        public ModelExpressionVisitor(ModelMapper mapData, Type targetTypeHint, params ParameterExpression[] parameters)
         {
             this.m_mapper = mapData;
             this.m_parameters = parameters;
+            this.m_targetType = targetTypeHint;
         }
 
         /// <summary>
@@ -663,6 +665,11 @@ namespace SanteDB.Core.Model.Map
         {
 
             Type mappedType = this.m_mapper.MapModelType(node.Type);
+
+            if(mappedType == null)
+            {
+                mappedType = this.m_targetType;
+            }
 
             var parameterRef = this.m_parameters.FirstOrDefault(p => p.Name == node.Name && p.Type == mappedType);
 

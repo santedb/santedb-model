@@ -146,6 +146,18 @@ namespace SanteDB.Core.Model.Map.Builder
                 }
                 Object targetObject = retVal;
 
+                // If the source property is not nullable and the target property is - 
+                // and the value is the default then we don't want to set
+                if (domainProperty != null &&
+                    domainProperty.PropertyType != propInfo.PropertyType &&
+                    domainProperty.PropertyType.IsNullable() &&
+                    !propInfo.PropertyType.IsNullable() &&
+                    (default(DateTimeOffset).Equals(propValue) ||
+                    default(DateTime).Equals(propValue) ||
+                    default(Guid).Equals(propValue) ||
+                    default(int).Equals(propValue)))
+                    continue;
+
                 this.Set(targetObject, domainProperty, propValue, propInfo);
             }
 

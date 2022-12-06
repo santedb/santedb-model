@@ -32,6 +32,14 @@ namespace SanteDB.Core.Model.Map
     public class ClassMap
     {
 
+        /// <summary>
+        /// Default CTOR
+        /// </summary>
+        public ClassMap()
+        {
+            this.Property = new List<PropertyMap>();
+        }
+
         // Cache
         private Dictionary<String, PropertyMap> m_modelPropertyMap = new Dictionary<String, PropertyMap>();
         private Dictionary<String, PropertyMap> m_domainPropertyMap = new Dictionary<String, PropertyMap>();

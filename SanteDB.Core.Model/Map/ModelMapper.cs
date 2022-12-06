@@ -232,11 +232,23 @@ namespace SanteDB.Core.Model.Map
 
             if (classMap == null)
             {
-                // Is there a different map we could use
-                classMap = this.m_mapFile.Class.FirstOrDefault(o => o.DomainType == accessExpression.Type);
-                if (classMap == null || !classMap.ModelType.IsAssignableFrom(modelType ?? memberExpression.Expression.Type))
+                // Special case for interface
+                if (memberExpression.Expression.Type.IsInterface)
                 {
-                    throw new InvalidOperationException(string.Format(ErrorMessages.MAP_NOT_FOUND, modelType ?? memberExpression.Type, accessExpression.Type));
+                    classMap = new ClassMap()
+                    {
+                        DomainClass = accessExpression.Type.AssemblyQualifiedName,
+                        ModelClass = memberExpression.Expression.Type.AssemblyQualifiedName
+                    };
+                }
+                else
+                {
+                    // Is there a different map we could use
+                    classMap = this.m_mapFile.Class.FirstOrDefault(o => o.DomainType == accessExpression.Type);
+                    if (classMap == null || !classMap.ModelType.IsAssignableFrom(modelType ?? memberExpression.Expression.Type))
+                    {
+                        throw new InvalidOperationException(string.Format(ErrorMessages.MAP_NOT_FOUND, modelType ?? memberExpression.Type, accessExpression.Type));
+                    }
                 }
             }
 
@@ -317,7 +329,11 @@ namespace SanteDB.Core.Model.Map
 
             ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType);
             // No class mapping so go up the tree
-            if (classMap == null && modelType.BaseType != typeof(Object))
+            if(modelType.BaseType == null)
+            {
+                return null;
+            }
+            else if (classMap == null && modelType.BaseType != typeof(Object))
             {
                 return MapModelType(modelType.BaseType);
             }
@@ -400,7 +416,7 @@ namespace SanteDB.Core.Model.Map
             {
                 var parameter = Expression.Parameter(toType, expression.Parameters[0].Name);
 
-                Expression expr = new ModelExpressionVisitor(this, parameter).Visit(expression.Body);
+                Expression expr = new ModelExpressionVisitor(this, toType, parameter).Visit(expression.Body);
                 if (expr == null && throwOnError)
                 {
                     throw new ArgumentException(ErrorMessages.MAP_EXPRESSION_NOT_POSSIBLE);
