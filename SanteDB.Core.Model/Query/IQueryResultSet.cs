@@ -103,6 +103,11 @@ namespace SanteDB.Core.Model.Query
         /// <param name="query">The query to apply</param>
         /// <returns>The filtered result collection</returns>
         IQueryResultSet Where(Expression query);
+
+        /// <summary>
+        /// Gets the types of elements which can be filtered and/or manipulated in the collection
+        /// </summary>
+        Type ElementType { get; }
     }
 
     /// <summary>

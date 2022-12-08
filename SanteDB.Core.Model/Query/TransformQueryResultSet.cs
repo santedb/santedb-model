@@ -39,6 +39,9 @@ namespace SanteDB.Core.Model.Query
         // The transformer
         private readonly Func<TSource, TDestination> m_transform;
 
+        /// <inheritdoc/>
+        public Type ElementType => this.m_sourceResultSet.ElementType;
+
         /// <summary>
         /// Transform the query result set
         /// </summary>

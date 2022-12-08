@@ -37,6 +37,9 @@ namespace SanteDB.Core.Model.Query
         // Iterator to yield
         private Func<object, object> m_yielder;
 
+        /// <inheritdoc/>
+        public Type ElementType => this.m_wrapped.ElementType;
+
         /// <summary>
         /// Creates a new wrapped memory result set
         /// </summary>

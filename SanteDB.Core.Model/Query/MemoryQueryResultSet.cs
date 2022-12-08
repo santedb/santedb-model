@@ -35,6 +35,9 @@ namespace SanteDB.Core.Model.Query
         // The underlying result set
         private IEnumerable<Object> m_wrapped;
 
+        /// <inheritdoc/>
+        public virtual Type ElementType => typeof(Object);
+
         /// <summary>
         /// Creates a new wrapped memory result set
         /// </summary>
@@ -191,6 +194,10 @@ namespace SanteDB.Core.Model.Query
     {
         // Wraped object
         private IEnumerable<TData> m_wrapped;
+
+
+        /// <inheritdoc/>
+        public override Type ElementType => typeof(TData);
 
         /// <summary>
         /// New query result set
