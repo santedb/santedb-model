@@ -258,8 +258,29 @@ namespace SanteDB
                 //buffer.Slice(roffset, length).CopyTo(bufferspan.Slice(3));
                 Buffer.BlockCopy(buffer, roffset, bufferspan, 3, length);
 
+                if (System.BitConverter.IsLittleEndian)
+                {
+                    //This is intentionally not in a loop.
+                    byte t1 = bufferspan[0];
+                    byte t2 = bufferspan[7];
+                    bufferspan[0] = t2;
+                    bufferspan[7] = t1;
+                    t1 = bufferspan[1];
+                    t2 = bufferspan[6];
+                    bufferspan[1] = t2;
+                    bufferspan[6] = t1;
+                    t1 = bufferspan[2];
+                    t2 = bufferspan[5];
+                    bufferspan[2] = t2;
+                    bufferspan[5] = t1;
+                    t1 = bufferspan[3];
+                    t2 = bufferspan[4];
+                    bufferspan[3] = t2;
+                    bufferspan[4] = t1;
+                }
 
-                ulong l = BinaryPrimitives.ReadUInt64BigEndian(bufferspan);
+
+                ulong l = BitConverter.ToUInt64(bufferspan, 0); //BinaryPrimitives.ReadUInt64BigEndian(bufferspan);
 
                 switch (length)
                 {
@@ -319,7 +340,7 @@ namespace SanteDB
                 roffset += length;
             }
 
-            return chars.Slice(0, woffset).ToString();
+            return new string(chars, 0, woffset);
         }
 
         /// <summary>
