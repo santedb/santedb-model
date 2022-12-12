@@ -235,6 +235,93 @@ namespace SanteDB
                     .TrimEnd(new Char[] { '=' }).Replace('+', '-').Replace('/', '_');
         }
 
+        const string Base32Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=";
+
+        public static String Base32Encode(this byte[] buffer)
+        {
+            if (buffer.Length < 1)
+            {
+                return string.Empty;
+            }
+
+            int roffset = 0, woffset = 0;
+            var chars = new char[((int)(buffer.Length / 5d + 1d)) * 8];
+
+            var bufferspan = new byte[8];
+
+            while (roffset < buffer.Length)
+            {
+                var length = roffset + 5 > buffer.Length ? (buffer.Length - roffset) : 5;
+
+                Array.Clear(bufferspan, 0, 8);
+                //bufferspan.Fill(0);
+                //buffer.Slice(roffset, length).CopyTo(bufferspan.Slice(3));
+                Buffer.BlockCopy(buffer, roffset, bufferspan, 3, length);
+
+
+                ulong l = BinaryPrimitives.ReadUInt64BigEndian(bufferspan);
+
+                switch (length)
+                {
+                    case 5:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 25) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 20) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 15) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 10) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 5) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l) & 0x1F];
+                        break;
+                    case 4:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 25) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 20) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 15) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 10) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 5) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[32]; //Pad Char
+                        break;
+                    case 3:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 25) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 20) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 15) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[32]; //Pad Char
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        break;
+                    case 2:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 25) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 20) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32]; //Pad Char
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        break;
+                    case 1:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32]; //Pad Char
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        break;
+                    default:
+                        break;
+                }
+                roffset += length;
+            }
+
+            return chars.Slice(0, woffset).ToString();
+        }
+
         /// <summary>
         /// Convert a hex string to byte array
         /// </summary>
