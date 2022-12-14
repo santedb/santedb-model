@@ -1021,7 +1021,7 @@ namespace SanteDB
                 var refName = me.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty;
                 if (refName == null)
                 {
-                    return null;
+                    return me.GetQueryName();
                 }
 
                 xmlName = me.DeclaringType.GetProperty(refName)?.GetCustomAttribute<XmlElementAttribute>()?.ElementName;

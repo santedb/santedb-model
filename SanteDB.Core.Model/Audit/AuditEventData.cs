@@ -19,6 +19,7 @@
  * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections.Generic;
@@ -144,7 +145,7 @@ namespace SanteDB.Core.Model.Audit
         /// <summary>
         /// Gets or sets the timestamp for the object
         /// </summary>
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore, QueryParameter("timestamp")]
         public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>

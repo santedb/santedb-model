@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2022-5-30
  */
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections;
@@ -46,6 +47,16 @@ namespace SanteDB.Core.Model.Query
                 "Any", "Where", "Contains", "StartsWith", "EndsWith", "ToLower", "ToUpper"
             };
 
+            /// <summary>
+            /// When true - strip all !null checks
+            /// </summary>
+            public bool StripNullChecks { get; set; }
+
+            /// <summary>
+            /// When true strips any control
+            /// </summary>
+            public bool StripControl { get; set; }
+
             // The dictionary
             private NameValueCollection m_query;
 
@@ -72,6 +83,11 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             private void AddCondition(String key, Object value)
             {
+                if("!null".Equals(value) && this.StripNullChecks)
+                {
+                    return;
+                }
+
                 if (this.m_query.GetValues(key)?.Contains("value") != true)
                 {
                     if (value is IList le)
@@ -229,7 +245,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             this.VisitMethodCall(callExpression, true);
                         }
-                        else if(node.Operand is UnaryExpression unaryExpression)
+                        else if (node.Operand is UnaryExpression unaryExpression)
                         {
                             this.Visit(unaryExpression.Operand);
                         }
@@ -264,9 +280,12 @@ namespace SanteDB.Core.Model.Query
                 {
                     case "WithControl":
                         {
-                            object parmName = this.ExtractValue(node.Arguments[1]);
-                            object parmValue = this.ExtractValue(node.Arguments[2]);
-                            this.AddCondition(parmName.ToString(), parmValue);
+                            if (!this.StripControl)
+                            {
+                                object parmName = this.ExtractValue(node.Arguments[1]);
+                                object parmValue = this.ExtractValue(node.Arguments[2]);
+                                this.AddCondition(parmName.ToString(), parmValue);
+                            }
                             return null;
                         }
                     case "Contains":
@@ -699,7 +718,7 @@ namespace SanteDB.Core.Model.Query
                     //CallExpression callExpr = access as MemberExpression;
                     MethodCallExpression callExpr = access as MethodCallExpression;
 
-                    if(callExpr.Method.Name == "WithControl")
+                    if (callExpr.Method.Name == "WithControl")
                     {
                         return null;
                     }
@@ -820,21 +839,20 @@ namespace SanteDB.Core.Model.Query
         /// <param name="model">Model.</param>
         /// <param name="stripNullChecks">True if null checks should not be included in the output</param>
         /// <typeparam name="TModel">The 1st type parameter.</typeparam>
-        public static NameValueCollection BuildQuery<TModel>(Expression<Func<TModel, bool>> model, bool stripNullChecks = false) => BuildQuery(typeof(TModel), model, stripNullChecks);
+        public static NameValueCollection BuildQuery<TModel>(Expression<Func<TModel, bool>> model, bool stripNullChecks = false, bool stripControl = false) => BuildQuery(typeof(TModel), model, stripNullChecks, stripControl);
 
         /// <summary>
         /// Build query non-generic version
         /// </summary>
-        public static NameValueCollection BuildQuery(Type tmodel, LambdaExpression model, bool stripNullChecks = false)
+        public static NameValueCollection BuildQuery(Type tmodel, LambdaExpression model, bool stripNullChecks = false, bool stripControl = false)
         {
             var retVal = new NameValueCollection();
-            var visitor = new HttpQueryExpressionVisitor(retVal, tmodel);
-            visitor.Visit(model);
-            if (stripNullChecks)
+            var visitor = new HttpQueryExpressionVisitor(retVal, tmodel)
             {
-                retVal.ToList().Where(o => !"!null".Equals(o.Value)).ToNameValueCollection();
-            }
-
+                StripNullChecks = stripNullChecks,
+                StripControl = stripControl
+            };
+            visitor.Visit(model);
             return retVal;
         }
 
@@ -866,9 +884,19 @@ namespace SanteDB.Core.Model.Query
             {
                 throw new InvalidOperationException("Cannot convert sort expression");
             }
+            else if(memberExpression is MemberExpression mexp && 
+                mexp.Member is PropertyInfo propertyInfo)
+            {
+                var serializationName = propertyInfo.GetSerializationName();
+                if(String.IsNullOrEmpty(serializationName))
+                {
+                    throw new ArgumentException(String.Format(ErrorMessages.FIELD_NOT_FOUND, propertyInfo.Name));
+                }
+                return $"{serializationName}:{(sort.SortOrder == Map.SortOrderType.OrderBy ? "asc" : "desc")}";
+            }
             else
             {
-                return $"{((memberExpression as MemberExpression).Member as PropertyInfo).GetSerializationName()}:{(sort.SortOrder == Map.SortOrderType.OrderBy ? "asc" : "desc")}";
+                throw new InvalidOperationException(String.Format(ErrorMessages.ARGUMENT_INCOMPATIBLE_TYPE, typeof(MemberExpression), memberExpression.GetType()));
             }
         }
     }
