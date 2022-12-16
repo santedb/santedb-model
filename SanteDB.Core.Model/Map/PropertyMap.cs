@@ -50,6 +50,12 @@ namespace SanteDB.Core.Model.Map
         public bool DontLoad { get; set; }
 
         /// <summary>
+        /// True if the property map is for rewriting queries only
+        /// </summary>
+        [XmlAttribute("queryOnly")]
+        public bool QueryOnly { get; set; }
+
+        /// <summary>
         /// Disaggregation function
         /// </summary>
         [XmlAttribute("aggregate")]

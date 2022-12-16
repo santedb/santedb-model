@@ -73,7 +73,7 @@ namespace SanteDB.Core.Model.Map.Builder
             {
                 // Map property
                 PropertyInfo modelProperty = null;
-                if (!m_classMap.TryGetModelProperty(sourceProperty.Name, out PropertyMap propMap))
+                if (!m_classMap.TryGetModelProperty(sourceProperty.Name, out PropertyMap propMap) && propMap?.QueryOnly != true)
                 {
                     modelProperty = this.m_classMap.ModelType.GetProperty(sourceProperty.Name);
                 }
@@ -81,6 +81,7 @@ namespace SanteDB.Core.Model.Map.Builder
                 {
                     modelProperty = this.m_classMap.ModelType.GetProperty(propMap.ModelName);
                 }
+                
 
                 if (modelProperty == null || propMap?.DontLoad == true)
                 {
@@ -136,7 +137,7 @@ namespace SanteDB.Core.Model.Map.Builder
 
                 // Map property
                 PropertyInfo domainProperty = null;
-                if (m_classMap.TryGetModelProperty(propInfo.Name, out PropertyMap propMap))
+                if (m_classMap.TryGetModelProperty(propInfo.Name, out PropertyMap propMap) && propMap?.QueryOnly != true)
                 {
                     domainProperty = this.m_classMap.DomainType.GetRuntimeProperty(propMap.DomainName);
                 }
@@ -144,6 +145,8 @@ namespace SanteDB.Core.Model.Map.Builder
                 {
                     domainProperty = this.m_classMap.DomainType.GetRuntimeProperty(propInfo.Name);
                 }
+
+
                 Object targetObject = retVal;
 
                 // If the source property is not nullable and the target property is - 

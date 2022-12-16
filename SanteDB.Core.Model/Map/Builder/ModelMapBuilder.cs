@@ -258,6 +258,11 @@ namespace SanteDB.Core.Model.Map.Builder
                 {
                     otherProp = map.ModelType.GetProperty(configMap.ModelName);
                 }
+                if (configMap?.QueryOnly == true)
+                {
+                    otherProp = null;
+                    configMap = null;
+                }
 
                 // Other property
                 if (otherProp == null || !otherProp.CanWrite)
@@ -328,6 +333,11 @@ namespace SanteDB.Core.Model.Map.Builder
                 if (map.TryGetDomainProperty(propInfo.Name, out PropertyMap configMap))
                 {
                     modelProp = map.ModelType.GetProperty(configMap.ModelName);
+                }
+                if (configMap?.QueryOnly == true)
+                {
+                    modelProp = null;
+                    configMap = null;
                 }
 
                 // Other property
