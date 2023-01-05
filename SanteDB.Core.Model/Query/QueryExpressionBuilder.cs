@@ -838,6 +838,7 @@ namespace SanteDB.Core.Model.Query
         /// <returns>The query.</returns>
         /// <param name="model">Model.</param>
         /// <param name="stripNullChecks">True if null checks should not be included in the output</param>
+        /// <param name="stripControl">True if the <see cref="QueryFilterExtensions.WithControl(object, string, object)"/> should be excluded from the output</param>
         /// <typeparam name="TModel">The 1st type parameter.</typeparam>
         public static NameValueCollection BuildQuery<TModel>(Expression<Func<TModel, bool>> model, bool stripNullChecks = false, bool stripControl = false) => BuildQuery(typeof(TModel), model, stripNullChecks, stripControl);
 

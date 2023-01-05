@@ -35,6 +35,7 @@ namespace SanteDB
         /// <param name="root">The root object from which data should be selected</param>
         /// <param name="hdsiExpressionPath">The HDSI expression to retrieve</param>
         /// <returns>The property value</returns>
+        /// <param name="replace">True if the value at <paramref name="hdsiExpressionPath"/> should be replaced with the <paramref name="valueToSet"/>, when false <paramref name="valueToSet"/> will be added to the object</param>
         /// <param name="valueToSet">The value to set the property to if no value at the <paramref name="hdsiExpressionPath"/> exists. Null if no value is to be set</param>
         /// <remarks>This method differs from the query expression parser in that it will actually modify 
         /// <paramref name="root"/> to set properties until it gets to the path expressed</remarks>

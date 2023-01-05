@@ -92,6 +92,14 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build expression for specified type
         /// </summary>
+        /// <param name="relayControlVariables">When true, the <see cref="QueryFilterExtensions.WithControl(object, string, object)"/> extension method should be used to convey the control variables</param>
+        /// <param name="forceLoad">When true, use the <see cref="ExtensionMethods.LoadProperty(IAnnotatedResource, string, bool)"/> on all calls to load values on the path. This is useful if the resulting Linq expression is intended to be executed in memory</param>
+        /// <param name="httpQueryParameters">The HTTP query parameter collection to parse into a LINQ expression</param>
+        /// <param name="lazyExpandVariables">When true, all variables in <paramref name="variables"/> should be called in the LINQ expression, when false the variables are evaluated when the expression is created</param>
+        /// <param name="modelType">The type of model to which the returned LINQ expression should accept as a parameter</param>
+        /// <param name="parameterName">The name of the parameter in the Lambda expression</param>
+        /// <param name="safeNullable">When true, use coalesce operators in the Lambda expression to provide a default value. This is useful if the LINQ expression will be used on memory objects</param>
+        /// <param name="variables">The variable evaluators to use when expanding <c>$variable</c> expressions in the HDSI path</param>
         public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false)
         {
             var controlMethod = typeof(QueryFilterExtensions).GetMethod(nameof(QueryFilterExtensions.WithControl), BindingFlags.Static | BindingFlags.NonPublic);
@@ -931,6 +939,7 @@ namespace SanteDB.Core.Model.Query
         /// <param name="lazyExpandVariables">When true, variables should be expanded in the LINQ expression otherwise they are realized when conversion is done</param>
         /// <param name="parameterName">The name of the parameter on the resulting Lambda</param>
         /// <param name="safeNullable">When true, coalesce operations will be injected into the LINQ to ensure object in-memory collections don't throw NRE</param>
+        /// <param name="relayControlVariables"></param>
         /// <param name="variables">A list of variables which are accessed in the LambdaExpression via $variable</param>
         public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false)
         {
