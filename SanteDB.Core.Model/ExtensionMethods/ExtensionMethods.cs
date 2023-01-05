@@ -93,9 +93,36 @@ namespace SanteDB
         private static ConcurrentDictionary<Assembly, Type[]> m_types = new ConcurrentDictionary<Assembly, Type[]>();
 
         /// <summary>
+        /// For each item in an enumerable
+        /// </summary>
+        public static void ForEach<T>(IList<T> me, Action<T> action) => ExtensionMethods.ForEach(me, action);
+
+        /// <summary>
+        /// For each item in an enumerable
+        /// </summary>
+        public static void ForEach<T>(IEnumerable<T> me, Action<T> action)
+        {
+            foreach(var itm in me)
+            {
+                action(itm);
+            }
+        }
+
+        /// <summary>
         /// Returns true if the <see cref="IList"/> is null or has no elements
         /// </summary>
-        public static bool IsNullOrEmpty(this IList me) => me == null || me.Count == 0;
+        public static bool IsNullOrEmpty(this IEnumerable me) => me == null || me.OfType<Object>().Count() == 0;
+
+        /// <summary>
+        /// Add <paramref name="itemsToAdd"/> to <paramref name="me"/>
+        /// </summary>
+        public static void AddRange<T>(this IList<T> me, IEnumerable<T> itemsToAdd)
+        {
+            foreach(var itm in itemsToAdd)
+            {
+                me.Add(itm);
+            }
+        }
 
         /// <summary>
         /// Get all types
@@ -237,6 +264,11 @@ namespace SanteDB
 
         const string Base32Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=";
 
+        /// <summary>
+        /// Encodes <paramref name="buffer"/> as a Base32 string
+        /// </summary>
+        /// <param name="buffer">The array of bytes to encode</param>
+        /// <returns>The encoded Base32 string</returns>
         public static String Base32Encode(this byte[] buffer)
         {
             if (buffer.Length < 1)
@@ -1240,9 +1272,21 @@ namespace SanteDB
             return validResults;
         }
 
+        /// <summary>
+        /// Returns true if <paramref name="t"/> has <typeparamref name="TAttribute"/>
+        /// </summary>
+        /// <typeparam name="TAttribute">The type of attribute to check for</typeparam>
+        /// <param name="t">The type on which the attribute should be checked</param>
+        /// <returns>True if <paramref name="t"/> is annoted with <typeparamref name="TAttribute"/></returns>
         public static bool HasCustomAttribute<TAttribute>(this Type t)
             => HasCustomAttribute(t, typeof(TAttribute));
 
+        /// <summary>
+        /// Non generic implementation of <see cref="HasCustomAttribute{TAttribute}(Type)"/>
+        /// </summary>
+        /// <param name="t">The type on which <paramref name="attributeType"/> should be checked</param>
+        /// <param name="attributeType">The type of attribute to check on <paramref name="t"/></param>
+        /// <returns>True if <paramref name="t"/> is annotated with <paramref name="attributeType"/></returns>
         public static bool HasCustomAttribute(this Type t, Type attributeType)
             => t.GetCustomAttribute(attributeType) != null;
         //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;

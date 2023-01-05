@@ -60,7 +60,17 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Count the objects
         /// </summary>
-        public int Count() => this.m_wrapped.Count();
+        public int Count()
+        {
+            if (this.m_wrapped is IQueryResultSet iqrs)
+            {
+                return iqrs.Count();
+            }
+            else
+            {
+                return this.m_wrapped.Count();
+            }
+        }
 
         /// <summary>
         /// Get the first
@@ -281,7 +291,14 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public IQueryResultSet<TData> Union(IQueryResultSet<TData> other)
         {
-            return new MemoryQueryResultSet<TData>(other.Union(this.m_wrapped));
+            if (this.m_wrapped.Count() == 0)
+            {
+                return other;
+            }
+            else
+            {
+                return new MemoryQueryResultSet<TData>(other.Union(this.m_wrapped));
+            }
         }
 
         /// <summary>

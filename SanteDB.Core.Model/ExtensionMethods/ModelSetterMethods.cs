@@ -154,7 +154,6 @@ namespace SanteDB
                         {
                             SetClassifier(currentValue, match.Groups[2].Value);
                         }
-
                         list.Add(currentValue);
                     }
                 }

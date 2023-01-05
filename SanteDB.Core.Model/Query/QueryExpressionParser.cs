@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2022-5-30
  */
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
@@ -91,7 +92,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build expression for specified type
         /// </summary>
-        public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
+        public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false)
         {
             var controlMethod = typeof(QueryFilterExtensions).GetMethod(nameof(QueryFilterExtensions.WithControl), BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -130,10 +131,17 @@ namespace SanteDB.Core.Model.Query
                     {
                         continue;
                     }
-                    else if (rawMember.StartsWith("_"))
+                    else if (rawMember.StartsWith("_") )
                     {
-                        accessExpression = Expression.Call(null, controlMethod, accessExpression, Expression.Constant(rawMember), Expression.Constant(null));
-                        break;
+                        if (relayControlVariables)
+                        {
+                            accessExpression = Expression.Call(null, controlMethod, accessExpression, Expression.Constant(rawMember), Expression.Constant(null));
+                            break;
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
                     else
                     {
@@ -505,6 +513,12 @@ namespace SanteDB.Core.Model.Query
                     }
                 }
 
+                // HACK: Was there any mapping done?
+                if(accessExpression == parameterExpression)
+                {
+                    continue;
+                }
+
                 // Now expression
                 var kp = currentValue.Value;
                 if (kp != null)
@@ -867,16 +881,6 @@ namespace SanteDB.Core.Model.Query
         }
 
 
-        /// <summary>
-        /// Buidl linq expression
-        /// </summary>
-        /// <typeparam name="TModelType"></typeparam>
-        /// <param name="httpQueryParameters"></param>
-        /// <returns></returns>
-        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters)
-        {
-            return BuildLinqExpression<TModelType>(httpQueryParameters, null);
-        }
 
         /// <summary>
         /// Build linq expression from string
@@ -903,10 +907,11 @@ namespace SanteDB.Core.Model.Query
         /// <param name="safeNullable">if set to <c>true</c> [safe nullable].</param>
         /// <returns>Expression&lt;Func&lt;TModelType, System.Boolean&gt;&gt;.</returns>
         /// <param name="lazyExpandVariables">When true, variables are written to be expanded on evaluation of the LINQ expression - if false then variables are realized when the conversion is done</param>
-        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables, bool safeNullable = true, bool lazyExpandVariables = true)
+        /// <param name="relayControlVariables">True if control parameters should be conveyed in the LINQ expression</param>
+        public static Expression<Func<TModelType, bool>> BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool lazyExpandVariables = true, bool relayControlVariables = false)
         {
 
-            var expression = BuildLinqExpression<TModelType>(httpQueryParameters, "o", variables, safeNullable: safeNullable, lazyExpandVariables: lazyExpandVariables);
+            var expression = BuildLinqExpression<TModelType>(httpQueryParameters, "o", variables: variables, safeNullable: safeNullable, lazyExpandVariables: lazyExpandVariables, relayControlVariables: relayControlVariables);
 
             if (expression == null) // No query!
             {
@@ -927,9 +932,9 @@ namespace SanteDB.Core.Model.Query
         /// <param name="parameterName">The name of the parameter on the resulting Lambda</param>
         /// <param name="safeNullable">When true, coalesce operations will be injected into the LINQ to ensure object in-memory collections don't throw NRE</param>
         /// <param name="variables">A list of variables which are accessed in the LambdaExpression via $variable</param>
-        public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true)
+        public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false)
         {
-            return BuildLinqExpression(typeof(TModelType), httpQueryParameters, parameterName, variables, safeNullable, forceLoad, lazyExpandVariables);
+            return BuildLinqExpression(typeof(TModelType), httpQueryParameters, parameterName, variables, safeNullable, forceLoad, lazyExpandVariables, relayControlVariables);
         }
 
 
@@ -957,20 +962,31 @@ namespace SanteDB.Core.Model.Query
                 {
                     // Expand value
                     var value = val();
-                    var propertySelector = BuildPropertySelector(value.GetType(), varPath.Substring(1), true);
-                    scope = Expression.Constant(propertySelector.Compile().DynamicInvoke(value));
+                    if (!String.IsNullOrEmpty(varPath))
+                    {
+                        var propertySelector = BuildPropertySelector(value.GetType(), varPath.Substring(1), true);
+                        scope = Expression.Constant(propertySelector.Compile().DynamicInvoke(value));
+                    }
+                    else
+                    {
+                        scope = Expression.Constant(value);
+                    }
                     varPath = String.Empty;
                 }
                 else
                 {
                     var value = val();
+                    if (expectedReturn == typeof(String))
+                    {
+                        value = value.ToString();
+                    }
                     scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), value?.GetType() ?? expectedReturn);
 
                 }
             }
             else
             {
-                return null;
+                throw new InvalidOperationException(String.Format(ErrorMessages.VARIABLE_NOT_FOUND, varName));
             }
 
             Expression retVal = scope;
@@ -978,7 +994,14 @@ namespace SanteDB.Core.Model.Query
 
             if (String.IsNullOrEmpty(varPath))
             {
-                return Expression.Convert(retVal, expectedReturn);
+                if (expectedReturn == typeof(String) && retVal.Type != typeof(String))
+                {
+                    return Expression.Call(retVal, retVal.Type.GetMethod(nameof(Object.ToString), Type.EmptyTypes));
+                }
+                else
+                {
+                    return Expression.Convert(retVal, expectedReturn);
+                }
             }
             else
             {

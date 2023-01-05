@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2022-5-30
  */
+using SanteDB.Core.Model.Attributes;
 using System;
 
 namespace SanteDB.Core.Model.Interfaces
@@ -30,21 +31,25 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets or sets the creator of the data
         /// </summary>
-        Guid? CreatedByKey { get; set; }
+        [QueryParameter("createdBy")]
+        Guid? CreatedByKey { get; }
 
         /// <summary>
         /// Gets or sets teh obsoletor of the data
         /// </summary>
-        Guid? ObsoletedByKey { get; set; }
+        [QueryParameter("obsoletedBy")]
+        Guid? ObsoletedByKey { get;  }
 
         /// <summary>
         /// Gets or sets the time when the data was created
         /// </summary>
-        DateTimeOffset CreationTime { get; set; }
+        [QueryParameter("creationTime")]
+        DateTimeOffset CreationTime { get; }
 
         /// <summary>
         /// Gets or sets the time with the data was obsoleted.
         /// </summary>
-        DateTimeOffset? ObsoletionTime { get; set; }
+        [QueryParameter("obsoletionTime")]
+        DateTimeOffset? ObsoletionTime { get;  }
     }
 }

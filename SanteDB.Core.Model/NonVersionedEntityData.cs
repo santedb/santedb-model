@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
 using System.ComponentModel;
@@ -38,7 +39,7 @@ namespace SanteDB.Core.Model
     /// at a field level.</para></remarks>
     [XmlType(nameof(NonVersionedEntityData), Namespace = "http://santedb.org/model")]
     [JsonObject(Id = nameof(NonVersionedEntityData))]
-    public class NonVersionedEntityData : BaseEntityData
+    public class NonVersionedEntityData : BaseEntityData, INonVersionedData
     {
 
         /// <summary>
