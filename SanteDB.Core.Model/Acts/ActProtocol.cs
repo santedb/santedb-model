@@ -35,6 +35,10 @@ namespace SanteDB.Core.Model.Acts
     [XmlType(nameof(ActProtocol), Namespace = "http://santedb.org/model"), JsonObject(nameof(ActProtocol))]
     public class ActProtocol : Association<Act>
     {
+
+        // The protocol
+        private Protocol m_protocol;
+
         /// <summary>
         /// Gets or sets the protocol  to which this act belongs
         /// </summary>
@@ -45,7 +49,10 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the protocol data related to the protocol
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReferenceAttribute(nameof(ProtocolKey))]
-        public Protocol Protocol { get; set; }
+        public Protocol Protocol {
+            get => this.m_protocol.AsSummary();
+            set => this.m_protocol = value; 
+        }
 
         /// <summary>
         /// Gets the version of the protocol that was used to generate the 

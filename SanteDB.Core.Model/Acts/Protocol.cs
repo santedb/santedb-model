@@ -93,6 +93,16 @@ namespace SanteDB.Core.Model.Acts
         public Narrative Narrative { get; set; }
 
         /// <summary>
+        /// Represent this protocol as a summary (for example, when displaying it as part of another object)
+        /// </summary>
+        /// <returns></returns>
+        public Protocol AsSummary() => new Protocol()
+            {
+                Name = this.Name,
+                Oid = this.Oid
+            };
+        
+        /// <summary>
         /// Semantic equality
         /// </summary>
         public override bool SemanticEquals(object obj)
