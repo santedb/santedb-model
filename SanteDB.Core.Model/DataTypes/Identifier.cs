@@ -87,6 +87,11 @@ namespace SanteDB.Core.Model.DataTypes
             this.Value = value;
         }
 
+        /// <summary>
+        /// Represent as a display
+        /// </summary>
+        public override string ToDisplay() => $"{this.Value}^^^{this.IdentityDomain?.DomainName ?? this.IdentityDomainKey.ToString()}";
+
     }
 
     /// <summary>
