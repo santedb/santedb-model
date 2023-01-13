@@ -24,7 +24,7 @@ namespace SanteDB
     {
 
         // Model setter cache
-        private static ConcurrentDictionary<Type, ConcurrentDictionary<String, Delegate>> s_modelSetterCache = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Delegate>>();
+        private static ConcurrentDictionary<Type, ConcurrentDictionary<String, Func<object, object>>> s_modelSetterCache = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>>();
 
         // Property selector
         private static Regex s_hdsiPropertySelector = new Regex(@"(\w+)(?:\[([\w\|\-]+)\])?(?:\@(\w+))?\.?", RegexOptions.Compiled);
@@ -64,7 +64,7 @@ namespace SanteDB
 
                 if (!s_modelSetterCache.TryGetValue(focalObject.GetType(), out var setterDelegates))
                 {
-                    setterDelegates = new ConcurrentDictionary<string, Delegate>();
+                    setterDelegates = new ConcurrentDictionary<string, Func<object, object>>();
                     s_modelSetterCache.TryAdd(focalObject.GetType(), setterDelegates);
                 }
                 if (!setterDelegates.TryGetValue(match.Groups[0].Value, out var accessorDelegate))
@@ -75,11 +75,14 @@ namespace SanteDB
                         propertyAccessor = Expression.Lambda(be.Left, propertyAccessor.Parameters[0]);
                     }
 
-                    accessorDelegate = propertyAccessor.Compile();
+                    // Convert to a strong delegate
+                    var parm = Expression.Parameter(typeof(Object));
+                    var newLambda = Expression.Lambda<Func<object, object>>(Expression.Convert(Expression.Invoke(propertyAccessor, Expression.Convert(parm, focalObject.GetType())), typeof(Object)), parm);
+                    accessorDelegate = newLambda.Compile();
                     setterDelegates.TryAdd(match.Groups[0].Value, accessorDelegate);
                 }
 
-                var currentValue = accessorDelegate.DynamicInvoke(focalObject);
+                var currentValue = accessorDelegate(focalObject);
                 var originalValue = currentValue;
                 sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
                 var sourcePropertyValue = sourceProperty.GetValue(focalObject);
