@@ -601,6 +601,44 @@ namespace SanteDB.Core.Model.Query
 
                         String pValue = value;
 
+                        // New syntax for operators:
+                        // gte:clause
+                        // gt:clause
+                        // 
+                        var indexOfColon = value.IndexOf(':');
+                        if(indexOfColon > 0 && indexOfColon < 4)
+                        {
+                            var op = value.Substr(0, indexOfColon);
+                            value = value.Substring(indexOfColon + 1);
+                            switch(op)
+                            {
+                                case "gt":
+                                    value = $">{value}";
+                                    break;
+                                case "gte":
+                                    value = $">={value}";
+                                    break;
+                                case "lt":
+                                    value = $"<{value}";
+                                    break;
+                                case "lte":
+                                    value = $"<={value}";
+                                    break;
+                                case "eq":
+                                    value = $"{value}";
+                                    break;
+                                case "ne":
+                                    value = $"!{value}";
+                                    break;
+                                case "ap":
+                                    value = $"~{value}";
+                                    break;
+                                default:
+                                    value = $"{op}:{value}"; // pass it along
+                                    break;
+                            }
+                        }
+
                         // Operator type
                         switch (value[0])
                         {
