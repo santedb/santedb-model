@@ -68,7 +68,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// True if the object is the head version
         /// </summary>
-        [XmlElement("_head"), JsonProperty("$head"), QueryParameter("head")]
+        [XmlIgnore, JsonIgnore, QueryParameter("head")]
         public bool IsHeadVersion { get; set; }
 
         /// <summary>
