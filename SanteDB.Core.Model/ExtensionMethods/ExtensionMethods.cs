@@ -95,14 +95,9 @@ namespace SanteDB
         /// <summary>
         /// For each item in an enumerable
         /// </summary>
-        public static void ForEach<T>(IList<T> me, Action<T> action) => ExtensionMethods.ForEach(me, action);
-
-        /// <summary>
-        /// For each item in an enumerable
-        /// </summary>
         public static void ForEach<T>(IEnumerable<T> me, Action<T> action)
         {
-            foreach(var itm in me)
+            foreach (var itm in me)
             {
                 action(itm);
             }
@@ -118,9 +113,24 @@ namespace SanteDB
         /// </summary>
         public static void AddRange<T>(this IList<T> me, IEnumerable<T> itemsToAdd)
         {
-            foreach(var itm in itemsToAdd)
+            foreach (var itm in itemsToAdd)
             {
                 me.Add(itm);
+            }
+        }
+
+        /// <summary>
+        /// Safe method for loading exported types from assemblies where <see cref="ReflectionTypeLoadException"/> is thrown
+        /// </summary>
+        public static Type[] GetExportedTypesSafe(this Assembly me)
+        {
+            try
+            {
+                return me.GetTypes().Where(t => t.IsPublic).ToArray();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(o => o?.IsPublic == true).ToArray();
             }
         }
 
@@ -138,7 +148,7 @@ namespace SanteDB
                     {
                         if (!m_types.TryGetValue(a, out var typ))
                         {
-                            typ = a.GetTypes().Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
+                            typ = a.GetExportedTypesSafe().Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
                             m_types.TryAdd(a, typ);
                         }
                         return typ;
@@ -1288,7 +1298,7 @@ namespace SanteDB
         /// <param name="attributeType">The type of attribute to check on <paramref name="t"/></param>
         /// <returns>True if <paramref name="t"/> is annotated with <paramref name="attributeType"/></returns>
         public static bool HasCustomAttribute(this Type t, Type attributeType)
-            => t.GetCustomAttribute(attributeType) != null;
+            => t?.GetCustomAttribute(attributeType) != null;
         //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
 
 

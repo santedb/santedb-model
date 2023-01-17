@@ -82,10 +82,9 @@ namespace SanteDB.Core.Model
         //[SerializationReference(nameof(PreviousVersionKey))]
         public virtual THistoryModelType GetPreviousVersion()
         {
-            if (this.PreviousVersionKey.HasValue &&
-                this.m_previousVersion == null)
+            if (this.PreviousVersionKey.HasValue)
             {
-                this.m_previousVersion = EntitySource.Current.Get<THistoryModelType>(this.Key, this.PreviousVersionKey.Value);
+                return EntitySource.Current.Get<THistoryModelType>(this.Key, this.PreviousVersionKey.Value);
             }
 
             return this.m_previousVersion;

@@ -293,7 +293,7 @@ namespace SanteDB.Core.Model.Query
                             Type castType = null;
                             if (!m_castCache.TryGetValue(cast, out castType))
                             {
-                                castType = typeof(QueryExpressionParser).Assembly.ExportedTypes.FirstOrDefault(o => o.GetCustomAttribute<XmlTypeAttribute>()?.TypeName == cast);
+                                castType = typeof(QueryExpressionParser).Assembly.GetExportedTypesSafe().FirstOrDefault(o => o.GetCustomAttribute<XmlTypeAttribute>()?.TypeName == cast);
                                 if (castType == null)
                                 {
                                     throw new ArgumentOutOfRangeException(nameof(castType), cast);
@@ -1043,7 +1043,14 @@ namespace SanteDB.Core.Model.Query
             {
                 if (expectedReturn == typeof(String) && retVal.Type != typeof(String))
                 {
-                    return Expression.Call(retVal, retVal.Type.GetMethod(nameof(Object.ToString), Type.EmptyTypes));
+                    if (retVal is ConstantExpression ce && ce.Value == null)
+                    {
+                        return retVal;
+                    }
+                    else
+                    {
+                        return Expression.Call(retVal, retVal.Type.GetMethod(nameof(Object.ToString), Type.EmptyTypes));
+                    }
                 }
                 else
                 {
