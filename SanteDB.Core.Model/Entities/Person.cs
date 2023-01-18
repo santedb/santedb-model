@@ -134,6 +134,88 @@ namespace SanteDB.Core.Model.Entities
             return this.DateOfBirthPrecision.HasValue;
         }
 
+
+        /// <summary>
+        /// Gets or sets the date the patient was deceased
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public DateTime? DeceasedDate { get; set; }
+
+        /// <summary>
+        /// Deceased date XML
+        /// </summary>
+        [XmlElement("deceasedDate"), JsonProperty("deceasedDate"), SerializationMetadata]
+        public String DeceasedDateXml
+        {
+            get
+            {
+                return this.DeceasedDate?.ToString("yyyy-MM-dd");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date
+                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    {
+                        this.DeceasedDate = dt;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Cannot parse {value} as a date");
+                    }
+                }
+                else
+                {
+                    this.DeceasedDate = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the precision of the date of deceased
+        /// </summary>
+        [XmlElement("deceasedDatePrecision"), JsonProperty("deceasedDatePrecision")]
+        public DatePrecision? DeceasedDatePrecision { get; set; }
+
+        /// <summary>
+        /// Should serialize deceased date
+        /// </summary>
+        /// <returns></returns>
+        public bool ShouldSerializeDeceasedDatePrecision() => this.DeceasedDatePrecision.HasValue;
+
+
+
+        /// <summary>
+        /// Gets or sets the VIP code
+        /// </summary>
+        [XmlElement("vipStatus"), JsonProperty("vipStatus")]
+        public Guid? VipStatusKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the VIP status code
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(VipStatusKey))]
+        public Concept VipStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the religious affiliation
+        /// </summary>
+        [XmlElement("nationality"), JsonProperty("nationality")]
+        public Guid? NationalityKey
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets the nationality of the patient
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(NationalityKey))]
+        public Concept Nationality
+        {
+            get; set;
+        }
+
         /// <summary>
         /// Semantic equality function
         /// </summary>
@@ -149,6 +231,7 @@ namespace SanteDB.Core.Model.Entities
                 this.DateOfBirth == other.DateOfBirth &&
                 this.GenderConceptKey == other.GenderConceptKey &&
                 this.DateOfBirthPrecision == other.DateOfBirthPrecision &&
+                this.NationalityKey == other.NationalityKey &&
                 this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) != false;
         }
     }

@@ -52,71 +52,10 @@ namespace SanteDB.Core.Model.Roles
         protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Patient;
 
         /// <summary>
-        /// Gets or sets the date the patient was deceased
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public DateTime? DeceasedDate { get; set; }
-
-        /// <summary>
-        /// Deceased date XML
-        /// </summary>
-        [XmlElement("deceasedDate"), JsonProperty("deceasedDate"), SerializationMetadata]
-        public String DeceasedDateXml
-        {
-            get
-            {
-                return this.DeceasedDate?.ToString("yyyy-MM-dd");
-            }
-            set
-            {
-                if (!String.IsNullOrEmpty(value))
-                {
-                    // Try to parse ISO date
-                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
-                    {
-                        this.DeceasedDate = dt;
-                    }
-                    else
-                    {
-                        throw new FormatException($"Cannot parse {value} as a date");
-                    }
-                }
-                else
-                {
-                    this.DeceasedDate = null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the precision of the date of deceased
-        /// </summary>
-        [XmlElement("deceasedDatePrecision"), JsonProperty("deceasedDatePrecision")]
-        public DatePrecision? DeceasedDatePrecision { get; set; }
-
-        /// <summary>
         /// Gets or sets the multiple birth order of the patient
         /// </summary>
         [XmlElement("multipleBirthOrder"), JsonProperty("multipleBirthOrder")]
         public int? MultipleBirthOrder { get; set; }
-
-        /// <summary>
-        /// Gets or sets the VIP code
-        /// </summary>
-        [XmlElement("vipStatus"), JsonProperty("vipStatus")]
-        public Guid? VipStatusKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the key of the marital status concept
-        /// </summary>
-        [XmlElement("maritalStatus"), JsonProperty("maritalStatus")]
-        public Guid? MaritalStatusKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the key of the education level
-        /// </summary>
-        [XmlElement("educationLevel"), JsonProperty("educationLevel")]
-        public Guid? EducationLevelKey { get; set; }
 
         /// <summary>
         /// Gets or sets the living arrangement
@@ -129,42 +68,6 @@ namespace SanteDB.Core.Model.Roles
         /// </summary>
         [XmlElement("religion"), JsonProperty("religion")]
         public Guid? ReligiousAffiliationKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the religious affiliation
-        /// </summary>
-        [XmlElement("nationality"), JsonProperty("nationality"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? NationalityKey
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets the marital status code
-        /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
-        public Concept MaritalStatus { get; set; }
-
-        /// <summary>
-        /// Gets the nationality of the patient
-        /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(NationalityKey))]
-        public Concept Nationality
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets the VIP status code
-        /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(VipStatusKey))]
-        public Concept VipStatus { get; set; }
-
-        /// <summary>
-        /// Gets or sets the education level of the person
-        /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
-        public Concept EducationLevel { get; set; }
 
         /// <summary>
         /// Gets or sets the living arrangements
@@ -194,18 +97,36 @@ namespace SanteDB.Core.Model.Roles
         }
 
         /// <summary>
+        /// Gets or sets the marital status code
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
+        public Concept MaritalStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the education level of the person
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
+        public Concept EducationLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the key of the marital status concept
+        /// </summary>
+        [XmlElement("maritalStatus"), JsonProperty("maritalStatus")]
+        public Guid? MaritalStatusKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the key of the education level
+        /// </summary>
+        [XmlElement("educationLevel"), JsonProperty("educationLevel")]
+        public Guid? EducationLevelKey { get; set; }
+
+        /// <summary>
         /// Should serialize deceased date?
         /// </summary>
         public bool ShouldSerializeDeceasedDateXml()
         {
             return this.DeceasedDate.HasValue;
         }
-
-        /// <summary>
-        /// Should serialize deceasd date
-        /// </summary>
-        /// <returns></returns>
-        public bool ShouldSerializeDeceasedDatePrecision() => this.DeceasedDatePrecision.HasValue;
 
         /// <summary>
         /// Should serialize deceased date?
@@ -228,7 +149,9 @@ namespace SanteDB.Core.Model.Roles
 
             return base.SemanticEquals(obj) &&
                 this.DeceasedDate == other.DeceasedDate &&
-                this.DeceasedDatePrecision == other.DeceasedDatePrecision;
+                this.DeceasedDatePrecision == other.DeceasedDatePrecision &&
+                this.MaritalStatusKey == other.MaritalStatusKey &&
+                this.VipStatusKey == other.VipStatusKey;
         }
 
     }
