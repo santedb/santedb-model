@@ -42,9 +42,7 @@ namespace SanteDB.Core.Model
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("VersionedEntityData")]
     public abstract class VersionedEntityData<THistoryModelType> : BaseEntityData, IVersionedData where THistoryModelType : VersionedEntityData<THistoryModelType>, new()
     {
-        // Previous version
-        private THistoryModelType m_previousVersion;
-
+        
         /// <summary>
         /// Creates a new versioned base data class
         /// </summary>
@@ -87,7 +85,7 @@ namespace SanteDB.Core.Model
                 return EntitySource.Current.Get<THistoryModelType>(this.Key, this.PreviousVersionKey.Value);
             }
 
-            return this.m_previousVersion;
+            return null;
         }
 
         /// <summary>
