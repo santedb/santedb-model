@@ -204,7 +204,8 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("nationality"), JsonProperty("nationality")]
         public Guid? NationalityKey
         {
-            get; set;
+            get; 
+            set;
         }
 
         /// <summary>
@@ -213,7 +214,8 @@ namespace SanteDB.Core.Model.Entities
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(NationalityKey))]
         public Concept Nationality
         {
-            get; set;
+            get; 
+            set;
         }
 
         /// <summary>

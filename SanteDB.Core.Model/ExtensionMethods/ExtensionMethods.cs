@@ -567,9 +567,19 @@ namespace SanteDB
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
+            
             if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBModelConstants.NoDynamicLoadAnnotation)))
             {
-                return currentValue;
+                // HACK: For some reason load check can be set but a list property is null
+                if (currentValue == null &&
+                    propertyToLoad.PropertyType.Implements(typeof(IList)))
+                {
+                    forceReload = true;
+                }
+                else
+                {
+                    return currentValue;
+                }
             }
             else if (forceReload)
             {
@@ -588,7 +598,8 @@ namespace SanteDB
                         {
                             if (me is ITaggable taggable && taggable.TryGetTag(SanteDBModelConstants.AlternateKeysTag, out ITag altKeys))
                             {
-                                foreach (var itm in EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray()))
+                                var loadedData = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
+                                foreach (var itm in loadedData)
                                 {
                                     loaded.Add(itm);
                                 }
