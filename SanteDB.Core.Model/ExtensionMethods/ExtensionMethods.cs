@@ -138,7 +138,7 @@ namespace SanteDB
                     {
                         if (!m_types.TryGetValue(a, out var typ))
                         {
-                            typ = a.GetTypes().Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
+                            typ = a.GetTypes().Where(t => t.IsPublic && t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
                             m_types.TryAdd(a, typ);
                         }
                         return typ;
