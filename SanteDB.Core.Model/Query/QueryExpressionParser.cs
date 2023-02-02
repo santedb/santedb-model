@@ -919,7 +919,7 @@ namespace SanteDB.Core.Model.Query
 
             if (retVal == null)
             {
-                return null;
+                return Expression.Lambda(Expression.Constant(true), Expression.Parameter(modelType));
             }
 
             return Expression.Lambda(retVal, parameterExpression);
