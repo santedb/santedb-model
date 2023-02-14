@@ -57,7 +57,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the arrangement made
         /// </summary>
         [XmlElement("type"), JsonProperty("type")]
-        public Guid ArrangementTypeKey { get; set; }
+        public Guid? ArrangementTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the type of arrangement

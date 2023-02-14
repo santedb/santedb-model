@@ -54,7 +54,14 @@ namespace SanteDB.Core.Model.Acts
         {
             get
             {
-                return System.Type.GetType(this.HandlerClassName);
+                if (this.HandlerClassName == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return System.Type.GetType(this.HandlerClassName);
+                }
             }
             set
             {

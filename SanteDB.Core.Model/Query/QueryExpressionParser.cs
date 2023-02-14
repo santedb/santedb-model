@@ -293,7 +293,7 @@ namespace SanteDB.Core.Model.Query
                             Type castType = null;
                             if (!m_castCache.TryGetValue(cast, out castType))
                             {
-                                castType = typeof(QueryExpressionParser).Assembly.ExportedTypes.FirstOrDefault(o => o.GetCustomAttribute<XmlTypeAttribute>()?.TypeName == cast);
+                                castType = typeof(QueryExpressionParser).Assembly.GetExportedTypesSafe().FirstOrDefault(o => o.GetCustomAttribute<XmlTypeAttribute>()?.TypeName == cast);
                                 if (castType == null)
                                 {
                                     throw new ArgumentOutOfRangeException(nameof(castType), cast);
@@ -919,7 +919,7 @@ namespace SanteDB.Core.Model.Query
 
             if (retVal == null)
             {
-                return null;
+                return Expression.Lambda(Expression.Constant(true), Expression.Parameter(modelType));
             }
 
             return Expression.Lambda(retVal, parameterExpression);
@@ -992,9 +992,17 @@ namespace SanteDB.Core.Model.Query
         {
             Func<object> val = null;
             String varName = variablePath.Contains(".") ? variablePath.Substring(0, variablePath.IndexOf(".")) : variablePath,
-                varPath = variablePath.Substring(varName.Length);
+                varPath = variablePath.Substring(varName.Length),
+                castAs = String.Empty ;
 
             Expression scope = null;
+
+            if(varName.Contains("@"))
+            {
+                var varParts = varName.Split('@');
+                castAs = varParts[1];
+                varName = varParts[0];
+            }
             if (varName == "_")
             {
                 scope = parameterExpression;
@@ -1023,9 +1031,16 @@ namespace SanteDB.Core.Model.Query
                 else
                 {
                     var value = val();
-                    if (expectedReturn == typeof(String))
+                    if (String.IsNullOrEmpty(varPath))
                     {
-                        value = value.ToString();
+                        if (expectedReturn == typeof(String))
+                        {
+                            value = value.ToString();
+                        }
+                        else if (expectedReturn.StripNullable() == typeof(Guid))
+                        {
+                            value = Guid.Parse(value.ToString());
+                        }
                     }
                     scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), value?.GetType() ?? expectedReturn);
 
@@ -1043,7 +1058,25 @@ namespace SanteDB.Core.Model.Query
             {
                 if (expectedReturn == typeof(String) && retVal.Type != typeof(String))
                 {
-                    return Expression.Call(retVal, retVal.Type.GetMethod(nameof(Object.ToString), Type.EmptyTypes));
+                    if (retVal is ConstantExpression ce && ce.Value == null)
+                    {
+                        return retVal;
+                    }
+                    else
+                    {
+                        return Expression.Call(retVal, retVal.Type.GetMethod(nameof(Object.ToString), Type.EmptyTypes));
+                    }
+                }
+                else if(expectedReturn == typeof(Guid) && retVal.Type != typeof(Guid))
+                {
+                    if (retVal is ConstantExpression ce && ce.Value == null)
+                    {
+                        return retVal;
+                    }
+                    else
+                    {
+                        return Expression.Call(null, typeof(Guid).GetMethod(nameof(Guid.Parse), new Type[] { typeof(String) }), retVal);
+                    }
                 }
                 else
                 {

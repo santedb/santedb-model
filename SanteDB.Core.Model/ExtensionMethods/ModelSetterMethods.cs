@@ -190,10 +190,17 @@ namespace SanteDB
             else
             {
                 var currentValue = sourceValue;
-                sourceValue = Activator.CreateInstance(classifierProperty.PropertyType);
-                classifierProperty.SetValue(currentValue, sourceValue);
-                var simpleProperty = classifierProperty.PropertyType.GetSanteDBProperty<KeyLookupAttribute>();
-                simpleProperty.SetValue(sourceValue, classifierValue);
+                if (classifierProperty.PropertyType != typeof(String))
+                {
+                    sourceValue = Activator.CreateInstance(classifierProperty.PropertyType);
+                    classifierProperty.SetValue(currentValue, sourceValue);
+                    var simpleProperty = classifierProperty.PropertyType.GetSanteDBProperty<KeyLookupAttribute>();
+                    simpleProperty.SetValue(sourceValue, classifierValue);
+                }
+                else
+                {
+                    classifierProperty.SetValue(currentValue, classifierValue);
+                }
             }
         }
     }

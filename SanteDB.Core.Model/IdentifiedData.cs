@@ -43,6 +43,9 @@ namespace SanteDB.Core.Model
     public abstract class IdentifiedData : IAnnotatedResource, ICanDeepCopy
     {
 
+        // Properties which can be copied
+        private static ConcurrentDictionary<Type, PropertyInfo[]> m_copyProperties = new ConcurrentDictionary<Type, PropertyInfo[]>();
+
         /// <summary>
         /// A list of custom tags which were added to this object
         /// </summary>
@@ -137,13 +140,16 @@ namespace SanteDB.Core.Model
             var retVal = Activator.CreateInstance(this.GetType()) as IdentifiedData;
             retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
             retVal.BatchOperation = BatchOperationType.Auto;
-            foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null)
-                {
-                    continue; // can't and not important to serialization write so continue 
-                }
 
+            if(!m_copyProperties.TryGetValue(this.GetType(), out var copyProperties))
+            {
+                copyProperties = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(o => o.CanWrite && o.CanRead && o.GetCustomAttribute<SerializationMetadataAttribute>() == null).ToArray();
+                m_copyProperties.TryAdd(this.GetType(), copyProperties);
+            }
+
+            foreach (var pi in copyProperties)
+            {
+                
                 var thisValue = pi.GetValue(this);
                 if (thisValue is IList list)
                 {

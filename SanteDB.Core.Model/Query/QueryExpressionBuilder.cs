@@ -309,6 +309,11 @@ namespace SanteDB.Core.Model.Query
                             this.AddCondition(parmName, (negate ? "!" : "^") + parmValue.ToString());
                             return null;
                         }
+                    case "Parse":
+                        {
+                            
+                            return null;
+                        }
                     case "Any":
                         {
                             var parmName = this.ExtractPath(node.Arguments[0], false);

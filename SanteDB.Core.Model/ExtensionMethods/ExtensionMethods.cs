@@ -95,14 +95,9 @@ namespace SanteDB
         /// <summary>
         /// For each item in an enumerable
         /// </summary>
-        public static void ForEach<T>(IList<T> me, Action<T> action) => ExtensionMethods.ForEach(me, action);
-
-        /// <summary>
-        /// For each item in an enumerable
-        /// </summary>
         public static void ForEach<T>(IEnumerable<T> me, Action<T> action)
         {
-            foreach(var itm in me)
+            foreach (var itm in me)
             {
                 action(itm);
             }
@@ -118,9 +113,24 @@ namespace SanteDB
         /// </summary>
         public static void AddRange<T>(this IList<T> me, IEnumerable<T> itemsToAdd)
         {
-            foreach(var itm in itemsToAdd)
+            foreach (var itm in itemsToAdd)
             {
                 me.Add(itm);
+            }
+        }
+
+        /// <summary>
+        /// Safe method for loading exported types from assemblies where <see cref="ReflectionTypeLoadException"/> is thrown
+        /// </summary>
+        public static Type[] GetExportedTypesSafe(this Assembly me)
+        {
+            try
+            {
+                return me.GetTypes().Where(t => t.IsPublic).ToArray();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(o => o?.IsPublic == true).ToArray();
             }
         }
 
@@ -138,7 +148,7 @@ namespace SanteDB
                     {
                         if (!m_types.TryGetValue(a, out var typ))
                         {
-                            typ = a.GetTypes().Where(t => t.IsPublic && t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
+                            typ = a.GetExportedTypesSafe().Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
                             m_types.TryAdd(a, typ);
                         }
                         return typ;
@@ -557,9 +567,19 @@ namespace SanteDB
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
+            
             if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBModelConstants.NoDynamicLoadAnnotation)))
             {
-                return currentValue;
+                // HACK: For some reason load check can be set but a list property is null
+                if (currentValue == null &&
+                    propertyToLoad.PropertyType.Implements(typeof(IList)))
+                {
+                    forceReload = true;
+                }
+                else
+                {
+                    return currentValue;
+                }
             }
             else if (forceReload)
             {
@@ -578,7 +598,8 @@ namespace SanteDB
                         {
                             if (me is ITaggable taggable && taggable.TryGetTag(SanteDBModelConstants.AlternateKeysTag, out ITag altKeys))
                             {
-                                foreach (var itm in EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray()))
+                                var loadedData = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
+                                foreach (var itm in loadedData)
                                 {
                                     loaded.Add(itm);
                                 }
@@ -1288,7 +1309,7 @@ namespace SanteDB
         /// <param name="attributeType">The type of attribute to check on <paramref name="t"/></param>
         /// <returns>True if <paramref name="t"/> is annotated with <paramref name="attributeType"/></returns>
         public static bool HasCustomAttribute(this Type t, Type attributeType)
-            => t.GetCustomAttribute(attributeType) != null;
+            => t?.GetCustomAttribute(attributeType) != null;
         //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
 
 

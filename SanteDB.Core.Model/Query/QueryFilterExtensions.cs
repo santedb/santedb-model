@@ -66,9 +66,7 @@ namespace SanteDB.Core.Model.Query
         private static void InitializeFilters()
         {
             // Try to init extended filters
-            foreach (var ext in AppDomain.CurrentDomain.GetAssemblies()
-                    .Where(a => !a.IsDynamic)
-                    .SelectMany(a => { try { return a.ExportedTypes; } catch { return Type.EmptyTypes; } })
+            foreach (var ext in AppDomain.CurrentDomain.GetAllTypes()
                     .Where(t => typeof(IQueryFilterExtension).IsAssignableFrom(t) && !t.IsAbstract)
                     .Select(t => Activator.CreateInstance(t) as IQueryFilterExtension))
             {

@@ -178,7 +178,7 @@ namespace SanteDB.Core.Model.Map
         private void ProcessAssembly(Assembly asm)
         {
             // Load the types
-            foreach (var t in asm.ExportedTypes.Where(t => typeof(IModelMapper).IsAssignableFrom(t)))
+            foreach (var t in asm.GetExportedTypesSafe().Where(t => typeof(IModelMapper).IsAssignableFrom(t)))
             {
                 var map = Activator.CreateInstance(t, this) as IModelMapper;
                 this.m_mappers.TryAdd(map.SourceType, map);

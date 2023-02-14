@@ -138,7 +138,10 @@ namespace SanteDB.Core.Model.Entities
         /// Gets the identifiers associated with this entity
         /// </summary>
         [XmlElement("identifier"), JsonProperty("identifier")]
-        public List<EntityIdentifier> Identifiers { get; set; }
+        public List<EntityIdentifier> Identifiers { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets a list of all names associated with the entity

@@ -47,7 +47,10 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Delete the object
         /// </summary>
-        Delete = 4
-
+        Delete = 4,
+        /// <summary>
+        /// Ignore this object - it is for reference only
+        /// </summary>
+        Ignore = 5
     }
 }
