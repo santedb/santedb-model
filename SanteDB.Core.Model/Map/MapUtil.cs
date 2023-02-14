@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2022-5-30
  */
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections.Generic;
@@ -151,6 +152,17 @@ namespace SanteDB.Core.Model.Map
 
         }
 
+        public static T Convert<T>(object value)
+        {
+            if(TryConvert(value, typeof(T), out var retVal))
+            {
+                return (T)retVal;
+            }
+            else
+            {
+                throw new InvalidOperationException(ErrorMessages.ARGUMENT_INCOMPATIBLE_TYPE);
+            }
+        }
         /// <summary>
         /// Attempt casting <paramref name="value"/> to <paramref name="destType"/> placing the result 
         /// in <paramref name="result"/>

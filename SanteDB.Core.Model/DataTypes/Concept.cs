@@ -111,7 +111,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets the concept names
         /// </summary>
-        //
         [XmlElement("name"), JsonProperty("name")]
         public List<ConceptName> ConceptNames { get; set; }
 

@@ -666,6 +666,18 @@ namespace SanteDB
         }
 
         /// <summary>
+        /// Gets the serialization runtime property
+        /// </summary>
+        public static PropertyInfo GetSerializationModelProperty(this PropertyInfo me)
+        {
+            if(me.Name.EndsWith("Key"))
+            {
+                return me.DeclaringType.GetProperty(me.Name.Substring(0, me.Name.Length - 3));
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Create aggregation functions
         /// </summary>
         public static Expression Aggregate(this Expression me, AggregationFunctionType aggregation)

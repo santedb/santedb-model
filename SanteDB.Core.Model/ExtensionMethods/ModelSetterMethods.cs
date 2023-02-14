@@ -41,142 +41,162 @@ namespace SanteDB
         /// <paramref name="root"/> to set properties until it gets to the path expressed</remarks>
         public static object GetOrSetValueAtPath(this IdentifiedData root, string hdsiExpressionPath, object valueToSet = null, bool replace = true)
         {
-            var matches = s_hdsiPropertySelector.Matches(hdsiExpressionPath);
-            if (matches.Count == 0)
+            try
             {
-                throw new InvalidOperationException(); // todo: add message
-            }
-
-            // The code will iterate through the matches to get the source properties - the examples inline are for the
-            // following HDSI expression:
-            // relationship[Mother].target@Person.name[Given].component[Family].value
-            Object focalObject = root;
-            PropertyInfo sourceProperty = null;
-            foreach (Match match in matches)
-            {
-
-                // Get the source property , in our example iterations
-                // 1. relationship[Mother]
-                // 2. target@Person
-                // 3. name[Given]
-                // 4. component[Family]
-                // 5. value
-
-                if (!s_modelSetterCache.TryGetValue(focalObject.GetType(), out var setterDelegates))
+                var matches = s_hdsiPropertySelector.Matches(hdsiExpressionPath);
+                if (matches.Count == 0)
                 {
-                    setterDelegates = new ConcurrentDictionary<string, Func<object, object>>();
-                    s_modelSetterCache.TryAdd(focalObject.GetType(), setterDelegates);
-                }
-                if (!setterDelegates.TryGetValue(match.Groups[0].Value, out var accessorDelegate))
-                {
-                    var propertyAccessor = QueryExpressionParser.BuildPropertySelector(focalObject.GetType(), match.Groups[0].Value, true);
-                    if (propertyAccessor.Body.NodeType == System.Linq.Expressions.ExpressionType.Coalesce && propertyAccessor.Body is BinaryExpression be) // Strip off the coalesce
-                    {
-                        propertyAccessor = Expression.Lambda(be.Left, propertyAccessor.Parameters[0]);
-                    }
-
-                    // Convert to a strong delegate
-                    var parm = Expression.Parameter(typeof(Object));
-                    var newLambda = Expression.Lambda<Func<object, object>>(Expression.Convert(Expression.Invoke(propertyAccessor, Expression.Convert(parm, focalObject.GetType())), typeof(Object)), parm);
-                    accessorDelegate = newLambda.Compile();
-                    setterDelegates.TryAdd(match.Groups[0].Value, accessorDelegate);
+                    throw new InvalidOperationException(); // todo: add message
                 }
 
-                var currentValue = accessorDelegate(focalObject);
-                var originalValue = currentValue;
-                sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
-                var sourcePropertyValue = sourceProperty.GetValue(focalObject);
-
-                // Is the property value not set so we want to create it if needed
-                if (currentValue == null)
+                // The code will iterate through the matches to get the source properties - the examples inline are for the
+                // following HDSI expression:
+                // relationship[Mother].target@Person.name[Given].component[Family].value
+                Object focalObject = root;
+                PropertyInfo sourceProperty = null;
+                foreach (Match match in matches)
                 {
-                    // Get the source property
-                    // 1. relationship
-                    // 2. target
-                    // 3. name
-                    // 4. component
+
+                    // Get the source property , in our example iterations
+                    // 1. relationship[Mother]
+                    // 2. target@Person
+                    // 3. name[Given]
+                    // 4. component[Family]
                     // 5. value
 
-                    // Chained?
-                    if (match.NextMatch().Success && sourceProperty.PropertyType.StripNullable() == typeof(Guid))
+                    if (!s_modelSetterCache.TryGetValue(focalObject.GetType(), out var setterDelegates))
                     {
-                        var redirect = sourceProperty.DeclaringType.GetProperties().FirstOrDefault(o => o.GetSerializationRedirectProperty() == sourceProperty);
-                        if (redirect == null)
+                        setterDelegates = new ConcurrentDictionary<string, Func<object, object>>();
+                        s_modelSetterCache.TryAdd(focalObject.GetType(), setterDelegates);
+                    }
+                    if (!setterDelegates.TryGetValue(match.Groups[0].Value, out var accessorDelegate))
+                    {
+                        var propertyAccessor = QueryExpressionParser.BuildPropertySelector(focalObject.GetType(), match.Groups[0].Value, true);
+                        if (propertyAccessor.Body.NodeType == System.Linq.Expressions.ExpressionType.Coalesce && propertyAccessor.Body is BinaryExpression be) // Strip off the coalesce
                         {
-                            throw new InvalidOperationException(); // todo: add message
+                            propertyAccessor = Expression.Lambda(be.Left, propertyAccessor.Parameters[0]);
                         }
-                        sourceProperty = redirect;
+
+                        // Convert to a strong delegate
+                        var parm = Expression.Parameter(typeof(Object));
+                        var newLambda = Expression.Lambda<Func<object, object>>(Expression.Convert(Expression.Invoke(propertyAccessor, Expression.Convert(parm, focalObject.GetType())), typeof(Object)), parm);
+                        accessorDelegate = newLambda.Compile();
+                        setterDelegates.TryAdd(match.Groups[0].Value, accessorDelegate);
                     }
 
-                    if (sourcePropertyValue == null && (sourceProperty.PropertyType.Implements(typeof(IIdentifiedResource)) ||
-                        sourceProperty.PropertyType.Implements(typeof(IList))))
+                    object currentValue = null;
+                    try
+                    {
+                        currentValue = accessorDelegate(focalObject);
+                    }
+                    catch
                     {
 
-                        // Is there a cast?
-                        // 2. target@Person => Create a new Person if one does not exist
-                        var propertyType = sourceProperty.PropertyType;
-                        if (!String.IsNullOrEmpty(match.Groups[3].Value))
+                    }
+
+                    var originalValue = currentValue;
+                    sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
+                    var sourcePropertyValue = sourceProperty.GetValue(focalObject);
+
+                    // Is the property value not set so we want to create it if needed
+                    if (currentValue == null)
+                    {
+                        // Get the source property
+                        // 1. relationship
+                        // 2. target
+                        // 3. name
+                        // 4. component
+                        // 5. value
+
+                        // Chained?
+                        if (match.NextMatch().Success && sourceProperty.PropertyType.StripNullable() == typeof(Guid))
                         {
-                            propertyType = new ModelSerializationBinder().BindToType(typeof(ModelSerializationBinder).Assembly.FullName, match.Groups[3].Value);
+                            var redirect = sourceProperty.DeclaringType.GetProperties().FirstOrDefault(o => o.GetSerializationRedirectProperty() == sourceProperty);
+                            if (redirect == null)
+                            {
+                                throw new InvalidOperationException(); // todo: add message
+                            }
+                            sourceProperty = redirect;
                         }
-                        sourcePropertyValue = Activator.CreateInstance(propertyType);
-                        sourceProperty.SetValue(focalObject, sourcePropertyValue);
-                    }
 
-                    // If the new object is a list then we want to add
-                    if (sourcePropertyValue is IList listObject)
-                    {
-                        sourcePropertyValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
-                        listObject.Add(sourcePropertyValue);
-                    }
+                        if (sourcePropertyValue == null && (sourceProperty.PropertyType.Implements(typeof(IIdentifiedResource)) ||
+                            sourceProperty.PropertyType.Implements(typeof(IList))))
+                        {
 
-                    currentValue = sourcePropertyValue;
-                    // Is there a guard?
-                    // 1. [Mother]
-                    // 3. [OfficialRecord]
-                    // 4. [Family]
+                            // Is there a cast?
+                            // 2. target@Person => Create a new Person if one does not exist
+                            var propertyType = sourceProperty.PropertyType;
+                            if (!String.IsNullOrEmpty(match.Groups[3].Value))
+                            {
+                                propertyType = new ModelSerializationBinder().BindToType(typeof(ModelSerializationBinder).Assembly.FullName, match.Groups[3].Value);
+                            }
+                            sourcePropertyValue = Activator.CreateInstance(propertyType);
+                            sourceProperty.SetValue(focalObject, sourcePropertyValue);
+                        }
 
-                    if (currentValue is IdentifiedData && !String.IsNullOrEmpty(match.Groups[2].Value))
-                    {
-                        SetClassifier(currentValue, match.Groups[2].Value);
-                    }
-                }
-                else if (!replace &&
-                    match.NextMatch().Success &&
-                    !match.NextMatch().NextMatch().Success) // We have a classifier property which is 
-                {
-                    // HACK: Figure out a better way to do this - basically 
-                    //        when we are near the terminal part of the path and the value is a collection 
-                    //        we don't want to replace - we want to add the value - for example:
-                    //          name[OfficialRecord].component[Given].value=Mary , replace=false
-                    //          name[OfficialRecord].component[Given].value=Elizabeth , replace=false
-                    //       the result is that name[OfficialRecord] should have 2 components rather than one
-                    if (sourcePropertyValue is IList list)
-                    {
-                        currentValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
+                        // If the new object is a list then we want to add
+                        if (sourcePropertyValue is IList listObject)
+                        {
+                            sourcePropertyValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
+                            listObject.Add(sourcePropertyValue);
+                        }
+
+                        currentValue = sourcePropertyValue;
+                        // Is there a guard?
+                        // 1. [Mother]
+                        // 3. [OfficialRecord]
+                        // 4. [Family]
+
                         if (currentValue is IdentifiedData && !String.IsNullOrEmpty(match.Groups[2].Value))
                         {
                             SetClassifier(currentValue, match.Groups[2].Value);
                         }
-                        list.Add(currentValue);
                     }
-                }
-                
-                if ((currentValue == null || replace && !match.NextMatch().Success) && valueToSet != null)
-                {
-                    currentValue = valueToSet;
-                    if (MapUtil.TryConvert(currentValue, sourceProperty.PropertyType, out var result))
+                    else if (!replace &&
+                        match.NextMatch().Success &&
+                        !match.NextMatch().NextMatch().Success) // We have a classifier property which is 
                     {
-                        sourceProperty.SetValue(focalObject, result);
+                        // HACK: Figure out a better way to do this - basically 
+                        //        when we are near the terminal part of the path and the value is a collection 
+                        //        we don't want to replace - we want to add the value - for example:
+                        //          name[OfficialRecord].component[Given].value=Mary , replace=false
+                        //          name[OfficialRecord].component[Given].value=Elizabeth , replace=false
+                        //       the result is that name[OfficialRecord] should have 2 components rather than one
+                        if (sourcePropertyValue is IList list)
+                        {
+                            currentValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
+                            if (currentValue is IdentifiedData && !String.IsNullOrEmpty(match.Groups[2].Value))
+                            {
+                                SetClassifier(currentValue, match.Groups[2].Value);
+                            }
+                            list.Add(currentValue);
+                        }
                     }
-                    else
+
+                    if ((currentValue == null || replace && !match.NextMatch().Success) && valueToSet != null)
                     {
-                        sourceProperty.SetValue(focalObject, currentValue);
+                        currentValue = valueToSet;
+                        if (MapUtil.TryConvert(currentValue, sourceProperty.PropertyType, out var result))
+                        {
+                            sourceProperty.SetValue(focalObject, result);
+                        }
+                        else if(currentValue is IdentifiedData)
+                        {
+                            (sourceProperty.GetSerializationModelProperty() ?? sourceProperty).SetValue(focalObject, currentValue);
+                        }
+                        else
+                        {
+                            (sourceProperty).SetValue(focalObject, currentValue);
+                        }
                     }
+                    focalObject = currentValue;
                 }
-                focalObject = currentValue;
+                return focalObject;
             }
-            return focalObject;
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.CANNOT_SET_VALUE_AT_PATH, hdsiExpressionPath, valueToSet.GetType().Name), e);
+            }
         }
 
         private static void SetClassifier(object sourceValue, String classifierValue)

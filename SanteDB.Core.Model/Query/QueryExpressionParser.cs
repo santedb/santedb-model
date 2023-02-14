@@ -1033,14 +1033,7 @@ namespace SanteDB.Core.Model.Query
                     var value = val();
                     if (String.IsNullOrEmpty(varPath))
                     {
-                        if (expectedReturn == typeof(String))
-                        {
-                            value = value.ToString();
-                        }
-                        else if (expectedReturn.StripNullable() == typeof(Guid))
-                        {
-                            value = Guid.Parse(value.ToString());
-                        }
+                        scope = Expression.Call(null, (MethodInfo)typeof(MapUtil).GetGenericMethod(nameof(MapUtil.Convert), new Type[] { expectedReturn }, new Type[] { typeof(object) }), Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()));
                     }
                     scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), value?.GetType() ?? expectedReturn);
 
@@ -1124,6 +1117,11 @@ namespace SanteDB.Core.Model.Query
             if (convertReturn == null)
             {
                 return BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad, false);
+            }
+            else if (String.IsNullOrEmpty(propertyName))
+            {
+                var parm = Expression.Parameter(type);
+                return Expression.Lambda(parm, parm);
             }
             else
             {
