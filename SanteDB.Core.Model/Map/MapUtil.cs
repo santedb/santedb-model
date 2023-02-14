@@ -176,7 +176,7 @@ namespace SanteDB.Core.Model.Map
             if (value == null)
             {
                 result = null;
-                return true;
+                return m_destType.IsNullable();
             }
 
             String convertKey = $"{value.GetType().FullName}>{destType.FullName}";
@@ -195,7 +195,7 @@ namespace SanteDB.Core.Model.Map
             if ("null".Equals(value?.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 result = null;
-                return true;
+                return m_destType.IsNullable();
             }
             else if (destType.IsAssignableFrom(value.GetType())) //  (m_destType.IsAssignableFrom(value.GetType())) // Same type
             {
