@@ -152,6 +152,9 @@ namespace SanteDB.Core.Model.Map
 
         }
 
+        /// <summary>
+        /// Convert the object <paramref name="value"/> to type <typeparamref name="T"/>
+        /// </summary>
         public static T Convert<T>(object value)
         {
             if(TryConvert(value, typeof(T), out var retVal))
