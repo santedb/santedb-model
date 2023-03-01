@@ -337,6 +337,10 @@ namespace SanteDB.Core.Model.Query
                                 return null;
                             }
                         }
+                    case "ToString":
+                        {
+                            return node.Object;
+                        }
                     default: // extended fn?
                         {
                             var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(node.Method);
