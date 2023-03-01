@@ -40,7 +40,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.CityOrTown)]
     [ClassConceptKey(EntityClassKeyStrings.Country)]
     [ClassConceptKey(EntityClassKeyStrings.CountyOrParish)]
-    [ClassConceptKey(EntityClassKeyStrings.State)]
+    [ClassConceptKey(EntityClassKeyStrings.StateOrProvince)]
     public class Place : Entity, IGeoTagged
     {
         /// <summary>
@@ -55,7 +55,7 @@ namespace SanteDB.Core.Model.Entities
         /// <inheritdoc/>
         protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Place ||
                     classKey == EntityClassKeys.ServiceDeliveryLocation ||
-                    classKey == EntityClassKeys.State ||
+                    classKey == EntityClassKeys.StateOrProvince ||
                     classKey == EntityClassKeys.CityOrTown ||
                     classKey == EntityClassKeys.PrecinctOrBorough ||
                     classKey == EntityClassKeys.Country ||

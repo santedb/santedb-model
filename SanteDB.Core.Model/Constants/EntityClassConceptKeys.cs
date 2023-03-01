@@ -130,7 +130,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// State
         /// </summary>
-        public const string State = "8cf4b0b0-84e5-4122-85fe-6afa8240c218";
+        public const string StateOrProvince = "4d1a5c28-deb7-411e-b75f-d524f90dfa63";
 
         /// <summary>
         /// Person which is a user
@@ -243,7 +243,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// State
         /// </summary>
-        public static readonly Guid State = Guid.Parse(EntityClassKeyStrings.State);
+        public static readonly Guid StateOrProvince = Guid.Parse(EntityClassKeyStrings.StateOrProvince);
 
         /// <summary>
         /// Represents a precinct or sub-division of a city such as a burrogh
