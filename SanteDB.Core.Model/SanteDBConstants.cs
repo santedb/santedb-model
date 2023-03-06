@@ -37,6 +37,12 @@ namespace SanteDB.Core.Model
         public const string DcdrRefetchTag = "$dcdr.refetch";
 
         /// <summary>
+        /// Indicates that an object is checked out
+        /// </summary>
+        public const string CheckoutStatusTag = "$checkoutState";
+
+
+        /// <summary>
         /// When set on an object, no dynamic loading via LoadProperty() will work on the object
         /// </summary>
         public const string NoDynamicLoadAnnotation = "No_Dyna_load";
