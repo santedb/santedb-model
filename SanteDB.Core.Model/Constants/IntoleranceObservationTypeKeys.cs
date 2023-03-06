@@ -48,12 +48,12 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid FoodIntolerance = Guid.Parse("298AC8E5-84BA-4992-9EEC-892C636C8E73");
 
         /// <summary>
-        /// An intolerance to a druge which is not a allergy
+        /// An intolerance to a druge which is not an allergy
         /// </summary>
         public static readonly Guid DrugNonAllergyIntolerance = Guid.Parse("62FC0BE4-F75F-460B-AB98-4215F4573748");
 
         /// <summary>
-        /// An intolerance to an environmental substance
+        /// An intolerance to an environmental substance which is not an allergy
         /// </summary>
         public static readonly Guid EnvironmentalNonAllergyIntolerance = Guid.Parse("0577D51F-8FF5-4CF7-A2DD-BFC52841FFF2");
 
