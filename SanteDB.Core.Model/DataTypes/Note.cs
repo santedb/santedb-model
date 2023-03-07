@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -33,12 +33,6 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Note")]
     public abstract class Note<TBoundModel> : VersionedAssociation<TBoundModel> where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
-        // Author id
-        private Guid? m_authorKey;
-
-        // Author entity
-
-        private Entity m_author;
 
         /// <summary>
         /// Default ctor
@@ -67,37 +61,14 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("author"), JsonProperty("author")]
-        public Guid? AuthorKey
-        {
-            get { return this.m_authorKey; }
-            set
-            {
-                if (this.m_authorKey != value)
-                {
-                    this.m_authorKey = value;
-                    this.m_author = null;
-                }
-            }
-        }
+        public Guid? AuthorKey { get; set; }
 
         /// <summary>
         /// Gets or sets the author entity
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(AuthorKey))]
-        public Entity Author
-        {
-            get
-            {
-                this.m_author = base.DelayLoad(this.m_authorKey, this.m_author);
-                return this.m_author;
-            }
-            set
-            {
-                this.m_author = value;
-                this.m_authorKey = value?.Key;
-            }
-        }
+        public Entity Author { get; set; }
 
         /// <summary>
         /// Determine equality
@@ -105,7 +76,11 @@ namespace SanteDB.Core.Model.DataTypes
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Note<TBoundModel>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.AuthorKey == other.AuthorKey &&
                 this.Text == other.Text;
         }

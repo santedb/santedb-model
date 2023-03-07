@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -38,103 +38,60 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.InvoiceElement)]
     public class InvoiceElement : Act
     {
-        // Backing fields
-        private Guid? m_modifierKey;
-
-        private Concept m_modifier;
-        private Guid? m_currencyKey;
-        private Concept m_currency;
-
         /// <summary>
         /// Creates the invoice element
         /// </summary>
         public InvoiceElement()
         {
-            this.ClassConceptKey = ActClassKeys.InvoiceElement;
+            this.m_classConceptKey = ActClassKeys.InvoiceElement;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.InvoiceElement;
 
         /// <summary>
         /// Gets or sets the modifier
         /// </summary>
         [XmlElement("modifier"), JsonProperty("modifier"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? ModifierKey
-        {
-            get => this.m_modifierKey;
-            set
-            {
-                this.m_modifierKey = value;
-                this.m_modifier = null;
-            }
-        }
+        public Guid? ModifierKey { get; set; }
 
         /// <summary>
         /// Gets or sets the modifier
         /// </summary>
         /// <remarks>The modifier allows further description of how/why the price of this invoice element was changed</remarks>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(ModifierKey))]
-        public Concept Modifier
-        {
-            get
-            {
-                this.m_modifier = base.DelayLoad(this.m_modifierKey, this.m_modifier);
-                return this.m_modifier;
-            }
-            set
-            {
-                this.m_modifier = value;
-                this.m_modifierKey = value?.Key;
-            }
-        }
+        public Concept Modifier { get; set; }
 
         /// <summary>
         /// Gets or sets the number of units included in the price
         /// </summary>
         [XmlElement("unitQty"), JsonProperty("unitQty")]
-        public Decimal UnitQuantity { get; set; }
+        public Decimal? UnitQuantity { get; set; }
 
         /// <summary>
         /// Gets or sets the price of each unit
         /// </summary>
         [XmlElement("unitPrice"), JsonProperty("unitPrice")]
-        public Decimal UnitPrice { get; set; }
+        public Decimal? UnitPrice { get; set; }
 
         /// <summary>
         /// Gets or sets the net amount
         /// </summary>
         [XmlElement("netPrice"), JsonProperty("netPrice")]
-        public Decimal NetPrice { get; set; }
+        public Decimal? NetPrice { get; set; }
 
         /// <summary>
         /// Gets or sets the currency of the invoice line item
         /// </summary>
         [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? CurrencyKey
-        {
-            get => this.m_currencyKey;
-            set
-            {
-                this.m_currencyKey = value;
-                this.m_currency = null;
-            }
-        }
+        [Binding(typeof(CurrencyKeys))]
+        public Guid? CurrencyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the currency of this transaction
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(CurrencyKey))]
-        public Concept Currency
-        {
-            get
-            {
-                this.m_currency = base.DelayLoad(this.m_currencyKey, this.m_currency);
-                return this.m_currency;
-            }
-            set
-            {
-                this.m_currency = value;
-                this.m_currencyKey = value?.Key;
-            }
-        }
+        public Concept Currency { get; set; }
 
         /// <summary>
         /// When provided, can specify the factor to allow for different amounts to be charged based on insurance provider negotiations

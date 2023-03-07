@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Interfaces;
@@ -87,9 +87,13 @@ namespace SanteDB.Core.Model.DataTypes
             set
             {
                 if (value == null)
+                {
                     this.ExtensionHandler = null;
+                }
                 else
+                {
                     this.ExtensionHandler = System.Type.GetType(value);
+                }
             }
         }
 
@@ -98,8 +102,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("name"), JsonProperty("name")]
         public String Name { get; set; }
-
-
 
     }
 }

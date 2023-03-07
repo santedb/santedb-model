@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -37,13 +37,6 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("EntityTelecomAddress", Namespace = "http://santedb.org/model"), JsonObject("EntityTelecomAddress")]
     public class EntityTelecomAddress : VersionedAssociation<Entity>
     {
-        private Concept m_useConcept;
-        private Concept m_typeConcept;
-
-        // Name use key
-        private Guid? m_useKey;
-
-        private Guid? m_typeKey;
 
         // Name use concept
         /// <summary>
@@ -65,21 +58,9 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets or sets the name use
         /// </summary>
-        [SerializationReference(nameof(AddressUseKey)), AutoLoad]
+        [SerializationReference(nameof(AddressUseKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept AddressUse
-        {
-            get
-            {
-                this.m_useConcept = base.DelayLoad(this.m_useKey, this.m_useConcept);
-                return this.m_useConcept;
-            }
-            set
-            {
-                this.m_useConcept = value;
-                this.m_useKey = value?.Key;
-            }
-        }
+        public Concept AddressUse { get; set; }
 
         /// <summary>
         /// Gets or sets the name use key
@@ -87,37 +68,14 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("use"), JsonProperty("use")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(TelecomAddressUseKeys))]
-        public Guid? AddressUseKey
-        {
-            get { return this.m_useKey; }
-            set
-            {
-                if (this.m_useKey != value)
-                {
-                    this.m_useKey = value;
-                    this.m_useConcept = null;
-                }
-            }
-        }
+        public Guid? AddressUseKey { get; set; }
 
         /// <summary>
         /// Gets or sets the name use
         /// </summary>
-        [SerializationReference(nameof(TypeConceptKey)), AutoLoad]
+        [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept TypeConcept
-        {
-            get
-            {
-                this.m_typeConcept = base.DelayLoad(this.m_typeKey, this.m_typeConcept);
-                return this.m_typeConcept;
-            }
-            set
-            {
-                this.m_typeConcept = value;
-                this.m_typeKey = value?.Key;
-            }
-        }
+        public Concept TypeConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the name use key
@@ -125,50 +83,53 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("type"), JsonProperty("type")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(TelecomAddressTypeKeys))]
-        public Guid? TypeConceptKey
-        {
-            get { return this.m_typeKey; }
-            set
-            {
-                if (this.m_typeKey != value)
-                {
-                    this.m_typeKey = value;
-                    this.m_typeConcept = null;
-                }
-            }
-        }
+        public Guid? TypeConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the value as an IETF value
         /// </summary>
-        [XmlIgnore, JsonIgnore, DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationMetadata]
         public String IETFValue
         {
             get
             {
-                if (this.Value == null) return null;
+                if (this.Value == null)
+                {
+                    return null;
+                }
 
                 // E-mail?
                 Regex email = new Regex(".+?@.+?\\..+?"),
                     tel = new Regex(@"([+0-9A-Za-z]{1,4})?\((\d{3})\)?(\d{3})\-(\d{4})X?(\d{1,6})?");
 
                 if (email.IsMatch(this.Value))
+                {
                     return String.Format("mailto:{0}", this.Value);
+                }
                 else if (tel.IsMatch(this.Value))
                 {
                     var match = tel.Match(this.Value);
                     StringBuilder sb = new StringBuilder("tel:");
 
                     for (int i = 1; i < 5; i++)
+                    {
                         if (!String.IsNullOrEmpty(match.Groups[i].Value))
+                        {
                             sb.AppendFormat("{0}{1}", match.Groups[i].Value, i == 4 ? "" : "-");
+                        }
+                    }
+
                     if (!string.IsNullOrEmpty(match.Groups[5].Value))
+                    {
                         sb.AppendFormat(";ext={0}", match.Groups[5].Value);
+                    }
 
                     return sb.ToString();
                 }
                 else
+                {
                     return this.Value;
+                }
             }
             set
             {
@@ -187,11 +148,16 @@ namespace SanteDB.Core.Model.Entities
                 StringBuilder sb = new StringBuilder(),
                     phone = new StringBuilder();
                 for (int i = 0; i < comps.Length; i++)
+                {
                     if (i == 0 && comps[i].Contains("+"))
+                    {
                         sb.Append(comps[i]);
+                    }
                     else if (sb.Length == 0 && comps.Length == 3 ||
                         comps.Length == 4 && i == 1) // area code?
+                    {
                         sb.AppendFormat("({0})", comps[i]);
+                    }
                     else if (i != comps.Length - 1)
                     {
                         sb.AppendFormat("{0}-", comps[i]);
@@ -202,6 +168,7 @@ namespace SanteDB.Core.Model.Entities
                         sb.Append(comps[i]);
                         phone.Append(comps[i]);
                     }
+                }
 
                 // Extension?
                 string[] parms = match.Groups[7].Value.Split(';');
@@ -239,7 +206,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as EntityTelecomAddress;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.Value == other.Value && this.AddressUseKey == other.AddressUseKey;
         }
     }

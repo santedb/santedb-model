@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -39,68 +39,17 @@ namespace SanteDB.Core.Model.Roles
     [ClassConceptKey(EntityClassKeyStrings.Patient)]
     public class Patient : Person
     {
-        // Marital statuses
-        private Guid? m_maritalStatusKey;
-
-        private Concept m_maritalStatus;
-        private Guid? m_educationLevelKey;
-        private Concept m_educationLevel;
-        private Guid? m_livingArrangementKey;
-        private Concept m_livingArrangement;
-        private Guid? m_religiousAffiliationKey;
-        private Concept m_religiousAffiliation;
-        private Guid? m_ethnicGroupKey;
-        private Concept m_ethnicGroup;
-        private Guid? m_vipStatusKey;
-        private Concept m_vipStatus;
-        private Guid? m_nationalityKey;
-        private Concept m_nationality;
-
         /// <summary>
         /// Represents a patient
         /// </summary>
         public Patient()
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
-            base.ClassConceptKey = EntityClassKeys.Patient;
+            base.m_classConceptKey = EntityClassKeys.Patient;
         }
 
-        /// <summary>
-        /// Gets or sets the date the patient was deceased
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public DateTime? DeceasedDate { get; set; }
-
-        /// <summary>
-        /// Deceased date XML
-        /// </summary>
-        [XmlElement("deceasedDate"), JsonProperty("deceasedDate"), DataIgnore]
-        public String DeceasedDateXml
-        {
-            get
-            {
-                return this.DeceasedDate?.ToString("yyyy-MM-dd");
-            }
-            set
-            {
-                if (!String.IsNullOrEmpty(value))
-                {
-                    // Try to parse ISO date
-                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
-                        this.DeceasedDate = dt;
-                    else
-                        throw new FormatException($"Cannot parse {value} as a date");
-                }
-                else
-                    this.DeceasedDate = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the precision of the date of deceased
-        /// </summary>
-        [XmlElement("deceasedDatePrecision"), JsonProperty("deceasedDatePrecision")]
-        public DatePrecision? DeceasedDatePrecision { get; set; }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Patient;
 
         /// <summary>
         /// Gets or sets the multiple birth order of the patient
@@ -109,228 +58,67 @@ namespace SanteDB.Core.Model.Roles
         public int? MultipleBirthOrder { get; set; }
 
         /// <summary>
-        /// Gets or sets the VIP code
-        /// </summary>
-        [XmlElement("vipStatus"), JsonProperty("vipStatus"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? VipStatusKey
-        {
-            get => this.m_vipStatusKey;
-            set
-            {
-                this.m_vipStatusKey = value;
-                this.m_vipStatus = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the key of the marital status concept
-        /// </summary>
-        [XmlElement("maritalStatus"), JsonProperty("maritalStatus"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? MaritalStatusKey
-        {
-            get => this.m_maritalStatusKey;
-            set
-            {
-                this.m_maritalStatusKey = value;
-                this.m_maritalStatus = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the key of the education level
-        /// </summary>
-        [XmlElement("educationLevel"), JsonProperty("educationLevel"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? EducationLevelKey
-        {
-            get => this.m_educationLevelKey;
-            set
-            {
-                this.m_educationLevelKey = value;
-                this.m_educationLevel = null;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the living arrangement
         /// </summary>
-        [XmlElement("livingArrangement"), JsonProperty("livingArrangement"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? LivingArrangementKey
-        {
-            get => this.m_livingArrangementKey;
-            set
-            {
-                this.m_livingArrangementKey = value;
-                this.m_livingArrangement = null;
-            }
-        }
+        [XmlElement("livingArrangement"), JsonProperty("livingArrangement")]
+        public Guid? LivingArrangementKey { get; set; }
 
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [XmlElement("religion"), JsonProperty("religion"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? ReligiousAffiliationKey
-        {
-            get => this.m_religiousAffiliationKey;
-            set
-            {
-                this.m_religiousAffiliationKey = value;
-                this.m_religiousAffiliation = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the religious affiliation
-        /// </summary>
-        [XmlElement("nationality"), JsonProperty("nationality"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? NationalityKey
-        {
-            get => this.m_nationalityKey;
-            set
-            {
-                this.m_nationalityKey = value;
-                this.m_nationality = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the marital status code
-        /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(NationalityKey))]
-        public Concept Nationality
-        {
-            get
-            {
-                this.m_nationality = base.DelayLoad(this.m_nationalityKey, this.m_nationality);
-                return this.m_nationality;
-            }
-            set
-            {
-                this.m_nationality = value;
-                this.m_nationalityKey = value?.Key;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the marital status code
-        /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
-        public Concept MaritalStatus
-        {
-            get
-            {
-                this.m_maritalStatus = base.DelayLoad(this.m_maritalStatusKey, this.m_maritalStatus);
-                return this.m_maritalStatus;
-            }
-            set
-            {
-                this.m_maritalStatus = value;
-                this.m_maritalStatusKey = value?.Key;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the VIP status code
-        /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(VipStatusKey))]
-        public Concept VipStatus
-        {
-            get
-            {
-                this.m_vipStatus = base.DelayLoad(this.m_vipStatusKey, this.m_vipStatus);
-                return this.m_vipStatus;
-            }
-            set
-            {
-                this.m_vipStatus = value;
-                this.m_vipStatusKey = value?.Key;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the education level of the person
-        /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
-        public Concept EducationLevel
-        {
-            get
-            {
-                this.m_educationLevel = base.DelayLoad(this.m_educationLevelKey, this.m_educationLevel);
-                return this.m_educationLevel;
-            }
-            set
-            {
-                this.m_educationLevel = value;
-                this.m_educationLevelKey = value?.Key;
-            }
-        }
+        [XmlElement("religion"), JsonProperty("religion")]
+        public Guid? ReligiousAffiliationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the living arrangements
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(LivingArrangementKey))]
-        public Concept LivingArrangement
-        {
-            get
-            {
-                this.m_livingArrangement = base.DelayLoad(this.m_livingArrangementKey, this.m_livingArrangement);
-                return this.m_livingArrangement;
-            }
-            set
-            {
-                this.m_livingArrangement = value;
-                this.m_livingArrangementKey = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(LivingArrangementKey))]
+        public Concept LivingArrangement { get; set; }
 
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(ReligiousAffiliationKey))]
-        public Concept ReligiousAffiliation
-        {
-            get
-            {
-                this.m_religiousAffiliation = base.DelayLoad(this.m_religiousAffiliationKey, this.m_religiousAffiliation);
-                return this.m_religiousAffiliation;
-            }
-            set
-            {
-                this.m_religiousAffiliation = value;
-                this.m_religiousAffiliationKey = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ReligiousAffiliationKey))]
+        public Concept ReligiousAffiliation { get; set; }
 
         /// <summary>
         /// Gets or sets the ethnicity codes
         /// </summary>
         [XmlElement("ethnicity"), JsonProperty("ethnicity")]
-        public Guid? EthnicGroupCodeKey
-        {
-            get => this.m_ethnicGroupKey;
-            set
-            {
-                this.m_ethnicGroupKey = value;
-                this.m_ethnicGroup = null;
-            }
-        }
+        public Guid? EthnicGroupKey { get; set; }
 
         /// <summary>
         /// Gets the ethic group concepts
         /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EthnicGroupCodeKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EthnicGroupKey))]
         public Concept EthnicGroup
         {
-            get
-            {
-                this.m_ethnicGroup = base.DelayLoad(this.m_ethnicGroupKey, this.m_ethnicGroup);
-                return this.m_ethnicGroup;
-            }
-            set
-            {
-                this.m_ethnicGroup = value;
-                this.m_ethnicGroupKey = value?.Key;
-            }
+            get; set;
         }
+
+        /// <summary>
+        /// Gets or sets the marital status code
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
+        public Concept MaritalStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the education level of the person
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
+        public Concept EducationLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the key of the marital status concept
+        /// </summary>
+        [XmlElement("maritalStatus"), JsonProperty("maritalStatus")]
+        public Guid? MaritalStatusKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the key of the education level
+        /// </summary>
+        [XmlElement("educationLevel"), JsonProperty("educationLevel")]
+        public Guid? EducationLevelKey { get; set; }
 
         /// <summary>
         /// Should serialize deceased date?
@@ -339,12 +127,6 @@ namespace SanteDB.Core.Model.Roles
         {
             return this.DeceasedDate.HasValue;
         }
-
-        /// <summary>
-        /// Should serialize deceasd date
-        /// </summary>
-        /// <returns></returns>
-        public bool ShouldSerializeDeceasedDatePrecision() => this.DeceasedDatePrecision.HasValue;
 
         /// <summary>
         /// Should serialize deceased date?
@@ -360,10 +142,17 @@ namespace SanteDB.Core.Model.Roles
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Patient;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.DeceasedDate == other.DeceasedDate &&
-                this.DeceasedDatePrecision == other.DeceasedDatePrecision;
+                this.DeceasedDatePrecision == other.DeceasedDatePrecision &&
+                this.MaritalStatusKey == other.MaritalStatusKey &&
+                this.VipStatusKey == other.VipStatusKey;
         }
+
     }
 }

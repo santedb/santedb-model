@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -39,11 +39,6 @@ namespace SanteDB.Core.Model
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Association")]
     public abstract class Association<TSourceType> : IdentifiedData, ISimpleAssociation where TSourceType : IdentifiedData, new()
     {
-        // Target entity key
-        private Guid? m_sourceEntityKey;
-
-        // The target entity
-        private TSourceType m_sourceEntity;
 
         /// <summary>
         /// Gets the source type
@@ -58,8 +53,11 @@ namespace SanteDB.Core.Model
         {
             get
             {
-                if (this.m_sourceEntity != null)
-                    return this.m_sourceEntity.ModifiedOn;
+                if (this.SourceEntity != null)
+                {
+                    return this.SourceEntity.ModifiedOn;
+                }
+
                 return DateTimeOffset.Now;
             }
         }
@@ -68,53 +66,28 @@ namespace SanteDB.Core.Model
         /// Gets or sets the source entity's key (where the relationship is FROM)
         /// </summary>
         [XmlElement("source"), JsonProperty("source")]
-        public virtual Guid? SourceEntityKey
-        {
-            get
-            {
-                return this.m_sourceEntityKey;
-            }
-            set
-            {
-                if (value != this.m_sourceEntity?.Key || value != this.m_sourceEntityKey)
-                {
-                    this.m_sourceEntityKey = value;
-                    this.m_sourceEntity = null;
-                }
-            }
-        }
+        public virtual Guid? SourceEntityKey { get; set; }
 
         /// <summary>
         /// The entity that this relationship targets
         /// </summary>
         [SerializationReference(nameof(SourceEntityKey))]
-        [XmlIgnore, JsonIgnore, DataIgnore]
-        public TSourceType SourceEntity
-        {
-            get
-            {
-                this.m_sourceEntity = this.DelayLoad(this.m_sourceEntityKey, this.m_sourceEntity);
-                return this.m_sourceEntity;
-            }
-            set
-            {
-                this.m_sourceEntity = value;
-                this.m_sourceEntityKey = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore, SerializationMetadata]
+        public TSourceType SourceEntity { get; set; }
 
         /// <summary>
         /// Source entity
         /// </summary>
-        object ISimpleAssociation.SourceEntity { get => this.SourceEntity; set => this.SourceEntity = (TSourceType)value; }
+        object ISimpleAssociation.SourceEntity
+        {
+            get => this.SourceEntity;
+            set => this.SourceEntity = (TSourceType)value;
+        }
 
         /// <summary>
         /// Should serialize obsolete
         /// </summary>
-        public virtual bool ShouldSerializeSourceEntityKey()
-        {
-            return this.m_sourceEntityKey.HasValue;
-        }
+        public virtual bool ShouldSerializeSourceEntityKey() => this.SourceEntityKey.HasValue;
 
         /// <summary>
         /// Determines equality of this association
@@ -122,7 +95,11 @@ namespace SanteDB.Core.Model
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Association<TSourceType>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj);
         }
     }

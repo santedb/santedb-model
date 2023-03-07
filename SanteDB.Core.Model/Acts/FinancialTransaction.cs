@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -36,59 +36,36 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.FinancialTransaction)]
     public class FinancialTransaction : Act
     {
-        // Backing fields
-        private Guid? m_amountCurrencyKey;
-
-        private Concept m_amountCurrency;
 
         /// <summary>
         /// Creates the financial transaction
         /// </summary>
         public FinancialTransaction()
         {
-            base.ClassConceptKey = ActClassKeys.FinancialTransaction;
+            base.m_classConceptKey = ActClassKeys.FinancialTransaction;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.FinancialTransaction;
 
         /// <summary>
         /// Gets or sets the amount of the financial transaction
         /// </summary>
         [XmlElement("amount"), JsonProperty("amount")]
-        public Decimal Amount { get; set; }
+        public Decimal? Amount { get; set; }
 
         /// <summary>
         /// Gets or sets the currency key
         /// </summary>
-        [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? CurrencyKey
-        {
-            get
-            {
-                return this.m_amountCurrencyKey;
-            }
-            set
-            {
-                this.m_amountCurrencyKey = value;
-                this.m_amountCurrency = null;
-            }
-        }
+        [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(CurrencyKeys))]
+        public Guid? CurrencyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the currency
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(CurrencyKey))]
-        public Concept Currency
-        {
-            get
-            {
-                this.m_amountCurrency = base.DelayLoad(this.m_amountCurrencyKey, this.m_amountCurrency);
-                return this.m_amountCurrency;
-            }
-            set
-            {
-                this.m_amountCurrency = value;
-                this.m_amountCurrencyKey = value?.Key;
-            }
-        }
+        public Concept Currency { get; set; }
 
         /// <summary>
         /// Gets or sets the crediting exchange rate

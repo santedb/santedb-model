@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using System;
@@ -68,7 +68,10 @@ namespace SanteDB.Core.Model.Patch
         {
             StringBuilder builder = new StringBuilder();
             foreach (var itm in this.Operation)
+            {
                 builder.AppendFormat("{0}\r\n", itm);
+            }
+
             return builder.ToString();
         }
     }

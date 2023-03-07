@@ -16,8 +16,9 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
 using System;
 
@@ -28,15 +29,32 @@ namespace SanteDB.Core.Model.Interfaces
     /// </summary>
     public interface IExternalIdentifier
     {
+        /// <summary>
+        /// Gets the assigning authority
+        /// </summary>
+        [QueryParameter("domain")]
+        IdentityDomain IdentityDomain { get; }
 
         /// <summary>
-        /// Gets the authority
+        /// Get the authority key
         /// </summary>
-        AssigningAuthority Authority { get; }
+        Guid? IdentityDomainKey { get; }
 
         /// <summary>
-        /// Gets the value of the identity 
+        /// Gets the value of the identity
         /// </summary>
+        [QueryParameter("value")]
         String Value { get; }
+
+        /// <summary>
+        /// Check digit
+        /// </summary>
+        String CheckDigit { get; }
+
+        /// <summary>
+        /// Gets or sets the reliability
+        /// </summary>
+        [QueryParameter("reliability")]
+        IdentifierReliability Reliability { get; set; }
     }
 }

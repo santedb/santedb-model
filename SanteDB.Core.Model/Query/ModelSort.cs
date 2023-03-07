@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using SanteDB.Core.Model.Map;
 using System;
@@ -46,7 +46,10 @@ namespace SanteDB.Core.Model.Query
         public ModelSort(Expression<Func<TData, dynamic>> property, SortOrderType order)
         {
             if (property.NodeType != ExpressionType.Lambda)
+            {
                 throw new ArgumentException($"{nameof(property)} must be a LambdaExpression");
+            }
+
             this.SortProperty = property;
             this.SortOrder = order;
         }

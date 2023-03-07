@@ -16,35 +16,37 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
+using SanteDB.Core.Model.Acts;
 using System;
 
-namespace SanteDB.Core.Model.Interfaces
+namespace SanteDB.Core.Model.Constants
 {
     /// <summary>
-    /// Represents base entity data
+    /// Keys for concepts which represent an interpretation of a <see cref="Observation"/>
     /// </summary>
-    public interface IBaseEntityData : IIdentifiedEntity
+    public static class ActInterpretationKeys
     {
         /// <summary>
-        /// Gets or sets the creator of the data
+        /// The observation represents a value which is higher than expected
         /// </summary>
-        Guid? CreatedByKey { get; set; }
-
+        public static readonly Guid AbnormalHigh = Guid.Parse("3C4D6579-7496-4B44-AAC1-18A714FF7A05");
         /// <summary>
-        /// Gets or sets teh obsoletor of the data
+        /// The observation represents a value which is much higher than expected
         /// </summary>
-        Guid? ObsoletedByKey { get; set; }
-
+        public static readonly Guid AbnormalVeryHigh = Guid.Parse("8B553D58-6C8C-4D01-A534-83BA5780B41A");
         /// <summary>
-        /// Gets or sets the time when the data was created
+        /// The observation is much lower than expected 
         /// </summary>
-        DateTimeOffset CreationTime { get; set; }
-
+        public static readonly Guid AbnormalVeryLow = Guid.Parse("A7159BA0-A9EC-4565-95B8-ED364794C0B8");
         /// <summary>
-        /// Gets or sets the time with the data was obsoleted.
+        /// The observation is abnormally low
         /// </summary>
-        DateTimeOffset? ObsoletionTime { get; set; }
+        public static readonly Guid AbnormalLow = Guid.Parse("6188F821-261F-420C-9520-0DE240A05661");
+        /// <summary>
+        /// The observation is normal
+        /// </summary>
+        public static readonly Guid Normal = Guid.Parse("41D42ABF-17AD-4144-BF97-EC3FD907F57D");
     }
 }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -69,18 +69,12 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.Observation)]
     public class Observation : Act
     {
-        // Interpreation concept key
-        private Guid? m_interpretationConceptKey;
-
-        // Interpretation concept
-        private Concept m_interpretationConcept;
-
         /// <summary>
         /// Observation ctor
         /// </summary>
         public Observation()
         {
-            this.ClassConceptKey = ActClassKeys.Observation;
+            this.m_classConceptKey = ActClassKeys.Observation;
         }
 
         /// <summary>
@@ -88,18 +82,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("interpretationConcept"), JsonProperty("interpretationConcept")]
-        public Guid? InterpretationConceptKey
-        {
-            get { return this.m_interpretationConceptKey; }
-            set
-            {
-                if (this.m_interpretationConceptKey != value)
-                {
-                    this.m_interpretationConceptKey = value;
-                    this.m_interpretationConcept = null;
-                }
-            }
-        }
+        public Guid? InterpretationConceptKey { get; set; }
 
         /// <summary>
         /// Value type
@@ -111,21 +94,9 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the concept which indicates the interpretation of the observtion
         /// </summary>
-        [AutoLoad, SerializationReference(nameof(InterpretationConceptKey))]
+        [SerializationReference(nameof(InterpretationConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept InterpretationConcept
-        {
-            get
-            {
-                this.m_interpretationConcept = base.DelayLoad(this.m_interpretationConceptKey, this.m_interpretationConcept);
-                return this.m_interpretationConcept;
-            }
-            set
-            {
-                this.m_interpretationConcept = value;
-                this.m_interpretationConceptKey = value?.Key;
-            }
-        }
+        public Concept InterpretationConcept { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -133,7 +104,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Observation;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.InterpretationConceptKey == other.InterpretationConceptKey;
         }
 
@@ -154,17 +129,11 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "QuantityObservation")]
     public class QuantityObservation : Observation
     {
-        // UOM key
-        private Guid? m_unitOfMeasureKey;
-
-        // UOM
-        private Concept m_unitOfMeasure;
-
         /// <summary>
         /// Gets or sets the observed quantity
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
-        public Decimal Value { get; set; }
+        public Decimal? Value { get; set; }
 
         /// <summary>
         /// Value type
@@ -183,38 +152,14 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the key of the uom concept
         /// </summary>
         [XmlElement("unitOfMeasure"), JsonProperty("unitOfMeasure")]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? UnitOfMeasureKey
-        {
-            get { return this.m_unitOfMeasureKey; }
-            set
-            {
-                if (this.m_unitOfMeasureKey != value)
-                {
-                    this.m_unitOfMeasureKey = value;
-                    this.m_unitOfMeasure = null;
-                }
-            }
-        }
+        public Guid? UnitOfMeasureKey { get; set; }
 
         /// <summary>
         /// Gets or sets the unit of measure
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(UnitOfMeasureKey))]
-        public Concept UnitOfMeasure
-        {
-            get
-            {
-                this.m_unitOfMeasure = base.DelayLoad(this.m_unitOfMeasureKey, this.m_unitOfMeasure);
-                return this.m_unitOfMeasure;
-            }
-            set
-            {
-                this.m_unitOfMeasure = value;
-                this.m_unitOfMeasureKey = value?.Key;
-            }
-        }
+        [SerializationReference(nameof(UnitOfMeasureKey))]
+        public Concept UnitOfMeasure { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -222,7 +167,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as QuantityObservation;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.Value == other.Value && this.UnitOfMeasureKey == other.UnitOfMeasureKey;
         }
     }
@@ -247,7 +196,7 @@ namespace SanteDB.Core.Model.Acts
         {
             get
             {
-                return "ED";
+                return "ST";
             }
             set { }
         }
@@ -264,7 +213,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as TextObservation;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.Value == other.Value;
         }
     }
@@ -280,12 +233,6 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "CodedObservation")]
     public class CodedObservation : Observation
     {
-        // Value key
-        private Guid m_valueKey;
-
-        // Value
-        private Concept m_value;
-
         /// <summary>
         /// Value type
         /// </summary>
@@ -304,37 +251,14 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid ValueKey
-        {
-            get { return this.m_valueKey; }
-            set
-            {
-                if (this.m_valueKey != value)
-                {
-                    this.m_valueKey = value;
-                    this.m_value = null;
-                }
-            }
-        }
+        public Guid? ValueKey { get; set; }
 
         /// <summary>
         /// Gets or sets the coded value of the observation
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(ValueKey))]
-        public Concept Value
-        {
-            get
-            {
-                this.m_value = base.DelayLoad(this.m_valueKey, this.m_value);
-                return this.m_value;
-            }
-            set
-            {
-                this.m_value = value;
-                this.m_valueKey = value?.Key ?? Guid.Empty;
-            }
-        }
+        [SerializationReference(nameof(ValueKey))]
+        public Concept Value { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -342,7 +266,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as CodedObservation;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.ValueKey == this.ValueKey;
         }
     }

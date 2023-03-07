@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 using System.Collections.Generic;
@@ -44,16 +44,16 @@ namespace SanteDB.Core.Model.Map
         public String DomainName { get; set; }
 
         /// <summary>
-        /// Identifies the route 
-        /// </summary>
-        [XmlElement("via")]
-        public PropertyMap Via { get; set; }
-
-        /// <summary>
         /// When this property is a via then traverse this
         /// </summary>
         [XmlAttribute("dontLoad")]
         public bool DontLoad { get; set; }
+
+        /// <summary>
+        /// True if the property map is for rewriting queries only
+        /// </summary>
+        [XmlAttribute("queryOnly")]
+        public bool QueryOnly { get; set; }
 
         /// <summary>
         /// Disaggregation function
@@ -88,24 +88,32 @@ namespace SanteDB.Core.Model.Map
             Debug.WriteLine(String.Format("\t Property {0}>{1}", this.ModelName, this.DomainName));
 #endif
             if (domainClass?.IsConstructedGenericType == true)
+            {
                 domainClass = domainClass.GenericTypeArguments[0];
+            }
+
             if (modelClass?.IsConstructedGenericType == true)
+            {
                 modelClass = modelClass.GenericTypeArguments[0];
+            }
 
             List<ValidationResultDetail> retVal = new List<ValidationResultDetail>();
             // 0. Property and model names should exist
             if (String.IsNullOrEmpty(this.DomainName))
+            {
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, "@domainName not set", null, null));
+            }
 
             // 1. The property should exist
             if (!String.IsNullOrEmpty(this.ModelName) && modelClass?.GetRuntimeProperty(this.ModelName ?? "") == null)
+            {
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", modelClass?.Name, this.ModelName), null, null));
-            if (domainClass?.GetRuntimeProperty(this.DomainName ?? "") == null)
-                retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", domainClass?.Name, this.DomainName), null, null));
+            }
 
-            // 2. All property maps should exist
-            if (this.Via != null)
-                retVal.AddRange(this.Via.Validate(modelClass?.GetRuntimeProperty(this.ModelName ?? "")?.PropertyType ?? modelClass, domainClass?.GetRuntimeProperty(this.DomainName)?.PropertyType));
+            if (domainClass?.GetRuntimeProperty(this.DomainName ?? "") == null)
+            {
+                retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", domainClass?.Name, this.DomainName), null, null));
+            }
 
             // Order by?
             if (!String.IsNullOrEmpty(this.OrderBy) && domainClass != null)
@@ -113,12 +121,16 @@ namespace SanteDB.Core.Model.Map
 
                 var orderProperty = domainClass.GetRuntimeProperty(this.DomainName);
                 if (!orderProperty.PropertyType.IsEnumerable())
+                {
                     retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Sort Property {0}.{1} is not enumerable", domainClass?.Name, this.OrderBy), null, null));
+                }
                 else
                 {
                     orderProperty = orderProperty.PropertyType.GenericTypeArguments[0].GetRuntimeProperty(this.OrderBy);
                     if (orderProperty == null)
+                    {
                         retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Sort Property {0}.{1} not found", domainClass?.Name, this.OrderBy), null, null));
+                    }
                 }
             }
             return retVal;

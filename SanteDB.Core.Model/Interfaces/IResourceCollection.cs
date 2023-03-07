@@ -16,9 +16,8 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-11-30
+ * Date: 2022-5-30
  */
-using System;
 using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
@@ -31,7 +30,12 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets the items in the collection
         /// </summary>
-        IEnumerable<IIdentifiedEntity> Item { get; }
+        IEnumerable<IIdentifiedResource> Item { get; }
+
+        /// <summary>
+        /// Get the total results if available
+        /// </summary>
+        int? TotalResults { get; }
 
         /// <summary>
         /// Add the <paramref name="annotation"/> to all objects

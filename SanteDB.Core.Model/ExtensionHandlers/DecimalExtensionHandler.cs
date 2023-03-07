@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using SanteDB.Core.Interfaces;
 using System;
@@ -51,10 +51,17 @@ namespace SanteDB.Core.Extensions
 
             byte[] edata = new byte[16];
             if (extensionData.Length == 16)
+            {
                 edata = extensionData;
+            }
             else
+            {
                 for (int i = 0; i < extensionData.Length; i++)
+                {
                     edata[i] = extensionData[i];
+                }
+            }
+
             Int32[] ints = new int[]
             {
                 BitConverter.ToInt32(edata, 0),
@@ -91,7 +98,10 @@ namespace SanteDB.Core.Extensions
             var ints = Decimal.GetBits((Decimal)data);
             byte[] retVal = new byte[16];
             for (int i = 0; i < ints.Length; i++)
+            {
                 Array.Copy(BitConverter.GetBytes(ints[i]), 0, retVal, i * 4, 4);
+            }
+
             return retVal;
         }
     }

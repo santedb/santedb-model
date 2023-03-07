@@ -16,12 +16,11 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-11-19
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Parameters
@@ -65,8 +64,37 @@ namespace SanteDB.Core.Model.Parameters
         public bool TryGet<TValue>(String parameterName, out TValue value)
         {
             var p = this.Parameters?.Find(o => o.Name == parameterName);
-            value = (TValue)(p?.Value ?? default(TValue));
+            // HACK: Sometimes the value is an LONG but the type is INT and this does not like that condition
+            if(Map.MapUtil.TryConvert(p?.Value, typeof(TValue), out var tvalue))
+            {
+                value = (TValue)tvalue;
+            }
+            else
+            {
+                value = (TValue)(p?.Value ?? default(TValue));
+            }
+
             return p != null;
+        }
+
+        /// <summary>
+        /// Set the specified <paramref name="parameterName"/>
+        /// </summary>
+        /// <param name="parameterName">The name of the parameter to set</param>
+        /// <param name="value">The value of the parameter</param>
+        public void Set(string parameterName, object value)
+        {
+            var existingParameter = this.Parameters.Find(o => o.Name == parameterName);
+            if(existingParameter == null)
+            {
+                existingParameter = new Parameter(parameterName, value);
+                this.Parameters.Add(existingParameter);
+            }
+            else
+            {
+                existingParameter.Value = value;
+            }
+
         }
     }
 }

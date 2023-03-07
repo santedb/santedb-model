@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -24,7 +24,6 @@ using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Roles
@@ -38,12 +37,6 @@ namespace SanteDB.Core.Model.Roles
     [ClassConceptKey(EntityClassKeyStrings.Provider)]
     public class Provider : Person
     {
-        // Specialty key
-        private Guid? m_providerSpecialtyKey;
-
-        // Specialty value
-
-        private Concept m_providerSpeciality;
 
         /// <summary>
         /// Creates a new provider
@@ -51,48 +44,24 @@ namespace SanteDB.Core.Model.Roles
         public Provider()
         {
             this.DeterminerConceptKey = DeterminerKeys.Specific;
-            this.ClassConceptKey = EntityClassKeys.Provider;
+            this.m_classConceptKey = EntityClassKeys.Provider;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Provider;
 
         /// <summary>
         /// Gets or sets the provider specialty key
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("providerSpecialty"), JsonProperty("providerSpecialty")]
-        public Guid? ProviderSpecialtyKey
-        {
-            get
-            {
-                return this.m_providerSpecialtyKey;
-            }
-            set
-            {
-                if (this.m_providerSpecialtyKey != value)
-                {
-                    this.m_providerSpecialtyKey = value;
-                    this.m_providerSpeciality = null;
-                }
-            }
-        }
+        public Guid? SpecialtyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the provider specialty
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [SerializationReference(nameof(ProviderSpecialtyKey))]
-        public Concept ProviderSpecialty
-        {
-            get
-            {
-                this.m_providerSpeciality = base.DelayLoad(this.m_providerSpecialtyKey, this.m_providerSpeciality);
-                return this.m_providerSpeciality;
-            }
-            set
-            {
-                this.m_providerSpeciality = value;
-                this.m_providerSpecialtyKey = value?.Key;
-            }
-        }
+        [SerializationReference(nameof(SpecialtyKey))]
+        public Concept Specialty { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -101,9 +70,12 @@ namespace SanteDB.Core.Model.Roles
         {
             var other = obj as Provider;
             if (other == null)
+            {
                 return false;
+            }
+
             return base.SemanticEquals(obj) &&
-                this.ProviderSpecialtyKey == other.ProviderSpecialtyKey;
+                this.SpecialtyKey == other.SpecialtyKey;
         }
     }
 }

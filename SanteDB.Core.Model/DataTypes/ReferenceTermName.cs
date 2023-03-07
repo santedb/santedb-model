@@ -16,12 +16,13 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using System;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -52,6 +53,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <param name="name">The name.</param>
         public ReferenceTermName(string name)
         {
+            this.Language = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
             this.Name = name;
         }
 

@@ -16,9 +16,10 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using System;
@@ -31,19 +32,17 @@ namespace SanteDB.Core.Model
     /// Represents versioned based data
     /// </summary>
     /// <remarks>
-    /// <para>In SanteDB, certain objects are not actually updated or deleted, rather they are subsequent versions
-    /// of the data appended to the previous. This class represents the base class of all objects which are versioned objects</para></remarks>
-
+    /// <para>In the SanteDB model, certain objects (like Concepts, Entities, and Acts) aren't ever updated or deleted. Rather, the
+    /// updating or deletion of an object will result in a new version</para>
+    /// <para>The <see cref="P:ObsoletionTime"/> property is used to indicate the <b>version</b> of the object is obsolete, rather
+    /// than the object itself. This means that a series of these <see cref="VersionedEntityData{THistoryModelType}"/> compose a single logical
+    /// instance of the object.</para>
+    /// <para>The previous versions (representations of this object) can be retrieved using the <see cref="P:PreviousVersion"/> property</para>
+    /// </remarks>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("VersionedEntityData")]
-    public abstract class VersionedEntityData<THistoryModelType> : BaseEntityData, IVersionedEntity where THistoryModelType : VersionedEntityData<THistoryModelType>, new()
+    public abstract class VersionedEntityData<THistoryModelType> : BaseEntityData, IVersionedData where THistoryModelType : VersionedEntityData<THistoryModelType>, new()
     {
-        // Previous version id
-        private Guid? m_previousVersionId;
-
-        // Previous version
-
-        private THistoryModelType m_previousVersion;
-
+        
         /// <summary>
         /// Creates a new versioned base data class
         /// </summary>
@@ -52,26 +51,9 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Previous version
-        /// </summary>
-        IVersionedEntity IVersionedEntity.PreviousVersion
-        {
-            get
-            {
-                return this.GetPreviousVersion();
-            }
-        }
-
-        /// <summary>
         /// Override the ETag
         /// </summary>
-        public override string Tag
-        {
-            get
-            {
-                return $"{this.Type}.{this.VersionKey?.ToString("N")}";
-            }
-        }
+        public override string Tag => $"{this.Type}.{this.VersionKey?.ToString()}";
 
         /// <summary>
         /// Gets or sets the UUID of the previous version of this record
@@ -79,26 +61,18 @@ namespace SanteDB.Core.Model
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("previousVersion"), JsonProperty("previousVersion")]
-        public virtual Guid? PreviousVersionKey
-        {
-            get
-            {
-                return this.m_previousVersionId;
-            }
-            set
-            {
-                this.m_previousVersionId = value;
-                this.m_previousVersion = default(THistoryModelType);
-            }
-        }
+        public virtual Guid? PreviousVersionKey { get; set; }
+
+        /// <summary>
+        /// True if the object is the head version
+        /// </summary>
+        [XmlIgnore, JsonIgnore, QueryParameter("head")]
+        public bool IsHeadVersion { get; set; }
 
         /// <summary>
         /// Should serialize previous version?
         /// </summary>
-        public bool ShouldSerializePreviousVersionKey()
-        {
-            return this.m_previousVersionId.HasValue;
-        }
+        public bool ShouldSerializePreviousVersionKey() => this.PreviousVersionKey.HasValue;
 
         /// <summary>
         /// Gets the previous version or loads it from the database if needed
@@ -106,19 +80,12 @@ namespace SanteDB.Core.Model
         //[SerializationReference(nameof(PreviousVersionKey))]
         public virtual THistoryModelType GetPreviousVersion()
         {
-            if (this.m_previousVersionId.HasValue &&
-                this.m_previousVersion == null)
-                this.m_previousVersion = EntitySource.Current.Get<THistoryModelType>(this.Key, this.m_previousVersionId.Value);
-            return this.m_previousVersion;
-        }
+            if (this.PreviousVersionKey.HasValue)
+            {
+                return EntitySource.Current.Get<THistoryModelType>(this.Key, this.PreviousVersionKey.Value);
+            }
 
-        /// <summary>
-        /// Sets the previous version
-        /// </summary>
-        public virtual void SetPreviousVersion(THistoryModelType previousVersion)
-        {
-            this.m_previousVersion = previousVersion;
-            this.m_previousVersionId = previousVersion?.VersionKey;
+            return null;
         }
 
         /// <summary>
@@ -131,7 +98,7 @@ namespace SanteDB.Core.Model
         /// The sequence number of the version (for ordering)
         /// </summary>
         [XmlElement("sequence"), JsonProperty("sequence")]
-        public Int32? VersionSequence { get; set; }
+        public Int64? VersionSequence { get; set; }
 
         /// <summary>
         /// Represent the versioned data as a string

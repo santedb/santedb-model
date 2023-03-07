@@ -16,16 +16,16 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using System;
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
-    /// Represents an audit code.
+    /// Represents an audit code which has a code system and a value
     /// </summary>
     [XmlType(nameof(AuditCode), Namespace = "http://santedb.org/audit")]
     [JsonObject(nameof(AuditCode))]

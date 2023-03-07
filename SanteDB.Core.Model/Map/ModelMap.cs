@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using SanteDB.Core.Exceptions;
 using SanteDB.Core.Model.Serialization;
@@ -53,7 +53,10 @@ namespace SanteDB.Core.Model.Map
             var retVal = s_xsz.Deserialize(sourceStream) as ModelMap;
             var validation = retVal.Validate();
             if (validation.Any(o => o.Level == ResultDetailType.Error))
+            {
                 throw new ModelMapValidationException(validation);
+            }
+
             return retVal;
         }
 
@@ -80,7 +83,10 @@ namespace SanteDB.Core.Model.Map
         {
             List<ValidationResultDetail> retVal = new List<ValidationResultDetail>();
             foreach (var cls in this.Class)
+            {
                 retVal.AddRange(cls.Validate());
+            }
+
             return retVal;
         }
 
@@ -96,16 +102,24 @@ namespace SanteDB.Core.Model.Map
 
                 // Look up the object hierarchy
                 if (retVal == null)
+                {
                     while (modelType != typeof(Object) && retVal?.DomainType != (domainType ?? retVal?.DomainType))
                     {
                         modelType = modelType.BaseType;
                         retVal = this.Class.Find(o => o.ModelType == modelType && o.DomainType == domainType);
                     }
+                }
 
                 if (retVal != null)
+                {
                     lock (this.m_lockObject)
+                    {
                         if (!this.m_classCache.ContainsKey(key))
+                        {
                             this.m_classCache.Add(key, retVal);
+                        }
+                    }
+                }
             }
 
             return retVal;

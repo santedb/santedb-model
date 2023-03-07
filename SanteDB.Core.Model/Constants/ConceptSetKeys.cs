@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
@@ -46,6 +46,11 @@ namespace SanteDB.Core.Model.Constants
         /// Represents codes which are used to relate two acts together
         /// </summary>
         public static readonly Guid ActRelationshipType = Guid.Parse("CF686A21-86E5-41E7-AF07-0016A054227A");
+
+        /// <summary>
+        /// Participations of entities in acts
+        /// </summary>
+        public static readonly Guid ActParticipationType = Guid.Parse("592431F5-BBBD-44D6-9C63-5A80A410C738");
 
         /// <summary>
         /// Represents codes which are used to dictate the status of an act
@@ -81,6 +86,11 @@ namespace SanteDB.Core.Model.Constants
         /// Represents the container separator concept set.
         /// </summary>
         public static readonly Guid ContainerSeparatorTypeKeys = Guid.Parse("B9AC7826-5D19-421E-A848-61C3C8F563A2");
+
+        /// <summary>
+        /// Represents concepts which are used to classify entities
+        /// </summary>
+        public static readonly Guid EntityDeterminer = Guid.Parse("effc9f86-56e2-4920-a75a-fec310aa1430");
 
         /// <summary>
         /// Represents concepts which are used to classify entities
@@ -176,5 +186,20 @@ namespace SanteDB.Core.Model.Constants
         /// Language codes
         /// </summary>
         public static readonly Guid LanguageCodes = Guid.Parse("48b4d375-0dca-4c58-9f45-66abfbc196a1");
+
+        /// <summary>
+        /// Currency codes
+        /// </summary>
+        public static readonly Guid Currencies = Guid.Parse("B6BC75AD-ADF4-4101-B4A1-E9AEA74AB257");
+
+        /// <summary>
+        /// Body site or system 
+        /// </summary>
+        public static readonly Guid BodySiteOrSystem = Guid.Parse("9BC75B1C-FF3F-41DC-A908-68763BD355DA");
+
+        /// <summary>
+        /// Procedure techniques
+        /// </summary>
+        public static readonly Guid ProcedureTechnique = Guid.Parse("581511D1-1B8D-42A2-A08E-746F5365803E");
     }
 }

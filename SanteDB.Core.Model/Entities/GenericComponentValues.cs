@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -35,10 +35,6 @@ namespace SanteDB.Core.Model.Entities
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("GenericComponentValues")]
     public abstract class GenericComponentValues<TBoundModel> : Association<TBoundModel> where TBoundModel : IdentifiedData, new()
     {
-        private Concept m_componentType;
-
-        // Component type
-        private Guid? m_componentTypeKey;
 
         // Component type
         /// <summary>
@@ -53,7 +49,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public GenericComponentValues(Guid partType, String value)
         {
-            this.m_componentTypeKey = partType;
+            this.ComponentTypeKey = partType;
             this.Value = value;
         }
 
@@ -69,38 +65,15 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the type of address component
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [SerializationReference(nameof(ComponentTypeKey)), AutoLoad]
-        public Concept ComponentType
-        {
-            get
-            {
-                this.m_componentType = base.DelayLoad(this.m_componentTypeKey, this.m_componentType);
-                return this.m_componentType;
-            }
-            set
-            {
-                this.m_componentType = value;
-                this.m_componentTypeKey = value?.Key;
-            }
-        }
+        [SerializationReference(nameof(ComponentTypeKey))]
+        public Concept ComponentType { get; set; }
 
         /// <summary>
         /// Component type key
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("type"), JsonProperty("type")]
-        public virtual Guid? ComponentTypeKey
-        {
-            get { return this.m_componentTypeKey; }
-            set
-            {
-                if (this.m_componentTypeKey != value)
-                {
-                    this.m_componentTypeKey = value;
-                    this.m_componentType = null;
-                }
-            }
-        }
+        public virtual Guid? ComponentTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the value of the name component
@@ -123,7 +96,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as GenericComponentValues<TBoundModel>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.Value == other.Value &&
                 this.ComponentTypeKey == other.ComponentTypeKey;

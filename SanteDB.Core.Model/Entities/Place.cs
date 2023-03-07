@@ -16,16 +16,14 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
-using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
@@ -42,7 +40,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.CityOrTown)]
     [ClassConceptKey(EntityClassKeyStrings.Country)]
     [ClassConceptKey(EntityClassKeyStrings.CountyOrParish)]
-    [ClassConceptKey(EntityClassKeyStrings.State)]
+    [ClassConceptKey(EntityClassKeyStrings.StateOrProvince)]
     public class Place : Entity, IGeoTagged
     {
         /// <summary>
@@ -50,88 +48,24 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public Place()
         {
-            base.ClassConceptKey = EntityClassKeys.Place;
+            base.m_classConceptKey = EntityClassKeys.Place;
             base.DeterminerConceptKey = DeterminerKeys.Specific;
-            this.Services = new List<PlaceService>();
         }
 
-        /// <summary>
-        /// Gets or sets the class concept key
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey
-        {
-            get
-            {
-                return base.ClassConceptKey;
-            }
-
-            set
-            {
-                if (value == EntityClassKeys.Place ||
-                    value == EntityClassKeys.ServiceDeliveryLocation ||
-                    value == EntityClassKeys.State ||
-                    value == EntityClassKeys.CityOrTown ||
-                    value == EntityClassKeys.PrecinctOrBorough ||
-                    value == EntityClassKeys.Country ||
-                    value == EntityClassKeys.CountyOrParish)
-                    base.ClassConceptKey = value;
-                else throw new ArgumentOutOfRangeException("Invalid ClassConceptKey value");
-            }
-        }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Place ||
+                    classKey == EntityClassKeys.ServiceDeliveryLocation ||
+                    classKey == EntityClassKeys.StateOrProvince ||
+                    classKey == EntityClassKeys.CityOrTown ||
+                    classKey == EntityClassKeys.PrecinctOrBorough ||
+                    classKey == EntityClassKeys.Country ||
+                    classKey == EntityClassKeys.CountyOrParish;
 
         /// <summary>
         /// True if location is mobile
         /// </summary>
         [XmlElement("isMobile"), JsonProperty("isMobile")]
         public Boolean IsMobile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the latitude
-        /// </summary>
-        [XmlIgnore, JsonIgnore, Obsolete("Use the IGeoTagged properties")]
-        public double? Lat
-        {
-            get
-            {
-                return this.GeoTag?.Lat;
-            }
-            set
-            {
-                if (value.HasValue)
-                {
-                    this.GeoTag = this.GeoTag ?? new GeoTag();
-                    this.GeoTag.Lat = value.Value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the longitude
-        /// </summary>
-        [XmlIgnore, JsonIgnore, Obsolete("Use the IGeoTagged properties")]
-        public double? Lng
-        {
-            get
-            {
-                return this.GeoTag?.Lng;
-            }
-            set
-            {
-                if (value.HasValue)
-                {
-                    this.GeoTag = this.GeoTag ?? new GeoTag();
-                    this.GeoTag.Lng = value.Value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the geographic tag
-        /// </summary>
-        [XmlElement("geo"), JsonProperty("geo")]
-        public GeoTag GeoTag { get; set; }
 
         /// <summary>
         /// Should serialize mobile
@@ -154,7 +88,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets the services
         /// </summary>
-        [AutoLoad, XmlElement("service"), JsonProperty("service")]
+        [XmlElement("service"), JsonProperty("service")]
         public List<PlaceService> Services { get; set; }
 
         /// <summary>
@@ -163,12 +97,16 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Place;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.IsMobile == other.IsMobile &&
                 this.GeoTag?.Lat == other.GeoTag?.Lat &&
                 this.GeoTag?.Lng == other.GeoTag?.Lng &&
-                this.Services?.SemanticEquals(other.Services) == true;
+                this.Services?.SemanticEquals(other.Services) != false;
         }
     }
 }

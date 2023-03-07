@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -54,7 +54,14 @@ namespace SanteDB.Core.Model.Acts
         {
             get
             {
-                return System.Type.GetType(this.HandlerClassName);
+                if (this.HandlerClassName == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return System.Type.GetType(this.HandlerClassName);
+                }
             }
             set
             {
@@ -89,16 +96,30 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the narrative description of the protocol
         /// </summary>
-        [XmlIgnore, JsonProperty, SerializationReference(nameof(NarrativeKey))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(NarrativeKey))]
         public Narrative Narrative { get; set; }
 
+        /// <summary>
+        /// Represent this protocol as a summary (for example, when displaying it as part of another object)
+        /// </summary>
+        /// <returns></returns>
+        public Protocol AsSummary() => new Protocol()
+            {
+                Name = this.Name,
+                Oid = this.Oid
+            };
+        
         /// <summary>
         /// Semantic equality
         /// </summary>
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Protocol;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.Name == other.Name;
         }

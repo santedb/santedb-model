@@ -16,8 +16,9 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using System;
 using System.Collections.Generic;
@@ -61,9 +62,15 @@ namespace SanteDB.Core.Model.Map
                 foreach (var t in typeof(MapUtil).Assembly.GetTypes())
                 {
                     var atts = t.GetCustomAttributes<ClassConceptKeyAttribute>();
-                    if (!atts.Any()) continue; // no map
+                    if (!atts.Any())
+                    {
+                        continue; // no map
+                    }
+
                     foreach (var clsCode in atts)
+                    {
                         s_classKeyMaps.Add(Guid.Parse(clsCode.ClassConcept), t);
+                    }
                 }
             }
 
@@ -80,7 +87,9 @@ namespace SanteDB.Core.Model.Map
         public static void RegisterMap(Type sourceType, Type destType, MethodInfo method)
         {
             lock (s_wireMaps)
+            {
                 s_wireMaps.Add(String.Format("{0}>{1}", sourceType, destType), method);
+            }
         }
 
         /// <summary>
@@ -88,7 +97,10 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static bool HasMap(Type sourceType, Type destType)
         {
-            if (sourceType == null || destType == null) return false;
+            if (sourceType == null || destType == null)
+            {
+                return false;
+            }
 
             return s_wireMaps.ContainsKey(String.Format("{0}>{1}", sourceType, destType));
         }
@@ -108,26 +120,52 @@ namespace SanteDB.Core.Model.Map
             {
                 var rtm = scanType.GetRuntimeMethods();
                 foreach (MethodInfo mi in rtm)
+                {
                     if (mi.GetParameters().Length == 2 &&
                                        (mi.ReturnType.IsSubclassOf(destType) || destType == mi.ReturnType) &&
                                        mi.GetParameters()[0].ParameterType.FullName == sourceType.FullName &&
                                        mi.GetParameters()[1].ParameterType.FullName == typeof(IFormatProvider).FullName)
+                    {
                         retVal = mi;
+                    }
                     else if (mi.GetParameters().Length == 1 &&
                                             (mi.ReturnType.IsSubclassOf(destType) || destType == mi.ReturnType) &&
                                             mi.GetParameters()[0].ParameterType.FullName == sourceType.FullName && retVal == null)
+                    {
                         retVal = mi;
+                    }
+                }
 
                 if (retVal != null)
+                {
                     lock (m_converterMaps)
+                    {
                         if (!m_converterMaps.ContainsKey(key))
+                        {
                             m_converterMaps.Add(key, retVal);
+                        }
+                    }
+                }
             }
 
             return retVal;
 
         }
 
+        /// <summary>
+        /// Convert the object <paramref name="value"/> to type <typeparamref name="T"/>
+        /// </summary>
+        public static T Convert<T>(object value)
+        {
+            if(TryConvert(value, typeof(T), out var retVal))
+            {
+                return (T)retVal;
+            }
+            else
+            {
+                throw new InvalidOperationException(ErrorMessages.ARGUMENT_INCOMPATIBLE_TYPE);
+            }
+        }
         /// <summary>
         /// Attempt casting <paramref name="value"/> to <paramref name="destType"/> placing the result 
         /// in <paramref name="result"/>
@@ -141,7 +179,7 @@ namespace SanteDB.Core.Model.Map
             if (value == null)
             {
                 result = null;
-                return true;
+                return m_destType.IsNullable();
             }
 
             String convertKey = $"{value.GetType().FullName}>{destType.FullName}";
@@ -157,22 +195,22 @@ namespace SanteDB.Core.Model.Map
             }
 
             // Is there a cast?
-            if("null".Equals(value?.ToString(), StringComparison.OrdinalIgnoreCase))
+            if ("null".Equals(value?.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 result = null;
-                return true;
+                return m_destType.IsNullable();
             }
             else if (destType.IsAssignableFrom(value.GetType())) //  (m_destType.IsAssignableFrom(value.GetType())) // Same type
             {
                 result = value;
                 return true;
             }
-            else if (m_destType == typeof(int) && value.GetType().IsEnum)
+            else if ((m_destType == typeof(int) || m_destType == typeof(long)) && value.GetType().IsEnum)
             {
                 result = (int)value;
                 return true;
             }
-            else if (m_destType.IsEnum && value.GetType() == typeof(int))
+            else if (m_destType.IsEnum && (value is int || value is long))
             {
                 result = Enum.ToObject(m_destType, value);
                 return true;
@@ -192,7 +230,9 @@ namespace SanteDB.Core.Model.Map
 
             }
             else if (destType.FullName.StartsWith("System.Nullable"))
+            {
                 destType = m_destType; // Transparency for nullable types
+            }
 
             // Is there a built in method that can convert this
             MethodInfo mi;
@@ -203,20 +243,39 @@ namespace SanteDB.Core.Model.Map
                 // Using an operator overload
                 mi = FindConverter(typeof(SanteDBConvert), value.GetType(), destType);
                 if (mi == null)
+                {
                     mi = FindConverter(m_destType, value.GetType(), destType);
+                }
+
                 if (mi == null)
+                {
                     mi = FindConverter(value.GetType(), value.GetType(), destType);
+                }
+
                 if (mi == null && m_destType != destType) // Using container type
+                {
                     mi = FindConverter(destType, value.GetType(), destType);
+                }
+
                 if (mi == null) // Using System.Xml.XmlConvert 
+                {
                     mi = FindConverter(typeof(System.Xml.XmlConvert), value.GetType(), destType);
+                }
+
                 if (mi == null) // Using System.Convert as a last resort
+                {
                     mi = FindConverter(typeof(System.Convert), value.GetType(), destType);
+                }
+
                 if (mi != null)
                 {
                     lock (s_wireMaps)
+                    {
                         if (!s_wireMaps.ContainsKey(converterKey))
+                        {
                             s_wireMaps.Add(converterKey, mi);
+                        }
+                    }
                 }
                 else
                 {
@@ -237,8 +296,13 @@ namespace SanteDB.Core.Model.Map
                         {
                             var retVal = TryConvert(value, valueCastType, out result);
                             if (!retVal)
+                            {
                                 lock (m_nonConvertable)
+                                {
                                     m_nonConvertable.Add(convertKey);
+                                }
+                            }
+
                             return retVal;
                         }
                         catch
@@ -251,7 +315,9 @@ namespace SanteDB.Core.Model.Map
                     else
                     {
                         lock (m_nonConvertable)
+                        {
                             m_nonConvertable.Add(convertKey);
+                        }
 
                         result = null;
                         return false;
@@ -264,13 +330,23 @@ namespace SanteDB.Core.Model.Map
             try
             {
                 if (mi.GetParameters().Length == 2)
+                {
                     result = mi.Invoke(null, new object[] { value, CultureInfo.InvariantCulture }); // Invoke the conversion method;
+                }
                 else
+                {
                     result = mi.Invoke(null, new object[] { value }); // Invoke the conversion method
+                }
+
                 var retVal = result != null;
                 if (!retVal) // non convertable
+                {
                     lock (m_nonConvertable)
+                    {
                         m_nonConvertable.Add(convertKey);
+                    }
+                }
+
                 return retVal;
             }
             catch { result = null; return false; }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -45,32 +45,9 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public Concept()
         {
-            this.ReferenceTerms = new List<ConceptReferenceTerm>();
-            this.ConceptNames = new List<ConceptName>();
-            this.Relationship = new List<ConceptRelationship>();
-            this.ConceptSets = new List<ConceptSet>();
+
         }
 
-        // Concept class id
-        private Guid? m_classId;
-
-        // Concept class
-        private ConceptClass m_class;
-
-        // Status id
-        private Guid? m_conceptStatusId;
-
-        // Status
-        private Concept m_conceptStatus;
-
-        // Concept sets
-        private List<ConceptSet> m_conceptSets;
-
-        /// <summary>
-        /// Gets or sets an indicator which dictates whether the concept is a system concept
-        /// </summary>
-        [XmlElement("isReadonly"), JsonProperty("isReadonly")]
-        public bool IsReadonly { get; set; }
 
         /// <summary>
         /// Gets or sets the unchanging mnemonic for the concept
@@ -85,43 +62,20 @@ namespace SanteDB.Core.Model.DataTypes
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
-        public Guid? StatusConceptKey
-        {
-            get
-            {
-                return this.m_conceptStatusId;
-            }
-            set
-            {
-                this.m_conceptStatusId = value;
-                this.m_conceptStatus = null;
-            }
-        }
+        public Guid? StatusConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the status of the concept
         /// </summary>
         [SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept StatusConcept
-        {
-            get
-            {
-                this.m_conceptStatus = base.DelayLoad(this.m_conceptStatusId, this.m_conceptStatus);
-                return this.m_conceptStatus;
-            }
-            set
-            {
-                this.m_conceptStatus = value;
-                this.m_conceptStatusId = value?.Key;
-            }
-        }
+        public Concept StatusConcept { get; set; }
 
         /// <summary>
         /// Gets a list of concept relationships
         /// </summary>
-        [AutoLoad, XmlElement("relationship"), JsonProperty("relationship")]
-        public List<ConceptRelationship> Relationship { get; set; }
+        [XmlElement("relationship"), JsonProperty("relationship")]
+        public List<ConceptRelationship> Relationships { get; set; }
 
         /// <summary>
         /// True if concept is empty
@@ -139,49 +93,25 @@ namespace SanteDB.Core.Model.DataTypes
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("conceptClass"), JsonProperty("conceptClass")]
         [Binding(typeof(ConceptClassKeys))]
-        public Guid? ClassKey
-        {
-            get
-            {
-                return this.m_classId;
-            }
-            set
-            {
-                this.m_classId = value;
-                this.m_class = null;
-            }
-        }
+        public Guid? ClassKey { get; set; }
 
         /// <summary>
         /// Gets or sets the classification of the concept
         /// </summary>
         [SerializationReference(nameof(ClassKey))]
-        [AutoLoad, XmlIgnore, JsonIgnore]
-        public ConceptClass Class
-        {
-            get
-            {
-                this.m_class = base.DelayLoad(this.m_classId, this.m_class);
-                return this.m_class;
-            }
-            set
-            {
-                this.m_class = value;
-                this.m_classId = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore]
+        public ConceptClass Class { get; set; }
 
         /// <summary>
         /// Gets a list of concept reference terms
         /// </summary>
-        [AutoLoad, XmlElement("referenceTerm"), JsonProperty("referenceTerm")]
+        [XmlElement("referenceTerm"), JsonProperty("referenceTerm")]
         public List<ConceptReferenceTerm> ReferenceTerms { get; set; }
 
         /// <summary>
         /// Gets the concept names
         /// </summary>
-        //
-        [AutoLoad, XmlElement("name"), JsonProperty("name")]
+        [XmlElement("name"), JsonProperty("name")]
         public List<ConceptName> ConceptNames { get; set; }
 
         /// <summary>
@@ -193,19 +123,16 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets concept sets to which this concept is a member
         /// </summary>
-        [DataIgnore, XmlIgnore, JsonIgnore, SerializationReference(nameof(ConceptSetsXml))]
+        [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(ConceptSetsXml))]
         public List<ConceptSet> ConceptSets
         {
             get
             {
-                if (this.m_conceptSets == null)
-                    this.m_conceptSets = this.ConceptSetsXml?.Select(o => EntitySource.Current.Get<ConceptSet>(o)).ToList();
-                return this.m_conceptSets;
+                return this.ConceptSetsXml?.Select(o => EntitySource.Current.Get<ConceptSet>(o)).ToList();
             }
             set
             {
                 this.ConceptSetsXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
-                this.m_conceptSets = value;
             }
         }
 
@@ -223,13 +150,16 @@ namespace SanteDB.Core.Model.DataTypes
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Concept;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.Mnemonic == this.Mnemonic &&
                 this.ClassKey == other.ClassKey &&
-                this.ConceptNames?.SemanticEquals(other.ConceptNames) == true &&
-                this.ConceptSets?.SemanticEquals(other.ConceptSets) == true &&
-                this.IsReadonly == other.IsReadonly &&
-                this.Relationship?.SemanticEquals(other.Relationship) == true;
+                this.ConceptNames?.SemanticEquals(other.ConceptNames) != false &&
+                this.ConceptSets?.SemanticEquals(other.ConceptSets) != false &&
+                this.Relationships?.SemanticEquals(other.Relationships) != false;
         }
 
         /// <summary>

@@ -16,11 +16,12 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -32,55 +33,41 @@ namespace SanteDB.Core.Model.DataTypes
     /// </summary>
     [Classifier(nameof(RelationshipType))]
     [XmlType("ConceptRelationship", Namespace = "http://santedb.org/model"), JsonObject("ConceptRelationship")]
-    public class ConceptRelationship : VersionedAssociation<Concept>
+    public class ConceptRelationship : VersionedAssociation<Concept>, ITargetedAssociation
     {
-        // Target concept id
-        private Guid? m_targetConceptId;
 
-        // Target concept
+        /// <summary>
+        /// Serialization default constructor
+        /// </summary>
+        public ConceptRelationship()
+        {
 
-        private Concept m_targetConcept;
+        }
 
-        // Relaltionship type id
-        private Guid? m_relationshipTypeId;
-
-        // Relationship type
-
-        private ConceptRelationshipType m_relationshipType;
+        /// <summary>
+        /// Creates a new concept relationship between the holder concept and <paramref name="targetConceptKey"/>
+        /// </summary>
+        /// <param name="relationshipType">The type of relationship the source has with the <paramref name="targetConceptKey"/></param>
+        /// <param name="targetConceptKey">The type of relationship which exists between the source and target</param>
+        public ConceptRelationship(Guid relationshipType, Guid targetConceptKey)
+        {
+            this.TargetConceptKey = targetConceptKey;
+            this.RelationshipTypeKey = relationshipType;
+        }
 
         /// <summary>
         /// Gets or sets the target concept identifier
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("targetConcept"), JsonProperty("targetConcept")]
-        public Guid? TargetConceptKey
-        {
-            get { return this.m_targetConceptId; }
-            set
-            {
-                this.m_targetConceptId = value;
-                this.m_targetConcept = null;
-            }
-        }
+        public Guid? TargetConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the target concept
         /// </summary>
         [SerializationReference(nameof(TargetConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept TargetConcept
-        {
-            get
-            {
-                this.m_targetConcept = base.DelayLoad(this.m_targetConceptId, this.m_targetConcept);
-                return this.m_targetConcept;
-            }
-            set
-            {
-                this.m_targetConcept = value;
-                this.m_targetConceptId = value?.Key;
-            }
-        }
+        public Concept TargetConcept { get; set; }
 
         /// <summary>
         /// Relationship type
@@ -88,33 +75,44 @@ namespace SanteDB.Core.Model.DataTypes
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(ConceptRelationshipTypeKeys))]
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
-        public Guid? RelationshipTypeKey
-        {
-            get { return this.m_relationshipTypeId; }
-            set
-            {
-                this.m_relationshipTypeId = value;
-                this.m_relationshipType = null;
-            }
-        }
+        public Guid? RelationshipTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the relationship type
         /// </summary>
         [SerializationReference(nameof(RelationshipTypeKey))]
         [XmlIgnore, JsonIgnore]
-        public ConceptRelationshipType RelationshipType
+        public ConceptRelationshipType RelationshipType { get; set; }
+
+        /// <summary>
+        /// Target entity entity
+        /// </summary>
+        Guid? ITargetedAssociation.TargetEntityKey
         {
-            get
-            {
-                this.m_relationshipType = base.DelayLoad(this.m_relationshipTypeId, this.m_relationshipType);
-                return this.m_relationshipType;
-            }
-            set
-            {
-                this.m_relationshipType = value;
-                this.m_relationshipTypeId = value?.Key;
-            }
+            get => this.TargetConceptKey;
+            set => this.TargetConceptKey = value;
+        }
+        /// <summary>
+        /// Classification of the relationship
+        /// </summary>
+        Guid? ITargetedAssociation.ClassificationKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Association type
+        /// </summary>
+        Guid? ITargetedAssociation.AssociationTypeKey
+        {
+            get => this.RelationshipTypeKey;
+            set => this.RelationshipTypeKey = value;
+        }
+
+        /// <summary>
+        /// Gets the target entity
+        /// </summary>
+        object ITargetedAssociation.TargetEntity
+        {
+            get => this.TargetConcept;
+            set => this.TargetConcept = (Concept)value;
         }
     }
 }

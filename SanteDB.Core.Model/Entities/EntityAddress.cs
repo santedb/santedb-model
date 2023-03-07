@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -32,35 +32,48 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Entities
 {
     /// <summary>
-    /// Entity address
+    /// A structured address for an entity
     /// </summary>
+    /// <remarks>
+    /// Addresses in SanteDB are structured as a collection of components. This structure
+    /// ensures that addresses a flexible when they are stored, searched and reproduced
+    /// </remarks>
     [Classifier(nameof(AddressUse))]
     [XmlType("EntityAddress", Namespace = "http://santedb.org/model"), JsonObject("EntityAddress")]
     public class EntityAddress : VersionedAssociation<Entity>
     {
-        // Address use concept
-        private Concept m_addressUseConcept;
-
-        // Address use key
-        private Guid? m_addressUseKey;
 
         /// <summary>
         /// Create the address from components
         /// </summary>
         public EntityAddress(Guid useKey, String streetAddressLine, String city, String province, String country, String zipCode)
         {
-            this.m_addressUseKey = useKey;
+            this.AddressUseKey = useKey;
             this.Component = new List<EntityAddressComponent>();
             if (!String.IsNullOrEmpty(streetAddressLine))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.StreetAddressLine, streetAddressLine));
+            }
+
             if (!String.IsNullOrEmpty(city))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.City, city));
+            }
+
             if (!String.IsNullOrEmpty(province))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.State, province));
+            }
+
             if (!String.IsNullOrEmpty(country))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.Country, country));
+            }
+
             if (!String.IsNullOrEmpty(zipCode))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.PostalCode, zipCode));
+            }
         }
 
         /// <summary>
@@ -69,9 +82,14 @@ namespace SanteDB.Core.Model.Entities
         public EntityAddress(Guid useKey, String streetAddressLine, String precinct, String city, String county, String province, String country, String zipCode) : this(useKey, streetAddressLine, city, province, country, zipCode)
         {
             if (!String.IsNullOrEmpty(precinct))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.Precinct, precinct));
+            }
+
             if (!String.IsNullOrEmpty(county))
+            {
                 this.Component.Add(new EntityAddressComponent(AddressComponentKeys.County, county));
+            }
         }
 
         /// <summary>
@@ -79,7 +97,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityAddress()
         {
-            this.Component = new List<EntityAddressComponent>();
+
         }
 
         /// <summary>
@@ -87,20 +105,8 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(AddressUseKey))]
         [XmlIgnore, JsonIgnore]
-        [AutoLoad]
-        public Concept AddressUse
-        {
-            get
-            {
-                this.m_addressUseConcept = base.DelayLoad(this.m_addressUseKey, this.m_addressUseConcept);
-                return this.m_addressUseConcept;
-            }
-            set
-            {
-                this.m_addressUseConcept = value;
-                this.m_addressUseKey = value?.Key;
-            }
-        }
+
+        public Concept AddressUse { get; set; }
 
         /// <summary>
         /// Gets or sets the address use key
@@ -108,24 +114,12 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("use"), JsonProperty("use")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(AddressUseKeys))]
-        public Guid? AddressUseKey
-        {
-            get { return this.m_addressUseKey; }
-            set
-            {
-                if (this.m_addressUseKey != value)
-                {
-                    this.m_addressUseKey = value;
-                    this.m_addressUseConcept = null;
-                }
-            }
-        }
+        public Guid? AddressUseKey { get; set; }
 
         /// <summary>
         /// Gets or sets the component types
         /// </summary>
         [XmlElement("component"), JsonProperty("component")]
-        [AutoLoad]
         public List<EntityAddressComponent> Component { get; set; }
 
         /// <summary>
@@ -133,7 +127,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public string GetComponent(Guid key)
         {
-            var comps = this.LoadCollection<EntityAddressComponent>("Component");
+            var comps = this.LoadProperty(o => o.Component);
             return comps.FirstOrDefault(o => o.ComponentTypeKey == key)?.Value;
         }
 
@@ -144,7 +138,7 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public override bool IsEmpty()
         {
-            return this.Component.Count == 0 || this.Component?.All(c => c.IsEmpty()) == true;
+            return this.Component.IsNullOrEmpty() || this.Component?.All(c => c.IsEmpty()) == true;
         }
 
         /// <summary>
@@ -153,10 +147,14 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as EntityAddress;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.AddressUseKey == other.AddressUseKey &&
-                this.Component?.SemanticEquals(other.Component) == true;
+                this.Component?.SemanticEquals(other.Component) != false;
         }
 
         /// <summary>
@@ -175,24 +173,50 @@ namespace SanteDB.Core.Model.Entities
         {
             StringBuilder sb = new StringBuilder();
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.StreetAddressLine)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.StreetAddressLine));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.AddressLine)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.AddressLine));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.Precinct)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.Precinct));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.City)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.City));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.County)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.County));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.State)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.State));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.Country)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.Country));
+            }
+
             if (!string.IsNullOrEmpty(this.GetComponent(AddressComponentKeys.PostalCode)))
+            {
                 sb.AppendFormat("{0}, ", this.GetComponent(AddressComponentKeys.PostalCode));
+            }
 
             if (sb.Length > 2)
+            {
                 sb.Remove(sb.Length - 2, 2);
+            }
+
             return sb.ToString();
         }
 

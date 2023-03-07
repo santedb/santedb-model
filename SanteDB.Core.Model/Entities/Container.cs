@@ -16,9 +16,10 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using System;
 using System.Xml.Serialization;
@@ -32,7 +33,8 @@ namespace SanteDB.Core.Model.Entities
     [XmlType(nameof(Container), Namespace = "http://santedb.org/model")]
     [XmlRoot(nameof(Container), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(Container))]
-    public class Container : ManufacturedMaterial
+    [ClassConceptKey(EntityClassKeyStrings.Container)]
+    public class Container : Material
     {
 
         /// <summary>
@@ -40,9 +42,18 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public Container()
         {
-            this.ClassConceptKey = EntityClassKeys.Container;
-            this.DeterminerConceptKey = DeterminerKeys.Specific;
+            this.m_classConceptKey = EntityClassKeys.Container;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Container;
+
+
+        /// <summary>
+        /// Gets or sets the lot number of the manufactured material
+        /// </summary>
+        [XmlElement("lotNumber"), JsonProperty("lotNumber")]
+        public String LotNumber { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class.

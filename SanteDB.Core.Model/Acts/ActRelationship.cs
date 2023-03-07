@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -43,22 +43,6 @@ namespace SanteDB.Core.Model.Acts
     [XmlType("ActRelationship", Namespace = "http://santedb.org/model"), JsonObject("ActRelationship")]
     public class ActRelationship : VersionedAssociation<Act>, ITargetedVersionedExtension
     {
-        // The entity key
-        private Guid? m_targetActKey;
-
-        // The target entity
-
-        private Act m_targetAct;
-
-        // The association type key
-        private Guid? m_relationshipTypeKey;
-
-        // The association type
-        private Concept m_relationshipType;
-
-        private Guid? m_classificationKey;
-        private Concept m_classification;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ActRelationship"/> class.
         /// </summary>
@@ -75,6 +59,7 @@ namespace SanteDB.Core.Model.Acts
         {
             this.RelationshipTypeKey = relationshipType;
             this.TargetAct = target;
+            this.TargetActKey = target.Key;
         }
 
         /// <summary>
@@ -97,22 +82,10 @@ namespace SanteDB.Core.Model.Acts
         /// formal relationship, whereas Patient->NextOfKin[EmergencyContact]->Person may indicate that NOK record is only for
         /// use as a contact and no other relationship can be inferred from the entry.</para>
         /// </remarks>
-        [AutoLoad]
+
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
-        public Concept Classification
-        {
-            get
-            {
-                this.m_classification = base.DelayLoad(this.m_classificationKey, this.m_classification);
-                return this.m_classification;
-            }
-            set
-            {
-                this.m_classification = value;
-                this.m_classificationKey = value?.Key;
-            }
-        }
+        public Concept Classification { get; set; }
 
         /// <summary>
         /// Association type key
@@ -120,55 +93,21 @@ namespace SanteDB.Core.Model.Acts
         [XmlElement("classification"), JsonProperty("classification")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(RelationshipClassKeys))]
-        public Guid? ClassificationKey
-        {
-            get { return this.m_classificationKey; }
-            set
-            {
-                if (this.m_classificationKey != value)
-                {
-                    this.m_classificationKey = value;
-                    this.m_classification = null;
-                }
-            }
-        }
+        public Guid? ClassificationKey { get; set; }
 
         /// <summary>
         /// The target of the association
         /// </summary>
         [XmlElement("target"), JsonProperty("target")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? TargetActKey
-        {
-            get { return this.m_targetActKey; }
-            set
-            {
-                if (this.m_targetActKey != value)
-                {
-                    this.m_targetActKey = value;
-                    this.m_targetAct = null;
-                }
-            }
-        }
+        public Guid? TargetActKey { get; set; }
 
         /// <summary>
         /// Target act reference
         /// </summary>
         [SerializationReference(nameof(TargetActKey))]
         [XmlIgnore, JsonIgnore]
-        public Act TargetAct
-        {
-            get
-            {
-                this.m_targetAct = base.DelayLoad(this.m_targetActKey, this.m_targetAct);
-                return this.m_targetAct;
-            }
-            set
-            {
-                this.m_targetAct = value;
-                this.m_targetActKey = value?.Key;
-            }
-        }
+        public Act TargetAct { get; set; }
 
         /// <summary>
         /// Association type key
@@ -176,49 +115,20 @@ namespace SanteDB.Core.Model.Acts
         [XmlElement("relationshipType"), JsonProperty("relationshipType")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(ActRelationshipTypeKeys))]
-        public Guid? RelationshipTypeKey
-        {
-            get { return this.m_relationshipTypeKey; }
-            set
-            {
-                if (this.m_relationshipTypeKey != value)
-                {
-                    this.m_relationshipTypeKey = value;
-                    this.m_relationshipType = null;
-                }
-            }
-        }
+        public Guid? RelationshipTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the association type
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RelationshipTypeKey))]
-        public Concept RelationshipType
-        {
-            get
-            {
-                this.m_relationshipType = base.DelayLoad(this.m_relationshipTypeKey, this.m_relationshipType);
-                return this.m_relationshipType;
-            }
-            set
-            {
-                this.m_relationshipType = value;
-                if (value == null)
-                    this.m_relationshipTypeKey = Guid.Empty;
-                else
-                    this.m_relationshipTypeKey = value.Key;
-            }
-        }
+        public Concept RelationshipType { get; set; }
 
         /// <summary>
         /// Empty?
         /// </summary>
-        public override bool IsEmpty()
-        {
-            return this.RelationshipType == null && this.RelationshipTypeKey == null ||
+        public override bool IsEmpty() => this.RelationshipType == null && this.RelationshipTypeKey == null ||
                 this.TargetAct == null && this.TargetActKey == null;
-        }
 
         /// <summary>
         /// Determine semantic equality
@@ -226,7 +136,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as ActRelationship;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.TargetActKey == other.TargetActKey &&
                 this.RelationshipTypeKey == other.RelationshipTypeKey &&
                 this.SourceEntityKey == other.SourceEntityKey;

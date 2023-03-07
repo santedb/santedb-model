@@ -16,46 +16,44 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
-using System.Collections.Generic;
 
-namespace SanteDB.Core.Model.Interfaces
+namespace SanteDB.Core.Model.Constants
 {
     /// <summary>
-    /// Identified entity
+    /// Types of patient encounters
     /// </summary>
-    public interface IIdentifiedEntity
+    public static class PatientEncounterTypeKeys
     {
         /// <summary>
-        /// Gets the load state of the entity
+        /// Ambulatory care setting
         /// </summary>
-        LoadState LoadState { get; set; }
-
+        public static Guid Ambulatory = Guid.Parse("42765002-17BE-11EB-ADC1-0242AC120002");
         /// <summary>
-        /// Gets the identifier for the entity
+        /// Emergency encounter (in an ER)
         /// </summary>
-        Guid? Key { get; set; }
-
+        public static Guid Emergency = Guid.Parse("427650FC-17BE-11EB-ADC1-0242AC120002");
         /// <summary>
-        /// Remove annotation
+        /// Field hospital encounter
         /// </summary>
-        void RemoveAnnotation(Object annotation);
-
+        public static Guid Field = Guid.Parse("427652C8-17BE-11EB-ADC1-0242AC120002");
         /// <summary>
-        /// Get annotations of specified <typeparamref name="T"/>
+        /// Home care encounter
         /// </summary>
-        IEnumerable<T> GetAnnotations<T>();
-
+        public static Guid Home = Guid.Parse("427653EA-17BE-11EB-ADC1-0242AC120002");
         /// <summary>
-        /// Add an annotated object
+        /// Inpatient encounter
         /// </summary>
-        void AddAnnotation(Object annotation);
-
+        public static Guid Inpatient = Guid.Parse("427654B2-17BE-11EB-ADC1-0242AC120002");
         /// <summary>
-        /// Copy annotations
+        /// Pre-admission encounter
         /// </summary>
-        IIdentifiedEntity CopyAnnotations(IIdentifiedEntity other);
+        public static Guid PreAdmission = Guid.Parse("4276573C-17BE-11EB-ADC1-0242AC120002");
+        /// <summary>
+        /// Virtual care encounter
+        /// </summary>
+        public static Guid Virtual = Guid.Parse("42765804-17BE-11EB-ADC1-0242AC120002");
     }
 }

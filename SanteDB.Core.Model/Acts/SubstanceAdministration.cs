@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -47,102 +47,45 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.SubstanceAdministration)]
     public class SubstanceAdministration : Act
     {
-        // Route key
-        private Guid? m_routeKey;
-
-        // Dose unit key
-        private Guid? m_doseUnitKey;
-
-        // Route
-        private Concept m_route;
-
-        // Dose unit
-        private Concept m_doseUnit;
-
-        private Concept m_site;
-        private Guid? m_siteKey;
 
         /// <summary>
         /// Substance administration ctor
         /// </summary>
         public SubstanceAdministration()
         {
-            base.ClassConceptKey = ActClassKeys.SubstanceAdministration;
+            base.m_classConceptKey = ActClassKeys.SubstanceAdministration;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.SubstanceAdministration;
 
         /// <summary>
         /// Gets or sets the key for route
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("route"), JsonProperty("route")]
-        public Guid? RouteKey
-        {
-            get { return this.m_routeKey; }
-            set
-            {
-                if (this.m_routeKey != value)
-                {
-                    this.m_routeKey = value;
-                    this.m_route = null;
-                }
-            }
-        }
+        public Guid? RouteKey { get; set; }
 
         /// <summary>
         /// Gets or sets the key for dosing unit
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("doseUnit"), JsonProperty("doseUnit")]
-        public Guid? DoseUnitKey
-        {
-            get { return this.m_doseUnitKey; }
-            set
-            {
-                if (this.m_doseUnitKey != value)
-                {
-                    this.m_doseUnitKey = value;
-                    this.m_doseUnit = null;
-                }
-            }
-        }
+        public Guid? DoseUnitKey { get; set; }
 
         /// <summary>
         /// Gets or sets a concept which indicates the route of administration (eg: Oral, Injection, etc.)
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(RouteKey))]
-        public Concept Route
-        {
-            get
-            {
-                this.m_route = base.DelayLoad(this.m_routeKey, this.m_route);
-                return this.m_route;
-            }
-            set
-            {
-                this.m_route = value;
-                this.m_routeKey = value?.Key;
-            }
-        }
+        public Concept Route { get; set; }
 
         /// <summary>
         /// Gets or sets a concept which indicates the unit of measure for the dose (eg: 5 mL, 10 mL, 1 drop, etc.)
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(DoseUnitKey))]
-        public Concept DoseUnit
-        {
-            get
-            {
-                this.m_doseUnit = base.DelayLoad(this.m_doseUnitKey, this.m_doseUnit);
-                return this.m_doseUnit;
-            }
-            set
-            {
-                this.m_doseUnit = value;
-                this.m_doseUnitKey = value?.Key;
-            }
-        }
+        public Concept DoseUnit { get; set; }
 
         /// <summary>
         /// Gets or sets the amount of substance administered
@@ -160,37 +103,14 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the site
         /// </summary>
         [XmlElement("site"), JsonProperty("site")]
-        public Guid? SiteKey
-        {
-            get { return this.m_siteKey; }
-            set
-            {
-                if (this.m_siteKey != value)
-                {
-                    this.m_siteKey = value;
-                    this.m_site = null;
-                }
-            }
-        }
+        public Guid? SiteKey { get; set; }
 
         /// <summary>
         /// Gets or sets a concept which indicates the site of administration
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(SiteKey))]
-        public Concept Site
-        {
-            get
-            {
-                this.m_site = base.DelayLoad(this.m_siteKey, this.m_site);
-                return this.m_site;
-            }
-            set
-            {
-                this.m_site = value;
-                this.m_siteKey = value?.Key;
-            }
-        }
+        public Concept Site { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -198,7 +118,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as SubstanceAdministration;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.SiteKey == this.SiteKey &&
                 other.RouteKey == this.RouteKey &&
                 other.DoseUnitKey == this.DoseUnitKey &&
@@ -210,9 +134,6 @@ namespace SanteDB.Core.Model.Acts
         /// Should serialize site key
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializeSiteKey()
-        {
-            return this.SiteKey.HasValue;
-        }
+        public bool ShouldSerializeSiteKey() => this.SiteKey.HasValue;
     }
 }

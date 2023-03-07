@@ -16,10 +16,11 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
 using System.ComponentModel;
@@ -31,16 +32,15 @@ namespace SanteDB.Core.Model
     /// <summary>
     /// Updateable entity data which is not versioned
     /// </summary>
-    /// <remarks>Non versioned data in SanteDB means that data can be updated (modified) in the underlying data store and changes are not tracked.</remarks>
+    /// <remarks>
+    /// <para>In SanteDB, objects which are non-versioned don't track changes over time, and therefore provide an updated time
+    /// to allow the tracking of the last update to the object</para>
+    /// <para>Because these objects are non-versioned, updates are destructive in that data is replaced in the database
+    /// at a field level.</para></remarks>
     [XmlType(nameof(NonVersionedEntityData), Namespace = "http://santedb.org/model")]
     [JsonObject(Id = nameof(NonVersionedEntityData))]
-    public class NonVersionedEntityData : BaseEntityData
+    public class NonVersionedEntityData : BaseEntityData, INonVersionedData
     {
-        // The updated by id
-        private Guid? m_updatedById;
-
-        // The updated by user
-        private SecurityProvenance m_updatedBy;
 
         /// <summary>
         /// Updated time
@@ -51,7 +51,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets or sets the time that this object was last modified in ISO format
         /// </summary>
-        [XmlElement("updatedTime"), JsonProperty("updatedTime"), DataIgnore()]
+        [XmlElement("updatedTime"), JsonProperty("updatedTime"), SerializationMetadata()]
         public String UpdatedTimeXml
         {
             get { return this.UpdatedTime?.ToString("o", CultureInfo.InvariantCulture); }
@@ -62,44 +62,31 @@ namespace SanteDB.Core.Model
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.UpdatedTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
+                {
                     this.UpdatedTime = null;
+                }
             }
         }
 
         /// <summary>
         /// Gets the time this item was modified
         /// </summary>
-        public override DateTimeOffset ModifiedOn
-        {
-            get
-            {
-                return this.UpdatedTime ?? this.CreationTime;
-            }
-        }
+        public override DateTimeOffset ModifiedOn => this.UpdatedTime ?? this.CreationTime;
 
         /// <summary>
         /// Gets or sets the user that updated this base data
         /// </summary>
-
-        [XmlIgnore, JsonIgnore, DataIgnore(), SerializationReference(nameof(UpdatedByKey))]
-        public SecurityProvenance UpdatedBy
-        {
-            get
-            {
-                this.m_updatedBy = base.DelayLoad(this.m_updatedById, this.m_updatedBy);
-                return m_updatedBy;
-            }
-            set
-            {
-                this.m_updatedBy = value;
-                this.m_updatedById = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore, SerializationMetadata(), SerializationReference(nameof(UpdatedByKey))]
+        public SecurityProvenance UpdatedBy { get; set; }
 
         /// <summary>
         /// Gets or sets the provenance identifier associated with the last update of this object
@@ -107,24 +94,13 @@ namespace SanteDB.Core.Model
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("updatedBy"), JsonProperty("updatedBy")]
-        public Guid? UpdatedByKey
-        {
-            get { return this.m_updatedById; }
-            set
-            {
-                if (this.m_updatedById != value)
-                    this.m_updatedBy = null;
-                this.m_updatedById = value;
-            }
-        }
+        public Guid? UpdatedByKey { get; set; }
 
         /// <summary>
         /// True if key should be serialized
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializeUpdatedByKey()
-        {
-            return this.UpdatedByKey.HasValue;
-        }
+        public bool ShouldSerializeUpdatedByKey() => this.UpdatedByKey.HasValue;
+
     }
 }

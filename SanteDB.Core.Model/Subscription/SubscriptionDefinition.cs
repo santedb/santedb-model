@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Serialization;
@@ -37,9 +37,6 @@ namespace SanteDB.Core.Model.Subscription
     {
         // XmlSerializer
         private static XmlSerializer m_xsz = XmlModelSerializerFactory.Current.CreateSerializer(typeof(SubscriptionDefinition));
-
-        // True if server definitions should be included
-        private bool m_includeServerDefs = true;
 
         /// <summary>
         /// Gets or sets the uuid
@@ -63,20 +60,15 @@ namespace SanteDB.Core.Model.Subscription
         }
 
         /// <summary>
-        /// Get locked copy of the object for sending to clients
-        /// </summary>
-        public override IdentifiedData GetLocked()
-        {
-
-            var retVal = base.GetLocked();
-            (retVal as SubscriptionDefinition).m_includeServerDefs = false;
-            return retVal;
-        }
-
-        /// <summary>
         /// Gets the time that this was modified
         /// </summary>
         public override DateTimeOffset ModifiedOn => DateTimeOffset.Now;
+
+        /// <summary>
+        /// Gets the name of the subscription
+        /// </summary>
+        [XmlAttribute("name"), JsonProperty("name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the resource type
@@ -97,18 +89,13 @@ namespace SanteDB.Core.Model.Subscription
         public List<SubscriptionServerDefinition> ServerDefinitions { get; set; }
 
         /// <summary>
-        /// Should serialize
-        /// </summary>
-        public bool ShouldSerializeServerDefinitions() => this.m_includeServerDefs;
-
-        /// <summary>
         /// Gets or sets the client side definitions
         /// </summary>
         [XmlArray("client"), XmlArrayItem("definition"), JsonProperty("definitions")]
         public List<SubscriptionClientDefinition> ClientDefinitions { get; set; }
 
         /// <summary>
-        /// Load the specified subscription definition 
+        /// Load the specified subscription definition  
         /// </summary>
         public static SubscriptionDefinition Load(MemoryStream ms)
         {

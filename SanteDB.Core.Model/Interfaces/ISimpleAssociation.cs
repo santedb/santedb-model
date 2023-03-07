@@ -16,16 +16,17 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
+using System.Linq.Expressions;
 
 namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
     /// Represents bound relational data
     /// </summary>
-    public interface ISimpleAssociation : IIdentifiedEntity
+    public interface ISimpleAssociation : IAnnotatedResource
     {
         /// <summary>
         /// Get the source type of the association
@@ -41,5 +42,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets or sets the source entity
         /// </summary>
         object SourceEntity { get; set; }
+
     }
 }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using SanteDB.Core.Interfaces;
 using System.Text;
@@ -45,7 +45,10 @@ namespace SanteDB.Core.Extensions
         public object DeSerialize(byte[] extensionData)
         {
             if (extensionData == null)
+            {
                 return null;
+            }
+
             return Encoding.UTF8.GetString(extensionData, 0, extensionData.Length);
         }
 
@@ -71,7 +74,10 @@ namespace SanteDB.Core.Extensions
         public byte[] Serialize(object data)
         {
             if (data == null)
+            {
                 return null;
+            }
+
             return Encoding.UTF8.GetBytes(data.ToString());
         }
     }

@@ -16,12 +16,11 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
-using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,15 +37,24 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ReferenceTerm")]
     public class ReferenceTerm : NonVersionedEntityData
     {
-        // Backing field for code system identifier
-        private Guid? m_codeSystemId;
 
-        // Code system
+        /// <summary>
+        /// Create reference term instance 
+        /// </summary>
+        public ReferenceTerm()
+        {
+        }
 
-        private CodeSystem m_codeSystem;
-        // Display names
-
-        private List<ReferenceTermName> m_displayNames;
+        /// <summary>
+        /// Creates a new reference term with the specified <paramref name="mnemonic"/> in the idicated <paramref name="codeSystemKey"/>
+        /// </summary>
+        /// <param name="mnemonic">The mnemonic of the concept reference term</param>
+        /// <param name="codeSystemKey">The code system in which the reference term belongs</param>
+        public ReferenceTerm(String mnemonic, Guid codeSystemKey)
+        {
+            this.CodeSystemKey = codeSystemKey;
+            this.Mnemonic = mnemonic;
+        }
 
         /// <summary>
         /// Gets or sets the mnemonic for the reference term
@@ -59,19 +67,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [SerializationReference(nameof(CodeSystemKey))]
         [XmlIgnore, JsonIgnore]
-        public CodeSystem CodeSystem
-        {
-            get
-            {
-                this.m_codeSystem = base.DelayLoad(this.m_codeSystemId, this.m_codeSystem);
-                return this.m_codeSystem;
-            }
-            set
-            {
-                this.m_codeSystem = value;
-                this.m_codeSystemId = value?.Key;
-            }
-        }
+        public CodeSystem CodeSystem { get; set; }
 
         /// <summary>
         /// Gets or sets the code system identifier
@@ -79,33 +75,13 @@ namespace SanteDB.Core.Model.DataTypes
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("codeSystem"), JsonProperty("codeSystem")]
         [Binding(typeof(CodeSystemKeys))]
-        public Guid? CodeSystemKey
-        {
-            get { return this.m_codeSystemId; }
-            set
-            {
-                this.m_codeSystemId = value;
-                this.m_codeSystem = null;
-            }
-        }
+        public Guid? CodeSystemKey { get; set; }
 
         /// <summary>
         /// Gets display names associated with the reference term
         /// </summary>
-        [AutoLoad, XmlElement("name"), JsonProperty("name")]
-        public List<ReferenceTermName> DisplayNames
-        {
-            get
-            {
-                if (this.m_displayNames == null && this.IsDelayLoadEnabled)
-                    this.m_displayNames = EntitySource.Current.Provider.Query<ReferenceTermName>(o => o.SourceEntityKey == this.Key && o.ObsoletionTime == null).ToList();
-                return this.m_displayNames;
-            }
-            set
-            {
-                this.m_displayNames = value;
-            }
-        }
+        [XmlElement("name"), JsonProperty("name")]
+        public List<ReferenceTermName> DisplayNames { get; set; }
 
         /// <summary>
         /// Get display name for the reference term

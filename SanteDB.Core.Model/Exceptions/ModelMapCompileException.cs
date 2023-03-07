@@ -16,37 +16,36 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
 
-namespace SanteDB.Core.Model.Attributes
+namespace SanteDB.Core.Exceptions
 {
     /// <summary>
-    /// Auto load attribute
+    /// An exception of model map compilation errors
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class AutoLoadAttribute : Attribute
+    public class ModelMapCompileException : Exception
     {
+
         /// <summary>
-        /// Auto load
+        /// Gets the errors from the compiler
         /// </summary>
-        public AutoLoadAttribute()
+        public IEnumerable<String> Errors { get; private set; }
+
+        /// <summary>
+        /// Creates a new model map compilation exception
+        /// </summary>
+        internal ModelMapCompileException(CompilerErrorCollection errors)
         {
-
+            var errorList = new List<String>(errors.Count);
+            foreach (CompilerError itm in errors)
+            {
+                errorList.Add($"{(itm.IsWarning ? "W" : "E")}: {itm.ErrorText} @ {itm.FileName}:{itm.Line}:{itm.Column}");
+            }
+            this.Errors = errorList;
         }
-
-        /// <summary>
-        /// Load on attribute
-        /// </summary>
-        public AutoLoadAttribute(string classCode)
-        {
-            this.ClassCode = classCode;
-        }
-
-        /// <summary>
-        /// Gets or sets the value when the class code is true to auto-load
-        /// </summary>
-        public string ClassCode { get; }
     }
 }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
@@ -26,7 +26,7 @@ namespace SanteDB.Core.Model.Attributes
     /// Classifier attribute used to mark a class' classifier
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class ClassifierAttribute : Attribute
+    public class ClassifierAttribute : Attribute, IPropertyReference
     {
 
         /// <summary>
@@ -59,6 +59,10 @@ namespace SanteDB.Core.Model.Attributes
         /// </summary>
         public string ClassifierKeyProperty { get; set; }
 
+        /// <summary>
+        /// Gets the classifier property
+        /// </summary>
+        string IPropertyReference.PropertyName => this.ClassifierProperty;
 
     }
 }

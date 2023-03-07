@@ -16,36 +16,40 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
+using SanteDB.Core.Model.Attributes;
 using System;
 
 namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Versioned entity
+    /// Represents base entity data
     /// </summary>
-    public interface IVersionedEntity : IIdentifiedEntity
+    public interface IBaseData : IAnnotatedResource
     {
+        /// <summary>
+        /// Gets or sets the creator of the data
+        /// </summary>
+        [QueryParameter("createdBy")]
+        Guid? CreatedByKey { get; }
 
         /// <summary>
-        /// Gets the version sequence
+        /// Gets or sets teh obsoletor of the data
         /// </summary>
-        Int32? VersionSequence { get; set; }
+        [QueryParameter("obsoletedBy")]
+        Guid? ObsoletedByKey { get;  }
 
         /// <summary>
-        /// Gets the version key
+        /// Gets or sets the time when the data was created
         /// </summary>
-        Guid? VersionKey { get; set; }
+        [QueryParameter("creationTime")]
+        DateTimeOffset CreationTime { get; }
 
         /// <summary>
-        /// Gets the previous version's key
+        /// Gets or sets the time with the data was obsoleted.
         /// </summary>
-        Guid? PreviousVersionKey { get; set; }
-
-        /// <summary>
-        /// Gets the previous version
-        /// </summary>
-        IVersionedEntity PreviousVersion { get; }
+        [QueryParameter("obsoletionTime")]
+        DateTimeOffset? ObsoletionTime { get;  }
     }
 }

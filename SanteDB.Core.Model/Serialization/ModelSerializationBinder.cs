@@ -16,9 +16,8 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -94,7 +93,7 @@ namespace SanteDB.Core.Model.Serialization
             {
                 lock (s_lock)
                 {
-                    type = typeof(ModelSerializationBinder).Assembly.ExportedTypes.Union(asm.ExportedTypes).FirstOrDefault(
+                    type = typeof(ModelSerializationBinder).Assembly.GetExportedTypesSafe().Union(asm.GetExportedTypesSafe()).FirstOrDefault(
                         t => t.GetSerializationName() == typeName
                     );
                     if (type == null) // deep look

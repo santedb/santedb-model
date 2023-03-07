@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
@@ -60,6 +60,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(DeviceEntity))]
     [XmlInclude(typeof(Entity))]
     [XmlInclude(typeof(Patient))]
+    [XmlInclude(typeof(AssigningAuthority))]
     [XmlInclude(typeof(ControlAct))]
     [XmlInclude(typeof(Account))]
     [XmlInclude(typeof(InvoiceElement))]
@@ -100,7 +101,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Represent the bundle as
         /// </summary>
-        public Bundle(IEnumerable<IdentifiedData> objects, int offset, int total) : this(objects)
+        public Bundle(IEnumerable<IdentifiedData> objects, int offset, int? total) : this(objects)
         {
             this.Offset = offset;
             this.TotalResults = total;
@@ -140,7 +141,7 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public IdentifiedData GetFocalObject()
         {
-            if (this.FocalObjects.Count == 1)
+            if (!this.FocalObjects.IsNullOrEmpty())
             {
                 return this.Item.FirstOrDefault(o => o.Key == this.FocalObjects.FirstOrDefault());
             }
@@ -175,22 +176,28 @@ namespace SanteDB.Core.Model.Collection
         /// Gets or sets the total results
         /// </summary>
         [XmlElement("totalResults"), JsonProperty("totalResults")]
-        public int TotalResults { get; set; }
+        public int? TotalResults { get; set; }
 
         /// <summary>
         /// Generic resource entity
         /// </summary>
-        IEnumerable<IIdentifiedEntity> IResourceCollection.Item => this.Item;
+        IEnumerable<IIdentifiedResource> IResourceCollection.Item => this.Item;
 
         /// <summary>
         /// Add item to the bundle
         /// </summary>
         public void Add(IdentifiedData data)
         {
-            if (data == null) return;
+            if (data == null)
+            {
+                return;
+            }
+
             this.Item.Add(data);
             if (!String.IsNullOrEmpty(data.Tag))
+            {
                 this.m_bundleTags.Add(data.Tag);
+            }
         }
 
         /// <summary>
@@ -212,10 +219,16 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public void Insert(int index, IdentifiedData data)
         {
-            if (data == null) return;
+            if (data == null)
+            {
+                return;
+            }
+
             this.Item.Insert(index, data);
             if (!String.IsNullOrEmpty(data.Tag))
+            {
                 this.m_bundleTags.Add(data.Tag);
+            }
         }
 
         /// <summary>
@@ -228,10 +241,15 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public static Bundle CreateBundle(IdentifiedData resourceRoot, bool followList = true)
         {
-            if (resourceRoot is Bundle) return resourceRoot as Bundle;
+            if (resourceRoot is Bundle)
+            {
+                return resourceRoot as Bundle;
+            }
+
             Bundle retVal = new Bundle();
             retVal.Key = Guid.NewGuid();
-            retVal.Count = retVal.TotalResults = 1;
+            retVal.Count = 1;
+            retVal.TotalResults = 1;
             if (resourceRoot == null)
             {
                 return retVal;
@@ -253,13 +271,18 @@ namespace SanteDB.Core.Model.Collection
             retVal.Offset = offset;
             retVal.TotalResults = totalResults;
             if (resourceRoot == null)
+            {
                 return retVal;
+            }
 
             // Resource root
             foreach (var itm in resourceRoot)
             {
                 if (itm == null)
+                {
                     continue;
+                }
+
                 if (!retVal.HasTag(itm.Tag) && itm.Key.HasValue)
                 {
                     retVal.Add(itm);
@@ -302,11 +325,14 @@ namespace SanteDB.Core.Model.Collection
         private void Reconstitute(IdentifiedData data, HashSet<IdentifiedData> context)
         {
             if (context.Contains(data))
+            {
                 return;
+            }
+
             context.Add(data);
 
             // Iterate over properties
-            foreach (var pi in data.GetType().GetRuntimeProperties().Where(o => o.GetCustomAttribute<DataIgnoreAttribute>() == null))
+            foreach (var pi in data.GetType().GetRuntimeProperties().Where(o => o.GetCustomAttribute<SerializationMetadataAttribute>() == null))
             {
                 // Is this property not null? If so, we want to iterate
 
@@ -314,12 +340,17 @@ namespace SanteDB.Core.Model.Collection
                 var keyPi = pi.GetSerializationRedirectProperty();
                 if (keyPi == null || (keyPi.PropertyType != typeof(Guid) &&
                     keyPi.PropertyType != typeof(Guid?)))
+                {
                     continue; // Invalid key link name
+                }
 
                 // Get the key and find a match
                 var key = (Guid?)keyPi.GetValue(data);
                 if (key == null)
+                {
                     continue;
+                }
+
                 var bundleItem = this.Item.Find(o => o.Key == key);
                 if (bundleItem != null)
                 {
@@ -353,7 +384,10 @@ namespace SanteDB.Core.Model.Collection
                     try
                     {
                         object rawValue = pi.GetValue(model);
-                        if (rawValue == null) continue;
+                        if (rawValue == null)
+                        {
+                            continue;
+                        }
 
                         if (rawValue is IList && followList)
                         {
@@ -363,7 +397,9 @@ namespace SanteDB.Core.Model.Collection
                                 if (iValue != null)
                                 {
                                     if (currentBundle.Item.Exists(o => o?.Tag == iValue?.Tag))
+                                    {
                                         continue;
+                                    }
 
                                     if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null)
                                     {

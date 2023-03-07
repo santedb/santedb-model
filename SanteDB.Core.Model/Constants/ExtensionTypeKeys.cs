@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
@@ -33,13 +33,29 @@ namespace SanteDB.Core.Model.Constants
         public static readonly Guid PatientRaceExtension = Guid.Parse("07B1A3CD-4A22-49DD-B2EC-9E4DEC234B10");
 
         /// <summary>
+        /// Patient race extension 
+        /// </summary>
+        public const string PatientRaceExtensionName = "http://santedb.org/extensions/ext/raceCode";
+
+        /// <summary>
         /// An extension which can hold a JPG photo of an entity
         /// </summary>
         public static readonly Guid JpegPhotoExtension = Guid.Parse("77B53CBA-C32F-442B-B7A7-ED08184A0FA5");
 
         /// <summary>
+        /// JPG extension name
+        /// </summary>
+        public const string JpegPhotoExtensionName = "http://santedb.org/extensions/core/jpegPhoto";
+
+        /// <summary>
         /// Data quality issue extension
         /// </summary>
         public static readonly Guid DataQualityExtension = Guid.Parse("6DE54C16-8D1C-48E4-B750-7A2F4552E86D");
+
+        /// <summary>
+        /// Data quality extension name
+        /// </summary>
+        public const string DataQualityExtensionName = "http://santedb.org/extensions/core/detectedIssue";
+
     }
 }

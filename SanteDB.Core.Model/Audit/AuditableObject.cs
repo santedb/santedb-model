@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 
@@ -45,11 +45,15 @@ using System.ComponentModel;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
     /// Identifies an object that adds context to the audit
     /// </summary>
+	/// <remarks>
+	/// <para>In the SanteDB audit structure, an auditable object represets an object that was actioned on (read, disclosed, updated, etc.) 
+	/// or represents an audit that provides context to the audit event (query performed, name of transaction, etc.)</para>
+	/// </remarks>
     [XmlType(nameof(AuditableObject), Namespace = "http://santedb.org/audit")]
     [JsonObject(nameof(AuditableObject))]
     public class AuditableObject
@@ -60,6 +64,7 @@ namespace SanteDB.Core.Auditing
         public AuditableObject()
         {
             this.ObjectData = new List<ObjectDataExtension>();
+
         }
 
         /// <summary>
@@ -119,7 +124,7 @@ namespace SanteDB.Core.Auditing
         /// <summary>
         /// Additional object data
         /// </summary>
-        [XmlElement("dictionary"), JsonProperty("dictionary")]
+        [XmlArray("data"), XmlArrayItem("d"), JsonProperty("data")]
         public List<ObjectDataExtension> ObjectData { get; set; }
 
         /// <summary>
@@ -190,7 +195,7 @@ namespace SanteDB.Core.Auditing
         /// <summary>
 		/// Object data extension
 		/// </summary>
-		public ObjectDataExtension(String key, string value) : this(key, Encoding.UTF8.GetBytes(value))
+		public ObjectDataExtension(String key, string value) : this(key, null == value ? Array.Empty<byte>() : Encoding.UTF8.GetBytes(value))
         {
         }
 

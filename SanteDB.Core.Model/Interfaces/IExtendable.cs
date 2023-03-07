@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Represents a object that can be extended with IModelExtensions
     /// </summary>
-    public interface IExtendable : IIdentifiedEntity
+    public interface IExtendable : IAnnotatedResource
     {
 
         /// <summary>

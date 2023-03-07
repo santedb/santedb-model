@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 using System.Reflection;
@@ -28,7 +28,7 @@ namespace SanteDB.Core.Model.Attributes
     /// for an ignored property
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class SerializationReferenceAttribute : Attribute
+    public class SerializationReferenceAttribute : Attribute, IPropertyReference
     {
         /// <summary>
         /// The redirection attribute
@@ -50,5 +50,11 @@ namespace SanteDB.Core.Model.Attributes
         {
             return hostType.GetRuntimeProperty(this.RedirectProperty);
         }
+
+
+        /// <summary>
+        /// Gets the classifier property
+        /// </summary>
+        string IPropertyReference.PropertyName => this.RedirectProperty;
     }
 }

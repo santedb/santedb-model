@@ -16,15 +16,17 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
+using SanteDB.Core.Model.Query;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -36,13 +38,15 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Model
+namespace SanteDB
 {
     /// <summary>
     /// Reflection tools
     /// </summary>
     public static class ExtensionMethods
     {
+
+
         /// <summary>
         /// Indicates a properly was load/checked
         /// </summary>
@@ -67,6 +71,9 @@ namespace SanteDB.Core.Model
             public override int GetHashCode() => this.PropertyName.GetHashCode();
         }
 
+        private static ConcurrentDictionary<String, MethodBase> s_genericMethodCache = new ConcurrentDictionary<string, MethodBase>();
+
+
         // Property cache
         private static ConcurrentDictionary<String, PropertyInfo> s_propertyCache = new ConcurrentDictionary<string, PropertyInfo>();
 
@@ -82,6 +89,51 @@ namespace SanteDB.Core.Model
         // Skip assemblies
         private static ConcurrentBag<Assembly> m_skipAsm = new ConcurrentBag<Assembly>();
 
+        // Types
+        private static ConcurrentDictionary<Assembly, Type[]> m_types = new ConcurrentDictionary<Assembly, Type[]>();
+
+        /// <summary>
+        /// For each item in an enumerable
+        /// </summary>
+        public static void ForEach<T>(IEnumerable<T> me, Action<T> action)
+        {
+            foreach (var itm in me)
+            {
+                action(itm);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the <see cref="IList"/> is null or has no elements
+        /// </summary>
+        public static bool IsNullOrEmpty(this IEnumerable me) => me == null || me.OfType<Object>().Count() == 0;
+
+        /// <summary>
+        /// Add <paramref name="itemsToAdd"/> to <paramref name="me"/>
+        /// </summary>
+        public static void AddRange<T>(this IList<T> me, IEnumerable<T> itemsToAdd)
+        {
+            foreach (var itm in itemsToAdd)
+            {
+                me.Add(itm);
+            }
+        }
+
+        /// <summary>
+        /// Safe method for loading exported types from assemblies where <see cref="ReflectionTypeLoadException"/> is thrown
+        /// </summary>
+        public static Type[] GetExportedTypesSafe(this Assembly me)
+        {
+            try
+            {
+                return me.GetTypes().Where(t => t.IsPublic).ToArray();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(o => o?.IsPublic == true).ToArray();
+            }
+        }
+
         /// <summary>
         /// Get all types
         /// </summary>
@@ -90,18 +142,109 @@ namespace SanteDB.Core.Model
             // HACK: The weird TRY/CATCH in select many is to prevent mono from throwning a fit
             return me.GetAssemblies()
                 .Where(a => !a.IsDynamic && !m_skipAsm.Contains(a))
-                .SelectMany(a => { try { return a.ExportedTypes.Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null); } catch { m_skipAsm.Add(a); return new List<Type>(); } });
+                .SelectMany(a =>
+                {
+                    try
+                    {
+                        if (!m_types.TryGetValue(a, out var typ))
+                        {
+                            typ = a.GetExportedTypesSafe().Where(t => t.GetCustomAttribute<ObsoleteAttribute>() == null).ToArray();
+                            m_types.TryAdd(a, typ);
+                        }
+                        return typ;
+                    }
+                    catch
+                    {
+                        m_skipAsm.Add(a); return Type.EmptyTypes;
+                    }
+                });
+        }
+
+
+
+        /// <summary>
+        /// As result set
+        /// </summary>
+        public static IQueryResultSet AsResultSet(this IEnumerable me)
+        {
+            if (me is IQueryResultSet qre)
+            {
+                return qre;
+            }
+            else
+            {
+                return new MemoryQueryResultSet(me);
+            }
         }
 
         /// <summary>
-        /// Convert a hex string to byte array
+        /// As result set
         /// </summary>
-        public static byte[] ParseHexString(this String hexString)
+        public static IQueryResultSet<TData> AsResultSet<TData>(this IEnumerable<TData> me)
         {
-            return Enumerable.Range(0, hexString.Length)
-                                   .Where(x => x % 2 == 0)
-                                   .Select(x => System.Convert.ToByte(hexString.Substring(x, 2), 16))
-                                   .ToArray();
+            if (me is IQueryResultSet<TData> qre)
+            {
+                return qre;
+            }
+            else
+            {
+                return new MemoryQueryResultSet<TData>(me);
+            }
+        }
+
+        /// <summary>
+        /// Order result set
+        /// </summary>
+        /// <remarks>
+        /// This interface prevents the default .NET IEnumerable OrderByDescending being called on a normal IQueryResultSet
+        /// </remarks>
+        public static IOrderableQueryResultSet<TData> OrderByDescending<TData, TKey>(this IQueryResultSet<TData> me, Expression<Func<TData, TKey>> sortExpression)
+        {
+            if (me is IOrderableQueryResultSet<TData> qre)
+            {
+                return qre.OrderByDescending(sortExpression);
+            }
+            else
+            {
+                return me.OrderByDescending(sortExpression);
+            }
+        }
+
+        /// <summary>
+        /// Order result set
+        /// </summary>
+        /// <remarks>
+        /// This interface prevents the default .NET IEnumerable OrderByDescending being called on a normal IQueryResultSet
+        /// </remarks>
+        public static IOrderableQueryResultSet<TData> OrderBy<TData, TKey>(this IQueryResultSet<TData> me, Expression<Func<TData, TKey>> sortExpression)
+        {
+            if (me is IOrderableQueryResultSet<TData> qre)
+            {
+                return qre.OrderBy(sortExpression);
+            }
+            else
+            {
+                return me.OrderBy(sortExpression);
+            }
+        }
+
+        /// <summary>
+        /// As a result set
+        /// </summary>
+        public static IQueryResultSet<TTo> TransformResultSet<TFrom, TTo>(this IQueryResultSet<TFrom> me)
+        {
+            if (me is IQueryResultSet<TTo> qre)
+            {
+                return qre;
+            }
+            else if (typeof(TTo).IsAssignableFrom(typeof(TFrom)))
+            {
+                return new TransformQueryResultSet<TFrom, TTo>(me, (o) => (TTo)(object)o);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Type {typeof(TFrom)} and {typeof(TTo)} are not compatible");
+            }
         }
 
         /// <summary>
@@ -129,16 +272,137 @@ namespace SanteDB.Core.Model
                     .TrimEnd(new Char[] { '=' }).Replace('+', '-').Replace('/', '_');
         }
 
+        const string Base32Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=";
+
+        /// <summary>
+        /// Encodes <paramref name="buffer"/> as a Base32 string
+        /// </summary>
+        /// <param name="buffer">The array of bytes to encode</param>
+        /// <returns>The encoded Base32 string</returns>
+        public static String Base32Encode(this byte[] buffer)
+        {
+            if (buffer.Length < 1)
+            {
+                return string.Empty;
+            }
+
+            int roffset = 0, woffset = 0;
+            var chars = new char[((int)(buffer.Length / 5d + 1d)) * 8];
+
+            var bufferspan = new byte[8];
+
+            while (roffset < buffer.Length)
+            {
+                var length = roffset + 5 > buffer.Length ? (buffer.Length - roffset) : 5;
+
+                Array.Clear(bufferspan, 0, 8);
+                //bufferspan.Fill(0);
+                //buffer.Slice(roffset, length).CopyTo(bufferspan.Slice(3));
+                Buffer.BlockCopy(buffer, roffset, bufferspan, 3, length);
+
+                if (System.BitConverter.IsLittleEndian)
+                {
+                    //This is intentionally not in a loop.
+                    byte t1 = bufferspan[0];
+                    byte t2 = bufferspan[7];
+                    bufferspan[0] = t2;
+                    bufferspan[7] = t1;
+                    t1 = bufferspan[1];
+                    t2 = bufferspan[6];
+                    bufferspan[1] = t2;
+                    bufferspan[6] = t1;
+                    t1 = bufferspan[2];
+                    t2 = bufferspan[5];
+                    bufferspan[2] = t2;
+                    bufferspan[5] = t1;
+                    t1 = bufferspan[3];
+                    t2 = bufferspan[4];
+                    bufferspan[3] = t2;
+                    bufferspan[4] = t1;
+                }
+
+
+                ulong l = BitConverter.ToUInt64(bufferspan, 0); //BinaryPrimitives.ReadUInt64BigEndian(bufferspan);
+
+                switch (length)
+                {
+                    case 5:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 25) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 20) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 15) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 10) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 5) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l) & 0x1F];
+                        break;
+                    case 4:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 25) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 20) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 15) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 10) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 5) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[32]; //Pad Char
+                        break;
+                    case 3:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 25) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 20) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 15) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[32]; //Pad Char
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        break;
+                    case 2:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 25) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 20) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32]; //Pad Char
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        break;
+                    case 1:
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 35) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[(int)(l >> 30) & 0x1F];
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32]; //Pad Char
+                        chars[woffset++] = Base32Alphabet[32];
+                        chars[woffset++] = Base32Alphabet[32];
+                        break;
+                    default:
+                        break;
+                }
+                roffset += length;
+            }
+
+            return new string(chars, 0, woffset);
+        }
+
         /// <summary>
         /// Convert a hex string to byte array
         /// </summary>
-        public static String ToHexString(this byte[] array)
+        public static String HexEncode(this byte[] array)
         {
             return BitConverter.ToString(array).Replace("-", "");
         }
 
         /// <summary>
-        /// Get postal code
+        /// Decode <paramref name="encodedData"/> to a byte array
+        /// </summary>
+        public static byte[] HexDecode(this string encodedData) => Enumerable.Range(0, encodedData.Length)
+                                    .Where(x => x % 2 == 0)
+                                    .Select(x => System.Convert.ToByte(encodedData.Substring(x, 2), 16))
+                                    .ToArray();
+
+        /// <summary>
+        /// Gets the value of a component of an <see cref="EntityAddress"/> with the given <paramref name="addressType"/>.
         /// </summary>
         public static String Value(this EntityAddress me, Guid addressType)
         {
@@ -150,30 +414,17 @@ namespace SanteDB.Core.Model
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedEntity
+            where TSource : IAnnotatedResource
         {
             me.SetLoaded(propertySelector.GetMember().Name);
         }
 
-        /// <summary>
-        /// Set the necessary annotation on <paramref name="me"/> to indicate that <paramref name="propertyName"/> has
-        /// been loaded
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetLoaded(this IIdentifiedEntity me, string propertyName)
-        {
-            var loadCheck = new PropertyLoadCheck(propertyName);
-            if (!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
-            {
-                me.AddAnnotation(loadCheck);
-            }
-        }
 
         /// <summary>
         /// Returns true if the property is loaded
         /// </summary>
         public static bool WasLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
-            where TSource : IIdentifiedEntity
+            where TSource : IAnnotatedResource
         {
             return me.WasLoaded(propertySelector.GetMember().Name);
         }
@@ -181,7 +432,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Returns true if the property has been loaded
         /// </summary>
-        public static bool WasLoaded(this IIdentifiedEntity me, String propertyName)
+        public static bool WasLoaded(this IAnnotatedResource me, String propertyName)
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
             return me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck);
@@ -190,7 +441,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static TReturn LoadProperty<TReturn>(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
+        public static TReturn LoadProperty<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false)
         {
             return (TReturn)me.LoadProperty(propertyName, forceReload);
         }
@@ -198,7 +449,7 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
+        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false)
         {
             return me.LoadProperty(propertyName, forceReload) as IEnumerable<TReturn> ?? new List<TReturn>();
         }
@@ -208,8 +459,14 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static MemberInfo GetMember(this Expression me)
         {
-            if (me is UnaryExpression ue) return ue.Operand.GetMember();
-            else if (me is LambdaExpression le) return le.Body.GetMember();
+            if (me is UnaryExpression ue)
+            {
+                return ue.Operand.GetMember();
+            }
+            else if (me is LambdaExpression le)
+            {
+                return le.Body.GetMember();
+            }
             else if (me is MemberExpression ma)
             {
                 if (ma.Member.Name == "Value" && ma.Expression.Type.IsGenericType && ma.Expression.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -221,7 +478,10 @@ namespace SanteDB.Core.Model
                     return ma.Member;
                 }
             }
-            else throw new InvalidOperationException($"{me} not supported, please use a member access expression");
+            else
+            {
+                throw new InvalidOperationException($"{me} not supported, please use a member access expression");
+            }
         }
 
 
@@ -229,54 +489,97 @@ namespace SanteDB.Core.Model
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static IEnumerable<TReturn> LoadCollection<TSource, TReturn>(this TSource me, Expression<Func<TSource, IEnumerable<TReturn>>> selector, bool forceReload = false)
-            where TSource : IIdentifiedEntity
+            where TSource : IAnnotatedResource
         {
             if (selector is LambdaExpression lambda)
             {
                 var body = lambda.Body as MemberExpression;
                 if (body != null)
+                {
                     return me.LoadCollection<TReturn>(body.Member.Name, forceReload);
+                }
                 else
+                {
                     throw new InvalidOperationException("Must be simple property selector");
+                }
             }
             else
+            {
                 throw new InvalidOperationException("Unknown expression passed");
+            }
         }
 
         /// <summary>
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false)
-            where TSource : IIdentifiedEntity
+            where TSource : IAnnotatedResource
         {
             if (selector is LambdaExpression lambda)
             {
                 var body = lambda.Body as MemberExpression;
                 if (body != null)
+                {
                     return me.LoadProperty<TReturn>(body.Member.Name, forceReload);
+                }
                 else
+                {
                     throw new InvalidOperationException("Must be simple property selector");
+                }
             }
             else
+            {
                 throw new InvalidOperationException("Unknown expression passed");
+            }
+        }
+
+
+        /// <summary>
+        /// Set the necessary annotation on <paramref name="me"/> to indicate that <paramref name="propertyName"/> has
+        /// been loaded
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void SetLoaded(this IAnnotatedResource me, string propertyName)
+        {
+            var loadCheck = new PropertyLoadCheck(propertyName);
+            if (!me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck))
+            {
+                me.AddAnnotation(loadCheck);
+            }
         }
 
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static object LoadProperty(this IIdentifiedEntity me, string propertyName, bool forceReload = false)
+        public static object LoadProperty(this IAnnotatedResource me, string propertyName, bool forceReload = false)
         {
-            if (me == null) 
+            if (me == null)
+            {
                 return null;
+            }
 
-            var propertyToLoad = me.GetType().GetRuntimeProperty(propertyName);
-            if (propertyToLoad == null) return null;
+            var propertyToLoad = me.GetType().GetProperty(propertyName);
+            if (propertyToLoad == null)
+            {
+                return null;
+            }
+
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
-            if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBConstants.NoDynamicLoadAnnotation)))
+            
+            if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBModelConstants.NoDynamicLoadAnnotation)))
             {
-                return currentValue;
+                // HACK: For some reason load check can be set but a list property is null
+                if (currentValue == null &&
+                    propertyToLoad.PropertyType.Implements(typeof(IList)))
+                {
+                    forceReload = true;
+                }
+                else
+                {
+                    return currentValue;
+                }
             }
             else if (forceReload)
             {
@@ -287,18 +590,32 @@ namespace SanteDB.Core.Model
             {
                 if (typeof(IList).IsAssignableFrom(propertyToLoad.PropertyType)) // Collection we load by key
                 {
-                    if ((currentValue == null || (currentValue as IList)?.Count == 0) && me.Key.HasValue)
+                    if ((currentValue == null || currentValue is IList cle && cle.IsNullOrEmpty()) &&
+                        typeof(IdentifiedData).IsAssignableFrom(propertyToLoad.PropertyType.StripGeneric()))
                     {
-                        var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.GetRelations), new Type[] { propertyToLoad.PropertyType.StripGeneric() }, new Type[] { typeof(Guid?[]) });
+                        IList loaded = Activator.CreateInstance(propertyToLoad.PropertyType) as IList;
+                        if (me.Key.HasValue)
+                        {
+                            if (me is ITaggable taggable && taggable.TryGetTag(SanteDBModelConstants.AlternateKeysTag, out ITag altKeys))
+                            {
+                                var loadedData = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
+                                foreach (var itm in loadedData)
+                                {
+                                    loaded.Add(itm);
+                                }
+                            }
+                            else
+                            {
+                                var delayLoad = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value);
+                                if (delayLoad != null)
+                                {
+                                    foreach (var itm in delayLoad)
+                                    {
+                                        loaded.Add(itm);
+                                    }
+                                }
+                            }
 
-                        object loaded = null;
-                        if (me is ITaggable taggable && taggable.TryGetTag(SanteDBConstants.AlternateKeysTag, out ITag altKeys))
-                        {
-                            loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new Object[] { altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).Union(new Guid?[] { me.Key }).ToArray() }));
-                        }
-                        else
-                        {
-                            loaded = Activator.CreateInstance(propertyToLoad.PropertyType, mi.Invoke(EntitySource.Current.Provider, new object[] { new Guid?[] { me.Key.Value } }));
                         }
                         propertyToLoad.SetValue(me, loaded);
                         return loaded;
@@ -309,7 +626,9 @@ namespace SanteDB.Core.Model
                 {
                     var keyValue = propertyToLoad.GetSerializationRedirectProperty()?.GetValue(me) as Guid?;
                     if (keyValue.GetValueOrDefault() == default(Guid))
+                    {
                         return currentValue;
+                    }
                     else
                     {
                         var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.Get), new Type[] { propertyToLoad.PropertyType }, new Type[] { typeof(Guid?) });
@@ -318,7 +637,10 @@ namespace SanteDB.Core.Model
                         return loaded;
                     }
                 }
-                else return currentValue;
+                else
+                {
+                    return currentValue;
+                }
             }
             finally
             {
@@ -333,8 +655,26 @@ namespace SanteDB.Core.Model
         public static PropertyInfo GetSerializationRedirectProperty(this PropertyInfo me)
         {
             var xsr = me.GetCustomAttribute<SerializationReferenceAttribute>();
-            if (xsr == null) return null;
-            return me.DeclaringType.GetRuntimeProperty(xsr.RedirectProperty);
+            if (xsr != null)
+            {
+                return me.DeclaringType.GetProperty(xsr.RedirectProperty);
+            }
+            else
+            {
+                return me.DeclaringType.GetProperty($"{me.Name}Key");
+            }
+        }
+
+        /// <summary>
+        /// Gets the serialization runtime property
+        /// </summary>
+        public static PropertyInfo GetSerializationModelProperty(this PropertyInfo me)
+        {
+            if(me.Name.EndsWith("Key"))
+            {
+                return me.DeclaringType.GetProperty(me.Name.Substring(0, me.Name.Length - 3));
+            }
+            return null;
         }
 
         /// <summary>
@@ -355,7 +695,10 @@ namespace SanteDB.Core.Model
         /// </summary>
         public static TReturn Convert<TReturn>(this Object me) where TReturn : new()
         {
-            if (me is TReturn) return (TReturn)me;
+            if (me is TReturn)
+            {
+                return (TReturn)me;
+            }
             else
             {
                 var retVal = new TReturn();
@@ -378,14 +721,19 @@ namespace SanteDB.Core.Model
         public static TObject StripAssociatedItemSources<TObject>(this TObject toEntity)
         {
             if (toEntity == null)
+            {
                 throw new ArgumentNullException(nameof(toEntity));
+            }
+
             if (!(toEntity is IdentifiedData identifiedData))
+            {
                 return toEntity;
+            }
 
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
             {
-                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<DataIgnoreAttribute>() == null &&
+                properties = toEntity.GetType().GetProperties().Where(destinationPi => destinationPi.GetCustomAttribute<SerializationMetadataAttribute>() == null &&
                     destinationPi.CanWrite).ToArray();
                 s_typePropertyCache.TryAdd(toEntity.GetType(), properties);
             }
@@ -395,9 +743,10 @@ namespace SanteDB.Core.Model
                 {
                     var value = destinationPi.GetValue(toEntity);
                     if (value is IList list)
+                    {
                         foreach (ISimpleAssociation itm in list)
                         {
-                            if(itm is ITargetedAssociation itgt && itgt.TargetEntityKey == identifiedData.Key)
+                            if (itm is ITargetedAssociation itgt && itgt.TargetEntityKey == identifiedData.Key)
                             {
                                 continue; // We're just pointing at ourselves and we don't want to change the direction of flow
                             }
@@ -408,10 +757,14 @@ namespace SanteDB.Core.Model
                                 itm.SourceEntityKey = null;
 
                                 if (itm is IVersionedAssociation va)
+                                {
                                     va.EffectiveVersionSequenceId = null;
+                                }
+
                                 itm.StripAssociatedItemSources();
                             }
                         }
+                    }
                     else if (value is ISimpleAssociation assoc)
                     {
                         if (assoc.SourceEntityKey != identifiedData.Key)
@@ -419,7 +772,10 @@ namespace SanteDB.Core.Model
                             assoc.Key = null;
                             assoc.SourceEntityKey = null;
                             if (assoc is IVersionedAssociation va)
+                            {
                                 va.EffectiveVersionSequenceId = null;
+                            }
+
                             assoc.StripAssociatedItemSources();
                         }
                     }
@@ -432,45 +788,54 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Update property data if required
         /// </summary>
-        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull, bool ignoreTypeMismatch = false)
+        /// TODO: Write a version of this that can use the CODE-DOM to pre-compile a copy function instead of using reflection which is slow
+        public static TObject CopyObjectData<TObject>(this TObject toEntity, TObject fromEntity, bool overwritePopulatedWithNull = false, bool ignoreTypeMismatch = false, bool declaredOnly = false, bool onlyNullFields = false)
         {
             if (toEntity == null)
+            {
                 throw new ArgumentNullException(nameof(toEntity));
+            }
             else if (fromEntity == null)
-                throw new ArgumentNullException(nameof(fromEntity));
+            {
+                return toEntity;// nothing to copy
+            }
             else if (!ignoreTypeMismatch && !fromEntity.GetType().IsAssignableFrom(toEntity.GetType()))
+            {
                 throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntity.GetType().FullName}", nameof(fromEntity));
+            }
 
             PropertyInfo[] properties = null;
-            if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
+            if (declaredOnly)
             {
-                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<DataIgnoreAttribute>() == null &&
+                properties = typeof(TObject).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            }
+            else if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
+            {
+                properties = toEntity.GetType().GetProperties().Where(destinationPi => destinationPi.GetCustomAttribute<SerializationMetadataAttribute>() == null &&
                     destinationPi.CanWrite).ToArray();
                 s_typePropertyCache.TryAdd(toEntity.GetType(), properties);
             }
+
+            var sameType = fromEntity.GetType() == toEntity.GetType();
+
             foreach (var destinationPi in properties)
             {
-                var sourcePi = fromEntity.GetType().GetRuntimeProperty(destinationPi.Name);
+
+                var sourcePi = sameType ? destinationPi : fromEntity.GetType().GetProperty(destinationPi.Name);
                 // Skip properties no in the source
                 if (sourcePi == null)
+                {
                     continue;
-
-                // Skip data ignore
-                if (destinationPi.PropertyType.IsGenericType &&
-                    destinationPi.PropertyType.GetGenericTypeDefinition().Namespace.StartsWith("System.Data.Linq") ||
-                    destinationPi.PropertyType.Namespace.StartsWith("SanteDB.Persistence"))
-                    continue;
+                }
 
                 object newValue = sourcePi.GetValue(fromEntity),
                     oldValue = destinationPi.GetValue(toEntity);
 
                 // HACK: New value wrap for nullables
-                if (newValue is Guid? && newValue != null)
-                    newValue = (newValue as Guid?).Value;
-
-                // HACK: Empty lists are NULL
-                if ((newValue as IList)?.Count == 0)
+                if (newValue is IList lst && lst.Count == 0)
+                {
                     newValue = null;
+                }
 
                 object defaultValue = null;
                 var hasConstructor = false;
@@ -481,28 +846,48 @@ namespace SanteDB.Core.Model
                     s_parameterlessCtor.TryAdd(newValue.GetType(), hasConstructor);
                 }
                 if (newValue != null && hasConstructor)
+                {
                     defaultValue = Activator.CreateInstance(newValue.GetType());
+                }
+
+                if (onlyNullFields &&
+                    oldValue != null &&
+                    oldValue != defaultValue &&
+                    !default(bool).Equals(oldValue) &&
+                    !default(int).Equals(oldValue) &&
+                    !default(DateTime).Equals(oldValue) &&
+                    !default(decimal).Equals(oldValue) &&
+                    !default(double).Equals(oldValue))
+                {
+                    continue;
+                }
 
                 if (newValue is IList && oldValue is IList)
                 {
                     if (!Enumerable.SequenceEqual<Object>(((IList)newValue).OfType<Object>(), ((IList)oldValue).OfType<Object>()))
+                    {
                         destinationPi.SetValue(toEntity, newValue);
+                    }
                 }
                 else if (
                     newValue != null &&
                     !newValue.Equals(oldValue) == true &&
                     (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || typeof(String) == destinationPi.PropertyType && !String.IsNullOrEmpty(newValue.ToString()) || !newValue.Equals(defaultValue) || !destinationPi.PropertyType.IsValueType))
+                {
                     destinationPi.SetValue(toEntity, newValue);
+                }
                 else if (newValue == null && oldValue != null && overwritePopulatedWithNull)
+                {
                     destinationPi.SetValue(toEntity, newValue);
+                }
             }
             return toEntity;
         }
 
         /// <summary>
-		/// Update property data with data from <paramref name="fromEntities"/> if the property is not semantically equal
-		/// </summary>
-		public static TObject SemanticCopy<TObject>(this TObject toEntity, params TObject[] fromEntities) where TObject : IdentifiedData
+        /// Update property data with data from <paramref name="fromEntities"/> if the property is not semantically equal
+        /// </summary>
+        public static TObject SemanticCopy<TObject>(this TObject toEntity, params TObject[] fromEntities) where TObject : IdentifiedData
         {
             return SemanticCopyInternal(toEntity, false, null, fromEntities);
         }
@@ -530,18 +915,26 @@ namespace SanteDB.Core.Model
         private static TObject SemanticCopyInternal<TObject>(this TObject toEntity, bool onlyIfNull, String[] fieldNames, params TObject[] fromEntities) where TObject : IdentifiedData
         {
             if (toEntity == null)
+            {
                 throw new ArgumentNullException(nameof(toEntity));
+            }
             else if (fromEntities == null)
+            {
                 throw new ArgumentNullException(nameof(fromEntities));
+            }
             else if (fromEntities.Length == 0)
+            {
                 return toEntity;
+            }
             else if (!fromEntities.Any(e => e.GetType().IsAssignableFrom(toEntity.GetType())))
+            {
                 throw new ArgumentException($"Type mismatch {toEntity.GetType().FullName} != {fromEntities.GetType().FullName}", nameof(fromEntities));
+            }
 
             PropertyInfo[] properties = null;
             if (!s_typePropertyCache.TryGetValue(toEntity.GetType(), out properties))
             {
-                properties = toEntity.GetType().GetRuntimeProperties().Where(destinationPi => destinationPi.GetCustomAttribute<DataIgnoreAttribute>() == null &&
+                properties = toEntity.GetType().GetProperties().Where(destinationPi => destinationPi.GetCustomAttribute<SerializationMetadataAttribute>() == null &&
                     destinationPi.CanWrite).ToArray();
                 s_typePropertyCache.TryAdd(toEntity.GetType(), properties);
             }
@@ -556,28 +949,37 @@ namespace SanteDB.Core.Model
                 object oldValue = destinationPi.GetValue(toEntity);
                 if ((onlyIfNull && (oldValue == null || (oldValue as IList)?.Count == 0) || !onlyIfNull) &&
                     (fieldNames == null || fieldNames.Contains(destinationPi.Name)))
+                {
                     foreach (var fromEntity in fromEntities.OrderBy(k => k.ModifiedOn))
                     {
-                        var sourcePi = fromEntity.GetType().GetRuntimeProperty(destinationPi.Name);
+                        var sourcePi = fromEntity.GetType().GetProperty(destinationPi.Name);
                         // Skip properties no in the source
                         if (sourcePi == null)
+                        {
                             continue;
+                        }
 
                         // Skip data ignore
                         if (destinationPi.PropertyType.IsGenericType &&
                             destinationPi.PropertyType.GetGenericTypeDefinition().Namespace.StartsWith("System.Data.Linq") ||
                             destinationPi.PropertyType.Namespace.StartsWith("SanteDB.Persistence"))
+                        {
                             continue;
+                        }
 
                         object newValue = sourcePi.GetValue(fromEntity);
 
                         // HACK: New value wrap for nullables
                         if (newValue is Guid? && newValue != null)
+                        {
                             newValue = (newValue as Guid?).Value;
+                        }
 
                         // HACK: Empty lists are NULL
                         if ((newValue as IList)?.Count == 0)
+                        {
                             newValue = null;
+                        }
 
                         if (newValue != null) // The new value has something
                         {
@@ -627,12 +1029,17 @@ namespace SanteDB.Core.Model
                             }
                             else if (newValue is IdentifiedData &&
                                 !(newValue as IdentifiedData).SemanticEquals(oldValue))
+                            {
                                 destinationPi.SetValue(toEntity, newValue);
+                            }
                             else if (!newValue.Equals(oldValue) &&
                                 (destinationPi.PropertyType.StripNullable() != destinationPi.PropertyType || !newValue.Equals(Activator.CreateInstance(newValue.GetType())) || !destinationPi.PropertyType.IsValueType))
+                            {
                                 destinationPi.SetValue(toEntity, newValue);
+                            }
                         }
                     }
+                }
             }
 
             return toEntity;
@@ -644,7 +1051,7 @@ namespace SanteDB.Core.Model
         public static MethodBase GetGenericMethod(this Type type, string name, Type[] typeArgs, Type[] argTypes)
         {
             int typeArity = typeArgs.Length;
-            var methods = type.GetRuntimeMethods()
+            var methods = type.GetMethods()
                 .Where(m => m.Name == name)
                 .Where(m => m.GetGenericArguments().Length == typeArity)
                 .Where(m => m.GetParameters().Length == argTypes.Length)
@@ -653,7 +1060,6 @@ namespace SanteDB.Core.Model
             methods = methods.Where(m => Enumerable.Range(0, argTypes.Length).All(i => m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.IsAssignableFrom(argTypes[i]))).ToList();
 
             return methods.FirstOrDefault();
-            //return Type.DefaultBinder.SelectMethod(flags, methods.ToArray(), argTypes, null);
         }
 
         /// <summary>
@@ -679,11 +1085,17 @@ namespace SanteDB.Core.Model
             {
                 var refName = me.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty;
                 if (refName == null)
-                    return null;
-                xmlName = me.DeclaringType.GetRuntimeProperty(refName)?.GetCustomAttribute<XmlElementAttribute>()?.ElementName;
+                {
+                    return me.GetQueryName();
+                }
+
+                xmlName = me.DeclaringType.GetProperty(refName)?.GetCustomAttribute<XmlElementAttribute>()?.ElementName;
             }
             else if (xmlName == String.Empty)
+            {
                 xmlName = me.Name;
+            }
+
             return xmlName;
         }
 
@@ -706,12 +1118,37 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
+        /// Get all allowed class keys for the specified type
+        /// </summary>
+        public static Guid[] GetClassKeys(this Type type)
+        {
+            return type.GetCustomAttributes<ClassConceptKeyAttribute>().Select(o => Guid.Parse(o.ClassConcept)).ToArray();
+        }
+
+        /// <summary>
         /// Get the serialization type name
         /// </summary>
         public static String GetSerializationName(this Type type)
         {
-            return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.Name;
+            return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.FullName;
         }
+
+        /// <summary>
+        /// Get the classifier property on <paramref name="type"/>
+        /// </summary>
+        public static PropertyInfo GetSanteDBProperty<AttributeType>(this Type type) where AttributeType : Attribute, IPropertyReference
+        {
+            var classifierAttribute = type.GetCustomAttribute<AttributeType>();
+            if (classifierAttribute == null)
+            {
+                return null;
+            }
+            else
+            {
+                return type.GetProperty(classifierAttribute.PropertyName);
+            }
+        }
+
 
         /// <summary>
         /// Get a property based on XML property and/or serialization redirect and/or query parameter
@@ -722,13 +1159,21 @@ namespace SanteDB.Core.Model
             var key = String.Format("{0}.{1}[{2}]", type.FullName, propertyName, followReferences);
             if (!s_propertyCache.TryGetValue(key, out retVal))
             {
-                retVal = type.GetRuntimeProperties().FirstOrDefault(o => o.GetCustomAttributes<XmlElementAttribute>()?.FirstOrDefault()?.ElementName == propertyName || o.GetCustomAttribute<QueryParameterAttribute>()?.ParameterName == propertyName || o.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName == propertyName);
+                retVal = type.GetProperties().FirstOrDefault(o => o.GetCustomAttributes<XmlElementAttribute>()?.FirstOrDefault()?.ElementName == propertyName || o.GetCustomAttribute<QueryParameterAttribute>()?.ParameterName == propertyName || o.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName == propertyName);
                 if (retVal == null)
+                {
                     return null;
-                if (followReferences) retVal = type.GetRuntimeProperties().FirstOrDefault(o => o.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty == retVal.Name) ?? retVal;
+                }
+
+                if (followReferences)
+                {
+                    retVal = type.GetProperties().FirstOrDefault(o => o.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty == retVal.Name) ?? retVal;
+                }
 
                 if (retVal.Name.EndsWith("Xml"))
-                    retVal = type.GetRuntimeProperty(retVal.Name.Substring(0, retVal.Name.Length - 3));
+                {
+                    retVal = type.GetProperty(retVal.Name.Substring(0, retVal.Name.Length - 3));
+                }
 
                 s_propertyCache.TryAdd(key, retVal);
             }
@@ -742,7 +1187,10 @@ namespace SanteDB.Core.Model
         {
             long hash = 1009;
             foreach (var b in me)
+            {
                 hash = ((hash << 5) + hash) ^ b;
+            }
+
             return BitConverter.ToString(BitConverter.GetBytes(hash)).Replace("-", "");
         }
 
@@ -790,140 +1238,27 @@ namespace SanteDB.Core.Model
         }
 
         /// <summary>
-        /// Create a version filter
-        /// </summary>
-        /// <param name="me">Me.</param>
-        /// <param name="domainInstance">The domain instance.</param>
-        /// <returns>Expression.</returns>
-        public static Expression IsActive(this Expression me, Object domainInstance)
-        {
-            // Extract boundary properties
-            var effectiveVersionMethod = me.Type.GenericTypeArguments[0].GetRuntimeProperty("EffectiveVersionSequenceId");
-            var obsoleteVersionMethod = me.Type.GenericTypeArguments[0].GetRuntimeProperty("ObsoleteVersionSequenceId");
-            if (effectiveVersionMethod == null || obsoleteVersionMethod == null)
-                return me;
-
-            // Create predicate type and find WHERE method
-            Type predicateType = typeof(Func<,>).MakeGenericType(me.Type.GenericTypeArguments[0], typeof(bool));
-            var whereMethod = typeof(Enumerable).GetGenericMethod("Where",
-                new Type[] { me.Type.GenericTypeArguments[0] },
-                new Type[] { me.Type, predicateType });
-
-            // Create Where Expression
-            var guardParameter = Expression.Parameter(me.Type.GenericTypeArguments[0], "x");
-            var currentSequenceId = domainInstance?.GetType().GetRuntimeProperty("VersionSequenceId").GetValue(domainInstance);
-            var bodyExpression = Expression.MakeBinary(ExpressionType.AndAlso,
-                Expression.MakeBinary(ExpressionType.LessThanOrEqual, Expression.MakeMemberAccess(guardParameter, effectiveVersionMethod), Expression.Constant(currentSequenceId)),
-                Expression.MakeBinary(ExpressionType.OrElse,
-                    Expression.MakeBinary(ExpressionType.Equal, Expression.MakeMemberAccess(guardParameter, obsoleteVersionMethod), Expression.Constant(null)),
-                    Expression.MakeBinary(ExpressionType.GreaterThan, Expression.MakeMemberAccess(
-                        Expression.MakeMemberAccess(guardParameter, obsoleteVersionMethod),
-                        typeof(Nullable<Decimal>).GetRuntimeProperty("Value")), Expression.Constant(currentSequenceId))
-                )
-            );
-
-            // Build strongly typed lambda
-            var builderMethod = typeof(Expression).GetGenericMethod(nameof(Expression.Lambda), new Type[] { predicateType }, new Type[] { typeof(Expression), typeof(ParameterExpression[]) });
-            var sortLambda = builderMethod.Invoke(null, new object[] { bodyExpression, new ParameterExpression[] { guardParameter } }) as Expression;
-            return Expression.Call(whereMethod as MethodInfo, me, sortLambda);
-        }
-
-        /// <summary>
-        /// Create a version filter
-        /// </summary>
-        /// <param name="me">Me.</param>
-        /// <returns>Expression.</returns>
-        public static Expression IsActive(this Expression me)
-        {
-            // Extract boundary properties
-            var obsoleteVersionMethod = me.Type.GenericTypeArguments[0].GetRuntimeProperty("ObsoleteVersionSequenceId");
-            if (obsoleteVersionMethod == null)
-                return me;
-
-            // Create predicate type and find WHERE method
-            Type predicateType = typeof(Func<,>).MakeGenericType(me.Type.GenericTypeArguments[0], typeof(bool));
-            var whereMethod = typeof(Enumerable).GetGenericMethod("Where",
-                new Type[] { me.Type.GenericTypeArguments[0] },
-                new Type[] { me.Type, predicateType });
-
-            // Create Where Expression
-            var guardParameter = Expression.Parameter(me.Type.GenericTypeArguments[0], "x");
-            var bodyExpression = Expression.MakeBinary(ExpressionType.Equal, Expression.MakeMemberAccess(guardParameter, obsoleteVersionMethod), Expression.Constant(null));
-
-            // Build strongly typed lambda
-            var builderMethod = typeof(Expression).GetGenericMethod(nameof(Expression.Lambda), new Type[] { predicateType }, new Type[] { typeof(Expression), typeof(ParameterExpression[]) });
-            var sortLambda = builderMethod.Invoke(null, new object[] { bodyExpression, new ParameterExpression[] { guardParameter } }) as Expression;
-            return Expression.Call(whereMethod as MethodInfo, me, sortLambda);
-        }
-
-        /// <summary>
-        /// Gets the latest version of the versioned entity data instance from a given list.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source">The source.</param>
-        /// <returns>Returns the latest version only of the versioned entity data.</returns>
-        public static IEnumerable<T> LatestVersionOnly<T>(this IEnumerable<T> source) where T : IVersionedEntity
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source), "Value cannot be null");
-            }
-
-            var latestVersions = new List<T>();
-
-            var keys = source.Select(e => e.Key.Value).Distinct();
-
-            foreach (var key in keys)
-            {
-                var maxVersionSequence = source.Select(e => source.Where(a => a.Key == key).Max<T>(a => a.VersionSequence)).FirstOrDefault();
-
-                var latestVersion = source.FirstOrDefault(a => a.Key == key && a.VersionSequence == maxVersionSequence);
-
-                if (latestVersion != null)
-                {
-                    latestVersions.Add(latestVersion);
-                }
-            }
-
-            return latestVersions;
-        }
-
-        /// <summary>
         /// Determine semantic equality of each item in me and other
         /// </summary>
         public static bool SemanticEquals<TEntity>(this IEnumerable<TEntity> me, IEnumerable<TEntity> other) where TEntity : IdentifiedData
         {
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             bool equals = me.Count() == other.Count();
             foreach (var itm in me)
+            {
                 equals &= other.Any(o => o.SemanticEquals(itm));
+            }
+
             foreach (var itm in other)
+            {
                 equals &= me.Any(o => o.SemanticEquals(itm));
+            }
 
             return equals;
-        }
-
-        /// <summary>
-        /// Create sort expression.
-        /// </summary>
-        /// <param name="me">Me.</param>
-        /// <param name="orderByProperty">The order by property.</param>
-        /// <param name="sortOrder">The sort order.</param>
-        /// <returns>Expression.</returns>
-        public static Expression Sort(this Expression me, String orderByProperty, SortOrderType sortOrder)
-        {
-            // Get sort property
-            var sortProperty = me.Type.GenericTypeArguments[0].GetRuntimeProperty(orderByProperty);
-            Type predicateType = typeof(Func<,>).MakeGenericType(me.Type.GenericTypeArguments[0], sortProperty.PropertyType);
-            var sortMethod = typeof(Enumerable).GetGenericMethod(sortOrder.ToString(),
-                new Type[] { me.Type.GenericTypeArguments[0], sortProperty.PropertyType },
-                new Type[] { me.Type, predicateType });
-
-            // Get builder methods
-            var sortParameter = Expression.Parameter(me.Type.GenericTypeArguments[0], "sort");
-            var builderMethod = typeof(Expression).GetGenericMethod(nameof(Expression.Lambda), new Type[] { predicateType }, new Type[] { typeof(Expression), typeof(ParameterExpression[]) });
-            var sortLambda = builderMethod.Invoke(null, new object[] { Expression.MakeMemberAccess(sortParameter, sortProperty), new ParameterExpression[] { sortParameter } }) as Expression;
-            return Expression.Call(sortMethod as MethodInfo, me, sortLambda);
         }
 
         /// <summary>
@@ -943,11 +1278,52 @@ namespace SanteDB.Core.Model
         /// <returns>Returns the type.</returns>
         public static Type StripNullable(this Type t)
         {
-            if (t.IsGenericType &&
-                t.GetGenericTypeDefinition() == typeof(Nullable<>))
-                return t.GenericTypeArguments[0];
-            return t;
+            return Nullable.GetUnderlyingType(t) ?? t;
         }
+
+        /// <summary>
+        /// Determine if <paramref name="t"/> is a nullable type
+        /// </summary>
+        /// <param name="t">The type of the nullable</param>
+        /// <returns>True if the type is nullable</returns>
+        public static bool IsNullable(this Type t)
+        {
+            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+
+        /// <summary>
+        /// Validates that this object has a target entity
+        /// </summary>
+        public static IEnumerable<ValidationResultDetail> Validate<TSourceType>(this VersionedAssociation<TSourceType> me) where TSourceType : VersionedEntityData<TSourceType>, new()
+        {
+            var validResults = new List<ValidationResultDetail>();
+            if (me.SourceEntityKey == Guid.Empty)
+            {
+                validResults.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} required", me.GetType().Name, "SourceEntityKey"), null, null));
+            }
+
+            return validResults;
+        }
+
+        /// <summary>
+        /// Returns true if <paramref name="t"/> has <typeparamref name="TAttribute"/>
+        /// </summary>
+        /// <typeparam name="TAttribute">The type of attribute to check for</typeparam>
+        /// <param name="t">The type on which the attribute should be checked</param>
+        /// <returns>True if <paramref name="t"/> is annoted with <typeparamref name="TAttribute"/></returns>
+        public static bool HasCustomAttribute<TAttribute>(this Type t)
+            => HasCustomAttribute(t, typeof(TAttribute));
+
+        /// <summary>
+        /// Non generic implementation of <see cref="HasCustomAttribute{TAttribute}(Type)"/>
+        /// </summary>
+        /// <param name="t">The type on which <paramref name="attributeType"/> should be checked</param>
+        /// <param name="attributeType">The type of attribute to check on <paramref name="t"/></param>
+        /// <returns>True if <paramref name="t"/> is annotated with <paramref name="attributeType"/></returns>
+        public static bool HasCustomAttribute(this Type t, Type attributeType)
+            => t?.GetCustomAttribute(attributeType) != null;
+        //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
+
 
     }
 }

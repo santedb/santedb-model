@@ -16,13 +16,10 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2022-1-12
+ * Date: 2022-5-30
  */
-using SanteDB.Core.Model.Entities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -55,7 +52,7 @@ namespace SanteDB.Core.Model.Query
         /// </summary>
         public static DateTime DateTrunc(this DateTime me, String precision)
         {
-            switch(precision)
+            switch (precision)
             {
                 case "y":
                     return new DateTime(me.Year, 01, 01);
@@ -107,16 +104,26 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Gets the first characters
         /// </summary>
-        public static String Substr(this String me, int start, int? length)
+        public static String Substr(this String me, int start, int? length = null)
         {
             if (length.HasValue && start + length > me.Length)
+            {
                 length = me.Length - start;
+            }
+
             if (start > me.Length)
+            {
                 start = me.Length - 1;
+            }
+
             if (length.HasValue)
+            {
                 return me.Substring(start, length.Value);
+            }
             else
+            {
                 return me.Substring(start);
+            }
         }
 
     }

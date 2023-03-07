@@ -16,13 +16,11 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2022-1-28
+ * Date: 2022-5-30
  */
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 
 namespace SanteDB.Core.Model.Query.FilterExtension
 {
@@ -47,8 +45,10 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         public BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms)
         {
             if (parms.Length == 0)
+            {
                 throw new InvalidOperationException("Date truncation requires precision");
-            else if(valueExpression.Type == typeof(DateTime))
+            }
+            else if (valueExpression.Type == typeof(DateTime))
             {
                 var func = typeof(QueryModelExtensions).GetMethod(nameof(QueryModelExtensions.DateTrunc), new Type[] { typeof(DateTime), typeof(String) });
                 return Expression.MakeBinary(ExpressionType.Equal,

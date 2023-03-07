@@ -16,9 +16,11 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Roles;
 using System;
 using System.Collections.Generic;
@@ -37,44 +39,37 @@ namespace SanteDB.Core.Model.Acts
     [XmlType(nameof(CarePlan), Namespace = "http://santedb.org/model")]
     [XmlRoot(nameof(CarePlan), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(CarePlan))]
-    public class CarePlan : BaseEntityData
+    [XmlInclude(typeof(SubstanceAdministration))]
+    [XmlInclude(typeof(QuantityObservation))]
+    [XmlInclude(typeof(CodedObservation))]
+    [XmlInclude(typeof(TextObservation))]
+    [XmlInclude(typeof(PatientEncounter))]
+    [ClassConceptKey(ActClassKeyStrings.CarePlan)]
+    public class CarePlan : Act
     {
-
-        /// <summary>
-        /// Target of the careplan
-        /// </summary>
-        [XmlElement("target"), JsonProperty("target")]
-        public Patient Target { get; set; }
-
-        /// <summary>
-        /// Action to take
-        /// </summary>
-        [XmlElement("act", typeof(Act))]
-        [XmlElement("substanceAdministration", typeof(SubstanceAdministration))]
-        [XmlElement("quantityObservation", typeof(QuantityObservation))]
-        [XmlElement("codedObservation", typeof(CodedObservation))]
-        [XmlElement("textObservation", typeof(TextObservation))]
-        [XmlElement("patientEncounter", typeof(PatientEncounter))]
-        [JsonProperty("act")]
-        public List<Act> Action { get; set; }
-
         /// <summary>
         /// Default ctor
         /// </summary>
         public CarePlan()
         {
-            this.Action = new List<Act>();
             this.Key = Guid.NewGuid();
             this.CreationTime = DateTimeOffset.Now;
+            this.MoodConceptKey = ActMoodKeys.Propose;
+            base.m_classConceptKey = ActClassKeys.CarePlan;
         }
+
+        /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.CarePlan;
 
         /// <summary>
         /// Create care plan with acts
         /// </summary>
         public CarePlan(Patient p, IEnumerable<Act> acts) : this()
         {
-            this.Action = acts.ToList();
-            this.Target = p;
+            this.Relationships = new List<ActRelationship>(acts.Select(o => new ActRelationship(ActRelationshipTypeKeys.HasComponent, o)));
+            this.Participations = new List<ActParticipation>() { new ActParticipation(ActParticipationKeys.RecordTarget, p) };
         }
 
         /// <summary>
@@ -82,7 +77,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public static CarePlan CreateCarePlanRequest(Patient p)
         {
-            return new CarePlan() { Target = p };
+            return new CarePlan(p, new Act[0]) { MoodConceptKey = ActMoodKeys.Request };
         }
     }
 }

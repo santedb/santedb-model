@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -35,17 +35,30 @@ namespace SanteDB.Core.Model.Acts
     [XmlType(nameof(ActProtocol), Namespace = "http://santedb.org/model"), JsonObject(nameof(ActProtocol))]
     public class ActProtocol : Association<Act>
     {
+
+        // The protocol
+        private Protocol m_protocol;
+
         /// <summary>
         /// Gets or sets the protocol  to which this act belongs
         /// </summary>
         [XmlElement("protocol"), JsonProperty("protocol")]
-        public Guid ProtocolKey { get; set; }
+        public Guid? ProtocolKey { get; set; }
 
         /// <summary>
         /// Gets or sets the protocol data related to the protocol
         /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReferenceAttribute(nameof(ProtocolKey))]
-        public Protocol Protocol { get; set; }
+        [XmlIgnore, JsonIgnore, SerializationReferenceAttribute(nameof(ProtocolKey)), SerializationMetadata]
+        public Protocol Protocol {
+            get => this.m_protocol?.AsSummary();
+            set => this.m_protocol = value; 
+        }
+
+        /// <summary>
+        /// Gets the version of the protocol that was used to generate the 
+        /// </summary>
+        [XmlElement("version"), JsonProperty("version")]
+        public string Version { get; set; }
 
         /// <summary>
         /// Represents the sequence of the act in the protocol
@@ -67,16 +80,17 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as ActProtocol;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.ProtocolKey == this.ProtocolKey;
         }
 
         /// <summary>
         /// Shoud serialize source
         /// </summary>
-        public override bool ShouldSerializeSourceEntityKey()
-        {
-            return false;
-        }
+        public override bool ShouldSerializeSourceEntityKey() => false;
     }
 }

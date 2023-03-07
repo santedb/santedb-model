@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -67,5 +67,11 @@ namespace SanteDB.Core.Model.Entities
                 base.ComponentTypeKey = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the order in which this element appears
+        /// </summary>
+        [XmlElement("sequence"), JsonProperty("sequence")]
+        public Int64 OrderSequence { get; set; }
     }
 }

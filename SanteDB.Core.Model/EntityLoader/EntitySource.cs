@@ -16,9 +16,10 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -62,17 +63,24 @@ namespace SanteDB.Core.Model.EntityLoader
             /// <summary>
             /// Gets the specified relations
             /// </summary>
-            public IEnumerable<TObject> GetRelations<TObject>(params Guid?[] sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new()
+            public IQueryResultSet<TObject> GetRelations<TObject>(params Guid?[] sourceKey) where TObject : IdentifiedData, ISimpleAssociation, new()
             {
-                return new List<TObject>();
+                return new MemoryQueryResultSet<TObject>(new List<TObject>());
+            }
+
+            /// <inheritdoc/>
+            public IQueryResultSet GetRelations(Type tobject, params Guid?[] sourceKey)
+            {
+                return new MemoryQueryResultSet(new Object[0]);
+
             }
 
             /// <summary>
             /// Query
             /// </summary>
-            public IEnumerable<TObject> Query<TObject>(Expression<Func<TObject, bool>> query) where TObject : IdentifiedData, new()
+            public IQueryResultSet<TObject> Query<TObject>(Expression<Func<TObject, bool>> query) where TObject : IdentifiedData, new()
             {
-                return new List<TObject>();
+                return new MemoryQueryResultSet<TObject>(new TObject[0]);
             }
         }
 
@@ -107,17 +115,22 @@ namespace SanteDB.Core.Model.EntityLoader
             set
             {
                 lock (s_lockObject)
+                {
                     s_instance = value;
+                }
             }
         }
 
         /// <summary>
         /// Get the specified object / version
         /// </summary>
-        public TObject Get<TObject>(Guid? key, Guid? version) where TObject : IdentifiedData, IVersionedEntity, new()
+        public TObject Get<TObject>(Guid? key, Guid? version) where TObject : IdentifiedData, IVersionedData, new()
         {
             if (key == null)
+            {
                 return null;
+            }
+
             return this.m_provider.Get<TObject>(key, version);
         }
 
@@ -127,9 +140,13 @@ namespace SanteDB.Core.Model.EntityLoader
         public TObject Get<TObject>(Guid? key) where TObject : IdentifiedData, new()
         {
             if (key == null)
+            {
                 return null;
+            }
             else
+            {
                 return this.m_provider.Get<TObject>(key);
+            }
         }
 
         /// <summary>

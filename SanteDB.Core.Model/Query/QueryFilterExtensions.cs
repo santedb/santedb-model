@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 using System.Collections.Generic;
@@ -34,12 +34,12 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Filter regular expression for query parameter syntax
         /// </summary>
-        public static readonly Regex ExtendedFilterRegex = new Regex(@":\((\w*?)(\|((?:"".*(?:[^\\]""))|(?:.*?))\)|\))(.*)");
+        public static readonly Regex ExtendedFilterRegex = new Regex(@":\((\w*?)(\|((?:"".*(?:[^\\]""))|(?:.*?))\)|\))(.*)", RegexOptions.Compiled);
 
         /// <summary>
         /// Filter for parameter extraction
         /// </summary>
-        public static readonly Regex ParameterExtractRegex = new Regex(@"((?:"".*?(?:[^\\]""))|(?:.*?)),(.*)");
+        public static readonly Regex ParameterExtractRegex = new Regex(@"((?:"".*?(?:[^\\]""))|(?:.*?)),(.*)", RegexOptions.Compiled);
 
         // The extension methods
         private static Dictionary<String, IQueryFilterExtension> s_extensionMethods = new Dictionary<string, IQueryFilterExtension>();
@@ -53,17 +53,25 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// With control parameter is used as a wrapper for _ parameters
+        /// </summary>
+        internal static object WithControl(this object me, string controlParameter, object value)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Initialize filters
         /// </summary>
         private static void InitializeFilters()
         {
             // Try to init extended filters
-            foreach (var ext in AppDomain.CurrentDomain.GetAssemblies()
-                    .Where(a => !a.IsDynamic)
-                    .SelectMany(a => { try { return a.ExportedTypes; } catch { return Type.EmptyTypes; } })
+            foreach (var ext in AppDomain.CurrentDomain.GetAllTypes()
                     .Where(t => typeof(IQueryFilterExtension).IsAssignableFrom(t) && !t.IsAbstract)
                     .Select(t => Activator.CreateInstance(t) as IQueryFilterExtension))
+            {
                 QueryFilterExtensions.AddExtendedFilter(ext);
+            }
         }
 
         /// <summary>
@@ -74,9 +82,12 @@ namespace SanteDB.Core.Model.Query
         {
             string methName = extensionInfo.Name;
             lock (s_extensionMethods)
+            {
                 if (!s_extensionMethods.ContainsKey(methName))
+                {
                     s_extensionMethods.Add(methName, extensionInfo);
-
+                }
+            }
         }
 
         /// <summary>
@@ -85,7 +96,10 @@ namespace SanteDB.Core.Model.Query
         public static IQueryFilterExtension GetExtendedFilter(String name)
         {
             if (s_extensionMethods.Count == 0)
+            {
                 InitializeFilters();
+            }
+
             IQueryFilterExtension retVal = null;
             s_extensionMethods.TryGetValue(name, out retVal);
             return retVal;

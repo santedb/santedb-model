@@ -16,14 +16,14 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
-    /// Auditable object lifecycle
+    /// Auditable object lifecycle indicates the lifecycle of the object when the audit was created
     /// </summary>
     [XmlType(nameof(AuditableObjectLifecycle), Namespace = "http://santedb.org/audit")]
     public enum AuditableObjectLifecycle

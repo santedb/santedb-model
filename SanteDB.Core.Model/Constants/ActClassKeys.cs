@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
@@ -76,7 +76,6 @@ namespace SanteDB.Core.Model.Constants
         /// The act represents a procedure (something done to a patient).
         /// </summary>
         public const String Procedure = "8cc5ef0d-3911-4d99-937f-6cfdc2a27d55";
-
         /// <summary>
         /// The act represents a registration event such as the registration of a patient.
         /// </summary>
@@ -128,14 +127,20 @@ namespace SanteDB.Core.Model.Constants
         public const string List = "b0323489-9a09-411a-bb55-ff283830ea1a";
 
         /// <summary>
-        /// Represents a document
+        /// Represents a document 
         /// </summary>
-        public const string Document = "253B006F-386D-44E9-8E81-A6B597C85A78";
+        public const string Document = "7a6944f7-8937-4e98-ae0d-452b1d8124f4";
 
         /// <summary>
-        /// Represents a document section
+        /// Represents a section within a document
         /// </summary>
-        public const string DocumentSection = "F7D02069-9A60-410D-BD52-0FC7A59FDE16";
+        public const string DocumentSection = "e86ea735-f243-41f4-bf33-aa78eb2e8466";
+
+        /// <summary>
+        /// Represents a plan of care
+        /// </summary>
+        public const string CarePlan = "042232b9-a694-42e0-9708-f387393a6c80";
+
     }
 
     /// <summary>
@@ -143,6 +148,21 @@ namespace SanteDB.Core.Model.Constants
     /// </summary>
     public static class ActClassKeys
     {
+        /// <summary>
+        /// Document class key
+        /// </summary>
+        public static readonly Guid Document = Guid.Parse(ActClassKeyStrings.Document);
+
+        /// <summary>
+        /// Document section class key
+        /// </summary>
+        public static readonly Guid DocumentSection = Guid.Parse(ActClassKeyStrings.DocumentSection);
+
+        /// <summary>
+        /// Care plan class key
+        /// </summary>
+        public static readonly Guid CarePlan = Guid.Parse(ActClassKeyStrings.CarePlan);
+
         /// <summary>
         /// The act represents generic account management such as adjudications, financial adjustments, stock counting, etc.
         /// </summary>
@@ -243,14 +263,5 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid List = Guid.Parse(ActClassKeyStrings.List);
 
-        /// <summary>
-        /// Clinical document
-        /// </summary>
-        public static readonly Guid Document = Guid.Parse(ActClassKeyStrings.Document);
-
-        /// <summary>
-        /// Clinical Document Section
-        /// </summary>
-        public static readonly Guid DocumentSection = Guid.Parse(ActClassKeyStrings.DocumentSection);
     }
 }

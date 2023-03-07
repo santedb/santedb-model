@@ -16,9 +16,10 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -43,72 +44,25 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("Entity", Namespace = "http://santedb.org/model"), JsonObject("Entity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]
-    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, ISecurable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships
+    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged
     {
-        private TemplateDefinition m_template;
-        private Guid? m_templateKey;
 
-        // Class concept
-        private Concept m_classConcept;
-
-        // Classe concept
-        private Guid? m_classConceptId;
-
-        // TODO: Change this to Act
-        private Act m_creationAct;
-
-        // Control act which created this
-        private Guid? m_creationActId;
-
-        // Determiner concept
-        private Concept m_determinerConcept;
-
-        // Determiner concept id
-        private Guid? m_determinerConceptId;
-
-        // Status concept
-        private Concept m_statusConcept;
-
-        // Status
-        private Guid? m_statusConceptId;
-
-        // Type concept
-        private Concept m_typeConcept;
-
-        // Type concept
-        private Guid? m_typeConceptId;
+        /// <summary>
+        /// Internal reference for class concept
+        /// </summary>
+        protected Guid? m_classConceptKey;
 
         /// <summary>
         /// Creates a new instance of the entity class
         /// </summary>
         public Entity()
         {
-            this.Identifiers = new List<EntityIdentifier>();
-            this.Addresses = new List<EntityAddress>();
-            this.Extensions = new List<EntityExtension>();
-            this.Names = new List<EntityName>();
-            this.Notes = new List<EntityNote>();
-            this.Participations = new List<ActParticipation>();
-            this.Relationships = new List<EntityRelationship>();
-            this.Telecoms = new List<EntityTelecomAddress>();
-            this.Tags = new List<EntityTag>();
-            this.Policies = new List<SecurityPolicyInstance>();
+            this.DeterminerConceptKey = DeterminerKeys.Specific;
         }
 
         /// <summary>
         /// Gets a list of all addresses associated with the entity
         /// </summary>
-        [AutoLoad()]
-        [AutoLoad(EntityClassKeyStrings.Patient)]
-        [AutoLoad(EntityClassKeyStrings.ServiceDeliveryLocation)]
-        [AutoLoad(EntityClassKeyStrings.Provider)]
-        [AutoLoad(EntityClassKeyStrings.Person)]
-        [AutoLoad(EntityClassKeyStrings.Place)]
-        [AutoLoad(EntityClassKeyStrings.State)]
-        [AutoLoad(EntityClassKeyStrings.Country)]
-        [AutoLoad(EntityClassKeyStrings.CountyOrParish)]
-        [AutoLoad(EntityClassKeyStrings.CityOrTown)]
-        [AutoLoad(EntityClassKeyStrings.Organization)]
         [XmlElement("address"), JsonProperty("address")]
         public List<EntityAddress> Addresses { get; set; }
 
@@ -116,21 +70,8 @@ namespace SanteDB.Core.Model.Entities
         /// Class concept datal load property
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad()]
         [SerializationReference(nameof(ClassConceptKey))]
-        public Concept ClassConcept
-        {
-            get
-            {
-                this.m_classConcept = base.DelayLoad(this.m_classConceptId, this.m_classConcept);
-                return this.m_classConcept;
-            }
-            set
-            {
-                this.m_classConcept = value;
-                this.m_classConceptId = value?.Key;
-            }
-        }
+        public Concept ClassConcept { get; set; }
 
         /// <summary>
         /// Class concept
@@ -138,15 +79,18 @@ namespace SanteDB.Core.Model.Entities
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(EntityClassKeys))]
-        public virtual Guid? ClassConceptKey
+        public Guid? ClassConceptKey
         {
-            get { return this.m_classConceptId; }
+            get => this.m_classConceptKey;
             set
             {
-                if (this.m_classConceptId != value)
+                if (value.HasValue && !this.ValidateClassKey(value))
                 {
-                    this.m_classConceptId = value;
-                    this.m_classConcept = null;
+                    throw new InvalidOperationException(ErrorMessages.INVALID_CLASS_CODE);
+                }
+                else
+                {
+                    this.m_classConceptKey = value;
                 }
             }
         }
@@ -156,60 +100,21 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(CreationActKey))]
         [XmlIgnore, JsonIgnore]
-        public Act CreationAct
-        {
-            get
-            {
-                this.m_creationAct = base.DelayLoad(this.m_creationActId, this.m_creationAct);
-                return this.m_creationAct;
-            }
-            set
-            {
-                this.m_creationAct = value;
-                this.m_creationActId = value?.Key;
-            }
-        }
+        public Act CreationAct { get; set; }
 
         /// <summary>
         /// Creation act reference
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("creationAct"), JsonProperty("creationAct")]
-        public Guid? CreationActKey
-        {
-            get { return this.m_creationActId; }
-            set
-            {
-                if (this.m_creationActId != value)
-                {
-                    this.m_creationActId = value;
-                    this.m_creationAct = null;
-                }
-            }
-        }
+        public Guid? CreationActKey { get; set; }
 
         /// <summary>
         /// Determiner concept
         /// </summary>
         [SerializationReference(nameof(DeterminerConceptKey))]
         [XmlIgnore, JsonIgnore]
-        [AutoLoad()]
-        public virtual Concept DeterminerConcept
-        {
-            get
-            {
-                this.m_determinerConcept = base.DelayLoad(this.m_determinerConceptId, this.m_determinerConcept);
-                return this.m_determinerConcept;
-            }
-            set
-            {
-                this.m_determinerConcept = value;
-                if (value == null)
-                    this.m_determinerConceptId = Guid.Empty;
-                else
-                    this.m_determinerConceptId = value.Key;
-            }
-        }
+        public virtual Concept DeterminerConcept { get; set; }
 
         /// <summary>
         /// Determiner concept
@@ -217,23 +122,11 @@ namespace SanteDB.Core.Model.Entities
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("determinerConcept"), JsonProperty("determinerConcept")]
         [Binding(typeof(DeterminerKeys))]
-        public virtual Guid? DeterminerConceptKey
-        {
-            get { return this.m_determinerConceptId; }
-            set
-            {
-                if (this.m_determinerConceptId != value)
-                {
-                    this.m_determinerConceptId = value;
-                    this.m_determinerConcept = null;
-                }
-            }
-        }
+        public virtual Guid? DeterminerConceptKey { get; set; }
 
         /// <summary>
         /// Gets a list of all extensions associated with the entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("extension"), JsonProperty("extension")]
         public List<EntityExtension> Extensions
         {
@@ -244,21 +137,21 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets the identifiers associated with this entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("identifier"), JsonProperty("identifier")]
-        public List<EntityIdentifier> Identifiers { get; set; }
+        public List<EntityIdentifier> Identifiers { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets a list of all names associated with the entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("name"), JsonProperty("name")]
         public List<EntityName> Names { get; set; }
 
         /// <summary>
         /// Gets a list of all notes associated with the entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("note"), JsonProperty("note")]
         public List<EntityNote> Notes { get; set; }
 
@@ -271,7 +164,6 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets a list of all associated entities for this entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("relationship"), JsonProperty("relationship")]
         public List<EntityRelationship> Relationships
         {
@@ -284,23 +176,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
-        [AutoLoad()]
-        public Concept StatusConcept
-        {
-            get
-            {
-                this.m_statusConcept = base.DelayLoad(this.m_statusConceptId, this.m_statusConcept);
-                return this.m_statusConcept;
-            }
-            set
-            {
-                this.m_statusConcept = value;
-                if (value == null)
-                    this.m_statusConceptId = Guid.Empty;
-                else
-                    this.m_statusConceptId = value.Key;
-            }
-        }
+        public Concept StatusConcept { get; set; }
 
         /// <summary>
         /// Status concept id
@@ -308,34 +184,17 @@ namespace SanteDB.Core.Model.Entities
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
-        public Guid? StatusConceptKey
-        {
-            get { return this.m_statusConceptId; }
-            set
-            {
-                if (this.m_statusConceptId != value)
-                {
-                    this.m_statusConceptId = value;
-                    this.m_statusConcept = null;
-                }
-            }
-        }
+        public Guid? StatusConceptKey { get; set; }
 
         /// <summary>
         /// Gets a list of all tags associated with the entity
         /// </summary>
-        [AutoLoad()]
         [XmlElement("tag"), JsonProperty("tag")]
         public List<EntityTag> Tags { get; set; }
 
         /// <summary>
         /// Gets a list of all telecommunications addresses associated with the entity
         /// </summary>
-        [AutoLoad(EntityClassKeyStrings.Patient)]
-        [AutoLoad(EntityClassKeyStrings.ServiceDeliveryLocation)]
-        [AutoLoad(EntityClassKeyStrings.Provider)]
-        [AutoLoad(EntityClassKeyStrings.Organization)]
-        [AutoLoad(EntityClassKeyStrings.Person)]
         [XmlElement("telecom"), JsonProperty("telecom")]
         public List<EntityTelecomAddress> Telecoms
         {
@@ -347,75 +206,27 @@ namespace SanteDB.Core.Model.Entities
         /// Gets the template key
         /// </summary>
         [XmlElement("template"), JsonProperty("template")]
-        public Guid? TemplateKey
-        {
-            get
-            {
-                return this.m_templateKey;
-            }
-            set
-            {
-                this.m_templateKey = value;
-                if (value.HasValue && value != this.m_template?.Key)
-                    this.m_template = null;
-            }
-        }
+        public Guid? TemplateKey { get; set; }
 
         /// <summary>
         /// Gets or sets the template definition
         /// </summary>
-        [AutoLoad, SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
-        public TemplateDefinition Template
-        {
-            get
-            {
-                this.m_template = base.DelayLoad(this.m_templateKey, this.m_template);
-                return this.m_template;
-            }
-            set
-            {
-                this.m_template = value;
-                this.m_templateKey = value?.Key;
-            }
-        }
+        [SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
+        public TemplateDefinition Template { get; set; }
 
         /// <summary>
         /// Type concept identifier
         /// </summary>
         [SerializationReference(nameof(TypeConceptKey))]
-        [AutoLoad()]
         [XmlIgnore, JsonIgnore]
-        public Concept TypeConcept
-        {
-            get
-            {
-                this.m_typeConcept = base.DelayLoad(this.m_typeConceptId, this.m_typeConcept);
-                return this.m_typeConcept;
-            }
-            set
-            {
-                this.m_typeConcept = value;
-                this.m_typeConceptId = value?.Key;
-            }
-        }
+        public Concept TypeConcept { get; set; }
 
         /// <summary>
         /// Type concept identifier
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
-        public Guid? TypeConceptKey
-        {
-            get { return this.m_typeConceptId; }
-            set
-            {
-                if (this.m_typeConceptId != value)
-                {
-                    this.m_typeConceptId = value;
-                    this.m_typeConcept = null;
-                }
-            }
-        }
+        public Guid? TypeConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the security policy instances associated with the entity
@@ -435,21 +246,25 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Entity;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
-                this.Addresses?.SemanticEquals(other.Addresses) == true &&
+                this.Addresses?.SemanticEquals(other.Addresses) != false &&
                 this.ClassConceptKey == other.ClassConceptKey &&
                 this.CreationActKey == other.CreationActKey &&
                 this.DeterminerConceptKey == other.DeterminerConceptKey &&
-                this.Extensions?.SemanticEquals(other.Extensions) == true &&
-                this.Identifiers?.SemanticEquals(other.Identifiers) == true &&
-                this.Names?.SemanticEquals(other.Names) == true &&
-                this.Notes?.SemanticEquals(other.Notes) == true &&
-                this.Participations?.SemanticEquals(other.Participations) == true &&
-                this.Relationships?.SemanticEquals(other.Relationships) == true &&
+                this.Extensions?.SemanticEquals(other.Extensions) != false &&
+                this.Identifiers?.SemanticEquals(other.Identifiers) != false &&
+                this.Names?.SemanticEquals(other.Names) != false &&
+                this.Notes?.SemanticEquals(other.Notes) != false &&
+                this.Participations?.SemanticEquals(other.Participations) != false &&
+                this.Relationships?.SemanticEquals(other.Relationships) != false &&
                 this.StatusConceptKey == other.StatusConceptKey &&
-                this.Tags?.SemanticEquals(other.Tags) == true &&
-                this.Telecoms?.SemanticEquals(other.Telecoms) == true &&
+                this.Tags?.SemanticEquals(other.Tags) != false &&
+                this.Telecoms?.SemanticEquals(other.Telecoms) != false &&
                 this.TemplateKey == other.TemplateKey &&
                 this.TypeConceptKey == other.TypeConceptKey;
         }
@@ -554,23 +369,6 @@ namespace SanteDB.Core.Model.Entities
             }
         }
 
-        /// <summary>
-        /// Copies the entity
-        /// </summary>
-        /// <returns></returns>
-        public virtual IdentifiedData Copy()
-        {
-            var retVal = base.Clone() as Entity;
-            retVal.Relationships = new List<EntityRelationship>(this.Relationships.ToArray());
-            retVal.Identifiers = new List<EntityIdentifier>(this.Identifiers.ToArray());
-            retVal.Names = new List<EntityName>(this.Names.ToArray());
-            retVal.Notes = new List<EntityNote>(this.Notes.ToArray());
-            retVal.Participations = new List<ActParticipation>(this.Participations.ToArray());
-            retVal.Addresses = new List<EntityAddress>(this.Addresses.ToArray());
-            retVal.Tags = new List<EntityTag>(this.Tags.ToArray());
-            retVal.Extensions = new List<EntityExtension>(this.Extensions.ToArray());
-            return retVal;
-        }
 
         /// <summary>
         /// Should serialize template key
@@ -585,16 +383,11 @@ namespace SanteDB.Core.Model.Entities
         {
             var pol = EntitySource.Current.Provider.Query<SecurityPolicy>(o => o.Oid == policyId).SingleOrDefault();
             if (pol == null)
+            {
                 throw new KeyNotFoundException($"Policy {policyId} not found");
-            this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
-        }
+            }
 
-        /// <summary>
-        /// Detects whether this object has a policy
-        /// </summary>
-        public bool HasPolicy(string policyId)
-        {
-            return this.LoadCollection<SecurityPolicyInstance>(nameof(Policies)).Any(o => o.LoadProperty<SecurityPolicy>(nameof(SecurityPolicyInstance.Policy)).Oid == policyId);
+            this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
         }
 
         /// <summary>
@@ -602,7 +395,8 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
         {
-            var tag = this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey);
+            var tag = this.LoadProperty(o => o.Tags)?.FirstOrDefault(o => o.TagKey == tagKey);
+            this.Tags = this.Tags ?? new List<EntityTag>();
             if (tag == null)
             {
                 tag = new EntityTag(tagKey, tagValue);
@@ -641,25 +435,56 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags.FirstOrDefault(o=>o.TagKey == tagKey)?.Value : this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value : this.LoadCollection(o => o.Tags).FirstOrDefault(o => o.TagKey == tagKey)?.Value;
 
         /// <summary>
         /// Remove the specified <paramref name="tagKey"/> from this objects tags
         /// </summary>
-        public void RemoveTag(string tagKey) => this.Tags.RemoveAll(o => o.TagKey == tagKey);
+        public void RemoveTag(string tagKey)
+        {
+            if (tagKey.StartsWith("$"))
+            {
+                this.Tags?.RemoveAll(o => o.TagKey == tagKey);
+            }
+            else
+            {
+                this.LoadProperty(o => o.Tags).RemoveAll(t => t.TagKey == tagKey);
+            }
+        }
+
 
         /// <summary>
         /// Remove tags matching <paramref name="predicate"/> from the tag collection
         /// </summary>
-        public void RemoveAllTags(Predicate<ITag> predicate) => this.Tags.RemoveAll(predicate);
+        public void RemoveAllTags(Predicate<ITag> predicate) => this.Tags?.RemoveAll(predicate);
 
         /// <summary>
         /// Try to fetch the tag
         /// </summary>
         public bool TryGetTag(string tagKey, out ITag tag)
         {
-            tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            tag = this.Tags?.FirstOrDefault(o => o.TagKey == tagKey);
             return tag != null;
         }
+
+
+        /// <summary>
+        /// Gets or sets the geo tag
+        /// </summary>
+        [XmlElement("geo"), JsonProperty("geo")]
+        public GeoTag GeoTag { get; set; }
+
+        /// <summary>
+        /// Gets the geo tag key
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public Guid? GeoTagKey { get; set; }
+
+        /// <summary>
+        /// Validate the class key
+        /// </summary>
+        /// <param name="classKey">The UUID of the class concept</param>
+        /// <returns>True if the <paramref name="classKey"/> is valid for this type of object</returns>
+        protected virtual bool ValidateClassKey(Guid? classKey) => true;
     }
 }

@@ -16,14 +16,17 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.Interfaces;
+using Microsoft.CSharp;
+using SanteDB.Core.Exceptions;
+using SanteDB.Core.i18n;
+using SanteDB.Core.Model.Map.Builder;
 using System;
-using System.Collections;
+using System.CodeDom;
+using System.CodeDom.Compiler;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -31,70 +34,17 @@ using System.Reflection;
 
 namespace SanteDB.Core.Model.Map
 {
-
-    /// <summary>
-    /// Represents model mapping event arguments
-    /// </summary>
-    public class ModelMapEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Domain object
-        /// </summary>
-        public Guid Key { get; set; }
-
-        /// <summary>
-        /// Identified data model object
-        /// </summary>
-        public IdentifiedData ModelObject { get; set; }
-
-        /// <summary>
-        /// Gets or sets the domain object type
-        /// </summary>
-        public Type ObjectType { get; set; }
-
-        /// <summary>
-        /// Gets or sets a cancel comand
-        /// </summary>
-        public bool Cancel { get; set; }
-    }
-
     /// <summary>
     /// Model mapper
     /// </summary>
     public sealed class ModelMapper
     {
+        private ConcurrentDictionary<Type, IModelMapper> m_mappers = new ConcurrentDictionary<Type, Builder.IModelMapper>();
+        private static ConcurrentDictionary<String, Assembly> m_loadedMaps = new ConcurrentDictionary<string, Assembly>();
 
-        /// <summary>
-        /// Primitive types
-        /// </summary>
-        private static readonly HashSet<Type> primitives = new HashSet<Type>()
-        {
-            typeof(bool),
-            typeof(bool?),
-            typeof(int),
-            typeof(int?),
-            typeof(float),
-            typeof(float?),
-            typeof(double),
-            typeof(double?),
-            typeof(decimal),
-            typeof(decimal?),
-            typeof(String),
-            typeof(Guid),
-            typeof(Guid?),
-            typeof(Type),
-            typeof(DateTime),
-            typeof(DateTime?),
-            typeof(DateTimeOffset),
-            typeof(DateTimeOffset?),
-            typeof(UInt32),
-            typeof(UInt32?),
-            typeof(byte[])
-        };
+        //private static Dictionary<Type, Dictionary<String, PropertyInfo[]>> s_modelPropertyCache = new Dictionary<Type, Dictionary<String, PropertyInfo[]>>();
 
-        private static Dictionary<Type, Dictionary<String, PropertyInfo[]>> s_modelPropertyCache = new Dictionary<Type, Dictionary<String, PropertyInfo[]>>();
-
-        private static Dictionary<Type, String> m_domainClassPropertyName = new Dictionary<Type, string>();
+        //private static Dictionary<Type, String> m_domainClassPropertyName = new Dictionary<Type, string>();
 
         /// <summary>
         /// Maps a model property at a root level only
@@ -113,9 +63,13 @@ namespace SanteDB.Core.Model.Map
             tdomain = tdomain ?? classMap?.DomainType;
             PropertyMap propMap = null;
             if (classMap?.TryGetModelProperty(propertyInfo.Name, out propMap) == true)
+            {
                 return tdomain?.GetRuntimeProperty(propMap.DomainName);
+            }
             else
+            {
                 return tdomain?.GetRuntimeProperty(propertyInfo.Name);
+            }
         }
 
         // The map file
@@ -124,48 +78,125 @@ namespace SanteDB.Core.Model.Map
         /// <summary>
         /// Creates a new mapper from source stream
         /// </summary>
-        public ModelMapper(Stream sourceStream)
+        public ModelMapper(Stream sourceStream, String name, bool useReflectionOnly = false)
         {
-            this.Load(sourceStream);
+            this.Load(sourceStream, name, useReflectionOnly);
         }
 
         /// <summary>
         /// Load mapping from a stream
         /// </summary>
-        private void Load(Stream sourceStream)
+        private void Load(Stream sourceStream, String name, bool useReflectionOnly)
         {
             this.m_mapFile = ModelMap.Load(sourceStream);
-        }
 
-        /// <summary>
-        /// Fired anytime any model mapper maps to a model
-        /// </summary>
-        public static event EventHandler<ModelMapEventArgs> MappingToModel;
-        /// <summary>
-        /// Fired anytime any model mapper maps finished
-        /// </summary>
-        public static event EventHandler<ModelMapEventArgs> MappedToModel;
-
-        /// <summary>
-        /// Fires the pre map returning whether cancellation is necessary
-        /// </summary>
-        private static object FireMappingToModel(object sender, Guid key, IdentifiedData modelInstance)
-        {
-            ModelMapEventArgs e = new ModelMapEventArgs() { ObjectType = modelInstance.GetType(), ModelObject = modelInstance, Key = key };
-            MappingToModel?.Invoke(sender, e);
-            if (e.Cancel)
-                return e.ModelObject;
+            if (m_loadedMaps.TryGetValue(name, out Assembly asm))
+            {
+                this.ProcessAssembly(asm);
+            }
             else
-                return null;
+            {
+                if (!useReflectionOnly)
+                {
+                    try
+                    {
+                        var csProvider = new CSharpCodeProvider();
+                        var compileUnit = new CodeCompileUnit();
+
+                        // Add namespace
+                        compileUnit.Namespaces.Add(new Builder.ModelMapBuilder().CreateCodeNamespace(this.m_mapFile, name));
+
+                        compileUnit.ReferencedAssemblies.Add(typeof(Type).Assembly.Location);
+                        compileUnit.ReferencedAssemblies.Add(typeof(HashSet<>).Assembly.Location);
+                        compileUnit.ReferencedAssemblies.AddRange(this.m_mapFile.Class.Select(o => o.ModelType.Assembly.Location).Distinct().ToArray());
+                        compileUnit.ReferencedAssemblies.AddRange(this.m_mapFile.Class.Select(o => o.DomainType.Assembly.Location).Distinct().ToArray());
+                        foreach (var casm in compileUnit.ReferencedAssemblies.OfType<String>().ToArray().Select(o => Assembly.LoadFile(o)).SelectMany(o => o.GetReferencedAssemblies()))
+                        {
+                            var asmC = Assembly.Load(casm);
+                            compileUnit.ReferencedAssemblies.Add(asmC.Location);
+                        }
+
+                        // Compiler parameters
+                        var compileParameters = new CompilerParameters();
+                        compileParameters.ReferencedAssemblies.AddRange(compileUnit.ReferencedAssemblies.OfType<String>().ToArray());
+                        compileParameters.GenerateInMemory = true;
+                        compileParameters.GenerateExecutable = false;
+
+#if DEBUG
+                        using (var sw = new StringWriter())
+                        {
+                            csProvider.GenerateCodeFromCompileUnit(compileUnit, sw, new CodeGeneratorOptions() { });
+                            String codeReview = sw.ToString();
+                        }
+#endif
+                        var results = csProvider.CompileAssemblyFromDom(compileParameters, compileUnit);
+
+                        if (results.Errors.HasErrors)
+                        {
+                            throw new ModelMapCompileException(results.Errors);
+                        }
+
+                        this.ProcessAssembly(results.CompiledAssembly);
+                        m_loadedMaps.TryAdd(name, results.CompiledAssembly);
+                    }
+                    catch (ModelMapCompileException e)
+                    {
+                        throw new Exception($"Could not compile model map {name}", e);
+                    }
+                    catch (ModelMapValidationException e)
+                    {
+                        throw new Exception($"Could not validate model map {name}", e);
+                    }
+                    catch (Exception)
+                    {
+                        this.InitializeReflection(this.m_mapFile);
+                    }
+                }
+                else
+                {
+                    this.InitializeReflection(this.m_mapFile);
+                }
+            }
         }
 
         /// <summary>
-        /// Fires that a map has occurred
+        /// Creates a reflection map only for the map file
         /// </summary>
-        private static void FireMappedToModel(object sender, Guid key, IdentifiedData modelInstance)
+        private void InitializeReflection(ModelMap mapFile)
         {
-            ModelMapEventArgs e = new ModelMapEventArgs() { ObjectType = modelInstance.GetType(), Key = key, ModelObject = modelInstance };
-            MappedToModel?.BeginInvoke(sender, e, null, null);
+            foreach (var map in mapFile.Class)
+            {
+                var mapper = new ReflectionModelMapper(map, this);
+                this.m_mappers.TryAdd(map.DomainType, mapper);
+                this.m_mappers.TryAdd(map.ModelType, mapper);
+            }
+        }
+
+        /// <summary>
+        /// Process the provided assembly for mappers
+        /// </summary>
+        private void ProcessAssembly(Assembly asm)
+        {
+            // Load the types
+            foreach (var t in asm.GetExportedTypesSafe().Where(t => typeof(IModelMapper).IsAssignableFrom(t)))
+            {
+                var map = Activator.CreateInstance(t, this) as IModelMapper;
+                this.m_mappers.TryAdd(map.SourceType, map);
+                this.m_mappers.TryAdd(map.TargetType, map);
+            }
+        }
+
+        /// <summary>
+        /// Gets a model mapper that can handle the specified type
+        /// </summary>
+        public IModelMapper GetModelMapper(Type forType)
+        {
+            if (this.m_mappers.TryGetValue(forType, out IModelMapper retVal))
+            {
+                return retVal;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -173,32 +204,53 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public Expression MapTypeCast(UnaryExpression sourceExpression, Expression accessExpression)
         {
-
             // First we find the map for the specified type
             ClassMap classMap = this.m_mapFile.GetModelClassMap(sourceExpression.Operand.Type);
 
             PropertyMap castMap = classMap.Cast?.Find(o => o.ModelType == sourceExpression.Type);
-            if (castMap == null) throw new InvalidCastException();
-            Expression accessExpr = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(castMap.DomainName));
-            while (castMap.Via != null)
+            if (castMap == null)
             {
-                castMap = castMap.Via;
-                accessExpr = Expression.MakeMemberAccess(accessExpr, accessExpr.Type.GetRuntimeProperty(castMap.DomainName));
+                throw new InvalidCastException();
             }
-            return accessExpr;
 
+            Expression accessExpr = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(castMap.DomainName));
+
+            return accessExpr;
         }
 
         /// <summary>
-        /// Map member 
+        /// Map member
         /// </summary>
         public Expression MapModelMember(MemberExpression memberExpression, Expression accessExpression, Type modelType = null)
         {
+            if (accessExpression.Type.StripNullable() == (modelType ?? memberExpression.Expression.Type).StripNullable())
+            {
+                return accessExpression;
+            }
 
-            ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType ?? memberExpression.Expression.Type);
+            ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType ?? memberExpression.Expression.Type.StripNullable());
 
             if (classMap == null)
-                return accessExpression;
+            {
+                // Special case for interface
+                if (memberExpression.Expression.Type.IsInterface)
+                {
+                    classMap = new ClassMap()
+                    {
+                        DomainClass = accessExpression.Type.AssemblyQualifiedName,
+                        ModelClass = memberExpression.Expression.Type.AssemblyQualifiedName
+                    };
+                }
+                else
+                {
+                    // Is there a different map we could use
+                    classMap = this.m_mapFile.Class.FirstOrDefault(o => o.DomainType == accessExpression.Type);
+                    if (classMap == null || !classMap.ModelType.IsAssignableFrom(modelType ?? memberExpression.Expression.Type))
+                    {
+                        throw new InvalidOperationException(string.Format(ErrorMessages.MAP_NOT_FOUND, modelType ?? memberExpression.Type, accessExpression.Type));
+                    }
+                }
+            }
 
             // Expression is the same class? Collapse if it is a key
             MemberExpression accessExpressionAsMember = accessExpression as MemberExpression;
@@ -206,32 +258,12 @@ namespace SanteDB.Core.Model.Map
             PropertyMap propertyMap = null;
 
             if (memberExpression.Member.Name == "Key" && classMap.TryGetCollapseKey(accessExpressionAsMember?.Member.Name, out collapseKey))
+            {
                 return Expression.MakeMemberAccess(accessExpressionAsMember.Expression, accessExpressionAsMember.Expression.Type.GetRuntimeProperty(collapseKey.KeyName));
+            }
             else if (classMap.TryGetModelProperty(memberExpression.Member.Name, out propertyMap))
             {
-                // We have to map through an associative table
-                if (propertyMap.Via != null)
-                {
-                    Expression viaExpression = Expression.MakeMemberAccess(accessExpression, accessExpression.Type.GetRuntimeProperty(propertyMap.DomainName));
-                    var via = propertyMap.Via;
-                    while (via != null)
-                    {
-
-                        MemberInfo viaMember = viaExpression.Type.GetRuntimeProperty(via.DomainName);
-                        if (viaMember == null)
-                            break;
-                        viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
-
-                        if (via.OrderBy != null && viaExpression.Type.FindInterfaces((o, _) => o == typeof(IEnumerable), null).Length > 0)
-                            viaExpression = viaExpression.Sort(via.OrderBy, via.SortOrder);
-                        if (via.Aggregate != AggregationFunctionType.None)
-                            viaExpression = viaExpression.Aggregate(via.Aggregate);
-                        via = via.Via;
-                    }
-                    return viaExpression;
-                }
-                else
-                    return Expression.MakeMemberAccess(accessExpression, this.ExtractDomainType(accessExpression.Type).GetRuntimeProperty(propertyMap.DomainName));
+                return Expression.MakeMemberAccess(accessExpression, this.ExtractDomainType(accessExpression.Type).GetRuntimeProperty(propertyMap.DomainName));
             }
             else
             {
@@ -241,35 +273,47 @@ namespace SanteDB.Core.Model.Map
                 // Get domain member and map
                 MemberInfo domainMember = accessExpression.Type.GetRuntimeProperty(memberExpression.Member.Name);
                 if (domainMember != null)
-                    return Expression.MakeMemberAccess(accessExpression, domainMember);
-                else
                 {
-                    // Try on the base? 
-                    if (classMap.ParentDomainProperty != null)
+                    return Expression.MakeMemberAccess(accessExpression, domainMember);
+                }
+                else if (accessExpression is ParameterExpression pe)
+                {
+                    // Try on the base?
+                    var baseType = modelType?.BaseType ?? memberExpression.Expression.Type.BaseType;
+                    var scanType = this.MapModelType(baseType);
+                    if (baseType == scanType) // No mapping
                     {
-                        domainMember = domainType.GetRuntimeProperty(classMap.ParentDomainProperty.DomainName);
-                        return MapModelMember(memberExpression, Expression.MakeMemberAccess(accessExpression, domainMember), (modelType ?? memberExpression.Expression.Type).BaseType);
-                    }
-                    else
-                    {
-                        //Debug.WriteLine(String.Format("Cannot find property information for {0}({1}).{2}", memberExpression.Expression, memberExpression.Expression.Type.Name, memberExpression.Member.Name));
                         return null;
                     }
+                    else
+                    {  // try to map
+                        return MapModelMember(memberExpression, Expression.Parameter(scanType, "o"), baseType);
+                    }
+                }
+                else
+                {
+                    return null;
                 }
             }
         }
-
 
         /// <summary>
         /// Extracts a domain type from a generic if needed
         /// </summary>
         public Type ExtractDomainType(Type domainType)
         {
-            if (!domainType.IsConstructedGenericType) return domainType;
+            if (!domainType.IsConstructedGenericType)
+            {
+                return domainType;
+            }
             else if (domainType.GenericTypeArguments.Length == 1)
+            {
                 return this.ExtractDomainType(domainType.GenericTypeArguments[0]);
+            }
             else
+            {
                 throw new InvalidOperationException("Cannot determine domain model type");
+            }
         }
 
         /// <summary>
@@ -277,12 +321,33 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public Type MapModelType(Type modelType)
         {
-            ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType);
-            if (classMap == null)
+            // Just a value type - don't look for a map
+            if (modelType.BaseType == typeof(ValueType))
+            {
                 return modelType;
+            }
+
+            ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType);
+            // No class mapping so go up the tree
+            if(modelType.BaseType == null)
+            {
+                return null;
+            }
+            else if (classMap == null && modelType.BaseType != typeof(Object))
+            {
+                return MapModelType(modelType.BaseType);
+            }
+            else if (classMap == null)
+            {
+                throw new InvalidOperationException($"Cannot map {modelType.FullName} to a domain type");
+            }
+
             Type domainType = classMap.DomainType;
             if (domainType == null)
+            {
                 throw new InvalidOperationException(String.Format("Cannot find class {0}", classMap.DomainClass));
+            }
+
             return domainType;
         }
 
@@ -293,10 +358,16 @@ namespace SanteDB.Core.Model.Map
         {
             ClassMap classMap = this.m_mapFile.Class.FirstOrDefault(o => o.DomainType == domainType);
             if (classMap == null)
+            {
                 return domainType;
+            }
+
             Type modelType = classMap.ModelType;
             if (domainType == null)
+            {
                 throw new InvalidOperationException(String.Format("Cannot find class {0}", classMap.DomainClass));
+            }
+
             return modelType;
         }
 
@@ -311,7 +382,9 @@ namespace SanteDB.Core.Model.Map
                 ClassMap classMap = this.m_mapFile.GetModelClassMap(this.ExtractDomainType(propertyExpression.Expression.Type));
 
                 if (classMap == null)
+                {
                     return lambdaParameterExpression;
+                }
 
                 // Expression is the same class? Collapse if it is a key
                 PropertyMap propertyMap = null;
@@ -322,57 +395,44 @@ namespace SanteDB.Core.Model.Map
                     {
                         classMap = this.m_mapFile.GetModelClassMap(classMap.ModelType.BaseType);
                         //                    var tDomain = rootExpression.Expression.Type.GetRuntimeProperty(classMap.ParentDomainProperty.DomainName);
-
                     }
                 }
 
-                // Is there a VIA that we need to express?
-                if (propertyMap.Via != null)
-                {
-                    Expression viaExpression = lambdaParameterExpression;
-                    var via = propertyMap.Via;
-                    while (via != null)
-                    {
 
-                        MemberInfo viaMember = viaExpression.Type.GetRuntimeProperty(via.DomainName);
-                        if (viaMember != null)
-                            viaExpression = Expression.MakeMemberAccess(viaExpression, viaMember);
-                        via = via.Via;
-                    }
-                    return viaExpression;
-                }
-                else
-                    return lambdaParameterExpression;
-
+                return lambdaParameterExpression;
             }
             else
             {
-
                 return lambdaParameterExpression;
             }
         }
 
         /// <summary>
-        /// Convert the specified lambda expression from model into query
+        /// Automap the model expression using the configured mapper type
         /// </summary>
-        /// <param name="expression">The expression to be converted</param>
-        /// <param name="throwOnError">When true, throw an exception of the expression can't be converted, otherwise return null when expression cannot be parsed</param>
-        public Expression<Func<TTo, TReturn>> MapModelExpression<TFrom, TTo, TReturn>(Expression<Func<TFrom, TReturn>> expression, bool throwOnError = true)
+        public LambdaExpression MapModelExpression<TFrom, TReturn>(Expression<Func<TFrom, TReturn>> expression, Type toType, bool throwOnError = true)
         {
             try
             {
-                var parameter = Expression.Parameter(typeof(TTo), expression.Parameters[0].Name);
+                var parameter = Expression.Parameter(toType, expression.Parameters[0].Name);
 
-                Expression expr = new ModelExpressionVisitor(this, parameter).Visit(expression.Body);
+                Expression expr = new ModelExpressionVisitor(this, toType, parameter).Visit(expression.Body);
                 if (expr == null && throwOnError)
-                    throw new InvalidOperationException("Could not map expressions");
+                {
+                    throw new ArgumentException(ErrorMessages.MAP_EXPRESSION_NOT_POSSIBLE);
+                }
                 else if (expr == null)
+                {
                     return null;
+                }
                 else
                 {
                     if (typeof(TReturn) != expr.Type)
+                    {
                         expr = Expression.Convert(expr, typeof(TReturn));
-                    var retVal = Expression.Lambda<Func<TTo, TReturn>>(expr, parameter);
+                    }
+
+                    var retVal = Expression.Lambda(expr, parameter);
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Map Expression: {0} > {1}", expression, retVal);
 #endif
@@ -383,18 +443,75 @@ namespace SanteDB.Core.Model.Map
             {
 #if VERBOSE_DEBUG
                 Debug.WriteLine("Error converting {0}. {1}", expression, e);
-#endif 
-                throw;
+#endif
+                if (throwOnError)
+                {
+                    throw;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convert the specified lambda expression from model into query
+        /// </summary>
+        /// <param name="expression">The expression to be converted</param>
+        /// <param name="throwOnError">When true, throw an exception of the expression can't be converted, otherwise return null when expression cannot be parsed</param>
+        public Expression<Func<TTo, TReturn>> MapModelExpression<TFrom, TTo, TReturn>(Expression<Func<TFrom, TReturn>> expression, bool throwOnError = true) => (Expression<Func<TTo, TReturn>>)this.MapModelExpression(expression, typeof(TTo), throwOnError);
+
+        /// <summary>
+        /// Map model instance
+        /// </summary>
+        public object MapModelInstance<TModel>(TModel modelInstance)
+            where TModel : new()
+        {
+            if (this.m_mappers.TryGetValue(modelInstance.GetType(), out IModelMapper modelMapper))
+            {
+                return modelMapper.MapToTarget(modelInstance);
+            }
+            else
+            {
+                return null;
             }
         }
 
         /// <summary>
         /// Map model instance
         /// </summary>
-        public TDomain MapModelInstance<TModel, TDomain>(TModel modelInstance) where TDomain : new()
+        public TDomain MapModelInstance<TModel, TDomain>(TModel modelInstance)
+            where TDomain : new()
+            where TModel : new()
         {
+            if (modelInstance == null)
+            {
+                return default(TDomain);
+            }
 
-
+            // Can we find a map between the type and another?
+            if (this.m_mappers.TryGetValue(typeof(TModel), out IModelMapper modelMapper) && modelMapper is IModelMapper<TModel, TDomain> preferredMapper)
+            {
+                return preferredMapper.MapToTarget(modelInstance);
+            }
+            else if (this.m_mappers.TryGetValue(typeof(TDomain), out modelMapper) ||
+                this.m_mappers.TryGetValue(modelInstance.GetType(), out modelMapper))
+            {
+                if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
+                {
+                    return smodelMapper.MapToTarget(modelInstance);
+                }
+                else
+                {
+                    return (TDomain)modelMapper.MapToTarget(modelInstance);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.MAP_NOT_FOUND, typeof(TModel), typeof(TDomain)));
+            }
+            /*
             ClassMap classMap = this.m_mapFile.GetModelClassMap(typeof(TModel), typeof(TDomain));
             if (classMap == null)
                 classMap = this.m_mapFile.GetModelClassMap(typeof(TModel));
@@ -435,7 +552,6 @@ namespace SanteDB.Core.Model.Map
             // Iterate through properties
             foreach (var propInfo in properties)
             {
-
                 var propValue = propInfo.GetValue(modelInstance);
                 // Property info
                 if (propValue == null)
@@ -458,7 +574,7 @@ namespace SanteDB.Core.Model.Map
                 PropertyInfo domainProperty = null;
                 Object targetObject = retVal;
 
-                // Set 
+                // Set
                 if (propMap == null)
                     domainProperty = typeof(TDomain).GetRuntimeProperty(propInfo.Name);
                 else
@@ -483,25 +599,62 @@ namespace SanteDB.Core.Model.Map
                     domainProperty.SetValue(targetObject, (propValue as Type).AssemblyQualifiedName);
                 else if (MapUtil.TryConvert(propValue, domainProperty.PropertyType, out domainValue))
                     domainProperty.SetValue(targetObject, domainValue);
-
             }
 
             return retVal;
+            */
         }
 
         /// <summary>
-        /// Map model instance
+        /// Map the specified domain instance
         /// </summary>
-        public TModel MapDomainInstance<TDomain, TModel>(TDomain domainInstance, bool useCache = true, HashSet<Guid> keyStack = null) where TModel : new()
+        public TModel MapDomainInstance<TDomain, TModel>(TDomain domainInstance)
+            where TModel : new()
+            where TDomain : new()
         {
-            return (TModel)MapDomainInstance(typeof(TDomain), typeof(TModel), domainInstance, useCache, keyStack);
+            if (domainInstance == null)
+            {
+                return default(TModel);
+            }
+
+            if (this.m_mappers.TryGetValue(typeof(TDomain), out IModelMapper modelMapper) && modelMapper is IModelMapper<TModel, TDomain> preferredMapper)
+            {
+                return preferredMapper.MapToSource(domainInstance);
+            }
+            else if (this.m_mappers.TryGetValue(typeof(TModel), out modelMapper) ||
+                this.m_mappers.TryGetValue(domainInstance.GetType(), out modelMapper)
+                )
+            {
+                if (modelMapper is IModelMapper<TModel, TDomain> smodelMapper)
+                {
+                    return smodelMapper.MapToSource(domainInstance);
+                }
+                else
+                {
+                    return (TModel)modelMapper.MapToSource(domainInstance);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.MAP_NOT_FOUND, typeof(TModel), typeof(TDomain)));
+            }
         }
 
         /// <summary>
         /// Map domain instance
         /// </summary>
-        public object MapDomainInstance(Type tDomain, Type tModel, object domainInstance, bool useCache = true, HashSet<Guid> keyStack = null)
+        public object MapDomainInstance(Type tDomain, Type tModel, object domainInstance)
         {
+            if (this.m_mappers.TryGetValue(tDomain, out IModelMapper modelMapper) ||
+                this.m_mappers.TryGetValue(tModel, out modelMapper))
+            {
+                return modelMapper.MapToSource(domainInstance);
+            }
+            else
+            {
+                return null;
+            }
+            /*
             ClassMap classMap = this.m_mapFile.GetModelClassMap(tModel, tDomain);
 
             if (domainInstance == null)
@@ -550,7 +703,7 @@ namespace SanteDB.Core.Model.Map
                     return cache;
             }
 
-            // Classifier value 
+            // Classifier value
             String classifierValue = null;
             String classPropertyName = String.Empty;
             if (!m_domainClassPropertyName.TryGetValue(tModel, out classPropertyName))
@@ -623,11 +776,9 @@ namespace SanteDB.Core.Model.Map
                 }
             }
 
-
             // Iterate the properties and map
             foreach (var modelPropertyInfo in properties)
             {
-
                 // Map property
                 PropertyMap propMap = null;
                 classMap.TryGetModelProperty(modelPropertyInfo.Name, out propMap);
@@ -664,7 +815,7 @@ namespace SanteDB.Core.Model.Map
                 object sourceObject = domainInstance;
                 PropertyInfo sourceProperty = propInfo;
 
-                // Go through the via elements in the object map. This code traces a path 
+                // Go through the via elements in the object map. This code traces a path
                 // through the domain class instantiating any necessary associative entity
                 // Example when a model entity is really two or three tables in the DB..
                 // This piece of code does whatever is necessary to traverse the data model,
@@ -736,7 +887,6 @@ namespace SanteDB.Core.Model.Map
 
                                 // Get the generic method for LIST to be widdled down
                                 instance = Expression.Lambda(aggregateExpr, parm).Compile().DynamicInvoke(instance);
-
                             }
                             via = via.Via;
                         }
@@ -785,7 +935,6 @@ namespace SanteDB.Core.Model.Map
 
                             // Get the generic method for LIST to be widdled down
                             instance = Expression.Lambda(aggregateExpr, parm).Compile().DynamicInvoke(instance);
-
                         }
                         via = via.Via;
                     }
@@ -809,7 +958,7 @@ namespace SanteDB.Core.Model.Map
             // (retVal as IdentifiedData).SetDelayLoad(true);
 
             return retVal;
+            */
         }
-
     }
 }

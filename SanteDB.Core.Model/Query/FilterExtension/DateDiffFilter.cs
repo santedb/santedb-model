@@ -16,10 +16,8 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using SanteDB.Core.Model;
-using SanteDB.Core.Model.Query;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -46,33 +44,46 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         /// </summary>
         public BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms)
         {
-            if (parms.Length != 1) throw new ArgumentOutOfRangeException("date_diff requires one parameter : value=:(date_diff|other)comparator");
+            if (parms.Length != 1)
+            {
+                throw new ArgumentOutOfRangeException("date_diff requires one parameter : value=:(date_diff|other)comparator");
+            }
 
             // Is scope nullable?
             if (scope.Type.IsConstructedGenericType && scope.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
                 scope = Expression.MakeMemberAccess(scope, scope.Type.GetRuntimeProperty("Value"));
+            }
 
             // Convert value expression if it is a string
             var constVal = valueExpression as ConstantExpression;
             if (constVal != null && constVal.Value is String)
+            {
                 valueExpression = Expression.Constant(TimeSpan.Parse(constVal.Value.ToString()));
+            }
 
             // Convert scope 
             constVal = scope as ConstantExpression;
             if (constVal != null && constVal.Value is String)
+            {
                 scope = Expression.Constant(DateTime.Parse(constVal.Value.ToString()));
+            }
 
             // Convert expression
             if (parms[0].NodeType == ExpressionType.Constant)
             {
                 constVal = parms[0] as ConstantExpression;
                 if (constVal == null || constVal.Value == null || "null".Equals(constVal.Value.ToString()))
+                {
                     throw new InvalidOperationException("Cannot compare a date_diff on a null date");
+                }
                 else if (constVal != null && constVal.Value is String && DateTime.TryParseExact(
                     constVal.Value.ToString(), new string[] { "o", "yyyy", "yyyy-MM", "yyyy-MM-dd" },
                     System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None,
                     out DateTime val))
+                {
                     parms[0] = Expression.Constant(val);
+                }
             }
 
             if (scope.Type.StripNullable() == typeof(DateTimeOffset))
@@ -83,9 +94,11 @@ namespace SanteDB.Core.Model.Query.FilterExtension
                     valueExpression);
             }
             else
+            {
                 return Expression.MakeBinary(comparison,
                     Expression.Call(this.ExtensionMethod, scope, parms[0]),
                     valueExpression);
+            }
         }
     }
 }

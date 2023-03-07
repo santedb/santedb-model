@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -47,14 +47,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "ActParticipation"), JsonObject(nameof(ActParticipation))]
     public class ActParticipation : VersionedAssociation<Act>, ITargetedVersionedExtension
     {
-        private Guid? m_playerKey;
 
-        private Entity m_player;
-        private Guid? m_participationRoleKey;
-
-        private Concept m_participationRole;
-        private Guid? m_classificationKey;
-        private Concept m_classification;
 
         /// <summary>
         /// Default constructor for act participation
@@ -72,6 +65,7 @@ namespace SanteDB.Core.Model.Acts
         {
             this.ParticipationRoleKey = roleType;
             this.PlayerEntity = player;
+            this.PlayerEntityKey = player.Key;
         }
 
         /// <summary>
@@ -94,22 +88,10 @@ namespace SanteDB.Core.Model.Acts
         /// formal relationship, whereas Patient->NextOfKin[EmergencyContact]->Person may indicate that NOK record is only for
         /// use as a contact and no other relationship can be inferred from the entry.</para>
         /// </remarks>
-        [AutoLoad]
+
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
-        public Concept Classification
-        {
-            get
-            {
-                this.m_classification = base.DelayLoad(this.m_classificationKey, this.m_classification);
-                return this.m_classification;
-            }
-            set
-            {
-                this.m_classification = value;
-                this.m_classificationKey = value?.Key;
-            }
-        }
+        public Concept Classification { get; set; }
 
         /// <summary>
         /// Identifies the classification of the participation.
@@ -121,42 +103,20 @@ namespace SanteDB.Core.Model.Acts
         [XmlElement("classification"), JsonProperty("classification")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(RelationshipClassKeys))]
-        public Guid? ClassificationKey
-        {
-            get { return this.m_classificationKey; }
-            set
-            {
-                if (this.m_classificationKey != value)
-                {
-                    this.m_classificationKey = value;
-                    this.m_classification = null;
-                }
-            }
-        }
+        public Guid? ClassificationKey { get; set; }
 
         /// <summary>
         /// Identifies the entity which played the <see cref="ParticipationRoleKey"/>
         /// </summary>
         /// <remarks>
         /// <para>The player represents the <see cref="Entity"/> which plays the <see cref="ParticipationRoleKey"/> in the act. The player 
-        /// is related to the act in this (and only this) manner. It should not be assumed that a player, for example, playing the role of <see cref="ActParticipationKey.Admitter"/> is 
-        /// also the <see cref="ActParticipationKey.Authororiginator"/> of the Act. Rather these participations would be represented as separate instances of <see cref="ActParticipation"/> 
+        /// is related to the act in this (and only this) manner. It should not be assumed that a player, for example, playing the role of <see cref="ActParticipationKeys.Admitter"/> is 
+        /// also the <see cref="ActParticipationKeys.Authororiginator"/> of the Act. Rather these participations would be represented as separate instances of <see cref="ActParticipation"/> 
         /// on the <see cref="Act"/></para>
         /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("player"), JsonProperty("player")]
-        public Guid? PlayerEntityKey
-        {
-            get { return this.m_playerKey; }
-            set
-            {
-                if (this.m_playerKey != value)
-                {
-                    this.m_playerKey = value;
-                    this.m_player = null;
-                }
-            }
-        }
+        public Guid? PlayerEntityKey { get; set; }
 
         /// <summary>
         /// Identifies the role which the <see cref="PlayerEntityKey"/> performs in the <see cref="ActKey"/>
@@ -164,28 +124,17 @@ namespace SanteDB.Core.Model.Acts
         /// <remarks>
         /// <para>
         /// The participation role indicates the type of role which the <see cref="PlayerEntityKey"/> plays in the containing Act. Roles of
-        /// a player entity can vary from <see cref="ActParticipationKey.Admitter"/> (the Entity which admitted the patient), to <see cref="ActParticipationKey.RecordTarget"/>
-        /// (the entity about which the act exists), or even <see cref="ActParticipationKey.Product"/> (the Entity representing the product which was used
+        /// a player entity can vary from <see cref="ActParticipationKeys.Admitter"/> (the Entity which admitted the patient), to <see cref="ActParticipationKeys.RecordTarget"/>
+        /// (the entity about which the act exists), or even <see cref="ActParticipationKeys.Product"/> (the Entity representing the product which was used
         /// or administered in the act).
         /// </para>
         /// <para>Participation roles are validated based on the <see cref="Entity.ClassConceptKey"/> for the player and the <see cref="Act.ClassConceptKey"/>. </para>
         /// </remarks>
-        /// <seealso cref="ActParticipationKey"/>
+        /// <seealso cref="ActParticipationKeys"/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [Binding(typeof(ActParticipationKey))]
+        [Binding(typeof(ActParticipationKeys))]
         [XmlElement("participationRole"), JsonProperty("participationRole")]
-        public Guid? ParticipationRoleKey
-        {
-            get { return this.m_participationRoleKey; }
-            set
-            {
-                if (this.m_participationRoleKey != value)
-                {
-                    this.m_participationRoleKey = value;
-                    this.m_participationRole = null;
-                }
-            }
-        }
+        public Guid? ParticipationRoleKey { get; set; }
 
         /// <summary>
         /// The delay-load property for <see cref="PlayerEntityKey"/>
@@ -203,19 +152,7 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso cref="PlayerEntityKey"/>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(PlayerEntityKey))]
-        public Entity PlayerEntity
-        {
-            get
-            {
-                this.m_player = base.DelayLoad(this.m_playerKey, this.m_player);
-                return this.m_player;
-            }
-            set
-            {
-                this.m_player = value;
-                this.m_playerKey = value?.Key;
-            }
-        }
+        public Entity PlayerEntity { get; set; }
 
         /// <summary>
         /// Delay load point for <see cref="ParticipationRoleKey"/>
@@ -231,21 +168,9 @@ namespace SanteDB.Core.Model.Acts
         /// ]]>
         /// </code>
         /// </example>
-        [XmlIgnore, JsonIgnore, AutoLoad]
+        [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ParticipationRoleKey))]
-        public Concept ParticipationRole
-        {
-            get
-            {
-                this.m_participationRole = base.DelayLoad(this.m_participationRoleKey, this.m_participationRole);
-                return this.m_participationRole;
-            }
-            set
-            {
-                this.m_participationRole = value;
-                this.m_participationRoleKey = value?.Key;
-            }
-        }
+        public Concept ParticipationRole { get; set; }
 
         /// <summary>
         /// Identifies the <see cref="Act"/> to which the participation belongs
@@ -257,14 +182,8 @@ namespace SanteDB.Core.Model.Acts
         [JsonProperty("act"), XmlElement("act")]
         public Guid? ActKey
         {
-            get
-            {
-                return this.SourceEntityKey;
-            }
-            set
-            {
-                this.SourceEntityKey = value;
-            }
+            get => this.SourceEntityKey;
+            set => this.SourceEntityKey = value;
         }
 
         /// <summary>
@@ -279,17 +198,11 @@ namespace SanteDB.Core.Model.Acts
         ///     var typeOfConcept = foo.LoadProperty(o=>o.Act).TypeConceptKey;
         /// }
         /// ]]></code></example>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ActKey)), DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ActKey)), SerializationMetadata]
         public Act Act
         {
-            get
-            {
-                return this.SourceEntity;
-            }
-            set
-            {
-                this.SourceEntity = value;
-            }
+            get => this.SourceEntity;
+            set => this.SourceEntity = value;
         }
 
         /// <summary>
@@ -298,8 +211,8 @@ namespace SanteDB.Core.Model.Acts
         /// <remarks>The quantity property is used to express the number of entities which are participating in the 
         /// act. Some examples where quantity may be used:
         /// <list type="bullet">
-        /// <item><term>30 Syringes were shipped</term><description>A <see cref="Act"/> with class <see cref="ActClassKeys.Supply"/> has a participation of type <see cref="ActParticipationKey.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 30</description></item>
-        /// <item><term>1 dose of BCG administered</term><description>A <see cref="SubstanceAdministration"/> has a participation of type <see cref="ActParticipationKey.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 1</description></item>
+        /// <item><term>30 Syringes were shipped</term><description>A <see cref="Act"/> with class <see cref="ActClassKeys.Supply"/> has a participation of type <see cref="ActParticipationKeys.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 30</description></item>
+        /// <item><term>1 dose of BCG administered</term><description>A <see cref="SubstanceAdministration"/> has a participation of type <see cref="ActParticipationKeys.Consumable"/> to a <see cref="ManufacturedMaterial"/> with quantity of 1</description></item>
         /// </list></remarks>
         [XmlElement("quantity"), JsonProperty("quantity")]
         public int? Quantity { get; set; }
@@ -317,7 +230,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as ActParticipation;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.ActKey == this.ActKey &&
                 other.PlayerEntityKey == this.PlayerEntityKey &&
                 other.ParticipationRoleKey == this.ParticipationRoleKey;
@@ -326,18 +243,12 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Don't serialize source entity
         /// </summary>
-        public override bool ShouldSerializeSourceEntityKey()
-        {
-            return false;
-        }
+        public override bool ShouldSerializeSourceEntityKey() => false;
 
         /// <summary>
         /// Should serialize quantity
         /// </summary>
-        public bool ShouldSerializeQuantity()
-        {
-            return this.Quantity.HasValue;
-        }
+        public bool ShouldSerializeQuantity() => this.Quantity.HasValue;
 
         /// <summary>
         /// Should serialize act key

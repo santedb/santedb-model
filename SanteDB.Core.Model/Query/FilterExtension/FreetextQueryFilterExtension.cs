@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2022-1-12
+ * Date: 2022-5-30
  */
 using System;
 using System.Linq.Expressions;
@@ -29,10 +29,16 @@ namespace SanteDB.Core.Model.Query.FilterExtension
     /// </summary>
     public class FreetextQueryFilterExtension : IQueryFilterExtension
     {
+
+        /// <summary>
+        /// The name of this filter extension
+        /// </summary>
+        public const string FilterName = "freetext";
+
         /// <summary>
         /// Get the name of the extendion
         /// </summary>
-        public string Name => "freetext";
+        public string Name => FilterName;
 
         /// <summary>
         /// Get the extension method
@@ -53,7 +59,7 @@ namespace SanteDB.Core.Model.Query.FilterExtension
 
             if (scope.Type.StripNullable() == typeof(Guid) && scope is MemberExpression mae) // We are anchored to the holder
             {
-                while(mae != null && !typeof(IdentifiedData).IsAssignableFrom(mae.Expression.Type))
+                while (mae != null && !typeof(IdentifiedData).IsAssignableFrom(mae.Expression.Type))
                 {
                     mae = mae.Expression as MemberExpression;
                 }

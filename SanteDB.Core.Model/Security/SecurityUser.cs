@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -25,13 +25,12 @@ using SanteDB.Core.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security
 {
     /// <summary>
-    /// Security user represents a user for the purpose of security 
+    /// Security user represents a user for the purpose of security
     /// </summary>
     [XmlType("SecurityUser", Namespace = "http://santedb.org/model"), JsonObject("SecurityUser")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "SecurityUser")]
@@ -51,16 +50,19 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("email"), JsonProperty("email"), NoCase]
         public String Email { get; set; }
+
         /// <summary>
         /// Gets or sets whether the email address is confirmed
         /// </summary>
         [XmlElement("emailConfirmed"), JsonProperty("emailConfirmed")]
         public Boolean EmailConfirmed { get; set; }
+
         /// <summary>
         /// Gets or sets the number of invalid login attempts by the user
         /// </summary>
         [XmlElement("invalidLoginAttempts"), JsonProperty("invalidLoginAttempts")]
         public Int32 InvalidLoginAttempts { get; set; }
+
         /// <summary>
         /// Gets or sets whether the account is locked out
         /// </summary>
@@ -77,9 +79,13 @@ namespace SanteDB.Core.Model.Security
             set
             {
                 if (value != null)
+                {
                     this.Lockout = DateTime.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                }
                 else
+                {
                     this.Lockout = default(DateTime);
+                }
             }
         }
 
@@ -90,7 +96,7 @@ namespace SanteDB.Core.Model.Security
         public String Password { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the security has is enabled
+        /// Gets or sets a value which indicates whether the security data for the user has changed
         /// </summary>
         [XmlElement("securityStamp"), JsonProperty("securityStamp")]
         public String SecurityHash { get; set; }
@@ -100,11 +106,13 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("twoFactorEnabled"), JsonProperty("twoFactorEnabled")]
         public Boolean TwoFactorEnabled { get; set; }
+
         /// <summary>
         /// Gets or sets the logical user name ofthe user
         /// </summary>
         [XmlElement("userName"), JsonProperty("userName"), NoCase]
         public String UserName { get; set; }
+
         /// <summary>
         /// Gets or sets the binary representation of the user's photo
         /// </summary>
@@ -131,11 +139,18 @@ namespace SanteDB.Core.Model.Security
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.LastLoginTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.LastLoginTime = default(DateTimeOffset);
+                else
+                {
+                    this.LastLoginTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -159,11 +174,18 @@ namespace SanteDB.Core.Model.Security
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.PasswordExpiration = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.PasswordExpiration = null;
+                else
+                {
+                    this.PasswordExpiration = null;
+                }
             }
         }
 
@@ -210,23 +232,7 @@ namespace SanteDB.Core.Model.Security
         }
 
         /// <summary>
-        /// Gets or sets the policies for the user
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public override List<SecurityPolicyInstance> Policies
-        {
-            get
-            {
-                return this.Roles.SelectMany(o => o.Policies).ToList();
-            }
-            set
-            {
-
-            }
-        }
-
-        /// <summary>
-        /// Link from this security resource to an entity resource 
+        /// Link from this security resource to an entity resource
         /// </summary>
         [XmlIgnore, QueryParameter("userEntity"), JsonIgnore]
         public UserEntity UserEntity { get; set; }
@@ -237,22 +243,24 @@ namespace SanteDB.Core.Model.Security
         public override bool SemanticEquals(object obj)
         {
             var other = obj as SecurityUser;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.Email == other.Email &&
                 this.EmailConfirmed == other.EmailConfirmed &&
                 this.Password == other.Password &&
                 this.PhoneNumber == other.PhoneNumber &&
                 this.PhoneNumberConfirmed == other.PhoneNumberConfirmed &&
-                this.Policies?.SemanticEquals(other.Policies) == true &&
-                this.Roles?.SemanticEquals(other.Roles) == true &&
+                this.Roles?.SemanticEquals(other.Roles) != false &&
                 this.SecurityHash == other.SecurityHash &&
                 this.TwoFactorEnabled == other.TwoFactorEnabled &&
                 this.UserClass == other.UserClass &&
                 this.UserName == other.UserName &&
                 (this.UserPhoto ?? new byte[0]).HashCode().Equals((other.UserPhoto ?? new byte[0]).HashCode()) == true;
         }
-
 
         /// <summary>
         /// Get the name of the object as a display string

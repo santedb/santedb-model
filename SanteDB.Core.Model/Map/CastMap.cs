@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 using System.Xml.Serialization;
@@ -48,7 +48,10 @@ namespace SanteDB.Core.Model.Map
             get
             {
                 if (this.m_modelType == null)
+                {
                     this.m_modelType = Type.GetType(this.TypeName);
+                }
+
                 return this.m_modelType;
             }
         }

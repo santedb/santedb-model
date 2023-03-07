@@ -16,21 +16,17 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
-namespace SanteDB.Core.Model.Constants
+namespace SanteDB.Core.Model.Attributes
 {
     /// <summary>
-    /// Represents built in assigning authorities
+    /// Identifies that a property containins no meaningful data 
+    /// and is provided only for serialization
     /// </summary>
-    public static class AssigningAuthorityKeys
-    {
-
-        /// <summary>
-        /// ISO 3166 Country Code Identifier Authority
-        /// </summary>
-        public static readonly Guid Iso3166CountryCode = Guid.Parse("ff6e7402-8545-48e1-8a70-ebf06f3ee4b8");
-    }
+    [AttributeUsage(AttributeTargets.Property)]
+    public class SerializationMetadataAttribute : Attribute
+    { }
 }

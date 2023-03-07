@@ -16,14 +16,14 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System.Xml.Serialization;
 
-namespace SanteDB.Core.Auditing
+namespace SanteDB.Core.Model.Audit
 {
     /// <summary>
-    /// Identifies the type of auditable objects in the system
+    /// Identifies the type of auditable object for context 
     /// </summary>
     [XmlType(nameof(AuditableObjectType), Namespace = "http://santedb.org/audit")]
     public enum AuditableObjectType

@@ -16,13 +16,14 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -41,56 +42,51 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.Encounter)]
     public class PatientEncounter : Act
     {
-        // Disposition key
-        private Guid? m_dischargeDispositionKey;
-
-        // Disposition
-        private Concept m_dischargeDisposition;
-
         /// <summary>
         /// Patient encounter ctor
         /// </summary>
         public PatientEncounter()
         {
-            base.ClassConceptKey = ActClassKeys.Encounter;
+            base.m_classConceptKey = ActClassKeys.Encounter;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.Encounter;
 
         /// <summary>
         /// Gets or sets the key of discharge disposition
         /// </summary>
-        [AutoLoad, EditorBrowsable(EditorBrowsableState.Advanced)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("dischargeDisposition"), JsonProperty("dischargeDisposition")]
-        public Guid? DischargeDispositionKey
-        {
-            get { return this.m_dischargeDispositionKey; }
-            set
-            {
-                if (this.m_dischargeDispositionKey != value)
-                {
-                    this.m_dischargeDispositionKey = value;
-                    this.m_dischargeDisposition = null;
-                }
-            }
-        }
+        public Guid? DischargeDispositionKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the admission source type
+        /// </summary>
+        [XmlElement("admissionSource"), JsonProperty("admissionSource")]
+        public Guid? AdmissionSourceTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the discharge disposition (how the patient left the encounter
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(DischargeDispositionKey))]
-        public Concept DischargeDisposition
-        {
-            get
-            {
-                this.m_dischargeDisposition = base.DelayLoad(this.m_dischargeDispositionKey, this.m_dischargeDisposition);
-                return this.m_dischargeDisposition;
-            }
-            set
-            {
-                this.m_dischargeDisposition = value;
-                this.m_dischargeDispositionKey = value?.Key;
-            }
-        }
+        public Concept DischargeDisposition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the code indicating the type of place which was responsible for care prior to admission
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(AdmissionSourceTypeKey))]
+        public Concept AdmissionSourceType { get; set; }
+
+        /// <summary>
+        /// A list of special arrangements which are to be made to the patient during the encounter
+        /// </summary>
+        /// <remarks>These are special arrangements which should be made for this encounter. These can be 
+        /// special considerations (VIP, private room, etc.) or other codes indicating care for the patient (seeing eye dog, attendant, interpreter, etc.)</remarks>
+        [XmlElement("specialArrangement"), JsonProperty("specialArrangement")]
+        public List<PatientEncounterArrangement> SpecialArrangements { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -98,7 +94,11 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as PatientEncounter;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.DischargeDispositionKey == this.DischargeDispositionKey;
         }
     }

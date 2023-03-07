@@ -16,13 +16,11 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
-using SanteDB.Core.Model.DataTypes;
-using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
 using System.ComponentModel;
@@ -37,22 +35,19 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("DeviceEntity", Namespace = "http://santedb.org/model"), JsonObject("DeviceEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "DeviceEntity")]
     [ClassConceptKey(EntityClassKeyStrings.Device)]
-    public class DeviceEntity : Entity, IGeoTagged
+    public class DeviceEntity : Entity
     {
-        // Security device
-        private SecurityDevice m_securityDevice;
-
-        // Security device key
-        private Guid? m_securityDeviceKey;
-
         /// <summary>
         /// Device entity ctor
         /// </summary>
         public DeviceEntity()
         {
             this.DeterminerConceptKey = DeterminerKeys.Specific;
-            this.ClassConceptKey = EntityClassKeys.Device;
+            this.m_classConceptKey = EntityClassKeys.Device;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Device;
 
         /// <summary>
         /// Gets or sets the manufacturer model name
@@ -71,43 +66,14 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [SerializationReference(nameof(SecurityDeviceKey))]
         [XmlIgnore, JsonIgnore]
-        public SecurityDevice SecurityDevice
-        {
-            get
-            {
-                this.m_securityDevice = base.DelayLoad(this.m_securityDeviceKey, this.m_securityDevice);
-                return this.m_securityDevice;
-            }
-            set
-            {
-                this.m_securityDevice = value;
-                this.m_securityDeviceKey = value?.Key;
-            }
-        }
+        public SecurityDevice SecurityDevice { get; set; }
 
         /// <summary>
         /// Gets or sets the security device key
         /// </summary>
         [XmlElement("securityDevice"), JsonProperty("securityDevice")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? SecurityDeviceKey
-        {
-            get { return this.m_securityDeviceKey; }
-            set
-            {
-                if (this.m_securityDeviceKey != value)
-                {
-                    this.m_securityDeviceKey = value;
-                    this.m_securityDevice = null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the geo tag
-        /// </summary>
-        [XmlElement("geo"), JsonProperty("geo")]
-        public GeoTag GeoTag { get; set; }
+        public Guid? SecurityDeviceKey { get; set; }
 
         /// <summary>
         /// Determine semantic equality
@@ -115,7 +81,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as DeviceEntity;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.SecurityDeviceKey == other.SecurityDeviceKey &&
                 this.ManufacturerModelName == other.ManufacturerModelName &&

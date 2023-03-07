@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -37,10 +37,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Organization)]
     public class Organization : Entity
     {
-        private Concept m_industryConcept;
 
-        // Industry concept
-        private Guid? m_industryConceptKey;
 
         // Industry Concept
         /// <summary>
@@ -49,8 +46,12 @@ namespace SanteDB.Core.Model.Entities
         public Organization()
         {
             this.DeterminerConceptKey = DeterminerKeys.Specific;
-            this.ClassConceptKey = EntityClassKeys.Organization;
+            this.m_classConceptKey = EntityClassKeys.Organization;
         }
+
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Organization;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Organization"/> class.
@@ -75,19 +76,7 @@ namespace SanteDB.Core.Model.Entities
         /// <see cref="IndustryConceptKey"/>
         [SerializationReference(nameof(IndustryConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept IndustryConcept
-        {
-            get
-            {
-                this.m_industryConcept = base.DelayLoad(this.m_industryConceptKey, this.m_industryConcept);
-                return this.m_industryConcept;
-            }
-            set
-            {
-                this.m_industryConcept = value;
-                this.m_industryConceptKey = value?.Key;
-            }
-        }
+        public Concept IndustryConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the concept key which classifies the industry in which the organization operates
@@ -99,18 +88,7 @@ namespace SanteDB.Core.Model.Entities
         /// <see cref="IndustryConcept"/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("industryConcept"), JsonProperty("industryConcept")]
-        public Guid? IndustryConceptKey
-        {
-            get { return this.m_industryConceptKey; }
-            set
-            {
-                if (this.m_industryConceptKey != value)
-                {
-                    this.m_industryConceptKey = value;
-                    this.m_industryConcept = null;
-                }
-            }
-        }
+        public Guid? IndustryConceptKey { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -118,7 +96,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Organization;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.IndustryConceptKey == other.IndustryConceptKey;
         }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -49,7 +49,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets the lockout time as XML date
         /// </summary>
-        [XmlElement("lockout"), JsonProperty("lockout"), DataIgnore]
+        [XmlElement("lockout"), JsonProperty("lockout"), SerializationMetadata]
         public String LockoutXml
         {
             get => this.Lockout?.ToString("o", CultureInfo.InvariantCulture);
@@ -60,11 +60,18 @@ namespace SanteDB.Core.Model.Security
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.Lockout = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.Lockout = default(DateTimeOffset);
+                else
+                {
+                    this.Lockout = default(DateTimeOffset);
+                }
             }
         }
 
@@ -83,7 +90,7 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets the last authenticated time
         /// </summary>
-        [XmlElement("lastAuthenticationTime"), JsonProperty("lastAuthenticationTime"), DataIgnore]
+        [XmlElement("lastAuthenticationTime"), JsonProperty("lastAuthenticationTime"), SerializationMetadata]
         public String LastAuthenticationXml
         {
             get => this.LastAuthentication?.ToString("o", CultureInfo.InvariantCulture);
@@ -94,11 +101,18 @@ namespace SanteDB.Core.Model.Security
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.LastAuthentication = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.LastAuthentication = default(DateTimeOffset);
+                else
+                {
+                    this.LastAuthentication = default(DateTimeOffset);
+                }
             }
         }
 

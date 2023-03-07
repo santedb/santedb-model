@@ -16,10 +16,11 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.Xml.Serialization;
 
@@ -32,6 +33,9 @@ namespace SanteDB.Core.Model.Patch
     [JsonObject(nameof(PatchTarget))]
     public class PatchTarget
     {
+
+        // Binder
+        private static ModelSerializationBinder s_binder = new ModelSerializationBinder();
 
         /// <summary>
         /// Default ctor
@@ -48,7 +52,7 @@ namespace SanteDB.Core.Model.Patch
         {
             this.Type = existing.GetType();
             this.Key = existing.Key;
-            this.VersionKey = (existing as IVersionedEntity)?.VersionKey;
+            this.VersionKey = (existing as IVersionedData)?.VersionKey;
             this.Tag = existing.Tag;
         }
 
@@ -56,7 +60,18 @@ namespace SanteDB.Core.Model.Patch
         /// Identifies the target type
         /// </summary>
         [XmlAttribute("type"), JsonProperty("type")]
-        public string TypeXml { get { return this.Type.AssemblyQualifiedName; } set { this.Type = Type.GetType(value); } }
+        public string TypeXml
+        {
+            get
+            {
+                s_binder.BindToName(this.Type, out _, out var type);
+                return type;
+            }
+            set
+            {
+                this.Type = s_binder.BindToType(typeof(IdentifiedData).Assembly.FullName, value);
+            }
+        }
 
         /// <summary>
         /// Represents the type

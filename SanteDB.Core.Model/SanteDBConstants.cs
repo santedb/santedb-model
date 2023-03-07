@@ -16,18 +16,15 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-10-29
+ * Date: 2022-5-30
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Model
 {
     /// <summary>
     /// Constants
     /// </summary>
-    public static class SanteDBConstants
+    public static class SanteDBModelConstants
     {
         /// <summary>
         /// Alternate keys tag for loading alternate objects from the database
@@ -38,6 +35,12 @@ namespace SanteDB.Core.Model
         /// Indicates that a dCDR needs to re-query or re-fetch the data
         /// </summary>
         public const string DcdrRefetchTag = "$dcdr.refetch";
+
+        /// <summary>
+        /// Indicates that an object is checked out
+        /// </summary>
+        public const string CheckoutStatusTag = "$checkoutState";
+
 
         /// <summary>
         /// When set on an object, no dynamic loading via LoadProperty() will work on the object

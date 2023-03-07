@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
@@ -44,6 +44,11 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string PrivateLink = "CA3057C3-CE83-4CA5-A0C4-FA0480B7F991";
 
+        /// <summary>
+        /// Played role
+        /// </summary>
+        public const string PlayedRoleLink = "8E7BEFBC-56D9-49F2-A758-7085CA72D03D";
+
     }
 
     /// <summary>
@@ -66,6 +71,9 @@ namespace SanteDB.Core.Model.Constants
         /// The target is referenced by the holder by a system process and should not be disclosed on non-internal APIs
         /// </summary>
         public static readonly Guid PrivateLink = Guid.Parse(RelationshipClassKeyStrings.PrivateLink);
-
+        /// <summary>
+        /// The holder of the relationship plays the role of the target of the relationship
+        /// </summary>
+        public static readonly Guid PlayedRoleLink = Guid.Parse(RelationshipClassKeyStrings.PlayedRoleLink);
     }
 }

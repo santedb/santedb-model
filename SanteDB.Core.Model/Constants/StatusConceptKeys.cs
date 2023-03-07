@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
@@ -58,7 +58,7 @@ namespace SanteDB.Core.Model.Constants
         public const String Obsolete = "BDEF5F90-5497-4F26-956C-8F818CCE2BD2";
 
         /// <summary>
-        /// Indicates that the data was purged (i.e. it did exist, however no longer exists)
+        /// Indicates that the data was logically deleted (i.e. it did exist, however no longer exists)
         /// </summary>
         public const String Purged = "39995C08-0A5C-4549-8BA7-D187F9B3C4FD";
 
@@ -130,6 +130,20 @@ namespace SanteDB.Core.Model.Constants
         {
             StatusKeys.Inactive,
             StatusKeys.Nullified,
+            StatusKeys.Obsolete
+        };
+
+        /// <summary>
+        /// Any status
+        /// </summary>
+        public static readonly Guid[] AllStates = new Guid[]
+        {
+            StatusKeys.Active,
+            StatusKeys.Completed,
+            StatusKeys.New,
+            StatusKeys.Inactive,
+            StatusKeys.Nullified,
+            StatusKeys.Obsolete,
             StatusKeys.Purged
         };
     }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -25,7 +25,6 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security
 {
-
     /// <summary>
     /// Policy grant type
     /// </summary>
@@ -55,6 +54,23 @@ namespace SanteDB.Core.Model.Security
     [KeyLookup(nameof(Oid)), SimpleValue(nameof(Oid))]
     public class SecurityPolicy : BaseEntityData
     {
+        /// <summary>
+        /// Create new security policy
+        /// </summary>
+        public SecurityPolicy()
+        {
+        }
+
+        /// <summary>
+        /// Create a new security policy
+        /// </summary>
+        public SecurityPolicy(String name, String oid, bool isPublic, bool canOverride)
+        {
+            this.Name = name;
+            this.Oid = oid;
+            this.IsPublic = IsPublic;
+            this.CanOverride = canOverride;
+        }
 
         /// <summary>
         /// Gets or sets the handler which may handle this policy
@@ -98,17 +114,11 @@ namespace SanteDB.Core.Model.Security
     [XmlType(nameof(SecurityPolicyInstance), Namespace = "http://santedb.org/model"), JsonObject("SecurityPolicyInstance")]
     public class SecurityPolicyInstance : Association<SecurityEntity>
     {
-        // Policy id
-        private Guid? m_policyId;
-        // Policy
-        private SecurityPolicy m_policy;
-
         /// <summary>
         /// Default ctor
         /// </summary>
         public SecurityPolicyInstance()
         {
-
         }
 
         /// <summary>
@@ -124,42 +134,18 @@ namespace SanteDB.Core.Model.Security
         /// Gets or sets the policy key
         /// </summary>
         [XmlElement("policy"), JsonProperty("policy")]
-        public Guid? PolicyKey
-        {
-            get
-            {
-                return this.m_policyId;
-            }
-            set
-            {
-                this.m_policyId = value;
-                this.m_policy = null;
-            }
-        }
+        public Guid? PolicyKey { get; set; }
 
         /// <summary>
         /// The policy
         /// </summary>
-        [AutoLoad, JsonIgnore, XmlIgnore, SerializationReference(nameof(PolicyKey))]
-        public SecurityPolicy Policy
-        {
-            get
-            {
-                this.m_policy = base.DelayLoad(this.m_policyId, this.m_policy);
-                return m_policy;
-            }
-            set
-            {
-                this.m_policy = value;
-                this.m_policyId = value?.Key;
-            }
-        }
+        [JsonIgnore, XmlIgnore, SerializationReference(nameof(PolicyKey))]
+        public SecurityPolicy Policy { get; set; }
 
         /// <summary>
         /// Gets or sets whether the policy is a Deny
         /// </summary>
         [XmlElement("grant"), JsonProperty("grant")]
         public PolicyGrantType GrantType { get; set; }
-
     }
 }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -33,14 +33,13 @@ namespace SanteDB.Core.Model.Entities
     /// <summary>
     /// Represents a name for an entity
     /// </summary>
+    /// <remarks>In SanteDB an entity name is a structured object which is made up of multiple
+    /// components. This allows SanteDB to store complex names without having to copy multiple
+    /// name components into a single field.</remarks>
     [Classifier(nameof(NameUse))]
     [XmlType("EntityName", Namespace = "http://santedb.org/model"), JsonObject("EntityName")]
     public class EntityName : VersionedAssociation<Entity>
     {
-        private Concept m_nameUseConcept;
-
-        // Name use key
-        private Guid? m_nameUseKey;
 
         // Name use concept
         /// <summary>
@@ -48,14 +47,21 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityName(Guid nameUse, String family, params String[] given)
         {
-            this.m_nameUseKey = nameUse;
+            this.NameUseKey = nameUse;
             this.Component = new List<EntityNameComponent>();
 
             if (!String.IsNullOrEmpty(family))
+            {
                 this.Component.Add(new EntityNameComponent(NameComponentKeys.Family, family));
+            }
+
             foreach (var nm in given)
+            {
                 if (!String.IsNullOrEmpty(nm))
+                {
                     this.Component.Add(new EntityNameComponent(NameComponentKeys.Given, nm));
+                }
+            }
         }
 
         /// <summary>
@@ -65,7 +71,7 @@ namespace SanteDB.Core.Model.Entities
         /// <param name="name"></param>
         public EntityName(Guid nameUse, String name)
         {
-            this.m_nameUseKey = nameUse;
+            this.NameUseKey = nameUse;
             this.Component = new List<EntityNameComponent>()
             {
                 new EntityNameComponent(name)
@@ -77,34 +83,21 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public EntityName()
         {
-            this.Component = new List<EntityNameComponent>();
+
         }
 
         /// <summary>
         /// Gets or sets the individual component types
         /// </summary>
 		[XmlElement("component"), JsonProperty("component")]
-        [AutoLoad]
         public List<EntityNameComponent> Component { get; set; }
 
         /// <summary>
         /// Gets or sets the name use
         /// </summary>
         [SerializationReference(nameof(NameUseKey))]
-        [XmlIgnore, JsonIgnore, AutoLoad]
-        public Concept NameUse
-        {
-            get
-            {
-                this.m_nameUseConcept = base.DelayLoad(this.m_nameUseKey, this.m_nameUseConcept);
-                return this.m_nameUseConcept;
-            }
-            set
-            {
-                this.m_nameUseConcept = value;
-                this.m_nameUseKey = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore]
+        public Concept NameUse { get; set; }
 
         /// <summary>
         /// Gets or sets the name use key
@@ -112,18 +105,7 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("use"), JsonProperty("use")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Binding(typeof(NameUseKeys))]
-        public Guid? NameUseKey
-        {
-            get { return this.m_nameUseKey; }
-            set
-            {
-                if (this.m_nameUseKey != value)
-                {
-                    this.m_nameUseKey = value;
-                    this.m_nameUseConcept = null;
-                }
-            }
-        }
+        public Guid? NameUseKey { get; set; }
 
         /// <summary>
         /// True if empty
@@ -131,7 +113,7 @@ namespace SanteDB.Core.Model.Entities
         /// <returns></returns>
         public override bool IsEmpty()
         {
-            return this.Component.Count == 0 || this.Component?.All(c=>c.IsEmpty()) == true;
+            return this.Component.IsNullOrEmpty() || this.Component?.All(c => c.IsEmpty()) == true;
         }
 
         /// <summary>
@@ -140,10 +122,14 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as EntityName;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.NameUseKey == other.NameUseKey &&
-                this.Component?.SemanticEquals(other.Component) == true;
+                this.Component?.SemanticEquals(other.Component) != false;
         }
 
         /// <summary>
@@ -160,11 +146,17 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public override string ToString()
         {
-            if (this.Component.Count == 1)
+            if (this.LoadProperty(o => o.Component).IsNullOrEmpty())
+            {
+                return "";
+            }
+            else if (this.Component.Count == 1)
+            {
                 return this.Component[0].Value;
+            }
             else
             {
-                return $"{this.Component.Find(o => o.ComponentTypeKey == NameComponentKeys.Given)?.Value} {this.Component.Find(o => o.ComponentTypeKey == NameComponentKeys.Family)?.Value}";
+                return $"{String.Join(" ", this.Component.Where(o => o.ComponentTypeKey == NameComponentKeys.Given).OrderBy(o => o.OrderSequence))} {String.Join(" ", this.Component.Where(o => o.ComponentTypeKey == NameComponentKeys.Family).OrderBy(o => o.OrderSequence))}";
             }
         }
 

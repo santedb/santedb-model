@@ -16,14 +16,13 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
@@ -37,26 +36,20 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Material)]
     public class Material : Entity
     {
-        // Form concept
-        private Concept m_formConcept;
-
-        // Form concept key
-        private Guid? m_formConceptKey;
-
-        // Quantity concept
-        private Concept m_quantityConcept;
-
-        // Quantity concept key
-        private Guid? m_quantityConceptKey;
 
         /// <summary>
         /// Material ctor
         /// </summary>
         public Material()
         {
-            this.ClassConceptKey = EntityClassKeys.Material;
+            this.m_classConceptKey = EntityClassKeys.Material;
             this.DeterminerConceptKey = DeterminerKeys.Described;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Material ||
+            classKey == EntityClassKeys.ManufacturedMaterial ||
+            classKey == EntityClassKeys.Container;
 
         /// <summary>
         /// Gets or sets the expiry date of the material
@@ -69,37 +62,13 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(FormConceptKey))]
-        public Concept FormConcept
-        {
-            get
-            {
-                this.m_formConcept = base.DelayLoad(this.m_formConceptKey, this.m_formConcept);
-                return this.m_formConcept;
-            }
-            set
-            {
-                this.m_formConcept = value;
-                this.m_formConceptKey = value?.Key;
-            }
-        }
+        public Concept FormConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the form concept's key
         /// </summary>
         [XmlElement("formConcept"), JsonProperty("formConcept")]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? FormConceptKey
-        {
-            get { return this.m_formConceptKey; }
-            set
-            {
-                if (this.m_formConceptKey != value)
-                {
-                    this.m_formConceptKey = value;
-                    this.m_formConcept = null;
-                }
-            }
-        }
+        public Guid? FormConceptKey { get; set; }
 
         /// <summary>
         /// True if the material is simply administrative
@@ -119,37 +88,13 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(QuantityConceptKey))]
-        public Concept QuantityConcept
-        {
-            get
-            {
-                this.m_quantityConcept = base.DelayLoad(this.m_quantityConceptKey, this.m_quantityConcept);
-                return this.m_quantityConcept;
-            }
-            set
-            {
-                this.m_quantityConcept = value;
-                this.m_quantityConceptKey = value?.Key;
-            }
-        }
+        public Concept QuantityConcept { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity concept ref
         /// </summary>
         [XmlElement("quantityConcept"), JsonProperty("quantityConcept")]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? QuantityConceptKey
-        {
-            get { return this.m_quantityConceptKey; }
-            set
-            {
-                if (this.m_quantityConceptKey != value)
-                {
-                    this.m_quantityConceptKey = value;
-                    this.m_quantityConcept = null;
-                }
-            }
-        }
+        public Guid? QuantityConceptKey { get; set; }
 
         /// <summary>
         /// Semantic equality function
@@ -157,7 +102,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Material;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.Quantity == other.Quantity &&
                 this.QuantityConceptKey == other.QuantityConceptKey &&

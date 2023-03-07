@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
@@ -130,7 +130,12 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// State
         /// </summary>
-        public const string State = "8cf4b0b0-84e5-4122-85fe-6afa8240c218";
+        public const string StateOrProvince = "4d1a5c28-deb7-411e-b75f-d524f90dfa63";
+
+        /// <summary>
+        /// Person which is a user
+        /// </summary>
+        public const string UserEntity = "6a2b00ba-501b-4523-b57c-f96d8ae44684";
     }
 
 
@@ -238,12 +243,17 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// State
         /// </summary>
-        public static readonly Guid State = Guid.Parse(EntityClassKeyStrings.State);
+        public static readonly Guid StateOrProvince = Guid.Parse(EntityClassKeyStrings.StateOrProvince);
 
         /// <summary>
         /// Represents a precinct or sub-division of a city such as a burrogh
         /// </summary>
         public static readonly Guid PrecinctOrBorough = Guid.Parse(EntityClassKeyStrings.PrecinctOrBorough);
+
+        /// <summary>
+        /// Represents a person which is a user in the system
+        /// </summary>
+        public static readonly Guid UserEntity = Guid.Parse(EntityClassKeyStrings.UserEntity);
 
     }
 }

@@ -16,9 +16,8 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using SanteDB.Core.Model.Query;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -46,13 +45,19 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         public BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms)
         {
             for (int i = 0; i < parms.Length; i++)
+            {
                 if (parms[i] is ConstantExpression)
+                {
                     parms[i] = Expression.Constant(Int32.Parse((parms[i] as ConstantExpression).Value.ToString()));
+                }
+            }
 
             if (parms.Length == 1)
+            {
                 return Expression.MakeBinary(comparison,
                     Expression.Call(this.ExtensionMethod, scope, parms[0], Expression.Constant(null)),
                     Expression.Call(this.ExtensionMethod, valueExpression, parms[0], Expression.Constant(null)));
+            }
             else if (parms.Length == 2)
             {
                 var exm = typeof(QueryModelExtensions).GetRuntimeMethod(nameof(QueryModelExtensions.Substr), new Type[] { typeof(String), typeof(Int32), typeof(Int32) });
@@ -61,7 +66,9 @@ namespace SanteDB.Core.Model.Query.FilterExtension
                     Expression.Call(exm, valueExpression, parms[0], Expression.Convert(parms[1], typeof(Int32?))));
             }
             else
+            {
                 throw new ArgumentOutOfRangeException($"Invalid number of arguments to substr");
+            }
         }
     }
 }

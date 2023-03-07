@@ -16,16 +16,14 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
-using SanteDB.Core.Model.Security;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
 
@@ -40,15 +38,6 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Person)]
     public class Person : Entity
     {
-        // Gender concept key
-        private Guid? m_genderConceptKey;
-
-        private Concept m_genderConcept;
-
-        // Backing fields for occupation
-        private Guid? m_occupationConceptKey;
-
-        private Concept m_occupationConcept;
 
         /// <summary>
         /// Person constructor
@@ -56,16 +45,12 @@ namespace SanteDB.Core.Model.Entities
         public Person()
         {
             base.DeterminerConceptKey = DeterminerKeys.Specific;
-            base.ClassConceptKey = EntityClassKeys.Person;
-            this.LanguageCommunication = new List<PersonLanguageCommunication>();
+            base.m_classConceptKey = EntityClassKeys.Person;
+
         }
 
-        /// <summary>
-        /// Gets the security user account associated with this person if applicable
-        /// </summary>
-        [XmlIgnore, JsonIgnore, DataIgnore]
-        public virtual SecurityUser AsSecurityUser
-        { get { return null; } }
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.Person;
 
         /// <summary>
         /// Gets or sets the person's date of birth
@@ -83,40 +68,19 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the gender concept key
         /// </summary>
         [XmlElement("genderConcept"), JsonProperty("genderConcept")]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? GenderConceptKey
-        {
-            get { return this.m_genderConceptKey; }
-            set
-            {
-                this.m_genderConceptKey = value;
-                this.m_genderConcept = null;
-            }
-        }
+        public Guid? GenderConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the gender concept
         /// </summary>
         [SerializationReference(nameof(GenderConceptKey))]
-        [XmlIgnore, JsonIgnore, AutoLoad]
-        public Concept GenderConcept
-        {
-            get
-            {
-                this.m_genderConcept = base.DelayLoad(this.m_genderConceptKey, this.m_genderConcept);
-                return this.m_genderConcept;
-            }
-            set
-            {
-                this.m_genderConcept = value;
-                this.m_genderConceptKey = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore]
+        public Concept GenderConcept { get; set; }
 
         /// <summary>
         /// Gets the date of birth as XML
         /// </summary>
-        [XmlElement("dateOfBirth"), JsonProperty("dateOfBirth"), DataIgnore]
+        [XmlElement("dateOfBirth"), JsonProperty("dateOfBirth"), SerializationMetadata]
         public String DateOfBirthXml
         {
             get
@@ -129,52 +93,38 @@ namespace SanteDB.Core.Model.Entities
                 {
                     // Try to parse ISO date
                     if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    {
                         this.DateOfBirth = dt;
+                    }
                     else
+                    {
                         throw new FormatException($"Cannot parse {value} as a date");
+                    }
                 }
                 else
+                {
                     this.DateOfBirth = null;
+                }
             }
         }
 
         /// <summary>
         /// Gets the person's languages of communication
         /// </summary>
-        [AutoLoad, XmlElement("language"), JsonProperty("language")]
+        [XmlElement("language"), JsonProperty("language")]
         public List<PersonLanguageCommunication> LanguageCommunication { get; set; }
 
         /// <summary>
         /// Gets or sets the religious affiliation
         /// </summary>
-        [XmlElement("occupation"), JsonProperty("occupation"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? OccupationKey
-        {
-            get => this.m_occupationConceptKey;
-            set
-            {
-                this.m_occupationConceptKey = value;
-                this.m_occupationConcept = null;
-            }
-        }
+        [XmlElement("occupation"), JsonProperty("occupation")]
+        public Guid? OccupationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the marital status code
         /// </summary>
-        [AutoLoad, XmlIgnore, JsonIgnore, SerializationReference(nameof(OccupationKey))]
-        public Concept Occupation
-        {
-            get
-            {
-                this.m_occupationConcept = base.DelayLoad(this.m_occupationConceptKey, this.m_occupationConcept);
-                return this.m_occupationConcept;
-            }
-            set
-            {
-                this.m_occupationConcept = value;
-                this.m_occupationConceptKey = value?.Key;
-            }
-        }
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(OccupationKey))]
+        public Concept Occupation { get; set; }
 
         /// <summary>
         /// Should serialize date of birth precision
@@ -184,18 +134,107 @@ namespace SanteDB.Core.Model.Entities
             return this.DateOfBirthPrecision.HasValue;
         }
 
+
+        /// <summary>
+        /// Gets or sets the date the patient was deceased
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public DateTime? DeceasedDate { get; set; }
+
+        /// <summary>
+        /// Deceased date XML
+        /// </summary>
+        [XmlElement("deceasedDate"), JsonProperty("deceasedDate"), SerializationMetadata]
+        public String DeceasedDateXml
+        {
+            get
+            {
+                return this.DeceasedDate?.ToString("yyyy-MM-dd");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date
+                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    {
+                        this.DeceasedDate = dt;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Cannot parse {value} as a date");
+                    }
+                }
+                else
+                {
+                    this.DeceasedDate = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the precision of the date of deceased
+        /// </summary>
+        [XmlElement("deceasedDatePrecision"), JsonProperty("deceasedDatePrecision")]
+        public DatePrecision? DeceasedDatePrecision { get; set; }
+
+        /// <summary>
+        /// Should serialize deceased date
+        /// </summary>
+        /// <returns></returns>
+        public bool ShouldSerializeDeceasedDatePrecision() => this.DeceasedDatePrecision.HasValue;
+
+
+
+        /// <summary>
+        /// Gets or sets the VIP code
+        /// </summary>
+        [XmlElement("vipStatus"), JsonProperty("vipStatus")]
+        public Guid? VipStatusKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the VIP status code
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(VipStatusKey))]
+        public Concept VipStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the religious affiliation
+        /// </summary>
+        [XmlElement("nationality"), JsonProperty("nationality")]
+        public Guid? NationalityKey
+        {
+            get; 
+            set;
+        }
+
+        /// <summary>
+        /// Gets the nationality of the patient
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(NationalityKey))]
+        public Concept Nationality
+        {
+            get; 
+            set;
+        }
+
         /// <summary>
         /// Semantic equality function
         /// </summary>
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Person;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.DateOfBirth == other.DateOfBirth &&
                 this.GenderConceptKey == other.GenderConceptKey &&
                 this.DateOfBirthPrecision == other.DateOfBirthPrecision &&
-                this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) == true;
+                this.NationalityKey == other.NationalityKey &&
+                this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) != false;
         }
     }
 }

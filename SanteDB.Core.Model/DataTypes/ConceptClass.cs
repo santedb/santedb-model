@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -40,6 +40,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("name"), JsonProperty("name")]
         public string Name { get; set; }
+
         /// <summary>
         /// Gets or sets the mnemonic
         /// </summary>

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System.Collections.Generic;
 
@@ -41,5 +41,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// Add a relationship
         /// </summary>
         void AddRelationship(ITargetedAssociation association);
+
     }
 }

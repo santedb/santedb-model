@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -57,9 +57,13 @@ namespace SanteDB.Core.Extensions
                 {
                     var obj = jsz.Deserialize<dynamic>(jr);
                     if (obj is JArray)
+                    {
                         return (obj as JArray).Values<dynamic>().ToArray();
+                    }
                     else if (obj is JObject)
+                    {
                         return (obj as JObject).Value<dynamic>();
+                    }
                 }
             }
             catch
@@ -103,7 +107,10 @@ namespace SanteDB.Core.Extensions
             // (We also want to prevent the raw literatl from going in the db)
             var strData = JsonConvert.SerializeObject(data);
             if (strData.Length > 64)
+            {
                 strData = strData.Substring(0, 64);
+            }
+
             return strData;
             //return this.DeSerialize(data);
             //return null;
@@ -119,7 +126,10 @@ namespace SanteDB.Core.Extensions
             {
                 using (var tr = new StreamWriter(ms))
                 using (var jr = new JsonTextWriter(tr))
+                {
                     jsz.Serialize(jr, data);
+                }
+
                 return ms.ToArray();
             }
         }

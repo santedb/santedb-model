@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Interfaces;
@@ -30,61 +30,34 @@ namespace SanteDB.Core.Model
     /// </summary>
     /// <remarks>
     /// <para>This association is used to link two complex objects to one another when the version
-    /// of the source object at time of assoication carries meaning.</para>
+    /// of the source object at time of assoication carries meaning. A versioned association has
+    /// an effective and obsolete version sequence indicator which allows callers to determine
+    /// at which version of a particular object the relationship was active (or became active)</para>
     /// </remarks>
-
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("VersionedAssociation")]
     public abstract class VersionedAssociation<TSourceType> : Association<TSourceType>, IVersionedAssociation where TSourceType : VersionedEntityData<TSourceType>, new()
     {
-        // The identifier of the version where this data is effective
-        private Int32? m_effectiveVersionSequenceId;
-
-        // The identifier of the version where this data is no longer effective
-        private Int32? m_obsoleteVersionSequenceId;
-
-        // The version where this data is effective
-
         /// <summary>
         /// Gets or sets the version sequence of the source object when this assoication became active
         /// </summary>
         [XmlElement("effectiveVersionSequence"), JsonProperty("effectiveVersionSequence")]
-        public Int32? EffectiveVersionSequenceId
-        {
-            get { return this.m_effectiveVersionSequenceId; }
-            set
-            {
-                this.m_effectiveVersionSequenceId = value;
-            }
-        }
+        public Int64? EffectiveVersionSequenceId { get; set; }
 
         /// <summary>
         /// Gets or sets the sequence identifier of the source when this association is no longer active
         /// </summary>
         [XmlElement("obsoleteVersionSequence"), JsonProperty("obsoleteVersionSequence")]
-        public Int32? ObsoleteVersionSequenceId
-        {
-            get { return this.m_obsoleteVersionSequenceId; }
-            set
-            {
-                this.m_obsoleteVersionSequenceId = value;
-            }
-        }
+        public Int64? ObsoleteVersionSequenceId { get; set; }
 
         /// <summary>
         /// Should serialize obsolete
         /// </summary>
-        public bool ShouldSerializeObsoleteVersionSequenceId()
-        {
-            return this.m_obsoleteVersionSequenceId.HasValue;
-        }
+        public bool ShouldSerializeObsoleteVersionSequenceId() => this.ObsoleteVersionSequenceId.HasValue;
 
         /// <summary>
         /// Should serialize obsolete
         /// </summary>
-        public bool ShouldSerializeEffectiveVersionSequenceId()
-        {
-            return this.m_effectiveVersionSequenceId.HasValue;
-        }
+        public bool ShouldSerializeEffectiveVersionSequenceId() => this.EffectiveVersionSequenceId.HasValue;
 
         /// <summary>
         /// Determines equality
@@ -92,7 +65,11 @@ namespace SanteDB.Core.Model
         public override bool SemanticEquals(object obj)
         {
             var other = obj as VersionedAssociation<TSourceType>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj);
         }
     }

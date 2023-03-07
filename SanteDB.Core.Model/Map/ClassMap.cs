@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 using System.Collections.Generic;
@@ -31,6 +31,14 @@ namespace SanteDB.Core.Model.Map
     [XmlType(nameof(ClassMap), Namespace = "http://santedb.org/model/map")]
     public class ClassMap
     {
+
+        /// <summary>
+        /// Default CTOR
+        /// </summary>
+        public ClassMap()
+        {
+            this.Property = new List<PropertyMap>();
+        }
 
         // Cache
         private Dictionary<String, PropertyMap> m_modelPropertyMap = new Dictionary<String, PropertyMap>();
@@ -48,7 +56,10 @@ namespace SanteDB.Core.Model.Map
             get
             {
                 if (this.m_domainType == null)
+                {
                     this.m_domainType = Type.GetType(this.DomainClass);
+                }
+
                 return this.m_domainType;
             }
         }
@@ -62,7 +73,10 @@ namespace SanteDB.Core.Model.Map
             get
             {
                 if (this.m_modelType == null)
+                {
                     this.m_modelType = Type.GetType(this.ModelClass);
+                }
+
                 return this.m_modelType;
             }
         }
@@ -92,12 +106,6 @@ namespace SanteDB.Core.Model.Map
         public List<PropertyMap> Property { get; set; }
 
         /// <summary>
-        /// Gets or sets the base proeprty 
-        /// </summary>
-        [XmlElement("base")]
-        public PropertyMap ParentDomainProperty { get; set; }
-
-        /// <summary>
         /// Casting
         /// </summary>
         [XmlElement("cast")]
@@ -121,8 +129,12 @@ namespace SanteDB.Core.Model.Map
             {
                 retVal = this.Property.Find(o => o.ModelName == modelName);
                 lock (this.m_lockObject)
+                {
                     if (!this.m_modelPropertyMap.ContainsKey(modelName))
+                    {
                         this.m_modelPropertyMap.Add(modelName, retVal);
+                    }
+                }
             }
             return retVal != null;
         }
@@ -139,14 +151,24 @@ namespace SanteDB.Core.Model.Map
             Type modelClass = Type.GetType(this.ModelClass),
                 domainClass = Type.GetType(this.DomainClass);
             if (modelClass == null)
+            {
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Class {0} not found", this.ModelClass), null, null));
+            }
+
             if (domainClass == null)
+            {
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("Class {0} not found", this.DomainClass), null, null));
+            }
 
             foreach (var p in this.Property)
+            {
                 retVal.AddRange(p.Validate(modelClass, domainClass).Select(o => { o.Location = this.ModelClass; return o; }));
+            }
+
             foreach (var k in this.CollapseKey)
+            {
                 retVal.AddRange(k.Validate(domainClass).Select(o => { o.Location = this.ModelClass; return o; }));
+            }
 
             return retVal;
         }
@@ -161,8 +183,12 @@ namespace SanteDB.Core.Model.Map
             {
                 retVal = this.Property.Find(o => o.DomainName == domainName);
                 lock (this.m_lockObject)
+                {
                     if (!this.m_domainPropertyMap.ContainsKey(domainName))
+                    {
                         this.m_domainPropertyMap.Add(domainName, retVal);
+                    }
+                }
             }
             return retVal != null;
 

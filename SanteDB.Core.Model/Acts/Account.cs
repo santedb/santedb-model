@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -38,17 +38,13 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.Account)]
     public class Account : Act
     {
-        // Backing fields
-        private Guid? m_currencyKey;
-
-        private Concept m_currency;
 
         /// <summary>
         /// Initializes the account
         /// </summary>
         public Account()
         {
-            this.ClassConceptKey = ActClassKeys.Account;
+            this.m_classConceptKey = ActClassKeys.Account;
         }
 
         /// <summary>
@@ -60,34 +56,15 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the currency concept UUID for this account
         /// </summary>
-        [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? CurrencyKey
-        {
-            get => this.m_currencyKey;
-            set
-            {
-                this.m_currencyKey = value;
-                this.m_currency = null;
-            }
-        }
+        [XmlElement("currency"), JsonProperty("currency"), EditorBrowsable(EditorBrowsableState.Never)]
+        [Binding(typeof(CurrencyKeys))]
+        public Guid? CurrencyKey { get; set; }
 
         /// <summary>
         /// Gets or sets the currency
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(CurrencyKey))]
-        public Concept Currency
-        {
-            get
-            {
-                this.m_currency = base.DelayLoad(this.m_currencyKey, this.m_currency);
-                return this.m_currency;
-            }
-            set
-            {
-                this.m_currency = value;
-                this.m_currencyKey = value?.Key;
-            }
-        }
+        public Concept Currency { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum balance of this account

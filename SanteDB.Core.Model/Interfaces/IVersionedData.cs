@@ -16,44 +16,35 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using Newtonsoft.Json;
 using System;
-using System.Xml.Serialization;
 
-namespace SanteDB.Core.Model.Warehouse
+namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Represents a datamart definition which contains the definition of fields for a datamart
+    /// Versioned entity
     /// </summary>
-    [JsonObject(nameof(DatamartDefinition)), XmlType(nameof(DatamartDefinition), Namespace = "http://santedb.org/warehousing")]
-    [XmlRoot(nameof(DatamartDefinition), Namespace = "http://santedb.org/warehousing")]
-    public class DatamartDefinition
+    public interface IVersionedData : IAnnotatedResource
     {
         /// <summary>
-        /// Gets or sets the identifier of the data mart
+        /// Gets the version sequence
         /// </summary>
-        [XmlAttribute("id"), JsonProperty("id")]
-        public Guid Id { get; set; }
+        Int64? VersionSequence { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the data mart
+        /// Gets the version key
         /// </summary>
-        [XmlAttribute("name"), JsonProperty("name")]
-        public String Name { get; set; }
+        Guid? VersionKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the time that the data mart was created
+        /// Gets the previous version's key
         /// </summary>
-        [XmlAttribute("creationTime"), JsonProperty("creationTime")]
-        public DateTime CreationTime { get; set; }
+        Guid? PreviousVersionKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the datamart schema
+        /// True if this version is the HEAD version
         /// </summary>
-        [XmlElement("schema"), JsonProperty("schema")]
-        public DatamartSchema Schema { get; set; }
-
+        bool IsHeadVersion { get; set; }
     }
 }

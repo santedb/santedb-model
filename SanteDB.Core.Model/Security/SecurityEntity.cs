@@ -16,12 +16,12 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -34,47 +34,8 @@ namespace SanteDB.Core.Model.Security
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "SecurityEntity")]
     [JsonObject(nameof(SecurityEntity))]
     [NonCached]
-    public class SecurityEntity : NonVersionedEntityData, ISecurable
+    public class SecurityEntity : NonVersionedEntityData
     {
 
-        /// <summary>
-        /// Policies applied to this entity
-        /// </summary>
-        protected List<SecurityPolicyInstance> m_policies = new List<SecurityPolicyInstance>();
-
-        /// <summary>
-        /// Policies associated with the entity
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public virtual List<SecurityPolicyInstance> Policies
-        {
-            get
-            {
-                return this.m_policies;
-            }
-            set
-            {
-                this.m_policies = value;
-            }
-        }
-
-        /// <summary>
-        /// Add a policy to this act
-        /// </summary>
-        public void AddPolicy(string policyId)
-        {
-            var pol = EntitySource.Current.Provider.Query<SecurityPolicy>(o => o.Oid == policyId).SingleOrDefault();
-            if (pol == null)
-                throw new KeyNotFoundException($"Policy {policyId} not found");
-            this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
-        }
-
-        /// <summary>
-        /// Returns true if this object has the specified policy applied
-        /// </summary>
-        public bool HasPolicy(string policyId)
-        {
-            return this.Policies.Any(o => o.Policy.Oid == policyId);
-        }
     }
 }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Interfaces;
@@ -40,11 +40,6 @@ namespace SanteDB.Core.Model.DataTypes
     public abstract class Extension<TBoundModel> :
         VersionedAssociation<TBoundModel>, IModelExtension where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
-        // Extension type key
-        private Guid? m_extensionTypeKey;
-
-        // Extension type
-        private ExtensionType m_extensionType;
 
         /// <summary>
         /// Gets or sets the value of the extension
@@ -69,7 +64,11 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                if (this.ExtensionValueXml == null) return null;
+                if (this.ExtensionValueXml == null)
+                {
+                    return null;
+                }
+
                 try
                 {
                     return BitConverter.ToString(this.ExtensionValueXml).Replace("-", "");
@@ -81,10 +80,18 @@ namespace SanteDB.Core.Model.DataTypes
             }
             set
             {
-                if (value == null) this.ExtensionValueXml = null;
+                if (value == null)
+                {
+                    this.ExtensionValueXml = null;
+                }
+
                 try
                 {
-                    if (value.Length % 2 == 1) value = "0" + value;
+                    if (value.Length % 2 == 1)
+                    {
+                        value = "0" + value;
+                    }
+
                     this.ExtensionValueXml = Enumerable.Range(0, value.Length)
                                  .Where(x => x % 2 == 0)
                                  .Select(x => Convert.ToByte(value.Substring(x, 2), 16)).ToArray();
@@ -99,7 +106,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the ignore value
         /// </summary>
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore, JsonIgnore, SerializationMetadataAttribute]
         public Object ExtensionValue
         {
             get
@@ -109,7 +116,9 @@ namespace SanteDB.Core.Model.DataTypes
             set
             {
                 if (this.LoadProperty(o => o.ExtensionType).ExtensionHandlerInstance != null)
+                {
                     this.ExtensionValueXml = this.ExtensionType?.ExtensionHandlerInstance?.Serialize(value);
+                }
             }
         }
 
@@ -131,8 +140,13 @@ namespace SanteDB.Core.Model.DataTypes
         {
             var handler = this.LoadProperty<ExtensionType>("ExtensionType")?.ExtensionHandlerInstance;
             if (handler != null)
+            {
                 return handler.DeSerialize<T>(this.ExtensionValueXml);
-            else return default(T);
+            }
+            else
+            {
+                return default(T);
+            }
         }
 
         /// <summary>
@@ -154,38 +168,15 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [SerializationReference(nameof(ExtensionTypeKey))]
         [XmlIgnore, JsonIgnore]
-        [AutoLoad]
-        public ExtensionType ExtensionType
-        {
-            get
-            {
-                this.m_extensionType = base.DelayLoad(this.m_extensionTypeKey, this.m_extensionType);
-                return this.m_extensionType;
-            }
-            set
-            {
-                this.m_extensionType = value;
-                this.m_extensionTypeKey = value?.Key;
-            }
-        }
+
+        public ExtensionType ExtensionType { get; set; }
 
         /// <summary>
         /// Gets or sets the extension type key
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("extensionType"), JsonProperty("extensionType")]
-        public Guid? ExtensionTypeKey
-        {
-            get { return this.m_extensionTypeKey; }
-            set
-            {
-                if (this.m_extensionTypeKey != value)
-                {
-                    this.m_extensionTypeKey = value;
-                    this.m_extensionType = null;
-                }
-            }
-        }
+        public Guid? ExtensionTypeKey { get; set; }
 
         /// <summary>
         /// Get the type key
@@ -237,7 +228,11 @@ namespace SanteDB.Core.Model.DataTypes
         public override bool SemanticEquals(object obj)
         {
             Extension<TBoundModel> other = obj as Extension<TBoundModel>;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && other.ExtensionTypeKey == this.ExtensionTypeKey &&
                 this.ExtensionValueString == other.ExtensionValueString;
         }

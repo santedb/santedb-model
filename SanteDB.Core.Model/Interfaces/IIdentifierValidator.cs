@@ -16,9 +16,8 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using SanteDB.Core.Model.DataTypes;
 using System;
 
 namespace SanteDB.Core.Model.Interfaces
@@ -28,7 +27,6 @@ namespace SanteDB.Core.Model.Interfaces
     /// </summary>
     public interface IIdentifierValidator
     {
-
         /// <summary>
         /// Gets the algorithm name
         /// </summary>
@@ -37,9 +35,8 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Validate the specified identifier
         /// </summary>
-        /// <typeparam name="TEntity">The type of entity the object is bound to</typeparam>
         /// <param name="id">The identifier to be validated</param>
         /// <returns>True if the identifier is valid, false if it is not</returns>
-        bool IsValid<TEntity>(IdentifierBase<TEntity> id) where TEntity : VersionedEntityData<TEntity>, new();
+        bool IsValid(IExternalIdentifier id);
     }
 }

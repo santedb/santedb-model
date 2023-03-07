@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -34,61 +34,33 @@ namespace SanteDB.Core.Model.Entities
     /// may use the system - a person with whom a user is associated</remarks>
     [XmlType("UserEntity", Namespace = "http://santedb.org/model"), JsonObject("UserEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "UserEntity")]
+    [ClassConceptKey(EntityClassKeyStrings.UserEntity)]
     public class UserEntity : Person
     {
-        ///// <summary>
-        ///// User entity
-        ///// </summary>
-        //public UserEntity()
-        //{
-        //    this.ClassConceptKey = EntityClassKeys.User;
-        //}
+        /// <summary>
+        /// Creates a new instance of user entity
+        /// </summary>
+        public UserEntity()
+        {
+            this.DeterminerConceptKey = DeterminerKeys.Specific;
+            this.m_classConceptKey = EntityClassKeys.UserEntity;
+        }
 
-        // Security user
-        private SecurityUser m_securityUser;
-
-        // Security user key
-        private Guid? m_securityUserKey;
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.UserEntity;
 
         /// <summary>
         /// Gets or sets the security user key
         /// </summary>
-        [XmlIgnore, JsonIgnore, DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationMetadata]
         [SerializationReference(nameof(SecurityUserKey))]
-        public SecurityUser SecurityUser
-        {
-            get
-            {
-                if (this.IsDelayLoadEnabled)
-                    this.m_securityUser = base.DelayLoad(this.m_securityUserKey, this.m_securityUser);
-                return this.m_securityUser;
-            }
-            set
-            {
-                this.m_securityUser = value;
-                this.m_securityUserKey = value?.Key;
-            }
-        }
+        public SecurityUser SecurityUser { get; set; }
 
         /// <summary>
         /// Gets or sets the security user key
         /// </summary>
         [XmlElement("securityUser"), JsonProperty("securityUser")]
-        public Guid? SecurityUserKey
-        {
-            get
-            {
-                return this.m_securityUserKey;
-            }
-            set
-            {
-                if (this.m_securityUserKey != value)
-                {
-                    this.m_securityUserKey = value;
-                    this.m_securityUser = null;
-                }
-            }
-        }
+        public Guid? SecurityUserKey { get; set; }
 
         /// <summary>
         /// Determine semantic equality
@@ -96,7 +68,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as UserEntity;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.SecurityUserKey == other.SecurityUserKey;
         }

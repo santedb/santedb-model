@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 
@@ -27,6 +27,12 @@ namespace SanteDB.Core.Model.Constants
     /// </summary>
     public static class TelecomAddressUseKeys
     {
+
+        /// <summary>
+        /// Primary home
+        /// </summary>
+        public static readonly Guid PrimaryHome = Guid.Parse("f3132fc0-aadd-40b7-b875-961c40695389");
+
         /// <summary>
         /// answering service
         /// </summary>

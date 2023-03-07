@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.DataTypes;
@@ -25,15 +25,13 @@ using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
 
-namespace SanteDB.Core.Model
+namespace SanteDB
 {
-
     /// <summary>
     /// Delay load utilities
     /// </summary>
     public static class DelayLoadUtils
     {
-
         /// <summary>
         /// Load the person's languages
         /// </summary>

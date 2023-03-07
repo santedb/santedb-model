@@ -16,10 +16,9 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-9-15
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
-using SanteDB.Core.Model.Attributes;
 using System;
 using System.Xml.Serialization;
 
@@ -40,7 +39,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Get the type identifier
         /// </summary>
-        [DataIgnore, XmlIgnore, JsonProperty("$type")]
+        [XmlIgnore, JsonProperty("$type")]
         public override string Type { get => "Reference"; set { } }
 
         /// <summary>

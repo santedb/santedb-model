@@ -16,17 +16,19 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using System;
-
 namespace SanteDB.Core.Model.Attributes
 {
     /// <summary>
-    /// Identifies that a property containins no meaningful data 
-    /// and is provided only for serialization
+    /// Represents a class which references a property
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class DataIgnoreAttribute : Attribute
-    { }
+    public interface IPropertyReference 
+    {
+        /// <summary>
+        /// Get the property name
+        /// </summary>
+        string PropertyName { get; }
+
+    }
 }

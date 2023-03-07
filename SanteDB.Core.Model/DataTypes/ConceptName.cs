@@ -16,11 +16,12 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using System;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -32,15 +33,11 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlType("ConceptName", Namespace = "http://santedb.org/model"), JsonObject("ConceptName")]
     public class ConceptName : VersionedAssociation<Concept>
     {
-
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ConceptName"/> class.
         /// </summary>
         public ConceptName()
         {
-
         }
 
         /// <summary>
@@ -50,6 +47,7 @@ namespace SanteDB.Core.Model.DataTypes
         public ConceptName(string name)
         {
             this.Name = name;
+            this.Language = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
         }
 
         /// <summary>
@@ -62,7 +60,6 @@ namespace SanteDB.Core.Model.DataTypes
             this.Language = language;
         }
 
-
         /// <summary>
         /// Gets or sets the language code of the object
         /// </summary>
@@ -74,7 +71,6 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
         public String Name { get; set; }
-
 
         /// <summary>
         /// Represent as a string

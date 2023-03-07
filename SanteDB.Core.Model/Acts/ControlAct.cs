@@ -16,11 +16,12 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using System;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -28,6 +29,11 @@ namespace SanteDB.Core.Model.Acts
     /// <summary>
     /// Represents an act which indicates why data was created/changed
     /// </summary>
+    /// <remarks>
+    /// Control acts are typically container acts which are used to illustrate an event which occurs on the system to 
+    /// change state, create data, or update it. The use of control acts in SanteDB are not required however may be 
+    /// useful in contexts where event metadata is collected (similar to the EVN segment in HL7v2).
+    /// </remarks>
     [XmlType(nameof(ControlAct), Namespace = "http://santedb.org/model"), JsonObject("ControlAct")]
     [ClassConceptKey(ActClassKeyStrings.ControlAct)]
     public class ControlAct : Act
@@ -37,7 +43,12 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public ControlAct()
         {
-            this.ClassConceptKey = ActClassKeys.ControlAct;
+            this.m_classConceptKey = ActClassKeys.ControlAct;
         }
+
+        /// <summary>
+        /// Gets or sets the class concept key
+        /// </summary>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.ControlAct;
     }
 }

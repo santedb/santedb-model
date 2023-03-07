@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -39,51 +39,28 @@ namespace SanteDB.Core.Model.Acts
     public class FinancialContract : Act
     {
 
-        // Payment terms key
-        private Guid? m_paymentTermsKey;
-        private Concept m_paymentTerms;
-
         /// <summary>
         /// Creates the financial contract
         /// </summary>
         public FinancialContract()
         {
-            base.ClassConceptKey = ActClassKeys.FinancialContract;
+            base.m_classConceptKey = ActClassKeys.FinancialContract;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.FinancialContract;
 
         /// <summary>
         /// Gets or sets the payment terms
         /// </summary>
         [JsonProperty("paymentTerms"), XmlElement("paymentTerms")]
-        public Guid? PaymentTermsKey
-        {
-            get
-            {
-                return this.m_paymentTermsKey;
-            }
-            set
-            {
-                this.m_paymentTermsKey = value;
-                this.m_paymentTerms = null;
-            }
-        }
+        public Guid? PaymentTermsKey { get; set; }
 
         /// <summary>
         /// Gets or sets the payment terms
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(PaymentTermsKey))]
-        public Concept PaymentTerms
-        {
-            get
-            {
-                this.m_paymentTerms = base.DelayLoad(this.m_paymentTermsKey, this.m_paymentTerms);
-                return this.m_paymentTerms;
-            }
-            set
-            {
-                this.m_paymentTerms = value;
-                this.m_paymentTermsKey = value?.Key;
-            }
-        }
+        public Concept PaymentTerms { get; set; }
+
     }
 }

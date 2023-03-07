@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -44,7 +44,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public ConceptSet()
         {
-            this.Concepts = new List<Concept>();
+
         }
 
         /// <summary>
@@ -52,16 +52,19 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("name"), JsonProperty("name")]
         public String Name { get; set; }
+
         /// <summary>
         /// Gets or sets the mnemonic for the concept set (used for convenient lookup)
         /// </summary>
         [XmlElement("mnemonic"), JsonProperty("mnemonic")]
         public String Mnemonic { get; set; }
+
         /// <summary>
         /// Gets or sets the oid of the concept set
         /// </summary>
         [XmlElement("oid"), JsonProperty("oid")]
         public String Oid { get; set; }
+
         /// <summary>
         /// Gets or sets the url of the concept set
         /// </summary>
@@ -78,12 +81,12 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets the concepts in the set
         /// </summary>
-        [DataIgnore, XmlIgnore, JsonIgnore]
-        public List<Concept> Concepts
+        [SerializationMetadata, XmlIgnore, JsonIgnore]
+        public IEnumerable<Concept> Concepts
         {
             get
             {
-                return this.ConceptsXml?.Select(o => EntitySource.Current.Get<Concept>(o) ?? new Concept() { Key = o }).ToList();
+                return this.ConceptsXml?.Select(o => EntitySource.Current.Get<Concept>(o) ?? new Concept() { Key = o });
             }
             set
             {

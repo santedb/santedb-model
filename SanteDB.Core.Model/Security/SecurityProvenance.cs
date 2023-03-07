@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -34,12 +34,6 @@ namespace SanteDB.Core.Model.Security
     [JsonObject(nameof(SecurityProvenance))]
     public class SecurityProvenance : IdentifiedData
     {
-
-        // User
-        private SecurityUser m_user;
-        private SecurityApplication m_application;
-        private SecurityDevice m_device;
-
         /// <summary>
         /// Gets the time that the provenance was modified / created
         /// </summary>
@@ -54,15 +48,19 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Gets or sets the creation time in XML format
         /// </summary>
-        [XmlElement("creationTime"), JsonProperty("creationTime"), DataIgnore()]
+        [XmlElement("creationTime"), JsonProperty("creationTime"), SerializationMetadata()]
         public String CreationTimeXml
         {
             get
             {
                 if (this.CreationTime == default(DateTimeOffset))
+                {
                     return null;
+                }
                 else
+                {
                     return this.CreationTime.ToString("o", CultureInfo.InvariantCulture);
+                }
             }
             set
             {
@@ -71,11 +69,18 @@ namespace SanteDB.Core.Model.Security
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.CreationTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
-                else this.CreationTime = default(DateTimeOffset);
+                else
+                {
+                    this.CreationTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -92,7 +97,7 @@ namespace SanteDB.Core.Model.Security
         public Guid? UserKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the device key 
+        /// Gets or sets the device key
         /// </summary>
         [XmlElement("device"), JsonProperty("device")]
         public Guid? DeviceKey { get; set; }
@@ -119,56 +124,18 @@ namespace SanteDB.Core.Model.Security
         /// Gets the security user for the provenance if applicable
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(DeviceKey))]
-        public SecurityDevice Device
-        {
-            get
-            {
-                this.m_device = base.DelayLoad(this.DeviceKey, this.m_device);
-                return this.m_device;
-            }
-            set
-            {
-                this.m_device = value;
-                this.DeviceKey = value?.Key;
-            }
-        }
-
+        public SecurityDevice Device { get; set; }
 
         /// <summary>
         /// Gets the security user for the provenance if applicable
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(UserKey))]
-        public SecurityUser User
-        {
-            get
-            {
-                this.m_user = base.DelayLoad(this.UserKey, this.m_user);
-                return this.m_user;
-            }
-            set
-            {
-                this.m_user = value;
-                this.UserKey = value?.Key;
-            }
-        }
+        public SecurityUser User { get; set; }
 
         /// <summary>
         /// Gets the security application for the provenance if applicable
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(ApplicationKey))]
-        public SecurityApplication Application
-        {
-            get
-            {
-                this.m_application = base.DelayLoad(this.ApplicationKey, this.m_application);
-                return this.m_application;
-            }
-            set
-            {
-                this.m_application = value;
-                this.ApplicationKey = value?.Key;
-            }
-        }
-
+        public SecurityApplication Application { get; set; }
     }
 }

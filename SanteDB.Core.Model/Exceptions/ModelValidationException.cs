@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using SanteDB.Core.Model.Map;
 using System;
@@ -59,7 +59,10 @@ namespace SanteDB.Core.Exceptions
         {
             StringBuilder sb = new StringBuilder("Model Validation Exception:\r\n");
             foreach (var itm in this.ValidationDetails)
+            {
                 sb.AppendFormat("{0}: {1} @ {2}\r\n", itm.Level, itm.Message, itm.Location);
+            }
+
             return sb.ToString();
         }
     }

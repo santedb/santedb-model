@@ -16,15 +16,13 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-12-10
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
@@ -41,31 +39,22 @@ namespace SanteDB.Core.Model.Entities
     [XmlRoot(nameof(NonPersonLivingSubject), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(NonPersonLivingSubject))]
     [ClassConceptKey(EntityClassKeyStrings.LivingSubject)]
+    [ClassConceptKey(EntityClassKeyStrings.Food)]
+    [ClassConceptKey(EntityClassKeyStrings.Animal)]
     public class NonPersonLivingSubject : Entity
     {
-        // Strain
-        private Guid? m_strainKey;
 
-        // The strain of the non-person living subject
-        private Concept m_strain;
+        /// <summary>
+        /// Living subject
+        /// </summary>
+        public NonPersonLivingSubject()
+        {
+            this.m_classConceptKey = EntityClassKeys.LivingSubject;
+        }
 
         /// <inheritdoc/>
-        [XmlElement("classConcept"), JsonProperty("classConcept")]
-        public override Guid? ClassConceptKey
-        {
-            get => base.ClassConceptKey;
-            set
-            {
-                if (value == EntityClassKeys.Animal || value == EntityClassKeys.LivingSubject)
-                {
-                    base.ClassConceptKey = value;
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Class concept {value} is no permitted in this context");
-                }
-            }
-        }
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.LivingSubject || classKey == EntityClassKeys.Animal || classKey == EntityClassKeys.Food;
+
 
         /// <summary>
         /// Gets the description of the strain
@@ -73,31 +62,16 @@ namespace SanteDB.Core.Model.Entities
         [XmlElement("strain"), JsonProperty("strain")]
         public Guid? StrainKey
         {
-            get => this.m_strainKey;
-            set
-            {
-                this.m_strain = null;
-                this.m_strainKey = value;
-            }
+            get; set;
         }
 
         /// <summary>
         /// Strain
         /// </summary>
-        [SerializationReference(nameof(StrainKey))]
-        [XmlIgnore, JsonIgnore, AutoLoad]
+        [SerializationReference(nameof(StrainKey)), XmlIgnore, JsonIgnore]
         public Concept Strain
         {
-            get
-            {
-                this.m_strain = base.DelayLoad(this.m_strainKey, this.m_strain);
-                return this.m_strain;
-            }
-            set
-            {
-                this.m_strain = value;
-                this.m_strainKey = value?.Key;
-            }
+            get; set;
         }
     }
 }

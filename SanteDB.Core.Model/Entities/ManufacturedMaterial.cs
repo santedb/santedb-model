@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -44,9 +44,11 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public ManufacturedMaterial()
         {
-            base.DeterminerConceptKey = DeterminerKeys.Specific;
-            base.ClassConceptKey = EntityClassKeys.ManufacturedMaterial;
+            base.m_classConceptKey = EntityClassKeys.ManufacturedMaterial;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.ManufacturedMaterial;
 
         /// <summary>
         /// Gets or sets the lot number of the manufactured material
@@ -60,7 +62,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as ManufacturedMaterial;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.LotNumber == other.LotNumber;
         }
     }

@@ -16,30 +16,31 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using Newtonsoft.Json;
-using System.Xml.Serialization;
+using System;
 
-namespace SanteDB.Core.Model.Warehouse
+namespace SanteDB.Core.Model.Constants
 {
     /// <summary>
-    /// Represents the SQL for an actual query
+    /// Represents built in assigning authorities
     /// </summary>
-    [XmlType(nameof(DatamartStoredQueryDefinition), Namespace = "http://santedb.org/warehousing"), JsonObject(nameof(DatamartStoredQueryDefinition))]
-    public class DatamartStoredQueryDefinition
+    public static class IdentityDomainKeys
     {
 
         /// <summary>
-        /// Provider identifier
+        /// ISO 3166 Country Code Identifier Authority
         /// </summary>
-        [XmlAttribute("provider"), JsonProperty("provider")]
-        public string ProviderId { get; set; }
+        public static readonly Guid Iso3166CountryCode = Guid.Parse("ff6e7402-8545-48e1-8a70-ebf06f3ee4b8");
 
         /// <summary>
-        /// The SQL 
+        /// GS1 Global Location Number
         /// </summary>
-        [XmlText, JsonProperty("sql")]
-        public string Query { get; set; }
+        public static readonly Guid Gs1GlobalLocationNumber = Guid.Parse("0f4a86d6-d8e0-423f-9a53-54739f2da409");
+
+        /// <summary>
+        /// GS1 GTIN
+        /// </summary>
+        public static readonly Guid Gs1GlobalTradeIdentificationNumber = Guid.Parse("ce5990db-2e2a-467d-a376-2a7b53481e84");
     }
 }

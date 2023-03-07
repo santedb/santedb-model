@@ -16,21 +16,42 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
-using System.Collections;
+using System;
+using System.Collections.Generic;
 
-namespace SanteDB.Core.Model.Collection
+namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Represents a lockable collection
+    /// Identified entity
     /// </summary>
-    public interface ILockable
+    public interface IAnnotatedResource : IIdentifiedResource
     {
 
         /// <summary>
-        /// Get a locked version of the collection
+        /// Remove annotation
         /// </summary>
-        IEnumerable GetLocked();
+        void RemoveAnnotation(Object annotation);
+
+        /// <summary>
+        /// Remove annotations of <typeparamref name="T"/>
+        /// </summary>
+        void RemoveAnnotations<T>();
+
+        /// <summary>
+        /// Get annotations of specified <typeparamref name="T"/>
+        /// </summary>
+        IEnumerable<T> GetAnnotations<T>();
+
+        /// <summary>
+        /// Add an annotated object
+        /// </summary>
+        void AddAnnotation<T>(T annotation);
+
+        /// <summary>
+        /// Copy annotations
+        /// </summary>
+        IAnnotatedResource CopyAnnotations(IAnnotatedResource other);
     }
 }

@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using System;
 using System.Linq.Expressions;
@@ -47,11 +47,15 @@ namespace SanteDB.Core.Model.Query.FilterExtension
             // Is there a reference data?
             var rawParm = parms[0] as ConstantExpression;
             if (rawParm == null || !DateTime.TryParse(rawParm.Value.ToString(), out DateTime parsedParm))
+            {
                 parsedParm = DateTime.Now;
-
+            }
 
             if (scope.Type == typeof(DateTimeOffset))
+            {
                 scope = Expression.MakeMemberAccess(scope, typeof(DateTimeOffset).GetProperty(nameof(DateTimeOffset.DateTime)));
+            }
+
             return Expression.MakeBinary(comparison, Expression.Call(null, this.ExtensionMethod, scope, Expression.Constant(parsedParm)), valueExpression);
 
         }

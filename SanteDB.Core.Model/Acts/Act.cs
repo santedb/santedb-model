@@ -16,13 +16,13 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
-using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using System;
@@ -70,35 +70,19 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Act")]
     [JsonObject("Act")]
     [Classifier(nameof(ClassConcept))]
-    public class Act : VersionedEntityData<Act>, ITaggable, ISecurable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships
+    public class Act : VersionedEntityData<Act>, ITaggable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships, IHasTypeConcept
     {
-        private Guid? m_classConceptKey;
-        private Guid? m_typeConceptKey;
-        private Guid? m_statusConceptKey;
-        private Guid? m_moodConceptKey;
-        private Guid? m_reasonConceptKey;
-        private Guid? m_templateKey;
 
-        private Concept m_classConcept;
-        private Concept m_typeConcept;
-        private Concept m_statusConcept;
-        private Concept m_moodConcept;
-        private Concept m_reasonConcept;
-        private TemplateDefinition m_template;
+        /// <summary>
+        /// Internal class key
+        /// </summary>
+        protected Guid? m_classConceptKey;
 
         /// <summary>
         /// Constructor for ACT
         /// </summary>
         public Act()
         {
-            this.Relationships = new List<ActRelationship>();
-            this.Identifiers = new List<ActIdentifier>();
-            this.Extensions = new List<ActExtension>();
-            this.Notes = new List<ActNote>();
-            this.Participations = new List<ActParticipation>();
-            this.Tags = new List<ActTag>();
-            this.Protocols = new List<ActProtocol>();
-            this.Policies = new List<SecurityPolicyInstance>();
         }
 
         /// <summary>
@@ -165,7 +149,7 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso cref="StartTime"/>
         /// <seealso cref="StopTime"/>
         [XmlIgnore, JsonIgnore]
-        public DateTimeOffset ActTime { get; set; }
+        public DateTimeOffset? ActTime { get; set; }
 
         /// <summary>
         /// The template on which the act is based
@@ -178,19 +162,7 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         /// <seealso cref="Template"/>
         [XmlElement("template"), JsonProperty("template")]
-        public Guid? TemplateKey
-        {
-            get
-            {
-                return this.m_templateKey;
-            }
-            set
-            {
-                this.m_templateKey = value;
-                if (value.HasValue && value != this.m_template?.Key)
-                    this.m_template = null;
-            }
-        }
+        public Guid? TemplateKey { get; set; }
 
         /// <summary>
         /// Delay load property for the template
@@ -212,30 +184,18 @@ namespace SanteDB.Core.Model.Acts
         ///     Console.WriteLine("This substance administration is based on template {0}", act.LoadProperty(o => o.Template).Name);
         /// ]]>
         /// </example>
-        [AutoLoad, SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
-        public TemplateDefinition Template
-        {
-            get
-            {
-                this.m_template = base.DelayLoad(this.m_templateKey, this.m_template);
-                return this.m_template;
-            }
-            set
-            {
-                this.m_template = value;
-                this.m_templateKey = value?.Key;
-            }
-        }
+        [SerializationReference(nameof(TemplateKey)), XmlIgnore, JsonIgnore]
+        public TemplateDefinition Template { get; set; }
 
         /// <summary>
         /// The moment in time that this act occurred in ISO format
         /// </summary>
         /// <seealso cref="ActTime"/>
         /// <exception cref="FormatException">When the format of the provided string does not conform to ISO date format</exception>
-        [DataIgnore, XmlElement("actTime"), JsonProperty("actTime")]
+        [SerializationMetadata, XmlElement("actTime"), JsonProperty("actTime")]
         public String ActTimeXml
         {
-            get { return this.ActTime.ToString("o", CultureInfo.InvariantCulture); }
+            get { return this.ActTime?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
                 DateTimeOffset val = default(DateTimeOffset);
@@ -243,12 +203,18 @@ namespace SanteDB.Core.Model.Acts
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.ActTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
-                    this.ActTime = default(DateTimeOffset);
+                {
+                    this.ActTime = null;
+                }
             }
         }
 
@@ -272,7 +238,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <seealso cref="StartTime"/>
         /// <exception cref="FormatException">When the format of the provided string does not conform to ISO date format</exception>
-        [DataIgnore, XmlElement("startTime"), JsonProperty("startTime")]
+        [SerializationMetadata, XmlElement("startTime"), JsonProperty("startTime")]
         public String StartTimeXml
         {
             get { return this.StartTime?.ToString("o", CultureInfo.InvariantCulture); }
@@ -283,12 +249,18 @@ namespace SanteDB.Core.Model.Acts
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.StartTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
+                {
                     this.StartTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -308,7 +280,8 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <see cref="StopTime"/>
         /// <exception cref="FormatException">When the provided value does not conform to ISO formatted date</exception>
-        [DataIgnore, XmlElement("stopTime"), JsonProperty("stopTime")]
+
+        [SerializationMetadata, XmlElement("stopTime"), JsonProperty("stopTime")]
         public String StopTimeXml
         {
             get { return this.StopTime?.ToString("o", CultureInfo.InvariantCulture); }
@@ -319,12 +292,18 @@ namespace SanteDB.Core.Model.Acts
                 {
                     if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
                         DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
+                    {
                         this.StopTime = val;
+                    }
                     else
+                    {
                         throw new FormatException($"Date {value} was not recognized as a valid date format");
+                    }
                 }
                 else
+                {
                     this.StopTime = default(DateTimeOffset);
+                }
             }
         }
 
@@ -343,15 +322,18 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/class-concepts"/>
         [XmlElement("classConcept"), JsonProperty("classConcept")]
         [Binding(typeof(ActClassKeys))]
-        public virtual Guid? ClassConceptKey
+        public Guid? ClassConceptKey
         {
-            get { return this.m_classConceptKey; }
+            get => this.m_classConceptKey;
             set
             {
-                if (this.m_classConceptKey != value)
+                if (!this.ValidateClassKey(value))
+                {
+                    throw new InvalidOperationException(ErrorMessages.INVALID_CLASS_CODE);
+                }
+                else
                 {
                     this.m_classConceptKey = value;
-                    this.m_classConcept = null;
                 }
             }
         }
@@ -387,21 +369,9 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         /// <seealso cref="MoodConcept"/>
         /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/mood-concepts"/>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("moodConcept"), JsonProperty("moodConcept")]
         [Binding(typeof(ActMoodKeys))]
-        public virtual Guid? MoodConceptKey
-        {
-            get { return this.m_moodConceptKey; }
-            set
-            {
-                if (this.m_moodConceptKey != value)
-                {
-                    this.m_moodConceptKey = value;
-                    this.m_moodConcept = null;
-                }
-            }
-        }
+        public virtual Guid? MoodConceptKey { get; set; }
 
         /// <summary>
         /// Identifies a codified reason as to why this act did (or did not, or should or should not) occur.
@@ -420,18 +390,7 @@ namespace SanteDB.Core.Model.Acts
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("reasonConcept"), JsonProperty("reasonConcept")]
         [Binding(typeof(ActReasonKeys))]
-        public Guid? ReasonConceptKey
-        {
-            get { return this.m_reasonConceptKey; }
-            set
-            {
-                if (this.m_reasonConceptKey != value)
-                {
-                    this.m_reasonConceptKey = value;
-                    this.m_reasonConcept = null;
-                }
-            }
-        }
+        public Guid? ReasonConceptKey { get; set; }
 
         /// <summary>
         /// The concept which describes the current status of the act
@@ -466,21 +425,9 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso cref="StatusKeys" />
         /// <seealso cref="StatusConcept"/>
         /// <seealso href="https://help.santesuite.org/santedb/architecture/data-and-information-architecture/conceptual-data-model/acts/state-machine"/>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("statusConcept"), JsonProperty("statusConcept")]
         [Binding(typeof(StatusKeys))]
-        public Guid? StatusConceptKey
-        {
-            get { return this.m_statusConceptKey; }
-            set
-            {
-                if (this.m_statusConceptKey != value)
-                {
-                    this.m_statusConceptKey = value;
-                    this.m_statusConcept = null;
-                }
-            }
-        }
+        public Guid? StatusConceptKey { get; set; }
 
         /// <summary>
         /// Gets or sets the key of the concept which further classifies the type of act occurring
@@ -488,18 +435,7 @@ namespace SanteDB.Core.Model.Acts
         /// <see cref="TypeConcept"/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [XmlElement("typeConcept"), JsonProperty("typeConcept")]
-        public Guid? TypeConceptKey
-        {
-            get { return this.m_typeConceptKey; }
-            set
-            {
-                if (this.m_typeConceptKey != value)
-                {
-                    this.m_typeConceptKey = value;
-                    this.m_typeConcept = null;
-                }
-            }
-        }
+        public Guid? TypeConceptKey { get; set; }
 
         /// <summary>
         /// Gets the delay-loaded value of the <see cref="ClassConceptKey"/>
@@ -513,20 +449,8 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso cref="ActClassKeys"/>
         /// <seealso cref="ClassConceptKey"/>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(ClassConceptKey))]
-        public Concept ClassConcept
-        {
-            get
-            {
-                this.m_classConcept = base.DelayLoad(this.m_classConceptKey, this.m_classConcept);
-                return this.m_classConcept;
-            }
-            set
-            {
-                this.m_classConcept = value;
-                this.m_classConceptKey = value?.Key;
-            }
-        }
+        [SerializationReference(nameof(ClassConceptKey))]
+        public Concept ClassConcept { get; set; }
 
         /// <summary>
         /// Gets the delay-loaded value of the <see cref="MoodConceptKey"/> property
@@ -540,20 +464,8 @@ namespace SanteDB.Core.Model.Acts
         /// <see cref="ActMoodKeys"/>
         /// <seealso cref="MoodConceptKey"/>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(MoodConceptKey))]
-        public Concept MoodConcept
-        {
-            get
-            {
-                this.m_moodConcept = base.DelayLoad(this.m_moodConceptKey, this.m_moodConcept);
-                return this.m_moodConcept;
-            }
-            set
-            {
-                this.m_moodConcept = value;
-                this.m_moodConceptKey = value?.Key;
-            }
-        }
+        [SerializationReference(nameof(MoodConceptKey))]
+        public Concept MoodConcept { get; set; }
 
         /// <summary>
         /// Delay loads the concept from <see cref="ReasonConceptKey"/>
@@ -567,20 +479,8 @@ namespace SanteDB.Core.Model.Acts
         /// <seealso cref="ActReasonKeys"/>
         /// <seealso cref="ReasonConceptKey"/>
         [XmlIgnore, JsonIgnore]
-        [AutoLoad, SerializationReference(nameof(ReasonConceptKey))]
-        public Concept ReasonConcept
-        {
-            get
-            {
-                this.m_reasonConcept = base.DelayLoad(this.m_reasonConceptKey, this.m_reasonConcept);
-                return this.m_reasonConcept;
-            }
-            set
-            {
-                this.m_reasonConcept = value;
-                this.m_reasonConceptKey = value?.Key;
-            }
-        }
+        [SerializationReference(nameof(ReasonConceptKey))]
+        public Concept ReasonConcept { get; set; }
 
         /// <summary>
         /// Delay loads the concept represented in <see cref="StatusConceptKey"/>
@@ -593,24 +493,9 @@ namespace SanteDB.Core.Model.Acts
         /// </remarks>
         /// <seealso cref="StatusConceptKey"/>
         ///
-        [AutoLoad, SerializationReference(nameof(StatusConceptKey))]
+        [SerializationReference(nameof(StatusConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept StatusConcept
-        {
-            get
-            {
-                this.m_statusConcept = base.DelayLoad(this.m_statusConceptKey, this.m_statusConcept);
-                return this.m_statusConcept;
-            }
-            set
-            {
-                this.m_statusConcept = value;
-                if (value == null)
-                    this.m_statusConceptKey = Guid.Empty;
-                else
-                    this.m_statusConceptKey = value.Key;
-            }
-        }
+        public Concept StatusConcept { get; set; }
 
         /// <summary>
         /// Delay loads the concept represented in <see cref="TypeConceptKey"/>
@@ -622,21 +507,9 @@ namespace SanteDB.Core.Model.Acts
         /// <code>act.LoadProperty(o=>o.TypeConcept)</code></para>
         /// </remarks>
         /// <see cref="TypeConceptKey"/>
-        [AutoLoad, SerializationReference(nameof(TypeConceptKey))]
+        [SerializationReference(nameof(TypeConceptKey))]
         [XmlIgnore, JsonIgnore]
-        public Concept TypeConcept
-        {
-            get
-            {
-                this.m_typeConcept = base.DelayLoad(this.m_typeConceptKey, this.m_typeConcept);
-                return this.m_typeConcept;
-            }
-            set
-            {
-                this.m_typeConceptKey = value?.Key;
-                this.m_typeConcept = value;
-            }
-        }
+        public Concept TypeConcept { get; set; }
 
         /// <summary>
         /// Identifiers by which this act is known
@@ -657,7 +530,7 @@ namespace SanteDB.Core.Model.Acts
         /// </para>
         /// </remarks>
         /// <seealso cref="ActIdentifier"/>
-        [AutoLoad, XmlElement("identifier"), JsonProperty("identifier")]
+        [XmlElement("identifier"), JsonProperty("identifier")]
         public List<ActIdentifier> Identifiers { get; set; }
 
         /// <summary>
@@ -668,7 +541,7 @@ namespace SanteDB.Core.Model.Acts
         /// directly as in an encounter with component acts, or between care episodes for chronic
         /// care.
         /// </remarks>
-        [AutoLoad, XmlElement("relationship"), JsonProperty("relationship")]
+        [XmlElement("relationship"), JsonProperty("relationship")]
         public List<ActRelationship> Relationships { get; set; }
 
         /// <summary>
@@ -695,14 +568,14 @@ namespace SanteDB.Core.Model.Acts
         /// are not
         /// </para>
         /// </remarks>
-        [AutoLoad, XmlElement("extension"), JsonProperty("extension")]
+        [XmlElement("extension"), JsonProperty("extension")]
         public List<ActExtension> Extensions { get; set; }
 
         /// <summary>
         /// Gets a list of all notes associated with the act
         /// </summary>
         /// <remarks>Allows one or more notes to be taken about an act by a clinician</remarks>
-        [AutoLoad, XmlElement("note"), JsonProperty("note")]
+        [XmlElement("note"), JsonProperty("note")]
         public List<ActNote> Notes { get; set; }
 
         /// <summary>
@@ -713,7 +586,7 @@ namespace SanteDB.Core.Model.Acts
         /// extend the underlying application in ways not imagined by the original SanteDB team. Tags differ
         /// from extensions in that they can only carry simple values (strings) and they are not versioned.
         /// </remarks>
-        [AutoLoad, XmlElement("tag"), JsonProperty("tag")]
+        [XmlElement("tag"), JsonProperty("tag")]
         public List<ActTag> Tags { get; set; }
 
         /// <summary>
@@ -723,7 +596,7 @@ namespace SanteDB.Core.Model.Acts
         /// The protocols element is used to track which clinical protocols where linked with
         /// the act.
         /// </remarks>
-        [AutoLoad, XmlElement("protocol"), JsonProperty("protocol")]
+        [XmlElement("protocol"), JsonProperty("protocol")]
         public List<ActProtocol> Protocols
         {
             get;
@@ -744,18 +617,14 @@ namespace SanteDB.Core.Model.Acts
         ///     <item>Location - Where the act took place</item>
         /// </list>
         /// </remarks>
-        /// <see cref="ActParticipationKey"/>
+        /// <see cref="ActParticipationKeys"/>
         [XmlElement("participation"), JsonProperty("participation")]
-        [AutoLoad]
         public List<ActParticipation> Participations { get; set; }
 
         /// <summary>
         /// True if reason concept key should be serialized
         /// </summary>
-        public bool ShouldSerializeReasonConceptKey()
-        {
-            return this.ReasonConceptKey.HasValue && this.ReasonConceptKey.GetValueOrDefault() != Guid.Empty;
-        }
+        public bool ShouldSerializeReasonConceptKey() => this.ReasonConceptKey.HasValue && this.ReasonConceptKey.GetValueOrDefault() != Guid.Empty;
 
         /// <summary>
         /// Semantic equality function
@@ -764,25 +633,28 @@ namespace SanteDB.Core.Model.Acts
         public override bool SemanticEquals(object obj)
         {
             var other = obj as Act;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) &&
                 this.ActTime == other.ActTime &&
                 this.ClassConceptKey == other.ClassConceptKey &&
-                this.Extensions?.SemanticEquals(other.Extensions) == true &&
-                this.Identifiers?.SemanticEquals(other.Identifiers) == true &&
+                this.Extensions?.SemanticEquals(other.Extensions) != false &&
+                this.Identifiers?.SemanticEquals(other.Identifiers) != false &&
                 this.IsNegated == other.IsNegated &&
                 this.MoodConceptKey == other.MoodConceptKey &&
-                this.Notes?.SemanticEquals(other.Notes) == true &&
-                this.Participations?.SemanticEquals(other.Participations) == true &&
-                this.Policies?.SemanticEquals(other.Policies) == true &&
-                this.Protocols?.SemanticEquals(other.Protocols) == true &&
+                this.Notes?.SemanticEquals(other.Notes) != false &&
+                this.Participations?.SemanticEquals(other.Participations) != false &&
+                this.Protocols?.SemanticEquals(other.Protocols) != false &&
                 this.ReasonConceptKey == other.ReasonConceptKey &&
-                this.Relationships?.SemanticEquals(other.Relationships) == true &&
+                this.Relationships?.SemanticEquals(other.Relationships) != false &&
                 this.StartTime == other.StartTime &&
                 this.StatusConceptKey == other.StatusConceptKey &&
                 this.StopTime == other.StopTime &&
-                this.Tags?.SemanticEquals(other.Tags) == true &&
-                this.Template?.SemanticEquals(other.Template) == true &&
+                this.Tags?.SemanticEquals(other.Tags) != false &&
+                this.Template?.SemanticEquals(other.Template) != false &&
                 this.TypeConceptKey == other.TypeConceptKey;
         }
 
@@ -833,7 +705,7 @@ namespace SanteDB.Core.Model.Acts
         /// Should serialize policies
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializePolicies() => this.Policies.Count > 0;
+        public bool ShouldSerializePolicies() => !this.Policies.IsNullOrEmpty();
 
         /// <summary>
         /// Gets the tags
@@ -841,6 +713,9 @@ namespace SanteDB.Core.Model.Acts
         [XmlIgnore, JsonIgnore]
         IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection<EntityTag>(nameof(Act.Tags)).OfType<ITag>(); } }
 
+        /// <summary>
+        /// Get all extensions on the act
+        /// </summary>
         [XmlIgnore, JsonIgnore]
         IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection<EntityExtension>(nameof(Act.Extensions)).OfType<IModelExtension>(); } }
 
@@ -849,6 +724,12 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlElement("geo"), JsonProperty("geo")]
         public GeoTag GeoTag { get; set; }
+
+        /// <summary>
+        /// Gets the geo tag key
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public Guid? GeoTagKey { get; set; }
 
         /// <summary>
         /// Has identifiers
@@ -911,31 +792,21 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Add a policy to this act
-        /// </summary>
-        public void AddPolicy(string policyId)
-        {
-            var pol = EntitySource.Current.Provider.Query<SecurityPolicy>(o => o.Oid == policyId).SingleOrDefault();
-            if (pol == null)
-                throw new KeyNotFoundException($"Policy {policyId} not found");
-            this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
-        }
-
-        /// <summary>
-        /// Determines if the object has policy
-        /// </summary>
-        public bool HasPolicy(string policyId)
-        {
-            return this.LoadCollection<SecurityPolicyInstance>(nameof(Policies)).Any(o => o.LoadProperty<SecurityPolicy>(nameof(SecurityPolicyInstance.Policy)).Oid == policyId);
-        }
-
-        /// <summary>
         /// Add a tag to this act
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
         {
-            var tag = new ActTag(tagKey, tagValue);
-            this.Tags.Add(tag);
+            var tag = this.LoadProperty(o => o.Tags)?.FirstOrDefault(o => o.TagKey == tagKey);
+            this.Tags = this.Tags ?? new List<ActTag>();
+            if (tag == null)
+            {
+                tag = new ActTag(tagKey, tagValue);
+                this.Tags.Add(tag);
+            }
+            else
+            {
+                tag.Value = tagValue;
+            }
             return tag;
         }
 
@@ -962,17 +833,27 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Get the specified tag
         /// </summary>
-        public string GetTag(string tagKey) => this.Tags.FirstOrDefault(o => o.TagKey == tagKey)?.Value;
+        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value : this.LoadProperty(o => o.Tags).FirstOrDefault(t => t.TagKey == tagKey)?.Value;
 
         /// <summary>
         /// Remove <paramref name="tagKey"/> from the tag collection
         /// </summary>
-        public void RemoveTag(string tagKey) => this.Tags.RemoveAll(o => o.TagKey == tagKey);
+        public void RemoveTag(string tagKey)
+        {
+            if (tagKey.StartsWith("$"))
+            {
+                this.Tags?.RemoveAll(o => o.TagKey == tagKey);
+            }
+            else
+            {
+                this.LoadProperty(o => o.Tags).RemoveAll(t => t.TagKey == tagKey);
+            }
+        }
 
         /// <summary>
         /// Remove tags matching <paramref name="predicate"/> from the tag collection
         /// </summary>
-        public void RemoveAllTags(Predicate<ITag> predicate) => this.Tags.RemoveAll(predicate);
+        public void RemoveAllTags(Predicate<ITag> predicate) => this.Tags?.RemoveAll(predicate);
 
 
         /// <summary>
@@ -980,8 +861,13 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public bool TryGetTag(string tagKey, out ITag tag)
         {
-            tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            tag = this.Tags?.FirstOrDefault(o => o.TagKey == tagKey);
             return tag != null;
         }
+
+        /// <summary>
+        /// Validate the class key
+        /// </summary>
+        protected virtual bool ValidateClassKey(Guid? classKey) => true;
     }
 }

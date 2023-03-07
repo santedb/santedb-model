@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -29,66 +29,45 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model.Entities
 {
     /// <summary>
-    /// An associative entity which links a SecurityApplication to an Entity
+    /// Represents the clinical data object for Applications
     /// </summary>
+    /// <remarks>
+    /// In SanteDB's data model, all security objects (objects which may alter the state of data) are separated
+    /// into a security object (in this example <see cref="SecurityApplication"/>) and a clinical object (<see cref="ApplicationEntity"/>).
+    /// This allows SanteDB to store provenance data (authoriship, origin, etc) without conflating the original
+    /// device, application or user with the security user, device, or application.
+    /// </remarks>
 
     [XmlType("ApplicationEntity", Namespace = "http://santedb.org/model"), JsonObject("ApplicationEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ApplicationEntity")]
     [ClassConceptKey(EntityClassKeyStrings.NonLivingSubject)]
     public class ApplicationEntity : Entity
     {
-        // Security application
-        private SecurityApplication m_securityApplication;
-
-        // Security application key
-        private Guid? m_securityApplicationKey;
-
         /// <summary>
         /// Creates application entity
         /// </summary>
         public ApplicationEntity()
         {
-            this.ClassConceptKey = EntityClassKeys.NonLivingSubject;
+            this.m_classConceptKey = EntityClassKeys.NonLivingSubject;
             this.DeterminerConceptKey = DeterminerKeys.Specific;
         }
+
+        /// <inheritdoc/>
+        protected override bool ValidateClassKey(Guid? classKey) => classKey == EntityClassKeys.NonLivingSubject;
 
         /// <summary>
         /// Gets or sets the security application
         /// </summary>
         [SerializationReference(nameof(SecurityApplicationKey))]
         [XmlIgnore, JsonIgnore]
-        public SecurityApplication SecurityApplication
-        {
-            get
-            {
-                this.m_securityApplication = base.DelayLoad(this.m_securityApplicationKey, this.m_securityApplication);
-                return this.m_securityApplication;
-            }
-            set
-            {
-                this.m_securityApplication = value;
-
-                this.m_securityApplicationKey = value?.Key;
-            }
-        }
+        public SecurityApplication SecurityApplication { get; set; }
 
         /// <summary>
         /// Gets or sets the security application
         /// </summary>
         [XmlElement("securityApplication"), JsonProperty("securityApplication")]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public Guid? SecurityApplicationKey
-        {
-            get { return this.m_securityApplicationKey; }
-            set
-            {
-                if (this.m_securityApplicationKey != value)
-                {
-                    this.m_securityApplicationKey = value;
-                    this.m_securityApplication = null;
-                }
-            }
-        }
+        public Guid? SecurityApplicationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the software
@@ -114,7 +93,11 @@ namespace SanteDB.Core.Model.Entities
         public override bool SemanticEquals(object obj)
         {
             var other = obj as ApplicationEntity;
-            if (other == null) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
             return base.SemanticEquals(obj) && this.SecurityApplicationKey == other.SecurityApplicationKey &&
                 this.SoftwareName == other.SoftwareName &&
                 this.VersionName == other.VersionName &&

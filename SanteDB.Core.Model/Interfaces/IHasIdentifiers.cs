@@ -16,8 +16,9 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
+using SanteDB.Core.Model.Attributes;
 using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
@@ -25,12 +26,13 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Entity has external identifiers
     /// </summary>
-    public interface IHasIdentifiers : IIdentifiedEntity
+    public interface IHasIdentifiers : IAnnotatedResource
     {
 
         /// <summary>
         /// Get the xternal identifiers
         /// </summary>
+        [QueryParameter("identifier")]
         IEnumerable<IExternalIdentifier> Identifiers { get; }
     }
 }

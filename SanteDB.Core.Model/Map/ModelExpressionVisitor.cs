@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2022-5-30
  */
 using SanteDB.Core.Model.Attributes;
 using System;
@@ -66,9 +66,13 @@ namespace SanteDB.Core.Model.Map
             {
 
                 if (node == null)
+                {
                     return node;
+                }
                 else if (node.CanReduce)
+                {
                     node = node.Reduce();
+                }
 
                 switch (node.NodeType)
                 {
@@ -87,12 +91,18 @@ namespace SanteDB.Core.Model.Map
 
                                 var memInfo = this.m_memberAccess.Type.GetRuntimeProperty(memberExpression.Member.Name);
                                 if (memInfo == null)
+                                {
                                     return memberExpression;
+                                }
                                 else
+                                {
                                     return Expression.MakeMemberAccess(this.m_memberAccess, memInfo ?? memberExpression.Member);
+                                }
                             }
                             else
+                            {
                                 return base.Visit(node);
+                            }
                         }
                     default:
                         return base.Visit(node);
@@ -108,7 +118,10 @@ namespace SanteDB.Core.Model.Map
                 Expression right = this.Visit(node.Right),
                     left = this.Visit(node.Left);
                 if (right != node.Right || left != node.Left)
+                {
                     return Expression.MakeBinary(node.NodeType, left, right);
+                }
+
                 return node;
             }
         }
@@ -118,6 +131,7 @@ namespace SanteDB.Core.Model.Map
 
         // Parameters
         private readonly ParameterExpression[] m_parameters;
+        private readonly Type m_targetType;
 
         // Scope stack
         private Stack<ParameterExpression> m_scope = new Stack<ParameterExpression>();
@@ -128,9 +142,13 @@ namespace SanteDB.Core.Model.Map
         private Object GetConstantValue(Expression expression)
         {
             if (expression == null)
+            {
                 return null;
+            }
             else if (expression is ConstantExpression)
+            {
                 return (expression as ConstantExpression).Value;
+            }
             else if (expression is UnaryExpression)
             {
                 var un = expression as UnaryExpression;
@@ -149,25 +167,33 @@ namespace SanteDB.Core.Model.Map
                 var mem = expression as MemberExpression;
                 var obj = this.GetConstantValue(mem.Expression);
                 if (mem.Member is PropertyInfo)
+                {
                     return (mem.Member as PropertyInfo).GetValue(obj);
+                }
                 else if (mem.Member is FieldInfo)
+                {
                     return (mem.Member as FieldInfo).GetValue(obj);
+                }
                 else
+                {
                     throw new NotSupportedException();
+                }
             }
             else
+            {
                 throw new InvalidOperationException($"Expression {expression} not supported for constant extraction");
-
+            }
         }
 
 
         /// <summary>
         /// Model conversion visitor 
         /// </summary>
-        public ModelExpressionVisitor(ModelMapper mapData, params ParameterExpression[] parameters)
+        public ModelExpressionVisitor(ModelMapper mapData, Type targetTypeHint, params ParameterExpression[] parameters)
         {
             this.m_mapper = mapData;
             this.m_parameters = parameters;
+            this.m_targetType = targetTypeHint;
         }
 
         /// <summary>
@@ -177,9 +203,13 @@ namespace SanteDB.Core.Model.Map
         {
 
             if (node == null)
+            {
                 return node;
+            }
             else if (node.CanReduce)
+            {
                 node = node.Reduce();
+            }
 
             switch (node.NodeType)
             {
@@ -191,6 +221,8 @@ namespace SanteDB.Core.Model.Map
                 case ExpressionType.Equal:
                 case ExpressionType.NotEqual:
                 case ExpressionType.AndAlso:
+                case ExpressionType.And:
+                case ExpressionType.Or:
                 case ExpressionType.OrElse:
                     return this.VisitBinary((BinaryExpression)node);
                 case ExpressionType.MemberAccess:
@@ -222,10 +254,16 @@ namespace SanteDB.Core.Model.Map
         {
             Expression newExpr = this.Visit(node.Expression);
             if (newExpr == null)
+            {
                 return null;
+            }
+
             var newType = this.m_mapper.MapModelType(node.TypeOperand);
             if (newExpr != node.Expression || newType != node.TypeOperand)
+            {
                 return Expression.TypeIs(newExpr, newType);
+            }
+
             return node;
         }
 
@@ -236,11 +274,19 @@ namespace SanteDB.Core.Model.Map
         {
             var newOp = this.Visit(node.Operand);
             if (newOp == null)
+            {
                 return null;
+            }
+
             if (newOp != node.Operand && node.NodeType == ExpressionType.TypeAs)
+            {
                 return this.m_mapper.MapTypeCast(node, newOp);
+            }
             else if (newOp != node.Operand)
+            {
                 return Expression.MakeUnary(node.NodeType, newOp, this.m_mapper.MapModelType(node.Type));
+            }
+
             return node;
         }
 
@@ -251,15 +297,26 @@ namespace SanteDB.Core.Model.Map
         {
             Expression newOperand = this.Visit(convert.Operand);
             if (newOperand == null)
+            {
                 return null;
+            }
 
             if (newOperand != convert.Operand)
             {
-                Type targetType = m_mapper.MapModelType(convert.Type);
-                if (targetType == convert.Type) // No map
+                if (convert.Type == typeof(Object)) // We're just mapping to object 
+                {
                     return newOperand;
+                }
+                else
+                {
+                    Type targetType = m_mapper.MapModelType(convert.Type);
+                    if (targetType == convert.Type) // No map
+                    {
+                        return newOperand;
+                    }
 
-                return Expression.Convert(newOperand, targetType);
+                    return Expression.Convert(newOperand, targetType);
+                }
             }
             return convert;
         }
@@ -271,23 +328,38 @@ namespace SanteDB.Core.Model.Map
         {
             var parameters = this.VisitExpressionList(node.Parameters.OfType<Expression>().ToList()).OfType<ParameterExpression>().ToArray();
             if (parameters == null)
+            {
                 return null;
+            }
+
             var parmExpr = this.Visit(parameters[0]);
             if (parmExpr == null)
+            {
                 return null;
+            }
+
             this.m_scope.Push(parmExpr as ParameterExpression);
             Expression newBody = this.Visit(node.Body);
             if (newBody == null)
+            {
                 return null;
+            }
 
             if (newBody != node.Body)
             {
                 var lambdaType = node.Type;
                 if (lambdaType.GetGenericTypeDefinition() == typeof(Func<,>))
+                {
                     lambdaType = typeof(Func<,>).MakeGenericType(parameters.Select(p => p.Type).Union(new Type[] { newBody.Type }).ToArray());
+                }
+
                 return Expression.Lambda(lambdaType, newBody, this.m_scope.Pop());
             }
-            else this.m_scope.Pop();
+            else
+            {
+                this.m_scope.Pop();
+            }
+
             return node;
 
         }
@@ -299,7 +371,7 @@ namespace SanteDB.Core.Model.Map
         {
             if (node.Object == null) // static method
             {
-                switch(node.Method.Name)
+                switch (node.Method.Name)
                 {
                     case "Contains": // Enumerable contains
                         try
@@ -310,7 +382,7 @@ namespace SanteDB.Core.Model.Map
                         }
                         catch
                         {
-                            return null; 
+                            return null;
                         }
                 }
                 return null;
@@ -319,10 +391,15 @@ namespace SanteDB.Core.Model.Map
             {
                 Expression newExpression = this.Visit(node.Object);
                 if (newExpression == null)
+                {
                     return null;
+                }
+
                 IEnumerable<Expression> args = this.VisitExpressionList(node.Arguments);
                 if (args == null)
+                {
                     return null;
+                }
 
                 if (newExpression != node.Object || args != node.Arguments)
                 {
@@ -352,7 +429,9 @@ namespace SanteDB.Core.Model.Map
             {
                 Expression argExpression = this.Visit(exp);
                 if (argExpression == null) // couldn't map // invalid
+                {
                     return null;
+                }
 
                 // Is there a VIA expression to be corrected?
                 if (argExpression is LambdaExpression)
@@ -369,7 +448,9 @@ namespace SanteDB.Core.Model.Map
 
                     var newBody = new LambdaCorrectionVisitor(accessExpression, lambdaExpression.Parameters[0], this.m_mapper).Visit(lambdaExpression.Body);
                     if (newBody == null)
+                    {
                         return null;
+                    }
 
                     var lambdaType = typeof(Func<,>).MakeGenericType(new Type[] { newParameter.Type, newBody.Type });
 
@@ -383,12 +464,18 @@ namespace SanteDB.Core.Model.Map
                     retVal.Add(argExpression);
                 }
                 else
+                {
                     retVal.Add(exp);
+                }
             }
             if (isDifferent)
+            {
                 return retVal;
+            }
             else
+            {
                 return args;
+            }
         }
 
         /// <summary>
@@ -400,22 +487,30 @@ namespace SanteDB.Core.Model.Map
                 left = this.Visit(node.Left);
 
             if (right == null || left == null)
+            {
                 return null;
+            }
 
             // Does the left have ToLower() and the right not?
             if (left.NodeType == ExpressionType.Call && node.Left.NodeType == ExpressionType.MemberAccess &&
                     (node.Left as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
+            {
                 right = Expression.Call(right, (left as MethodCallExpression).Method);
+            }
             else if (right.NodeType == ExpressionType.Call && node.Right.NodeType == ExpressionType.MemberAccess &&
                     (node.Right as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
+            {
                 left = Expression.Call(left, (right as MethodCallExpression).Method);
+            }
 
 
             // Are the types compatible?
             if (!right.Type.IsAssignableFrom(left.Type))
             {
                 if (right.NodeType == ExpressionType.Convert)
+                {
                     right = ((UnaryExpression)right).Operand;
+                }
 
                 // Convert byte[] <= Guid
                 if ((right.Type == typeof(Guid) || right.Type == typeof(Guid?)) && left.Type == typeof(Byte[]))
@@ -433,8 +528,13 @@ namespace SanteDB.Core.Model.Map
                                 {
                                     accessStack.Push(accessExpr);
                                     if (accessExpr is MemberExpression)
+                                    {
                                         accessExpr = (accessExpr as MemberExpression).Expression;
-                                    else break;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
                                 }
 
                                 scope = ((ConstantExpression)accessExpr).Value;
@@ -442,28 +542,44 @@ namespace SanteDB.Core.Model.Map
                                 {
                                     var member = (accessStack.Pop() as MemberExpression).Member;
                                     if (member is PropertyInfo)
+                                    {
                                         scope = (member as PropertyInfo).GetValue(scope);
+                                    }
                                     else if (member is FieldInfo)
+                                    {
                                         scope = (member as FieldInfo).GetValue(scope);
+                                    }
                                 }
                             }
                             if (memberExpr.Member is FieldInfo)
+                            {
                                 right = Expression.Constant(((Guid)(memberExpr.Member as FieldInfo).GetValue(scope)).ToByteArray());
+                            }
                             else if (memberExpr.Member is MethodInfo)
+                            {
                                 right = Expression.Constant(((Guid)(memberExpr.Member as MethodInfo).Invoke(scope, null)).ToByteArray());
+                            }
                             else if (memberExpr.Member is PropertyInfo)
+                            {
                                 right = Expression.Constant(((Guid)(memberExpr.Member as PropertyInfo).GetValue(scope)).ToByteArray());
+                            }
 
                             break;
                         case ExpressionType.Constant:
                             if (right is ConstantExpression ce)
                             {
                                 if (ce.Value is Guid uuid)
+                                {
                                     right = Expression.Constant(uuid.ToByteArray());
+                                }
                                 else if (ce.Value is Nullable<Guid>)
+                                {
                                     right = Expression.Constant((ce.Value as Guid?).GetValueOrDefault().ToByteArray());
+                                }
                                 else if (ce.Value == null)
+                                {
                                     right = Expression.Constant(null);
+                                }
                             }
                             break;
                     }
@@ -479,7 +595,7 @@ namespace SanteDB.Core.Model.Map
                     }
                     else if (!DateTime.TryParse(cvalue.ToString(), out dateTime))
                     {
-                        throw new InvalidOperationException($"Unable to convert { (right as ConstantExpression)?.Value } to a valid date time");
+                        throw new InvalidOperationException($"Unable to convert {(right as ConstantExpression)?.Value} to a valid date time");
                     }
                     else
                     {
@@ -500,28 +616,42 @@ namespace SanteDB.Core.Model.Map
                     {
                         if (right.NodeType == ExpressionType.Convert &&
                             (right as UnaryExpression).Operand.Type == left.Type)
+                        {
                             right = (right as UnaryExpression).Operand;
+                        }
                         else if (left is ConstantExpression && (left as ConstantExpression).Value == null)
+                        {
                             return Expression.MakeBinary(node.NodeType, left, right);
+                        }
                         else
+                        {
                             right = Expression.Coalesce(right, Expression.Constant(Activator.CreateInstance(right.Type.GenericTypeArguments[0])));
+                        }
                     }
                     if (left.Type.IsGenericType &&
                         left.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
                     {
                         if (left.NodeType == ExpressionType.Convert &&
                             (left as UnaryExpression).Operand.Type == right.Type)
+                        {
                             left = (left as UnaryExpression).Operand;
+                        }
                         else if (right is ConstantExpression && (right as ConstantExpression).Value == null) // Handle : o.Nullable == null
+                        {
                             return Expression.MakeBinary(node.NodeType, left, right);
+                        }
                         else
+                        {
                             left = Expression.Coalesce(left, Expression.Constant(Activator.CreateInstance(left.Type.GenericTypeArguments[0])));
+                        }
                     }
                     // Handle nullable <> null to always be true
                     if ((right is ConstantExpression && (right as ConstantExpression).Value == null ||
                         left is ConstantExpression && (left as ConstantExpression).Value == null) &&
                         (!right.Type.IsClass || !left.Type.IsClass))
+                    {
                         return Expression.Constant(true);
+                    }
                 }
                 return Expression.MakeBinary(node.NodeType, left, right);
             }
@@ -535,17 +665,29 @@ namespace SanteDB.Core.Model.Map
         {
 
             Type mappedType = this.m_mapper.MapModelType(node.Type);
+
+            if(mappedType == null)
+            {
+                mappedType = this.m_targetType;
+            }
+
             var parameterRef = this.m_parameters.FirstOrDefault(p => p.Name == node.Name && p.Type == mappedType);
 
             if (parameterRef != null)
+            {
                 return parameterRef;
+            }
 
             parameterRef = this.m_scope.FirstOrDefault(p => p.Name == node.Name && p.Type == mappedType);
             if (parameterRef != null)
+            {
                 return parameterRef;
+            }
 
             if (mappedType != null && mappedType != node.Type)
+            {
                 return Expression.Parameter(mappedType, node.Name);
+            }
 
             return node;
         }
@@ -558,8 +700,11 @@ namespace SanteDB.Core.Model.Map
         {
 
             if (node.Expression == null) // Constant?
+            {
                 return node;
-            // Convert the expression
+            }
+
+            // Convert the expression 
             Expression newExpression = this.Visit(node.Expression);
 
             if (newExpression == null)
@@ -573,15 +718,31 @@ namespace SanteDB.Core.Model.Map
                 {
                     UnaryExpression convertExpression = node.Expression as UnaryExpression;
                     if (convertExpression.Type.IsAssignableFrom(convertExpression.Operand.Type))
+                    {
                         node = Expression.MakeMemberAccess(convertExpression.Operand, node.Member);
+                    }
                 }
 
-                var retVal = this.m_mapper.MapModelMember(node, newExpression);
-                if (node.NodeType == ExpressionType.MemberAccess &&
-                    (node as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
-                    retVal = Expression.Call(retVal, typeof(String).GetRuntimeMethod(nameof(String.ToLower), new Type[0]));
+                // Special case - HasValue on a nullable
+                if (node.Expression.Type != node.Expression.Type.StripNullable() &&
+                    node.Member.Name == "HasValue")
+                {
+                    return Expression.MakeBinary(ExpressionType.NotEqual, newExpression, Expression.Constant(null));
 
-                return retVal;
+                }
+                else
+                {
+
+                    var retVal = this.m_mapper.MapModelMember(node, newExpression);
+                    if (node.NodeType == ExpressionType.MemberAccess &&
+                        (node as MemberExpression).Member.GetCustomAttribute<NoCaseAttribute>() != null)
+                    {
+                        retVal = Expression.Call(retVal, typeof(String).GetRuntimeMethod(nameof(String.ToLower), new Type[0]));
+                    }
+
+                    return retVal;
+
+                }
             }
             return node;
         }
