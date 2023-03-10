@@ -260,7 +260,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3">
     </PackageReference>
     <PackageReference Include="System.CodeDom" Version="7.0.0" />
   </ItemGroup>
