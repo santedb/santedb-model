@@ -58,13 +58,13 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets the latitude
         /// </summary>
         [XmlElement("lat"), JsonProperty("lat")]
-        public double Lat { get; set; }
+        public double? Lat { get; set; }
 
         /// <summary>
         /// Gets or sets the longitude of the object
         /// </summary>
         [XmlElement("lng"), JsonProperty("lng")]
-        public double Lng { get; set; }
+        public double? Lng { get; set; }
 
         /// <summary>
         /// Gets or sets the accuracy of the geo-tag
@@ -72,5 +72,9 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("precise"), JsonProperty("precise")]
         public bool? Precise { get; set; }
 
+        /// <summary>
+        /// True if the object is empty
+        /// </summary>
+        public override bool IsEmpty() => !this.Lat.HasValue || !this.Lng.HasValue;
     }
 }

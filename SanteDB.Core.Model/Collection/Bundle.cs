@@ -113,6 +113,7 @@ namespace SanteDB.Core.Model.Collection
         public Bundle(IEnumerable<IdentifiedData> objects)
         {
             this.Item = new List<IdentifiedData>(objects);
+            this.Count = this.Item.Count;
             this.FocalObjects = new List<Guid>(this.Item.Select(o => o.Key).OfType<Guid>());
         }
 
