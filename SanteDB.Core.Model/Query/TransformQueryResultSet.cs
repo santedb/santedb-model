@@ -319,6 +319,21 @@ namespace SanteDB.Core.Model.Query
             }
         }
 
+        /// <inheritdoc/>
+        public IQueryResultSet<TDestination> Except(Expression<Func<TDestination, bool>> query)
+        {
+            // Is the <TDestination> compatible with <TReturn>
+            if (typeof(TSource).IsAssignableFrom(typeof(TDestination)))
+            {
+                var convertedExpression = new ExpressionParameterRewriter<TDestination, TSource, bool>(query).Convert();
+                return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.Except(convertedExpression), this.m_transform);
+            }
+            else
+            {
+                throw new NotSupportedException(String.Format(ErrorMessages.ARGUMENT_INCOMPATIBLE_TYPE, typeof(TDestination), typeof(TSource)));
+            }
+        }
+
         /// <summary>
         /// Intersect this set with other set
         /// </summary>

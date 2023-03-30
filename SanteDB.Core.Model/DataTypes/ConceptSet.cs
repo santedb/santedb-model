@@ -79,6 +79,12 @@ namespace SanteDB.Core.Model.DataTypes
         public List<Guid> ConceptsXml { get; set; }
 
         /// <summary>
+        /// If the concept set is composed of other concept sets
+        /// </summary>
+        [XmlElement("compose"), JsonProperty("compose")]
+        public List<ConceptSetComposition> Composition { get; set; }
+
+        /// <summary>
         /// Gets the concepts in the set
         /// </summary>
         [SerializationMetadata, XmlIgnore, JsonIgnore]

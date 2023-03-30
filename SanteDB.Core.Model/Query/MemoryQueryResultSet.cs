@@ -289,6 +289,14 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Union with another
         /// </summary>
+        public IQueryResultSet<TData> Except(Expression<Func<TData, bool>> query)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Union with another
+        /// </summary>
         public IQueryResultSet<TData> Union(IQueryResultSet<TData> other)
         {
             if (this.m_wrapped.Count() == 0)

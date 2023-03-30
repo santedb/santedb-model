@@ -802,7 +802,7 @@ namespace SanteDB.Core.Model.Query
                         return $"{this.BuildGuardExpression(binaryExpression.Left as BinaryExpression)}|{this.BuildGuardExpression(binaryExpression.Right as BinaryExpression)}";
 
                     case ExpressionType.Equal:
-                        var expressionMember = binaryExpression.Left as MemberExpression;
+                        var expressionMember = this.StripConvert(binaryExpression.Left) as MemberExpression;
                         var valueExpression = this.ExtractValue(binaryExpression.Right);
                         var classifierAttribute = expressionMember.Member.DeclaringType.GetCustomAttribute<ClassifierAttribute>();
                         if (classifierAttribute == null)
@@ -830,6 +830,10 @@ namespace SanteDB.Core.Model.Query
                         if (valueExpression == null)
                         {
                             throw new InvalidOperationException($"Could not extract right hand side of guard expression {binaryExpression.Right} - is the value passed null (guard values must not be null)?");
+                        }
+                        else if(expressionMember.Type.IsEnum && valueExpression is int valueInt)
+                        {
+                            valueExpression = Enum.GetName(expressionMember.Type, valueInt);
                         }
 
                         return valueExpression.ToString();

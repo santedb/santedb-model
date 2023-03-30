@@ -52,5 +52,6 @@ namespace SanteDB.Core.Interfaces
         /// De-serialize as a strongly type object
         /// </summary>
         T DeSerialize<T>(byte[] extensionValueXml);
+
     }
 }

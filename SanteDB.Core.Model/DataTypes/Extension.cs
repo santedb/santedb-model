@@ -23,6 +23,7 @@ using SanteDB.Core.Interfaces;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Entities;
+using SanteDB.Core.Model.ExtensionHandlers;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
@@ -35,7 +36,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a base entity extension
     /// </summary>
-    [Classifier(nameof(ExtensionType)), SimpleValue(nameof(ExtensionValueString))]
+    [Classifier(nameof(ExtensionType)), SimpleValue(nameof(ExtensionValue))]
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Extension")]
     public abstract class Extension<TBoundModel> :
         VersionedAssociation<TBoundModel>, IModelExtension where TBoundModel : VersionedEntityData<TBoundModel>, new()
@@ -111,14 +112,11 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.LoadProperty(o => o.ExtensionType)?.ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
+                return this.GetExtensionHandler()?.DeSerialize(this.ExtensionValueXml);
             }
             set
             {
-                if (this.LoadProperty(o => o.ExtensionType).ExtensionHandlerInstance != null)
-                {
-                    this.ExtensionValueXml = this.ExtensionType?.ExtensionHandlerInstance?.Serialize(value);
-                }
+                this.ExtensionValueXml = this.GetExtensionHandler()?.Serialize(value);
             }
         }
 
@@ -152,7 +150,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets an extension displayable value
         /// </summary>
-        [XmlIgnore, JsonIgnore, QueryParameter("display")]
+        [XmlIgnore, JsonIgnore, QueryParameter("display"), SerializationMetadata]
         public String ExtensionDisplay
         {
             get

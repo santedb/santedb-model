@@ -290,6 +290,14 @@ namespace SanteDB.Core.Model.Query
         }
 
         /// <summary>
+        /// Except with another
+        /// </summary>
+        public IQueryResultSet<TData> Except(Expression<Func<TData, bool>> query)
+        {
+            return new NestedQueryResultSet<TData>(this.m_wrapped.Except(query), this.m_yielder);
+        }
+
+        /// <summary>
         /// Union with another
         /// </summary>
         public IQueryResultSet<TData> Union(IQueryResultSet<TData> other)

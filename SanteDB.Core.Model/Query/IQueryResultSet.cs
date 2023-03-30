@@ -364,6 +364,13 @@ namespace SanteDB.Core.Model.Query
         /// </para>
         /// </remarks>
         IQueryResultSet<TData> Union(Expression<Func<TData, bool>> query);
+
+        /// <summary>
+        /// Do not include in the result set any objects which match the <paramref name="query"/>
+        /// </summary>
+        /// <param name="query">The query of objects to except</param>
+        /// <returns>The excepted query</returns>
+        IQueryResultSet<TData> Except(Expression<Func<TData, bool>> query);
     }
 
     /// <summary>
