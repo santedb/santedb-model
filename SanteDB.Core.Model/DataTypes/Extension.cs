@@ -36,7 +36,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a base entity extension
     /// </summary>
-    [Classifier(nameof(ExtensionType)), SimpleValue(nameof(ExtensionValue))]
+    [Classifier(nameof(ExtensionType)), SimpleValue(nameof(ExtensionValueXml))]
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Extension")]
     public abstract class Extension<TBoundModel> :
         VersionedAssociation<TBoundModel>, IModelExtension where TBoundModel : VersionedEntityData<TBoundModel>, new()
