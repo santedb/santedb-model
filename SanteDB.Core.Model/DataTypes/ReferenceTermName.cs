@@ -78,6 +78,11 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the language code of the object
         /// </summary>
+        /// <remarks> In XML, <see cref="Language"/> is represented as:
+        /// <code lang="XML">&lt;language&gt;en&lt;/language&gt;</code>
+        /// In JSON, <see cref="Language"/> is represented as:
+        /// <code lang="JSON">"language": "en"</code>
+        /// </remarks>
         [XmlElement("language"), JsonProperty("language")]
         public String Language { get; set; }
 
