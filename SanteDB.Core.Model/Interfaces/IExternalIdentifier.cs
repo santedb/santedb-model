@@ -33,23 +33,39 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets the assigning authority
         /// </summary>
         [QueryParameter("domain")]
-        IdentityDomain IdentityDomain { get; }
+        IdentityDomain IdentityDomain { get; set;  }
 
         /// <summary>
         /// Get the authority key
         /// </summary>
-        Guid? IdentityDomainKey { get; }
+        Guid? IdentityDomainKey { get; set;  }
+
+        /// <summary>
+        /// Gets or sets the identifier type
+        /// </summary>
+        [QueryParameter("type")]
+        Concept IdentifierType { get; set; }
 
         /// <summary>
         /// Gets the value of the identity
         /// </summary>
         [QueryParameter("value")]
-        String Value { get; }
+        String Value { get; set;  }
 
         /// <summary>
         /// Check digit
         /// </summary>
-        String CheckDigit { get; }
+        String CheckDigit { get; set;  }
+
+        /// <summary>
+        /// Gets the date of issue
+        /// </summary>
+        DateTimeOffset? IssueDate { get; set; }
+
+        /// <summary>
+        /// Gets the date of expiration
+        /// </summary>
+        DateTimeOffset? ExpiryDate { get; set; }
 
         /// <summary>
         /// Gets or sets the reliability

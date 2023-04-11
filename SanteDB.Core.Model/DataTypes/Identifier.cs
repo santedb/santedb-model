@@ -247,15 +247,15 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the type identifier
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [XmlIgnore, JsonIgnore]
+        [XmlElement("type"), JsonProperty("type")]
         public Guid? IdentifierTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier type
         /// </summary>
         [SerializationReference(nameof(IdentifierTypeKey))]
-        [XmlElement("type"), JsonProperty("type")]
-        public IdentifierType IdentifierType { get; set; }
+        [XmlIgnore, JsonIgnore]
+        public Concept IdentifierType { get; set; }
 
         /// <summary>
         /// Represents the authority information
@@ -273,7 +273,12 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Represents the authority information
         /// </summary>
-        IdentityDomain IExternalIdentifier.IdentityDomain => this.LoadProperty(o => o.IdentityDomain);
+        IdentityDomain IExternalIdentifier.IdentityDomain
+        {
+            get => this.LoadProperty(o => o.IdentityDomain);
+            set => this.IdentityDomain = value;
+        }
+
 
         /// <summary>
         /// True if the identifier is empty

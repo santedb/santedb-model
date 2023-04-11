@@ -201,5 +201,10 @@ namespace SanteDB.Core.Model.Constants
         /// Procedure techniques
         /// </summary>
         public static readonly Guid ProcedureTechnique = Guid.Parse("581511D1-1B8D-42A2-A08E-746F5365803E");
+
+        /// <summary>
+        /// Identifiers types
+        /// </summary>
+        public static readonly Guid IdentifierTypes = Guid.Parse("cb6e4f28-5a78-408e-9b5e-a41018057fb1");
     }
 }
