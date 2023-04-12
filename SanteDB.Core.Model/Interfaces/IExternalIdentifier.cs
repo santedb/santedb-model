@@ -40,6 +40,12 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         Guid? IdentityDomainKey { get; set;  }
 
+
+        /// <summary>
+        /// Gets or sets the identifier type
+        /// </summary>
+        Guid? IdentifierTypeKey { get; set; }
+
         /// <summary>
         /// Gets or sets the identifier type
         /// </summary>
