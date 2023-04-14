@@ -1306,6 +1306,24 @@ namespace SanteDB
         }
 
         /// <summary>
+        /// Returns true if <paramref name="p"/> has <typeparamref name="TAttribute"/>
+        /// </summary>
+        /// <typeparam name="TAttribute">The type of attribute to check for</typeparam>
+        /// <param name="p">The type on which the attribute should be checked</param>
+        /// <returns>True if <paramref name="p"/> is annoted with <typeparamref name="TAttribute"/></returns>
+        public static bool HasCustomAttribute<TAttribute>(this PropertyInfo p)
+            => HasCustomAttribute(p, typeof(TAttribute));
+
+        /// <summary>
+        /// Non generic implementation of <see cref="HasCustomAttribute{TAttribute}(Type)"/>
+        /// </summary>
+        /// <param name="p">The type on which <paramref name="attributeType"/> should be checked</param>
+        /// <param name="attributeType">The type of attribute to check on <paramref name="p"/></param>
+        /// <returns>True if <paramref name="p"/> is annotated with <paramref name="attributeType"/></returns>
+        public static bool HasCustomAttribute(this PropertyInfo p, Type attributeType)
+            => p?.GetCustomAttribute(attributeType) != null;
+
+        /// <summary>
         /// Returns true if <paramref name="t"/> has <typeparamref name="TAttribute"/>
         /// </summary>
         /// <typeparam name="TAttribute">The type of attribute to check for</typeparam>
