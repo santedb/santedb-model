@@ -47,6 +47,12 @@ namespace SanteDB.Core.Model.Acts
         public String Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the group id
+        /// </summary>
+        [XmlElement("groupId"), JsonProperty("groupId")]
+        public String GroupId { get; set; }
+
+        /// <summary>
         /// Gets or sets the handler for this protocol (which can load the definition
         /// </summary>
         [XmlIgnore, JsonIgnore]

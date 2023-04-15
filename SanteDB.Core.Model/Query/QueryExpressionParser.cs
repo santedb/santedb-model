@@ -308,6 +308,7 @@ namespace SanteDB.Core.Model.Query
                                 }
                             }
                             accessExpression = Expression.TypeAs(accessExpression, castType);
+                            if(safeNullable) { coalesce = true; }
                         }
                         if (coalesce && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null)
                         {
