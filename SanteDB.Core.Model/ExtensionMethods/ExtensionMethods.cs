@@ -36,6 +36,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB
@@ -1341,7 +1342,21 @@ namespace SanteDB
         public static bool HasCustomAttribute(this Type t, Type attributeType)
             => t?.GetCustomAttribute(attributeType) != null;
         //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
+        
 
+        /// <summary>
+        /// Convert the exception to a human readable string
+        /// </summary>
+        public static string ToHumanReadableString(this Exception e)
+        {
+            StringBuilder retVal = new StringBuilder($"{e.GetType().Name} : {e.Message}");
+            while(e.InnerException != null)
+            {
+                retVal.AppendFormat("\r\nCAUSE: {0}: {1}", e.InnerException.GetType().Name, e.InnerException.Message);
+                e = e.InnerException;
+            }
+            return retVal.ToString();
+        }
 
     }
 }
