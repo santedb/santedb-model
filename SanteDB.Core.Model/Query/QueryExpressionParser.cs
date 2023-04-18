@@ -24,6 +24,7 @@ using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -45,11 +46,11 @@ namespace SanteDB.Core.Model.Query
     {
 
         // Member cache
-        private static Dictionary<Type, Dictionary<String, PropertyInfo>> m_memberCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+        private static ConcurrentDictionary<Type, Dictionary<String, PropertyInfo>> m_memberCache = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
         // Cast cache
-        private static Dictionary<String, Type> m_castCache = new Dictionary<string, Type>();
+        private static ConcurrentDictionary<String, Type> m_castCache = new ConcurrentDictionary<string, Type>();
         // Redirect cache
-        private static Dictionary<Type, Dictionary<String, PropertyInfo>> m_redirectCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+        private static ConcurrentDictionary<Type, Dictionary<String, PropertyInfo>> m_redirectCache = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
 
         /// <summary>
         /// Gets the default built in variables
@@ -139,7 +140,7 @@ namespace SanteDB.Core.Model.Query
                     {
                         continue;
                     }
-                    else if (rawMember.StartsWith("_") )
+                    else if (rawMember.StartsWith("_"))
                     {
                         if (relayControlVariables)
                         {
@@ -189,16 +190,12 @@ namespace SanteDB.Core.Model.Query
 
                         // Get member cache for data
                         Dictionary<String, PropertyInfo> memberCache = null;
+
+                        
                         if (!m_memberCache.TryGetValue(accessExpression.Type, out memberCache))
                         {
                             memberCache = new Dictionary<string, PropertyInfo>();
-                            lock (m_memberCache)
-                            {
-                                if (!m_memberCache.ContainsKey(accessExpression.Type))
-                                {
-                                    m_memberCache.Add(accessExpression.Type, memberCache);
-                                }
-                            }
+                            m_memberCache.TryAdd(accessExpression.Type, memberCache);
                         }
 
                         // Add member info
@@ -234,13 +231,7 @@ namespace SanteDB.Core.Model.Query
                             if (!m_redirectCache.TryGetValue(accessExpression.Type, out memberCache))
                             {
                                 memberCache = new Dictionary<string, PropertyInfo>();
-                                lock (m_redirectCache)
-                                {
-                                    if (!m_redirectCache.ContainsKey(accessExpression.Type))
-                                    {
-                                        m_redirectCache.Add(accessExpression.Type, memberCache);
-                                    }
-                                }
+                                m_redirectCache.TryAdd(accessExpression.Type, memberCache);
                             }
 
                             // Now find backing
@@ -299,16 +290,10 @@ namespace SanteDB.Core.Model.Query
                                     throw new ArgumentOutOfRangeException(nameof(castType), cast);
                                 }
 
-                                lock (m_castCache)
-                                {
-                                    if (!m_castCache.ContainsKey(cast))
-                                    {
-                                        m_castCache.Add(cast, castType);
-                                    }
-                                }
+                                m_castCache.TryAdd(cast, castType);
                             }
                             accessExpression = Expression.TypeAs(accessExpression, castType);
-                            if(safeNullable) { coalesce = true; }
+                            if (safeNullable) { coalesce = true; }
                         }
                         if (coalesce && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null)
                         {
@@ -523,7 +508,7 @@ namespace SanteDB.Core.Model.Query
                 }
 
                 // HACK: Was there any mapping done?
-                if(accessExpression == parameterExpression)
+                if (accessExpression == parameterExpression)
                 {
                     continue;
                 }
@@ -607,11 +592,11 @@ namespace SanteDB.Core.Model.Query
                         // gt:clause
                         // 
                         var indexOfColon = value.IndexOf(':');
-                        if(indexOfColon > 0 && indexOfColon < 4)
+                        if (indexOfColon > 0 && indexOfColon < 4)
                         {
                             var op = value.Substr(0, indexOfColon);
                             value = value.Substring(indexOfColon + 1);
-                            switch(op)
+                            switch (op)
                             {
                                 case "gt":
                                     value = $">{value}";
@@ -994,11 +979,11 @@ namespace SanteDB.Core.Model.Query
             Func<object> val = null;
             String varName = variablePath.Contains(".") ? variablePath.Substring(0, variablePath.IndexOf(".")) : variablePath,
                 varPath = variablePath.Substring(varName.Length),
-                castAs = String.Empty ;
+                castAs = String.Empty;
 
             Expression scope = null;
 
-            if(varName.Contains("@"))
+            if (varName.Contains("@"))
             {
                 var varParts = varName.Split('@');
                 castAs = varParts[1];
@@ -1061,7 +1046,7 @@ namespace SanteDB.Core.Model.Query
                         return Expression.Call(retVal, retVal.Type.GetMethod(nameof(Object.ToString), Type.EmptyTypes));
                     }
                 }
-                else if(expectedReturn == typeof(Guid) && retVal.Type != typeof(Guid))
+                else if (expectedReturn == typeof(Guid) && retVal.Type != typeof(Guid))
                 {
                     if (retVal is ConstantExpression ce && ce.Value == null)
                     {
