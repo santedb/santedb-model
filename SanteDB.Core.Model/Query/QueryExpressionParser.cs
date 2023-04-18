@@ -191,7 +191,13 @@ namespace SanteDB.Core.Model.Query
                         // Get member cache for data
                         Dictionary<String, PropertyInfo> memberCache = null;
 
-                        
+#if DEBUG
+                        // There is an odd Mono bug where accessExpression.Type can be null and the next line throws an NRE
+                        if(accessExpression.Type == null)
+                        {
+                            throw new InvalidOperationException($"{accessExpression} has  a type of null");
+                        }
+#endif
                         if (!m_memberCache.TryGetValue(accessExpression.Type, out memberCache))
                         {
                             memberCache = new Dictionary<string, PropertyInfo>();
