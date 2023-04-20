@@ -21,6 +21,7 @@
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SanteDB.Core.Exceptions
 {
@@ -46,6 +47,19 @@ namespace SanteDB.Core.Exceptions
                 errorList.Add($"{(itm.IsWarning ? "W" : "E")}: {itm.ErrorText} @ {itm.FileName}:{itm.Line}:{itm.Column}");
             }
             this.Errors = errorList;
+        }
+
+        /// <summary>
+        /// Represent as a string
+        /// </summary>
+        public override string ToString()
+        {
+            StringBuilder retVal = new StringBuilder(this.Message);
+            foreach(var itm in this.Errors)
+            {
+                retVal.AppendFormat("\r\n\t{0}", itm);
+            }
+            return retVal.ToString();
         }
     }
 }
