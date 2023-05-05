@@ -270,6 +270,7 @@ namespace SanteDB.Core.Model.Collection
             retVal.Key = Guid.NewGuid();
             retVal.Count = resourceRoot.Count();
             retVal.Offset = offset;
+            
             retVal.TotalResults = totalResults;
             if (resourceRoot == null)
             {
@@ -287,6 +288,7 @@ namespace SanteDB.Core.Model.Collection
                 if (!retVal.HasTag(itm.Tag) && itm.Key.HasValue)
                 {
                     retVal.Add(itm);
+                    retVal.FocalObjects.Add(itm.Key.Value);
                     Bundle.ProcessModel(itm as IdentifiedData, retVal);
                 }
             }
@@ -365,7 +367,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Packages the objects into a bundle
         /// </summary>
-        public static void ProcessModel(IdentifiedData model, Bundle currentBundle, bool followList = true)
+        private static void ProcessModel(IdentifiedData model, Bundle currentBundle, bool followList = true)
         {
             try
             {
@@ -373,13 +375,13 @@ namespace SanteDB.Core.Model.Collection
                 IEnumerable<PropertyInfo> properties = null;
                 if (!m_propertyCache.TryGetValue(model.GetType(), out properties))
                 {
-                    properties = model.GetType().GetRuntimeProperties().Where(p => p.GetCustomAttribute<SerializationReferenceAttribute>() != null ||
-                        typeof(IList).IsAssignableFrom(p.PropertyType) && p.GetCustomAttributes<XmlElementAttribute>().Count() > 0 && followList).ToList();
-
+                    properties = model.GetType().GetRuntimeProperties().Where(p => p.GetCustomAttribute<SerializationReferenceAttribute>() != null && p.GetCustomAttribute<XmlIgnoreAttribute>() != null ||
+                        typeof(IList).IsAssignableFrom(p.PropertyType) && p.HasCustomAttribute<XmlElementAttribute>() && followList).ToList();
                     m_propertyCache.TryAdd(model.GetType(), properties);
                 }
 
                 currentBundle.m_modifiedOn = DateTimeOffset.Now;
+
                 foreach (var pi in properties)
                 {
                     try
@@ -387,47 +389,31 @@ namespace SanteDB.Core.Model.Collection
                         object rawValue = pi.GetValue(model);
                         if (rawValue == null)
                         {
-                            continue;
+                            rawValue = model.LoadProperty(pi.Name);
                         }
 
-                        if (rawValue is IList && followList)
+                        if (rawValue is IList listValue && followList)
                         {
-                            foreach (var itm in rawValue as IList)
+                            foreach (var itm in listValue.OfType<IdentifiedData>())
                             {
-                                var iValue = itm as IdentifiedData;
-                                if (iValue != null)
+                                if (currentBundle.HasTag(itm.Tag)) // bundle already has this item
                                 {
-                                    if (currentBundle.Item.Exists(o => o?.Tag == iValue?.Tag))
-                                    {
-                                        continue;
-                                    }
-
-                                    if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null)
-                                    {
-                                        if (!currentBundle.HasTag(iValue.Tag) && iValue.Key.HasValue)
-                                        {
-                                            currentBundle.Insert(0, iValue);
-                                        }
-                                    }
-                                    ProcessModel(iValue, currentBundle, false);
+                                    continue;
+                                }
+                                else if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) // won't be serialized so we need to add to bundle
+                                {
+                                    currentBundle.Insert(0, itm);
+                                    ProcessModel(itm, currentBundle, false);
                                 }
                             }
                         }
-                        else if (rawValue is IdentifiedData)
+                        else if (rawValue is IdentifiedData ident)
                         {
-                            var iValue = rawValue as IdentifiedData;
-
                             // Check for existing item
-                            if (iValue != null && !currentBundle.HasTag(iValue.Tag))
+                            if (!currentBundle.HasTag(ident.Tag) && pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) // won't be serialized
                             {
-                                if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null && iValue != null)
-                                {
-                                    if (!currentBundle.HasTag(iValue.Tag) && iValue.Key.HasValue)
-                                    {
-                                        currentBundle.Insert(0, iValue);
-                                    }
-                                }
-                                ProcessModel(iValue, currentBundle, followList);
+                                currentBundle.Insert(0, ident);
+                                ProcessModel(ident, currentBundle, followList);
                             }
                         }
                     }

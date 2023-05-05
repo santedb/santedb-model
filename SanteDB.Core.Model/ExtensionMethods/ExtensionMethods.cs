@@ -37,6 +37,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB
@@ -47,6 +48,8 @@ namespace SanteDB
     public static class ExtensionMethods
     {
 
+        // Revers lookup cache for resource names
+        private static IDictionary<String, Type> s_resourceNames;
 
         /// <summary>
         /// Indicates a properly was load/checked
@@ -92,6 +95,56 @@ namespace SanteDB
 
         // Types
         private static ConcurrentDictionary<Assembly, Type[]> m_types = new ConcurrentDictionary<Assembly, Type[]>();
+
+
+        /// <summary>
+        ///     Creates a <see cref="Dictionary{TKey, TValue}"/> from an <see cref="IEnumerable{T}"/>
+        ///     according to specified key selector function. Diplicate keys will not be added to the dictionary.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to create a <see cref="Dictionary{TKey, TValue}"/> from.</param>
+        /// <param name="keySelector">A function to extract a key from each element.</param>
+        /// <returns>
+        ///     A <see cref="Dictionary{TKey, TValue}"/> that contains values of type <typeparamref name="TSource"/> selected from the input sequence.
+        /// </returns>
+        public static Dictionary<TKey, TSource> ToDictionaryIgnoringDuplicates<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+            => ToDictionaryIgnoringDuplicates(source, keySelector, v => v);
+
+
+        /// <summary>
+        ///     Creates a <see cref="Dictionary{TKey, TValue}"/> from an <see cref="IEnumerable{T}"/>
+        ///     according to specified key selector and element selector functions. Diplicate keys will not be added to the dictionary.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <typeparam name="TKey">The type of the key returned by keySelector.</typeparam>
+        /// <typeparam name="TElement">The type of the value returned by elementSelector.</typeparam>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to create a <see cref="Dictionary{TKey, TValue}"/> from.</param>
+        /// <param name="keySelector">A function to extract a key from each element.</param>
+        /// <param name="valueSelector">A transform function to produce a result element value from each element.</param>
+        /// <returns>
+        ///     A <see cref="Dictionary{TKey, TValue}"/> that contains values of type <typeparamref name="TElement"/> selected from the input sequence.
+        /// </returns>
+        public static Dictionary<TKey, TElement> ToDictionaryIgnoringDuplicates<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> valueSelector)
+        {
+            if (null == source)
+            {
+                return null;
+            }
+
+            var dict = new Dictionary<TKey, TElement>();
+
+            foreach (var item in source)
+            {
+                var key = keySelector(item);
+                if (!dict.ContainsKey(key))
+                {
+                    dict.Add(key, valueSelector(item));
+                }
+            }
+
+            return dict;
+        }
 
         /// <summary>
         /// For each item in an enumerable
@@ -1132,6 +1185,22 @@ namespace SanteDB
         public static String GetSerializationName(this Type type)
         {
             return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.FullName;
+        }
+
+        /// <summary>
+        /// Get the resource type from the serialization name
+        /// </summary>
+        /// <param name="rootElement">The serialization name</param>
+        /// <returns>The resource type</returns>
+        public static Type GetResourceType(this XName rootElement)
+        {
+            if(s_resourceNames == null)
+            {
+                s_resourceNames = AppDomain.CurrentDomain.GetAllTypes()
+                    .Where(o => o.GetCustomAttribute<XmlRootAttribute>() != null)
+                    .ToDictionaryIgnoringDuplicates(o => $"{o.GetCustomAttribute<XmlRootAttribute>().Namespace}#{o.GetCustomAttribute<XmlRootAttribute>().ElementName}", o => o);
+            }
+            return s_resourceNames.TryGetValue($"{rootElement.Namespace}#{rootElement.LocalName}", out var retVal) ? retVal : null;
         }
 
         /// <summary>

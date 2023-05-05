@@ -77,6 +77,12 @@ namespace SanteDB.Core.Model.Subscription
         public String Resource { get; set; }
 
         /// <summary>
+        /// Gets the order of synchronization
+        /// </summary>
+        [XmlAttribute("order"), JsonProperty("order")]
+        public int Order { get; set; }
+
+        /// <summary>
         /// Gets the resource type
         /// </summary>
         [XmlIgnore, JsonIgnore]

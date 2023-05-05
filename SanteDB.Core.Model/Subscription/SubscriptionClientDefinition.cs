@@ -19,6 +19,8 @@
  * Date: 2023-3-10
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -73,6 +75,13 @@ namespace SanteDB.Core.Model.Subscription
         /// </summary>
         [XmlArray("filters"), XmlArrayItem("add"), JsonProperty("filters")]
         public List<string> Filters { get; set; }
+
+        /// <summary>
+        /// Gets the resource type
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public Type ResourceType => new ModelSerializationBinder().BindToType("SanteDB.Core.Model", this.Resource);
+
 
     }
 }

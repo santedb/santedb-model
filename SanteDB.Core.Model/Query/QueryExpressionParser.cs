@@ -107,9 +107,10 @@ namespace SanteDB.Core.Model.Query
 
             var parameterExpression = Expression.Parameter(modelType, parameterName);
             Expression retVal = null;
+
             List<KeyValuePair<String, String[]>> workingValues = new List<KeyValuePair<string, string[]>>();
             // Iterate 
-            foreach (var nvc in httpQueryParameters.AllKeys)
+            foreach (var nvc in httpQueryParameters?.AllKeys ?? new string[0])
             {
                 workingValues.Add(new KeyValuePair<string, string[]>(nvc, httpQueryParameters.GetValues(nvc)));
             }

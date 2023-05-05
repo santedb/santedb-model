@@ -41,5 +41,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// Add the <paramref name="annotation"/> to all objects
         /// </summary>
         void AddAnnotationToAll(object annotation);
+
     }
 }
