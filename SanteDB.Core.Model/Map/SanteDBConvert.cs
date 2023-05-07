@@ -116,7 +116,8 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static DateTimeOffset DateTimeToDateTimeOffset(DateTime dt)
         {
-            return dt;
+            return new DateTimeOffset(dt.Ticks, TimeSpan.Zero);
+            //return dt;
         }
 
         /// <summary>
