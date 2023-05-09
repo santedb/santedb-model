@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [Classifier(nameof(RelationshipType)), NonCached]
     [XmlType("ActRelationship", Namespace = "http://santedb.org/model"), JsonObject("ActRelationship")]
-    public class ActRelationship : VersionedAssociation<Act>, ITargetedVersionedExtension
+    public class ActRelationship : VersionedAssociation<Act>, ITargetedVersionedExtension, IHasExternalKey
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ActRelationship"/> class.
@@ -86,6 +86,15 @@ namespace SanteDB.Core.Model.Acts
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
         public Concept Classification { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
 
         /// <summary>
         /// Association type key

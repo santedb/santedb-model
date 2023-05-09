@@ -45,7 +45,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [Classifier(nameof(ParticipationRole)), NonCached]
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "ActParticipation"), JsonObject(nameof(ActParticipation))]
-    public class ActParticipation : VersionedAssociation<Act>, ITargetedVersionedExtension
+    public class ActParticipation : VersionedAssociation<Act>, ITargetedVersionedExtension, IHasExternalKey
     {
 
 
@@ -92,6 +92,14 @@ namespace SanteDB.Core.Model.Acts
         [XmlIgnore, JsonIgnore]
         [SerializationReference(nameof(ClassificationKey))]
         public Concept Classification { get; set; }
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
 
         /// <summary>
         /// Identifies the classification of the participation.

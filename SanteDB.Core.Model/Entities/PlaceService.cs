@@ -21,6 +21,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -32,7 +33,7 @@ namespace SanteDB.Core.Model.Entities
     /// </summary>
 
     [XmlType("PlaceService", Namespace = "http://santedb.org/model"), JsonObject("PlaceService")]
-    public class PlaceService : VersionedAssociation<Entity>
+    public class PlaceService : VersionedAssociation<Entity>, IHasExternalKey
     {
 
         /// <summary>
@@ -41,6 +42,14 @@ namespace SanteDB.Core.Model.Entities
         [SerializationReference(nameof(ServiceConceptKey))]
         [XmlIgnore, JsonIgnore]
         public Concept ServiceConcept { get; set; }
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
 
         /// <summary>
         /// Gets or sets the service concept key

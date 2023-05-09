@@ -39,7 +39,7 @@ namespace SanteDB.Core.Model.DataTypes
     [Classifier(nameof(ExtensionType)), SimpleValue(nameof(ExtensionValueXml))]
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Extension")]
     public abstract class Extension<TBoundModel> :
-        VersionedAssociation<TBoundModel>, IModelExtension where TBoundModel : VersionedEntityData<TBoundModel>, new()
+        VersionedAssociation<TBoundModel>, IModelExtension, IHasExternalKey where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
 
         /// <summary>
@@ -47,6 +47,14 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
         public byte[] ExtensionValueXml { get; set; }
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
 
         /// <summary>
         /// Empty

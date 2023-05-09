@@ -132,13 +132,21 @@ namespace SanteDB.Core.Model.DataTypes
     /// </summary>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("IdentifierBase")]
     [Classifier(nameof(IdentityDomain), nameof(IdentityDomainKey))]
-    public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier where TBoundModel : VersionedEntityData<TBoundModel>, new()
+    public abstract class IdentifierBase<TBoundModel> : VersionedAssociation<TBoundModel>, IExternalIdentifier, IHasExternalKey where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
         /// <summary>
         /// Gets or sets the value of the identifier
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
         public String Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
 
         /// <summary>
         /// Serialization property for issued date

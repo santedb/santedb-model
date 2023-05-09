@@ -19,6 +19,7 @@
  * Date: 2023-3-10
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Xml.Serialization;
 
@@ -29,7 +30,7 @@ namespace SanteDB.Core.Model.Entities
     /// </summary>
 
     [XmlType("PersonLanguageCommunication", Namespace = "http://santedb.org/model"), JsonObject("PersonLanguageCommunication")]
-    public class PersonLanguageCommunication : VersionedAssociation<Entity>
+    public class PersonLanguageCommunication : VersionedAssociation<Entity>, IHasExternalKey
     {
         /// <summary>
         /// Default ctor
@@ -46,6 +47,14 @@ namespace SanteDB.Core.Model.Entities
             this.LanguageCode = languageCode;
             this.IsPreferred = isPreferred;
         }
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
 
         /// <summary>
         /// Gets or set the user's preference indicator

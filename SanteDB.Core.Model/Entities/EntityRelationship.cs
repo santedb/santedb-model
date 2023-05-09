@@ -35,7 +35,7 @@ namespace SanteDB.Core.Model.Entities
     [Classifier(nameof(RelationshipType)), NonCached]
     [XmlRoot("EntityRelationship", Namespace = "http://santedb.org/model")]
     [XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
-    public class EntityRelationship : VersionedAssociation<Entity>, ITargetedVersionedExtension
+    public class EntityRelationship : VersionedAssociation<Entity>, ITargetedVersionedExtension, IHasExternalKey
     {
 
         // The target entity
@@ -97,6 +97,15 @@ namespace SanteDB.Core.Model.Entities
                 this.SourceEntity = value;
             }
         }
+
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
 
         /// <summary>
         /// The entity that this relationship targets

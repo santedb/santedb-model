@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Text;
@@ -35,7 +36,7 @@ namespace SanteDB.Core.Model.Entities
     /// </summary>
     [Classifier(nameof(AddressUse))]
     [XmlType("EntityTelecomAddress", Namespace = "http://santedb.org/model"), JsonObject("EntityTelecomAddress")]
-    public class EntityTelecomAddress : VersionedAssociation<Entity>
+    public class EntityTelecomAddress : VersionedAssociation<Entity>, IHasExternalKey
     {
 
         // Name use concept
@@ -61,6 +62,15 @@ namespace SanteDB.Core.Model.Entities
         [SerializationReference(nameof(AddressUseKey))]
         [XmlIgnore, JsonIgnore]
         public Concept AddressUse { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
 
         /// <summary>
         /// Gets or sets the name use key
