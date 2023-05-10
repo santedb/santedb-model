@@ -1223,7 +1223,7 @@ namespace SanteDB
         /// <summary>
         /// Get a property based on XML property and/or serialization redirect and/or query parameter
         /// </summary>
-        public static PropertyInfo GetQueryProperty(this Type type, string propertyName, bool followReferences = false)
+        public static PropertyInfo GetQueryProperty(this Type type, string propertyName, bool followReferences = false, bool dropXmlSuffix = true)
         {
             PropertyInfo retVal = null;
             var key = String.Format("{0}.{1}[{2}]", type.FullName, propertyName, followReferences);
@@ -1240,7 +1240,7 @@ namespace SanteDB
                     retVal = type.GetProperties().FirstOrDefault(o => o.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty == retVal.Name) ?? retVal;
                 }
 
-                if (retVal.Name.EndsWith("Xml"))
+                if (retVal.Name.EndsWith("Xml") && dropXmlSuffix)
                 {
                     retVal = type.GetProperty(retVal.Name.Substring(0, retVal.Name.Length - 3));
                 }

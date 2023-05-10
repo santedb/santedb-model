@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -118,7 +119,7 @@ namespace SanteDB.Core.Model.Collection
         }
 
         // Property cache
-        private static ConcurrentDictionary<Type, IEnumerable<PropertyInfo>> m_propertyCache = new ConcurrentDictionary<System.Type, IEnumerable<PropertyInfo>>();
+        private static ConcurrentDictionary<Type, PropertyInfo[]> m_propertyCache = new ConcurrentDictionary<System.Type, PropertyInfo[]>();
 
         // Bundle contents
         private HashSet<String> m_bundleTags = new HashSet<string>(); // hashset of all tags
@@ -240,37 +241,18 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Create a bundle
         /// </summary>
-        public static Bundle CreateBundle(IdentifiedData resourceRoot, bool followList = true)
-        {
-            if (resourceRoot is Bundle)
-            {
-                return resourceRoot as Bundle;
-            }
-
-            Bundle retVal = new Bundle();
-            retVal.Key = Guid.NewGuid();
-            retVal.Count = 1;
-            retVal.TotalResults = 1;
-            if (resourceRoot == null)
-            {
-                return retVal;
-            }
-            retVal.FocalObjects.Add(resourceRoot.Key.Value);
-            retVal.Add(resourceRoot);
-            ProcessModel(resourceRoot, retVal, followList);
-            return retVal;
-        }
+        public static Bundle CreateBundle(IdentifiedData resourceRoot, bool followList = true) => CreateBundle(new IdentifiedData[] { resourceRoot }, 1, 1);
 
         /// <summary>
         /// Create a bundle
         /// </summary>
-        public static Bundle CreateBundle(IEnumerable<IdentifiedData> resourceRoot, int totalResults, int offset)
+        public static Bundle CreateBundle(IEnumerable<IdentifiedData> resourceRoot, int totalResults, int offset, PropertyInfo[] propertiesToInclude = null, PropertyInfo[] propertiesToExclude = null)
         {
             Bundle retVal = new Bundle();
             retVal.Key = Guid.NewGuid();
             retVal.Count = resourceRoot.Count();
             retVal.Offset = offset;
-            
+
             retVal.TotalResults = totalResults;
             if (resourceRoot == null)
             {
@@ -289,7 +271,7 @@ namespace SanteDB.Core.Model.Collection
                 {
                     retVal.Add(itm);
                     retVal.FocalObjects.Add(itm.Key.Value);
-                    Bundle.ProcessModel(itm as IdentifiedData, retVal);
+                    Bundle.ProcessModel(itm as IdentifiedData, retVal, true, propertiesToInclude ?? new PropertyInfo[0], propertiesToExclude ?? new PropertyInfo[0]);
                 }
             }
 
@@ -367,27 +349,32 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Packages the objects into a bundle
         /// </summary>
-        private static void ProcessModel(IdentifiedData model, Bundle currentBundle, bool followList = true)
+        private static void ProcessModel(IdentifiedData model, Bundle currentBundle, bool followList, PropertyInfo[] propertiesToInclude, PropertyInfo[] propertiesToExclude)
         {
             try
             {
                 // Iterate over properties
-                IEnumerable<PropertyInfo> properties = null;
-                if (!m_propertyCache.TryGetValue(model.GetType(), out properties))
+                PropertyInfo[] properties = propertiesToInclude.Union(propertiesToExclude).ToArray();
+                if (properties.Length == 0 && !m_propertyCache.TryGetValue(model.GetType(), out properties))
                 {
                     properties = model.GetType().GetRuntimeProperties().Where(p => p.GetCustomAttribute<SerializationReferenceAttribute>() != null && p.GetCustomAttribute<XmlIgnoreAttribute>() != null ||
-                        typeof(IList).IsAssignableFrom(p.PropertyType) && p.HasCustomAttribute<XmlElementAttribute>() && followList).ToList();
+                        typeof(IList).IsAssignableFrom(p.PropertyType) && p.HasCustomAttribute<XmlElementAttribute>() && followList).ToArray();
                     m_propertyCache.TryAdd(model.GetType(), properties);
                 }
 
                 currentBundle.m_modifiedOn = DateTimeOffset.Now;
 
-                foreach (var pi in properties)
+                foreach (var pi in properties.Where(o => o.DeclaringType.IsAssignableFrom(model.GetType())))
                 {
                     try
                     {
                         object rawValue = pi.GetValue(model);
-                        if (rawValue == null)
+                        if(propertiesToExclude.Contains(pi))
+                        {
+                            pi.SetValue(model, null);
+                            continue;
+                        }
+                        else if (rawValue == null)
                         {
                             rawValue = model.LoadProperty(pi.Name);
                         }
@@ -403,7 +390,7 @@ namespace SanteDB.Core.Model.Collection
                                 else if (pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) // won't be serialized so we need to add to bundle
                                 {
                                     currentBundle.Insert(0, itm);
-                                    ProcessModel(itm, currentBundle, false);
+                                    ProcessModel(itm, currentBundle, false, propertiesToInclude, propertiesToExclude);
                                 }
                             }
                         }
@@ -413,7 +400,7 @@ namespace SanteDB.Core.Model.Collection
                             if (!currentBundle.HasTag(ident.Tag) && pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) // won't be serialized
                             {
                                 currentBundle.Insert(0, ident);
-                                ProcessModel(ident, currentBundle, followList);
+                                ProcessModel(ident, currentBundle, followList, propertiesToInclude, propertiesToExclude);
                             }
                         }
                     }
