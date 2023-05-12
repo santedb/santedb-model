@@ -110,11 +110,11 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         /// <returns></returns>
         public Protocol AsSummary() => new Protocol()
-            {
-                Name = this.Name,
-                Oid = this.Oid
-            };
-        
+        {
+            Name = this.Name,
+            Oid = this.Oid
+        };
+
         /// <summary>
         /// Semantic equality
         /// </summary>

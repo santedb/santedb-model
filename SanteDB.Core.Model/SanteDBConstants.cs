@@ -25,7 +25,7 @@ namespace SanteDB.Core.Model
     /// </summary>
     public static class SanteDBModelConstants
     {
-        
+
         /// <summary>
         /// When set on an object, no dynamic loading via LoadProperty() will work on the object
         /// </summary>

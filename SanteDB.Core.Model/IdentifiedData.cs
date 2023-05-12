@@ -141,7 +141,7 @@ namespace SanteDB.Core.Model
             retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
             retVal.BatchOperation = BatchOperationType.Auto;
 
-            if(!m_copyProperties.TryGetValue(this.GetType(), out var copyProperties))
+            if (!m_copyProperties.TryGetValue(this.GetType(), out var copyProperties))
             {
                 copyProperties = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(o => o.CanWrite && o.CanRead && o.GetCustomAttribute<SerializationMetadataAttribute>() == null).ToArray();
                 m_copyProperties.TryAdd(this.GetType(), copyProperties);
@@ -149,7 +149,7 @@ namespace SanteDB.Core.Model
 
             foreach (var pi in copyProperties)
             {
-                
+
                 var thisValue = pi.GetValue(this);
                 if (thisValue is IList list)
                 {

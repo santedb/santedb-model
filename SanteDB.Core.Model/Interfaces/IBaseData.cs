@@ -38,7 +38,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets or sets teh obsoletor of the data
         /// </summary>
         [QueryParameter("obsoletedBy")]
-        Guid? ObsoletedByKey { get;  }
+        Guid? ObsoletedByKey { get; }
 
         /// <summary>
         /// Gets or sets the time when the data was created
@@ -50,6 +50,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets or sets the time with the data was obsoleted.
         /// </summary>
         [QueryParameter("obsoletionTime")]
-        DateTimeOffset? ObsoletionTime { get;  }
+        DateTimeOffset? ObsoletionTime { get; }
     }
 }

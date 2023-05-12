@@ -30,7 +30,6 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -369,7 +368,7 @@ namespace SanteDB.Core.Model.Collection
                     try
                     {
                         object rawValue = pi.GetValue(model);
-                        if(propertiesToExclude.Contains(pi))
+                        if (propertiesToExclude.Contains(pi))
                         {
                             pi.SetValue(model, null);
                             continue;

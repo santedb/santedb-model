@@ -2,15 +2,13 @@
 using SanteDB.Core.Model.DataTypes;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Model.ExtensionHandlers
 {
     /// <summary>
     /// Extension handler utility
     /// </summary>
-    internal static class ExtensionHandlerUtil 
+    internal static class ExtensionHandlerUtil
     {
         // Extension handlers
         private static ConcurrentDictionary<Guid, IExtensionHandler> s_extensionHandlers = new ConcurrentDictionary<Guid, IExtensionHandler>();

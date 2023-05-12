@@ -19,9 +19,7 @@
  * Date: 2023-3-10
  */
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model

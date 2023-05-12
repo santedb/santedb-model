@@ -20,8 +20,6 @@
  */
 using SanteDB.Core.Model.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Model.Interfaces
 {

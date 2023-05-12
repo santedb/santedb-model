@@ -49,9 +49,10 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the protocol data related to the protocol
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReferenceAttribute(nameof(ProtocolKey)), SerializationMetadata]
-        public Protocol Protocol {
+        public Protocol Protocol
+        {
             get => this.m_protocol?.AsSummary();
-            set => this.m_protocol = value; 
+            set => this.m_protocol = value;
         }
 
         /// <summary>

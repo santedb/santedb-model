@@ -83,7 +83,7 @@ namespace SanteDB.Core.Model.Query
             /// </summary>
             private void AddCondition(String key, Object value)
             {
-                if("!null".Equals(value) && this.StripNullChecks)
+                if ("!null".Equals(value) && this.StripNullChecks)
                 {
                     return;
                 }
@@ -311,7 +311,7 @@ namespace SanteDB.Core.Model.Query
                         }
                     case "Parse":
                         {
-                            
+
                             return null;
                         }
                     case "Any":
@@ -831,7 +831,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             throw new InvalidOperationException($"Could not extract right hand side of guard expression {binaryExpression.Right} - is the value passed null (guard values must not be null)?");
                         }
-                        else if(expressionMember.Type.IsEnum && valueExpression is int valueInt)
+                        else if (expressionMember.Type.IsEnum && valueExpression is int valueInt)
                         {
                             valueExpression = Enum.GetName(expressionMember.Type, valueInt);
                         }
@@ -898,11 +898,11 @@ namespace SanteDB.Core.Model.Query
             {
                 throw new InvalidOperationException("Cannot convert sort expression");
             }
-            else if(memberExpression is MemberExpression mexp && 
+            else if (memberExpression is MemberExpression mexp &&
                 mexp.Member is PropertyInfo propertyInfo)
             {
                 var serializationName = propertyInfo.GetSerializationName();
-                if(String.IsNullOrEmpty(serializationName))
+                if (String.IsNullOrEmpty(serializationName))
                 {
                     throw new ArgumentException(String.Format(ErrorMessages.FIELD_NOT_FOUND, propertyInfo.Name));
                 }

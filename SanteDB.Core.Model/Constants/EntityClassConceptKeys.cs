@@ -55,7 +55,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// County or parish
         /// </summary>
-        public const string CountyOrParish = "6eefee7d-dff5-46d3-a6a7-171ef93879c7"; 
+        public const string CountyOrParish = "6eefee7d-dff5-46d3-a6a7-171ef93879c7";
 
         /// <summary>
         /// Represents a precinct or sub-division of a city such as a burrogh

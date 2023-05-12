@@ -81,7 +81,7 @@ namespace SanteDB.Core.Model.Map.Builder
                 {
                     modelProperty = this.m_classMap.ModelType.GetProperty(propMap.ModelName);
                 }
-                
+
 
                 if (modelProperty == null || propMap?.DontLoad == true)
                 {

@@ -65,7 +65,7 @@ namespace SanteDB.Core.Model.Parameters
         {
             var p = this.Parameters?.Find(o => o.Name == parameterName);
             // HACK: Sometimes the value is an LONG but the type is INT and this does not like that condition
-            if(Map.MapUtil.TryConvert(p?.Value, typeof(TValue), out var tvalue))
+            if (Map.MapUtil.TryConvert(p?.Value, typeof(TValue), out var tvalue))
             {
                 value = (TValue)tvalue;
             }
@@ -85,7 +85,7 @@ namespace SanteDB.Core.Model.Parameters
         public void Set(string parameterName, object value)
         {
             var existingParameter = this.Parameters.Find(o => o.Name == parameterName);
-            if(existingParameter == null)
+            if (existingParameter == null)
             {
                 existingParameter = new Parameter(parameterName, value);
                 this.Parameters.Add(existingParameter);

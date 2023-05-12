@@ -28,11 +28,9 @@ using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SanteDB
@@ -200,7 +198,7 @@ namespace SanteDB
                         {
                             sourceProperty.SetValue(focalObject, result);
                         }
-                        else if(currentValue is IdentifiedData)
+                        else if (currentValue is IdentifiedData)
                         {
                             (sourceProperty.GetSerializationModelProperty() ?? sourceProperty).SetValue(focalObject, currentValue);
                         }

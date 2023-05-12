@@ -329,7 +329,7 @@ namespace SanteDB.Core.Model.Map
 
             ClassMap classMap = this.m_mapFile.GetModelClassMap(modelType);
             // No class mapping so go up the tree
-            if(modelType.BaseType == null)
+            if (modelType.BaseType == null)
             {
                 return null;
             }

@@ -157,7 +157,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static T Convert<T>(object value)
         {
-            if(TryConvert(value, typeof(T), out var retVal))
+            if (TryConvert(value, typeof(T), out var retVal))
             {
                 return (T)retVal;
             }

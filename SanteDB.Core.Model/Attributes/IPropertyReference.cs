@@ -23,7 +23,7 @@ namespace SanteDB.Core.Model.Attributes
     /// <summary>
     /// Represents a class which references a property
     /// </summary>
-    public interface IPropertyReference 
+    public interface IPropertyReference
     {
         /// <summary>
         /// Get the property name

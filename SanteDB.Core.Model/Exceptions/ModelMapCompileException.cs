@@ -55,7 +55,7 @@ namespace SanteDB.Core.Exceptions
         public override string ToString()
         {
             StringBuilder retVal = new StringBuilder(this.Message);
-            foreach(var itm in this.Errors)
+            foreach (var itm in this.Errors)
             {
                 retVal.AppendFormat("\r\n\t{0}", itm);
             }

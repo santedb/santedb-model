@@ -33,12 +33,12 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets the assigning authority
         /// </summary>
         [QueryParameter("domain")]
-        IdentityDomain IdentityDomain { get; set;  }
+        IdentityDomain IdentityDomain { get; set; }
 
         /// <summary>
         /// Get the authority key
         /// </summary>
-        Guid? IdentityDomainKey { get; set;  }
+        Guid? IdentityDomainKey { get; set; }
 
 
         /// <summary>
@@ -56,12 +56,12 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets the value of the identity
         /// </summary>
         [QueryParameter("value")]
-        String Value { get; set;  }
+        String Value { get; set; }
 
         /// <summary>
         /// Check digit
         /// </summary>
-        String CheckDigit { get; set;  }
+        String CheckDigit { get; set; }
 
         /// <summary>
         /// Gets the date of issue

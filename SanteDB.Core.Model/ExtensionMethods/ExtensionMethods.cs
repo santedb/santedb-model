@@ -621,7 +621,7 @@ namespace SanteDB
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
-            
+
             if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBModelConstants.NoDynamicLoadAnnotation)))
             {
                 // HACK: For some reason load check can be set but a list property is null
@@ -724,7 +724,7 @@ namespace SanteDB
         /// </summary>
         public static PropertyInfo GetSerializationModelProperty(this PropertyInfo me)
         {
-            if(me.Name.EndsWith("Key"))
+            if (me.Name.EndsWith("Key"))
             {
                 return me.DeclaringType.GetProperty(me.Name.Substring(0, me.Name.Length - 3));
             }
@@ -1194,7 +1194,7 @@ namespace SanteDB
         /// <returns>The resource type</returns>
         public static Type GetResourceType(this XName rootElement)
         {
-            if(s_resourceNames == null)
+            if (s_resourceNames == null)
             {
                 s_resourceNames = AppDomain.CurrentDomain.GetAllTypes()
                     .Where(o => o.GetCustomAttribute<XmlRootAttribute>() != null)
@@ -1411,7 +1411,7 @@ namespace SanteDB
         public static bool HasCustomAttribute(this Type t, Type attributeType)
             => t?.GetCustomAttribute(attributeType) != null;
         //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
-        
+
 
         /// <summary>
         /// Convert the exception to a human readable string
@@ -1419,7 +1419,7 @@ namespace SanteDB
         public static string ToHumanReadableString(this Exception e)
         {
             StringBuilder retVal = new StringBuilder($"{e.GetType().Name} : {e.Message}");
-            while(e.InnerException != null)
+            while (e.InnerException != null)
             {
                 retVal.AppendFormat("\r\nCAUSE: {0}: {1}", e.InnerException.GetType().Name, e.InnerException.Message);
                 e = e.InnerException;

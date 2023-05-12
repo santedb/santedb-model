@@ -19,8 +19,6 @@
  * Date: 2023-3-10
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SanteDB.Core.Model.Interfaces
 {
@@ -32,7 +30,7 @@ namespace SanteDB.Core.Model.Interfaces
         /// <summary>
         /// Gets or sets the resource key for this resource.
         /// </summary>
-        Guid? Key { get; set;  }
+        Guid? Key { get; set; }
 
         /// <summary>
         /// Gets the tag for this resource. The tag is used to calculate whether a resource has changed or not.

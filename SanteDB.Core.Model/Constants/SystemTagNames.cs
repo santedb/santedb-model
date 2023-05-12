@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SanteDB.Core.Model.Constants
+﻿namespace SanteDB.Core.Model.Constants
 {
     /// <summary>
     /// A list of tag names used by the system

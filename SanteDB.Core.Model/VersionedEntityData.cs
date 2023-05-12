@@ -42,7 +42,7 @@ namespace SanteDB.Core.Model
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("VersionedEntityData")]
     public abstract class VersionedEntityData<THistoryModelType> : BaseEntityData, IVersionedData where THistoryModelType : VersionedEntityData<THistoryModelType>, new()
     {
-        
+
         /// <summary>
         /// Creates a new versioned base data class
         /// </summary>

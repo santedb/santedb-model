@@ -314,7 +314,7 @@ namespace SanteDB.Core.Model.Map.Builder
             // Iterate through the inbound properties and copy them over
             foreach (var propInfo in map.DomainType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
-                
+
                 if (!propInfo.PropertyType.StripNullable().IsPrimitive
                     && propInfo.PropertyType.StripNullable() != typeof(Guid) &&
                    propInfo.PropertyType.StripGeneric() != typeof(String) &&

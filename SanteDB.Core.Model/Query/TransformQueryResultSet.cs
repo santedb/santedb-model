@@ -114,7 +114,7 @@ namespace SanteDB.Core.Model.Query
                 // Strip body convert
                 return this.Select(Expression.Lambda<Func<TDestination, TReturn>>(Expression.Convert(de.Body, typeof(TReturn)).Reduce(), de.Parameters));
             }
-            else if(selector is Expression<Func<TSource, TReturn>> se2)
+            else if (selector is Expression<Func<TSource, TReturn>> se2)
             {
                 return this.m_sourceResultSet.Select(se2);
             }
@@ -387,7 +387,7 @@ namespace SanteDB.Core.Model.Query
             {
                 return new TransformQueryResultSet<TSource, TDestination>(this.m_sourceResultSet.OrderBy(se), this.m_transform);
             }
-            else if(this.m_sourceResultSet is IOrderableQueryResultSet iqr)
+            else if (this.m_sourceResultSet is IOrderableQueryResultSet iqr)
             {
                 return new TransformQueryResultSet<TSource, TDestination>((IQueryResultSet<TSource>)iqr.OrderBy(expression), this.m_transform);
             }

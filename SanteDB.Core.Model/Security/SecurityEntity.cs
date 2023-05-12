@@ -20,10 +20,6 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
-using SanteDB.Core.Model.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security

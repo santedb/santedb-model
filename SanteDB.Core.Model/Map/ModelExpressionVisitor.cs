@@ -384,7 +384,7 @@ namespace SanteDB.Core.Model.Map
                         {
                             return null;
                         }
-                    
+
                 }
                 return null;
             }
@@ -667,7 +667,7 @@ namespace SanteDB.Core.Model.Map
 
             Type mappedType = this.m_mapper.MapModelType(node.Type);
 
-            if(mappedType == null)
+            if (mappedType == null)
             {
                 mappedType = this.m_targetType;
             }
