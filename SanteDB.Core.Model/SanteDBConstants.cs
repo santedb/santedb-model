@@ -25,22 +25,7 @@ namespace SanteDB.Core.Model
     /// </summary>
     public static class SanteDBModelConstants
     {
-        /// <summary>
-        /// Alternate keys tag for loading alternate objects from the database
-        /// </summary>
-        public const string AlternateKeysTag = "$alt.keys";
-
-        /// <summary>
-        /// Indicates that a dCDR needs to re-query or re-fetch the data
-        /// </summary>
-        public const string DcdrRefetchTag = "$dcdr.refetch";
-
-        /// <summary>
-        /// Indicates that an object is checked out
-        /// </summary>
-        public const string CheckoutStatusTag = "$checkoutState";
-
-
+        
         /// <summary>
         /// When set on an object, no dynamic loading via LoadProperty() will work on the object
         /// </summary>

@@ -650,7 +650,7 @@ namespace SanteDB
                         IList loaded = Activator.CreateInstance(propertyToLoad.PropertyType) as IList;
                         if (me.Key.HasValue)
                         {
-                            if (me is ITaggable taggable && taggable.TryGetTag(SanteDBModelConstants.AlternateKeysTag, out ITag altKeys))
+                            if (me is ITaggable taggable && taggable.TryGetTag(SystemTagNames.AlternateKeysTag, out ITag altKeys))
                             {
                                 var loadedData = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
                                 foreach (var itm in loadedData)
