@@ -45,7 +45,7 @@ namespace SanteDB.Core.Model.Query
             //for each parameter in the original expression creates a new parameter with the same name but with changed type
             convertedParameters = expresionToConvert.Parameters
                 .ToDictionary(
-                    x => x.Name,
+                    x => x.Name ?? "o",
                     x => Expression.Parameter(typeof(TTo), x.Name)
                 );
 
