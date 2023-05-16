@@ -88,7 +88,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         /// <remarks>The type is used in JSON serialization to provide a concise $type value on the serializer which 
         /// does not worry about the namespacing</remarks>
-        [SerializationMetadata, XmlIgnore, JsonProperty("$type")]
+        [SerializationMetadata, XmlIgnore, JsonProperty("$type", Order = -100)]
         public virtual String Type
         {
             get
