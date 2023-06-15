@@ -237,5 +237,14 @@ namespace SanteDB.Core.Model.Entities
         {
             return this.ToDisplay();
         }
+
+        /// <summary>
+        /// Gets or sets the external key for the object
+        /// </summary>
+        /// <remarks>Sometimes, when communicating with an external communications another system needs to 
+        /// refer to this by a particular key</remarks>
+        [XmlElement("externId"), JsonProperty("externId")]
+        public string ExternalKey { get; set; }
+
     }
 }
