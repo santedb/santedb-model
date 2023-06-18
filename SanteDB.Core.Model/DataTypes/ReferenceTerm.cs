@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-3-10
+ * Date: 2023-5-19
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -88,7 +88,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public string GetDisplayName(String language = null)
         {
-            language = language ?? System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
+            language = language ?? System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
             return this.LoadCollection(o => o.DisplayNames).FirstOrDefault(o => language.Equals(o.Language, StringComparison.OrdinalIgnoreCase))?.Name;
         }
     }

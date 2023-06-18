@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2022, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2021-8-27
+ * Date: 2023-5-19
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
@@ -25,6 +25,7 @@ using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -33,64 +34,28 @@ using System.Xml.Serialization;
 namespace SanteDB.Core.Model
 {
     /// <summary>
-    /// Identifies the state of loading of the object from persistence
+    /// A class which represent data which has a keyed identifier
     /// </summary>
-    public enum LoadState
-    {
-        /// <summary>
-        /// Newly created, not persisted, no data loaded
-        /// </summary>
-        New = 0,
-
-        /// <summary>
-        /// Object was partially loaded meaning some properties are not populated
-        /// </summary>
-        PartialLoad = 1,
-
-        /// <summary>
-        /// The object was fully loaded
-        /// </summary>
-        FullLoad = 2
-    }
-
-    /// <summary>
-    /// Represents data that is identified by a key
-    /// </summary>
+    /// <remarks><para>The IdentifiedData class is the root of the SanteDB business object model, 
+    /// and is the class from which all other business object model instances are derived.
+    /// </para><para>This class contains </para></remarks>
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
-    public abstract class IdentifiedData : IIdentifiedEntity, ICanDeepCopy
+    public abstract class IdentifiedData : IAnnotatedResource, ICanDeepCopy
     {
-        // Annotations
+
+        // Properties which can be copied
+        private static ConcurrentDictionary<Type, PropertyInfo[]> m_copyProperties = new ConcurrentDictionary<Type, PropertyInfo[]>();
+
         /// <summary>
         /// A list of custom tags which were added to this object
         /// </summary>
-        protected List<Object> m_annotations = new List<object>();
+        protected ConcurrentDictionary<Type, List<Object>> m_annotations = new ConcurrentDictionary<Type, List<object>>();
 
         // Lock
         private object m_lock = new object();
 
-        // True when the data class is locked for storage
-        private bool m_delayLoad = false;
-
         // Type id
         private string m_typeId = String.Empty;
-
-        // Load state
-        private LoadState m_loadState = LoadState.New;
-
-        // batch operation mode
-        private BatchOperationType m_batchMode = BatchOperationType.Auto;
-
-        /// <summary>
-        /// True if the class is currently loading associations when accessed
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public bool IsDelayLoadEnabled
-        {
-            get
-            {
-                return this.m_delayLoad;
-            }
-        }
 
         /// <summary>
         /// Gets or sets the primary identifying UUID of this object
@@ -102,14 +67,7 @@ namespace SanteDB.Core.Model
         /// Gets or sets the operation
         /// </summary>
         [XmlAttribute("operation"), JsonProperty("operation")]
-        public BatchOperationType BatchOperation {
-            get => this.m_batchMode;
-            set
-            {
-                
-                this.m_batchMode = value;
-            }
-        }
+        public BatchOperationType BatchOperation { get; set; }
 
         /// <summary>
         /// Should serialize batch operation
@@ -128,97 +86,72 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets the type registration of this object
         /// </summary>
-        [DataIgnore, XmlIgnore, JsonProperty("$type")]
+        /// <remarks>The type is used in JSON serialization to provide a concise $type value on the serializer which 
+        /// does not worry about the namespacing</remarks>
+        [SerializationMetadata, XmlIgnore, JsonProperty("$type", Order = -100)]
         public virtual String Type
         {
             get
             {
                 if (String.IsNullOrEmpty(this.m_typeId))
+                {
                     this.m_typeId = this.GetType().GetSerializationName();
+                }
+
                 return this.m_typeId;
             }
             set { }
         }
 
         /// <summary>
-        /// Get associated entity
-        /// </summary>
-        protected TEntity DelayLoad<TEntity>(Guid? keyReference, TEntity currentInstance) where TEntity : IdentifiedData, new()
-        {
-            //if (currentInstance == null &&
-            //    this.m_delayLoad &&
-            //    keyReference.HasValue)
-            //{
-            //    //Debug.WriteLine("Delay loading key reference: {0}>{1}", this.Key, keyReference);
-            //    currentInstance = EntitySource.Current.Get<TEntity>(keyReference.Value);
-            //}
-            //currentInstance?.SetDelayLoad(this.IsDelayLoadEnabled);
-            return currentInstance;
-        }
-
-        /// <summary>
         /// Gets or sets date/time that this object was last created or modified
         /// </summary>
-        [XmlElement("modifiedOn"), JsonProperty("modifiedOn"), DataIgnore]
+        /// <remarks>Classes which extend this should expose the last modified date (for example: CreationTime or UpdatedTime) </remarks>
+        [XmlElement("modifiedOn"), JsonProperty("modifiedOn"), SerializationMetadata]
         public abstract DateTimeOffset ModifiedOn { get; }
 
         /// <summary>
         /// Never serialize modified on
         /// </summary>
-        /// <returns></returns>
-        public bool ShouldSerializeModifiedOn()
-        {
-            return false;
-        }
+        public virtual bool ShouldSerializeModifiedOn() => false;
 
         /// <summary>
         /// Gets a tag which changes whenever the object is updated
         /// </summary>
-        [XmlIgnore, JsonIgnore, DataIgnore]
+        [XmlIgnore, JsonIgnore, SerializationMetadata, QueryParameter("etag")]
         public virtual String Tag
         {
             get
             {
-                return $"{this.Type}.{this.Key?.ToString("N")}";
+                return $"{this.Type}.{this.Key?.ToString()}";
             }
         }
 
         /// <summary>
         /// Determines w
         /// </summary>
-        /// <returns></returns>
         public virtual bool IsEmpty() => false;
-
-        /// <summary>
-        /// Gets or sets whether the object was partial loaded
-        /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public LoadState LoadState
-        {
-            get
-            {
-                return this.m_loadState;
-            }
-            set
-            {
-                if (value >= this.m_loadState)
-                    this.m_loadState = value;
-            }
-        }
 
         /// <summary>
         /// Provide a deep copy of the specified data
         /// </summary>
         public virtual ICanDeepCopy DeepCopy()
         {
-            var retVal = this.MemberwiseClone() as IdentifiedData;
-            retVal.m_annotations = new List<object>();
-            foreach(var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            var retVal = Activator.CreateInstance(this.GetType()) as IdentifiedData;
+            retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
+            retVal.BatchOperation = BatchOperationType.Auto;
+
+            if (!m_copyProperties.TryGetValue(this.GetType(), out var copyProperties))
             {
-                if (!pi.CanWrite || pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) continue; // can't and not important to serialization write so continue 
+                copyProperties = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(o => o.CanWrite && o.CanRead && o.GetCustomAttribute<SerializationMetadataAttribute>() == null).ToArray();
+                m_copyProperties.TryAdd(this.GetType(), copyProperties);
+            }
+
+            foreach (var pi in copyProperties)
+            {
 
                 var thisValue = pi.GetValue(this);
-                if(thisValue is IList list)
+                if (thisValue is IList list)
                 {
                     if (pi.PropertyType.GetConstructor(System.Type.EmptyTypes) != null)
                     {
@@ -234,13 +167,14 @@ namespace SanteDB.Core.Model
                                 newList.Add(itm);
                             }
                         }
+                        pi.SetValue(retVal, newList);
                     }
                     else
                     {
                         pi.SetValue(retVal, list);
                     }
                 }
-                else if(thisValue is IdentifiedData id)
+                else if (thisValue is IdentifiedData id)
                 {
                     pi.SetValue(retVal, id.DeepCopy());
                 }
@@ -259,12 +193,16 @@ namespace SanteDB.Core.Model
         public virtual IdentifiedData Clone()
         {
             var retVal = this.MemberwiseClone() as IdentifiedData;
-            retVal.m_delayLoad = true;
-            retVal.m_annotations = new List<object>();
-            
+            retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
+
             // Re-initialize all arrays
             foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
+                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) // No sense of reading
+                {
+                    continue;
+                }
+
                 var thisValue = pi.GetValue(this);
                 if (thisValue is IList listValue && listValue.Count > 0 &&
                     pi.PropertyType.GetConstructor(new Type[] { thisValue.GetType() }) != null)
@@ -272,15 +210,6 @@ namespace SanteDB.Core.Model
                     pi.SetValue(retVal, Activator.CreateInstance(pi.PropertyType, pi.GetValue(this)));
                 }
             }
-            return retVal;
-        }
-
-        /// <summary>
-        /// Clone the specified data
-        /// </summary>
-        public virtual IdentifiedData GetLocked()
-        {
-            var retVal = this.MemberwiseClone() as IdentifiedData;
             return retVal;
         }
 
@@ -300,7 +229,10 @@ namespace SanteDB.Core.Model
         {
             var other = obj as IdentifiedData;
             if (other == null)
+            {
                 return false;
+            }
+
             return this.Type == other.Type;
         }
 
@@ -340,9 +272,20 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual void RemoveAnnotation(Object annotation)
         {
-            lock (this.m_lock)
+            if (this.m_annotations.TryGetValue(annotation.GetType(), out var values))
             {
-                this.m_annotations.Remove(annotation);
+                values.Remove(annotation);
+            }
+        }
+
+        /// <summary>
+        /// Remove annotation
+        /// </summary>
+        public virtual void RemoveAnnotations<T>()
+        {
+            if (this.m_annotations.TryGetValue(typeof(T), out var values))
+            {
+                values.Clear();
             }
         }
 
@@ -351,31 +294,52 @@ namespace SanteDB.Core.Model
         /// </summary>
         public virtual IEnumerable<T> GetAnnotations<T>()
         {
-            lock (this.m_lock)
+            if (this.m_annotations.TryGetValue(typeof(T), out var values))
             {
-                return this.m_annotations.ToArray().OfType<T>();
+                return values.OfType<T>().ToArray();
+            }
+            else
+            {
+                return new T[0];
             }
         }
 
         /// <summary>
         /// Add an annotated object
         /// </summary>
-        public virtual void AddAnnotation(Object annotation)
+        public virtual void AddAnnotation<T>(T annotation)
         {
-            lock (this.m_lock)
+            if (annotation == null)
             {
-                this.m_annotations.Add(annotation);
+                return;
             }
+            if (!this.m_annotations.TryGetValue(typeof(T), out var values))
+            {
+                values = new List<object>();
+                this.m_annotations.TryAdd(typeof(T), values);
+            }
+            values.Add(annotation);
+
         }
 
         /// <summary>
         /// Copy annotations from another resource
         /// </summary>
-        public virtual IIdentifiedEntity CopyAnnotations(IIdentifiedEntity other)
+        public virtual IAnnotatedResource CopyAnnotations(IAnnotatedResource other)
         {
             if (other is IdentifiedData id)
             {
-                this.m_annotations.AddRange(id.m_annotations);
+                foreach (var itm in id.m_annotations)
+                {
+                    if (this.m_annotations.TryGetValue(itm.Key, out var values))
+                    {
+                        values.AddRange(itm.Value);
+                    }
+                    else
+                    {
+                        this.m_annotations.TryAdd(itm.Key, itm.Value);
+                    }
+                }
             }
             return this;
         }
