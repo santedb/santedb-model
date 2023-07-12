@@ -43,6 +43,7 @@ namespace SanteDB.Core.Model.DataTypes
 
         // private validator
         private IIdentifierValidator m_validator;
+        private ICheckDigitAlgorithm m_checkDigit;
 
         /// <summary>
         /// Assigning authority
@@ -136,6 +137,30 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("customValidator"), JsonProperty("customValidator")]
         public string CustomValidator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the check digit algorithm 
+        /// </summary>
+        [XmlElement("checkDigitAlgorithm"), JsonProperty("checkDigitAlgorithm")]
+        public string CheckDigitAlgorithm { get; set; }
+
+        /// <summary>
+        /// Get check digit algorithm
+        /// </summary>
+        public ICheckDigitAlgorithm GetCheckDigitAlgorithm()
+        {
+            if (this.m_validator == null && !String.IsNullOrEmpty(this.CheckDigitAlgorithm))
+            {
+                var t = System.Type.GetType(this.CustomValidator);
+                if (t == null)
+                {
+                    throw new InvalidOperationException($"Validator {this.CheckDigitAlgorithm} is not valid");
+                }
+
+                this.m_checkDigit = Activator.CreateInstance(t) as ICheckDigitAlgorithm;
+            }
+            return this.m_checkDigit;
+        }
 
         /// <summary>
         /// Gets the custom validator
