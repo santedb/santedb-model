@@ -11,6 +11,11 @@ namespace SanteDB.Core.Model.Interfaces
     {
 
         /// <summary>
+        /// Gets the name of the check digit algorithm
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// Generates a check digit based on <paramref name="identifierValue"/>
         /// </summary>
         /// <param name="identifierValue">The value on which a check digit should be calculated</param>
