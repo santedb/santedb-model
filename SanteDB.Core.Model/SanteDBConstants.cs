@@ -30,5 +30,6 @@ namespace SanteDB.Core.Model
         /// When set on an object, no dynamic loading via LoadProperty() will work on the object
         /// </summary>
         public const string NoDynamicLoadAnnotation = "No_Dyna_load";
+
     }
 }
