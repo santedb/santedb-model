@@ -30,7 +30,7 @@ namespace SanteDB.Core.Model.DataTypes
 
     [XmlType("CodeSystem", Namespace = "http://santedb.org/model"), JsonObject("CodeSystem")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "CodeSystem")]
-    [Classifier(nameof(Authority))]
+    [Classifier(nameof(Domain))]
     public class CodeSystem : NonVersionedEntityData
     {
 
@@ -49,7 +49,7 @@ namespace SanteDB.Core.Model.DataTypes
         {
             this.Name = name;
             this.Oid = oid;
-            this.Authority = authority;
+            this.Domain = authority;
         }
 
         /// <summary>
@@ -68,13 +68,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the authority of the code system
         /// </summary>
         [XmlElement("authority"), JsonProperty("authority")]
-        public string Authority { get; set; }
-
-        /// <summary>
-        /// Gets or sets the obsoletion reason of the code system
-        /// </summary>
-        [XmlElement("obsoletionReason"), JsonProperty("obsoletionReason")]
-        public string ObsoletionReason { get; set; }
+        public string Domain { get; set; }
 
         /// <summary>
         /// Gets or sets the URL of the code system
@@ -107,7 +101,7 @@ namespace SanteDB.Core.Model.DataTypes
 
             return base.SemanticEquals(obj) && this.Name == other.Name &&
                 this.Oid == other.Oid &&
-                this.Authority == other.Authority &&
+                this.Domain == other.Domain &&
                 this.VersionText == other.VersionText;
         }
 
@@ -116,7 +110,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public override string ToString()
         {
-            return $"{this.Authority},{this.Oid}";
+            return $"{this.Domain},{this.Oid}";
         }
     }
 }
