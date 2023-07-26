@@ -36,7 +36,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Represents a base entity extension
     /// </summary>
-    [Classifier(nameof(ExtensionType)), SimpleValue(nameof(ExtensionValueXml))]
+    [Classifier(nameof(ExtensionType)), SimpleValue(nameof(ExtensionValueData))]
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Extension")]
     public abstract class Extension<TBoundModel> :
         VersionedAssociation<TBoundModel>, IModelExtension, IHasExternalKey where TBoundModel : VersionedEntityData<TBoundModel>, new()
@@ -46,7 +46,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets or sets the value of the extension
         /// </summary>
         [XmlElement("value"), JsonProperty("value")]
-        public byte[] ExtensionValueXml { get; set; }
+        public byte[] ExtensionValueData { get; set; }
 
         /// <summary>
         /// Gets or sets the external key for the object
@@ -62,25 +62,25 @@ namespace SanteDB.Core.Model.DataTypes
         /// <returns></returns>
         public override bool IsEmpty()
         {
-            return this.ExtensionValueXml == null || this.ExtensionValueXml.Length == 0;
+            return this.ExtensionValueData == null || this.ExtensionValueData.Length == 0;
         }
 
         /// <summary>
         /// Value as string of bytes
         /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ExtensionValueXml))]
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ExtensionValueData))]
         public string ExtensionValueString
         {
             get
             {
-                if (this.ExtensionValueXml == null)
+                if (this.ExtensionValueData == null)
                 {
                     return null;
                 }
 
                 try
                 {
-                    return BitConverter.ToString(this.ExtensionValueXml).Replace("-", "");
+                    return BitConverter.ToString(this.ExtensionValueData).Replace("-", "");
                 }
                 catch
                 {
@@ -91,7 +91,7 @@ namespace SanteDB.Core.Model.DataTypes
             {
                 if (value == null)
                 {
-                    this.ExtensionValueXml = null;
+                    this.ExtensionValueData = null;
                 }
 
                 try
@@ -101,13 +101,13 @@ namespace SanteDB.Core.Model.DataTypes
                         value = "0" + value;
                     }
 
-                    this.ExtensionValueXml = Enumerable.Range(0, value.Length)
+                    this.ExtensionValueData = Enumerable.Range(0, value.Length)
                                  .Where(x => x % 2 == 0)
                                  .Select(x => Convert.ToByte(value.Substring(x, 2), 16)).ToArray();
                 }
                 catch
                 {
-                    this.ExtensionValueXml = Encoding.UTF8.GetBytes(value);
+                    this.ExtensionValueData = Encoding.UTF8.GetBytes(value);
                 }
             }
         }
@@ -120,11 +120,11 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.GetExtensionHandler()?.DeSerialize(this.ExtensionValueXml);
+                return this.GetExtensionHandler()?.DeSerialize(this.ExtensionValueData);
             }
             set
             {
-                this.ExtensionValueXml = this.GetExtensionHandler()?.Serialize(value);
+                this.ExtensionValueData = this.GetExtensionHandler()?.Serialize(value);
             }
         }
 
@@ -134,7 +134,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <returns></returns>
         public Object GetValue()
         {
-            return this.LoadProperty<ExtensionType>("ExtensionType")?.ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueXml);
+            return this.LoadProperty<ExtensionType>("ExtensionType")?.ExtensionHandlerInstance?.DeSerialize(this.ExtensionValueData);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace SanteDB.Core.Model.DataTypes
             var handler = this.LoadProperty<ExtensionType>("ExtensionType")?.ExtensionHandlerInstance;
             if (handler != null)
             {
-                return handler.DeSerialize<T>(this.ExtensionValueXml);
+                return handler.DeSerialize<T>(this.ExtensionValueData);
             }
             else
             {
@@ -202,7 +202,7 @@ namespace SanteDB.Core.Model.DataTypes
         {
             get
             {
-                return this.ExtensionValueXml;
+                return this.ExtensionValueData;
             }
         }
 
@@ -264,7 +264,7 @@ namespace SanteDB.Core.Model.DataTypes
         public EntityExtension(Guid extensionType, byte[] value)
         {
             this.ExtensionTypeKey = extensionType;
-            this.ExtensionValueXml = value;
+            this.ExtensionValueData = value;
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace SanteDB.Core.Model.DataTypes
         public EntityExtension(Guid extensionType, Type extensionHandlerType, object value)
         {
             this.ExtensionTypeKey = extensionType;
-            this.ExtensionValueXml = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
+            this.ExtensionValueData = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
         }
     }
 
@@ -297,7 +297,7 @@ namespace SanteDB.Core.Model.DataTypes
         public ActExtension(Guid extensionType, byte[] value)
         {
             this.ExtensionTypeKey = extensionType;
-            this.ExtensionValueXml = value;
+            this.ExtensionValueData = value;
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace SanteDB.Core.Model.DataTypes
         public ActExtension(Guid extensionType, Type extensionHandlerType, object value)
         {
             this.ExtensionTypeKey = extensionType;
-            this.ExtensionValueXml = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
+            this.ExtensionValueData = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
         }
     }
 }
