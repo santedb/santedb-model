@@ -796,7 +796,11 @@ namespace SanteDB.Core.Model.Query
                                 valueExpr = Expression.Constant(Enum.Parse(operandType, pValue));
                             }
                         }
-                        else
+                        else if (extendedFilter is IQueryFilterConverterExtension) // Just converting input string to output string
+                        {
+                            valueExpr = Expression.Constant(pValue);
+                        }
+                        else 
                         {
                             try
                             {

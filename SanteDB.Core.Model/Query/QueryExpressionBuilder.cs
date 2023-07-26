@@ -371,7 +371,7 @@ namespace SanteDB.Core.Model.Query
                                 this.AddCondition(parmName, callValue);
                                 return node;
                             }
-                            return null;
+                            return null; // let another thing handle this
                         }
                 }
             }
@@ -536,8 +536,27 @@ namespace SanteDB.Core.Model.Query
                             }
                         }
                     }
+                    else if(node.Right is MethodCallExpression mceRight && right == null && 
+                        !String.IsNullOrEmpty(parmName)) // RHS is a method
+                    {
+                        var extendedFn = QueryFilterExtensions.GetExtendedFilterByMethod(mceRight.Method);
+                        if (extendedFn != null)
+                        {
+                            var callValue = $":({extendedFn.Name}";
+                            if (mceRight.Arguments.Count > 1)
+                            {
+                                callValue += $"|{String.Join(",", mceRight.Arguments.Skip(1).Select(o => this.PrepareValue(this.ExtractValue(o), true)))}";
+                            }
 
-                    this.AddCondition(parmName, fParmValue);
+                            callValue += ")";
+                            fParmValue = callValue + fParmValue;
+                        }
+                    }
+
+                    if (!String.IsNullOrEmpty(parmName))
+                    {
+                        this.AddCondition(parmName, fParmValue);
+                    }
                 }
 
                 return node;
