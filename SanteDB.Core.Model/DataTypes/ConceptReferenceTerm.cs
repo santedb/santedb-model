@@ -30,7 +30,8 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents a reference term relationship between a concept and reference term
     /// </summary>
     [Classifier(nameof(ReferenceTerm))]
-    [XmlType("ConceptReferenceTerm", Namespace = "http://santedb.org/model"), JsonObject("ConceptReferenceTerm")]
+    [XmlType(nameof(ConceptReferenceTerm), Namespace = "http://santedb.org/model"), JsonObject(nameof(ConceptReferenceTerm))]
+    [XmlRoot(nameof(ConceptReferenceTerm), Namespace = "http://santedb.org/model")]
     public class ConceptReferenceTerm : VersionedAssociation<Concept>
     {
 

@@ -66,6 +66,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(InvoiceElement))]
     [XmlInclude(typeof(FinancialContract))]
     [XmlInclude(typeof(FinancialTransaction))]
+    [XmlInclude(typeof(ConceptReferenceTerm))]
     [XmlInclude(typeof(Procedure))]
     [XmlInclude(typeof(Provider))]
     [XmlInclude(typeof(Organization))]
