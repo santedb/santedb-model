@@ -42,6 +42,11 @@ namespace SanteDB.Core.Model.Map
         private ConcurrentDictionary<Type, IModelMapper> m_mappers = new ConcurrentDictionary<Type, Builder.IModelMapper>();
         private static ConcurrentDictionary<String, Assembly> m_loadedMaps = new ConcurrentDictionary<string, Assembly>();
 
+        /// <summary>
+        /// When true, disables code generation for all model mapping activities. This value overrides the per-map setting.
+        /// </summary>
+        public static bool UseReflectionOnly { get; set; } = false;
+
         //private static Dictionary<Type, Dictionary<String, PropertyInfo[]>> s_modelPropertyCache = new Dictionary<Type, Dictionary<String, PropertyInfo[]>>();
 
         //private static Dictionary<Type, String> m_domainClassPropertyName = new Dictionary<Type, string>();
@@ -80,7 +85,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public ModelMapper(Stream sourceStream, String name, bool useReflectionOnly = false)
         {
-            this.Load(sourceStream, name, useReflectionOnly);
+            this.Load(sourceStream, name, useReflectionOnly || UseReflectionOnly);
         }
 
         /// <summary>
@@ -106,10 +111,15 @@ namespace SanteDB.Core.Model.Map
                         // Add namespace
                         compileUnit.Namespaces.Add(new Builder.ModelMapBuilder().CreateCodeNamespace(this.m_mapFile, name));
 
-                        compileUnit.ReferencedAssemblies.Add(typeof(Type).Assembly.Location);
-                        compileUnit.ReferencedAssemblies.Add(typeof(HashSet<>).Assembly.Location);
-                        compileUnit.ReferencedAssemblies.AddRange(this.m_mapFile.Class.Select(o => o.ModelType.Assembly.Location).Distinct().ToArray());
-                        compileUnit.ReferencedAssemblies.AddRange(this.m_mapFile.Class.Select(o => o.DomainType.Assembly.Location).Distinct().ToArray());
+                        var referencedassemblies = new List<string>();
+
+                        referencedassemblies.Add(typeof(Type).Assembly.Location);
+                        referencedassemblies.Add(typeof(HashSet<>).Assembly.Location);
+                        referencedassemblies.AddRange(this.m_mapFile.Class.Select(o => o.ModelType.Assembly.Location).Distinct().ToArray());
+                        referencedassemblies.AddRange(this.m_mapFile.Class.Select(o => o.DomainType.Assembly.Location).Distinct().ToArray());
+
+                        compileUnit.ReferencedAssemblies.AddRange(referencedassemblies.Distinct().ToArray());
+
                         foreach (var casm in compileUnit.ReferencedAssemblies.OfType<String>().ToArray().Select(o => Assembly.LoadFile(o)).SelectMany(o => o.GetReferencedAssemblies()))
                         {
                             var asmC = Assembly.Load(casm);
