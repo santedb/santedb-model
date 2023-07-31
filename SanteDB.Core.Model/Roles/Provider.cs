@@ -34,6 +34,7 @@ namespace SanteDB.Core.Model.Roles
 
     [XmlType("Provider", Namespace = "http://santedb.org/model"), JsonObject("Provider")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Provider")]
+    [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
     [ClassConceptKey(EntityClassKeyStrings.Provider)]
     public class Provider : Person
     {
