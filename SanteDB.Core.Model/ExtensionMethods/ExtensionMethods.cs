@@ -1427,5 +1427,58 @@ namespace SanteDB
             return retVal.ToString();
         }
 
+        /// <summary>
+        /// Ensure that all properties in <paramref name="propertiesToNullify"/> are null
+        /// </summary>
+        public static IdentifiedData NullifyProperties(this IdentifiedData model, params PropertyInfo[] propertiesToNullify)
+        {
+            if(propertiesToNullify == null) { return model; }
+
+            if (!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            {
+                properties = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                s_typePropertyCache.TryAdd(model.GetType(), properties);
+            }
+            foreach(var pi in properties)
+            {
+                if(propertiesToNullify.Contains(pi))
+                {
+                    pi.SetValue(model, null);
+                }
+            }
+            return model;
+        }
+
+        /// <summary>
+        /// Get dependent objects for <paramref name="model"/>
+        /// </summary>
+        public static IEnumerable<IdentifiedData> GetDependentObjects(this IdentifiedData model, PropertyInfo[] propertiesToInclude, bool followLists)
+        {
+            if(!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            {
+                properties = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                s_typePropertyCache.TryAdd(model.GetType(), properties);
+            }
+
+            foreach(var pi in properties)
+            {
+                var currentValue = model.LoadProperty(pi.Name);
+                if(currentValue is IList list && followLists)
+                {
+                    foreach(var itm in list.OfType<IdentifiedData>())
+                    {
+                        foreach (var depObj in itm.GetDependentObjects(propertiesToInclude, false))
+                        {
+                            yield return depObj;
+                        }
+                    }
+                }
+                else if (currentValue is IdentifiedData identified)
+                {
+                    yield return identified;
+                }
+            }
+        } 
+
     }
 }
