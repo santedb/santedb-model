@@ -877,7 +877,7 @@ namespace SanteDB
 
                 var sourcePi = sameType ? destinationPi : fromEntity.GetType().GetProperty(destinationPi.Name);
                 // Skip properties no in the source
-                if (sourcePi == null)
+                if (sourcePi == null || !destinationPi.CanWrite || !sourcePi.CanRead)
                 {
                     continue;
                 }
