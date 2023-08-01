@@ -100,11 +100,5 @@ namespace SanteDB.Core.Model.DataTypes
             }
         }
 
-        /// <summary>
-        /// Gets or sets the obsoletion reason
-        /// </summary>
-        [XmlElement("obsoletionReason")]
-        public string ObsoletionReason { get; set; }
-
     }
 }

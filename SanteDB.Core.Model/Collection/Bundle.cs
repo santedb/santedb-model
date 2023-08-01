@@ -369,7 +369,7 @@ namespace SanteDB.Core.Model.Collection
                     try
                     {
                         object rawValue = pi.GetValue(model);
-                        if (propertiesToExclude.Contains(pi))
+                        if (propertiesToExclude.Contains(pi) || pi == null)
                         {
                             pi.SetValue(model, null);
                             continue;
