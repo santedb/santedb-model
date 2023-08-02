@@ -37,6 +37,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -50,6 +51,7 @@ namespace SanteDB
 
         // Revers lookup cache for resource names
         private static IDictionary<String, Type> s_resourceNames;
+        private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
 
         /// <summary>
         /// Indicates a properly was load/checked
@@ -446,6 +448,13 @@ namespace SanteDB
         {
             return BitConverter.ToString(array).Replace("-", "");
         }
+
+
+        /// <summary>
+        /// Determine if <paramref name="stringToTest"/> is hex encoded
+        /// </summary>
+        public static bool IsHexEncoded(this string stringToTest) => stringToTest.Length % 2 == 0 &&
+            s_hexRegex.IsMatch(stringToTest);
 
         /// <summary>
         /// Decode <paramref name="encodedData"/> to a byte array
