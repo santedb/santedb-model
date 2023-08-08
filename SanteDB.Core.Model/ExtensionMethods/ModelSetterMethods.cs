@@ -115,7 +115,7 @@ namespace SanteDB
                     var originalValue = currentValue;
                     sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
 
-                    if(Guid.TryParse(valueToSet.ToString(), out var uuid) && sourceProperty.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty.EndsWith("Xml") == true) // HACK: Most of the time we want to set the redirect property
+                    if(valueToSet != null && Guid.TryParse(valueToSet.ToString(), out var uuid) && sourceProperty.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty.EndsWith("Xml") == true) // HACK: Most of the time we want to set the redirect property
                     {
                         sourceProperty = focalObject.GetType().GetProperty($"{sourceProperty.Name}Xml");
                         valueToSet = uuid;
@@ -224,7 +224,7 @@ namespace SanteDB
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException(String.Format(ErrorMessages.CANNOT_SET_VALUE_AT_PATH, hdsiExpressionPath, valueToSet.GetType().Name), e);
+                throw new InvalidOperationException(String.Format(ErrorMessages.CANNOT_SET_VALUE_AT_PATH, hdsiExpressionPath, valueToSet?.GetType().Name), e);
             }
         }
 
