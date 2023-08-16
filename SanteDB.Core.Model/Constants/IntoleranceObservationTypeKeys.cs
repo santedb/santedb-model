@@ -61,5 +61,10 @@ namespace SanteDB.Core.Model.Constants
         /// An intolerance to a food which is not an allergy
         /// </summary>
         public static readonly Guid FoodNonAllergyIntolerance = Guid.Parse("594F0A36-34C1-48B4-B870-883173450FF4");
+
+        /// <summary>
+        /// An allergy intolerance but is not medically specified. This value is used for compatability between standards.
+        /// </summary>
+        public static readonly Guid UnspecifiedAllergyIntolerance = Guid.Parse("1b5bf354-2c80-4d62-8012-6ebaa54b185b");
     }
 }
