@@ -34,6 +34,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("Material", Namespace = "http://santedb.org/model"), JsonObject("Material")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Material")]
     [ClassConceptKey(EntityClassKeyStrings.Material)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
     public class Material : Entity
     {
 

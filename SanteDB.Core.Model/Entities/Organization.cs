@@ -35,6 +35,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("Organization", Namespace = "http://santedb.org/model"), JsonObject("Organization")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Organization")]
     [ClassConceptKey(EntityClassKeyStrings.Organization)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
     public class Organization : Entity
     {
 

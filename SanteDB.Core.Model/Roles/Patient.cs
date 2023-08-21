@@ -35,6 +35,7 @@ namespace SanteDB.Core.Model.Roles
     [XmlType("Patient", Namespace = "http://santedb.org/model"), JsonObject("Patient")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Patient")]
     [ClassConceptKey(EntityClassKeyStrings.Patient)]
+    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     public class Patient : Person
     {
         /// <summary>

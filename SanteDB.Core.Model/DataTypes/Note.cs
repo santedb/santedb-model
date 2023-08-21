@@ -21,6 +21,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Entities;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -31,7 +32,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// Generic note class
     /// </summary>
     [XmlType(Namespace = "http://santedb.org/model"), JsonObject("Note")]
-    public abstract class Note<TBoundModel> : VersionedAssociation<TBoundModel> where TBoundModel : VersionedEntityData<TBoundModel>, new()
+    public abstract class Note<TBoundModel> : VersionedAssociation<TBoundModel>, INote where TBoundModel : VersionedEntityData<TBoundModel>, new()
     {
 
         /// <summary>

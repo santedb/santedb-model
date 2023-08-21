@@ -42,12 +42,6 @@ namespace SanteDB.Core.Model.Security
         public String DeviceSecret { get; set; }
 
         /// <summary>
-        /// Gets the public key of the security device
-        /// </summary>
-        [XmlElement("publicKey"), JsonProperty("publicKey")]
-        public String PublicKey { get; set; }
-
-        /// <summary>
         /// Gets or sets the name of the security device/user/role/device
         /// </summary>
         [XmlElement("name"), JsonProperty("name"), NoCase]

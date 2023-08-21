@@ -41,6 +41,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("ApplicationEntity", Namespace = "http://santedb.org/model"), JsonObject("ApplicationEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "ApplicationEntity")]
     [ClassConceptKey(EntityClassKeyStrings.NonLivingSubject)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     public class ApplicationEntity : Entity
     {
         /// <summary>

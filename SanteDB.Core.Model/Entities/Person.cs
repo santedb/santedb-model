@@ -36,6 +36,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("Person", Namespace = "http://santedb.org/model"), JsonObject("Person")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Person")]
     [ClassConceptKey(EntityClassKeyStrings.Person)]
+    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     public class Person : Entity
     {
 

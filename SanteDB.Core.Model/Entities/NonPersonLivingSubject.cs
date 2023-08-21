@@ -41,6 +41,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.LivingSubject)]
     [ClassConceptKey(EntityClassKeyStrings.Food)]
     [ClassConceptKey(EntityClassKeyStrings.Animal)]
+    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     public class NonPersonLivingSubject : Entity
     {
 

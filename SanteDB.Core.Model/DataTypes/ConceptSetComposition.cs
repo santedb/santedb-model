@@ -63,7 +63,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets the target of the composition
         /// </summary>
-        [XmlElement("targetConceptSet"), JsonProperty("targetConceptSet")]
+        [XmlElement("target"), JsonProperty("target")]
         public Guid? TargetKey { get; set; }
 
         /// <summary>

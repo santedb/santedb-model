@@ -37,6 +37,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -50,6 +51,7 @@ namespace SanteDB
 
         // Revers lookup cache for resource names
         private static IDictionary<String, Type> s_resourceNames;
+        private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
 
         /// <summary>
         /// Indicates a properly was load/checked
@@ -446,6 +448,13 @@ namespace SanteDB
         {
             return BitConverter.ToString(array).Replace("-", "");
         }
+
+
+        /// <summary>
+        /// Determine if <paramref name="stringToTest"/> is hex encoded
+        /// </summary>
+        public static bool IsHexEncoded(this string stringToTest) => stringToTest.Length % 2 == 0 &&
+            s_hexRegex.IsMatch(stringToTest);
 
         /// <summary>
         /// Decode <paramref name="encodedData"/> to a byte array
@@ -877,7 +886,7 @@ namespace SanteDB
 
                 var sourcePi = sameType ? destinationPi : fromEntity.GetType().GetProperty(destinationPi.Name);
                 // Skip properties no in the source
-                if (sourcePi == null)
+                if (sourcePi == null || !destinationPi.CanWrite || !sourcePi.CanRead)
                 {
                     continue;
                 }
@@ -1426,6 +1435,59 @@ namespace SanteDB
             }
             return retVal.ToString();
         }
+
+        /// <summary>
+        /// Ensure that all properties in <paramref name="propertiesToNullify"/> are null
+        /// </summary>
+        public static IdentifiedData NullifyProperties(this IdentifiedData model, params PropertyInfo[] propertiesToNullify)
+        {
+            if(propertiesToNullify == null) { return model; }
+
+            if (!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            {
+                properties = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                s_typePropertyCache.TryAdd(model.GetType(), properties);
+            }
+            foreach(var pi in properties)
+            {
+                if(propertiesToNullify.Contains(pi))
+                {
+                    pi.SetValue(model, null);
+                }
+            }
+            return model;
+        }
+
+        /// <summary>
+        /// Get dependent objects for <paramref name="model"/>
+        /// </summary>
+        public static IEnumerable<IdentifiedData> GetDependentObjects(this IdentifiedData model, PropertyInfo[] propertiesToInclude, bool followLists)
+        {
+            if(!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            {
+                properties = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                s_typePropertyCache.TryAdd(model.GetType(), properties);
+            }
+
+            foreach(var pi in properties)
+            {
+                var currentValue = model.LoadProperty(pi.Name);
+                if(currentValue is IList list && followLists)
+                {
+                    foreach(var itm in list.OfType<IdentifiedData>())
+                    {
+                        foreach (var depObj in itm.GetDependentObjects(propertiesToInclude, false))
+                        {
+                            yield return depObj;
+                        }
+                    }
+                }
+                else if (currentValue is IdentifiedData identified)
+                {
+                    yield return identified;
+                }
+            }
+        } 
 
     }
 }

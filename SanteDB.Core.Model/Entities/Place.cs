@@ -41,6 +41,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.Country)]
     [ClassConceptKey(EntityClassKeyStrings.CountyOrParish)]
     [ClassConceptKey(EntityClassKeyStrings.StateOrProvince)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
     public class Place : Entity, IGeoTagged
     {
         /// <summary>

@@ -114,6 +114,12 @@ namespace SanteDB
 
                     var originalValue = currentValue;
                     sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
+
+                    if(valueToSet != null && Guid.TryParse(valueToSet.ToString(), out var uuid) && sourceProperty.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty.EndsWith("Xml") == true) // HACK: Most of the time we want to set the redirect property
+                    {
+                        sourceProperty = focalObject.GetType().GetProperty($"{sourceProperty.Name}Xml");
+                        valueToSet = uuid;
+                    }
                     var sourcePropertyValue = sourceProperty.GetValue(focalObject);
 
                     // Is the property value not set so we want to create it if needed
@@ -156,6 +162,10 @@ namespace SanteDB
                         if (sourcePropertyValue is IList listObject)
                         {
                             sourcePropertyValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
+                            if(Guid.Empty.Equals(sourcePropertyValue) && valueToSet is Guid) // HACK: A list of GUID indicates 
+                            {
+                                sourcePropertyValue = valueToSet;
+                            }
                             listObject.Add(sourcePropertyValue);
                         }
 
@@ -169,6 +179,7 @@ namespace SanteDB
                         {
                             SetClassifier(currentValue, match.Groups[2].Value);
                         }
+                     
                     }
                     else if (!replace &&
                         match.NextMatch().Success &&
@@ -213,7 +224,7 @@ namespace SanteDB
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException(String.Format(ErrorMessages.CANNOT_SET_VALUE_AT_PATH, hdsiExpressionPath, valueToSet.GetType().Name), e);
+                throw new InvalidOperationException(String.Format(ErrorMessages.CANNOT_SET_VALUE_AT_PATH, hdsiExpressionPath, valueToSet?.GetType().Name), e);
             }
         }
 

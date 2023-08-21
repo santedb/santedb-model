@@ -34,6 +34,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlRoot(nameof(Container), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(Container))]
     [ClassConceptKey(EntityClassKeyStrings.Container)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
     public class Container : Material
     {
 

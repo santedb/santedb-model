@@ -46,9 +46,9 @@ namespace SanteDB.Core.Model.Query.FilterExtension
         {
             for (int i = 0; i < parms.Length; i++)
             {
-                if (parms[i] is ConstantExpression)
+                if (parms[i] is ConstantExpression ce)
                 {
-                    parms[i] = Expression.Constant(Int32.Parse((parms[i] as ConstantExpression).Value.ToString()));
+                    parms[i] = Expression.Constant(Int32.Parse(ce.Value.ToString()));
                 }
             }
 

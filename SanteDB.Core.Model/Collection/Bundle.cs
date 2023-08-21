@@ -66,6 +66,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(InvoiceElement))]
     [XmlInclude(typeof(FinancialContract))]
     [XmlInclude(typeof(FinancialTransaction))]
+    [XmlInclude(typeof(ConceptReferenceTerm))]
     [XmlInclude(typeof(Procedure))]
     [XmlInclude(typeof(Provider))]
     [XmlInclude(typeof(Organization))]
@@ -368,7 +369,7 @@ namespace SanteDB.Core.Model.Collection
                     try
                     {
                         object rawValue = pi.GetValue(model);
-                        if (propertiesToExclude.Contains(pi))
+                        if (propertiesToExclude.Contains(pi) || pi == null)
                         {
                             pi.SetValue(model, null);
                             continue;

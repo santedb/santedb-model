@@ -55,4 +55,9 @@ namespace SanteDB.Core.Model.Query
         BinaryExpression Compose(Expression scope, ExpressionType comparison, Expression valueExpression, Expression[] parms);
 
     }
+
+    /// <summary>
+    /// Indicates an implementation of <see cref="IQueryFilterExtension"/> is only used for converting the input
+    /// </summary>
+    public interface IQueryFilterConverterExtension : IQueryFilterExtension { }
 }

@@ -35,6 +35,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlType("DeviceEntity", Namespace = "http://santedb.org/model"), JsonObject("DeviceEntity")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "DeviceEntity")]
     [ClassConceptKey(EntityClassKeyStrings.Device)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     public class DeviceEntity : Entity
     {
         /// <summary>

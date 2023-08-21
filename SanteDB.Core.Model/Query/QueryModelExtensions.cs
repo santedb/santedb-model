@@ -20,6 +20,7 @@
  */
 using System;
 using System.ComponentModel;
+using System.Text;
 
 namespace SanteDB.Core.Model.Query
 {
@@ -125,6 +126,13 @@ namespace SanteDB.Core.Model.Query
                 return me.Substring(start);
             }
         }
+
+
+        /// <summary>
+        /// Convert string <paramref name="me"/> to binary for filtering on extensions
+        /// </summary>
+        public static byte[] StringToBinary(this String me) => Encoding.UTF8.GetBytes(me);
+
 
     }
 }

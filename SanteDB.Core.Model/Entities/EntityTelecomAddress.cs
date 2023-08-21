@@ -39,6 +39,10 @@ namespace SanteDB.Core.Model.Entities
     public class EntityTelecomAddress : VersionedAssociation<Entity>, IHasExternalKey
     {
 
+        static readonly Regex s_EmailRegex = new Regex(".+?@.+?\\..+?", RegexOptions.Compiled | RegexOptions.Singleline, TimeSpan.FromMilliseconds(250));
+        static readonly Regex s_TelephoneRegex = new Regex(@"([+0-9A-Za-z]{1,4})?\((\d{3})\)?(\d{3})\-(\d{4})X?(\d{1,6})?", RegexOptions.Compiled | RegexOptions.Singleline, TimeSpan.FromMilliseconds(250));
+        static readonly Regex s_IetfValueRegex = new Regex(@"^(?<s1>(?<s0>[^:/\?#]+):)?(?<a1>//(?<a0>[^/\;#]*))?(?<p0>[^\;#]*)(?<q1>\;(?<q0>[^#]*))?(?<f1>#(?<f0>.*))?", RegexOptions.Compiled | RegexOptions.Singleline, TimeSpan.FromMilliseconds(250));
+
         // Name use concept
         /// <summary>
         /// Default constructor
@@ -109,16 +113,14 @@ namespace SanteDB.Core.Model.Entities
                 }
 
                 // E-mail?
-                Regex email = new Regex(".+?@.+?\\..+?"),
-                    tel = new Regex(@"([+0-9A-Za-z]{1,4})?\((\d{3})\)?(\d{3})\-(\d{4})X?(\d{1,6})?");
-
-                if (email.IsMatch(this.Value))
+               
+                if (s_EmailRegex.IsMatch(this.Value))
                 {
                     return String.Format("mailto:{0}", this.Value);
                 }
-                else if (tel.IsMatch(this.Value))
+                else if (s_TelephoneRegex.IsMatch(this.Value))
                 {
-                    var match = tel.Match(this.Value);
+                    var match = s_TelephoneRegex.Match(this.Value);
                     StringBuilder sb = new StringBuilder("tel:");
 
                     for (int i = 1; i < 5; i++)
@@ -143,10 +145,9 @@ namespace SanteDB.Core.Model.Entities
             }
             set
             {
-                Regex re = new Regex(@"^(?<s1>(?<s0>[^:/\?#]+):)?(?<a1>//(?<a0>[^/\;#]*))?(?<p0>[^\;#]*)(?<q1>\;(?<q0>[^#]*))?(?<f1>#(?<f0>.*))?");
 
                 // Match
-                var match = re.Match(value);
+                var match = s_IetfValueRegex.Match(value);
                 if (match.Groups[1].Value != "tel:")
                 {
                     this.Value = value.Substring(value.IndexOf(":"));

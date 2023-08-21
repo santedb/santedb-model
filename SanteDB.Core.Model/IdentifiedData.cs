@@ -40,6 +40,7 @@ namespace SanteDB.Core.Model
     /// and is the class from which all other business object model instances are derived.
     /// </para><para>This class contains </para></remarks>
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
+    [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
     public abstract class IdentifiedData : IAnnotatedResource, ICanDeepCopy
     {
 
