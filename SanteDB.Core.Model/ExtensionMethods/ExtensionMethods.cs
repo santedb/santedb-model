@@ -1489,5 +1489,20 @@ namespace SanteDB
             }
         } 
 
+        /// <summary>
+        /// Masks the specified string exposing only the last <paramref name="digitsToDisclose"/> or the last 20% of the identifier
+        /// </summary>
+        /// <param name="stringToMask"></param>
+        /// <returns></returns>
+        public static String Mask(this string stringToMask, int? digitsToDisclose = null)
+        {
+            digitsToDisclose = digitsToDisclose ?? (int)(stringToMask.Length * 0.25);
+            return new string('X', stringToMask.Length - digitsToDisclose.Value) + stringToMask.Substr(stringToMask.Length - digitsToDisclose.Value, digitsToDisclose);
+        }
+
+        /// <summary>
+        /// Get the resource sensitivity classification
+        /// </summary>
+        public static ResourceSensitivityClassification GetResourceSensitivityClassification(this Type resourceType) => resourceType.GetCustomAttribute<ResourceSensitivityAttribute>()?.Classification ?? ResourceSensitivityClassification.Metadata;
     }
 }
