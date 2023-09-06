@@ -46,6 +46,10 @@ namespace SanteDB.Core.Model.Serialization
         // Cache of created serializers
         private readonly ConcurrentDictionary<string, XmlSerializer> m_serializers = new ConcurrentDictionary<string, XmlSerializer>();
 
+        static readonly Type s_AddDependentSerializersType = typeof(AddDependentSerializersAttribute);
+        static readonly Type s_XmlRootType = typeof(XmlRootAttribute);
+        static readonly Type s_XmlTypeType = typeof(XmlTypeAttribute);
+
         /// <summary>
         /// Private ctor
         /// </summary>
@@ -83,9 +87,10 @@ namespace SanteDB.Core.Model.Serialization
         /// <returns>The specified serializer</returns>
         public XmlSerializer CreateSerializer(Type type, params Type[] extraTypes)
         {
-            var adddependentserializerstype = typeof(AddDependentSerializersAttribute);
-            var xmlroottype = typeof(XmlRootAttribute);
-            var xmltypetype = typeof(XmlTypeAttribute);
+            if (null == type)
+            {
+                return null;
+            }
 
             // Generate key
             if (extraTypes.Length > 0 || !this.m_serializerKeys.TryGetValue(type, out var key))
@@ -102,17 +107,17 @@ namespace SanteDB.Core.Model.Serialization
             {
                 if (!this.m_serializers.ContainsKey(key)) // Ensure that hasn't been generated since lock was acquired
                 {
-                    if (type.HasCustomAttribute(adddependentserializerstype) && extraTypes.Length == 0)
+                    if (type.HasCustomAttribute(s_AddDependentSerializersType) && extraTypes.Length == 0)
                     {
                         extraTypes = AppDomain.CurrentDomain.GetAllTypes()
-                            .Where(t => t.HasCustomAttribute(xmlroottype) && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface)
+                            .Where(t => t.HasCustomAttribute(s_XmlRootType) && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface)
                             .Union(ModelSerializationBinder.GetRegisteredTypes())
                             .ToArray();
                     }
                     else if (extraTypes.Length == 0)
                     {
                         extraTypes = AppDomain.CurrentDomain.GetAllTypes()
-                            .Where(t => t.HasCustomAttribute(xmltypetype))
+                            .Where(t => t.HasCustomAttribute(s_XmlTypeType))
                             .Where(t => t.GetConstructor(Type.EmptyTypes) != null && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface && (type.IsAssignableFrom(t) || type.GetProperties().Select(p => p.PropertyType.StripGeneric()).Any(p => !p.IsAbstract && !p.IsInterface && typeof(IdentifiedData).IsAssignableFrom(p) && p.IsAssignableFrom(t))))
                             .ToArray();
                     }
