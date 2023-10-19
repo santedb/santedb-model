@@ -87,6 +87,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(SecurityProvenance))]
     [XmlInclude(typeof(SecurityRole))]
     [XmlInclude(typeof(SecurityChallenge))]
+    [XmlInclude(typeof(RelationshipValidationRule))]
     [XmlInclude(typeof(CodeSystem))]
     public class Bundle : IdentifiedData, IResourceCollection
     {
