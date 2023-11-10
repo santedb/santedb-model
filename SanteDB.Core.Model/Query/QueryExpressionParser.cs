@@ -1004,7 +1004,7 @@ namespace SanteDB.Core.Model.Query
             {
                 scope = parameterExpression;
             }
-            else if (variables?.TryGetValue(varName, out val) == true || m_builtInVars.TryGetValue(varName, out val))
+            else if (variables?.TryGetValue(varName.ToLowerInvariant(), out val) == true || m_builtInVars.TryGetValue(varName.ToLowerInvariant(), out val))
             {
                 if (val.GetMethodInfo().GetParameters().Length > 0)
                 {
