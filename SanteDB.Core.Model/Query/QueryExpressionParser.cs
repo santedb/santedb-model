@@ -100,8 +100,10 @@ namespace SanteDB.Core.Model.Query
         /// <param name="modelType">The type of model to which the returned LINQ expression should accept as a parameter</param>
         /// <param name="parameterName">The name of the parameter in the Lambda expression</param>
         /// <param name="safeNullable">When true, use coalesce operators in the Lambda expression to provide a default value. This is useful if the LINQ expression will be used on memory objects</param>
+        /// <param name="coalesceOutput">When true, all outputs on selectors should be coalesced with a new object (always return a value)</param>
+        /// <param name="collectionResolutionMethod">When provided resolve the terminal statement of a collection with the specified function</param>
         /// <param name="variables">The variable evaluators to use when expanding <c>$variable</c> expressions in the HDSI path</param>
-        public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false)
+        public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false, bool coalesceOutput = true, string collectionResolutionMethod = nameof(Enumerable.FirstOrDefault))
         {
             var controlMethod = typeof(QueryFilterExtensions).GetMethod(nameof(QueryFilterExtensions.WithControl), BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -230,7 +232,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             memberInfo = accessExpression.Type.GetRuntimeProperty(memberInfo.Name.Replace("Xml", ""));
                         }
-                        else if (i != memberPath.Length - 1)
+                        else if (i != memberPath.Length - 1 || !string.IsNullOrEmpty(cast))
                         {
                             PropertyInfo backingFor = null;
 
@@ -454,10 +456,13 @@ namespace SanteDB.Core.Model.Query
                             // First or default
                             if (currentValue.Value == null)
                             {
-                                Type itemType = accessExpression.Type.GenericTypeArguments[0];
-                                Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
-                                var firstMethod = typeof(Enumerable).GetGenericMethod("FirstOrDefault", new Type[] { itemType }, new Type[] { accessExpression.Type }) as MethodInfo;
-                                accessExpression = Expression.Call(firstMethod, accessExpression);
+                                if (!String.IsNullOrEmpty(collectionResolutionMethod))
+                                {
+                                    Type itemType = accessExpression.Type.GenericTypeArguments[0];
+                                    Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
+                                    var firstMethod = typeof(Enumerable).GetGenericMethod(collectionResolutionMethod, new Type[] { itemType }, new Type[] { accessExpression.Type }) as MethodInfo;
+                                    accessExpression = Expression.Call(firstMethod, accessExpression);
+                                }
                             }
                             else // We're filtering so guard
                             {
@@ -507,7 +512,7 @@ namespace SanteDB.Core.Model.Query
                         }
 
                         // Is this an access expression?
-                        if (currentValue.Value == null && typeof(IdentifiedData).IsAssignableFrom(accessExpression.Type))
+                        if (currentValue.Value == null && typeof(IdentifiedData).IsAssignableFrom(accessExpression.Type) && coalesceOutput)
                         {
                             accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
                         }
@@ -1107,13 +1112,13 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Build a property selector 
         /// </summary>
-        public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false, Type convertReturn = null)
+        public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad = false, Type convertReturn = null, bool returnNewObjectOnNull = true, string collectionResolutionMethod = "FirstOrDefault")
         {
             var nvc = new NameValueCollection();
             nvc.Add(propertyName, null);
             if (convertReturn == null)
             {
-                return BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad, false);
+                return BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad, false, coalesceOutput: returnNewObjectOnNull, collectionResolutionMethod: collectionResolutionMethod);
             }
             else if (String.IsNullOrEmpty(propertyName))
             {
