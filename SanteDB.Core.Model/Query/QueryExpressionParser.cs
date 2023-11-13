@@ -805,7 +805,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             valueExpr = Expression.Constant(pValue);
                         }
-                        else 
+                        else
                         {
                             try
                             {
@@ -1107,6 +1107,13 @@ namespace SanteDB.Core.Model.Query
         public static LambdaExpression BuildPropertySelector<T>(String propertyName, bool forceLoad)
         {
             return BuildPropertySelector(typeof(T), propertyName, forceLoad);
+        }
+        /// <summary>
+        /// Build a property selector 
+        /// </summary>
+        public static LambdaExpression BuildPropertySelector(Type type, String propertyName, bool forceLoad)
+        {
+            return BuildPropertySelector(type, propertyName, forceLoad: forceLoad, convertReturn: null, returnNewObjectOnNull: true);
         }
 
         /// <summary>
