@@ -64,6 +64,22 @@ namespace SanteDB.Core.Model.Acts
         protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.CarePlan;
 
         /// <summary>
+        /// Gets or sets a human title for the care plan
+        /// </summary>
+        [XmlElement("title"), JsonProperty("title")]
+        public String Title { get; set; }
+
+        /// <summary>
+        /// Identifies the program under which this care plan has been created or prepared
+        /// </summary>
+        /// <remarks>
+        /// The program can be used to identify where the care plan "fits" in the broader patient care picture. For example, a care plan 
+        /// generated as part of an HIV/TB care program may be kept separate from an ANC or pregnancy care plan
+        /// </remarks>
+        [XmlElement("program"), JsonProperty("program")]
+        public String ProgramIdentifier { get; set; }
+
+        /// <summary>
         /// Create care plan with acts
         /// </summary>
         public CarePlan(Patient p, IEnumerable<Act> acts) : this()
