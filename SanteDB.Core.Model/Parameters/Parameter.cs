@@ -20,6 +20,9 @@
  */
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SanteDB.Core.Model.Acts;
+using SanteDB.Core.Model.Collection;
+using SanteDB.Core.Model.Roles;
 using System;
 using System.Linq;
 using System.Xml.Serialization;
@@ -71,6 +74,16 @@ namespace SanteDB.Core.Model.Parameters
             XmlElement("string", typeof(string)),
             XmlElement("float", typeof(float)),
             XmlElement("uuid", typeof(Guid)),
+            XmlElement("patient", typeof(Patient)),
+            XmlElement("act", typeof(Act)),
+            XmlElement("substanceAdministration", typeof(SubstanceAdministration)),
+            XmlElement("quantityObservation", typeof(QuantityObservation)),
+            XmlElement("codedObservation", typeof(CodedObservation)),
+            XmlElement("textObservation", typeof(TextObservation)),
+            XmlElement("procedure", typeof(Procedure)),
+            XmlElement("encounter", typeof(PatientEncounter)),
+            XmlElement("narrative", typeof(Narrative)),
+            XmlElement("bundle", typeof(Bundle)),
             XmlElement("other", typeof(object))
         ]
         public Object Value
