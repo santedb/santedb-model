@@ -24,6 +24,7 @@ using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SanteDB
 {
@@ -103,6 +104,27 @@ namespace SanteDB
         /// </summary>
         [Obsolete("Use LoadProperty()")]
         public static IEnumerable<ActParticipation> GetParticipations(this Act me) => me.LoadCollection<ActParticipation>(nameof(Act.Participations));
+
+        /// <summary>
+        /// Get the acts in which this entity participates
+        /// </summary>
+        public static IEnumerable<ActParticipation> GetParticipations(this Entity me)
+        {
+            if(me.WasLoaded(nameof(Entity.Participations)))
+            {
+                return me.Participations;
+            }
+            else if (me.Key.HasValue)
+            {
+                me.SetLoaded(nameof(Entity.Participations));
+                me.Participations = EntitySource.Current.Provider.Query<ActParticipation>(o => o.PlayerEntityKey == me.Key).ToList();
+                return me.Participations;
+            }
+            else
+            {
+                return new ActParticipation[0];
+            }
+        }
 
         /// <summary>
         /// Get the target of the relationship

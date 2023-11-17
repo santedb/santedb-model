@@ -504,7 +504,6 @@ namespace SanteDB.Core.Model.Map
                 left = Expression.Call(left, (right as MethodCallExpression).Method);
             }
 
-
             // Are the types compatible?
             if (!right.Type.IsAssignableFrom(left.Type))
             {
