@@ -214,7 +214,7 @@ namespace SanteDB.Core.Model.Query
                             memberInfo = accessExpression.Type.GetRuntimeProperties().FirstOrDefault(p => p.GetQueryName() == pMember);
                             if (memberInfo == null)
                             {
-                                throw new ArgumentOutOfRangeException(currentValue.Key);
+                                memberInfo = accessExpression.Type.GetInterfaces().SelectMany(o => o.GetRuntimeProperties()).FirstOrDefault(o => o.GetQueryName() == pMember) ?? throw new ArgumentOutOfRangeException(currentValue.Key);
                             }
 
                             // Member cache
