@@ -16,6 +16,11 @@ namespace SanteDB.Core.Model
         internal const string ApplicationRoot = "application/x.santedb";
 
         /// <summary>
+        /// CDSS logic in text format
+        /// </summary>
+        public const string CdssTextFormat = ApplicationRoot + ".cdss";
+
+        /// <summary>
         /// RIM based model root
         /// </summary>
         public const string RimModelRoot = ApplicationRoot + ".rim";
