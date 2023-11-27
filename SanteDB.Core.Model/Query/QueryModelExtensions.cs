@@ -45,7 +45,7 @@ namespace SanteDB.Core.Model.Query
         /// <remarks>This exists for the extended query filter only</remarks>
         public static TimeSpan Age(this DateTime me, DateTime atDateTime)
         {
-            return me.Subtract(atDateTime);
+            return atDateTime.Subtract(me);
         }
 
         /// <summary>
