@@ -81,7 +81,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the interpretation concept
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [XmlElement("interpretation"), JsonProperty("interpretation")]
+        [XmlElement("interpretationConcept"), JsonProperty("interpretationConcept")]
         public Guid? InterpretationConceptKey { get; set; }
 
         /// <summary>

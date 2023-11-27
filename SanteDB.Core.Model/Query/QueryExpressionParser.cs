@@ -103,7 +103,7 @@ namespace SanteDB.Core.Model.Query
         /// <param name="coalesceOutput">When true, all outputs on selectors should be coalesced with a new object (always return a value)</param>
         /// <param name="collectionResolutionMethod">When provided resolve the terminal statement of a collection with the specified function</param>
         /// <param name="variables">The variable evaluators to use when expanding <c>$variable</c> expressions in the HDSI path</param>
-        public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false, bool coalesceOutput = true, string collectionResolutionMethod = nameof(Enumerable.FirstOrDefault))
+        public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool alwaysCoalesce = false, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false, bool coalesceOutput = true, string collectionResolutionMethod = nameof(Enumerable.FirstOrDefault))
         {
             var controlMethod = typeof(QueryFilterExtensions).GetMethod(nameof(QueryFilterExtensions.WithControl), BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -172,7 +172,7 @@ namespace SanteDB.Core.Model.Query
 
                         // Update path
                         path += pMember + ".";
-                        bool coalesce = false;
+                        bool coalesce = alwaysCoalesce;
 
                         // Guard token?
                         if (pMember.Contains("[") && pMember.EndsWith("]"))
@@ -302,8 +302,9 @@ namespace SanteDB.Core.Model.Query
                                 m_castCache.TryAdd(cast, castType);
                             }
                             accessExpression = Expression.TypeAs(accessExpression, castType);
+                            coalesce = safeNullable;
                         }
-                        if ((coalesce || safeNullable) && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null)
+                        if (coalesce && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null)
                         {
                             accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
                         }
@@ -498,7 +499,7 @@ namespace SanteDB.Core.Model.Query
                                     workingValues.Remove(wv);
                                 }
 
-                                Expression predicate = BuildLinqExpression(itemType, subFilter, pMember, variables, safeNullable, forceLoad, lazyExpandVariables);
+                                Expression predicate = BuildLinqExpression(itemType, subFilter, pMember, variables: variables, safeNullable: safeNullable, forceLoad: forceLoad, lazyExpandVariables: lazyExpandVariables, alwaysCoalesce: alwaysCoalesce, coalesceOutput: coalesceOutput, collectionResolutionMethod: collectionResolutionMethod);
                                 if (predicate == null) // No predicate so just ANY()
                                 {
                                     continue;
@@ -982,7 +983,7 @@ namespace SanteDB.Core.Model.Query
         /// <param name="variables">A list of variables which are accessed in the LambdaExpression via $variable</param>
         public static LambdaExpression BuildLinqExpression<TModelType>(NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false)
         {
-            return BuildLinqExpression(typeof(TModelType), httpQueryParameters, parameterName, variables, safeNullable, forceLoad, lazyExpandVariables, relayControlVariables);
+            return BuildLinqExpression(typeof(TModelType), httpQueryParameters, parameterName, variables: variables, safeNullable: safeNullable, forceLoad: forceLoad, lazyExpandVariables: lazyExpandVariables, relayControlVariables: relayControlVariables);
         }
 
 
@@ -1125,7 +1126,7 @@ namespace SanteDB.Core.Model.Query
             nvc.Add(propertyName, null);
             if (convertReturn == null)
             {
-                return BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad, false, coalesceOutput: returnNewObjectOnNull, collectionResolutionMethod: collectionResolutionMethod);
+                return BuildLinqExpression(type, nvc, "__xinstance", null, safeNullable: false, forceLoad: forceLoad, lazyExpandVariables: false, coalesceOutput: returnNewObjectOnNull, collectionResolutionMethod: collectionResolutionMethod);
             }
             else if (String.IsNullOrEmpty(propertyName))
             {
