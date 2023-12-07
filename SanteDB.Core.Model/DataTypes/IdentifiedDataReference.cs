@@ -19,6 +19,7 @@
  * Date: 2023-5-19
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Acts;
 using System;
 using System.Xml.Serialization;
 
@@ -36,6 +37,24 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlRoot("Reference", Namespace = "http://santedb.org/model")]
     public class IdentifiedDataReference : IdentifiedData
     {
+
+        /// <summary>
+        /// Serialization ctor
+        /// </summary>
+        public IdentifiedDataReference()
+        {
+                
+        }
+
+        /// <summary>
+        /// Create a reference from <paramref name="refObject"/>
+        /// </summary>
+        public IdentifiedDataReference(IdentifiedData refObject)
+        {
+            this.Key = refObject.Key;
+            this.ReferencedType = refObject.Type;
+        }
+
         /// <summary>
         /// Get the type identifier
         /// </summary>
@@ -47,5 +66,11 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlIgnore, JsonIgnore]
         public override DateTimeOffset ModifiedOn => DateTimeOffset.MinValue;
+
+        /// <summary>
+        /// The type of object referenced
+        /// </summary>
+        [XmlElement("refType"), JsonProperty("refType")]
+        public String ReferencedType { get; set; }
     }
 }
