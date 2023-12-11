@@ -57,5 +57,14 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string DataQualityExtensionName = "http://santedb.org/extensions/core/detectedIssue";
 
+        /// <summary>
+        /// Data quality issue extension
+        /// </summary>
+        public static readonly Guid PatientSafetyConcernIssueExtension = Guid.Parse("E8F05D38-60E2-4C8B-B3BE-08286148F077");
+
+        /// <summary>
+        /// Data quality extension name
+        /// </summary>
+        public const string PatientSafetyConcernIssueExtensionName = "http://santedb.org/extensions/core/safetyConcernIssue";
     }
 }

@@ -97,6 +97,10 @@ namespace SanteDB.Core.Model.Entities
                     {
                         this.DateOfBirth = dt;
                     }
+                    else if(DateTime.TryParse(value, CultureInfo.InvariantCulture , DateTimeStyles.AssumeLocal, out dt))
+                    {
+                        this.DateOfBirth = dt.Date;
+                    }
                     else
                     {
                         throw new FormatException($"Cannot parse {value} as a date");

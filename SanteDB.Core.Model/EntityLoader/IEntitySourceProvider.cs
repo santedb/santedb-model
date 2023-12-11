@@ -58,5 +58,6 @@ namespace SanteDB.Core.Model.EntityLoader
         /// <param name="relatedType">The related type to load</param>
         /// <param name="sourceKey">The source keys to load relationships for</param>
         IQueryResultSet GetRelations(Type relatedType, params Guid?[] sourceKey);
+
     }
 }

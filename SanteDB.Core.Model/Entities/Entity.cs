@@ -160,7 +160,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets the acts in which this entity participates
         /// </summary>
-        [XmlElement("participation"), JsonProperty("participation")]
+        [XmlElement("participation"), JsonProperty("participation"), SerializationMetadata]
         public List<ActParticipation> Participations { get; set; }
 
         /// <summary>

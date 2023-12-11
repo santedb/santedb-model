@@ -19,6 +19,7 @@
  * Date: 2023-5-19
  */
 using Newtonsoft.Json;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
@@ -52,7 +53,7 @@ namespace SanteDB
         // Revers lookup cache for resource names
         private static IDictionary<String, Type> s_resourceNames;
         private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
-
+        private static readonly Regex s_verRegex = new Regex(@"^([0-9]+?(?:\.[0-9]+){0,3})?(?:-?((?:alpha|beta|debug)[0-9]*))?$", RegexOptions.Compiled);
         /// <summary>
         /// Indicates a properly was load/checked
         /// </summary>
@@ -1489,5 +1490,52 @@ namespace SanteDB
             }
         } 
 
+        /// <summary>
+        /// Masks the specified string exposing only the last <paramref name="digitsToDisclose"/> or the last 20% of the identifier
+        /// </summary>
+        /// <param name="stringToMask">The string which is to be masked</param>
+        /// <param name="digitsToDisclose">The number of digits to disclose at the end of the identifier (default is last 1/4 of the string)</param>
+        /// <returns>The masked string</returns>
+        public static String Mask(this string stringToMask, int? digitsToDisclose = null)
+        {
+            digitsToDisclose = digitsToDisclose ?? (int)(stringToMask.Length * 0.25);
+            return new string('X', stringToMask.Length - digitsToDisclose.Value) + stringToMask.Substr(stringToMask.Length - digitsToDisclose.Value, digitsToDisclose);
+        }
+
+        /// <summary>
+        /// Get the resource sensitivity classification
+        /// </summary>
+        public static ResourceSensitivityClassification GetResourceSensitivityClassification(this Type resourceType) => resourceType.GetCustomAttribute<ResourceSensitivityAttribute>()?.Classification ?? ResourceSensitivityClassification.Metadata;
+
+        /// <summary>
+        /// Parse the version string
+        /// </summary>
+        /// <param name="versionString">The version string to be parsed</param>
+        /// <param name="suffix">The version suffix</param>
+        /// <returns>The parsed version as a .net version</returns>
+        /// <remarks>
+        /// Note that this parsing will work on semantic versions such as <code>1.3-alpha1</code> parsing the suffix into <paramref name="suffix"/>
+        /// </remarks>
+        public static Version ParseVersion(this String versionString, out string suffix)
+        {
+            var match = s_verRegex.Match(versionString);
+            if(match.Success && Version.TryParse(match.Groups[1].Value, out var retVal))
+            {
+                if (match.Groups.Count > 1)
+                {
+                    suffix = match.Groups[2].Value;
+                }
+                else
+                {
+                    suffix = String.Empty;
+                }
+
+                return retVal;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(String.Format(ErrorMessages.INVALID_FORMAT, versionString, "#0[.#0.#0.#0][-alpha##|-beta##|-debug##]"));
+            }
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Represents base entity data
     /// </summary>
-    public interface IBaseData : IAnnotatedResource
+    public interface IBaseData : IIdentifiedResource
     {
         /// <summary>
         /// Gets or sets the creator of the data
