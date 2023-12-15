@@ -165,6 +165,10 @@ namespace SanteDB.Core.Model.Entities
                     {
                         this.DeceasedDate = dt;
                     }
+                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
+                    {
+                        this.DeceasedDate = dt.Date;
+                    }
                     else
                     {
                         throw new FormatException($"Cannot parse {value} as a date");

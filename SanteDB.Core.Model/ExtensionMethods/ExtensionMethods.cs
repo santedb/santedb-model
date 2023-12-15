@@ -1368,7 +1368,7 @@ namespace SanteDB
         /// <returns>True if the type is nullable</returns>
         public static bool IsNullable(this Type t)
         {
-            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>) || t == typeof(String);
         }
 
         /// <summary>
