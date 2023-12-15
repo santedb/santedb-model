@@ -1493,8 +1493,9 @@ namespace SanteDB
         /// <summary>
         /// Masks the specified string exposing only the last <paramref name="digitsToDisclose"/> or the last 20% of the identifier
         /// </summary>
-        /// <param name="stringToMask"></param>
-        /// <returns></returns>
+        /// <param name="stringToMask">The string which is to be masked</param>
+        /// <param name="digitsToDisclose">The number of digits to disclose at the end of the identifier (default is last 1/4 of the string)</param>
+        /// <returns>The masked string</returns>
         public static String Mask(this string stringToMask, int? digitsToDisclose = null)
         {
             digitsToDisclose = digitsToDisclose ?? (int)(stringToMask.Length * 0.25);
