@@ -29,7 +29,6 @@ namespace SanteDB.Core.Model.Security
     /// </summary>
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "SecurityEntity")]
     [JsonObject(nameof(SecurityEntity))]
-    [NonCached]
     [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     public class SecurityEntity : NonVersionedEntityData
     {
