@@ -75,6 +75,6 @@ namespace SanteDB.Core.Model.Subscription
         /// Only when manually pulling
         /// </summary>
         [XmlEnum("manual")]
-        Manual = PeriodicPoll | OnCommit | OnStart
+        Manual = 0x40
     }
 }
