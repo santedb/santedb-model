@@ -197,9 +197,9 @@ namespace SanteDB.Core.Model
             retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
 
             // Re-initialize all arrays
-            foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var pi in this.GetType().GetNonMetadataProperties())
             {
-                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) // No sense of reading
+                if (!pi.CanWrite) // No sense of reading
                 {
                     continue;
                 }
