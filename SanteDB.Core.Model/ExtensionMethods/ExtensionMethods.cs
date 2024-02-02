@@ -28,6 +28,7 @@ using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
 using SanteDB.Core.Model.Query;
+using SanteDB.Core.Model.Security;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -1537,5 +1538,6 @@ namespace SanteDB
                 throw new ArgumentOutOfRangeException(String.Format(ErrorMessages.INVALID_FORMAT, versionString, "#0[.#0.#0.#0][-alpha##|-beta##|-debug##]"));
             }
         }
+
     }
 }

@@ -811,7 +811,7 @@ namespace SanteDB.Core.Model.Query
                             try
                             {
                                 Object converted = null;
-                                if (MapUtil.TryConvert(pValue, operandType, out converted))
+                                if (MapUtil.TryConvert(pValue, operandType.StripGeneric(), out converted))
                                 {
                                     valueExpr = Expression.Constant(converted);
                                 }
