@@ -84,7 +84,7 @@ namespace SanteDB.Core.Model.Security
                 }
                 else
                 {
-                    this.Lockout = default(DateTime);
+                    this.Lockout = null;
                 }
             }
         }
@@ -149,7 +149,7 @@ namespace SanteDB.Core.Model.Security
                 }
                 else
                 {
-                    this.LastLoginTime = default(DateTimeOffset);
+                    this.LastLoginTime = null;
                 }
             }
         }
