@@ -71,6 +71,12 @@ namespace SanteDB.Core.Model
         public BatchOperationType BatchOperation { get; set; }
 
         /// <summary>
+        /// A query parameter which references itself - this is for query filters which pass the original data in
+        /// </summary>
+        [XmlIgnore, JsonIgnore, QueryParameter("$self")]
+        public IdentifiedData _Self => this;
+
+        /// <summary>
         /// Should serialize batch operation
         /// </summary>
         public bool ShouldSerializeBatchOperation() => this.BatchOperation != BatchOperationType.Auto;
@@ -197,9 +203,9 @@ namespace SanteDB.Core.Model
             retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
 
             // Re-initialize all arrays
-            foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var pi in this.GetType().GetNonMetadataProperties())
             {
-                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) // No sense of reading
+                if (!pi.CanWrite) // No sense of reading
                 {
                     continue;
                 }

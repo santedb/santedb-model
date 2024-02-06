@@ -42,10 +42,25 @@ namespace SanteDB
     {
 
         // Model setter cache
-        private static ConcurrentDictionary<Type, ConcurrentDictionary<String, Func<object, object>>> s_modelSetterCache = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>>();
+        private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<String, Func<object, object>>> s_modelSetterCache = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Func<object, object>>>();
+        // Non-metadata property cache
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> s_nonMetadataCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
 
         // Property selector
         private static Regex s_hdsiPropertySelector = new Regex(@"(\w+)(?:\[([\w\|\-]+)\])?(?:\@(\w+))?\.?", RegexOptions.Compiled);
+
+        /// <summary>
+        /// Gets all non metadata properties (those marked with <see cref="SerializationMetadataAttribute"/>
+        /// </summary>
+        public static PropertyInfo[] GetNonMetadataProperties(this Type me)
+        {
+            if(!s_nonMetadataCache.TryGetValue(me, out var retVal))
+            {
+                retVal = me.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(o => o.GetCustomAttribute<SerializationMetadataAttribute>() == null).ToArray();
+                s_nonMetadataCache.TryAdd(me, retVal);
+            }
+            return retVal;
+        }
 
         /// <summary>
         /// Get the property value 

@@ -71,7 +71,7 @@ namespace SanteDB.Core.Model.Security
                 }
                 else
                 {
-                    this.Lockout = default(DateTimeOffset);
+                    this.Lockout = null;
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace SanteDB.Core.Model.Security
                 }
                 else
                 {
-                    this.LastAuthentication = default(DateTimeOffset);
+                    this.LastAuthentication = null;
                 }
             }
         }
