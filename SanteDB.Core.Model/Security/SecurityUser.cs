@@ -211,7 +211,7 @@ namespace SanteDB.Core.Model.Security
         /// Gets or sets the preferred tfa mechanism
         /// </summary>
         [XmlElement("twoFactorMechanism"), JsonProperty("twoFactorMechanism")]
-        public Guid TwoFactorMechnaismKey { get; set; }
+        public Guid? TwoFactorMechnaismKey { get; set; }
 
         /// <summary>
         /// Gets or sets the user class key

@@ -70,14 +70,14 @@ namespace SanteDB.Core.Model.Acts
         public String Title { get; set; }
 
         /// <summary>
-        /// Identifies the program under which this care plan has been created or prepared
+        /// Identifies the care pathway identifier which this care plan is generated for
         /// </summary>
         /// <remarks>
         /// The program can be used to identify where the care plan "fits" in the broader patient care picture. For example, a care plan 
-        /// generated as part of an HIV/TB care program may be kept separate from an ANC or pregnancy care plan
+        /// generated as part of an HIV/TB care pathway may be kept separate from an ANC or pregnancy care plan
         /// </remarks>
-        [XmlElement("program"), JsonProperty("program")]
-        public String ProgramIdentifier { get; set; }
+        [XmlElement("pathway"), JsonProperty("pathway")]
+        public String CarePathwayIdentifier { get; set; }
 
         /// <summary>
         /// Create care plan with acts
