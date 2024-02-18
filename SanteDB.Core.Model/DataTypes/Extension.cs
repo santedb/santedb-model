@@ -248,7 +248,9 @@ namespace SanteDB.Core.Model.DataTypes
     /// Extension bound to entity
     /// </summary>
 
-    [XmlType("EntityExtension", Namespace = "http://santedb.org/model"), JsonObject("EntityExtension")]
+    [XmlType("EntityExtension", Namespace = "http://santedb.org/model"),
+        XmlRoot("EntityExtension", Namespace = "http://santedb.org/model"), 
+        JsonObject("EntityExtension")]
     public class EntityExtension : Extension<Entity>
     {
         /// <summary>
@@ -281,7 +283,9 @@ namespace SanteDB.Core.Model.DataTypes
     /// Act extension
     /// </summary>
 
-    [XmlType("ActExtension", Namespace = "http://santedb.org/model"), JsonObject("ActExtension")]
+    [XmlType("ActExtension", Namespace = "http://santedb.org/model"), 
+        XmlRoot("ActExtension", Namespace = "http://santedb.org/model"),
+        JsonObject("ActExtension")]
     public class ActExtension : Extension<Act>
     {
         /// <summary>
