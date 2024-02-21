@@ -1187,7 +1187,7 @@ namespace SanteDB
         /// </summary>
         public static Guid[] GetClassKeys(this Type type)
         {
-            return type.GetCustomAttributes<ClassConceptKeyAttribute>().Select(o => Guid.Parse(o.ClassConcept)).ToArray();
+            return type.GetCustomAttributes<ClassConceptKeyAttribute>(false).Select(o => Guid.Parse(o.ClassConcept)).ToArray();
         }
 
         /// <summary>

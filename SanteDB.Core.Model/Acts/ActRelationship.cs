@@ -87,6 +87,16 @@ namespace SanteDB.Core.Model.Acts
         [SerializationReference(nameof(ClassificationKey))]
         public Concept Classification { get; set; }
 
+        /// <summary>
+        /// A negation indicator - used to flag this relationship as negated
+        /// </summary>
+        /// <remarks>
+        /// This flag is used to indicate that <see cref="Act"/> is NOT related to <see cref="TargetAct"/> 
+        /// via relationship <see cref="RelationshipType"/>. This isused for indicating A is not a <see cref="ActRelationshipTypeKeys.Duplicate"/> of B
+        /// or that A is does not <see cref="ActRelationshipTypeKeys.HasComponent"/> of B.
+        /// </remarks>
+        [XmlElement("negationInd"), JsonProperty("negationInd")]
+        public bool NegationIndicator { get; set; }
 
         /// <summary>
         /// Gets or sets the external key for the object
