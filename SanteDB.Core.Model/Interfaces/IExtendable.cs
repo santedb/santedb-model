@@ -45,6 +45,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// <param name="extensionType">The type of extension to add</param>
         /// <param name="handlerType">The handler to serialize the <paramref name="value"/></param>
         /// <param name="value">The value of the extension to set</param>
-        void AddExtension(Guid extensionType, Type handlerType, object value);
+        IModelExtension AddExtension(Guid extensionType, Type handlerType, object value);
     }
 }

@@ -826,9 +826,11 @@ namespace SanteDB.Core.Model.Acts
         /// <param name="extensionType">The extension type to be added</param>
         /// <param name="handlerType">The handler</param>
         /// <param name="value">The value</param>
-        public void AddExtension(Guid extensionType, Type handlerType, object value)
+        public IModelExtension AddExtension(Guid extensionType, Type handlerType, object value)
         {
-            this.Extensions.Add(new ActExtension(extensionType, handlerType, value));
+            var retVal = new ActExtension(extensionType, handlerType, value) { SourceEntityKey = this.Key };
+            this.Extensions.Add(retVal);
+            return retVal;
         }
 
         /// <summary>

@@ -264,7 +264,6 @@ namespace SanteDB.Core.Model.Query
                             }
                         }
 
-
                         // Force loading of properties
                         if (forceLoad)
                         {

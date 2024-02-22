@@ -422,10 +422,12 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Add an extension to this entity
         /// </summary>
-        public void AddExtension(Guid extensionType, Type handlerType, object value)
+        public IModelExtension AddExtension(Guid extensionType, Type handlerType, object value)
         {
             // Is there already an extension type? if so just replace
-            this.Extensions.Add(new EntityExtension(extensionType, handlerType, value));
+            var retVal = new EntityExtension(extensionType, handlerType, value) { SourceEntityKey = this.Key };
+            this.Extensions.Add(retVal);
+            return retVal;
         }
 
         /// <summary>
