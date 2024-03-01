@@ -99,8 +99,7 @@ namespace SanteDB
 
         // Types
         private static ConcurrentDictionary<Assembly, Type[]> m_types = new ConcurrentDictionary<Assembly, Type[]>();
-
-
+       
         /// <summary>
         ///     Creates a <see cref="Dictionary{TKey, TValue}"/> from an <see cref="IEnumerable{T}"/>
         ///     according to specified key selector function. Diplicate keys will not be added to the dictionary.

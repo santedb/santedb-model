@@ -215,7 +215,7 @@ namespace SanteDB
             var retVal = new List<KeyValuePair<String, String>>();
             foreach (var k in nvc.AllKeys)
             {
-                foreach (var v in nvc.GetValues(k))
+                foreach (var v in nvc.GetValues(k) ?? new string[0])
                 {
                     retVal.Add(new KeyValuePair<String, String>(k, v));
                 }
