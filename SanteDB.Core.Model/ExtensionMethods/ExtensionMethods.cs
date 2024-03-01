@@ -1438,6 +1438,44 @@ namespace SanteDB
         }
 
         /// <summary>
+        /// Nullify all empty collections
+        /// </summary>
+        public static TModel NullifyEmptyCollections<TModel>(this TModel model) where TModel : IdentifiedData
+        {
+            if(!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            {
+                properties = model.GetType().GetNonMetadataProperties();
+                s_typePropertyCache.TryAdd(model.GetType(), properties);
+            }
+
+            foreach(var pi in properties.Where(p=>p.HasCustomAttribute<JsonPropertyAttribute>()))
+            {
+                var instance = pi.GetValue(model);
+
+                switch(instance)
+                {
+                    case IList list:
+                        if(list.Count == 0)
+                        {
+                            pi.SetValue(model, null);
+                        }
+                        else
+                        {
+                            foreach(var itm in list.OfType<IdentifiedData>())
+                            {
+                                itm.NullifyEmptyCollections();
+                            }
+                        }
+                        break;
+                    case IdentifiedData id:
+                        id.NullifyEmptyCollections();
+                        break;
+                }
+            }
+            return model;
+        }
+
+        /// <summary>
         /// Ensure that all properties in <paramref name="propertiesToNullify"/> are null
         /// </summary>
         public static IdentifiedData NullifyProperties(this IdentifiedData model, params PropertyInfo[] propertiesToNullify)
