@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.i18n;
@@ -28,7 +28,6 @@ using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
 using SanteDB.Core.Model.Query;
-using SanteDB.Core.Model.Security;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -99,7 +98,7 @@ namespace SanteDB
 
         // Types
         private static ConcurrentDictionary<Assembly, Type[]> m_types = new ConcurrentDictionary<Assembly, Type[]>();
-       
+
         /// <summary>
         ///     Creates a <see cref="Dictionary{TKey, TValue}"/> from an <see cref="IEnumerable{T}"/>
         ///     according to specified key selector function. Diplicate keys will not be added to the dictionary.
@@ -1442,26 +1441,26 @@ namespace SanteDB
         /// </summary>
         public static TModel NullifyEmptyCollections<TModel>(this TModel model) where TModel : IdentifiedData
         {
-            if(!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            if (!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
             {
                 properties = model.GetType().GetNonMetadataProperties();
                 s_typePropertyCache.TryAdd(model.GetType(), properties);
             }
 
-            foreach(var pi in properties.Where(p=>p.HasCustomAttribute<JsonPropertyAttribute>()))
+            foreach (var pi in properties.Where(p => p.HasCustomAttribute<JsonPropertyAttribute>()))
             {
                 var instance = pi.GetValue(model);
 
-                switch(instance)
+                switch (instance)
                 {
                     case IList list:
-                        if(list.Count == 0)
+                        if (list.Count == 0)
                         {
                             pi.SetValue(model, null);
                         }
                         else
                         {
-                            foreach(var itm in list.OfType<IdentifiedData>())
+                            foreach (var itm in list.OfType<IdentifiedData>())
                             {
                                 itm.NullifyEmptyCollections();
                             }
@@ -1480,16 +1479,16 @@ namespace SanteDB
         /// </summary>
         public static IdentifiedData NullifyProperties(this IdentifiedData model, params PropertyInfo[] propertiesToNullify)
         {
-            if(propertiesToNullify == null) { return model; }
+            if (propertiesToNullify == null) { return model; }
 
             if (!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
             {
                 properties = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 s_typePropertyCache.TryAdd(model.GetType(), properties);
             }
-            foreach(var pi in properties)
+            foreach (var pi in properties)
             {
-                if(propertiesToNullify.Contains(pi))
+                if (propertiesToNullify.Contains(pi))
                 {
                     pi.SetValue(model, null);
                 }
@@ -1502,18 +1501,18 @@ namespace SanteDB
         /// </summary>
         public static IEnumerable<IdentifiedData> GetDependentObjects(this IdentifiedData model, PropertyInfo[] propertiesToInclude, bool followLists)
         {
-            if(!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            if (!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
             {
                 properties = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 s_typePropertyCache.TryAdd(model.GetType(), properties);
             }
 
-            foreach(var pi in properties)
+            foreach (var pi in properties)
             {
                 var currentValue = model.LoadProperty(pi.Name);
-                if(currentValue is IList list && followLists)
+                if (currentValue is IList list && followLists)
                 {
-                    foreach(var itm in list.OfType<IdentifiedData>())
+                    foreach (var itm in list.OfType<IdentifiedData>())
                     {
                         foreach (var depObj in itm.GetDependentObjects(propertiesToInclude, false))
                         {
@@ -1526,7 +1525,7 @@ namespace SanteDB
                     yield return identified;
                 }
             }
-        } 
+        }
 
         /// <summary>
         /// Masks the specified string exposing only the last <paramref name="digitsToDisclose"/> or the last 20% of the identifier
@@ -1557,7 +1556,7 @@ namespace SanteDB
         public static Version ParseVersion(this String versionString, out string suffix)
         {
             var match = s_verRegex.Match(versionString);
-            if(match.Success && Version.TryParse(match.Groups[1].Value, out var retVal))
+            if (match.Success && Version.TryParse(match.Groups[1].Value, out var retVal))
             {
                 if (match.Groups.Count > 1)
                 {
