@@ -37,6 +37,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -1186,6 +1187,40 @@ namespace SanteDB
         public static Guid[] GetClassKeys(this Type type)
         {
             return type.GetCustomAttributes<ClassConceptKeyAttribute>(false).Select(o => Guid.Parse(o.ClassConcept)).ToArray();
+        }
+
+        /// <summary>
+        /// Get the specified classifier property
+        /// </summary>
+        public static PropertyInfo GetClassifierProperty(this Type type)
+        {
+            var classAttr = type.GetCustomAttribute<ClassifierAttribute>();
+            if(classAttr == null)
+            {
+                return null; //throw new InvalidOperationException(String.Format(ErrorMessages.NO_CLASSIFIER_PROPERTY, type));
+            }
+            return type.GetRuntimeProperty(classAttr.ClassifierProperty);
+        }
+
+        /// <summary>
+        /// Get the classification key property for UUIDs
+        /// </summary>
+        public static PropertyInfo GetClassifierKeyProperty(this Type type)
+        {
+            var classAttr = type.GetCustomAttribute<ClassifierAttribute>();
+            if (classAttr == null)
+            {
+                return null; //throw new InvalidOperationException(String.Format(ErrorMessages.NO_CLASSIFIER_PROPERTY, type));
+            }
+
+            if (!String.IsNullOrEmpty(classAttr.ClassifierKeyProperty))
+            {
+                return type.GetRuntimeProperty(classAttr.ClassifierKeyProperty);
+            }
+            else
+            {
+                return type.GetRuntimeProperty(classAttr.ClassifierProperty).GetSerializationRedirectProperty();
+            }
         }
 
         /// <summary>

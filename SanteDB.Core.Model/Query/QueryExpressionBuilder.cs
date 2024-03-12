@@ -27,6 +27,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Query
@@ -568,21 +569,33 @@ namespace SanteDB.Core.Model.Query
             private object PrepareValue(object parmValue, bool quoteStrings)
             {
                 Object fParmValue = parmValue;
-                if (parmValue is DateTime)
+                switch (parmValue)
                 {
-                    fParmValue = ((DateTime)parmValue).ToString("o");
-                }
-                else if (parmValue is DateTimeOffset)
-                {
-                    fParmValue = ((DateTimeOffset)parmValue).ToString("o");
-                }
-                else if (parmValue == null)
-                {
-                    fParmValue = "null";
-                }
-                else if (parmValue is String && !"null".Equals(parmValue) && quoteStrings)
-                {
-                    fParmValue = $"\"{parmValue.ToString().Replace("\"", "\\\"")}\"";
+                    case DateTime dt:
+                        {
+                            fParmValue = dt.ToString("o");
+                            break;
+                        }
+                    case DateTimeOffset dto:
+                        {
+                            fParmValue = dto.ToString("o");
+                            break;
+                        }
+                    case String str:
+                        if (!str.Equals("null", StringComparison.OrdinalIgnoreCase) && quoteStrings)
+                        {
+                            fParmValue = $"\"{parmValue.ToString().Replace("\"", "\\\"")}\"";
+                        }
+                        break;
+                    case bool blValue:
+                        fParmValue = XmlConvert.ToString(blValue);
+                        break;
+                    default:
+                        if (parmValue == null)
+                        {
+                            fParmValue = "null";
+                        }
+                        break;
                 }
 
                 return fParmValue;
@@ -620,20 +633,20 @@ namespace SanteDB.Core.Model.Query
                         {
                             return this.ExtractPath(expr, false, true);
                         }
-                        else if (expr.Member is PropertyInfo)
+                        else if (expr.Member is PropertyInfo pi)
                         {
                             try
                             {
-                                return (expr.Member as PropertyInfo).GetValue(expressionValue);
+                                return pi.GetValue(expressionValue);
                             }
                             catch
                             {
                                 return null;
                             }
                         }
-                        else if (expr.Member is FieldInfo)
+                        else if (expr.Member is FieldInfo fi)
                         {
-                            return (expr.Member as FieldInfo).GetValue(expressionValue);
+                            return fi.GetValue(expressionValue);
                         }
                         break;
 
@@ -756,14 +769,23 @@ namespace SanteDB.Core.Model.Query
                         String path = this.ExtractPath(callExpr.Arguments[0], false, fromOperand); // get the chain if required
                         var guardExpression = callExpr.Arguments[1] as LambdaExpression;
                         // Where should be a guard so we just grab the unary equals only!
-                        var binaryExpression = guardExpression.Body as BinaryExpression;
-                        if (binaryExpression == null)
-                        {
-                            throw new InvalidOperationException("Cannot translate non-binary expression guards");
-                        }
-
                         // Is the expression the guard?
-                        String guardString = this.BuildGuardExpression(binaryExpression);
+                        string guardString = String.Empty;
+                        // TODO: The building of a guard expression may not be required - it may save some computation downstream to use full expressions in the guard
+                        if (guardExpression.Body is BinaryExpression binaryExpression && !this.TryBuildGuardExpression(binaryExpression, out guardString) ||
+                            String.IsNullOrEmpty(guardString) && guardExpression.Body.Type == typeof(bool))
+                        {
+                            // Attempt to build a complex guard
+                            var guardParameter = guardExpression.Parameters[0];
+                            var subQuery = new NameValueCollection();
+                            var subVisitor = new HttpQueryExpressionVisitor(subQuery, guardParameter.Type);
+                            subVisitor.Visit(guardExpression);
+                            guardString = Uri.EscapeDataString(subQuery.ToHttpString());
+                        }
+                        if(String.IsNullOrEmpty(guardString))
+                        {
+                            throw new InvalidOperationException(String.Format(ErrorMessages.HDSI_GUARD_INVALID, guardExpression));
+                        }
                         return String.Format("{0}[{1}]", path, guardString);
                     }
                     else if (callExpr.Method.Name == "First" ||
@@ -812,53 +834,38 @@ namespace SanteDB.Core.Model.Query
             /// <summary>
             /// Build a guard expression
             /// </summary>
-            private string BuildGuardExpression(BinaryExpression binaryExpression)
+            private bool TryBuildGuardExpression(BinaryExpression binaryExpression, out string simpleGuardExpression)
             {
                 switch (binaryExpression.NodeType)
                 {
                     case ExpressionType.Or:
                     case ExpressionType.OrElse:
-                        return $"{this.BuildGuardExpression(binaryExpression.Left as BinaryExpression)}|{this.BuildGuardExpression(binaryExpression.Right as BinaryExpression)}";
+                        var retVal = this.TryBuildGuardExpression(binaryExpression.Right as BinaryExpression, out var rightExpression) &
+                            this.TryBuildGuardExpression(binaryExpression.Left as BinaryExpression, out var leftExpression);
+                        simpleGuardExpression = $"{leftExpression}|{rightExpression}";
+                        return retVal;
 
                     case ExpressionType.Equal:
                         var expressionMember = this.StripConvert(binaryExpression.Left) as MemberExpression;
                         var valueExpression = this.ExtractValue(binaryExpression.Right);
-                        var classifierAttribute = expressionMember.Member.DeclaringType.GetCustomAttribute<ClassifierAttribute>();
-                        if (classifierAttribute == null)
+                        var classifierProperty = ExtractValue(binaryExpression.Right) is Guid ?
+                            expressionMember.Member.DeclaringType.GetClassifierKeyProperty() : expressionMember.Member.DeclaringType.GetClassifierProperty();
+                        if (classifierProperty != expressionMember.Member || valueExpression == null) // Complex processing of the value
                         {
-                            throw new InvalidOperationException($"No classifier is defined on {expressionMember.Expression.Type.FullName}");
-                        }
-                        else if (classifierAttribute.ClassifierProperty != expressionMember.Member.Name)
-                        {
-                            // Lookup the key property
-                            PropertyInfo keyProp = null;
-                            if (!String.IsNullOrEmpty(classifierAttribute.ClassifierKeyProperty))
-                            {
-                                keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierKeyProperty);
-                            }
-                            else
-                            {
-                                keyProp = expressionMember.Expression.Type.GetProperty(classifierAttribute.ClassifierProperty).GetSerializationRedirectProperty();
-                            }
-
-                            if (keyProp?.Name != expressionMember.Member.Name)
-                            {
-                                throw new InvalidOperationException($"Classifier for type on {expressionMember.Member.DeclaringType.FullName} is property {classifierAttribute?.ClassifierProperty} however expression uses property {expressionMember.Member.Name}. Only {classifierAttribute?.ClassifierProperty} may be used in guard expression");
-                            }
-                        }
-                        if (valueExpression == null)
-                        {
-                            throw new InvalidOperationException($"Could not extract right hand side of guard expression {binaryExpression.Right} - is the value passed null (guard values must not be null)?");
+                            simpleGuardExpression = String.Empty;
+                            return false;
                         }
                         else if (expressionMember.Type.IsEnum && valueExpression is int valueInt)
                         {
                             valueExpression = Enum.GetName(expressionMember.Type, valueInt);
                         }
 
-                        return valueExpression.ToString();
+                        simpleGuardExpression = valueExpression.ToString();
+                        return true;
 
                     default:
-                        throw new InvalidOperationException($"Binary expressions of {binaryExpression.NodeType} are not permitted");
+                        simpleGuardExpression = String.Empty;
+                        return false;
                 }
             }
         }
