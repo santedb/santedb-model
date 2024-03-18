@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -124,10 +124,15 @@ namespace SanteDB.Core.Model.Entities
         }
 
         /// <summary>
-        /// The inversion indicator
+        /// A negation indicator - used to flag this relationship as negated
         /// </summary>
-        [XmlElement("inversionInd"), JsonProperty("inversionInd")]
-        public bool InversionIndicator { get; set; }
+        /// <remarks>
+        /// This flag is used to indicate that <see cref="Holder"/> is NOT related to <see cref="TargetEntity"/> 
+        /// via relationship <see cref="RelationshipType"/>. This isused for indicating A is not a <see cref="EntityRelationshipTypeKeys.Duplicate"/> of B
+        /// or that A is does not <see cref="EntityRelationshipTypeKeys.HasIngredient"/> of B.
+        /// </remarks>
+        [XmlElement("negationInd"), JsonProperty("negationInd")]
+        public bool NegationIndicator { get; set; }
 
         /// <summary>
         /// The strength (confidence) of the relationship between source and target
@@ -249,9 +254,9 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Should serialize inversion indicator?
         /// </summary>
-        public bool ShouldSerializeInversionIndicator()
+        public bool ShouldSerializeNegationIndicator()
         {
-            return this.InversionIndicator;
+            return this.NegationIndicator;
         }
 
         /// <summary>

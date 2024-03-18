@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -70,14 +70,14 @@ namespace SanteDB.Core.Model.Acts
         public String Title { get; set; }
 
         /// <summary>
-        /// Identifies the program under which this care plan has been created or prepared
+        /// Identifies the care pathway identifier which this care plan is generated for
         /// </summary>
         /// <remarks>
         /// The program can be used to identify where the care plan "fits" in the broader patient care picture. For example, a care plan 
-        /// generated as part of an HIV/TB care program may be kept separate from an ANC or pregnancy care plan
+        /// generated as part of an HIV/TB care pathway may be kept separate from an ANC or pregnancy care plan
         /// </remarks>
-        [XmlElement("program"), JsonProperty("program")]
-        public String ProgramIdentifier { get; set; }
+        [XmlElement("pathway"), JsonProperty("pathway")]
+        public String CarePathwayIdentifier { get; set; }
 
         /// <summary>
         /// Create care plan with acts

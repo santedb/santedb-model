@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model;
@@ -54,7 +54,7 @@ namespace SanteDB
         /// </summary>
         public static PropertyInfo[] GetNonMetadataProperties(this Type me)
         {
-            if(!s_nonMetadataCache.TryGetValue(me, out var retVal))
+            if (!s_nonMetadataCache.TryGetValue(me, out var retVal))
             {
                 retVal = me.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(o => o.GetCustomAttribute<SerializationMetadataAttribute>() == null).ToArray();
                 s_nonMetadataCache.TryAdd(me, retVal);
@@ -130,7 +130,7 @@ namespace SanteDB
                     var originalValue = currentValue;
                     sourceProperty = focalObject.GetType().GetQueryProperty(match.Groups[1].Value);
 
-                    if(valueToSet != null && Guid.TryParse(valueToSet.ToString(), out var uuid) && sourceProperty.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty.EndsWith("Xml") == true) // HACK: Most of the time we want to set the redirect property
+                    if (valueToSet != null && Guid.TryParse(valueToSet.ToString(), out var uuid) && sourceProperty.GetCustomAttribute<SerializationReferenceAttribute>()?.RedirectProperty.EndsWith("Xml") == true) // HACK: Most of the time we want to set the redirect property
                     {
                         sourceProperty = focalObject.GetType().GetProperty($"{sourceProperty.Name}Xml");
                         valueToSet = uuid;
@@ -177,7 +177,7 @@ namespace SanteDB
                         if (sourcePropertyValue is IList listObject)
                         {
                             sourcePropertyValue = Activator.CreateInstance(sourceProperty.PropertyType.StripGeneric());
-                            if(Guid.Empty.Equals(sourcePropertyValue) && valueToSet is Guid) // HACK: A list of GUID indicates 
+                            if (Guid.Empty.Equals(sourcePropertyValue) && valueToSet is Guid) // HACK: A list of GUID indicates 
                             {
                                 sourcePropertyValue = valueToSet;
                             }
@@ -194,7 +194,7 @@ namespace SanteDB
                         {
                             SetClassifier(currentValue, match.Groups[2].Value);
                         }
-                     
+
                     }
                     else if (!replace &&
                         match.NextMatch().Success &&
