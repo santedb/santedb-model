@@ -872,5 +872,23 @@ namespace SanteDB.Core.Model.Acts
         /// Validate the class key
         /// </summary>
         protected virtual bool ValidateClassKey(Guid? classKey) => true;
+
+        /// <inheritdoc/>
+        public IExternalIdentifier AddIdentifier(Guid domainKey, String value)
+        {
+            var id = new ActIdentifier(domainKey, value); 
+            this.Identifiers.Add(id);
+            return id;
+        }
+
+        /// <inheritdoc/>
+        public void RemoveIdentifier(Func<IExternalIdentifier, bool> removePredicate)
+        {
+            if(removePredicate == null)
+            {
+                throw new ArgumentNullException(nameof(removePredicate));
+            }
+            this.Identifiers.RemoveAll(o => removePredicate(o));
+        }
     }
 }

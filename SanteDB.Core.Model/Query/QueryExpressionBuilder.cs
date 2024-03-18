@@ -758,7 +758,7 @@ namespace SanteDB.Core.Model.Query
                 {
                     //CallExpression callExpr = access as MemberExpression;
                     MethodCallExpression callExpr = access as MethodCallExpression;
-
+                    
                     if (callExpr.Method.Name == "WithControl")
                     {
                         return null;
