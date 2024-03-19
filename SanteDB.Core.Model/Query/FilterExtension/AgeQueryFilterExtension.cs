@@ -51,6 +51,10 @@ namespace SanteDB.Core.Model.Query.FilterExtension
                 parsedParm = DateTime.Now;
             }
 
+            if(scope.Type.StripNullable() != scope.Type) // nullable
+            {
+                scope = Expression.Convert(scope, scope.Type.StripNullable());
+            }
             if (scope.Type == typeof(DateTimeOffset))
             {
                 scope = Expression.MakeMemberAccess(scope, typeof(DateTimeOffset).GetProperty(nameof(DateTimeOffset.DateTime)));
