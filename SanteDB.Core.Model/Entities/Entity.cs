@@ -426,7 +426,7 @@ namespace SanteDB.Core.Model.Entities
         {
             // Is there already an extension type? if so just replace
             var retVal = new EntityExtension(extensionType, handlerType, value) { SourceEntityKey = this.Key };
-            this.Extensions.Add(retVal);
+            this.LoadProperty(o=>o.Extensions).Add(retVal);
             return retVal;
         }
 
