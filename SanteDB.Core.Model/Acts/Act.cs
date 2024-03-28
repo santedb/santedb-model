@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.i18n;
@@ -826,9 +826,11 @@ namespace SanteDB.Core.Model.Acts
         /// <param name="extensionType">The extension type to be added</param>
         /// <param name="handlerType">The handler</param>
         /// <param name="value">The value</param>
-        public void AddExtension(Guid extensionType, Type handlerType, object value)
+        public IModelExtension AddExtension(Guid extensionType, Type handlerType, object value)
         {
-            this.Extensions.Add(new ActExtension(extensionType, handlerType, value));
+            var retVal = new ActExtension(extensionType, handlerType, value) { SourceEntityKey = this.Key };
+            this.Extensions.Add(retVal);
+            return retVal;
         }
 
         /// <summary>
@@ -870,5 +872,23 @@ namespace SanteDB.Core.Model.Acts
         /// Validate the class key
         /// </summary>
         protected virtual bool ValidateClassKey(Guid? classKey) => true;
+
+        /// <inheritdoc/>
+        public IExternalIdentifier AddIdentifier(Guid domainKey, String value)
+        {
+            var id = new ActIdentifier(domainKey, value); 
+            this.Identifiers.Add(id);
+            return id;
+        }
+
+        /// <inheritdoc/>
+        public void RemoveIdentifier(Func<IExternalIdentifier, bool> removePredicate)
+        {
+            if(removePredicate == null)
+            {
+                throw new ArgumentNullException(nameof(removePredicate));
+            }
+            this.Identifiers.RemoveAll(o => removePredicate(o));
+        }
     }
 }

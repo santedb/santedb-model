@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.i18n;
@@ -422,10 +422,12 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Add an extension to this entity
         /// </summary>
-        public void AddExtension(Guid extensionType, Type handlerType, object value)
+        public IModelExtension AddExtension(Guid extensionType, Type handlerType, object value)
         {
             // Is there already an extension type? if so just replace
-            this.Extensions.Add(new EntityExtension(extensionType, handlerType, value));
+            var retVal = new EntityExtension(extensionType, handlerType, value) { SourceEntityKey = this.Key };
+            this.LoadProperty(o=>o.Extensions).Add(retVal);
+            return retVal;
         }
 
         /// <summary>
@@ -488,5 +490,23 @@ namespace SanteDB.Core.Model.Entities
         /// <param name="classKey">The UUID of the class concept</param>
         /// <returns>True if the <paramref name="classKey"/> is valid for this type of object</returns>
         protected virtual bool ValidateClassKey(Guid? classKey) => true;
+
+        /// <inheritdoc/>
+        public IExternalIdentifier AddIdentifier(Guid domainKey, String value)
+        {
+            var id = new EntityIdentifier(domainKey, value);
+            this.Identifiers.Add(id);
+            return id;
+        }
+
+        /// <inheritdoc/>
+        public void RemoveIdentifier(Func<IExternalIdentifier, bool> removePredicate)
+        {
+            if (removePredicate == null)
+            {
+                throw new ArgumentNullException(nameof(removePredicate));
+            }
+            this.Identifiers.RemoveAll(o => removePredicate(o));
+        }
     }
 }
