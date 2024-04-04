@@ -332,7 +332,7 @@ namespace SanteDB.Core.Model.Map
         public Type MapModelType(Type modelType)
         {
             // Just a value type - don't look for a map
-            if (modelType.BaseType == typeof(ValueType))
+            if (modelType?.BaseType == typeof(ValueType) || modelType == null)
             {
                 return modelType;
             }
