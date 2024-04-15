@@ -68,6 +68,7 @@ namespace SanteDB.Core.Model.Query
         static QueryExpressionParser()
         {
             m_builtInVars.Add("now", () => DateTimeOffset.Now);
+            m_builtInVars.Add("nowLocal", () => DateTime.Now);
             m_builtInVars.Add("today", () => DateTime.Now.Date);
         }
 
@@ -953,6 +954,7 @@ namespace SanteDB.Core.Model.Query
                     {
                         scope = Expression.Call(null, (MethodInfo)typeof(MapUtil).GetGenericMethod(nameof(MapUtil.Convert), new Type[] { expectedReturn }, new Type[] { typeof(object) }), Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()));
                     }
+
                     scope = Expression.Convert(Expression.Call(val.Target == null ? null : Expression.Constant(val.Target), val.GetMethodInfo()), value?.GetType() ?? expectedReturn);
 
                 }
