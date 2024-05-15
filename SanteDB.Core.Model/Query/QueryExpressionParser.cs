@@ -991,6 +991,10 @@ namespace SanteDB.Core.Model.Query
                         return Expression.Call(null, typeof(Guid).GetMethod(nameof(Guid.Parse), new Type[] { typeof(String) }), retVal);
                     }
                 }
+                else if (retVal.Type == typeof(DateTimeOffset) && expectedReturn == typeof(DateTime))
+                {
+                    return Expression.MakeMemberAccess(retVal, typeof(DateTimeOffset).GetProperty(nameof(DateTimeOffset.DateTime)));
+                }
                 else
                 {
                     return Expression.Convert(retVal, expectedReturn);
