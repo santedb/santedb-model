@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2023-6-21
  */
+using SanteDB.Core.Model.Entities;
 using System;
 
 namespace SanteDB.Core.Model.Constants
@@ -139,6 +140,10 @@ namespace SanteDB.Core.Model.Constants
         /// The identifier of the unit (example: 820)
         /// </summary>
         public static readonly Guid UnitIdentifier = Guid.Parse("908C09DF-81FE-45AC-9233-0881A278A401");
+        /// <summary>
+        /// The identifier in the address that points to another <see cref="Place"/>
+        /// </summary>
+        public static readonly Guid PlaceReference = Guid.Parse("A314F427-2B6D-4948-9146-A5F700973899");
     }
 
     /// <summary>
