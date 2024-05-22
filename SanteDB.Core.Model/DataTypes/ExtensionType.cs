@@ -21,7 +21,10 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Interfaces;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.EntityLoader;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.DataTypes
@@ -29,7 +32,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// <summary>
     /// Instructions on how an extensionshould be handled
     /// </summary>
-    [Classifier(nameof(Name)), KeyLookup(nameof(Name))]
+    [Classifier(nameof(Uri)), KeyLookup(nameof(Uri))]
     [XmlType(nameof(ExtensionType), Namespace = "http://santedb.org/model"), JsonObject("ExtensionType")]
     [XmlRoot(nameof(ExtensionType), Namespace = "http://santedb.org/model")]
     public class ExtensionType : NonVersionedEntityData
@@ -48,7 +51,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public ExtensionType(String name, Type handlerClass)
         {
-            this.Name = name;
+            this.Uri = name;
             this.ExtensionHandler = handlerClass;
         }
 
@@ -98,10 +101,43 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <summary>
-        /// Gets or sets the description
+        /// Gets or sets the uri of the extension
+        /// </summary>
+        [XmlElement("uri"), JsonProperty("uri")]
+        public String Uri { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the extension
         /// </summary>
         [XmlElement("name"), JsonProperty("name")]
         public String Name { get; set; }
+
+        /// <summary>
+        /// Represents scopes to which the authority is bound
+        /// </summary>
+        [JsonProperty("scope"), XmlElement("scope")]
+        public List<Guid> ScopeXml
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets concept sets to which this concept is a member
+        /// </summary>
+        [SerializationMetadata, XmlIgnore, JsonIgnore, SerializationReference(nameof(ScopeXml))]
+        public List<Concept> Scope
+        {
+            get
+            {
+                return this.ScopeXml?.Select(o => EntitySource.Current.Get<Concept>(o)).ToList();
+            }
+            set
+            {
+                this.ScopeXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
+            }
+        }
+
 
     }
 }

@@ -93,16 +93,6 @@ namespace SanteDB.Core.Model.DataTypes
         public String Url { get; set; }
 
         /// <summary>
-        /// Represents scopes to which the authority is bound
-        /// </summary>
-        [JsonProperty("scope"), XmlElement("scope")]
-        public List<Guid> AuthorityScopeXml
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Assigning device identifier
         /// </summary>
         [XmlElement("assigningAuthority"), JsonProperty("assigningAuthority")]
@@ -185,6 +175,17 @@ namespace SanteDB.Core.Model.DataTypes
         /// Should serialize IsUnique
         /// </summary>
         public bool ShouldSerializeIsUnique() => this.IsUnique;
+
+
+        /// <summary>
+        /// Represents scopes to which the authority is bound
+        /// </summary>
+        [JsonProperty("scope"), XmlElement("scope")]
+        public List<Guid> AuthorityScopeXml
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets concept sets to which this concept is a member
