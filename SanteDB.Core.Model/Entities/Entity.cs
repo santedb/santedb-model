@@ -426,7 +426,7 @@ namespace SanteDB.Core.Model.Entities
         {
             // Is there already an extension type? if so just replace
             var retVal = new EntityExtension(extensionType, handlerType, value) { SourceEntityKey = this.Key };
-            this.Extensions.Add(retVal);
+            this.LoadProperty(o=>o.Extensions).Add(retVal);
             return retVal;
         }
 
@@ -490,5 +490,23 @@ namespace SanteDB.Core.Model.Entities
         /// <param name="classKey">The UUID of the class concept</param>
         /// <returns>True if the <paramref name="classKey"/> is valid for this type of object</returns>
         protected virtual bool ValidateClassKey(Guid? classKey) => true;
+
+        /// <inheritdoc/>
+        public IExternalIdentifier AddIdentifier(Guid domainKey, String value)
+        {
+            var id = new EntityIdentifier(domainKey, value);
+            this.Identifiers.Add(id);
+            return id;
+        }
+
+        /// <inheritdoc/>
+        public void RemoveIdentifier(Func<IExternalIdentifier, bool> removePredicate)
+        {
+            if (removePredicate == null)
+            {
+                throw new ArgumentNullException(nameof(removePredicate));
+            }
+            this.Identifiers.RemoveAll(o => removePredicate(o));
+        }
     }
 }

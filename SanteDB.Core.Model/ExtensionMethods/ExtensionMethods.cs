@@ -19,6 +19,7 @@
  * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Exceptions;
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model;
 using SanteDB.Core.Model.Attributes;
@@ -45,6 +46,63 @@ using System.Xml.Serialization;
 
 namespace SanteDB
 {
+    /// <summary>
+    /// Key harmonization mode
+    /// </summary>
+    public enum KeyHarmonizationMode
+    {
+        /// <summary>
+        /// When the harmonization process occurs, the priority is:
+        /// Key, if set is used and model/delay loaded property is cleared
+        /// </summary>
+        /// <remarks>
+        /// The process of harmonization would harmonize the object as follows, from:
+        /// <code lang="javascript">
+        ///     {
+        ///         "administrativeGender": "UUID1",
+        ///         "administrativeGenderModel": {
+        ///             "$type": "Concept",
+        ///             "id": "UUID2"
+        ///         }
+        /// </code>
+        /// to the resulting:
+        /// <code lang="javascript">
+        ///     {
+        ///         "administrativeGender" : "UUID1",
+        ///         "administrativeGenderModel": null
+        ///     }
+        /// </code>
+        /// </remarks>
+        KeyOverridesProperty,
+
+        /// <summary>
+        /// When the harmonization process occurs, the priority is:
+        /// Property, if set overrides Key
+        /// </summary>
+        /// <remarks>
+        /// The process of harmonization would harmonize the object as follows, from:
+        /// <code lang="javascript">
+        ///     {
+        ///         "administrativeGender": "UUID1",
+        ///         "administrativeGenderModel": {
+        ///             "$type": "Concept",
+        ///             "id": "UUID2"
+        ///         }
+        /// </code>
+        /// to the resulting:
+        /// <code lang="javascript">
+        ///     {
+        ///         "administrativeGender" : "UUID2",
+        ///         "administrativeGenderModel": {
+        ///             "$type": "Concept",
+        ///             "id" :"UUID2"
+        ///         }
+        ///     }
+        /// </code>
+        /// </remarks>
+        PropertyOverridesKey
+    }
+
     /// <summary>
     /// Reflection tools
     /// </summary>
@@ -1610,5 +1668,71 @@ namespace SanteDB
             }
         }
 
+
+        /// <summary>
+        /// Harmonize the keys with the delay load properties
+        /// </summary>
+        public static TData HarmonizeKeys<TData>(this TData me, KeyHarmonizationMode harmonizationMode, bool strictKeyAgreement = true)
+            where TData : IdentifiedData
+        {
+            me = me.Clone() as TData;
+
+            foreach (var pi in me.GetType().GetNonMetadataProperties())
+            {
+                if (!pi.CanWrite)
+                {
+                    continue;
+                }
+
+                var piValue = pi.GetValue(me);
+
+                // Is the property a key?
+                if (piValue is IdentifiedData iddata && iddata.Key.HasValue)
+                {
+                    // Get the object which references this
+                    var keyProperty = pi.GetSerializationRedirectProperty();
+                    var keyValue = keyProperty?.GetValue(me);
+                    switch (harmonizationMode)
+                    {
+                        case KeyHarmonizationMode.KeyOverridesProperty:
+                            if (keyValue != null && !keyValue.Equals(iddata.Key)) // There is a key for this which is populated, we want to use the key and clear the property
+                            {
+                                if (strictKeyAgreement)
+                                {
+                                    throw new InvalidOperationException(String.Format(ErrorMessages.KEY_PROPERTY_DISAGREEMENT, keyProperty.ToString(), pi.ToString()));
+                                }
+                                else
+                                {
+                                    pi.SetValue(me, null);
+                                }
+                            }
+                            else
+                            {
+                                keyProperty.SetValue(me, iddata.Key);
+                            }
+                            break;
+
+                        case KeyHarmonizationMode.PropertyOverridesKey:
+                            if (iddata.Key.HasValue) // Data has value
+                            {
+                                keyProperty.SetValue(me, iddata.Key);
+                            }
+                            else
+                            {
+                                pi.SetValue(me, null); // Let the identifier data stand
+                            }
+                            break;
+                    }
+                }
+                else if (piValue is IList list)
+                {
+                    for (var i = 0; i < list.Count; i++)
+                    {
+                        list[i] = (list[i] as IdentifiedData)?.HarmonizeKeys(harmonizationMode) ?? list[i];
+                    }
+                }
+            }
+            return me;
+        }
     }
 }

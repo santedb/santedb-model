@@ -19,6 +19,7 @@
  * Date: 2023-6-21
  */
 using SanteDB.Core.Model.Attributes;
+using System;
 using System.Collections.Generic;
 
 namespace SanteDB.Core.Model.Interfaces
@@ -34,5 +35,16 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         [QueryParameter("identifier")]
         IEnumerable<IExternalIdentifier> Identifiers { get; }
+
+        /// <summary>
+        /// Add an identifier to this object
+        /// </summary>
+        IExternalIdentifier AddIdentifier(Guid domainKey, String value);
+
+        /// <summary>
+        /// Remove identifiers matching <paramref name="removeIdentifier"/>
+        /// </summary>
+        /// <param name="removeIdentifier">The identifier predicate to remove</param>
+        void RemoveIdentifier(Func<IExternalIdentifier, bool> removeIdentifier);
     }
 }

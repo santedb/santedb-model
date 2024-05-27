@@ -74,8 +74,8 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// True if the material is simply administrative
         /// </summary>
-        [XmlElement("isAdministrative"), JsonProperty("isAdministrative")]
-        public Boolean IsAdministrative { get; set; }
+        [XmlElement("isAdministrable"), JsonProperty("isAdministrable")]
+        public Boolean IsAdministrable { get; set; }
 
         /// <summary>
         /// The base quantity of the object in the units. This differs from quantity on the relationship
@@ -113,7 +113,7 @@ namespace SanteDB.Core.Model.Entities
                 this.QuantityConceptKey == other.QuantityConceptKey &&
                 this.FormConceptKey == other.FormConceptKey &&
                 this.ExpiryDate == other.ExpiryDate &&
-                this.IsAdministrative == other.IsAdministrative;
+                this.IsAdministrable == other.IsAdministrable;
         }
     }
 }
