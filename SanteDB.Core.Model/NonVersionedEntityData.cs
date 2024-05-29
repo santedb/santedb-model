@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -100,7 +101,13 @@ namespace SanteDB.Core.Model
         /// True if key should be serialized
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializeUpdatedByKey() => this.UpdatedByKey.HasValue;
+        public bool ShouldSerializeUpdatedByKey() => this.UpdatedByKey.HasValue && !SerializationControlContext.IsCurrentContextForExport();
+
+        /// <summary>
+        /// True if the updated time should be serialized
+        /// </summary>
+        public bool ShouldSerializeUpdatedTimeXml() => !SerializationControlContext.IsCurrentContextForExport();
+
 
     }
 }
