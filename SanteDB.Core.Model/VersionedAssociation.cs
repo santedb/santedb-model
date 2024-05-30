@@ -52,10 +52,10 @@ namespace SanteDB.Core.Model
         [XmlIgnore, JsonIgnore, QueryParameter("obsoleteVersionSequence")]
         public Int64? ObsoleteVersionSequenceId { get; set; }
 
-        ///// <summary>
-        ///// Should serialize obsolete
-        ///// </summary>
-        //public bool ShouldSerializeObsoleteVersionSequenceId() => this.ObsoleteVersionSequenceId.HasValue;
+        /// <summary>
+        /// Should serialize obsolete
+        /// </summary>
+        public bool ShouldSerializeObsoleteVersionSequenceId() => this.ObsoleteVersionSequenceId.HasValue;
 
         ///// <summary>
         ///// Should serialize obsolete

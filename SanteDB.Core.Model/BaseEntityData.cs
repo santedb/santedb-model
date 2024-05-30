@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -144,12 +145,22 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// True if key should be serialized
         /// </summary>
-        public bool ShouldSerializeCreatedByKey() => this.CreatedByKey.HasValue;
+        public bool ShouldSerializeCreatedByKey() => this.CreatedByKey.HasValue && !SerializationControlContext.IsCurrentContextForExport();
 
         /// <summary>
         /// True if key should be serialized
         /// </summary>
-        public bool ShouldSerializeObsoletedByKey() => this.ObsoletedByKey.HasValue;
+        public bool ShouldSerializeObsoletedByKey() => this.ObsoletedByKey.HasValue && !SerializationControlContext.IsCurrentContextForExport();
+
+        /// <summary>
+        /// True if the creation time should be serialized
+        /// </summary>
+        public bool ShouldSerializeCreationTimeXml() => !SerializationControlContext.IsCurrentContextForExport();
+
+        /// <summary>
+        /// True if the creation time should be serialized
+        /// </summary>
+        public bool ShouldSerializeObsoletionTimeXml() => !SerializationControlContext.IsCurrentContextForExport();
 
         /// <summary>
         /// Gets or sets the user that obsoleted this base data
