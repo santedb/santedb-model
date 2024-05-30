@@ -1677,8 +1677,7 @@ namespace SanteDB
         public static TData HarmonizeKeys<TData>(this TData me, KeyHarmonizationMode harmonizationMode, bool strictKeyAgreement = true)
             where TData : IdentifiedData
         {
-            me = me.Clone() as TData;
-
+            me = me.Clone().CopyAnnotations(me) as TData;
             foreach (var pi in me.GetType().GetNonMetadataProperties())
             {
                 if (!pi.CanWrite)
