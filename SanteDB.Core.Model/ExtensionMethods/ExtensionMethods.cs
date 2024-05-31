@@ -29,6 +29,7 @@ using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
 using SanteDB.Core.Model.Query;
+using SanteDB.Core.Model.Security;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -39,6 +40,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -1675,8 +1677,7 @@ namespace SanteDB
         public static TData HarmonizeKeys<TData>(this TData me, KeyHarmonizationMode harmonizationMode, bool strictKeyAgreement = true)
             where TData : IdentifiedData
         {
-            me = me.Clone() as TData;
-
+            me = me.Clone().CopyAnnotations(me) as TData;
             foreach (var pi in me.GetType().GetNonMetadataProperties())
             {
                 if (!pi.CanWrite)
@@ -1734,5 +1735,8 @@ namespace SanteDB
             }
             return me;
         }
+
+        /// <summary>Gets the last modification date of the object</summary>
+        public static DateTimeOffset LastModified(this IdentifiedData me) => me.ModifiedOn;
     }
 }
