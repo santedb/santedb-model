@@ -35,7 +35,8 @@ namespace SanteDB.Core.Model.DataTypes.CheckDigitAlgorithms
         /// <inheritdoc/>
         public string GenerateCheckDigit(string identifierValue)
         {
-            var seed = ("0" + identifierValue)
+            var seed = ("0" + identifierValue) 
+                .Where(i=>int.TryParse(i.ToString(), out _))
                 .Select(i => int.Parse(i.ToString()))
                 .Aggregate((a, b) => ((a + b) * 10) % 97);
             seed *= 10;
