@@ -92,6 +92,7 @@ namespace SanteDB.Core.Model.DataTypes
                 if (value == null)
                 {
                     this.ExtensionValueData = null;
+                    return;
                 }
 
                 try
