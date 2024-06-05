@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using System;
 
@@ -66,5 +66,16 @@ namespace SanteDB.Core.Model.Constants
         /// Data quality extension name
         /// </summary>
         public const string PatientSafetyConcernIssueExtensionName = "http://santedb.org/extensions/core/safetyConcernIssue";
+
+        /// <summary>
+        /// User preference extension key
+        /// </summary>
+        public static readonly Guid UserPreferenceExtension = Guid.Parse("210DAD97-4F14-447B-962C-0AD6B5FC1933");
+
+        /// <summary>
+        /// User preferences extension key
+        /// </summary>
+        public const string UserPreferenceExtensionName = "http://santedb.org/extensions/core/userPreferences";
+
     }
 }

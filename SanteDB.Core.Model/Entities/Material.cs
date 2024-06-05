@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -74,8 +74,8 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// True if the material is simply administrative
         /// </summary>
-        [XmlElement("isAdministrative"), JsonProperty("isAdministrative")]
-        public Boolean IsAdministrative { get; set; }
+        [XmlElement("isAdministrable"), JsonProperty("isAdministrable")]
+        public Boolean IsAdministrable { get; set; }
 
         /// <summary>
         /// The base quantity of the object in the units. This differs from quantity on the relationship
@@ -113,7 +113,7 @@ namespace SanteDB.Core.Model.Entities
                 this.QuantityConceptKey == other.QuantityConceptKey &&
                 this.FormConceptKey == other.FormConceptKey &&
                 this.ExpiryDate == other.ExpiryDate &&
-                this.IsAdministrative == other.IsAdministrative;
+                this.IsAdministrable == other.IsAdministrable;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,12 +16,13 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -100,7 +101,13 @@ namespace SanteDB.Core.Model
         /// True if key should be serialized
         /// </summary>
         /// <returns></returns>
-        public bool ShouldSerializeUpdatedByKey() => this.UpdatedByKey.HasValue;
+        public bool ShouldSerializeUpdatedByKey() => this.UpdatedByKey.HasValue && !SerializationControlContext.IsCurrentContextForExport();
+
+        /// <summary>
+        /// True if the updated time should be serialized
+        /// </summary>
+        public bool ShouldSerializeUpdatedTimeXml() => !SerializationControlContext.IsCurrentContextForExport();
+
 
     }
 }

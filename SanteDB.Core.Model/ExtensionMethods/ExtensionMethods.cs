@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,9 +16,10 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Exceptions;
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model;
 using SanteDB.Core.Model.Attributes;
@@ -28,6 +29,7 @@ using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Map;
 using SanteDB.Core.Model.Query;
+using SanteDB.Core.Model.Security;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -37,6 +39,8 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -44,6 +48,63 @@ using System.Xml.Serialization;
 
 namespace SanteDB
 {
+    /// <summary>
+    /// Key harmonization mode
+    /// </summary>
+    public enum KeyHarmonizationMode
+    {
+        /// <summary>
+        /// When the harmonization process occurs, the priority is:
+        /// Key, if set is used and model/delay loaded property is cleared
+        /// </summary>
+        /// <remarks>
+        /// The process of harmonization would harmonize the object as follows, from:
+        /// <code lang="javascript">
+        ///     {
+        ///         "administrativeGender": "UUID1",
+        ///         "administrativeGenderModel": {
+        ///             "$type": "Concept",
+        ///             "id": "UUID2"
+        ///         }
+        /// </code>
+        /// to the resulting:
+        /// <code lang="javascript">
+        ///     {
+        ///         "administrativeGender" : "UUID1",
+        ///         "administrativeGenderModel": null
+        ///     }
+        /// </code>
+        /// </remarks>
+        KeyOverridesProperty,
+
+        /// <summary>
+        /// When the harmonization process occurs, the priority is:
+        /// Property, if set overrides Key
+        /// </summary>
+        /// <remarks>
+        /// The process of harmonization would harmonize the object as follows, from:
+        /// <code lang="javascript">
+        ///     {
+        ///         "administrativeGender": "UUID1",
+        ///         "administrativeGenderModel": {
+        ///             "$type": "Concept",
+        ///             "id": "UUID2"
+        ///         }
+        /// </code>
+        /// to the resulting:
+        /// <code lang="javascript">
+        ///     {
+        ///         "administrativeGender" : "UUID2",
+        ///         "administrativeGenderModel": {
+        ///             "$type": "Concept",
+        ///             "id" :"UUID2"
+        ///         }
+        ///     }
+        /// </code>
+        /// </remarks>
+        PropertyOverridesKey
+    }
+
     /// <summary>
     /// Reflection tools
     /// </summary>
@@ -98,7 +159,6 @@ namespace SanteDB
 
         // Types
         private static ConcurrentDictionary<Assembly, Type[]> m_types = new ConcurrentDictionary<Assembly, Type[]>();
-
 
         /// <summary>
         ///     Creates a <see cref="Dictionary{TKey, TValue}"/> from an <see cref="IEnumerable{T}"/>
@@ -1186,7 +1246,41 @@ namespace SanteDB
         /// </summary>
         public static Guid[] GetClassKeys(this Type type)
         {
-            return type.GetCustomAttributes<ClassConceptKeyAttribute>().Select(o => Guid.Parse(o.ClassConcept)).ToArray();
+            return type.GetCustomAttributes<ClassConceptKeyAttribute>(false).Select(o => Guid.Parse(o.ClassConcept)).ToArray();
+        }
+
+        /// <summary>
+        /// Get the specified classifier property
+        /// </summary>
+        public static PropertyInfo GetClassifierProperty(this Type type)
+        {
+            var classAttr = type.GetCustomAttribute<ClassifierAttribute>();
+            if(classAttr == null)
+            {
+                return null; //throw new InvalidOperationException(String.Format(ErrorMessages.NO_CLASSIFIER_PROPERTY, type));
+            }
+            return type.GetRuntimeProperty(classAttr.ClassifierProperty);
+        }
+
+        /// <summary>
+        /// Get the classification key property for UUIDs
+        /// </summary>
+        public static PropertyInfo GetClassifierKeyProperty(this Type type)
+        {
+            var classAttr = type.GetCustomAttribute<ClassifierAttribute>();
+            if (classAttr == null)
+            {
+                return null; //throw new InvalidOperationException(String.Format(ErrorMessages.NO_CLASSIFIER_PROPERTY, type));
+            }
+
+            if (!String.IsNullOrEmpty(classAttr.ClassifierKeyProperty))
+            {
+                return type.GetRuntimeProperty(classAttr.ClassifierKeyProperty);
+            }
+            else
+            {
+                return type.GetRuntimeProperty(classAttr.ClassifierProperty).GetSerializationRedirectProperty();
+            }
         }
 
         /// <summary>
@@ -1368,7 +1462,7 @@ namespace SanteDB
         /// <returns>True if the type is nullable</returns>
         public static bool IsNullable(this Type t)
         {
-            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>) || t == typeof(String);
         }
 
         /// <summary>
@@ -1438,20 +1532,58 @@ namespace SanteDB
         }
 
         /// <summary>
+        /// Nullify all empty collections
+        /// </summary>
+        public static TModel NullifyEmptyCollections<TModel>(this TModel model) where TModel : IdentifiedData
+        {
+            if (!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            {
+                properties = model.GetType().GetNonMetadataProperties();
+                s_typePropertyCache.TryAdd(model.GetType(), properties);
+            }
+
+            foreach (var pi in properties.Where(p => p.HasCustomAttribute<JsonPropertyAttribute>()))
+            {
+                var instance = pi.GetValue(model);
+
+                switch (instance)
+                {
+                    case IList list:
+                        if (list.Count == 0)
+                        {
+                            pi.SetValue(model, null);
+                        }
+                        else
+                        {
+                            foreach (var itm in list.OfType<IdentifiedData>())
+                            {
+                                itm.NullifyEmptyCollections();
+                            }
+                        }
+                        break;
+                    case IdentifiedData id:
+                        id.NullifyEmptyCollections();
+                        break;
+                }
+            }
+            return model;
+        }
+
+        /// <summary>
         /// Ensure that all properties in <paramref name="propertiesToNullify"/> are null
         /// </summary>
         public static IdentifiedData NullifyProperties(this IdentifiedData model, params PropertyInfo[] propertiesToNullify)
         {
-            if(propertiesToNullify == null) { return model; }
+            if (propertiesToNullify == null) { return model; }
 
             if (!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
             {
                 properties = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 s_typePropertyCache.TryAdd(model.GetType(), properties);
             }
-            foreach(var pi in properties)
+            foreach (var pi in properties)
             {
-                if(propertiesToNullify.Contains(pi))
+                if (propertiesToNullify.Contains(pi))
                 {
                     pi.SetValue(model, null);
                 }
@@ -1464,18 +1596,18 @@ namespace SanteDB
         /// </summary>
         public static IEnumerable<IdentifiedData> GetDependentObjects(this IdentifiedData model, PropertyInfo[] propertiesToInclude, bool followLists)
         {
-            if(!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
+            if (!s_typePropertyCache.TryGetValue(model.GetType(), out var properties))
             {
                 properties = model.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 s_typePropertyCache.TryAdd(model.GetType(), properties);
             }
 
-            foreach(var pi in properties)
+            foreach (var pi in properties)
             {
                 var currentValue = model.LoadProperty(pi.Name);
-                if(currentValue is IList list && followLists)
+                if (currentValue is IList list && followLists)
                 {
-                    foreach(var itm in list.OfType<IdentifiedData>())
+                    foreach (var itm in list.OfType<IdentifiedData>())
                     {
                         foreach (var depObj in itm.GetDependentObjects(propertiesToInclude, false))
                         {
@@ -1488,7 +1620,7 @@ namespace SanteDB
                     yield return identified;
                 }
             }
-        } 
+        }
 
         /// <summary>
         /// Masks the specified string exposing only the last <paramref name="digitsToDisclose"/> or the last 20% of the identifier
@@ -1519,7 +1651,7 @@ namespace SanteDB
         public static Version ParseVersion(this String versionString, out string suffix)
         {
             var match = s_verRegex.Match(versionString);
-            if(match.Success && Version.TryParse(match.Groups[1].Value, out var retVal))
+            if (match.Success && Version.TryParse(match.Groups[1].Value, out var retVal))
             {
                 if (match.Groups.Count > 1)
                 {
@@ -1537,5 +1669,74 @@ namespace SanteDB
                 throw new ArgumentOutOfRangeException(String.Format(ErrorMessages.INVALID_FORMAT, versionString, "#0[.#0.#0.#0][-alpha##|-beta##|-debug##]"));
             }
         }
+
+
+        /// <summary>
+        /// Harmonize the keys with the delay load properties
+        /// </summary>
+        public static TData HarmonizeKeys<TData>(this TData me, KeyHarmonizationMode harmonizationMode, bool strictKeyAgreement = true)
+            where TData : IdentifiedData
+        {
+            me = me.Clone().CopyAnnotations(me) as TData;
+            foreach (var pi in me.GetType().GetNonMetadataProperties())
+            {
+                if (!pi.CanWrite)
+                {
+                    continue;
+                }
+
+                var piValue = pi.GetValue(me);
+
+                // Is the property a key?
+                if (piValue is IdentifiedData iddata && iddata.Key.HasValue)
+                {
+                    // Get the object which references this
+                    var keyProperty = pi.GetSerializationRedirectProperty();
+                    var keyValue = keyProperty?.GetValue(me);
+                    switch (harmonizationMode)
+                    {
+                        case KeyHarmonizationMode.KeyOverridesProperty:
+                            if (keyValue != null && !keyValue.Equals(iddata.Key)) // There is a key for this which is populated, we want to use the key and clear the property
+                            {
+                                if (strictKeyAgreement)
+                                {
+                                    throw new InvalidOperationException(String.Format(ErrorMessages.KEY_PROPERTY_DISAGREEMENT, keyProperty.ToString(), pi.ToString()));
+                                }
+                                else
+                                {
+                                    pi.SetValue(me, null);
+                                }
+                            }
+                            else
+                            {
+                                keyProperty.SetValue(me, iddata.Key);
+                            }
+                            break;
+
+                        case KeyHarmonizationMode.PropertyOverridesKey:
+                            if (iddata.Key.HasValue) // Data has value
+                            {
+                                keyProperty.SetValue(me, iddata.Key);
+                            }
+                            else
+                            {
+                                pi.SetValue(me, null); // Let the identifier data stand
+                            }
+                            break;
+                    }
+                }
+                else if (piValue is IList list)
+                {
+                    for (var i = 0; i < list.Count; i++)
+                    {
+                        list[i] = (list[i] as IdentifiedData)?.HarmonizeKeys(harmonizationMode) ?? list[i];
+                    }
+                }
+            }
+            return me;
+        }
+
+        /// <summary>Gets the last modification date of the object</summary>
+        public static DateTimeOffset LastModified(this IdentifiedData me) => me.ModifiedOn;
     }
 }

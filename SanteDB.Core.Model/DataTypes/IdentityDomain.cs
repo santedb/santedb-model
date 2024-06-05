@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -93,16 +93,6 @@ namespace SanteDB.Core.Model.DataTypes
         public String Url { get; set; }
 
         /// <summary>
-        /// Represents scopes to which the authority is bound
-        /// </summary>
-        [JsonProperty("scope"), XmlElement("scope")]
-        public List<Guid> AuthorityScopeXml
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Assigning device identifier
         /// </summary>
         [XmlElement("assigningAuthority"), JsonProperty("assigningAuthority")]
@@ -119,6 +109,12 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         [XmlElement("policy"), JsonProperty("policy")]
         public Guid? PolicyKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier classification key
+        /// </summary>
+        [XmlElement("identifierClass"), JsonProperty("identifierClass")]
+        public Guid? IdentifierClassificationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the validation regex
@@ -186,6 +182,17 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public bool ShouldSerializeIsUnique() => this.IsUnique;
 
+
+        /// <summary>
+        /// Represents scopes to which the authority is bound
+        /// </summary>
+        [JsonProperty("scope"), XmlElement("scope")]
+        public List<Guid> AuthorityScopeXml
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets concept sets to which this concept is a member
         /// </summary>
@@ -201,6 +208,12 @@ namespace SanteDB.Core.Model.DataTypes
                 this.AuthorityScopeXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
             }
         }
+
+        /// <summary>
+        /// Bacing property for the identifier classification
+        /// </summary>
+        [JsonIgnore, XmlIgnore, SerializationReference(nameof(IdentifierClassificationKey))]
+        public Concept IdentifierClassification { get; set; }
 
         /// <summary>
         /// Represent the AA as a minimal info

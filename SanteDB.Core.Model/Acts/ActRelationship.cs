@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -87,6 +87,16 @@ namespace SanteDB.Core.Model.Acts
         [SerializationReference(nameof(ClassificationKey))]
         public Concept Classification { get; set; }
 
+        /// <summary>
+        /// A negation indicator - used to flag this relationship as negated
+        /// </summary>
+        /// <remarks>
+        /// This flag is used to indicate that <see cref="Act"/> is NOT related to <see cref="TargetAct"/> 
+        /// via relationship <see cref="RelationshipType"/>. This isused for indicating A is not a <see cref="ActRelationshipTypeKeys.Duplicate"/> of B
+        /// or that A is does not <see cref="ActRelationshipTypeKeys.HasComponent"/> of B.
+        /// </remarks>
+        [XmlElement("negationInd"), JsonProperty("negationInd")]
+        public bool NegationIndicator { get; set; }
 
         /// <summary>
         /// Gets or sets the external key for the object

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,9 +16,10 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Xml.Serialization;
@@ -40,13 +41,15 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Gets or sets the version sequence of the source object when this assoication became active
         /// </summary>
-        [XmlElement("effectiveVersionSequence"), JsonProperty("effectiveVersionSequence")]
+        //[XmlElement("effectiveVersionSequence"), JsonProperty("effectiveVersionSequence")]
+        [XmlIgnore, JsonIgnore, QueryParameter("effectiveVersionSequence")]
         public Int64? EffectiveVersionSequenceId { get; set; }
 
         /// <summary>
         /// Gets or sets the sequence identifier of the source when this association is no longer active
         /// </summary>
-        [XmlElement("obsoleteVersionSequence"), JsonProperty("obsoleteVersionSequence")]
+        //[XmlElement("obsoleteVersionSequence"), JsonProperty("obsoleteVersionSequence")]
+        [XmlIgnore, JsonIgnore, QueryParameter("obsoleteVersionSequence")]
         public Int64? ObsoleteVersionSequenceId { get; set; }
 
         /// <summary>
@@ -54,10 +57,10 @@ namespace SanteDB.Core.Model
         /// </summary>
         public bool ShouldSerializeObsoleteVersionSequenceId() => this.ObsoleteVersionSequenceId.HasValue;
 
-        /// <summary>
-        /// Should serialize obsolete
-        /// </summary>
-        public bool ShouldSerializeEffectiveVersionSequenceId() => this.EffectiveVersionSequenceId.HasValue;
+        ///// <summary>
+        ///// Should serialize obsolete
+        ///// </summary>
+        //public bool ShouldSerializeEffectiveVersionSequenceId() => this.EffectiveVersionSequenceId.HasValue;
 
         /// <summary>
         /// Determines equality

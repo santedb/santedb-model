@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,12 +16,13 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -72,7 +73,22 @@ namespace SanteDB.Core.Model
         /// <summary>
         /// Should serialize previous version?
         /// </summary>
-        public bool ShouldSerializePreviousVersionKey() => this.PreviousVersionKey.HasValue;
+        /// <remarks>
+        /// The previous version is not serialized on exports since there is no guarantee the importing system will have the previous version or that the version assigned with be the same
+        /// </remarks>
+        public bool ShouldSerializePreviousVersionKey() => this.PreviousVersionKey.HasValue && !SerializationControlContext.IsCurrentContextForExport();
+
+        /// <summary>
+        /// Should serialize the version key
+        /// </summary>
+        /// <remarks>The version key should not be exported beyond the system boundary</remarks>
+        public bool ShouldSerializeVersionKey() => !SerializationControlContext.IsCurrentContextForExport();
+
+        /// <summary>
+        /// Should serialize the version sequence
+        /// </summary>
+        /// <remarks>The version sequence is not serialized on data exports</remarks>
+        public bool ShouldSeralizeVersionSequence() => !SerializationControlContext.IsCurrentContextForExport();
 
         /// <summary>
         /// Gets the previous version or loads it from the database if needed

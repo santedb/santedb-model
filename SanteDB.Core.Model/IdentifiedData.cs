@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,7 +16,7 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
@@ -69,6 +69,12 @@ namespace SanteDB.Core.Model
         /// </summary>
         [XmlAttribute("operation"), JsonProperty("operation")]
         public BatchOperationType BatchOperation { get; set; }
+
+        /// <summary>
+        /// A query parameter which references itself - this is for query filters which pass the original data in
+        /// </summary>
+        [XmlIgnore, JsonIgnore, QueryParameter("$self")]
+        public IdentifiedData _Self => this;
 
         /// <summary>
         /// Should serialize batch operation
@@ -197,9 +203,9 @@ namespace SanteDB.Core.Model
             retVal.m_annotations = new ConcurrentDictionary<Type, List<object>>();
 
             // Re-initialize all arrays
-            foreach (var pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var pi in this.GetType().GetNonMetadataProperties())
             {
-                if (!pi.CanWrite || pi.GetCustomAttribute<SerializationMetadataAttribute>() != null) // No sense of reading
+                if (!pi.CanWrite) // No sense of reading
                 {
                     continue;
                 }

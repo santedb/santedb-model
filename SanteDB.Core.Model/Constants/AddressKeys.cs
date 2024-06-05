@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2023, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -16,8 +16,9 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-5-19
+ * Date: 2023-6-21
  */
+using SanteDB.Core.Model.Entities;
 using System;
 
 namespace SanteDB.Core.Model.Constants
@@ -139,6 +140,10 @@ namespace SanteDB.Core.Model.Constants
         /// The identifier of the unit (example: 820)
         /// </summary>
         public static readonly Guid UnitIdentifier = Guid.Parse("908C09DF-81FE-45AC-9233-0881A278A401");
+        /// <summary>
+        /// The identifier in the address that points to another <see cref="Place"/>
+        /// </summary>
+        public static readonly Guid PlaceReference = Guid.Parse("A314F427-2B6D-4948-9146-A5F700973899");
     }
 
     /// <summary>
