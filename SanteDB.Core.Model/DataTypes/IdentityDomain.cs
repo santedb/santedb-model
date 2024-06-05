@@ -111,6 +111,12 @@ namespace SanteDB.Core.Model.DataTypes
         public Guid? PolicyKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the identifier classification key
+        /// </summary>
+        [XmlElement("identifierClass"), JsonProperty("identifierClass")]
+        public Guid? IdentifierClassificationKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the validation regex
         /// </summary>
         [XmlElement("validation"), JsonProperty("validation")]
@@ -202,6 +208,12 @@ namespace SanteDB.Core.Model.DataTypes
                 this.AuthorityScopeXml = value?.Where(o => o.Key.HasValue).Select(o => o.Key.Value).ToList();
             }
         }
+
+        /// <summary>
+        /// Bacing property for the identifier classification
+        /// </summary>
+        [JsonIgnore, XmlIgnore, SerializationReference(nameof(IdentifierClassificationKey))]
+        public Concept IdentifierClassification { get; set; }
 
         /// <summary>
         /// Represent the AA as a minimal info
