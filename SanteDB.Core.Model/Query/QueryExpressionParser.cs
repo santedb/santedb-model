@@ -248,96 +248,86 @@ namespace SanteDB.Core.Model.Query
 
                             // Next we want to determine if the guard is an expression or just a list of values
                             Expression guardExpression = null;
-                            if (guardExpressionRaw.Contains('='))
+                            foreach(var expr in guardExpressionRaw.Split('|'))
                             {
-                                var guardFilterExpression = guardExpressionRaw.ParseQueryString();
-                                guardExpression = BuildLinqExpression(itemType, guardFilterExpression, "guard", variables, safeNullable, alwaysCoalesce, forceLoad, lazyExpandVariables, relayControlVariables, coalesceOutput, collectionResolutionMethod);
-                            }
-                            else
-                            {
-                                var guardList = guardExpressionRaw.Split('|');
-                                if (guardList.All(o => o.Equals("null", StringComparison.OrdinalIgnoreCase) || Guid.TryParse(o, out _))) // Explicit list of UUIDs
+                                Expression workingExpression = null;
+                                if (expr.Contains('='))
                                 {
-                                    // Does the classifier key property point at the key attribute if so we use this
-                                    // property, otherwise we use the serialization redirect property
-                                    var classifierProperty = itemType.GetClassifierKeyProperty();
-                                    if (classifierProperty == null)
-                                    {
-                                        throw new ArgumentOutOfRangeException(propertyPathRaw, String.Format(ErrorMessages.HDSI_GUARD_INVALID, "UUID not permitted"));
-                                    }
-
-                                    foreach (var g in guardList)
-                                    {
-                                        var value = g.Equals("null", StringComparison.OrdinalIgnoreCase) ? (Guid?)null : Guid.Parse(g);
-                                        var expr = Expression.MakeBinary(ExpressionType.Equal, Expression.MakeMemberAccess(guardParameter, classifierProperty), Expression.Convert(Expression.Constant(value), classifierProperty.PropertyType));
-                                        if (guardExpression == null)
-                                        {
-                                            guardExpression = expr;
-                                        }
-                                        else
-                                        {
-                                            guardExpression = Expression.MakeBinary(ExpressionType.OrElse, guardExpression, expr);
-                                        }
-                                    }
-                                    guardExpression = Expression.Lambda(guardExpression, guardParameter);
+                                    var guardFilterExpression = expr.ParseQueryString();
+                                    workingExpression = BuildLinqExpression(itemType, guardFilterExpression, "guard", variables, safeNullable, alwaysCoalesce, forceLoad, lazyExpandVariables, relayControlVariables, coalesceOutput, collectionResolutionMethod);
+                                    workingExpression = Expression.Invoke(workingExpression, guardParameter);
                                 }
-                                else // Named values - so we have to follow the property path - we will follow the classifiers through the sub objects
+                                else
                                 {
-                                    var classifierProperty = itemType.GetClassifierProperty();
-                                    Expression guardAccessor = guardParameter;
-                                    while (classifierProperty != null)
+                                    if(expr.Equals("null") || Guid.TryParse(expr, out _))
                                     {
-                                        if (typeof(IdentifiedData).IsAssignableFrom(classifierProperty.PropertyType))
+                                        // Does the classifier key property point at the key attribute if so we use this
+                                        // property, otherwise we use the serialization redirect property
+                                        var classifierProperty = itemType.GetClassifierKeyProperty();
+                                        if (classifierProperty == null)
                                         {
-                                            if (forceLoad) // Force the loading of properties in the guard
+                                            throw new ArgumentOutOfRangeException(propertyPathRaw, String.Format(ErrorMessages.HDSI_GUARD_INVALID, "UUID not permitted"));
+                                        }
+
+                                        var gValue = expr.Equals("null", StringComparison.OrdinalIgnoreCase) ? (Guid?)null : Guid.Parse(expr);
+                                        workingExpression = Expression.MakeBinary(ExpressionType.Equal, Expression.MakeMemberAccess(guardParameter, classifierProperty), Expression.Convert(Expression.Constant(gValue), classifierProperty.PropertyType));
+                                    }
+                                    else // Named values - so we have to follow the property path - we will follow the classifiers through the sub objects
+                                    {
+                                        var classifierProperty = itemType.GetClassifierProperty();
+                                        Expression guardAccessor = guardParameter;
+                                        while (classifierProperty != null)
+                                        {
+                                            if (typeof(IdentifiedData).IsAssignableFrom(classifierProperty.PropertyType))
                                             {
-                                                var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                                var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false));
-                                                guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
+                                                if (forceLoad) // Force the loading of properties in the guard
+                                                {
+                                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
+                                                    var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false));
+                                                    guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
+                                                }
+                                                else
+                                                {
+                                                    guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
+                                                }
                                             }
                                             else
                                             {
-                                                guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
+                                                guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
                                             }
+                                            classifierProperty = classifierProperty.PropertyType.GetClassifierProperty();
+                                        }
+
+                                        // Now make expression for guard
+                                        if (expr.Equals("null", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            workingExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(null));
                                         }
                                         else
-                                        {
-                                            guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
-                                        }
-                                        classifierProperty = classifierProperty.PropertyType.GetClassifierProperty();
-                                    }
-
-                                    // Now make expression for guard
-                                    if (guardExpressionRaw.Equals("null", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        guardExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(null));
-                                    }
-                                    else
-                                    {
-                                        foreach (var g in guardList)
                                         {
                                             // HACK: Some types use enums as their classifier 
-                                            object value = g;
+                                            object value = expr;
                                             if (guardAccessor.Type.IsEnum)
                                             {
-                                                value = Enum.Parse(guardAccessor.Type, g);
+                                                value = Enum.Parse(guardAccessor.Type, expr);
                                             }
 
-                                            var expr = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(value));
-                                            if (guardExpression == null)
-                                            {
-                                                guardExpression = expr;
-                                            }
-                                            else
-                                            {
-                                                guardExpression = Expression.MakeBinary(ExpressionType.Or, guardExpression, expr);
-                                            }
+                                            workingExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(value));
                                         }
                                     }
+                                }
 
-                                    guardExpression = Expression.Lambda(guardExpression, guardParameter);
+                                if(guardExpression == null)
+                                {
+                                    guardExpression = workingExpression;
+                                }
+                                else
+                                {
+                                    guardExpression = Expression.MakeBinary(ExpressionType.OrElse, guardExpression, workingExpression);
                                 }
                             }
+
+                            guardExpression = Expression.Lambda(guardExpression, guardParameter);
 
                             if (!(guardExpression is LambdaExpression))
                             {
