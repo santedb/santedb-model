@@ -188,9 +188,9 @@ namespace SanteDB.Core.Model.Query
             /// <returns></returns>
             protected override Expression VisitInvocation(InvocationExpression node)
             {
-                if (node.Expression is LambdaExpression)
+                if (node.Expression is LambdaExpression le)
                 {
-                    var callee = (node.Expression as LambdaExpression).Compile();
+                    var callee = le.Compile();
                     var args = node.Arguments.Select(o =>
                     {
                         o = this.StripConvert(o);
@@ -205,6 +205,8 @@ namespace SanteDB.Core.Model.Query
                                     var obj = (ie.Object as ConstantExpression)?.Value;
                                     return ie.Method.Invoke(obj, new object[0]);
                                 }
+                            case ExpressionType.Parameter:
+                                return null;
                             default:
                                 throw new InvalidOperationException($"Cannot expand parameter {o} ({o.NodeType})");
                         }
