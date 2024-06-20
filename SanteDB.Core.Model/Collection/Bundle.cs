@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -341,6 +342,31 @@ namespace SanteDB.Core.Model.Collection
                 if (bundleItem != null)
                 {
                     pi.SetValue(data, bundleItem);
+                }
+            }
+
+            if(data is IHasRelationships ihr && ihr.Relationships != null)
+            {
+                foreach (var item in ihr.Relationships)
+                {
+                    if(item.TargetEntity == null && item.TargetEntityKey.HasValue && item.TargetEntityKey != data.Key)
+                    {
+                        item.TargetEntity = this.Item.Find(o => o.Key == item.TargetEntityKey);
+                    }
+                    if(item.SourceEntity == null && item.SourceEntityKey.HasValue && item.SourceEntityKey != data.Key)
+                    {
+                        item.SourceEntity = this.Item.Find(o => o.Key == item.SourceEntityKey);
+                    }
+                }
+            }
+            if(data is Act act && act.Participations != null)
+            {
+                foreach(var ptcpt in act.Participations)
+                {
+                    if(ptcpt.PlayerEntity == null && ptcpt.PlayerEntityKey.HasValue)
+                    {
+                        ptcpt.PlayerEntity = (Entity)this.Item.Find(o => o.Key == ptcpt.PlayerEntityKey);
+                    }
                 }
             }
 
