@@ -33,6 +33,7 @@ namespace SanteDB.Core.Model.Entities
     /// </summary>
 
     [XmlType("PlaceService", Namespace = "http://santedb.org/model"), JsonObject("PlaceService")]
+    [XmlRoot("PlaceService", Namespace = "http://santedb.org/model")]
     public class PlaceService : VersionedAssociation<Entity>, IHasExternalKey
     {
 

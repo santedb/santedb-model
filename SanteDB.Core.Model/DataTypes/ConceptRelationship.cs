@@ -33,6 +33,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// </summary>
     [Classifier(nameof(RelationshipType))]
     [XmlType("ConceptRelationship", Namespace = "http://santedb.org/model"), JsonObject("ConceptRelationship")]
+    [XmlRoot("ConceptRelationship", Namespace = "http://santedb.org/model")]
     public class ConceptRelationship : VersionedAssociation<Concept>, ITargetedAssociation
     {
 
