@@ -141,6 +141,12 @@ namespace SanteDB
 
         private static ConcurrentDictionary<String, MethodBase> s_genericMethodCache = new ConcurrentDictionary<string, MethodBase>();
 
+        /// <summary>
+        /// Gets an assembly qualified name without version information
+        /// </summary>
+        /// <param name="me"></param>
+        /// <returns></returns>
+        public static String AssemblyQualifiedNameWithoutVersion(this Type me) => $"{me.FullName}, {me.Assembly.GetName().Name}";
 
         // Property cache
         private static ConcurrentDictionary<String, PropertyInfo> s_propertyCache = new ConcurrentDictionary<string, PropertyInfo>();

@@ -86,7 +86,7 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("handlerClass"), JsonProperty("handlerClass")]
         public String ExtensionHandlerXml
         {
-            get { return this.ExtensionHandler?.AssemblyQualifiedName; }
+            get { return this.ExtensionHandler?.AssemblyQualifiedNameWithoutVersion(); }
             set
             {
                 if (value == null)
