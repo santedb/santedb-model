@@ -96,7 +96,7 @@ namespace SanteDB.Core.Model.Acts
         /// or that A is does not <see cref="ActRelationshipTypeKeys.HasComponent"/> of B.
         /// </remarks>
         [XmlElement("negationInd"), JsonProperty("negationInd")]
-        public bool NegationIndicator { get; set; }
+        public bool? NegationIndicator { get; set; }
 
         /// <summary>
         /// Gets or sets the external key for the object

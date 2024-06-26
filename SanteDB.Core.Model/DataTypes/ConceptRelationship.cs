@@ -96,7 +96,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Classification of the relationship
         /// </summary>
-        Guid? ITargetedAssociation.ClassificationKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        Guid? ITargetedAssociation.ClassificationKey { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
         /// <summary>
         /// Association type

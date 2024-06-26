@@ -47,5 +47,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// The target entity object
         /// </summary>
         object TargetEntity { get; set; }
+
     }
 }

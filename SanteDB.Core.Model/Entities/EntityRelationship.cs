@@ -132,7 +132,7 @@ namespace SanteDB.Core.Model.Entities
         /// or that A is does not <see cref="EntityRelationshipTypeKeys.HasIngredient"/> of B.
         /// </remarks>
         [XmlElement("negationInd"), JsonProperty("negationInd")]
-        public bool NegationIndicator { get; set; }
+        public bool? NegationIndicator { get; set; }
 
         /// <summary>
         /// The strength (confidence) of the relationship between source and target
@@ -256,7 +256,7 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         public bool ShouldSerializeNegationIndicator()
         {
-            return this.NegationIndicator;
+            return this.NegationIndicator.HasValue;
         }
 
         /// <summary>
