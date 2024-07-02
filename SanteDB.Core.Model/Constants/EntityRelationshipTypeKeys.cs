@@ -143,6 +143,11 @@ namespace SanteDB.Core.Model.Constants
         public const string CommissioningParty = "33BD1401-DFDB-40E7-A914-0A695AD5186E";
 
         /// <summary>
+        /// Community location where health services are delivered
+        /// </summary>
+        public const string CommunityServiceDeliveryLocation = "4AA573A0-D967-493A-BEA0-8BAD060E4264";
+
+        /// <summary>
         /// The target represents a contact of the source
         /// </summary>
         public const string Contact = "B1D2148D-BB35-4337-8FE6-021F5A3AC8A3";
@@ -952,6 +957,11 @@ namespace SanteDB.Core.Model.Constants
         /// The commissioning party
         /// </summary>
         public static readonly Guid CommissioningParty = Guid.Parse(EntityRelationshipTypeKeyStrings.CommissioningParty);
+
+        /// <summary>
+        /// Community location which is used to provide services within holder
+        /// </summary>
+        public static readonly Guid CommunityServiceDeliveryLocation = Guid.Parse(EntityRelationshipTypeKeyStrings.CommunityServiceDeliveryLocation);
 
         /// <summary>
         /// The target represents a contact of the source
