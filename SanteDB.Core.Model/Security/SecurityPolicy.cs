@@ -91,7 +91,7 @@ namespace SanteDB.Core.Model.Security
         public String Oid { get; set; }
 
         /// <summary>
-        /// Whether the property is public
+        /// Whether the policy is public
         /// </summary>
         [XmlElement("isPublic"), JsonProperty("isPublic")]
         public bool IsPublic { get; set; }
