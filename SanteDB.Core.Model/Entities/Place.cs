@@ -60,7 +60,8 @@ namespace SanteDB.Core.Model.Entities
                     classKey == EntityClassKeys.CityOrTown ||
                     classKey == EntityClassKeys.PrecinctOrBorough ||
                     classKey == EntityClassKeys.Country ||
-                    classKey == EntityClassKeys.CountyOrParish;
+                    classKey == EntityClassKeys.CountyOrParish ||
+                    classKey == EntityClassKeys.ZoneOrTerritory;
 
         /// <summary>
         /// True if location is mobile

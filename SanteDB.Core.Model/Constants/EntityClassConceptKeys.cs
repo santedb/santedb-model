@@ -136,6 +136,11 @@ namespace SanteDB.Core.Model.Constants
         /// Person which is a user
         /// </summary>
         public const string UserEntity = "6a2b00ba-501b-4523-b57c-f96d8ae44684";
+
+        /// <summary>
+        /// Person which is a user
+        /// </summary>
+        public const string ZoneOrTerritory = "3F9B5FF2-97A6-40BE-8FCB-E71D18C8EE42";
     }
 
 
@@ -255,5 +260,9 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid UserEntity = Guid.Parse(EntityClassKeyStrings.UserEntity);
 
+        /// <summary>
+        /// Represents a zone or a territority
+        /// </summary>
+        public static readonly Guid ZoneOrTerritory = Guid.Parse(EntityClassKeyStrings.ZoneOrTerritory);
     }
 }
