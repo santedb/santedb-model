@@ -115,7 +115,7 @@ namespace SanteDB.Core.Model.Query
         /// <param name="variables">The variable evaluators to use when expanding <c>$variable</c> expressions in the HDSI path</param>
         public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool alwaysCoalesce = false, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false, bool coalesceOutput = true, string collectionResolutionMethod = nameof(Enumerable.FirstOrDefault), ParameterExpression useParameter = null)
         {
-            
+
             var controlMethod = typeof(QueryFilterExtensions).GetMethod(nameof(QueryFilterExtensions.WithControl), BindingFlags.Static | BindingFlags.NonPublic);
 
             var parameterExpression = useParameter ?? Expression.Parameter(modelType, parameterName);
@@ -147,12 +147,12 @@ namespace SanteDB.Core.Model.Query
                 var currentPathString = currentValue.Key;
 
                 var accessResult = m_propertyExtractionRegex.Match(currentPathString);
-                while(accessResult.Success)
+                while (accessResult.Success)
                 {
 
                     // Get the raw member to the path 
                     var propertyGroup = accessResult.Groups[1].Value;
-                   
+
                     var propertyPathRaw = accessResult.Groups[2].Value;
                     var guardExpressionRaw = accessResult.Groups[3].Value;
                     var castExpressionRaw = accessResult.Groups[4].Value;
@@ -250,7 +250,7 @@ namespace SanteDB.Core.Model.Query
 
                             // Next we want to determine if the guard is an expression or just a list of values
                             Expression guardExpression = null;
-                            foreach(var expr in guardExpressionRaw.Split('|'))
+                            foreach (var expr in guardExpressionRaw.Split('|'))
                             {
                                 Expression workingExpression = null;
                                 if (expr.Contains('='))
@@ -261,7 +261,7 @@ namespace SanteDB.Core.Model.Query
                                 }
                                 else
                                 {
-                                    if(expr.Equals("null") || Guid.TryParse(expr, out _))
+                                    if (expr.Equals("null") || Guid.TryParse(expr, out _))
                                     {
                                         // Does the classifier key property point at the key attribute if so we use this
                                         // property, otherwise we use the serialization redirect property
@@ -319,7 +319,7 @@ namespace SanteDB.Core.Model.Query
                                     }
                                 }
 
-                                if(guardExpression == null)
+                                if (guardExpression == null)
                                 {
                                     guardExpression = workingExpression;
                                 }
@@ -380,7 +380,7 @@ namespace SanteDB.Core.Model.Query
                                 var subFilter = new NameValueCollection();
 
                                 // Default to id
-                                if(String.IsNullOrEmpty(remainderExpressionRaw) && currentValue.Value.All(o=>Guid.TryParse(o, out _)))
+                                if (String.IsNullOrEmpty(remainderExpressionRaw) && currentValue.Value.All(o => Guid.TryParse(o, out _)))
                                 {
                                     Array.ForEach(currentValue.Value, o => subFilter.Add("id", o));
                                 }
@@ -426,7 +426,7 @@ namespace SanteDB.Core.Model.Query
                     }
                     accessResult = m_propertyExtractionRegex.Match(remainderExpressionRaw);
                 }
-                
+
                 // HACK: Was there any mapping done?
                 if (accessExpression == parameterExpression)
                 {
@@ -570,7 +570,16 @@ namespace SanteDB.Core.Model.Query
                                 et = ExpressionType.Equal;
                                 if (thisAccessExpression.Type == typeof(String))
                                 {
-                                    thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("StartsWith", new Type[] { typeof(String) }), Expression.Constant(pValue.Substring(1)));
+                                    pValue = pValue.Substring(1);
+                                    if (pValue.StartsWith("$"))
+                                    {
+                                        thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("StartsWith", new Type[] { typeof(String) }), GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(pValue));
+                                    }
+                                    else
+                                    {
+                                        thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("StartsWith", new Type[] { typeof(String) }), Expression.Constant(pValue));
+                                    }
+
                                     operandType = typeof(bool);
                                     pValue = "true";
                                 }
