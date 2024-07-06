@@ -27,14 +27,36 @@ namespace SanteDB.Core.Model.Constants
     /// </summary>
     public static class ContainerTypeKeys
     {
+
         /// <summary>
         /// Represents a container type of box.
         /// </summary>
-        public static readonly Guid Boxes = Guid.Parse("6CFDA504-ED76-4BC9-B77B-40D4ED09E93D");
+        public static readonly Guid BoxOrCrate = Guid.Parse("03d52794-756a-4f9a-a17e-edd44f36c244");
 
         /// <summary>
         /// Represents a container type of vial.
         /// </summary>
-        public static readonly Guid Vials = Guid.Parse("907DDBFB-91B3-439E-8DF2-67925DCF4625");
+        public static readonly Guid Vial = Guid.Parse("035e63b7-854c-4ba8-a115-fb74ce4b6c8e");
+
+        /// <summary>
+        /// Represents a box which is insulated to keep contents cold
+        /// </summary>
+        public static readonly Guid ColdBoxOrFlask = Guid.Parse("6AE1F173-60FA-4540-B7CF-957775AE5986");
+
+        /// <summary>
+        /// Represents an actively powered cold storage unit which typically keeps contents between -4 and 8 degrees celsius
+        /// </summary>
+        public static readonly Guid Refrigerator = Guid.Parse("9077f00c-0f9a-4030-b1db-f0c3671ad8f4");
+
+        /// <summary>
+        /// Represents a freezer which typically keeps contents under -18 degrees celcius
+        /// </summary>
+        public static readonly Guid Freezer = Guid.Parse("e2800131-c008-4d11-b8b5-e98527cf8c22");
+
+        /// <summary>
+        /// Represents a non-refrigerated room where supplies are kept
+        /// </summary>
+        public static readonly Guid PantryOrStoreRoom = Guid.Parse("e2a19772-5c11-4af9-aa5c-68206040b72b");
+
     }
 }
