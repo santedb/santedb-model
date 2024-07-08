@@ -196,7 +196,7 @@ namespace SanteDB.Core.Model.Query
                         // Force loading of properties
                         if (forceLoad)
                         {
-                            if (typeof(IList).IsAssignableFrom(memberInfo.PropertyType))
+                            if (typeof(IList).IsAssignableFrom(memberInfo.PropertyType) && !memberInfo.PropertyType.IsArray)
                             {
                                 var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
                                 accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
