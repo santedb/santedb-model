@@ -1531,7 +1531,7 @@ namespace SanteDB
             StringBuilder retVal = new StringBuilder($"{e.GetType().Name} : {e.Message}");
             while (e.InnerException != null)
             {
-                retVal.AppendFormat("\r\nCAUSE: {0}: {1}", e.InnerException.GetType().Name, e.InnerException.Message);
+                retVal.AppendFormat("\r\nCAUSED BY: {0}: {1}", e.InnerException.GetType().Name, e.InnerException.Message);
                 e = e.InnerException;
             }
             return retVal.ToString();

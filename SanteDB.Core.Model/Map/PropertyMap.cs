@@ -20,6 +20,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
 
@@ -97,6 +98,12 @@ namespace SanteDB.Core.Model.Map
                 modelClass = modelClass.GenericTypeArguments[0];
             }
 
+            var properties = modelClass.GetRuntimeProperties().Select(o=>o.Name).ToList();
+            if(modelClass.IsInterface)
+            {
+                properties.AddRange(modelClass.GetInterfaces().SelectMany(i => i.GetRuntimeProperties().Select(o=>o.Name)));
+            }
+
             List<ValidationResultDetail> retVal = new List<ValidationResultDetail>();
             // 0. Property and model names should exist
             if (String.IsNullOrEmpty(this.DomainName))
@@ -105,7 +112,7 @@ namespace SanteDB.Core.Model.Map
             }
 
             // 1. The property should exist
-            if (!String.IsNullOrEmpty(this.ModelName) && modelClass?.GetRuntimeProperty(this.ModelName ?? "") == null)
+            if (!String.IsNullOrEmpty(this.ModelName) && !properties.Contains(this.ModelName ?? ""))
             {
                 retVal.Add(new ValidationResultDetail(ResultDetailType.Error, String.Format("({0}).{1} not found", modelClass?.Name, this.ModelName), null, null));
             }
