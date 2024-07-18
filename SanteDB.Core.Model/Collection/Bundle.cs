@@ -82,6 +82,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(DeviceEntity))]
     [XmlInclude(typeof(Bundle))]
     [XmlInclude(typeof(ConceptClass))]
+    [XmlInclude(typeof(Container))]
     [XmlInclude(typeof(ConceptRelationship))]
     [XmlInclude(typeof(ConceptRelationshipType))]
     [XmlInclude(typeof(SecurityUser))]
