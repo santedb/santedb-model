@@ -33,6 +33,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
@@ -49,8 +50,151 @@ namespace SanteDB.Core.Model.Query
     {
 
         private static readonly Regex m_valueExtractionRegex = new Regex(@"^((?:(?:\w+?|\w+?\[(?:[^\]]*)\])(?:\.|\@\w+?\.?)?)*)\=(.*)$", RegexOptions.Compiled);
-        private static readonly Regex m_propertyExtractionRegex = new Regex(@"^(([_$\w]+)(?:\[([^\]]+)\])?(?:@(\w+))?(\??))\.?(.*?)$", RegexOptions.Compiled);
+        private static readonly Regex m_propertyExtractionRegex = new Regex(@"^(([_$\w]+)(?:\[([^\]]+)\])?(?:@(\w+))?(\??))\.?(.*?)(?:\|\|(.*))?$", RegexOptions.Compiled);
         private static readonly ModelSerializationBinder m_modelBinder = new ModelSerializationBinder();
+
+        private class HdsiAccessPathInfo
+        {
+
+            private HdsiAccessPathInfo(String groupingPath, String propertyName, String guardExpression, String castExpression, bool isCoalesced, String remainderExpression) {
+                this.GroupingPath = groupingPath;
+                this.PropertyName = propertyName;
+                this.GuardExpression = guardExpression;
+                this.CastExpression = castExpression;
+                this.IsCoalesced = isCoalesced;
+                this.IsControlParameter = propertyName.StartsWith("_");
+
+                if (!String.IsNullOrEmpty(remainderExpression))
+                {
+                    if (TryParseHdsiAccessPath(remainderExpression, out var next))
+                    {
+                        this.NextProperty = next;
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException(String.Format(ErrorMessages.INVALID_HDSI_EXPRESSION, remainderExpression));
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Gets the path for the purposes of grouping together multiple paths
+            /// </summary>
+            public String GroupingPath { get; }
+            /// <summary>
+            /// Gets the property accessor name
+            /// </summary>
+            public String PropertyName { get; }
+            /// <summary>
+            /// Gets the guard expression
+            /// </summary>
+            public String GuardExpression { get; }
+            /// <summary>
+            /// Gets the cast expression
+            /// </summary>
+            public String CastExpression { get; }
+            /// <summary>
+            /// Gets the coalsced expression
+            /// </summary>
+            public bool IsCoalesced { get; }
+            /// <summary>
+            /// Gets the control parameter
+            /// </summary>
+            public bool IsControlParameter { get; }
+            /// <summary>
+            /// Gets the next property in this access path
+            /// </summary>
+            public HdsiAccessPathInfo NextProperty { get; }
+
+
+
+            /// <summary>
+            /// Attempts to parse the <paramref name="hdsiAccessPath"/> into a <see cref="HdsiAccessPathInfo"/> instance
+            /// </summary>
+            /// <param name="hdsiAccessPath">The HDSI path as a string</param>
+            /// <param name="parsedResult">The parsed information info</param>
+            /// <returns>True if the <paramref name="parsedResult"/> contains a successfully interpreted HDSI expression path</returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            public static bool TryParseHdsiAccessPath(String hdsiAccessPath, out HdsiAccessPathInfo parsedResult)
+            {
+                if (hdsiAccessPath == null)
+                {
+                    throw new ArgumentNullException(nameof(hdsiAccessPath));
+                }
+
+                var result = QueryExpressionParser.m_propertyExtractionRegex.Match(hdsiAccessPath);
+                if (result.Success)
+                {
+                    parsedResult = HdsiAccessPathInfo.Create(result);
+                    return true;
+                }
+                else
+                {
+                    parsedResult = null;
+                    return false;
+                }
+            }
+
+            /// <summary>
+            /// Parses all HDSI access paths including those which are explicit OR 
+            /// </summary>
+            /// <param name="accessPath">The string access path</param>
+            /// <returns>An enumerator of each of the HDSI expressions in the OR path</returns>
+            public static IEnumerable<HdsiAccessPathInfo> ParseAllAccessPaths(String accessPath)
+            {
+                var accessMatch = m_propertyExtractionRegex.Match(accessPath);
+                while(accessMatch.Success)
+                {
+                    yield return Create(accessMatch);
+                    accessMatch = m_propertyExtractionRegex.Match(accessMatch.Groups[7].Value);
+                }
+            }
+
+            /// <summary>
+            /// Creates a HDsi
+            /// </summary>
+            /// <param name="parsedAccessString"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            /// <exception cref="ArgumentException"></exception>
+            private static HdsiAccessPathInfo Create(Match parsedAccessString)
+            {
+                if (parsedAccessString == null)
+                {
+                    throw new ArgumentNullException(nameof(parsedAccessString));
+                }
+                else if (!parsedAccessString.Success)
+                {
+                    throw new ArgumentException(nameof(parsedAccessString));
+                }
+
+                return new HdsiAccessPathInfo(parsedAccessString.Groups[1].Value, parsedAccessString.Groups[2].Value, parsedAccessString.Groups[3].Value, parsedAccessString.Groups[4].Value, parsedAccessString.Groups[5].Value == "?", parsedAccessString.Groups[6].Value);
+            }
+
+            /// <inheritdoc/>
+            public override string ToString()
+            {
+                StringBuilder sb = new StringBuilder(this.PropertyName);
+                if (!String.IsNullOrEmpty(this.GuardExpression)) {
+                    sb.AppendFormat("[{0}]", this.GuardExpression);
+                }
+                if(!String.IsNullOrEmpty(this.CastExpression))
+                {
+                    sb.AppendFormat("@{0}", this.CastExpression);
+                }
+                if(this.IsCoalesced)
+                {
+                    sb.Append("?");
+                }
+                if(this.NextProperty != null)
+                {
+                    sb.AppendFormat(".{0}", this.NextProperty.ToString());
+                }
+
+                return sb.ToString();
+
+            }
+        }
 
         // Member cache
         private static ConcurrentDictionary<Type, ConcurrentDictionary<String, PropertyInfo>> m_memberCache = new ConcurrentDictionary<Type, ConcurrentDictionary<string, PropertyInfo>>();
@@ -131,707 +275,705 @@ namespace SanteDB.Core.Model.Query
             // Get the first values
             while (workingValues.Count > 0)
             {
-                var currentValue = workingValues.FirstOrDefault();
-                workingValues.Remove(currentValue);
+                var processValue = workingValues.FirstOrDefault();
+                workingValues.Remove(processValue);
 
-                if (currentValue.Value?.Count(o => !String.IsNullOrEmpty(o)) == 0)
+                if (processValue.Value?.Count(o => !String.IsNullOrEmpty(o)) == 0)
                 {
                     continue;
                 }
 
-                // Create accessor expression
-                Expression keyExpression = null;
-                Expression accessExpression = parameterExpression;
-
-
-                var currentPathString = currentValue.Key;
-
-                var accessResult = m_propertyExtractionRegex.Match(currentPathString);
-                while (accessResult.Success)
+                Expression currentExpression = null;
+                foreach (var hdsiPathGroup in HdsiAccessPathInfo.ParseAllAccessPaths(processValue.Key))
                 {
+                    var currentValue = processValue; // Take a copy for UNION not to be messed with
+                    // Create accessor expression
+                    Expression keyExpression = null;
+                    Expression accessExpression = parameterExpression;
 
-                    // Get the raw member to the path 
-                    var propertyGroup = accessResult.Groups[1].Value;
-
-                    var propertyPathRaw = accessResult.Groups[2].Value;
-                    var guardExpressionRaw = accessResult.Groups[3].Value;
-                    var castExpressionRaw = accessResult.Groups[4].Value;
-                    var isCoalesced = accessResult.Groups[5].Value == "?" || alwaysCoalesce;
-                    var isControlParameter = propertyPathRaw.StartsWith("_");
-                    var remainderExpressionRaw = accessResult.Groups[6].Value;
-
-                    if (isControlParameter && relayControlVariables) // Control of parameter 
+                    var hdsiPath = hdsiPathGroup;
+                    while (hdsiPath != null)
                     {
-                        accessExpression = Expression.Call(null, controlMethod, accessExpression, Expression.Constant(propertyPathRaw), Expression.Constant(null));
-                    }
-                    else if (!isControlParameter)
-                    {
-                        // Attempt to get property cache
-                        if (!m_memberCache.TryGetValue(accessExpression.Type, out var memberCache))
+                        // Get the raw member to the path 
+                        var isCoalesced = hdsiPath.IsCoalesced || alwaysCoalesce;
+
+                        if (hdsiPath.IsControlParameter && relayControlVariables) // Control of parameter 
                         {
-                            memberCache = new ConcurrentDictionary<string, PropertyInfo>();
-                            m_memberCache.TryAdd(accessExpression.Type, memberCache);
+                            accessExpression = Expression.Call(null, controlMethod, accessExpression, Expression.Constant(hdsiPath.PropertyName), Expression.Constant(null));
                         }
-
-                        // Get or member info
-                        var followRefs = !String.IsNullOrEmpty(remainderExpressionRaw) || !String.IsNullOrEmpty(castExpressionRaw);
-                        var propertyPathKey = $"{propertyPathRaw}{followRefs}";
-                        if (!memberCache.TryGetValue(propertyPathKey, out var memberInfo))
+                        else if (!hdsiPath.IsControlParameter)
                         {
-                            // Get the property
-                            memberInfo = accessExpression.Type.GetQueryProperty(propertyPathRaw, followReferences: followRefs) ??
-                                    accessExpression.Type.GetInterfaces().Select(o => o.GetQueryProperty(propertyPathRaw, followReferences: followRefs)).OfType<PropertyInfo>().FirstOrDefault() ??
-                                    throw new ArgumentOutOfRangeException(currentValue.Key, ErrorMessages.HDSI_PATH_INVALID);
-
-                            if (memberInfo.Name.EndsWith("Xml")) // Handle XML properties
+                            // Attempt to get property cache
+                            if (!m_memberCache.TryGetValue(accessExpression.Type, out var memberCache))
                             {
-                                memberInfo = accessExpression.Type.GetRuntimeProperty(memberInfo.Name.Replace("Xml", ""));
+                                memberCache = new ConcurrentDictionary<string, PropertyInfo>();
+                                m_memberCache.TryAdd(accessExpression.Type, memberCache);
                             }
 
-                            // Member cache
-                            memberCache.TryAdd(propertyPathKey, memberInfo);
-
-                        }
-
-                        // Force loading of properties
-                        if (forceLoad)
-                        {
-                            if (typeof(IList).IsAssignableFrom(memberInfo.PropertyType) && !memberInfo.PropertyType.IsArray)
+                            // Get or member info
+                            var followRefs = hdsiPath.NextProperty != null || !String.IsNullOrEmpty(hdsiPath.CastExpression);
+                            var propertyPathKey = $"{hdsiPath.PropertyName}{followRefs}";
+                            if (!memberCache.TryGetValue(propertyPathKey, out var memberInfo))
                             {
-                                var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
+                                // Get the property
+                                memberInfo = accessExpression.Type.GetQueryProperty(hdsiPath.PropertyName, followReferences: followRefs) ??
+                                        accessExpression.Type.GetInterfaces().Select(o => o.GetQueryProperty(hdsiPath.PropertyName, followReferences: followRefs)).OfType<PropertyInfo>().FirstOrDefault() ??
+                                        throw new ArgumentOutOfRangeException(currentValue.Key, ErrorMessages.HDSI_PATH_INVALID);
+
+                                if (memberInfo.Name.EndsWith("Xml")) // Handle XML properties
+                                {
+                                    memberInfo = accessExpression.Type.GetRuntimeProperty(memberInfo.Name.Replace("Xml", ""));
+                                }
+
+                                // Member cache
+                                memberCache.TryAdd(propertyPathKey, memberInfo);
+
                             }
-                            else if (typeof(IAnnotatedResource).IsAssignableFrom(memberInfo.PropertyType))
+
+                            // Force loading of properties
+                            if (forceLoad)
                             {
-                                var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
+                                if (typeof(IList).IsAssignableFrom(memberInfo.PropertyType) && !memberInfo.PropertyType.IsArray)
+                                {
+                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
+                                    accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
+                                }
+                                else if (typeof(IAnnotatedResource).IsAssignableFrom(memberInfo.PropertyType))
+                                {
+                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
+                                    accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
+                                }
+                                else
+                                {
+                                    accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
+                                }
                             }
                             else
                             {
                                 accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
                             }
-                        }
-                        else
-                        {
-                            accessExpression = Expression.MakeMemberAccess(accessExpression, memberInfo);
-                        }
 
-                        // Casting
-                        if (!String.IsNullOrEmpty(castExpressionRaw))
-                        {
-
-                            Type castType = null;
-                            if (!m_castCache.TryGetValue(castExpressionRaw, out castType))
+                            // Casting
+                            if (!String.IsNullOrEmpty(hdsiPath.CastExpression))
                             {
-                                castType = m_modelBinder.BindToType(null, castExpressionRaw);
-                                if (castType == null)
+
+                                Type castType = null;
+                                if (!m_castCache.TryGetValue(hdsiPath.CastExpression, out castType))
                                 {
-                                    throw new ArgumentOutOfRangeException(nameof(castType), castExpressionRaw);
-                                }
-
-                                m_castCache.TryAdd(castExpressionRaw, castType);
-                            }
-                            accessExpression = Expression.TypeAs(accessExpression, castType);
-                            isCoalesced |= safeNullable;
-                        }
-
-                        // Coalesce
-                        if (isCoalesced && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null)
-                        {
-                            accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
-                        }
-
-                        // Guard?
-                        if (!String.IsNullOrEmpty(guardExpressionRaw))
-                        {
-                            Type itemType = accessExpression.Type.GenericTypeArguments[0];
-                            Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
-                            ParameterExpression guardParameter = Expression.Parameter(itemType, "guard");
-
-                            // Next we want to determine if the guard is an expression or just a list of values
-                            Expression guardExpression = null;
-                            foreach (var expr in guardExpressionRaw.Split('|'))
-                            {
-                                Expression workingExpression = null;
-                                if (expr.Contains('='))
-                                {
-                                    var guardFilterExpression = expr.ParseQueryString();
-                                    workingExpression = BuildLinqExpression(itemType, guardFilterExpression, "guard", variables, safeNullable, alwaysCoalesce, forceLoad, lazyExpandVariables, relayControlVariables, coalesceOutput, collectionResolutionMethod, useParameter: guardParameter).Body;
-
-                                }
-                                else
-                                {
-                                    if (expr.Equals("null") || Guid.TryParse(expr, out _))
+                                    castType = m_modelBinder.BindToType(null, hdsiPath.CastExpression);
+                                    if (castType == null)
                                     {
-                                        // Does the classifier key property point at the key attribute if so we use this
-                                        // property, otherwise we use the serialization redirect property
-                                        var classifierProperty = itemType.GetClassifierKeyProperty();
-                                        if (classifierProperty == null)
-                                        {
-                                            throw new ArgumentOutOfRangeException(propertyPathRaw, String.Format(ErrorMessages.HDSI_GUARD_INVALID, "UUID not permitted"));
-                                        }
-
-                                        var gValue = expr.Equals("null", StringComparison.OrdinalIgnoreCase) ? (Guid?)null : Guid.Parse(expr);
-                                        workingExpression = Expression.MakeBinary(ExpressionType.Equal, Expression.MakeMemberAccess(guardParameter, classifierProperty), Expression.Convert(Expression.Constant(gValue), classifierProperty.PropertyType));
+                                        throw new ArgumentOutOfRangeException(nameof(castType), hdsiPath.CastExpression);
                                     }
-                                    else // Named values - so we have to follow the property path - we will follow the classifiers through the sub objects
-                                    {
-                                        var classifierProperty = itemType.GetClassifierProperty();
-                                        Expression guardAccessor = guardParameter;
-                                        while (classifierProperty != null)
-                                        {
-                                            if (typeof(IdentifiedData).IsAssignableFrom(classifierProperty.PropertyType))
-                                            {
-                                                if (forceLoad) // Force the loading of properties in the guard
-                                                {
-                                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                                    var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false));
-                                                    guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
-                                                }
-                                                else
-                                                {
-                                                    guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
-                                                }
-                                            }
-                                            else
-                                            {
-                                                guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
-                                            }
-                                            classifierProperty = classifierProperty.PropertyType.GetClassifierProperty();
-                                        }
 
-                                        // Now make expression for guard
-                                        if (expr.Equals("null", StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            workingExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(null));
-                                        }
-                                        else
-                                        {
-                                            // HACK: Some types use enums as their classifier 
-                                            object value = expr;
-                                            if (guardAccessor.Type.IsEnum)
-                                            {
-                                                value = Enum.Parse(guardAccessor.Type, expr);
-                                            }
-
-                                            workingExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(value));
-                                        }
-                                    }
+                                    m_castCache.TryAdd(hdsiPath.CastExpression, castType);
                                 }
-
-                                if (guardExpression == null)
-                                {
-                                    guardExpression = workingExpression;
-                                }
-                                else
-                                {
-                                    guardExpression = Expression.MakeBinary(ExpressionType.OrElse, guardExpression, workingExpression);
-                                }
+                                accessExpression = Expression.TypeAs(accessExpression, castType);
+                                isCoalesced |= safeNullable;
                             }
 
-                            guardExpression = Expression.Lambda(guardExpression, guardParameter);
-
-                            if (!(guardExpression is LambdaExpression))
+                            // Coalesce
+                            if (isCoalesced && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null)
                             {
-                                throw new NotSupportedException(String.Format(ErrorMessages.INVALID_EXPRESSION_TYPE, typeof(LambdaExpression), guardExpression.GetType()));
+                                accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
                             }
 
-                            MethodInfo whereMethod = typeof(Enumerable).GetGenericMethod("Where",
-                                    new Type[] { itemType },
-                                    new Type[] { accessExpression.Type, predicateType }) as MethodInfo;
-                            accessExpression = Expression.Call(whereMethod, accessExpression, guardExpression);
-
-                            if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null") && String.IsNullOrEmpty(remainderExpressionRaw))
-                            {
-                                var anyMethod = typeof(Enumerable).GetGenericMethod("Any",
-                                    new Type[] { itemType },
-                                    new Type[] { accessExpression.Type }) as MethodInfo;
-                                accessExpression = Expression.Call(anyMethod, accessExpression);
-                                currentValue.Value[0] = currentValue.Value[0].Replace("null", "false");
-                            }
-                        }
-
-                        // Is our access expression leaving on a collection? If so we want to use the Any() function 
-                        if (accessExpression.Type.IsEnumerable() &&
-                            accessExpression.Type.IsGenericType)
-                        {
-
-                            // First or default - we are not filtering on a value
-                            if (currentValue.Value == null)
-                            {
-                                if (!String.IsNullOrEmpty(collectionResolutionMethod))
-                                {
-                                    Type itemType = accessExpression.Type.GenericTypeArguments[0];
-                                    Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
-                                    var firstMethod = typeof(Enumerable).GetGenericMethod(collectionResolutionMethod, new Type[] { itemType }, new Type[] { accessExpression.Type }) as MethodInfo;
-                                    accessExpression = Expression.Call(firstMethod, accessExpression);
-                                }
-                            }
-                            else // We are filtering - so we want to use ANY and pass in the rest of our sub-values
+                            // Guard?
+                            if (!String.IsNullOrEmpty(hdsiPath.GuardExpression))
                             {
                                 Type itemType = accessExpression.Type.GenericTypeArguments[0];
                                 Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
+                                ParameterExpression guardParameter = Expression.Parameter(itemType, "guard");
 
-                                var anyMethod = typeof(Enumerable).GetGenericMethod(nameof(Enumerable.Any),
-                                    new Type[] { itemType },
-                                    new Type[] { accessExpression.Type, predicateType }) as MethodInfo;
-
-                                // A sub-filter
-                                var subFilter = new NameValueCollection();
-
-                                // Default to id
-                                if (String.IsNullOrEmpty(remainderExpressionRaw) && currentValue.Value.All(o => Guid.TryParse(o, out _)))
+                                // Next we want to determine if the guard is an expression or just a list of values
+                                Expression guardExpression = null;
+                                foreach (var expr in hdsiPath.GuardExpression.Split('|'))
                                 {
-                                    Array.ForEach(currentValue.Value, o => subFilter.Add("id", o));
-                                }
-                                else if (!String.IsNullOrEmpty(remainderExpressionRaw))
-                                {
-                                    Array.ForEach(currentValue.Value, o => subFilter.Add(remainderExpressionRaw, o));
-                                }
-                                else  // just the same property so is simple
-                                {
-                                    Array.ForEach(currentValue.Value, o => subFilter.Add(String.Empty, o));
-                                }
-
-                                // Add collect other parameters
-                                foreach (var wv in workingValues.Where(o => o.Key.StartsWith(propertyGroup)).ToList())
-                                {
-                                    var keyName = wv.Key.Substring(propertyGroup.Length + 1);
-                                    Array.ForEach(wv.Value, o => subFilter.Add(keyName, o));
-                                    workingValues.Remove(wv);
-                                }
-
-                                Expression predicate = BuildLinqExpression(itemType, subFilter, propertyPathRaw, variables: variables, safeNullable: safeNullable, forceLoad: forceLoad, lazyExpandVariables: lazyExpandVariables, alwaysCoalesce: alwaysCoalesce, coalesceOutput: coalesceOutput, collectionResolutionMethod: collectionResolutionMethod);
-                                if (predicate == null) // No predicate so just ANY()
-                                {
-                                    continue;
-                                }
-
-                                keyExpression = Expression.Call(anyMethod, accessExpression, predicate);
-                                currentValue = new KeyValuePair<string, string[]>("", new string[0]);
-                                break;  // skip
-                            }
-                        }
-                        // Is this an access expression?
-                        if (currentValue.Value == null && typeof(IdentifiedData).IsAssignableFrom(accessExpression.Type) && coalesceOutput)
-                        {
-                            accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
-                        }
-
-                    }
-
-                    if (String.IsNullOrEmpty(remainderExpressionRaw))
-                    {
-                        break;
-                    }
-                    accessResult = m_propertyExtractionRegex.Match(remainderExpressionRaw);
-                }
-
-                // HACK: Was there any mapping done?
-                if (accessExpression == parameterExpression)
-                {
-                    continue;
-                }
-
-                // Now expression
-                var kp = currentValue.Value;
-                if (kp != null)
-                {
-                    foreach (var qValue in kp.Where(o => !String.IsNullOrEmpty(o)))
-                    {
-                        var value = qValue;
-                        var thisAccessExpression = accessExpression;
-                        // HACK: Fuzz dates for intervals
-                        if ((thisAccessExpression.Type.StripNullable() == typeof(DateTime) ||
-                            thisAccessExpression.Type.StripNullable() == typeof(DateTimeOffset)) &&
-                            value.Length <= 7 &&
-                            !value.StartsWith("~") &&
-                            !value.Contains("null") &&
-                            !value.Contains("$")
-                            )
-                        {
-                            value = "~" + value;
-                        }
-
-                        Expression nullCheckExpr = null;
-                        Type operandType = thisAccessExpression.Type;
-
-                        // Correct for nullable
-                        if (value != "null" && value != "!null" && thisAccessExpression.Type.IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
-                            safeNullable)
-                        {
-                            nullCheckExpr = Expression.MakeBinary(ExpressionType.NotEqual, thisAccessExpression, Expression.Constant(null));
-                            thisAccessExpression = Expression.MakeMemberAccess(thisAccessExpression, accessExpression.Type.GetRuntimeProperty("Value"));
-                        }
-
-                        // Process value
-                        ExpressionType et = ExpressionType.Equal;
-                        IQueryFilterExtension extendedFilter = null;
-                        List<String> extendedParms = new List<string>();
-
-                        if (String.IsNullOrEmpty(value))
-                        {
-                            continue;
-                        }
-                        // The input parameter is an extended filter operation, let's parse it
-                        else if (value[0] == ':')
-                        {
-                            var opMatch = QueryFilterExtensions.ExtendedFilterRegex.Match(value);
-                            if (opMatch.Success)
-                            {
-
-                                // Extract
-                                String fnName = opMatch.Groups[1].Value,
-                                    parms = opMatch.Groups[3].Value,
-                                    operand = opMatch.Groups[4].Value;
-
-                                var parmExtract = QueryFilterExtensions.ParameterExtractRegex.Match(parms + ",");
-                                while (parmExtract.Success)
-                                {
-                                    extendedParms.Add(parmExtract.Groups[1].Value);
-                                    parmExtract = QueryFilterExtensions.ParameterExtractRegex.Match(parmExtract.Groups[2].Value);
-                                }
-                                //extendedParms = parms.Split(',');
-
-                                // Now find the expression
-                                extendedFilter = QueryFilterExtensions.GetExtendedFilter(fnName);
-                                if (extendedFilter == null) // ensure valid reference
-                                {
-                                    throw new MissingMemberException(fnName);
-                                }
-
-                                value = String.IsNullOrEmpty(operand) ? "true" : operand;
-                                operandType = extendedFilter.ExtensionMethod.ReturnType;
-                            }
-                        }
-
-                        String pValue = value;
-
-                        // New syntax for operators:
-                        // gte:clause
-                        // gt:clause
-                        // 
-                        var indexOfColon = value.IndexOf(':');
-                        if (indexOfColon > 0 && indexOfColon < 4)
-                        {
-                            var op = value.Substr(0, indexOfColon);
-                            value = value.Substring(indexOfColon + 1);
-                            switch (op)
-                            {
-                                case "gt":
-                                    value = $">{value}";
-                                    break;
-                                case "gte":
-                                    value = $">={value}";
-                                    break;
-                                case "lt":
-                                    value = $"<{value}";
-                                    break;
-                                case "lte":
-                                    value = $"<={value}";
-                                    break;
-                                case "eq":
-                                    value = $"{value}";
-                                    break;
-                                case "ne":
-                                    value = $"!{value}";
-                                    break;
-                                case "ap":
-                                    value = $"~{value}";
-                                    break;
-                                default:
-                                    value = $"{op}:{value}"; // pass it along
-                                    break;
-                            }
-                        }
-
-                        // Operator type
-                        switch (value[0])
-                        {
-                            case '<':
-                                et = ExpressionType.LessThan;
-                                pValue = value.Substring(1);
-                                if (pValue[0] == '=')
-                                {
-                                    et = ExpressionType.LessThanOrEqual;
-                                    pValue = pValue.Substring(1);
-                                }
-                                break;
-                            case '>':
-                                et = ExpressionType.GreaterThan;
-                                pValue = value.Substring(1);
-                                if (pValue[0] == '=')
-                                {
-                                    et = ExpressionType.GreaterThanOrEqual;
-                                    pValue = pValue.Substring(1);
-                                }
-                                break;
-                            case '^':
-                                et = ExpressionType.Equal;
-                                if (thisAccessExpression.Type == typeof(String))
-                                {
-                                    pValue = pValue.Substring(1);
-                                    if (pValue.StartsWith("$"))
+                                    Expression workingExpression = null;
+                                    if (expr.Contains('='))
                                     {
-                                        thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("StartsWith", new Type[] { typeof(String) }), GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(pValue));
+                                        var guardFilterExpression = expr.ParseQueryString();
+                                        workingExpression = BuildLinqExpression(itemType, guardFilterExpression, "guard", variables, safeNullable, alwaysCoalesce, forceLoad, lazyExpandVariables, relayControlVariables, coalesceOutput, collectionResolutionMethod, useParameter: guardParameter).Body;
+
                                     }
                                     else
                                     {
-                                        thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("StartsWith", new Type[] { typeof(String) }), Expression.Constant(pValue));
+                                        if (expr.Equals("null") || Guid.TryParse(expr, out _))
+                                        {
+                                            // Does the classifier key property point at the key attribute if so we use this
+                                            // property, otherwise we use the serialization redirect property
+                                            var classifierProperty = itemType.GetClassifierKeyProperty();
+                                            if (classifierProperty == null)
+                                            {
+                                                throw new ArgumentOutOfRangeException(hdsiPath.PropertyName, String.Format(ErrorMessages.HDSI_GUARD_INVALID, "UUID not permitted"));
+                                            }
+
+                                            var gValue = expr.Equals("null", StringComparison.OrdinalIgnoreCase) ? (Guid?)null : Guid.Parse(expr);
+                                            workingExpression = Expression.MakeBinary(ExpressionType.Equal, Expression.MakeMemberAccess(guardParameter, classifierProperty), Expression.Convert(Expression.Constant(gValue), classifierProperty.PropertyType));
+                                        }
+                                        else // Named values - so we have to follow the property path - we will follow the classifiers through the sub objects
+                                        {
+                                            var classifierProperty = itemType.GetClassifierProperty();
+                                            Expression guardAccessor = guardParameter;
+                                            while (classifierProperty != null)
+                                            {
+                                                if (typeof(IdentifiedData).IsAssignableFrom(classifierProperty.PropertyType))
+                                                {
+                                                    if (forceLoad) // Force the loading of properties in the guard
+                                                    {
+                                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
+                                                        var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false));
+                                                        guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
+                                                    }
+                                                    else
+                                                    {
+                                                        guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    guardAccessor = Expression.MakeMemberAccess(guardAccessor, classifierProperty);
+                                                }
+                                                classifierProperty = classifierProperty.PropertyType.GetClassifierProperty();
+                                            }
+
+                                            // Now make expression for guard
+                                            if (expr.Equals("null", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                workingExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(null));
+                                            }
+                                            else
+                                            {
+                                                // HACK: Some types use enums as their classifier 
+                                                object value = expr;
+                                                if (guardAccessor.Type.IsEnum)
+                                                {
+                                                    value = Enum.Parse(guardAccessor.Type, expr);
+                                                }
+
+                                                workingExpression = Expression.MakeBinary(ExpressionType.Equal, guardAccessor, Expression.Constant(value));
+                                            }
+                                        }
                                     }
 
-                                    operandType = typeof(bool);
-                                    pValue = "true";
-                                }
-                                else
-                                {
-                                    throw new InvalidOperationException("^ can only be applied to string properties");
-                                }
-
-                                break;
-                            case '~':
-                                et = ExpressionType.Equal;
-                                if (thisAccessExpression.Type == typeof(String))
-                                {
-                                    pValue = pValue.Substring(1);
-                                    if (pValue.StartsWith("$"))
+                                    if (guardExpression == null)
                                     {
-                                        thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("Contains", new Type[] { typeof(String) }), GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(pValue));
+                                        guardExpression = workingExpression;
                                     }
                                     else
                                     {
-                                        thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("Contains", new Type[] { typeof(String) }), Expression.Constant(pValue));
+                                        guardExpression = Expression.MakeBinary(ExpressionType.OrElse, guardExpression, workingExpression);
+                                    }
+                                }
+
+                                guardExpression = Expression.Lambda(guardExpression, guardParameter);
+
+                                if (!(guardExpression is LambdaExpression))
+                                {
+                                    throw new NotSupportedException(String.Format(ErrorMessages.INVALID_EXPRESSION_TYPE, typeof(LambdaExpression), guardExpression.GetType()));
+                                }
+
+                                MethodInfo whereMethod = typeof(Enumerable).GetGenericMethod("Where",
+                                        new Type[] { itemType },
+                                        new Type[] { accessExpression.Type, predicateType }) as MethodInfo;
+                                accessExpression = Expression.Call(whereMethod, accessExpression, guardExpression);
+
+                                if (currentValue.Value?.Length == 1 && currentValue.Value[0].EndsWith("null") && hdsiPath.NextProperty == null)
+                                {
+                                    var anyMethod = typeof(Enumerable).GetGenericMethod("Any",
+                                        new Type[] { itemType },
+                                        new Type[] { accessExpression.Type }) as MethodInfo;
+                                    accessExpression = Expression.Call(anyMethod, accessExpression);
+                                    currentValue.Value[0] = currentValue.Value[0].Replace("null", "false");
+                                }
+                            }
+
+                            // Is our access expression leaving on a collection? If so we want to use the Any() function 
+                            if (accessExpression.Type.IsEnumerable() &&
+                                accessExpression.Type.IsGenericType)
+                            {
+
+                                // First or default - we are not filtering on a value
+                                if (currentValue.Value == null)
+                                {
+                                    if (!String.IsNullOrEmpty(collectionResolutionMethod))
+                                    {
+                                        Type itemType = accessExpression.Type.GenericTypeArguments[0];
+                                        Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
+                                        var firstMethod = typeof(Enumerable).GetGenericMethod(collectionResolutionMethod, new Type[] { itemType }, new Type[] { accessExpression.Type }) as MethodInfo;
+                                        accessExpression = Expression.Call(firstMethod, accessExpression);
+                                    }
+                                }
+                                else // We are filtering - so we want to use ANY and pass in the rest of our sub-values
+                                {
+                                    Type itemType = accessExpression.Type.GenericTypeArguments[0];
+                                    Type predicateType = typeof(Func<,>).MakeGenericType(itemType, typeof(bool));
+
+                                    var anyMethod = typeof(Enumerable).GetGenericMethod(nameof(Enumerable.Any),
+                                        new Type[] { itemType },
+                                        new Type[] { accessExpression.Type, predicateType }) as MethodInfo;
+
+                                    // A sub-filter
+                                    var subFilter = new NameValueCollection();
+
+                                    // Default to id
+                                    if (hdsiPath.NextProperty == null && currentValue.Value.All(o => Guid.TryParse(o, out _)))
+                                    {
+                                        Array.ForEach(currentValue.Value, o => subFilter.Add("id", o));
+                                    }
+                                    else if (hdsiPath.NextProperty != null)
+                                    {
+                                        Array.ForEach(currentValue.Value, o => subFilter.Add(hdsiPath.NextProperty.ToString(), o));
+                                    }
+                                    else  // just the same property so is simple
+                                    {
+                                        Array.ForEach(currentValue.Value, o => subFilter.Add(String.Empty, o));
                                     }
 
-                                    operandType = typeof(bool);
-                                    pValue = "true";
+                                    // Add collect other parameters
+                                    foreach (var wv in workingValues.Where(o => o.Key.StartsWith(hdsiPath.GroupingPath)).ToList())
+                                    {
+                                        var keyName = wv.Key.Substring(hdsiPath.GroupingPath.Length + 1);
+                                        Array.ForEach(wv.Value, o => subFilter.Add(keyName, o));
+                                        workingValues.Remove(wv);
+                                    }
+
+                                    Expression predicate = BuildLinqExpression(itemType, subFilter, hdsiPath.PropertyName, variables: variables, safeNullable: safeNullable, forceLoad: forceLoad, lazyExpandVariables: lazyExpandVariables, alwaysCoalesce: alwaysCoalesce, coalesceOutput: coalesceOutput, collectionResolutionMethod: collectionResolutionMethod);
+                                    if (predicate == null) // No predicate so just ANY()
+                                    {
+                                        continue;
+                                    }
+
+                                    keyExpression = Expression.Call(anyMethod, accessExpression, predicate);
+                                    currentValue = new KeyValuePair<string, string[]>("", new string[0]);
+                                    break;  // skip
                                 }
-                                else if (thisAccessExpression.Type == typeof(DateTime) ||
-                                    thisAccessExpression.Type == typeof(DateTime?) ||
-                                    thisAccessExpression.Type == typeof(DateTimeOffset) ||
-                                    thisAccessExpression.Type == typeof(DateTimeOffset?))
+                            }
+                            // Is this an access expression?
+                            if (currentValue.Value == null && typeof(IdentifiedData).IsAssignableFrom(accessExpression.Type) && coalesceOutput)
+                            {
+                                accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
+                            }
+
+                        }
+
+                        hdsiPath = hdsiPath.NextProperty;
+                    }
+
+                    // HACK: Was there any mapping done?
+                    if (accessExpression == parameterExpression)
+                    {
+                        continue;
+                    }
+
+                    // Now expression
+                    var kp = currentValue.Value;
+                    if (kp != null)
+                    {
+                        foreach (var qValue in kp.Where(o => !String.IsNullOrEmpty(o)))
+                        {
+                            var value = qValue;
+                            var thisAccessExpression = accessExpression;
+                            // HACK: Fuzz dates for intervals
+                            if ((thisAccessExpression.Type.StripNullable() == typeof(DateTime) ||
+                                thisAccessExpression.Type.StripNullable() == typeof(DateTimeOffset)) &&
+                                value.Length <= 7 &&
+                                !value.StartsWith("~") &&
+                                !value.Contains("null") &&
+                                !value.Contains("$")
+                                )
+                            {
+                                value = "~" + value;
+                            }
+
+                            Expression nullCheckExpr = null;
+                            Type operandType = thisAccessExpression.Type;
+
+                            // Correct for nullable
+                            if (value != "null" && value != "!null" && thisAccessExpression.Type.IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+                                safeNullable)
+                            {
+                                nullCheckExpr = Expression.MakeBinary(ExpressionType.NotEqual, thisAccessExpression, Expression.Constant(null));
+                                thisAccessExpression = Expression.MakeMemberAccess(thisAccessExpression, accessExpression.Type.GetRuntimeProperty("Value"));
+                            }
+
+                            // Process value
+                            ExpressionType et = ExpressionType.Equal;
+                            IQueryFilterExtension extendedFilter = null;
+                            List<String> extendedParms = new List<string>();
+
+                            if (String.IsNullOrEmpty(value))
+                            {
+                                continue;
+                            }
+                            // The input parameter is an extended filter operation, let's parse it
+                            else if (value[0] == ':')
+                            {
+                                var opMatch = QueryFilterExtensions.ExtendedFilterRegex.Match(value);
+                                if (opMatch.Success)
                                 {
+
+                                    // Extract
+                                    String fnName = opMatch.Groups[1].Value,
+                                        parms = opMatch.Groups[3].Value,
+                                        operand = opMatch.Groups[4].Value;
+
+                                    var parmExtract = QueryFilterExtensions.ParameterExtractRegex.Match(parms + ",");
+                                    while (parmExtract.Success)
+                                    {
+                                        extendedParms.Add(parmExtract.Groups[1].Value);
+                                        parmExtract = QueryFilterExtensions.ParameterExtractRegex.Match(parmExtract.Groups[2].Value);
+                                    }
+                                    //extendedParms = parms.Split(',');
+
+                                    // Now find the expression
+                                    extendedFilter = QueryFilterExtensions.GetExtendedFilter(fnName);
+                                    if (extendedFilter == null) // ensure valid reference
+                                    {
+                                        throw new MissingMemberException(fnName);
+                                    }
+
+                                    value = String.IsNullOrEmpty(operand) ? "true" : operand;
+                                    operandType = extendedFilter.ExtensionMethod.ReturnType;
+                                }
+                            }
+
+                            String pValue = value;
+
+                            // New syntax for operators:
+                            // gte:clause
+                            // gt:clause
+                            // 
+                            var indexOfColon = value.IndexOf(':');
+                            if (indexOfColon > 0 && indexOfColon < 4)
+                            {
+                                var op = value.Substr(0, indexOfColon);
+                                value = value.Substring(indexOfColon + 1);
+                                switch (op)
+                                {
+                                    case "gt":
+                                        value = $">{value}";
+                                        break;
+                                    case "gte":
+                                        value = $">={value}";
+                                        break;
+                                    case "lt":
+                                        value = $"<{value}";
+                                        break;
+                                    case "lte":
+                                        value = $"<={value}";
+                                        break;
+                                    case "eq":
+                                        value = $"{value}";
+                                        break;
+                                    case "ne":
+                                        value = $"!{value}";
+                                        break;
+                                    case "ap":
+                                        value = $"~{value}";
+                                        break;
+                                    default:
+                                        value = $"{op}:{value}"; // pass it along
+                                        break;
+                                }
+                            }
+
+                            // Operator type
+                            switch (value[0])
+                            {
+                                case '<':
+                                    et = ExpressionType.LessThan;
                                     pValue = value.Substring(1);
-                                    DateTime dateLow = DateTime.ParseExact(pValue, "yyyy-MM-dd".Substring(0, pValue.Length), CultureInfo.InvariantCulture), dateHigh = DateTime.MaxValue;
-                                    if (pValue.Length == 4) // Year
+                                    if (pValue[0] == '=')
                                     {
-                                        dateHigh = new DateTime(dateLow.Year, 12, 31, 23, 59, 59);
+                                        et = ExpressionType.LessThanOrEqual;
+                                        pValue = pValue.Substring(1);
                                     }
-                                    else if (pValue.Length == 7)
+                                    break;
+                                case '>':
+                                    et = ExpressionType.GreaterThan;
+                                    pValue = value.Substring(1);
+                                    if (pValue[0] == '=')
                                     {
-                                        dateHigh = new DateTime(dateLow.Year, dateLow.Month, DateTime.DaysInMonth(dateLow.Year, dateLow.Month), 23, 59, 59);
+                                        et = ExpressionType.GreaterThanOrEqual;
+                                        pValue = pValue.Substring(1);
                                     }
-                                    else if (pValue.Length == 10)
+                                    break;
+                                case '^':
+                                    et = ExpressionType.Equal;
+                                    if (thisAccessExpression.Type == typeof(String))
                                     {
-                                        dateHigh = new DateTime(dateLow.Year, dateLow.Month, dateLow.Day, 23, 59, 59);
-                                    }
+                                        pValue = pValue.Substring(1);
+                                        if (pValue.StartsWith("$"))
+                                        {
+                                            thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("StartsWith", new Type[] { typeof(String) }), GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(pValue));
+                                        }
+                                        else
+                                        {
+                                            thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("StartsWith", new Type[] { typeof(String) }), Expression.Constant(pValue));
+                                        }
 
-                                    if (thisAccessExpression.Type == typeof(DateTime?) || thisAccessExpression.Type == typeof(DateTimeOffset?))
-                                    {
-                                        thisAccessExpression = Expression.MakeMemberAccess(thisAccessExpression, thisAccessExpression.Type.GetRuntimeProperty("Value"));
-                                    }
-
-                                    // Correct for DTO if originally is
-                                    if (thisAccessExpression.Type == typeof(DateTimeOffset) || thisAccessExpression.Type == typeof(DateTimeOffset?))
-                                    {
-                                        Expression lowerBound = Expression.MakeBinary(ExpressionType.GreaterThanOrEqual, thisAccessExpression, Expression.Constant((DateTimeOffset)dateLow)),
-                                            upperBound = Expression.MakeBinary(ExpressionType.LessThanOrEqual, thisAccessExpression, Expression.Constant((DateTimeOffset)dateHigh));
-                                        thisAccessExpression = Expression.MakeBinary(ExpressionType.AndAlso, lowerBound, upperBound);
-
+                                        operandType = typeof(bool);
+                                        pValue = "true";
                                     }
                                     else
                                     {
-                                        Expression lowerBound = Expression.MakeBinary(ExpressionType.GreaterThanOrEqual, thisAccessExpression, Expression.Constant(dateLow)),
-                                            upperBound = Expression.MakeBinary(ExpressionType.LessThanOrEqual, thisAccessExpression, Expression.Constant(dateHigh));
-                                        thisAccessExpression = Expression.MakeBinary(ExpressionType.AndAlso, lowerBound, upperBound);
-
+                                        throw new InvalidOperationException("^ can only be applied to string properties");
                                     }
-                                    operandType = thisAccessExpression.Type;
-                                    pValue = "true";
+
+                                    break;
+                                case '~':
+                                    et = ExpressionType.Equal;
+                                    if (thisAccessExpression.Type == typeof(String))
+                                    {
+                                        pValue = pValue.Substring(1);
+                                        if (pValue.StartsWith("$"))
+                                        {
+                                            thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("Contains", new Type[] { typeof(String) }), GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(pValue));
+                                        }
+                                        else
+                                        {
+                                            thisAccessExpression = Expression.Call(thisAccessExpression, typeof(String).GetRuntimeMethod("Contains", new Type[] { typeof(String) }), Expression.Constant(pValue));
+                                        }
+
+                                        operandType = typeof(bool);
+                                        pValue = "true";
+                                    }
+                                    else if (thisAccessExpression.Type == typeof(DateTime) ||
+                                        thisAccessExpression.Type == typeof(DateTime?) ||
+                                        thisAccessExpression.Type == typeof(DateTimeOffset) ||
+                                        thisAccessExpression.Type == typeof(DateTimeOffset?))
+                                    {
+                                        pValue = value.Substring(1);
+                                        DateTime dateLow = DateTime.ParseExact(pValue, "yyyy-MM-dd".Substring(0, pValue.Length), CultureInfo.InvariantCulture), dateHigh = DateTime.MaxValue;
+                                        if (pValue.Length == 4) // Year
+                                        {
+                                            dateHigh = new DateTime(dateLow.Year, 12, 31, 23, 59, 59);
+                                        }
+                                        else if (pValue.Length == 7)
+                                        {
+                                            dateHigh = new DateTime(dateLow.Year, dateLow.Month, DateTime.DaysInMonth(dateLow.Year, dateLow.Month), 23, 59, 59);
+                                        }
+                                        else if (pValue.Length == 10)
+                                        {
+                                            dateHigh = new DateTime(dateLow.Year, dateLow.Month, dateLow.Day, 23, 59, 59);
+                                        }
+
+                                        if (thisAccessExpression.Type == typeof(DateTime?) || thisAccessExpression.Type == typeof(DateTimeOffset?))
+                                        {
+                                            thisAccessExpression = Expression.MakeMemberAccess(thisAccessExpression, thisAccessExpression.Type.GetRuntimeProperty("Value"));
+                                        }
+
+                                        // Correct for DTO if originally is
+                                        if (thisAccessExpression.Type == typeof(DateTimeOffset) || thisAccessExpression.Type == typeof(DateTimeOffset?))
+                                        {
+                                            Expression lowerBound = Expression.MakeBinary(ExpressionType.GreaterThanOrEqual, thisAccessExpression, Expression.Constant((DateTimeOffset)dateLow)),
+                                                upperBound = Expression.MakeBinary(ExpressionType.LessThanOrEqual, thisAccessExpression, Expression.Constant((DateTimeOffset)dateHigh));
+                                            thisAccessExpression = Expression.MakeBinary(ExpressionType.AndAlso, lowerBound, upperBound);
+
+                                        }
+                                        else
+                                        {
+                                            Expression lowerBound = Expression.MakeBinary(ExpressionType.GreaterThanOrEqual, thisAccessExpression, Expression.Constant(dateLow)),
+                                                upperBound = Expression.MakeBinary(ExpressionType.LessThanOrEqual, thisAccessExpression, Expression.Constant(dateHigh));
+                                            thisAccessExpression = Expression.MakeBinary(ExpressionType.AndAlso, lowerBound, upperBound);
+
+                                        }
+                                        operandType = thisAccessExpression.Type;
+                                        pValue = "true";
+                                    }
+                                    else
+                                    {
+                                        throw new InvalidOperationException($"~ can only be applied to string and date properties not {thisAccessExpression.Type}");
+                                    }
+
+                                    break;
+                                case '!':
+                                    et = ExpressionType.NotEqual;
+                                    pValue = value.Substring(1);
+                                    break;
+                            }
+
+                            // The expression
+                            Expression valueExpr = null;
+                            if (pValue == "null")
+                            {
+                                valueExpr = Expression.Constant(null);
+                            }
+                            else if (pValue.StartsWith("$"))
+                            {
+                                valueExpr = GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(pValue);
+                            }
+                            else if (operandType == typeof(String))
+                            {
+                                valueExpr = Expression.Constant(pValue);
+                            }
+                            else if (operandType == typeof(DateTime) || operandType == typeof(DateTime?))
+                            {
+                                valueExpr = Expression.Constant(DateTime.Parse(pValue));
+                            }
+                            else if (operandType == typeof(DateTimeOffset) || operandType == typeof(DateTimeOffset?))
+                            {
+                                valueExpr = Expression.Constant(DateTimeOffset.Parse(pValue));
+                            }
+                            else if (operandType == typeof(Guid))
+                            {
+                                valueExpr = Expression.Constant(Guid.Parse(pValue));
+                            }
+                            else if (operandType == typeof(Guid?))
+                            {
+                                valueExpr = Expression.Convert(Expression.Constant(Guid.Parse(pValue)), typeof(Guid?));
+                            }
+                            else if (operandType == typeof(TimeSpan) || operandType == typeof(TimeSpan?))
+                            {
+                                if (!TimeSpan.TryParse(pValue, out TimeSpan ts))
+                                {
+                                    try
+                                    {
+                                        ts = XmlConvert.ToTimeSpan(pValue);
+                                    }
+                                    catch
+                                    {
+                                        ts = SanteDBConvert.StringToTimespan(pValue);
+                                    }
+                                }
+                                valueExpr = Expression.Constant(ts);
+                            }
+                            else if (operandType.IsEnum)
+                            {
+                                int tryParse = 0;
+                                if (Int32.TryParse(pValue, out tryParse))
+                                {
+                                    valueExpr = Expression.Constant(Enum.ToObject(operandType, Int32.Parse(pValue)));
                                 }
                                 else
                                 {
-                                    throw new InvalidOperationException($"~ can only be applied to string and date properties not {thisAccessExpression.Type}");
-                                }
-
-                                break;
-                            case '!':
-                                et = ExpressionType.NotEqual;
-                                pValue = value.Substring(1);
-                                break;
-                        }
-
-                        // The expression
-                        Expression valueExpr = null;
-                        if (pValue == "null")
-                        {
-                            valueExpr = Expression.Constant(null);
-                        }
-                        else if (pValue.StartsWith("$"))
-                        {
-                            valueExpr = GetVariableExpression(pValue.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(pValue);
-                        }
-                        else if (operandType == typeof(String))
-                        {
-                            valueExpr = Expression.Constant(pValue);
-                        }
-                        else if (operandType == typeof(DateTime) || operandType == typeof(DateTime?))
-                        {
-                            valueExpr = Expression.Constant(DateTime.Parse(pValue));
-                        }
-                        else if (operandType == typeof(DateTimeOffset) || operandType == typeof(DateTimeOffset?))
-                        {
-                            valueExpr = Expression.Constant(DateTimeOffset.Parse(pValue));
-                        }
-                        else if (operandType == typeof(Guid))
-                        {
-                            valueExpr = Expression.Constant(Guid.Parse(pValue));
-                        }
-                        else if (operandType == typeof(Guid?))
-                        {
-                            valueExpr = Expression.Convert(Expression.Constant(Guid.Parse(pValue)), typeof(Guid?));
-                        }
-                        else if (operandType == typeof(TimeSpan) || operandType == typeof(TimeSpan?))
-                        {
-                            if (!TimeSpan.TryParse(pValue, out TimeSpan ts))
-                            {
-                                try
-                                {
-                                    ts = XmlConvert.ToTimeSpan(pValue);
-                                }
-                                catch
-                                {
-                                    ts = SanteDBConvert.StringToTimespan(pValue);
+                                    valueExpr = Expression.Constant(Enum.Parse(operandType, pValue));
                                 }
                             }
-                            valueExpr = Expression.Constant(ts);
-                        }
-                        else if (operandType.IsEnum)
-                        {
-                            int tryParse = 0;
-                            if (Int32.TryParse(pValue, out tryParse))
+                            else if (extendedFilter is IQueryFilterConverterExtension) // Just converting input string to output string
                             {
-                                valueExpr = Expression.Constant(Enum.ToObject(operandType, Int32.Parse(pValue)));
+                                valueExpr = Expression.Constant(pValue);
                             }
                             else
                             {
-                                valueExpr = Expression.Constant(Enum.Parse(operandType, pValue));
-                            }
-                        }
-                        else if (extendedFilter is IQueryFilterConverterExtension) // Just converting input string to output string
-                        {
-                            valueExpr = Expression.Constant(pValue);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                Object converted = null;
-                                if (MapUtil.TryConvert(pValue, operandType.StripGeneric(), out converted))
+                                try
                                 {
-                                    valueExpr = Expression.Constant(converted);
-                                }
-                                else if (typeof(IdentifiedData).IsAssignableFrom(operandType) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
-                                {
-                                    valueExpr = Expression.Constant(uuid);
-                                    thisAccessExpression = accessExpression = Expression.MakeMemberAccess(accessExpression, operandType.GetRuntimeProperty(nameof(IdentifiedData.Key)));
-                                }
-                                else
-                                {
-                                    valueExpr = Expression.Constant(Convert.ChangeType(pValue, operandType));
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                throw new InvalidOperationException($"Unable to convert {pValue} to {operandType}", e);
-                            }
-                        }
-
-                        // Extended filters operate in a different manner, they basically are allowed to write whatever they like to the Expression
-                        Expression singleExpression = null;
-                        if (extendedFilter != null)
-                        {
-                            // Extended parms build
-                            int parmNo = 1;
-                            var parms = extendedParms.Select(p =>
-                            {
-                                var parmList = extendedFilter.ExtensionMethod.GetParameters();
-                                if (parmList.Length > parmNo)
-                                {
-                                    var parmType = parmList[parmNo++];
-                                    if (p.StartsWith("$")) // variable
+                                    Object converted = null;
+                                    if (MapUtil.TryConvert(pValue, operandType.StripGeneric(), out converted))
                                     {
-                                        return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(p);
+                                        valueExpr = Expression.Constant(converted);
                                     }
-                                    else if (parmType.ParameterType != typeof(String) && MapUtil.TryConvert(p, parmType.ParameterType, out object res)) // convert parameter type
+                                    else if (typeof(IdentifiedData).IsAssignableFrom(operandType) && Guid.TryParse(pValue, out Guid uuid)) // Assign to key
                                     {
-                                        return Expression.Constant(res);
-                                    }
-                                    else if (p.StartsWith("\"") && p.EndsWith("\""))
-                                    {
-                                        return Expression.Constant(p.Substring(1, p.Length - 2).Replace("\\\"", "\""));
+                                        valueExpr = Expression.Constant(uuid);
+                                        thisAccessExpression = accessExpression = Expression.MakeMemberAccess(accessExpression, operandType.GetRuntimeProperty(nameof(IdentifiedData.Key)));
                                     }
                                     else
                                     {
-                                        return Expression.Constant(p);
+                                        valueExpr = Expression.Constant(Convert.ChangeType(pValue, operandType));
                                     }
                                 }
-                                return Expression.Constant(p);
-                            }).ToArray();
-
-                            singleExpression = extendedFilter.Compose(thisAccessExpression, et, valueExpr, parms);
-
-                        }
-                        else
-                        {
-                            if (valueExpr.Type != thisAccessExpression.Type)
-                            {
-                                valueExpr = Expression.Convert(valueExpr, thisAccessExpression.Type);
+                                catch (Exception e)
+                                {
+                                    throw new InvalidOperationException($"Unable to convert {pValue} to {operandType}", e);
+                                }
                             }
 
-                            singleExpression = Expression.MakeBinary(et, thisAccessExpression, valueExpr);
-                        }
+                            // Extended filters operate in a different manner, they basically are allowed to write whatever they like to the Expression
+                            Expression singleExpression = null;
+                            if (extendedFilter != null)
+                            {
+                                // Extended parms build
+                                int parmNo = 1;
+                                var parms = extendedParms.Select(p =>
+                                {
+                                    var parmList = extendedFilter.ExtensionMethod.GetParameters();
+                                    if (parmList.Length > parmNo)
+                                    {
+                                        var parmType = parmList[parmNo++];
+                                        if (p.StartsWith("$")) // variable
+                                        {
+                                            return GetVariableExpression(p.Substring(1), thisAccessExpression.Type, variables, parameterExpression, lazyExpandVariables) ?? Expression.Constant(p);
+                                        }
+                                        else if (parmType.ParameterType != typeof(String) && MapUtil.TryConvert(p, parmType.ParameterType, out object res)) // convert parameter type
+                                        {
+                                            return Expression.Constant(res);
+                                        }
+                                        else if (p.StartsWith("\"") && p.EndsWith("\""))
+                                        {
+                                            return Expression.Constant(p.Substring(1, p.Length - 2).Replace("\\\"", "\""));
+                                        }
+                                        else
+                                        {
+                                            return Expression.Constant(p);
+                                        }
+                                    }
+                                    return Expression.Constant(p);
+                                }).ToArray();
 
-                        if (nullCheckExpr != null)
-                        {
-                            singleExpression = Expression.MakeBinary(ExpressionType.AndAlso, nullCheckExpr, singleExpression);
-                        }
+                                singleExpression = extendedFilter.Compose(thisAccessExpression, et, valueExpr, parms);
 
-                        // Passthrough the key expression 
-                        if (singleExpression is BinaryExpression be && be.Left is MethodCallExpression mce && mce.Method.Name == nameof(QueryFilterExtensions.WithControl))
-                        {
-                            singleExpression = Expression.MakeUnary(ExpressionType.IsTrue,
-                                Expression.Convert(Expression.Call(mce.Object, mce.Method, mce.Arguments[0], mce.Arguments[1], Expression.Convert(be.Right, typeof(Object))), typeof(Boolean)), typeof(Boolean));
-                        }
+                            }
+                            else
+                            {
+                                if (valueExpr.Type != thisAccessExpression.Type)
+                                {
+                                    valueExpr = Expression.Convert(valueExpr, thisAccessExpression.Type);
+                                }
 
-                        if (keyExpression == null)
-                        {
-                            keyExpression = singleExpression;
-                        }
-                        else if (et == ExpressionType.Equal)
-                        {
-                            keyExpression = Expression.MakeBinary(ExpressionType.OrElse, keyExpression, singleExpression);
-                        }
-                        else
-                        {
-                            keyExpression = Expression.MakeBinary(ExpressionType.AndAlso, keyExpression, singleExpression);
+                                singleExpression = Expression.MakeBinary(et, thisAccessExpression, valueExpr);
+                            }
+
+                            if (nullCheckExpr != null)
+                            {
+                                singleExpression = Expression.MakeBinary(ExpressionType.AndAlso, nullCheckExpr, singleExpression);
+                            }
+
+                            // Passthrough the key expression 
+                            if (singleExpression is BinaryExpression be && be.Left is MethodCallExpression mce && mce.Method.Name == nameof(QueryFilterExtensions.WithControl))
+                            {
+                                singleExpression = Expression.MakeUnary(ExpressionType.IsTrue,
+                                    Expression.Convert(Expression.Call(mce.Object, mce.Method, mce.Arguments[0], mce.Arguments[1], Expression.Convert(be.Right, typeof(Object))), typeof(Boolean)), typeof(Boolean));
+                            }
+
+                            if (keyExpression == null)
+                            {
+                                keyExpression = singleExpression;
+                            }
+                            else if (et == ExpressionType.Equal)
+                            {
+                                keyExpression = Expression.MakeBinary(ExpressionType.OrElse, keyExpression, singleExpression);
+                            }
+                            else
+                            {
+                                keyExpression = Expression.MakeBinary(ExpressionType.AndAlso, keyExpression, singleExpression);
+                            }
                         }
                     }
-                }
-                else
-                {
-                    keyExpression = accessExpression;
-                }
+                    else
+                    {
+                        keyExpression = accessExpression;
+                    }
 
+
+                    if (currentExpression == null)
+                    {
+                        currentExpression = keyExpression;
+                    }
+                    else
+                    {
+                        currentExpression = Expression.MakeBinary(ExpressionType.Or, currentExpression, keyExpression);
+                    }
+                }
 
                 if (retVal == null)
                 {
-                    retVal = keyExpression;
+                    retVal = currentExpression;
                 }
-                else
+                else if(currentExpression != null)
                 {
-
-                    retVal = Expression.MakeBinary(ExpressionType.AndAlso, retVal, keyExpression);
+                    retVal = Expression.MakeBinary(ExpressionType.AndAlso, retVal, currentExpression);
                 }
             }
             //Debug.WriteLine(String.Format("Converted {0} to {1}", httpQueryParameters, retVal));
