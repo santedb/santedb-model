@@ -216,6 +216,9 @@ namespace SanteDB.Core.Model.DataTypes
             }
         }
 
+        /// <inheritdoc/>
+        public bool ShouldSerializeExpiryDateXml() => this.ExpiryDate.HasValue;
+
         /// <summary>
         /// Gets or sets the expiration date of the identifier
         /// </summary>
