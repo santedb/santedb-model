@@ -38,6 +38,7 @@ namespace SanteDB.Core.Model.Map
         public ClassMap()
         {
             this.Property = new List<PropertyMap>();
+            this.ParentMap = new List<ClassMap>();
         }
 
         // Cache
@@ -112,6 +113,12 @@ namespace SanteDB.Core.Model.Map
         public List<CastMap> Cast { get; set; }
 
         /// <summary>
+        /// Parent map
+        /// </summary>
+        [XmlIgnore]
+        public List<ClassMap> ParentMap { get; set; }
+
+        /// <summary>
         /// Try to get a collapse key
         /// </summary>
         public bool TryGetCollapseKey(string propertyName, out CollapseKey retVal)
@@ -127,7 +134,8 @@ namespace SanteDB.Core.Model.Map
         {
             if (!this.m_modelPropertyMap.TryGetValue(modelName, out retVal))
             {
-                retVal = this.Property.Find(o => o.ModelName == modelName);
+                retVal = this.Property.FirstOrDefault(o => o.ModelName == modelName);
+
                 lock (this.m_lockObject)
                 {
                     if (!this.m_modelPropertyMap.ContainsKey(modelName))

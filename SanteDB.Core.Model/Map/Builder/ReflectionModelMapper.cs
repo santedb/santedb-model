@@ -73,13 +73,19 @@ namespace SanteDB.Core.Model.Map.Builder
             {
                 // Map property
                 PropertyInfo modelProperty = null;
-                if (!m_classMap.TryGetModelProperty(sourceProperty.Name, out PropertyMap propMap) && propMap?.QueryOnly != true)
+                var classMap = this.m_classMap;
+                if(classMap.DomainType != domainInstance.GetType()) // Get from the parent
                 {
-                    modelProperty = this.m_classMap.ModelType.GetProperty(sourceProperty.Name);
+                    classMap = classMap.ParentMap.Find(o => o.DomainType == domainInstance.GetType()) ?? classMap;
+                }
+
+                if (!classMap.TryGetModelProperty(sourceProperty.Name, out PropertyMap propMap) && propMap?.QueryOnly != true)
+                {
+                    modelProperty = classMap.ModelType.GetProperty(sourceProperty.Name);
                 }
                 else
                 {
-                    modelProperty = this.m_classMap.ModelType.GetProperty(propMap.ModelName);
+                    modelProperty = classMap.ModelType.GetProperty(propMap.ModelName);
                 }
 
 

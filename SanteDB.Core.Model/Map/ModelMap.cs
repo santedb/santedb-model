@@ -81,13 +81,27 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public IEnumerable<ValidationResultDetail> Validate()
         {
-            List<ValidationResultDetail> retVal = new List<ValidationResultDetail>();
             foreach (var cls in this.Class)
             {
-                retVal.AddRange(cls.Validate());
+                foreach(var itm in cls.Validate())
+                {
+                    yield return itm;
+                }
+
+                // Add the parent map types
+                var par = cls.ModelType.BaseType;
+                cls.ParentMap = new List<ClassMap>();
+                while(par != typeof(Object) && par != null)
+                {
+                    var map = this.Class.Find(o => o.ModelType == par);
+                    if(map != null)
+                    {
+                        cls.ParentMap.Add(map);
+                    }
+                    par = par.BaseType;
+                }
             }
 
-            return retVal;
         }
 
         /// <summary>
