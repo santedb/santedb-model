@@ -67,19 +67,20 @@ namespace SanteDB.Core.Model.Map.Builder
 
             // Now the property maps
             var retVal = Activator.CreateInstance(this.m_classMap.ModelType);
+            var classMap = this.m_classMap;
+            if(classMap.DomainType != domainInstance.GetType()) // Get from the parent
+            {
+                classMap = classMap.ParentMap.Find(o => o.DomainType == domainInstance.GetType()) ?? classMap;
+            }
 
             // Iterate the properties and map
             foreach (var sourceProperty in domainInstance.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 // Map property
                 PropertyInfo modelProperty = null;
-                var classMap = this.m_classMap;
-                if(classMap.DomainType != domainInstance.GetType()) // Get from the parent
-                {
-                    classMap = classMap.ParentMap.Find(o => o.DomainType == domainInstance.GetType()) ?? classMap;
-                }
 
-                if (!classMap.TryGetModelProperty(sourceProperty.Name, out PropertyMap propMap) && propMap?.QueryOnly != true)
+                
+                if (!classMap.TryGetDomainProperty(sourceProperty.Name, out PropertyMap propMap) || propMap?.QueryOnly == true)
                 {
                     modelProperty = classMap.ModelType.GetProperty(sourceProperty.Name);
                 }
@@ -143,7 +144,7 @@ namespace SanteDB.Core.Model.Map.Builder
 
                 // Map property
                 PropertyInfo domainProperty = null;
-                if (m_classMap.TryGetModelProperty(propInfo.Name, out PropertyMap propMap) && propMap?.QueryOnly != true)
+                if (m_classMap.TryGetModelProperty(propInfo.Name, out PropertyMap propMap) || propMap?.QueryOnly == true)
                 {
                     domainProperty = this.m_classMap.DomainType.GetRuntimeProperty(propMap.DomainName);
                 }
