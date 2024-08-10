@@ -210,6 +210,17 @@ namespace SanteDB.Core.Model.Map
         }
 
         /// <summary>
+        /// Add a class map definition <paramref name="map"/> to this model mapper context
+        /// </summary>
+        /// <param name="map">The map to be added</param>
+        public void AddClassMap(ClassMap map)
+        {
+            this.m_mapFile.Class.Add(map);
+            var mapper = new ReflectionModelMapper(map, this);
+            this.m_mappers.TryAdd(map.DomainType, mapper);
+            this.m_mappers.TryAdd(map.ModelType, mapper);
+        }
+        /// <summary>
         /// Maps a cast to appropriate path
         /// </summary>
         public Expression MapTypeCast(UnaryExpression sourceExpression, Expression accessExpression)
