@@ -123,7 +123,7 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public bool TryGetCollapseKey(string propertyName, out CollapseKey retVal)
         {
-            retVal = this.CollapseKey.Find(o => o.PropertyName == propertyName);
+            retVal = this.CollapseKey?.Find(o => o.PropertyName == propertyName);
             return retVal != null;
         }
 
