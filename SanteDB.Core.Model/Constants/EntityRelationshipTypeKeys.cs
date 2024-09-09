@@ -836,6 +836,11 @@ namespace SanteDB.Core.Model.Constants
         /// The source entity is comprised of the target as a part (example: DTP vaccine kind has part Diptheria vaccine kind, Tetanus vaccine kind, and Pertussis vaccine kind)
         /// </summary>
         public const string HasPart = "2220EF3F-B8D9-43A4-9BAE-A2906E3C0803";
+
+        /// <summary>
+        /// Extended SanteDB relationship for grouping related objects together for reporting purposes
+        /// </summary>
+        public const string ReportTarget = "34D144E0-4F3B-4555-8F0B-BEE370D05719";
     }
 
     /// <summary>
@@ -1652,5 +1657,10 @@ namespace SanteDB.Core.Model.Constants
         /// The source entity is comprised of the target as a part (example: DTP vaccine kind has part Diptheria vaccine kind, Tetanus vaccine kind, and Pertussis vaccine kind)
         /// </summary>
         public static readonly Guid HasPart = Guid.Parse("2220EF3F-B8D9-43A4-9BAE-A2906E3C0803");
+
+        /// <summary>
+        /// Extended SanteDB type for contained report flag
+        /// </summary>
+        public static readonly Guid ReportTarget = Guid.Parse(EntityRelationshipTypeKeyStrings.ReportTarget);
     }
 }
