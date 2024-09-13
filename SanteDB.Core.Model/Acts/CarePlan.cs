@@ -87,7 +87,13 @@ namespace SanteDB.Core.Model.Acts
         /// generated as part of an HIV/TB care pathway may be kept separate from an ANC or pregnancy care plan
         /// </remarks>
         [XmlElement("pathway"), JsonProperty("pathway")]
-        public String CarePathwayIdentifier { get; set; }
+        public Guid? CarePathwayKey { get; set; }
+
+        /// <summary>
+        /// Delay load property for <see cref="CarePathwayKey">
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(CarePathwayKey))]
+        public CarePathwayDefinition CarePathway { get; set; }
 
         /// <summary>
         /// Create care plan with acts
