@@ -36,6 +36,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Query
@@ -52,6 +53,16 @@ namespace SanteDB.Core.Model.Query
         private static readonly Regex m_valueExtractionRegex = new Regex(@"^((?:(?:\w+?|\w+?\[(?:[^\]]*)\])(?:\.|\@\w+?\.?)?)*)\=(.*)$", RegexOptions.Compiled);
         private static readonly Regex m_propertyExtractionRegex = new Regex(@"^(([_$\w]+)(?:\[([^\]]+)\])?(?:@(\w+))?(\??))\.?(.*?)(?:\|\|(.*))?$", RegexOptions.Compiled);
         private static readonly ModelSerializationBinder m_modelBinder = new ModelSerializationBinder();
+        private static readonly Type[] m_baseTypes = new Type[]
+        {
+            typeof(String),
+            typeof(Boolean),
+            typeof(Int32),
+            typeof(DateTime),
+            typeof(DateTimeOffset),
+            typeof(Int64),
+            typeof(Decimal)
+        };
 
         private class HdsiAccessPathInfo
         {
@@ -142,6 +153,10 @@ namespace SanteDB.Core.Model.Query
             /// <returns>An enumerator of each of the HDSI expressions in the OR path</returns>
             public static IEnumerable<HdsiAccessPathInfo> ParseAllAccessPaths(String accessPath)
             {
+                if(String.IsNullOrEmpty(accessPath))
+                {
+                    yield return new HdsiAccessPathInfo(String.Empty, String.Empty, String.Empty, String.Empty, false, String.Empty);
+                }
                 var accessMatch = m_propertyExtractionRegex.Match(accessPath);
                 while(accessMatch.Success)
                 {
@@ -301,7 +316,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             accessExpression = Expression.Call(null, controlMethod, accessExpression, Expression.Constant(hdsiPath.PropertyName), Expression.Constant(null));
                         }
-                        else if (!hdsiPath.IsControlParameter)
+                        else if(!String.IsNullOrEmpty(hdsiPath.PropertyName) && !hdsiPath.IsControlParameter)
                         {
                             // Attempt to get property cache
                             if (!m_memberCache.TryGetValue(accessExpression.Type, out var memberCache))
@@ -561,7 +576,7 @@ namespace SanteDB.Core.Model.Query
                     }
 
                     // HACK: Was there any mapping done?
-                    if (accessExpression == parameterExpression)
+                    if (accessExpression == parameterExpression && !m_baseTypes.Contains(modelType.StripNullable()))
                     {
                         continue;
                     }
