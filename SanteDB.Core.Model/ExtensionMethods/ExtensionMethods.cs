@@ -1692,7 +1692,7 @@ namespace SanteDB
                 var piValue = pi.GetValue(me);
 
                 // Is the property a key?
-                if (piValue is IdentifiedData iddata && iddata.Key.HasValue)
+                if (piValue is IdentifiedData iddata)
                 {
                     // Get the object which references this
                     var keyProperty = pi.GetSerializationRedirectProperty();
@@ -1700,7 +1700,7 @@ namespace SanteDB
                     switch (harmonizationMode)
                     {
                         case KeyHarmonizationMode.KeyOverridesProperty:
-                            if (keyValue != null && !keyValue.Equals(iddata.Key)) // There is a key for this which is populated, we want to use the key and clear the property
+                            if (iddata.Key.HasValue && keyValue != null && !keyValue.Equals(iddata.Key)) // There is a key for this which is populated, we want to use the key and clear the property
                             {
                                 if (strictKeyAgreement)
                                 {
