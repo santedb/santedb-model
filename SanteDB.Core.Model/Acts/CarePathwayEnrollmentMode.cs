@@ -23,11 +23,11 @@ namespace SanteDB.Core.Model.Acts
     /// <summary>
     /// Enrolment mode
     /// </summary>
-    [XmlType(nameof(CarePathwayEnrolmentMode), Namespace = "http://santedb.org/model")]
-    public enum CarePathwayEnrolmentMode
+    [XmlType(nameof(CarePathwayEnrollmentMode), Namespace = "http://santedb.org/model")]
+    public enum CarePathwayEnrollmentMode
     {
         /// <summary>
-        /// Enrolment is manually performed
+        /// Enrollment is manually performed
         /// </summary>
         [XmlEnum("manual")]
         Manual,

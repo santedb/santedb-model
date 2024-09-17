@@ -54,8 +54,8 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the enrolment mode
         /// </summary>
-        [XmlElement("enrolment"), JsonProperty("enrolment")]
-        public CarePathwayEnrolmentMode EnrolmentMode { get; set; }
+        [XmlElement("enrollment"), JsonProperty("enrollment")]
+        public CarePathwayEnrollmentMode EnrollmentMode { get; set; }
 
         /// <summary>
         /// Gets or sets the type of encounter 
