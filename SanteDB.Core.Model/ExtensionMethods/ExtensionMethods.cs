@@ -1722,7 +1722,7 @@ namespace SanteDB
                             {
                                 keyProperty.SetValue(me, iddata.Key);
                             }
-                            else
+                            else if(keyValue != null)
                             {
                                 pi.SetValue(me, null); // Let the identifier data stand
                             }
