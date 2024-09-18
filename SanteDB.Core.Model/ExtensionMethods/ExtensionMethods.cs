@@ -722,11 +722,14 @@ namespace SanteDB
                         typeof(IdentifiedData).IsAssignableFrom(propertyToLoad.PropertyType.StripGeneric()))
                     {
                         IList loaded = Activator.CreateInstance(propertyToLoad.PropertyType) as IList;
+                        var inverted = propertyToLoad.HasCustomAttribute<DelayLoadInverseAttribute>();
                         if (me.Key.HasValue)
                         {
                             if (me is ITaggable taggable && taggable.TryGetTag(SystemTagNames.AlternateKeysTag, out ITag altKeys))
                             {
-                                var loadedData = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
+                                var loadedData = inverted ?
+                                    EntitySource.Current.Provider.GetInverseRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray()) 
+                                    : EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
                                 foreach (var itm in loadedData)
                                 {
                                     loaded.Add(itm);
@@ -734,7 +737,9 @@ namespace SanteDB
                             }
                             else
                             {
-                                var delayLoad = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value);
+                                var delayLoad = inverted ?
+                                    EntitySource.Current.Provider.GetInverseRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value)
+                                    : EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value);
                                 if (delayLoad != null)
                                 {
                                     foreach (var itm in delayLoad)

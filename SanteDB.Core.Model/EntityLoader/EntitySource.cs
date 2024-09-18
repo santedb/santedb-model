@@ -73,6 +73,14 @@ namespace SanteDB.Core.Model.EntityLoader
 
             }
 
+
+            /// <inheritdoc/>
+            public IQueryResultSet GetInverseRelations(Type tobject, params Guid?[] targetKey)
+            {
+                return new MemoryQueryResultSet(new Object[0]);
+
+            }
+
             /// <summary>
             /// Query
             /// </summary>
