@@ -15,10 +15,9 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Roles;
@@ -47,6 +46,15 @@ namespace SanteDB.Core.Model.Acts
     [ClassConceptKey(ActClassKeyStrings.CarePlan)]
     public class CarePlan : Act
     {
+
+        private static readonly Guid?[] COPY_RELATIONSHIP_TYPES = new Guid?[]
+        {
+            ActRelationshipTypeKeys.Fulfills,
+            ActRelationshipTypeKeys.Evaluates,
+            ActRelationshipTypeKeys.IsCauseOf,
+            ActRelationshipTypeKeys.Appends
+        };
+
         /// <summary>
         /// Default ctor
         /// </summary>
@@ -77,7 +85,13 @@ namespace SanteDB.Core.Model.Acts
         /// generated as part of an HIV/TB care pathway may be kept separate from an ANC or pregnancy care plan
         /// </remarks>
         [XmlElement("pathway"), JsonProperty("pathway")]
-        public String CarePathwayIdentifier { get; set; }
+        public Guid? CarePathwayKey { get; set; }
+
+        /// <summary>
+        /// Delay load property for <see cref="CarePathwayKey"/>
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(CarePathwayKey))]
+        public CarePathwayDefinition CarePathway { get; set; }
 
         /// <summary>
         /// Create care plan with acts
@@ -95,5 +109,6 @@ namespace SanteDB.Core.Model.Acts
         {
             return new CarePlan(p, new Act[0]) { MoodConceptKey = ActMoodKeys.Request };
         }
+
     }
 }

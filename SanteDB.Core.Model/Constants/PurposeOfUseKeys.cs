@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using System;
 
@@ -68,5 +66,21 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid SecurityAdmin = Guid.Parse("8b18c8ce-916a-11ea-bb37-0242ac130002");
 
+        /// <summary>
+        /// Gets all keys
+        /// </summary>
+        public static readonly Guid[] AllKeys = new Guid[]
+        {
+            Coverage,
+            EmergencyTreatment,
+            Marketing,
+            Operations,
+            Payment,
+            Research,
+            PatientRequest,
+            PublicHealth,
+            Treatment,
+            SecurityAdmin
+        };
     }
 }

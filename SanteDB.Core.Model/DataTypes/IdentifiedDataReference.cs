@@ -15,10 +15,9 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.Xml.Serialization;
 
@@ -37,6 +36,9 @@ namespace SanteDB.Core.Model.DataTypes
     public class IdentifiedDataReference : IdentifiedData
     {
 
+        // Serialization binder 
+        private static readonly ModelSerializationBinder m_serializationBinder = new ModelSerializationBinder();
+
         /// <summary>
         /// Serialization ctor
         /// </summary>
@@ -51,7 +53,7 @@ namespace SanteDB.Core.Model.DataTypes
         public IdentifiedDataReference(IdentifiedData refObject)
         {
             this.Key = refObject.Key;
-            this.ReferencedType = refObject.Type;
+            this.ReferencedTypeXml = refObject.Type;
         }
 
         /// <summary>
@@ -70,6 +72,16 @@ namespace SanteDB.Core.Model.DataTypes
         /// The type of object referenced
         /// </summary>
         [XmlElement("refType"), JsonProperty("refType")]
-        public String ReferencedType { get; set; }
+        public String ReferencedTypeXml { get; set; }
+
+        /// <summary>
+        /// Gets the referenced type
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public Type ReferencedType
+        {
+            get => m_serializationBinder.BindToType(null, this.ReferencedTypeXml);
+            set => this.ReferencedTypeXml = value?.GetSerializationName();
+        }
     }
 }

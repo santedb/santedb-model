@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
@@ -129,10 +127,10 @@ namespace SanteDB.Core.Model.Query
                     case ExpressionType.Equal:
                     case ExpressionType.And:
                     case ExpressionType.AndAlso:
-                    case ExpressionType.Or:
                     case ExpressionType.OrElse:
                         return this.VisitBinary((BinaryExpression)node);
-
+                    case ExpressionType.Or:
+                        return this.VisitExplicitOr((BinaryExpression)node);
                     case ExpressionType.MemberAccess:
                         return this.VisitMemberAccess((MemberExpression)node);
 
@@ -165,6 +163,24 @@ namespace SanteDB.Core.Model.Query
                     default:
                         throw new InvalidOperationException($"Don't know how to convert type of {node.Type}");
                 }
+            }
+
+            /// <summary>
+            /// Visit a binary union instruction for an explcit OR
+            /// </summary>
+            private Expression VisitExplicitOr(BinaryExpression node)
+            {
+                var result = new NameValueCollection();
+                var subExpressionVisitor = new HttpQueryExpressionVisitor(result, node.Left.Type);
+                subExpressionVisitor.Visit(node.Left);
+                var leftProperty = result.Keys[0];
+                result.Clear();
+                subExpressionVisitor.Visit(node.Right);
+                var rightProperty = result.Keys[0];
+
+                // Now we want to add to ours
+                this.AddCondition($"{leftProperty}||{rightProperty}", result.GetValues(rightProperty));
+                return node;
             }
 
             /// <summary>

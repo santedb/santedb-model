@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.i18n;
@@ -160,7 +158,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Gets the acts in which this entity participates
         /// </summary>
-        [XmlElement("participation"), JsonProperty("participation"), SerializationMetadata]
+        [XmlElement("participation"), JsonProperty("participation"), SerializationMetadata, DelayLoadInverse]
         public List<ActParticipation> Participations { get; set; }
 
         /// <summary>

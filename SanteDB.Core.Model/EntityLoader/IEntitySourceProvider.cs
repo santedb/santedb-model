@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Query;
@@ -58,6 +56,14 @@ namespace SanteDB.Core.Model.EntityLoader
         /// <param name="relatedType">The related type to load</param>
         /// <param name="sourceKey">The source keys to load relationships for</param>
         IQueryResultSet GetRelations(Type relatedType, params Guid?[] sourceKey);
+
+        /// <summary>
+        /// Get the relationships which the object is the target
+        /// </summary>
+        /// <param name="relatedType">The type of relationship to load</param>
+        /// <param name="targetKey">The target key</param>
+        /// <returns>The list of loaded relationship</returns>
+        IQueryResultSet GetInverseRelations(Type relatedType, params Guid?[] targetKey);
 
     }
 }

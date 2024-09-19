@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -96,7 +94,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Classification of the relationship
         /// </summary>
-        Guid? ITargetedAssociation.ClassificationKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        Guid? ITargetedAssociation.ClassificationKey { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
         /// <summary>
         /// Association type

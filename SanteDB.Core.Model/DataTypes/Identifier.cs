@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Acts;
@@ -215,6 +213,9 @@ namespace SanteDB.Core.Model.DataTypes
                 }
             }
         }
+
+        /// <inheritdoc/>
+        public bool ShouldSerializeExpiryDateXml() => this.ExpiryDate.HasValue;
 
         /// <summary>
         /// Gets or sets the expiration date of the identifier

@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using SanteDB.Core.Model.Entities;
 using System;
@@ -144,6 +142,11 @@ namespace SanteDB.Core.Model.Constants
         /// The identifier in the address that points to another <see cref="Place"/>
         /// </summary>
         public static readonly Guid PlaceReference = Guid.Parse("A314F427-2B6D-4948-9146-A5F700973899");
+        /// <summary>
+        /// Identifies the region or zone or division
+        /// </summary>
+        public static readonly Guid Zone = Guid.Parse("BEB49585-0F65-4F2E-9481-DD11CB7A15E0");
+
     }
 
     /// <summary>

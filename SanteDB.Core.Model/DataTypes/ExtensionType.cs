@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Interfaces;
@@ -86,7 +84,7 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("handlerClass"), JsonProperty("handlerClass")]
         public String ExtensionHandlerXml
         {
-            get { return this.ExtensionHandler?.AssemblyQualifiedName; }
+            get { return this.ExtensionHandler?.AssemblyQualifiedNameWithoutVersion(); }
             set
             {
                 if (value == null)

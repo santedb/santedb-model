@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -40,6 +38,7 @@ namespace SanteDB.Core.Model.Entities
     [ClassConceptKey(EntityClassKeyStrings.CityOrTown)]
     [ClassConceptKey(EntityClassKeyStrings.Country)]
     [ClassConceptKey(EntityClassKeyStrings.CountyOrParish)]
+    [ClassConceptKey(EntityClassKeyStrings.ZoneOrTerritory)]
     [ClassConceptKey(EntityClassKeyStrings.StateOrProvince)]
     [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
     public class Place : Entity, IGeoTagged
@@ -60,7 +59,8 @@ namespace SanteDB.Core.Model.Entities
                     classKey == EntityClassKeys.CityOrTown ||
                     classKey == EntityClassKeys.PrecinctOrBorough ||
                     classKey == EntityClassKeys.Country ||
-                    classKey == EntityClassKeys.CountyOrParish;
+                    classKey == EntityClassKeys.CountyOrParish ||
+                    classKey == EntityClassKeys.ZoneOrTerritory;
 
         /// <summary>
         /// True if location is mobile

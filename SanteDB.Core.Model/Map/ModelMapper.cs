@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Microsoft.CSharp;
 using SanteDB.Core.Exceptions;
@@ -209,6 +207,17 @@ namespace SanteDB.Core.Model.Map
             return null;
         }
 
+        /// <summary>
+        /// Add a class map definition <paramref name="map"/> to this model mapper context
+        /// </summary>
+        /// <param name="map">The map to be added</param>
+        public void AddClassMap(ClassMap map)
+        {
+            this.m_mapFile.Class.Add(map);
+            var mapper = new ReflectionModelMapper(map, this);
+            this.m_mappers.TryAdd(map.DomainType, mapper);
+            this.m_mappers.TryAdd(map.ModelType, mapper);
+        }
         /// <summary>
         /// Maps a cast to appropriate path
         /// </summary>

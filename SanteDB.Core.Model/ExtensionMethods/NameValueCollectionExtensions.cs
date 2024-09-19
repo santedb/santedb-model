@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using System;
 using System.Collections;
@@ -134,6 +132,14 @@ namespace SanteDB
             {
                 var expr = itm.Split('=');
                 expr[0] = Uri.UnescapeDataString(expr[0]).Trim();
+
+                if(expr.Length > 2)
+                {
+                    for(int i = 2; i < expr.Length; i++)
+                    {
+                        expr[1] += $"={expr[i]}";
+                    }
+                }
                 expr[1] = Uri.UnescapeDataString(expr[1]).Trim();
 
                 if (expr[0].EndsWith("[]")) // JQUERY Hack:

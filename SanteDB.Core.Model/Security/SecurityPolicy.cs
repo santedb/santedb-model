@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -91,7 +89,7 @@ namespace SanteDB.Core.Model.Security
         public String Oid { get; set; }
 
         /// <summary>
-        /// Whether the property is public
+        /// Whether the policy is public
         /// </summary>
         [XmlElement("isPublic"), JsonProperty("isPublic")]
         public bool IsPublic { get; set; }

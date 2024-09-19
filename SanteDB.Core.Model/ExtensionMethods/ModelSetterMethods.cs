@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model;
@@ -47,7 +45,7 @@ namespace SanteDB
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> s_nonMetadataCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
 
         // Property selector
-        private static Regex s_hdsiPropertySelector = new Regex(@"(\w+)(?:\[([\w\|\-]+)\])?(?:\@(\w+))?\.?", RegexOptions.Compiled);
+        private static Regex s_hdsiPropertySelector = new Regex(@"(\w+)(?:\[([^]]+)\])?(?:\@(\w+))?\.?", RegexOptions.Compiled);
 
         /// <summary>
         /// Gets all non metadata properties (those marked with <see cref="SerializationMetadataAttribute"/>
@@ -159,7 +157,7 @@ namespace SanteDB
                         }
 
                         if (sourcePropertyValue == null && (sourceProperty.PropertyType.Implements(typeof(IIdentifiedResource)) ||
-                            sourceProperty.PropertyType.Implements(typeof(IList))))
+                            sourceProperty.PropertyType.Implements(typeof(IList)) && !sourceProperty.PropertyType.IsArray))
                         {
 
                             // Is there a cast?
@@ -169,6 +167,7 @@ namespace SanteDB
                             {
                                 propertyType = new ModelSerializationBinder().BindToType(typeof(ModelSerializationBinder).Assembly.FullName, match.Groups[3].Value);
                             }
+
                             sourcePropertyValue = Activator.CreateInstance(propertyType);
                             sourceProperty.SetValue(focalObject, sourcePropertyValue);
                         }

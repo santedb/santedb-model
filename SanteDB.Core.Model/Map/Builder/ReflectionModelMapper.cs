@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using System;
 using System.Linq;
@@ -67,19 +65,26 @@ namespace SanteDB.Core.Model.Map.Builder
 
             // Now the property maps
             var retVal = Activator.CreateInstance(this.m_classMap.ModelType);
+            var classMap = this.m_classMap;
+            if(classMap.DomainType != domainInstance.GetType()) // Get from the parent
+            {
+                classMap = classMap.ParentMap.Find(o => o.DomainType == domainInstance.GetType()) ?? classMap;
+            }
 
             // Iterate the properties and map
             foreach (var sourceProperty in domainInstance.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 // Map property
                 PropertyInfo modelProperty = null;
-                if (!m_classMap.TryGetModelProperty(sourceProperty.Name, out PropertyMap propMap) && propMap?.QueryOnly != true)
+
+                
+                if (!classMap.TryGetDomainProperty(sourceProperty.Name, out PropertyMap propMap) || propMap?.QueryOnly == true)
                 {
-                    modelProperty = this.m_classMap.ModelType.GetProperty(sourceProperty.Name);
+                    modelProperty = classMap.ModelType.GetProperty(sourceProperty.Name);
                 }
                 else
                 {
-                    modelProperty = this.m_classMap.ModelType.GetProperty(propMap.ModelName);
+                    modelProperty = classMap.ModelType.GetProperty(propMap.ModelName);
                 }
 
 
@@ -137,7 +142,7 @@ namespace SanteDB.Core.Model.Map.Builder
 
                 // Map property
                 PropertyInfo domainProperty = null;
-                if (m_classMap.TryGetModelProperty(propInfo.Name, out PropertyMap propMap) && propMap?.QueryOnly != true)
+                if (m_classMap.TryGetModelProperty(propInfo.Name, out PropertyMap propMap) || propMap?.QueryOnly == true)
                 {
                     domainProperty = this.m_classMap.DomainType.GetRuntimeProperty(propMap.DomainName);
                 }

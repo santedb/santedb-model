@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -96,7 +94,7 @@ namespace SanteDB.Core.Model.Acts
         /// or that A is does not <see cref="ActRelationshipTypeKeys.HasComponent"/> of B.
         /// </remarks>
         [XmlElement("negationInd"), JsonProperty("negationInd")]
-        public bool NegationIndicator { get; set; }
+        public bool? NegationIndicator { get; set; }
 
         /// <summary>
         /// Gets or sets the external key for the object

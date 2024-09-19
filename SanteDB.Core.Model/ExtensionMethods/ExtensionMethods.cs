@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Exceptions;
@@ -141,6 +139,12 @@ namespace SanteDB
 
         private static ConcurrentDictionary<String, MethodBase> s_genericMethodCache = new ConcurrentDictionary<string, MethodBase>();
 
+        /// <summary>
+        /// Gets an assembly qualified name without version information
+        /// </summary>
+        /// <param name="me"></param>
+        /// <returns></returns>
+        public static String AssemblyQualifiedNameWithoutVersion(this Type me) => $"{me.FullName}, {me.Assembly.GetName().Name}";
 
         // Property cache
         private static ConcurrentDictionary<String, PropertyInfo> s_propertyCache = new ConcurrentDictionary<string, PropertyInfo>();
@@ -718,11 +722,14 @@ namespace SanteDB
                         typeof(IdentifiedData).IsAssignableFrom(propertyToLoad.PropertyType.StripGeneric()))
                     {
                         IList loaded = Activator.CreateInstance(propertyToLoad.PropertyType) as IList;
+                        var inverted = propertyToLoad.HasCustomAttribute<DelayLoadInverseAttribute>();
                         if (me.Key.HasValue)
                         {
                             if (me is ITaggable taggable && taggable.TryGetTag(SystemTagNames.AlternateKeysTag, out ITag altKeys))
                             {
-                                var loadedData = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
+                                var loadedData = inverted ?
+                                    EntitySource.Current.Provider.GetInverseRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray()) 
+                                    : EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
                                 foreach (var itm in loadedData)
                                 {
                                     loaded.Add(itm);
@@ -730,7 +737,9 @@ namespace SanteDB
                             }
                             else
                             {
-                                var delayLoad = EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value);
+                                var delayLoad = inverted ?
+                                    EntitySource.Current.Provider.GetInverseRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value)
+                                    : EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), me.Key.Value);
                                 if (delayLoad != null)
                                 {
                                     foreach (var itm in delayLoad)
@@ -1525,7 +1534,7 @@ namespace SanteDB
             StringBuilder retVal = new StringBuilder($"{e.GetType().Name} : {e.Message}");
             while (e.InnerException != null)
             {
-                retVal.AppendFormat("\r\nCAUSE: {0}: {1}", e.InnerException.GetType().Name, e.InnerException.Message);
+                retVal.AppendFormat("\r\nCAUSED BY: {0}: {1}", e.InnerException.GetType().Name, e.InnerException.Message);
                 e = e.InnerException;
             }
             return retVal.ToString();
@@ -1688,7 +1697,7 @@ namespace SanteDB
                 var piValue = pi.GetValue(me);
 
                 // Is the property a key?
-                if (piValue is IdentifiedData iddata && iddata.Key.HasValue)
+                if (piValue is IdentifiedData iddata)
                 {
                     // Get the object which references this
                     var keyProperty = pi.GetSerializationRedirectProperty();
@@ -1696,7 +1705,7 @@ namespace SanteDB
                     switch (harmonizationMode)
                     {
                         case KeyHarmonizationMode.KeyOverridesProperty:
-                            if (keyValue != null && !keyValue.Equals(iddata.Key)) // There is a key for this which is populated, we want to use the key and clear the property
+                            if (iddata.Key.HasValue && keyValue != null && !keyValue.Equals(iddata.Key)) // There is a key for this which is populated, we want to use the key and clear the property
                             {
                                 if (strictKeyAgreement)
                                 {
@@ -1718,7 +1727,7 @@ namespace SanteDB
                             {
                                 keyProperty.SetValue(me, iddata.Key);
                             }
-                            else
+                            else if(keyValue != null)
                             {
                                 pi.SetValue(me, null); // Let the identifier data stand
                             }

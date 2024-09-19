@@ -15,8 +15,6 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
- * User: fyfej
- * Date: 2023-6-21
  */
 using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Query;
@@ -70,6 +68,14 @@ namespace SanteDB.Core.Model.EntityLoader
 
             /// <inheritdoc/>
             public IQueryResultSet GetRelations(Type tobject, params Guid?[] sourceKey)
+            {
+                return new MemoryQueryResultSet(new Object[0]);
+
+            }
+
+
+            /// <inheritdoc/>
+            public IQueryResultSet GetInverseRelations(Type tobject, params Guid?[] targetKey)
             {
                 return new MemoryQueryResultSet(new Object[0]);
 
