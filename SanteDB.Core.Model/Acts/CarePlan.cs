@@ -88,7 +88,7 @@ namespace SanteDB.Core.Model.Acts
         public Guid? CarePathwayKey { get; set; }
 
         /// <summary>
-        /// Delay load property for <see cref="CarePathwayKey">
+        /// Delay load property for <see cref="CarePathwayKey"/>
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(CarePathwayKey))]
         public CarePathwayDefinition CarePathway { get; set; }
