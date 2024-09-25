@@ -29,5 +29,9 @@ namespace SanteDB.Core.Model
         /// </summary>
         public const string NoDynamicLoadAnnotation = "No_Dyna_load";
 
+        /// <summary>
+        /// XHTML namespace
+        /// </summary>
+        public const string NS_XHTML = "http://www.w3.org/1999/xhtml";
     }
 }
