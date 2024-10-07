@@ -354,7 +354,7 @@ namespace SanteDB.Core.Model.Query
                                 else if (typeof(IAnnotatedResource).IsAssignableFrom(memberInfo.PropertyType))
                                 {
                                     var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                    accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
+                                    accessExpression = Expression.Coalesce(Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false)), Expression.New(memberInfo.PropertyType));
                                 }
                                 else
                                 {

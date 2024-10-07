@@ -547,6 +547,16 @@ namespace SanteDB
             me.SetLoaded(propertySelector.GetMember().Name);
         }
 
+        /// <summary>
+        /// Set the load state
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void ClearLoaded<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> propertySelector)
+            where TSource : IAnnotatedResource
+        {
+            me.ClearLoaded(propertySelector.GetMember().Name);
+        }
+
 
         /// <summary>
         /// Returns true if the property is loaded
@@ -674,6 +684,17 @@ namespace SanteDB
             {
                 me.AddAnnotation(loadCheck);
             }
+        }
+
+        /// <summary>
+        /// Set the necessary annotation on <paramref name="me"/> to indicate that <paramref name="propertyName"/> has
+        /// been loaded
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void ClearLoaded(this IAnnotatedResource me, string propertyName)
+        {
+            var loadCheck = new PropertyLoadCheck(propertyName);
+            me.RemoveAnnotation(loadCheck);
         }
 
         /// <summary>
