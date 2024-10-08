@@ -40,6 +40,12 @@ namespace SanteDB.Core.Model.Acts
         public string Mnemonic { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the care pathway
+        /// </summary>
+        [XmlElement("name"), JsonProperty("name")]
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the description of the care pathway
         /// </summary>
         [XmlElement("description"), JsonProperty("description")]
