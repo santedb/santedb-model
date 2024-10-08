@@ -85,5 +85,15 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string BirthTimeExtensionName = "http://santedb.org/extensions/core/birthTime";
 
+        /// <summary>
+        /// Birth information is confirmed and readonly
+        /// </summary>
+        public static readonly Guid BirthInformationConfirmedExtension = Guid.Parse("CE6689C1-C48E-40C8-9ECD-3CD7734635DA");
+
+        /// <summary>
+        /// Death information is confirmed and readonly
+        /// </summary>
+        public static readonly Guid DeathInformationConfirmedExtension = Guid.Parse("D71A56C3-5E74-4929-9AD3-BA24DE56590A");
+
     }
 }
