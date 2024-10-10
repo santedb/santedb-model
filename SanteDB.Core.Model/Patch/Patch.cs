@@ -24,6 +24,33 @@ using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Patch
 {
+
+    /// <summary>
+    /// Represents a collection of patch instructions
+    /// </summary>
+    [XmlType(nameof(PatchCollection), Namespace = "http://santedb.org/model")]
+    [XmlRoot(nameof(PatchCollection), Namespace = "http://santedb.org/model")]
+    [JsonObject(nameof(PatchCollection))]
+    public class PatchCollection : IdentifiedData
+    {
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public PatchCollection()
+        {
+            this.Patches = new List<Patch>();
+        }
+
+        /// <summary>
+        /// Gets or sets the patches 
+        /// </summary>
+        [XmlElement("patch"), JsonProperty("patch")]
+        public List<Patch> Patches { get; set; }
+
+        /// <inheritdoc/>
+        public override DateTimeOffset ModifiedOn => DateTimeOffset.Now;
+    }
+
     /// <summary>
     /// Represents a series of patch instructions 
     /// </summary>
