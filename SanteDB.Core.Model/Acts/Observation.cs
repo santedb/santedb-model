@@ -64,6 +64,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [XmlType("Observation", Namespace = "http://santedb.org/model"), JsonObject("Observation")]
     [XmlRoot("Observation", Namespace = "http://santedb.org/model")]
+    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     [ClassConceptKey(ActClassKeyStrings.Observation)]
     public class Observation : Act
     {

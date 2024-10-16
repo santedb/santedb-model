@@ -67,7 +67,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "Act")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Act")]
     [JsonObject("Act")]
-    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     [Classifier(nameof(ClassConcept))]
     public class Act : VersionedEntityData<Act>, ITaggable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships, IHasTypeConcept
     {

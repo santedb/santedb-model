@@ -34,6 +34,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [XmlType(nameof(ControlAct), Namespace = "http://santedb.org/model"), JsonObject("ControlAct")]
     [ClassConceptKey(ActClassKeyStrings.ControlAct)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     public class ControlAct : Act
     {
         /// <summary>
