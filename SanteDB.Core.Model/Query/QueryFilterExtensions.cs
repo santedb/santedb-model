@@ -53,7 +53,7 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// With control parameter is used as a wrapper for _ parameters
         /// </summary>
-        internal static object WithControl(this object me, string controlParameter, object value)
+        public static object WithControl(this object me, string controlParameter, object value)
         {
             return true;
         }
