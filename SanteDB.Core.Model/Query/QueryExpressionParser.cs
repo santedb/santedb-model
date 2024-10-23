@@ -73,7 +73,7 @@ namespace SanteDB.Core.Model.Query
                 this.IsCoalesced = isCoalesced;
                 this.IsControlParameter = propertyName.StartsWith("_");
 
-                if (!String.IsNullOrEmpty(remainderExpression))
+                if (!String.IsNullOrEmpty(remainderExpression) && !remainderExpression.Equals("[]")) // HACK: JQuery will add [] for multi-queries
                 {
                     if (TryParseHdsiAccessPath(remainderExpression, out var next))
                     {
