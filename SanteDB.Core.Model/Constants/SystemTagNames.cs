@@ -62,6 +62,10 @@ namespace SanteDB.Core.Model.Constants
         /// Indicates that data was synthesized from a variety of other records and does not actually exist
         /// </summary>
         public const string GeneratedDataTag = "$generated";
+        /// <summary>
+        /// Indicates that the data is tagged for back-entry
+        /// </summary>
+        public const string BackEntry = "isBackEntry";
 
     }
 }
