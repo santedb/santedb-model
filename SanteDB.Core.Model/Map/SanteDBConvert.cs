@@ -28,6 +28,22 @@ namespace SanteDB.Core.Model.Map
     public class SanteDBConvert
     {
 
+
+        /// <summary>
+        /// Convert string to byte array
+        /// </summary>
+        public static byte[] StringToByteArray(String str)
+        {
+            try
+            {
+                return str.ParseBase64UrlEncode();
+            }
+            catch
+            {
+                return str.HexDecode();
+            }
+        }
+
         /// <summary>
         /// Guid > Byte[]
         /// </summary>

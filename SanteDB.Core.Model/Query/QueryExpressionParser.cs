@@ -837,6 +837,10 @@ namespace SanteDB.Core.Model.Query
                             {
                                 valueExpr = Expression.Convert(Expression.Constant(Guid.Parse(pValue)), typeof(Guid?));
                             }
+                            else if(operandType == typeof(Byte[]))
+                            {
+                                valueExpr = Expression.Convert(Expression.Constant(pValue.ParseBase64UrlEncode()), typeof(Byte[]));
+                            }
                             else if (operandType == typeof(TimeSpan) || operandType == typeof(TimeSpan?))
                             {
                                 if (!TimeSpan.TryParse(pValue, out TimeSpan ts))
