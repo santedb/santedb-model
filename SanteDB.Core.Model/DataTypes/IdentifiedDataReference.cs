@@ -80,7 +80,7 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlIgnore, JsonIgnore]
         public Type ReferencedType
         {
-            get => m_serializationBinder.BindToType(null, this.ReferencedTypeXml);
+            get => this.ReferencedTypeXml == null ? null :  m_serializationBinder.BindToType(null, this.ReferencedTypeXml);
             set => this.ReferencedTypeXml = value?.GetSerializationName();
         }
     }
