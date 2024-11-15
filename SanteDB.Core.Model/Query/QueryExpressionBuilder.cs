@@ -605,6 +605,9 @@ namespace SanteDB.Core.Model.Query
                             fParmValue = $"\"{parmValue.ToString().Replace("\"", "\\\"")}\"";
                         }
                         break;
+                    case byte[] bt:
+                        fParmValue = bt.Base64UrlEncode();
+                        break;
                     case bool blValue:
                         fParmValue = XmlConvert.ToString(blValue);
                         break;

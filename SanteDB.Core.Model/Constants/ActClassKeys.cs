@@ -179,11 +179,13 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// The act represents some provision of care such as the seeking out services.
         /// </summary>
+        [Obsolete("Use of this class code represents a potential privacy risk")]
         public static readonly Guid CareProvision = Guid.Parse(ActClassKeyStrings.CareProvision);
 
         /// <summary>
         /// The act represents a problem or condition which the patient is suffering from.
         /// </summary>
+        [Obsolete("Use of this class code represents a potential privacy risk - please use Observation with Type Concept ObservationTypeKeys.Condition")]
         public static readonly Guid Condition = Guid.Parse(ActClassKeyStrings.Condition);
 
         /// <summary>

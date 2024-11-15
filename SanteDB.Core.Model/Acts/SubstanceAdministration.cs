@@ -42,6 +42,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [XmlType("SubstanceAdministration", Namespace = "http://santedb.org/model"), JsonObject("SubstanceAdministration")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "SubstanceAdministration")]
+    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     [ClassConceptKey(ActClassKeyStrings.SubstanceAdministration)]
     public class SubstanceAdministration : Act
     {

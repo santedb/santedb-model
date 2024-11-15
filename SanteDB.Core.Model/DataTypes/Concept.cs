@@ -165,7 +165,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public override string ToDisplay()
         {
-            return this.LoadCollection<ConceptName>("ConceptNames")?.FirstOrDefault().Name;
+            return this.LoadCollection<ConceptName>("ConceptNames")?.FirstOrDefault()?.Name;
         }
     }
 }

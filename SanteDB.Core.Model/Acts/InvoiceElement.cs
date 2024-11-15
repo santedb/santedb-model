@@ -34,6 +34,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlType("InvoiceElement", Namespace = "http://santedb.org/model"), JsonObject("InvoiceElement")]
     [XmlRoot("InvoiceElement", Namespace = "http://santedb.org/model")]
     [ClassConceptKey(ActClassKeyStrings.InvoiceElement)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     public class InvoiceElement : Act
     {
         /// <summary>

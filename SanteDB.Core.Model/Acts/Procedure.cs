@@ -32,6 +32,7 @@ namespace SanteDB.Core.Model.Acts
     /// </summary>
     [XmlType(nameof(Procedure), Namespace = "http://santedb.org/model"), JsonObject(nameof(Procedure))]
     [XmlRoot(nameof(Procedure), Namespace = "http://santedb.org/model")]
+    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     [ClassConceptKey(ActClassKeyStrings.Procedure)]
     public class Procedure : Act
     {

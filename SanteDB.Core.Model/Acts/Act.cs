@@ -67,7 +67,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlType(Namespace = "http://santedb.org/model", TypeName = "Act")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Act")]
     [JsonObject("Act")]
-    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
+    [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     [Classifier(nameof(ClassConcept))]
     public class Act : VersionedEntityData<Act>, ITaggable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships, IHasTypeConcept
     {
@@ -392,6 +392,15 @@ namespace SanteDB.Core.Model.Acts
         public Guid? ReasonConceptKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the reason why the act was obsoleted/deleted
+        /// </summary>
+        /// <see cref="ObsoletionReasonConcept"/>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [XmlElement("obsoletionReason"), JsonProperty("obsoletionReason")]
+        [Binding(typeof(ActReasonKeys))]
+        public Guid? ObsoletionReasonKey { get; set; }
+
+        /// <summary>
         /// The concept which describes the current status of the act
         /// </summary>
         /// <see cref="StatusKeys"/>
@@ -481,6 +490,16 @@ namespace SanteDB.Core.Model.Acts
         [SerializationReference(nameof(ReasonConceptKey))]
         public Concept ReasonConcept { get; set; }
 
+        /// <summary>
+        /// Delay loads the concept from <see cref="ObsoletionReasonKey"/>
+        /// </summary>
+        /// <seealso cref="ActReasonKeys"/>
+        /// <seealso cref="ObsoletionReasonKey"/>
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(ObsoletionReasonKey))]
+        public Concept ObsoletionReasonConcept { get; set; }
+
+        
         /// <summary>
         /// Delay loads the concept represented in <see cref="StatusConceptKey"/>
         /// </summary>

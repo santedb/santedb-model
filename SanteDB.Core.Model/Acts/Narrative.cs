@@ -38,6 +38,7 @@ namespace SanteDB.Core.Model.Acts
     [JsonObject(nameof(Narrative))]
     [ClassConceptKey(ActClassKeyStrings.Document)]
     [ClassConceptKey(ActClassKeyStrings.DocumentSection)]
+    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     public class Narrative : Act
     {
         /// <inheritdoc/>

@@ -144,7 +144,7 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public IdentifiedData GetFocalObject()
         {
-            if (!this.FocalObjects.IsNullOrEmpty())
+            if (!this.FocalObjects.IsNullOrEmpty() && this.FocalObjects.Count == 1)
             {
                 return this.Item.FirstOrDefault(o => o.Key == this.FocalObjects.FirstOrDefault());
             }

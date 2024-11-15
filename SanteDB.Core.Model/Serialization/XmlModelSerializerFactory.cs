@@ -108,8 +108,8 @@ namespace SanteDB.Core.Model.Serialization
                     if (type.HasCustomAttribute(s_AddDependentSerializersType) && extraTypes.Length == 0)
                     {
                         extraTypes = AppDomain.CurrentDomain.GetAllTypes()
-                            .Where(t => t.HasCustomAttribute(s_XmlRootType) && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface)
                             .Union(ModelSerializationBinder.GetRegisteredTypes())
+                            .Where(t => t.HasCustomAttribute(s_XmlRootType) && !t.IsEnum && !t.IsGenericTypeDefinition && !t.IsAbstract && !t.IsInterface)
                             .ToArray();
                     }
                     else if (extraTypes.Length == 0)

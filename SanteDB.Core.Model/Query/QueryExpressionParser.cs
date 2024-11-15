@@ -73,7 +73,7 @@ namespace SanteDB.Core.Model.Query
                 this.IsCoalesced = isCoalesced;
                 this.IsControlParameter = propertyName.StartsWith("_");
 
-                if (!String.IsNullOrEmpty(remainderExpression))
+                if (!String.IsNullOrEmpty(remainderExpression) && !remainderExpression.Equals("[]")) // HACK: JQuery will add [] for multi-queries
                 {
                     if (TryParseHdsiAccessPath(remainderExpression, out var next))
                     {
@@ -273,7 +273,7 @@ namespace SanteDB.Core.Model.Query
         public static LambdaExpression BuildLinqExpression(Type modelType, NameValueCollection httpQueryParameters, string parameterName, Dictionary<String, Func<object>> variables = null, bool safeNullable = true, bool alwaysCoalesce = false, bool forceLoad = false, bool lazyExpandVariables = true, bool relayControlVariables = false, bool coalesceOutput = true, string collectionResolutionMethod = nameof(Enumerable.FirstOrDefault), ParameterExpression useParameter = null)
         {
 
-            var controlMethod = typeof(QueryFilterExtensions).GetMethod(nameof(QueryFilterExtensions.WithControl), BindingFlags.Static | BindingFlags.NonPublic);
+            var controlMethod = typeof(QueryFilterExtensions).GetMethod(nameof(QueryFilterExtensions.WithControl), BindingFlags.Static | BindingFlags.Public);
 
             var parameterExpression = useParameter ?? Expression.Parameter(modelType, parameterName);
             Expression retVal = null;
@@ -836,6 +836,10 @@ namespace SanteDB.Core.Model.Query
                             else if (operandType == typeof(Guid?))
                             {
                                 valueExpr = Expression.Convert(Expression.Constant(Guid.Parse(pValue)), typeof(Guid?));
+                            }
+                            else if(operandType == typeof(Byte[]) && extendedFilter == null)
+                            {
+                                valueExpr = Expression.Convert(Expression.Constant(pValue.ParseBase64UrlEncode()), typeof(Byte[]));
                             }
                             else if (operandType == typeof(TimeSpan) || operandType == typeof(TimeSpan?))
                             {

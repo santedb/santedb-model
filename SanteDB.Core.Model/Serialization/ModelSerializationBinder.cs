@@ -85,6 +85,10 @@ namespace SanteDB.Core.Model.Serialization
                 }
             }
 
+            // Is the type an array 
+            var isArray = typeName.StartsWith("ArrayOf");
+            typeName = isArray ? typeName.Substring(7) : typeName;
+
             // The type
             Type type = null;
             if (!s_typeCache.TryGetValue(typeName, out type))
@@ -110,7 +114,7 @@ namespace SanteDB.Core.Model.Serialization
                 type = asm.GetType(typeName);
             }
 
-            return type ?? null;
+            return isArray ? type?.MakeArrayType() : type ?? null;
         }
 
         /// <summary>

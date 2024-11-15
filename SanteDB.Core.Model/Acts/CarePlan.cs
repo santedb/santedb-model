@@ -44,6 +44,7 @@ namespace SanteDB.Core.Model.Acts
     [XmlInclude(typeof(TextObservation))]
     [XmlInclude(typeof(PatientEncounter))]
     [ClassConceptKey(ActClassKeyStrings.CarePlan)]
+    [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     public class CarePlan : Act
     {
 

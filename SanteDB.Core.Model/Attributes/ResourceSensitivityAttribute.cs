@@ -49,7 +49,7 @@ namespace SanteDB.Core.Model.Attributes
     /// This allows other generic processes to understand the resource's sensitivity and to take appropriate 
     /// auditing and/or privacy decisions (such as export, etc.)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field)]
     public class ResourceSensitivityAttribute : Attribute
     {
 
