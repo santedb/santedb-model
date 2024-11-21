@@ -113,6 +113,15 @@ namespace SanteDB
         private static IDictionary<String, Type> s_resourceNames;
         private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
         private static readonly Regex s_verRegex = new Regex(@"^([0-9]+?(?:\.[0-9]+){0,3})?(?:-?((?:alpha|beta|debug)[0-9]*))?$", RegexOptions.Compiled);
+
+        /// <summary>
+        /// Defer constraints annotation
+        /// </summary>
+        private struct DeferConstraints
+        {
+
+        }
+
         /// <summary>
         /// Indicates a properly was load/checked
         /// </summary>
@@ -1765,6 +1774,19 @@ namespace SanteDB
             }
             return me;
         }
+
+        /// <summary>
+        /// Defer check constraints on the object in the persistence layer
+        /// </summary>
+        public static void DisablePersistenceConstraints(this IdentifiedData me)
+        {
+            me.AddAnnotation(new DeferConstraints());
+        }
+
+        /// <summary>
+        /// Determine if the object has been flagged for constraint deferral
+        /// </summary>
+        public static bool ShouldDisablePersistenceConstraints(this IdentifiedData me) => me.GetAnnotations<DeferConstraints>().Any();
 
         /// <summary>Gets the last modification date of the object</summary>
         public static DateTimeOffset LastModified(this IdentifiedData me) => me.ModifiedOn;
