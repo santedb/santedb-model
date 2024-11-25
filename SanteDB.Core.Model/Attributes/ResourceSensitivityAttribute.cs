@@ -17,6 +17,7 @@
  * 
  */
 using System;
+using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Attributes
 {
@@ -24,20 +25,24 @@ namespace SanteDB.Core.Model.Attributes
     /// <summary>
     /// Classifications of resources
     /// </summary>
+    [Flags]
     public enum ResourceSensitivityClassification
     {
         /// <summary>
         /// Resource is PHI
         /// </summary>
-        PersonalHealthInformation,
+        [XmlEnum("phi")]
+        PersonalHealthInformation = 0x1,
         /// <summary>
         /// Resource contains adminstrative data
         /// </summary>
-        Administrative,
+        [XmlEnum("admin")]
+        Administrative =0x2,
         /// <summary>
         /// Resource is metadata
         /// </summary>
-        Metadata
+        [XmlEnum("meta")]
+        Metadata = 0x4
     }
 
     /// <summary>

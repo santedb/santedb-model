@@ -115,6 +115,12 @@ namespace SanteDB.Core.Model.Audit
         public AuditCode EventTypeCode { get; set; }
 
         /// <summary>
+        /// Gets the sensitivity of the audit event
+        /// </summary>
+        [XmlElement("sensitivity"), JsonProperty("sensitivity")]
+        public ResourceSensitivityClassification Sensitivity { get; set; }
+
+        /// <summary>
         /// Gets or sets the value indicating the outcome of the event
         /// </summary>
         /// <remarks>This property is used to indicate whether the event which the audit 
