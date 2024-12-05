@@ -189,7 +189,7 @@ namespace SanteDB.Core.Model.Acts
         object ITargetedAssociation.TargetEntity
         {
             get => this.TargetAct;
-            set => this.TargetAct = (Act)value;
+            set => this.TargetAct = value as Act;
         }
 
         /// <summary>
