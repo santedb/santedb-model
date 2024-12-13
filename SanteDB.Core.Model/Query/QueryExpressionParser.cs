@@ -603,7 +603,7 @@ namespace SanteDB.Core.Model.Query
                             Type operandType = thisAccessExpression.Type;
 
                             // Correct for nullable
-                            if (value != "null" && value == "!null" && thisAccessExpression.Type.IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+                            if (value != "null" && value != "!null" && thisAccessExpression.Type.IsGenericType && thisAccessExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
                                 safeNullable)
                             {
                                 nullCheckExpr = Expression.MakeBinary(ExpressionType.NotEqual, thisAccessExpression, Expression.Constant(null));
