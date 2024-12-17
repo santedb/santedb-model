@@ -37,12 +37,12 @@ namespace SanteDB.Core.Model.ExtensionHandlers
         public static IExtensionHandler GetExtensionHandler<TBoundModel>(this Extension<TBoundModel> me) where TBoundModel : VersionedEntityData<TBoundModel>, new()
         {
 
-            if (!s_extensionHandlers.TryGetValue(me.ExtensionTypeKey.GetValueOrDefault(), out var extensionHandler))
+            if (!s_extensionHandlers.TryGetValue(me.ExtensionType?.Key ?? me.ExtensionTypeKey.GetValueOrDefault(), out var extensionHandler))
             {
                 // Loading from DB = slow
                 var extensionType = me.LoadProperty(o => o.ExtensionType);
                 extensionHandler = extensionType?.ExtensionHandlerInstance;
-                s_extensionHandlers.TryAdd(me.ExtensionTypeKey.GetValueOrDefault(), extensionHandler);
+                s_extensionHandlers.TryAdd(me.ExtensionType?.Key ?? me.ExtensionTypeKey.GetValueOrDefault(), extensionHandler);
             }
             return extensionHandler;
         }
