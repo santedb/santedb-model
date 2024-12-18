@@ -121,15 +121,15 @@ namespace SanteDB.Core.Extensions
             StringBuilder retVal = new StringBuilder();
             if (data is Entity)
             {
-                retVal.Append(ReferenceType.Entity);
+                retVal.Append((int)ReferenceType.Entity);
             }
             else if (data is Act)
             {
-                retVal.Append(ReferenceType.Act);
+                retVal.Append((int)ReferenceType.Act);
             }
             else if (data is Concept)
             {
-                retVal.Append(ReferenceType.Concept);
+                retVal.Append((int)ReferenceType.Concept);
             }
             else
             {
