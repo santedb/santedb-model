@@ -30,7 +30,7 @@ namespace SanteDB.Core.Model.Parameters
     /// <summary>
     /// REST service fault wrapper
     /// </summary>
-    [XmlType(nameof(Parameter), Namespace = "http://santedb.org/operation")]
+    [XmlType(nameof(Parameter), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(Parameter))]
     public class Parameter
     {
