@@ -33,6 +33,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -113,7 +114,7 @@ namespace SanteDB
         private static IDictionary<String, Type> s_resourceNames;
         private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
         private static readonly Regex s_verRegex = new Regex(@"^([0-9]+?(?:\.[0-9]+){0,3})?(?:-?((?:alpha|beta|debug)[0-9]*))?$", RegexOptions.Compiled);
-
+        
         /// <summary>
         /// Defer constraints annotation
         /// </summary>
@@ -216,6 +217,10 @@ namespace SanteDB
                 if (!dict.ContainsKey(key))
                 {
                     dict.Add(key, valueSelector(item));
+                }
+                else
+                {
+                    Trace.TraceWarning("Not including {0} in dictionary as it is duplicate", key);
                 }
             }
 
