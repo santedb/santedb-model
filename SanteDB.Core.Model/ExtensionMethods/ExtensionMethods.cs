@@ -591,6 +591,26 @@ namespace SanteDB
         }
 
         /// <summary>
+        /// Checks whether <paramref name="me"/> has a direct relationship with <paramref name="targetEntityKey"/> or if there exists a relationship with 
+        /// <paramref name="targetEntityKey"/> via one of its <see cref="EntityRelationshipTypeKeys.Parent"/> associations
+        /// </summary>
+        /// <param name="me">The object on which to check <paramref name="relationshipTypeKey"/></param>
+        /// <param name="relationshipTypeKey">The type of relationship that is being sought</param>
+        /// <param name="targetEntityKey">The target entity with which <paramref name="me"/> has a relationship and which the <see cref="EntityRelationshipTypeKeys.Parent"/> should
+        /// be checked</param>
+        /// <returns>True if the relationship exists</returns>
+        public static bool HasDirectOrParentRelationshipWith(this Entity me, Guid relationshipTypeKey, Guid? targetEntityKey)
+        {
+            bool retVal = false;
+            while(!retVal && targetEntityKey.GetValueOrDefault() != Guid.Empty)
+            {
+                retVal |= me.LoadProperty(o => o.Relationships).Any(r => r.RelationshipTypeKey == relationshipTypeKey && r.TargetEntityKey == targetEntityKey);
+                targetEntityKey = EntitySource.Current.Provider.Query<EntityRelationship>(o => o.SourceEntityKey == targetEntityKey && o.ObsoleteVersionSequenceId == null && o.RelationshipTypeKey == EntityRelationshipTypeKeys.Parent).Select(o => o.TargetEntityKey).FirstOrDefault();
+            }
+            return retVal;
+        }
+
+        /// <summary>
         /// Delay load property
         /// </summary>
         public static TReturn LoadProperty<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false)
