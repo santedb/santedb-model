@@ -45,6 +45,11 @@ namespace SanteDB.Core.Model.Patch
         /// Patch should test value before proceeding
         /// </summary>
         [XmlEnum("test")]
-        Test
+        TestEqual,
+        /// <summary>
+        /// Patch should test value does not equal before proceeding
+        /// </summary>
+        [XmlEnum("test-ne")]
+        TestNotEqual
     }
 }
