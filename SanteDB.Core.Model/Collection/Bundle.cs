@@ -17,6 +17,7 @@
  * 
  */
 using Newtonsoft.Json;
+using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
@@ -127,6 +128,7 @@ namespace SanteDB.Core.Model.Collection
 
         // Modified now
         private DateTimeOffset m_modifiedOn = DateTimeOffset.Now;
+        private Guid? m_correlationKey = null;
 
         /// <summary>
         /// Gets the time the bundle was modified
@@ -150,6 +152,42 @@ namespace SanteDB.Core.Model.Collection
             }
             return null;
         }
+
+        /// <summary>
+        /// Gets or sets the sequence control for this bundle
+        /// </summary>
+        [XmlElement("correlationSeq"), JsonProperty("correlationSeq")]
+        public long? CorrelationSequence { get; set; }
+
+        /// <inheritdoc/>
+        public bool ShouldSerializeCorrelationSequence() => this.CorrelationSequence.HasValue;
+
+        /// <summary>
+        /// A unique identifier which correlates this bundle with other bundles that are about the same "subject"
+        /// </summary>
+        [XmlElement("correlationId"), JsonProperty("correlationId")]
+        public Guid? CorrelationKey {
+            get => this.m_correlationKey;
+            set {
+                if (!this.m_correlationKey.HasValue)
+                {
+                    this.m_correlationKey = value;
+                    this.CorrelationSequence = this.CorrelationSequence ?? DateTime.Now.Ticks;
+                }
+                else if(!value.HasValue)
+                {
+                    this.CorrelationSequence = null;
+                    this.m_correlationKey = null;
+                }
+                else if(!value.Equals(this.m_correlationKey))
+                {
+                    throw new InvalidOperationException(String.Format(ErrorMessages.WOULD_RESULT_INVALID_STATE, nameof(CorrelationKey)));
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        public bool ShouldSerializeCorrelationKey() => this.CorrelationKey.HasValue;
 
         /// <summary>
         /// Gets or sets items in the bundle
@@ -251,6 +289,8 @@ namespace SanteDB.Core.Model.Collection
         {
             Bundle retVal = new Bundle();
             retVal.Key = Guid.NewGuid();
+            retVal.CorrelationSequence = DateTime.Now.Ticks;
+            retVal.CorrelationKey = resourceRoot.First().Key;
             retVal.Count = resourceRoot.Count();
             retVal.Offset = offset;
 
