@@ -21,6 +21,7 @@ using SanteDB.Core.Exceptions;
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Collection;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
@@ -390,7 +391,7 @@ namespace SanteDB
         public static byte[] ParseBase64UrlEncode(this String base64String)
         {
             string incoming = base64String.Replace('_', '/').Replace('-', '+');
-            switch (base64String.Length % 4)
+            switch (incoming.Length % 4)
             {
                 case 2: incoming += "=="; break;
                 case 3: incoming += "="; break;
@@ -525,6 +526,7 @@ namespace SanteDB
         /// </summary>
         public static String HexEncode(this byte[] array)
         {
+            
             return BitConverter.ToString(array).Replace("-", "");
         }
 
@@ -588,6 +590,41 @@ namespace SanteDB
         {
             var loadCheck = new PropertyLoadCheck(propertyName);
             return me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck);
+        }
+
+        /// <summary>
+        /// Checks whether <paramref name="me"/> has a direct relationship with <paramref name="targetEntityKey"/> or if there exists a relationship with 
+        /// <paramref name="targetEntityKey"/> via one of its <see cref="EntityRelationshipTypeKeys.Parent"/> associations
+        /// </summary>
+        /// <param name="me">The object on which to check <paramref name="relationshipTypeKey"/></param>
+        /// <param name="relationshipTypeKey">The type of relationship that is being sought</param>
+        /// <param name="targetEntityKey">The target entity with which <paramref name="me"/> has a relationship and which the <see cref="EntityRelationshipTypeKeys.Parent"/> should
+        /// be checked</param>
+        /// <returns>True if the relationship exists</returns>
+        public static bool HasDirectOrParentRelationshipWith(this Entity me, Guid relationshipTypeKey, Guid? targetEntityKey)
+        {
+            bool retVal = false;
+            while(!retVal && targetEntityKey.GetValueOrDefault() != Guid.Empty)
+            {
+                retVal |= me.LoadProperty(o => o.Relationships).Any(r => r.RelationshipTypeKey == relationshipTypeKey && r.TargetEntityKey == targetEntityKey);
+                targetEntityKey = EntitySource.Current.Provider.Query<EntityRelationship>(o => o.SourceEntityKey == targetEntityKey && o.ObsoleteVersionSequenceId == null && o.RelationshipTypeKey == EntityRelationshipTypeKeys.Parent).Select(o => o.TargetEntityKey).FirstOrDefault();
+            }
+            return retVal;
+        }
+
+
+        /// <summary>
+        /// Adds correlation control onto bundle <paramref name="me"/>
+        /// </summary>
+        /// <param name="me">The bundle to setup for correlation information</param>
+        /// <param name="correlationKey">The correlation key</param>
+        /// <returns>The bundle with correlation data</returns>
+        public static Bundle WithCorrelationControl(this Bundle me, Guid correlationKey)
+        {
+            me.Key = me.Key ?? Guid.NewGuid();
+            me.CorrelationKey = me.CorrelationKey ?? correlationKey;
+            me.CorrelationSequence = me.CorrelationSequence ?? DateTime.Now.Ticks;
+            return me;
         }
 
         /// <summary>

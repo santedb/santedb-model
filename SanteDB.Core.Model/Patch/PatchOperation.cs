@@ -108,8 +108,10 @@ namespace SanteDB.Core.Model.Patch
                     return $"---- {this.Path} : {this.Value}";
                 case PatchOperationType.Replace:
                     return $"==== {this.Path} : {this.Value}";
-                case PatchOperationType.Test:
-                    return $"???? {this.Path} : {this.Value}";
+                case PatchOperationType.TestEqual:
+                    return $"???? {this.Path} = {this.Value}";
+                case PatchOperationType.TestNotEqual:
+                    return $"???? {this.Path} <> {this.Value}";
                 default:
                     return base.ToString();
             }

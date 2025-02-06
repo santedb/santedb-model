@@ -22,8 +22,10 @@ using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Security;
 using SanteDB.Core.Model.Serialization;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model
@@ -45,7 +47,9 @@ namespace SanteDB.Core.Model
         /// </summary>
         public BaseEntityData()
         {
+            
         }
+        
 
         /// <summary>
         /// Gets or sets the time at which the data was created
