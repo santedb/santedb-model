@@ -289,8 +289,11 @@ namespace SanteDB.Core.Model.Collection
         {
             Bundle retVal = new Bundle();
             retVal.Key = Guid.NewGuid();
-            retVal.CorrelationSequence = DateTime.Now.Ticks;
-            retVal.CorrelationKey = resourceRoot.First().Key;
+            if (resourceRoot.Count() == 1)
+            {
+                retVal.CorrelationSequence = DateTime.Now.Ticks;
+                retVal.CorrelationKey = resourceRoot.First()?.Key;
+            }
             retVal.Count = resourceRoot.Count();
             retVal.Offset = offset;
 
