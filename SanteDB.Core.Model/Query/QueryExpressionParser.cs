@@ -59,7 +59,8 @@ namespace SanteDB.Core.Model.Query
             typeof(DateTime),
             typeof(DateTimeOffset),
             typeof(Int64),
-            typeof(Decimal)
+            typeof(Decimal),
+            typeof(Guid)
         };
 
         private class HdsiAccessPathInfo
@@ -376,12 +377,18 @@ namespace SanteDB.Core.Model.Query
                                     castType = m_modelBinder.BindToType(null, hdsiPath.CastExpression);
                                     if (castType == null)
                                     {
-                                        throw new ArgumentOutOfRangeException(nameof(castType), hdsiPath.CastExpression);
+                                        castType = m_baseTypes.FirstOrDefault(o => o.Name == hdsiPath.CastExpression) ?? throw new ArgumentOutOfRangeException(nameof(castType), hdsiPath.CastExpression);
                                     }
 
                                     m_castCache.TryAdd(hdsiPath.CastExpression, castType);
                                 }
-                                accessExpression = Expression.TypeAs(accessExpression, castType);
+
+                                if (!castType.IsClass) // Hard cast
+                                {
+                                    accessExpression = Expression.Convert(accessExpression, castType);
+                                } else {
+                                    accessExpression = Expression.TypeAs(accessExpression, castType);
+                                }
                                 isCoalesced |= safeNullable;
                             }
 
