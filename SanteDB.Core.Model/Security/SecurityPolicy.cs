@@ -125,6 +125,7 @@ namespace SanteDB.Core.Model.Security
         public SecurityPolicyInstance(SecurityPolicy policy, PolicyGrantType grantType)
         {
             this.Policy = policy;
+            this.PolicyKey = policy.Key;
             this.GrantType = grantType;
         }
 

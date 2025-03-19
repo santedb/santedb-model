@@ -1788,7 +1788,7 @@ namespace SanteDB
                                     pi.SetValue(me, null);
                                 }
                             }
-                            else
+                            else if(iddata.Key.HasValue)
                             {
                                 keyProperty.SetValue(me, iddata.Key);
                             }

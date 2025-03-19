@@ -69,7 +69,7 @@ namespace SanteDB.Core.Model.Acts
     [JsonObject("Act")]
     [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     [Classifier(nameof(ClassConcept))]
-    public class Act : VersionedEntityData<Act>, ITaggable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships, IHasTypeConcept
+    public class Act : VersionedEntityData<Act>, ITaggable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships, IHasTypeConcept, IHasPolicies
     {
 
         /// <summary>
@@ -908,5 +908,9 @@ namespace SanteDB.Core.Model.Acts
             }
             this.Identifiers.RemoveAll(o => removePredicate(o));
         }
+
+        /// <inheritdoc/>
+        IEnumerable<SecurityPolicyInstance> IHasPolicies.Policies => this.Policies;
+
     }
 }
