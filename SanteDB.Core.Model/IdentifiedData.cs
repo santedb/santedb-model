@@ -39,7 +39,7 @@ namespace SanteDB.Core.Model
     /// </para><para>This class contains </para></remarks>
     [XmlType("IdentifiedData", Namespace = "http://santedb.org/model"), JsonObject("IdentifiedData")]
     [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
-    public abstract class IdentifiedData : IAnnotatedResource, ICanDeepCopy
+    public abstract class IdentifiedData : IAnnotatedResource, ICanDeepCopy, IHasToDisplay
     {
 
         // Properties which can be copied
