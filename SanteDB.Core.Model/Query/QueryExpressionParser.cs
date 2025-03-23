@@ -349,13 +349,13 @@ namespace SanteDB.Core.Model.Query
                             {
                                 if (typeof(IList).IsAssignableFrom(memberInfo.PropertyType) && !memberInfo.PropertyType.IsArray)
                                 {
-                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                    accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
+                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
+                                    accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>)));
                                 }
                                 else if (typeof(IAnnotatedResource).IsAssignableFrom(memberInfo.PropertyType))
                                 {
-                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                    accessExpression = Expression.Coalesce(Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false)), Expression.New(memberInfo.PropertyType));
+                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
+                                    accessExpression = Expression.Coalesce(Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>))), Expression.New(memberInfo.PropertyType));
                                 }
                                 else
                                 {
@@ -441,8 +441,8 @@ namespace SanteDB.Core.Model.Query
                                                 {
                                                     if (forceLoad) // Force the loading of properties in the guard
                                                     {
-                                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                                        var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false));
+                                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
+                                                        var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>)));
                                                         guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
                                                     }
                                                     else
