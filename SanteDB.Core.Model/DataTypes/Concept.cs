@@ -36,7 +36,7 @@ namespace SanteDB.Core.Model.DataTypes
     [XmlType("Concept", Namespace = "http://santedb.org/model"), JsonObject("Concept")]
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Concept")]
     [Classifier(nameof(Mnemonic)), KeyLookup(nameof(Mnemonic))]
-    public class Concept : VersionedEntityData<Concept>, IHasState
+    public class Concept : VersionedEntityData<Concept>, IHasState, ITaggable, IExtendable
     {
         /// <summary>
         /// Creates a new concept
@@ -134,6 +134,46 @@ namespace SanteDB.Core.Model.DataTypes
             }
         }
 
+
+        /// <summary>
+        /// Gets a list of all tags associated with the concept
+        /// </summary>
+        /// <remarks>
+        /// A tag is a simple piece of data which is appended to an concept which allows developers to
+        /// extend the underlying application in ways not imagined by the original SanteDB team. Tags differ
+        /// from extensions in that they can only carry simple values (strings) and they are not versioned.
+        /// </remarks>
+        [XmlElement("tag"), JsonProperty("tag")]
+        public List<ConceptTag> Tags { get; set; }
+
+
+        /// <summary>
+        /// Gets a list of all extensions associated with the concept
+        /// </summary>
+        /// <remarks>
+        /// An extension allows developers to store additional data about a particular exception in a manner
+        /// which the original SanteDB authors did not intend. This can be things such as equipment
+        /// used to record an observation, etc.
+        /// <para>
+        /// The key difference beetween an extension and a tag is that extensions are versioned whereas tags
+        /// are not
+        /// </para>
+        /// </remarks>
+        [XmlElement("extension"), JsonProperty("extension")]
+        public List<ConceptExtension> Extensions { get; set; }
+
+        /// <summary>
+        /// Json and XML ignore
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        IEnumerable<ITag> ITaggable.Tags => this.Tags;
+
+        /// <summary>
+        /// Gets the extensions
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        IEnumerable<IModelExtension> IExtendable.Extensions => this.Extensions;
+
         /// <summary>
         /// Override string
         /// </summary>
@@ -157,7 +197,9 @@ namespace SanteDB.Core.Model.DataTypes
                 this.ClassKey == other.ClassKey &&
                 this.ConceptNames?.SemanticEquals(other.ConceptNames) != false &&
                 this.ConceptSets?.SemanticEquals(other.ConceptSets) != false &&
-                this.Relationships?.SemanticEquals(other.Relationships) != false;
+                this.Relationships?.SemanticEquals(other.Relationships) != false &&
+                this.Extensions?.SemanticEquals(other.Extensions) != false &&
+                this.Tags?.SemanticEquals(other.Tags) != false;
         }
 
         /// <summary>
@@ -167,5 +209,83 @@ namespace SanteDB.Core.Model.DataTypes
         {
             return this.LoadCollection<ConceptName>("ConceptNames")?.FirstOrDefault()?.Name;
         }
+
+
+        /// <summary>
+        /// Add a tag to this act
+        /// </summary>
+        public ITag AddTag(String tagKey, String tagValue)
+        {
+            var tag = this.LoadProperty(o => o.Tags)?.FirstOrDefault(o => o.TagKey == tagKey);
+            this.Tags = this.Tags ?? new List<ConceptTag>();
+            if (tag == null)
+            {
+                tag = new ConceptTag(tagKey, tagValue);
+                this.Tags.Add(tag);
+            }
+            else
+            {
+                tag.Value = tagValue;
+            }
+            return tag;
+        }
+
+        /// <summary>
+        /// Remove the specified extension
+        /// </summary>
+        /// <param name="extensionType">The type of extension to remove</param>
+        public void RemoveExtension(Guid extensionType)
+        {
+            this.Extensions.RemoveAll(o => o.ExtensionTypeKey == extensionType);
+        }
+
+        /// <summary>
+        /// Add the specified extension type to the collection
+        /// </summary>
+        /// <param name="extensionType">The extension type to be added</param>
+        /// <param name="handlerType">The handler</param>
+        /// <param name="value">The value</param>
+        public IModelExtension AddExtension(Guid extensionType, Type handlerType, object value)
+        {
+            var retVal = new ConceptExtension(extensionType, handlerType, value) { SourceEntityKey = this.Key };
+            this.Extensions.Add(retVal);
+            return retVal;
+        }
+
+        /// <summary>
+        /// Get the specified tag
+        /// </summary>
+        public string GetTag(string tagKey) => tagKey.StartsWith("$") ? this.Tags?.FirstOrDefault(o => o.TagKey == tagKey)?.Value : this.LoadProperty(o => o.Tags).FirstOrDefault(t => t.TagKey == tagKey)?.Value;
+
+        /// <summary>
+        /// Remove <paramref name="tagKey"/> from the tag collection
+        /// </summary>
+        public void RemoveTag(string tagKey)
+        {
+            if (tagKey.StartsWith("$"))
+            {
+                this.Tags?.RemoveAll(o => o.TagKey == tagKey);
+            }
+            else
+            {
+                this.LoadProperty(o => o.Tags).RemoveAll(t => t.TagKey == tagKey);
+            }
+        }
+
+        /// <summary>
+        /// Remove tags matching <paramref name="predicate"/> from the tag collection
+        /// </summary>
+        public void RemoveAllTags(Predicate<ITag> predicate) => this.Tags?.RemoveAll(predicate);
+
+
+        /// <summary>
+        /// Try to fetch the tag
+        /// </summary>
+        public bool TryGetTag(string tagKey, out ITag tag)
+        {
+            tag = this.Tags?.FirstOrDefault(o => o.TagKey == tagKey);
+            return tag != null;
+        }
+
     }
 }

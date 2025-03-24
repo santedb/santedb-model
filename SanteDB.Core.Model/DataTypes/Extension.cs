@@ -247,6 +247,41 @@ namespace SanteDB.Core.Model.DataTypes
     /// Extension bound to entity
     /// </summary>
 
+    [XmlType("ConceptExtension", Namespace = "http://santedb.org/model"),
+        XmlRoot("ConceptExtension", Namespace = "http://santedb.org/model"),
+        JsonObject("ConceptExtension")]
+    public class ConceptExtension : Extension<Concept>
+    {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ConceptExtension()
+        {
+        }
+
+        /// <summary>
+        /// Creates an entity extension
+        /// </summary>
+        public ConceptExtension(Guid extensionType, byte[] value)
+        {
+            this.ExtensionTypeKey = extensionType;
+            this.ExtensionValueData = value;
+        }
+
+        /// <summary>
+        /// Creates an entity extension
+        /// </summary>
+        public ConceptExtension(Guid extensionType, Type extensionHandlerType, object value)
+        {
+            this.ExtensionTypeKey = extensionType;
+            this.ExtensionValueData = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
+        }
+    }
+
+    /// <summary>
+    /// Extension bound to entity
+    /// </summary>
+
     [XmlType("EntityExtension", Namespace = "http://santedb.org/model"),
         XmlRoot("EntityExtension", Namespace = "http://santedb.org/model"),
         JsonObject("EntityExtension")]

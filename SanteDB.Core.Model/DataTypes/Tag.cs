@@ -119,6 +119,32 @@ namespace SanteDB.Core.Model.DataTypes
         }
     }
 
+
+    /// <summary>
+    /// Represents a tag associated with an concept
+    /// </summary>
+
+    [XmlType("ConceptTag", Namespace = "http://santedb.org/model"), JsonObject("ConceptTag")]
+    public class ConceptTag : Tag<Entity>
+    {
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public ConceptTag()
+        {
+        }
+
+        /// <summary>
+        /// Construtor setting key and tag
+        /// </summary>
+        public ConceptTag(String key, String value)
+        {
+            this.TagKey = key;
+            this.Value = value;
+        }
+    }
+
+
     /// <summary>
     /// Represents a tag associated with an entity
     /// </summary>

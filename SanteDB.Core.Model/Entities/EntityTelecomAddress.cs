@@ -110,9 +110,13 @@ namespace SanteDB.Core.Model.Entities
                     return null;
                 }
 
-                // E-mail?
-
-                if (s_EmailRegex.IsMatch(this.Value))
+                // Attempt to set the scheme via the type concept
+                var scheme = this.LoadProperty(o => o.TypeConcept)?.LoadProperty(o => o.Extensions)?.Find(o=>o.ExtensionTypeKey == ExtensionTypeKeys.Rfc3986SchemeExtension)?.ExtensionValue?.ToString();
+                if (!String.IsNullOrEmpty(scheme))
+                {
+                    return String.Format("{0}:{1}", scheme, this.Value);
+                }
+                else if (s_EmailRegex.IsMatch(this.Value))
                 {
                     return String.Format("mailto:{0}", this.Value);
                 }
@@ -134,7 +138,9 @@ namespace SanteDB.Core.Model.Entities
                         sb.AppendFormat(";ext={0}", match.Groups[5].Value);
                     }
 
+                    
                     return sb.ToString();
+
                 }
                 else
                 {

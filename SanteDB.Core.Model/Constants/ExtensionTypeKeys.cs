@@ -95,5 +95,15 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid DeathInformationConfirmedExtension = Guid.Parse("D71A56C3-5E74-4929-9AD3-BA24DE56590A");
 
+        /// <summary>
+        /// Get the UUID of the uri scheme extension
+        /// </summary>
+        public static readonly Guid Rfc3986SchemeExtension = Guid.Parse("7948BDB9-0700-4945-A39B-23522801F8E3");
+
+        /// <summary>
+        /// Gets the name of the scheme
+        /// </summary>
+        public const string Rfc3986SchemeExtensionName = "http://santedb.org/extensions/core/itef/rfc3986/scheme";
+
     }
 }
