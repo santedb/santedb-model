@@ -43,7 +43,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]
     [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
-    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged
+    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged, IHasPolicies
     {
 
         /// <summary>
@@ -238,7 +238,10 @@ namespace SanteDB.Core.Model.Entities
         /// data should be exposed or masked based on user credentials.
         /// </remarks>
         [XmlElement("policy"), JsonProperty("policy")]
-        public List<SecurityPolicyInstance> Policies { get; set; }
+        public List<SecurityPolicyInstance> Policies { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Semantic equality function
@@ -481,6 +484,9 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [XmlIgnore, JsonIgnore]
         public Guid? GeoTagKey { get; set; }
+
+        /// <inheritdoc/>
+        IEnumerable<SecurityPolicyInstance> IHasPolicies.Policies => this.Policies;
 
         /// <summary>
         /// Validate the class key

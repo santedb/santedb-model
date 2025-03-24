@@ -630,17 +630,17 @@ namespace SanteDB
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static TReturn LoadProperty<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false)
+        public static TReturn LoadProperty<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false, IEnumerable<IdentifiedData> referenceData = null)
         {
-            return (TReturn)me.LoadProperty(propertyName, forceReload);
+            return (TReturn)me.LoadProperty(propertyName, forceReload, referenceData);
         }
 
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false)
+        public static IEnumerable<TReturn> LoadCollection<TReturn>(this IAnnotatedResource me, string propertyName, bool forceReload = false, IEnumerable<IdentifiedData> referenceData = null)
         {
-            return me.LoadProperty(propertyName, forceReload) as IEnumerable<TReturn> ?? new List<TReturn>();
+            return me.LoadProperty(propertyName, forceReload, referenceData) as IEnumerable<TReturn> ?? new List<TReturn>();
         }
 
         /// <summary>
@@ -701,7 +701,7 @@ namespace SanteDB
         /// <summary>
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
-        public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false)
+        public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false, IEnumerable<IdentifiedData> referenceData = null)
             where TSource : IAnnotatedResource
         {
             if (selector is LambdaExpression lambda)
@@ -709,7 +709,7 @@ namespace SanteDB
                 var body = lambda.Body as MemberExpression;
                 if (body != null)
                 {
-                    return me.LoadProperty<TReturn>(body.Member.Name, forceReload);
+                    return me.LoadProperty<TReturn>(body.Member.Name, forceReload, referenceData);
                 }
                 else
                 {
@@ -751,7 +751,7 @@ namespace SanteDB
         /// <summary>
         /// Delay load property
         /// </summary>
-        public static object LoadProperty(this IAnnotatedResource me, string propertyName, bool forceReload = false)
+        public static object LoadProperty(this IAnnotatedResource me, string propertyName, bool forceReload = false, IEnumerable<IdentifiedData> referenceData = null)
         {
             if (me == null)
             {
@@ -820,7 +820,6 @@ namespace SanteDB
                                     }
                                 }
                             }
-
                         }
                         propertyToLoad.SetValue(me, loaded);
                         return loaded;
@@ -837,7 +836,7 @@ namespace SanteDB
                     else
                     {
                         var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.Get), new Type[] { propertyToLoad.PropertyType }, new Type[] { typeof(Guid?) });
-                        var loaded = mi.Invoke(EntitySource.Current.Provider, new object[] { keyValue });
+                        var loaded = referenceData?.FirstOrDefault(o=>o.Key == keyValue) ?? mi.Invoke(EntitySource.Current.Provider, new object[] { keyValue });
                         propertyToLoad.SetValue(me, loaded);
                         return loaded;
                     }
@@ -1603,10 +1602,10 @@ namespace SanteDB
         /// </summary>
         public static string ToHumanReadableString(this Exception e)
         {
-            StringBuilder retVal = new StringBuilder($"{e.GetType().Name} : {e.Message}");
+            StringBuilder retVal = new StringBuilder($"{e.GetType().Name} : {e.Message} - {(e as IHasToDisplay)?.ToDisplay()}");
             while (e.InnerException != null)
             {
-                retVal.AppendFormat("\r\nCAUSED BY: {0}: {1}", e.InnerException.GetType().Name, e.InnerException.Message);
+                retVal.AppendFormat("\r\nCAUSED BY: {0}: {1} - {2}", e.InnerException.GetType().Name, e.InnerException.Message, (e.InnerException as IHasToDisplay)?.ToDisplay());
                 e = e.InnerException;
             }
             return retVal.ToString();
@@ -1788,7 +1787,7 @@ namespace SanteDB
                                     pi.SetValue(me, null);
                                 }
                             }
-                            else
+                            else if(iddata.Key.HasValue)
                             {
                                 keyProperty.SetValue(me, iddata.Key);
                             }
