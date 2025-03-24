@@ -260,7 +260,7 @@ namespace SanteDB.Core.Model.Query
         /// Build expression for specified type
         /// </summary>
         /// <param name="relayControlVariables">When true, the <see cref="QueryFilterExtensions.WithControl(object, string, object)"/> extension method should be used to convey the control variables</param>
-        /// <param name="forceLoad">When true, use the <see cref="ExtensionMethods.LoadProperty(IAnnotatedResource, string, bool)"/> on all calls to load values on the path. This is useful if the resulting Linq expression is intended to be executed in memory</param>
+        /// <param name="forceLoad">When true, use the <see cref="ExtensionMethods.LoadProperty(IAnnotatedResource, string, bool, IEnumerable{IdentifiedData})"/> on all calls to load values on the path. This is useful if the resulting Linq expression is intended to be executed in memory</param>
         /// <param name="httpQueryParameters">The HTTP query parameter collection to parse into a LINQ expression</param>
         /// <param name="lazyExpandVariables">When true, all variables in <paramref name="variables"/> should be called in the LINQ expression, when false the variables are evaluated when the expression is created</param>
         /// <param name="modelType">The type of model to which the returned LINQ expression should accept as a parameter</param>
