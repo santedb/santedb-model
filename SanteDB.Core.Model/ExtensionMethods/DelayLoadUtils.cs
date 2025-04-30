@@ -117,7 +117,7 @@ namespace SanteDB
             else if (me.Key.HasValue)
             {
                 me.SetLoaded(nameof(Entity.Participations));
-                me.Participations = EntitySource.Current.Provider.Query<ActParticipation>(o => o.PlayerEntityKey == me.Key).ToList();
+                me.Participations = EntitySource.Current.Provider.Query<ActParticipation>(o => o.PlayerEntityKey == me.Key && o.Act.ObsoletionTime == null).ToList();
                 return me.Participations;
             }
             else
