@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -15,6 +15,8 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
+ * User: fyfej
+ * Date: 2023-6-21
  */
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
@@ -59,7 +61,8 @@ namespace SanteDB.Core.Model.Query
             typeof(DateTime),
             typeof(DateTimeOffset),
             typeof(Int64),
-            typeof(Decimal)
+            typeof(Decimal),
+            typeof(Guid)
         };
 
         private class HdsiAccessPathInfo
@@ -259,7 +262,7 @@ namespace SanteDB.Core.Model.Query
         /// Build expression for specified type
         /// </summary>
         /// <param name="relayControlVariables">When true, the <see cref="QueryFilterExtensions.WithControl(object, string, object)"/> extension method should be used to convey the control variables</param>
-        /// <param name="forceLoad">When true, use the <see cref="ExtensionMethods.LoadProperty(IAnnotatedResource, string, bool)"/> on all calls to load values on the path. This is useful if the resulting Linq expression is intended to be executed in memory</param>
+        /// <param name="forceLoad">When true, use the <see cref="ExtensionMethods.LoadProperty(IAnnotatedResource, string, bool, IEnumerable{IdentifiedData})"/> on all calls to load values on the path. This is useful if the resulting Linq expression is intended to be executed in memory</param>
         /// <param name="httpQueryParameters">The HTTP query parameter collection to parse into a LINQ expression</param>
         /// <param name="lazyExpandVariables">When true, all variables in <paramref name="variables"/> should be called in the LINQ expression, when false the variables are evaluated when the expression is created</param>
         /// <param name="modelType">The type of model to which the returned LINQ expression should accept as a parameter</param>
@@ -348,13 +351,13 @@ namespace SanteDB.Core.Model.Query
                             {
                                 if (typeof(IList).IsAssignableFrom(memberInfo.PropertyType) && !memberInfo.PropertyType.IsArray)
                                 {
-                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                    accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false));
+                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
+                                    accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>)));
                                 }
                                 else if (typeof(IAnnotatedResource).IsAssignableFrom(memberInfo.PropertyType))
                                 {
-                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                    accessExpression = Expression.Coalesce(Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false)), Expression.New(memberInfo.PropertyType));
+                                    var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
+                                    accessExpression = Expression.Coalesce(Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>))), Expression.New(memberInfo.PropertyType));
                                 }
                                 else
                                 {
@@ -376,12 +379,18 @@ namespace SanteDB.Core.Model.Query
                                     castType = m_modelBinder.BindToType(null, hdsiPath.CastExpression);
                                     if (castType == null)
                                     {
-                                        throw new ArgumentOutOfRangeException(nameof(castType), hdsiPath.CastExpression);
+                                        castType = m_baseTypes.FirstOrDefault(o => o.Name == hdsiPath.CastExpression) ?? throw new ArgumentOutOfRangeException(nameof(castType), hdsiPath.CastExpression);
                                     }
 
                                     m_castCache.TryAdd(hdsiPath.CastExpression, castType);
                                 }
-                                accessExpression = Expression.TypeAs(accessExpression, castType);
+
+                                if (!castType.IsClass) // Hard cast
+                                {
+                                    accessExpression = Expression.Convert(accessExpression, castType);
+                                } else {
+                                    accessExpression = Expression.TypeAs(accessExpression, castType);
+                                }
                                 isCoalesced |= safeNullable;
                             }
 
@@ -434,8 +443,8 @@ namespace SanteDB.Core.Model.Query
                                                 {
                                                     if (forceLoad) // Force the loading of properties in the guard
                                                     {
-                                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool) });
-                                                        var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false));
+                                                        var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { classifierProperty.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
+                                                        var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>)));
                                                         guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
                                                     }
                                                     else

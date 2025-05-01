@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -15,6 +15,8 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
+ * User: fyfej
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.i18n;
@@ -43,7 +45,7 @@ namespace SanteDB.Core.Model.Entities
     [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "Entity")]
     [Classifier(nameof(ClassConcept))]
     [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
-    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged
+    public class Entity : VersionedEntityData<Entity>, ITaggable, IExtendable, IHasClassConcept, IHasTypeConcept, IHasState, IHasTemplate, IHasIdentifiers, IHasRelationships, IGeoTagged, IHasPolicies
     {
 
         /// <summary>
@@ -238,7 +240,10 @@ namespace SanteDB.Core.Model.Entities
         /// data should be exposed or masked based on user credentials.
         /// </remarks>
         [XmlElement("policy"), JsonProperty("policy")]
-        public List<SecurityPolicyInstance> Policies { get; set; }
+        public List<SecurityPolicyInstance> Policies { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Semantic equality function
@@ -481,6 +486,9 @@ namespace SanteDB.Core.Model.Entities
         /// </summary>
         [XmlIgnore, JsonIgnore]
         public Guid? GeoTagKey { get; set; }
+
+        /// <inheritdoc/>
+        IEnumerable<SecurityPolicyInstance> IHasPolicies.Policies => this.Policies;
 
         /// <summary>
         /// Validate the class key

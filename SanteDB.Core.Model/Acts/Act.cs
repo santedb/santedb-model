@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -15,6 +15,8 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
+ * User: fyfej
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.i18n;
@@ -69,7 +71,7 @@ namespace SanteDB.Core.Model.Acts
     [JsonObject("Act")]
     [ResourceSensitivity(ResourceSensitivityClassification.Administrative)]
     [Classifier(nameof(ClassConcept))]
-    public class Act : VersionedEntityData<Act>, ITaggable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships, IHasTypeConcept
+    public class Act : VersionedEntityData<Act>, ITaggable, IExtendable, IHasClassConcept, IHasState, IGeoTagged, IHasTemplate, IHasIdentifiers, IHasRelationships, IHasTypeConcept, IHasPolicies
     {
 
         /// <summary>
@@ -729,13 +731,13 @@ namespace SanteDB.Core.Model.Acts
         /// Gets the tags
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection<EntityTag>(nameof(Act.Tags)).OfType<ITag>(); } }
+        IEnumerable<ITag> ITaggable.Tags { get { return this.LoadCollection<ActTag>(nameof(Act.Tags)).OfType<ITag>(); } }
 
         /// <summary>
         /// Get all extensions on the act
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection<EntityExtension>(nameof(Act.Extensions)).OfType<IModelExtension>(); } }
+        IEnumerable<IModelExtension> IExtendable.Extensions { get { return this.LoadCollection<ActExtension>(nameof(Act.Extensions)).OfType<IModelExtension>(); } }
 
         /// <summary>
         /// Gets or sets the geo-tag
@@ -794,22 +796,6 @@ namespace SanteDB.Core.Model.Acts
         }
 
         /// <summary>
-        /// Copies the entity
-        /// </summary>
-        /// <returns></returns>
-        public IdentifiedData Copy()
-        {
-            var retVal = base.Clone() as Act;
-            retVal.Relationships = new List<ActRelationship>(this.Relationships.ToArray());
-            retVal.Identifiers = new List<ActIdentifier>(this.Identifiers.ToArray());
-            retVal.Notes = new List<ActNote>(this.Notes.ToArray());
-            retVal.Participations = new List<ActParticipation>(this.Participations.ToArray());
-            retVal.Tags = new List<ActTag>(this.Tags.ToArray());
-            retVal.Extensions = new List<ActExtension>(this.Extensions.ToArray());
-            return retVal;
-        }
-
-        /// <summary>
         /// Add a tag to this act
         /// </summary>
         public ITag AddTag(String tagKey, String tagValue)
@@ -846,6 +832,7 @@ namespace SanteDB.Core.Model.Acts
         public IModelExtension AddExtension(Guid extensionType, Type handlerType, object value)
         {
             var retVal = new ActExtension(extensionType, handlerType, value) { SourceEntityKey = this.Key };
+            this.Extensions = this.Extensions ?? new List<ActExtension>();
             this.Extensions.Add(retVal);
             return retVal;
         }
@@ -907,5 +894,9 @@ namespace SanteDB.Core.Model.Acts
             }
             this.Identifiers.RemoveAll(o => removePredicate(o));
         }
+
+        /// <inheritdoc/>
+        IEnumerable<SecurityPolicyInstance> IHasPolicies.Policies => this.Policies;
+
     }
 }

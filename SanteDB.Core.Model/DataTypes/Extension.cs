@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -15,6 +15,8 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
+ * User: fyfej
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Interfaces;
@@ -114,7 +116,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets or sets the ignore value
         /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationMetadataAttribute]
+        [XmlIgnore, JsonIgnore, SerializationMetadataAttribute, QueryParameter("$object")]
         public Object ExtensionValue
         {
             get
@@ -240,6 +242,41 @@ namespace SanteDB.Core.Model.DataTypes
 
             return base.SemanticEquals(obj) && other.ExtensionTypeKey == this.ExtensionTypeKey &&
                 this.ExtensionValueString == other.ExtensionValueString;
+        }
+    }
+
+    /// <summary>
+    /// Extension bound to entity
+    /// </summary>
+
+    [XmlType("ConceptExtension", Namespace = "http://santedb.org/model"),
+        XmlRoot("ConceptExtension", Namespace = "http://santedb.org/model"),
+        JsonObject("ConceptExtension")]
+    public class ConceptExtension : Extension<Concept>
+    {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ConceptExtension()
+        {
+        }
+
+        /// <summary>
+        /// Creates an entity extension
+        /// </summary>
+        public ConceptExtension(Guid extensionType, byte[] value)
+        {
+            this.ExtensionTypeKey = extensionType;
+            this.ExtensionValueData = value;
+        }
+
+        /// <summary>
+        /// Creates an entity extension
+        /// </summary>
+        public ConceptExtension(Guid extensionType, Type extensionHandlerType, object value)
+        {
+            this.ExtensionTypeKey = extensionType;
+            this.ExtensionValueData = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
         }
     }
 

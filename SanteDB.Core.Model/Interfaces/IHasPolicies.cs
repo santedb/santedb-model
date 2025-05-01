@@ -16,51 +16,25 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-6-21
+ * Date: 2025-3-10
  */
+using SanteDB.Core.Model.Security;
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
+using System.Text;
 
-namespace SanteDB.Core.Model.Map
+namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Class redirect on mapper
+    /// Represents an object that has security policies associated with it
     /// </summary>
-    [XmlType(nameof(ClassRedirect), Namespace = "http://santedb.org/model/map")]
-    public class ClassRedirect
+    public interface IHasPolicies
     {
-        // Domain type
-        private Type m_fromType = null;
-        /// <summary>
-        /// Gets the domain CLR type
-        /// </summary>
-        [XmlIgnore]
-        public Type FromType
-        {
-            get
-            {
-                if (this.m_fromType == null)
-                {
-                    this.m_fromType = Type.GetType(this.FromClass);
-                }
-
-                return this.m_fromType;
-            }
-        }
 
         /// <summary>
-        /// Gets or sets the model class for the mapper
+        /// Get the security policies associated with this object
         /// </summary>
-        [XmlAttribute("fromClass")]
-        public String FromClass { get; set; }
+        IEnumerable<SecurityPolicyInstance> Policies { get; }
 
-        /// <summary>
-        /// Gets or sets the property maps
-        /// </summary>
-        [XmlElement("via")]
-        public List<PropertyMap> Property { get; set; }
-
-        // TODO: Validation
     }
 }

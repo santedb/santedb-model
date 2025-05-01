@@ -16,51 +16,23 @@
  * the License.
  * 
  * User: fyfej
- * Date: 2023-6-21
+ * Date: 2025-3-21
  */
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
+using System.Text;
 
-namespace SanteDB.Core.Model.Map
+namespace SanteDB.Core.Model.Interfaces
 {
     /// <summary>
-    /// Class redirect on mapper
+    /// Represents a <see cref="Exception"/> or any object that produces a human friendly message about its status
     /// </summary>
-    [XmlType(nameof(ClassRedirect), Namespace = "http://santedb.org/model/map")]
-    public class ClassRedirect
+    public interface IHasToDisplay
     {
-        // Domain type
-        private Type m_fromType = null;
-        /// <summary>
-        /// Gets the domain CLR type
-        /// </summary>
-        [XmlIgnore]
-        public Type FromType
-        {
-            get
-            {
-                if (this.m_fromType == null)
-                {
-                    this.m_fromType = Type.GetType(this.FromClass);
-                }
-
-                return this.m_fromType;
-            }
-        }
 
         /// <summary>
-        /// Gets or sets the model class for the mapper
+        /// Get the message for rendering in the user interface
         /// </summary>
-        [XmlAttribute("fromClass")]
-        public String FromClass { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property maps
-        /// </summary>
-        [XmlElement("via")]
-        public List<PropertyMap> Property { get; set; }
-
-        // TODO: Validation
+        String ToDisplay();
     }
 }

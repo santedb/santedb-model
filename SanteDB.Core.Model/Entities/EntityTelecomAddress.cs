@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -15,6 +15,8 @@
  * License for the specific language governing permissions and limitations under 
  * the License.
  * 
+ * User: fyfej
+ * Date: 2023-6-21
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
@@ -110,9 +112,13 @@ namespace SanteDB.Core.Model.Entities
                     return null;
                 }
 
-                // E-mail?
-
-                if (s_EmailRegex.IsMatch(this.Value))
+                // Attempt to set the scheme via the type concept
+                var scheme = this.LoadProperty(o => o.TypeConcept)?.LoadProperty(o => o.Extensions)?.Find(o=>o.ExtensionTypeKey == ExtensionTypeKeys.Rfc3986SchemeExtension)?.ExtensionValue?.ToString();
+                if (!String.IsNullOrEmpty(scheme))
+                {
+                    return String.Format("{0}:{1}", scheme, this.Value);
+                }
+                else if (s_EmailRegex.IsMatch(this.Value))
                 {
                     return String.Format("mailto:{0}", this.Value);
                 }
@@ -134,7 +140,9 @@ namespace SanteDB.Core.Model.Entities
                         sb.AppendFormat(";ext={0}", match.Groups[5].Value);
                     }
 
+                    
                     return sb.ToString();
+
                 }
                 else
                 {
