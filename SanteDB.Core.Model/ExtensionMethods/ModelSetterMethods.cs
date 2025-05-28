@@ -47,7 +47,7 @@ namespace SanteDB
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> s_nonMetadataCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
 
         // Property selector
-        private static Regex s_hdsiPropertySelector = new Regex(@"(\w+)(?:\[([^]]+)\])?(?:\@(\w+))?\.?", RegexOptions.Compiled);
+        private static Regex s_hdsiPropertySelector = new Regex(@"([$\w]+)(?:\[([^]]+)\])?(?:\@(\w+))?\.?", RegexOptions.Compiled);
 
         /// <summary>
         /// Gets all non metadata properties (those marked with <see cref="SerializationMetadataAttribute"/>
