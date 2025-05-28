@@ -30,6 +30,7 @@ namespace SanteDB.Core.Model.DataTypes
     /// Represents a relationship validation rule between two <see cref="ITargetedAssociation"/>
     /// </summary>
     [XmlType(nameof(RelationshipValidationRule), Namespace = "http://santedb.org/model"), JsonObject(nameof(RelationshipValidationRule))]
+    [XmlRoot(ElementName = nameof(RelationshipValidationRule), Namespace = "http://santedb.org/model")]
     public class RelationshipValidationRule : BaseEntityData
     {
 
