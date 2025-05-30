@@ -1266,6 +1266,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:element name="RelationshipValidationRule" nillable="true" type="tns:RelationshipValidationRule" />
 	<xs:complexType name="RelationshipValidationRule">
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:BaseEntityData">
@@ -1273,12 +1274,20 @@
 					<xs:element minOccurs="1" maxOccurs="1" name="sourceClass" nillable="true" xmlns:q125="http://microsoft.com/wsdl/types/" type="q125:guid" />
 					<xs:element minOccurs="1" maxOccurs="1" name="targetClass" nillable="true" xmlns:q126="http://microsoft.com/wsdl/types/" type="q126:guid" />
 					<xs:element minOccurs="1" maxOccurs="1" name="relationshipType" xmlns:q127="http://microsoft.com/wsdl/types/" type="q127:guid" />
-					<xs:element minOccurs="0" maxOccurs="1" name="appliesTo" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="appliesTo" type="tns:EntityRelationshipType" />
 					<xs:element minOccurs="0" maxOccurs="1" name="description" type="xs:string" />
+          <!--TODO: Need to add relationship class here, depending on how we choose to encode it in the final model type. -->
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+  <xs:simpleType name="EntityRelationshipType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EntityRelationship" />
+      <xs:enumeration value="ActRelationship" />
+      <xs:enumeration value="ActParticipation" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="TemplateDefinition" nillable="true" type="tns:TemplateDefinition" />
 	<xs:complexType name="TemplateDefinition">
 		<xs:complexContent mixed="false">

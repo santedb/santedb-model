@@ -143,7 +143,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// The identifier in the address that points to another <see cref="Place"/>
         /// </summary>
-        public static readonly Guid PlaceReference = Guid.Parse("A314F427-2B6D-4948-9146-A5F700973899");
+        public static readonly Guid PlaceRef = Guid.Parse("A314F427-2B6D-4948-9146-A5F700973899");
         /// <summary>
         /// Identifies the region or zone or division
         /// </summary>
