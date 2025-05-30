@@ -80,7 +80,7 @@ namespace SanteDB.Core.Model.Constants
         /// <summary>
         /// The act represents a registration event such as the registration of a patient.
         /// </summary>
-        public const String Registration = "78b9540f-438b-4b6f-8d83-aaf4979dbc64";
+        public const String Registration = "6be8d358-f591-4a3a-9a57-1889b0147c7e";
 
         /// <summary>
         /// The act represents that a substance (medication, or otherwise) was, should, or will be administered to the patient.
