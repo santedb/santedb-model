@@ -59,17 +59,40 @@ namespace SanteDB.Core.Model.Map
             if (s_classKeyMaps == null)
             {
                 s_classKeyMaps = new Dictionary<Guid, Type>();
-                foreach (var t in typeof(MapUtil).Assembly.GetTypes())
-                {
-                    var atts = t.GetCustomAttributes<ClassConceptKeyAttribute>();
-                    if (!atts.Any())
-                    {
-                        continue; // no map
-                    }
 
-                    foreach (var clsCode in atts)
+                var types = typeof(MapUtil).Assembly.GetTypes()
+                    .Where(t => t != null && !t.IsAbstract)
+                    .Select(t => (type: t, direct: t.GetCustomAttributes<ClassConceptKeyAttribute>(inherit: false), inherited: t.GetCustomAttributes<ClassConceptKeyAttribute>(inherit: true)))
+                    .Where(tup => tup.direct?.Any() == true || tup.inherited?.Any() == true);
+
+                //Direct assignments take priority since they are expressed by the model.
+                foreach (var t in types)
+                {
+                    foreach (var clsCode in t.direct)
                     {
-                        s_classKeyMaps.Add(Guid.Parse(clsCode.ClassConcept), t);
+                        var key = Guid.Parse(clsCode.ClassConcept);
+
+                        //Two direct assignments of the same class key is not permitted. Throw an exception showing which two types have the same direct assignment and need to be fixed.
+                        if (s_classKeyMaps.ContainsKey(key))
+                        {
+                            throw new ArgumentException($"Model exception: Two model types contain the same class concept in the ClassConceptKey attribute: '{t.type.FullName}' and '{s_classKeyMaps[key].FullName}'.");
+                        }
+                        else
+                        {
+                            s_classKeyMaps.Add(key, t.type);
+                        }
+                    }
+                }
+
+                //Inherited assignments account for the first instance
+                foreach (var t in types)
+                {
+                    foreach (var clsCode in t.inherited)
+                    {
+                        var key = Guid.Parse(clsCode.ClassConcept);
+
+                        if (!s_classKeyMaps.ContainsKey(key))
+                            s_classKeyMaps.Add(key, t.type);
                     }
                 }
             }
