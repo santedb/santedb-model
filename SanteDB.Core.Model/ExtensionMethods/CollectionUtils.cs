@@ -38,6 +38,10 @@ namespace SanteDB.Core.Model
                     case Entity entity:
                         dependencies = entity.Relationships?.Select(r => r.TargetEntityKey == identifiedData.Key ? r.SourceEntityKey : r.TargetEntityKey).ToArray() ?? new Guid?[0];
                         dependencies = entity.Participations != null ? dependencies.Union(entity.Participations.Select(p => p.ActKey)).ToArray() : dependencies;
+                        if (entity.CreationActKey.HasValue)
+                        {
+                            dependencies = dependencies.Union(new Guid?[] { entity.CreationActKey }).ToArray();
+                        }
                         break;
                     case Act act:
                         dependencies = act.Relationships?.Select(r => r.TargetActKey == identifiedData.Key ? r.SourceEntityKey : r.TargetActKey).ToArray() ?? new Guid?[0];
