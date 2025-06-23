@@ -41,6 +41,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
@@ -1371,6 +1372,14 @@ namespace SanteDB
         public static String GetSerializationName(this Type type)
         {
             return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.FullName;
+        }
+        
+        /// <summary>
+        /// Get the preferred resource name or the default resource name
+        /// </summary>
+        public static String GetResourceName(this Type type)
+        {
+            return type.GetCustomAttribute<ResourceNameAttribute>(false)?.ResourceName ?? type.GetSerializationName();
         }
 
         /// <summary>
