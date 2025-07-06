@@ -120,7 +120,7 @@ namespace SanteDB.Core.Model.Map.Builder
             var retVal = Activator.CreateInstance(this.m_classMap.DomainType);
 
             // Iterate through properties
-            foreach (var propInfo in modelInstance.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            foreach (var propInfo in modelInstance.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance).Where(p=>p.CanRead && p.CanWrite))
             {
                 var propValue = propInfo.GetValue(modelInstance);
                 // Property info
