@@ -167,7 +167,6 @@ namespace SanteDB.Core.Model.DataTypes
                 this.ExtensionType = this.LoadProperty<ExtensionType>(nameof(ExtensionType));
                 return this.ExtensionType?.ExtensionHandlerInstance?.GetDisplay(this.ExtensionValue);
             }
-            set { }
         }
 
         /// <summary>
