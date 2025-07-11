@@ -395,6 +395,24 @@ namespace SanteDB.Core.Model.Entities
             this.Policies.Add(new SecurityPolicyInstance(pol, PolicyGrantType.Grant));
         }
 
+
+        /// <inheritdoc/>
+        public ITag AddTagUnchecked(String tagKey, String tagValue)
+        {
+            this.Tags = this.Tags ?? new List<EntityTag>();
+            var tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            if (tag == null)
+            {
+                tag = new EntityTag(tagKey, tagValue);
+                this.Tags.Add(tag);
+            }
+            else
+            {
+                tag.Value = tagValue;
+            }
+            return tag;
+        }
+
         /// <summary>
         /// Add a tag to this entity
         /// </summary>
