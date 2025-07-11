@@ -1823,5 +1823,36 @@ namespace SanteDB
 
         /// <summary>Gets the last modification date of the object</summary>
         public static DateTimeOffset LastModified(this IdentifiedData me) => me.ModifiedOn;
+
+
+        /// <summary>
+        /// Searches the expression tree <paramref name="expression"/> to see if there is a property reference to <paramref name="propertyName"/>
+        /// </summary>
+        /// <typeparam name="TPredicate">The type of object for the expression tree</typeparam>
+        /// <param name="expression">The expression to be parsed</param>
+        /// <param name="propertyName">The name of the property to check</param>
+        /// <returns>The property reference</returns>
+        public static bool ContainsPropertyReference(this Expression expression, string propertyName)
+        {
+            if (expression is MemberExpression me && me.Member.Name == propertyName && me.Member is PropertyInfo) return true;
+
+            switch(expression)
+            {
+                case LambdaExpression lambda:
+                    return lambda.Body.ContainsPropertyReference(propertyName);
+                case BinaryExpression binaryExpression:
+                    return binaryExpression.Right.ContainsPropertyReference(propertyName) || binaryExpression.Left.ContainsPropertyReference(propertyName);
+                case MemberExpression memberExpression:
+                    return memberExpression.Expression.ContainsPropertyReference(propertyName);
+                case MethodCallExpression methodCallExpression:
+                    return methodCallExpression.Object.ContainsPropertyReference(propertyName) || methodCallExpression.Arguments.Any(arg => arg.ContainsPropertyReference(propertyName));
+                case InvocationExpression invocationExpression:
+                    return invocationExpression.Expression.ContainsPropertyReference(propertyName) || invocationExpression.Arguments.Any(arg => arg.ContainsPropertyReference(propertyName));
+                case UnaryExpression unaryExpression:
+                    return unaryExpression.Operand.ContainsPropertyReference(propertyName);
+                default:
+                    return false;
+            }
+        }
     }
 }
