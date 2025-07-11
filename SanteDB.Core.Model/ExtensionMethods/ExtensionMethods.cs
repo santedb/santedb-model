@@ -1828,7 +1828,6 @@ namespace SanteDB
         /// <summary>
         /// Searches the expression tree <paramref name="expression"/> to see if there is a property reference to <paramref name="propertyName"/>
         /// </summary>
-        /// <typeparam name="TPredicate">The type of object for the expression tree</typeparam>
         /// <param name="expression">The expression to be parsed</param>
         /// <param name="propertyName">The name of the property to check</param>
         /// <returns>The property reference</returns>
