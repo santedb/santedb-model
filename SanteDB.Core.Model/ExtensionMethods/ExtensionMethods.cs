@@ -1833,25 +1833,49 @@ namespace SanteDB
         /// <returns>The property reference</returns>
         public static bool ContainsPropertyReference(this Expression expression, string propertyName)
         {
-            if (expression is MemberExpression me && me.Member.Name == propertyName && me.Member is PropertyInfo) return true;
+            // Non-recursive algorithm - faster performance 
+            Stack<Expression> processStack = new Stack<Expression>();
+            processStack.Push(expression);
 
-            switch(expression)
+            while (processStack.Count > 0)
             {
-                case LambdaExpression lambda:
-                    return lambda.Body.ContainsPropertyReference(propertyName);
-                case BinaryExpression binaryExpression:
-                    return binaryExpression.Right.ContainsPropertyReference(propertyName) || binaryExpression.Left.ContainsPropertyReference(propertyName);
-                case MemberExpression memberExpression:
-                    return memberExpression.Expression.ContainsPropertyReference(propertyName);
-                case MethodCallExpression methodCallExpression:
-                    return methodCallExpression.Object.ContainsPropertyReference(propertyName) || methodCallExpression.Arguments.Any(arg => arg.ContainsPropertyReference(propertyName));
-                case InvocationExpression invocationExpression:
-                    return invocationExpression.Expression.ContainsPropertyReference(propertyName) || invocationExpression.Arguments.Any(arg => arg.ContainsPropertyReference(propertyName));
-                case UnaryExpression unaryExpression:
-                    return unaryExpression.Operand.ContainsPropertyReference(propertyName);
-                default:
-                    return false;
+                var currentExpression = processStack.Pop();
+                switch (currentExpression)
+                {
+                    case LambdaExpression lambda:
+                        processStack.Push(lambda.Body);
+                        break;
+                    case BinaryExpression binaryExpression:
+                        processStack.Push(binaryExpression.Left);
+                        processStack.Push(binaryExpression.Right);
+                        break;
+                    case MemberExpression memberExpression:
+                        if(memberExpression.Member.Name == propertyName && memberExpression.Member is PropertyInfo)
+                        {
+                            return true;
+                        }
+                        processStack.Push(memberExpression.Expression);
+                        break;
+                    case MethodCallExpression methodCallExpression:
+                        processStack.Push(methodCallExpression.Object);
+                        foreach(var arg in methodCallExpression.Arguments)
+                        {
+                            processStack.Push(arg);
+                        };
+                        break;
+                    case InvocationExpression invocationExpression:
+                        processStack.Push(invocationExpression.Expression);
+                        foreach (var arg in invocationExpression.Arguments)
+                        {
+                            processStack.Push(arg);
+                        }
+                        break;
+                    case UnaryExpression unaryExpression:
+                        processStack.Push(unaryExpression.Operand);
+                        break;
+                }
             }
+            return false;
         }
     }
 }
