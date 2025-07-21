@@ -38,12 +38,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -227,11 +229,11 @@ namespace SanteDB
         /// <summary>
         /// For each item in an enumerable
         /// </summary>
-        public static void ForEach<T>(IEnumerable<T> me, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
-            foreach (var itm in me)
+            foreach (var item in items)
             {
-                action(itm);
+                action(item);
             }
         }
 
@@ -1876,6 +1878,33 @@ namespace SanteDB
                 }
             }
             return false;
+        }
+
+
+        /// <summary>
+        /// Read a pascal string form the stream
+        /// </summary>
+        /// <remarks>https://stackoverflow.com/questions/25068903/what-are-pascal-strings</remarks>
+        public static String ReadPascalString(this Stream str)
+        {
+            var len = str.ReadByte();
+            if(len <= 0)
+            {
+                return String.Empty;
+            }
+            var strBuf = new Byte[len];
+            str.Read(strBuf, 0, strBuf.Length);
+            return Encoding.UTF8.GetString(strBuf);
+        }
+
+        /// <summary>
+        /// Write <paramref name="stringData"/> to <paramref name="str"/>
+        /// </summary>
+        public static void WritePascalString(this Stream str, String stringData)
+        {
+            var dataBuf = Encoding.UTF8.GetBytes(stringData);
+            str.WriteByte((byte)dataBuf.Length);
+            str.Write(dataBuf, 0, dataBuf.Length);
         }
     }
 }
