@@ -93,5 +93,8 @@ namespace SanteDB.Core.Model.DataTypes
             }
             return base.SemanticEquals(obj);
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

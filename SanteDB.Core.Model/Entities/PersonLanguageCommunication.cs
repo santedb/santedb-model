@@ -83,5 +83,8 @@ namespace SanteDB.Core.Model.Entities
                 this.IsPreferred == other.IsPreferred &&
                 this.LanguageCode == other.LanguageCode;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

@@ -111,5 +111,8 @@ namespace SanteDB.Core.Model.Entities
                 this.GeoTag?.Lng == other.GeoTag?.Lng &&
                 this.Services?.SemanticEquals(other.Services) != false;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

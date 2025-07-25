@@ -306,5 +306,7 @@ namespace SanteDB.Core.Model.DataTypes
             return tag != null;
         }
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

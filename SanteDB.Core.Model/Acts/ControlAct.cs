@@ -21,6 +21,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Xml.Serialization;
 
@@ -51,5 +52,8 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the class concept key
         /// </summary>
         protected override bool ValidateClassKey(Guid? classKey) => classKey == ActClassKeys.ControlAct;
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

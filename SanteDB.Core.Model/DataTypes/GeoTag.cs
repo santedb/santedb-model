@@ -19,6 +19,7 @@
  * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Xml.Serialization;
 
@@ -76,5 +77,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// True if the object is empty
         /// </summary>
         public override bool IsEmpty() => !this.Lat.HasValue || !this.Lng.HasValue;
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

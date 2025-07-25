@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Security
@@ -33,5 +34,7 @@ namespace SanteDB.Core.Model.Security
     public class SecurityEntity : NonVersionedEntityData
     {
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

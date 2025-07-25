@@ -92,6 +92,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         public override string ToDisplay() => $"{this.Value}^^^{this.IdentityDomain?.DomainName ?? this.IdentityDomainKey.ToString()}";
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -125,6 +127,9 @@ namespace SanteDB.Core.Model.DataTypes
             this.IdentityDomain = authority;
             this.Value = value;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>

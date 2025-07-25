@@ -277,6 +277,9 @@ namespace SanteDB.Core.Model.DataTypes
             this.ExtensionTypeKey = extensionType;
             this.ExtensionValueData = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -312,6 +315,9 @@ namespace SanteDB.Core.Model.DataTypes
             this.ExtensionTypeKey = extensionType;
             this.ExtensionValueData = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -347,5 +353,8 @@ namespace SanteDB.Core.Model.DataTypes
             this.ExtensionTypeKey = extensionType;
             this.ExtensionValueData = (Activator.CreateInstance(extensionHandlerType) as IExtensionHandler)?.Serialize(value);
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

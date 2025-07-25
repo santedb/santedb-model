@@ -231,6 +231,9 @@ namespace SanteDB.Core.Model.Entities
             return base.SemanticEquals(obj) && this.Value == other.Value && this.AddressUseKey == other.AddressUseKey;
         }
 
-        
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

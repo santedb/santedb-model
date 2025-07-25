@@ -915,5 +915,7 @@ namespace SanteDB.Core.Model.Acts
         /// <inheritdoc/>
         IEnumerable<SecurityPolicyInstance> IHasPolicies.Policies => this.Policies;
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

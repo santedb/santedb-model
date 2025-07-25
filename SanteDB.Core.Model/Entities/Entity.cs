@@ -532,5 +532,8 @@ namespace SanteDB.Core.Model.Entities
             }
             this.Identifiers.RemoveAll(o => removePredicate(o));
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

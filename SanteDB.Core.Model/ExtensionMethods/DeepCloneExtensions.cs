@@ -8,11183 +8,8149 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SanteDB.Core.Model
-{
+namespace SanteDB.Core.Model {
     using SanteDB.Core.Model;
-
-
-    public static class DeepCloneExtensions
-    {
-
-        public static SanteDB.Core.Model.Subscription.SubscriptionDefinition CloneDeep(this SanteDB.Core.Model.Subscription.SubscriptionDefinition clonee)
-        {
-            if ((clonee == null))
-            {
+    
+    
+    internal static class DeepCloner {
+        
+        internal static SanteDB.Core.Model.Subscription.SubscriptionDefinition CloneDeep(this SanteDB.Core.Model.Subscription.SubscriptionDefinition clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Subscription.SubscriptionDefinition _retVal = new SanteDB.Core.Model.Subscription.SubscriptionDefinition();
             // Clone Uuid
-            if ((clonee.Uuid != null))
-            {
-                _retVal.Uuid = clonee.Uuid;
-            }
+            _retVal.Uuid = clonee.Uuid;
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Resource
-            if ((clonee.Resource != null))
-            {
+            if ((clonee.Resource != null)) {
                 _retVal.Resource = clonee.Resource;
             }
             // Clone Order
-            if ((clonee.Order != null))
-            {
-                _retVal.Order = clonee.Order;
-            }
+            _retVal.Order = clonee.Order;
             // Clone ServerDefinitions
-            if ((clonee.ServerDefinitions != null))
-            {
+            if ((clonee.ServerDefinitions != null)) {
                 _retVal.ServerDefinitions = new System.Collections.Generic.List<SanteDB.Core.Model.Subscription.SubscriptionServerDefinition>(clonee.ServerDefinitions);
             }
             // Clone ClientDefinitions
-            if ((clonee.ClientDefinitions != null))
-            {
+            if ((clonee.ClientDefinitions != null)) {
                 _retVal.ClientDefinitions = new System.Collections.Generic.List<SanteDB.Core.Model.Subscription.SubscriptionClientDefinition>(clonee.ClientDefinitions);
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityApplication CloneDeep(this SanteDB.Core.Model.Security.SecurityApplication clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityApplication CloneDeep(this SanteDB.Core.Model.Security.SecurityApplication clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityApplication _retVal = new SanteDB.Core.Model.Security.SecurityApplication();
             // Clone ApplicationSecret
-            if ((clonee.ApplicationSecret != null))
-            {
+            if ((clonee.ApplicationSecret != null)) {
                 _retVal.ApplicationSecret = clonee.ApplicationSecret;
             }
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Lockout
-            if ((clonee.Lockout != null))
-            {
+            if ((clonee.Lockout != null)) {
                 _retVal.Lockout = clonee.Lockout;
             }
             // Clone InvalidAuthAttempts
-            if ((clonee.InvalidAuthAttempts != null))
-            {
+            if ((clonee.InvalidAuthAttempts != null)) {
                 _retVal.InvalidAuthAttempts = clonee.InvalidAuthAttempts;
             }
             // Clone LastAuthentication
-            if ((clonee.LastAuthentication != null))
-            {
+            if ((clonee.LastAuthentication != null)) {
                 _retVal.LastAuthentication = clonee.LastAuthentication;
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityChallenge CloneDeep(this SanteDB.Core.Model.Security.SecurityChallenge clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityChallenge CloneDeep(this SanteDB.Core.Model.Security.SecurityChallenge clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityChallenge _retVal = new SanteDB.Core.Model.Security.SecurityChallenge();
             // Clone ChallengeText
-            if ((clonee.ChallengeText != null))
-            {
+            if ((clonee.ChallengeText != null)) {
                 _retVal.ChallengeText = clonee.ChallengeText;
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityDevice CloneDeep(this SanteDB.Core.Model.Security.SecurityDevice clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityDevice CloneDeep(this SanteDB.Core.Model.Security.SecurityDevice clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityDevice _retVal = new SanteDB.Core.Model.Security.SecurityDevice();
             // Clone DeviceSecret
-            if ((clonee.DeviceSecret != null))
-            {
+            if ((clonee.DeviceSecret != null)) {
                 _retVal.DeviceSecret = clonee.DeviceSecret;
             }
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Lockout
-            if ((clonee.Lockout != null))
-            {
+            if ((clonee.Lockout != null)) {
                 _retVal.Lockout = clonee.Lockout;
             }
             // Clone InvalidAuthAttempts
-            if ((clonee.InvalidAuthAttempts != null))
-            {
+            if ((clonee.InvalidAuthAttempts != null)) {
                 _retVal.InvalidAuthAttempts = clonee.InvalidAuthAttempts;
             }
             // Clone LastAuthentication
-            if ((clonee.LastAuthentication != null))
-            {
+            if ((clonee.LastAuthentication != null)) {
                 _retVal.LastAuthentication = clonee.LastAuthentication;
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityEntity CloneDeep(this SanteDB.Core.Model.Security.SecurityEntity clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityEntity CloneDeep(this SanteDB.Core.Model.Security.SecurityEntity clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityEntity _retVal = new SanteDB.Core.Model.Security.SecurityEntity();
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityPolicy CloneDeep(this SanteDB.Core.Model.Security.SecurityPolicy clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityPolicy CloneDeep(this SanteDB.Core.Model.Security.SecurityPolicy clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityPolicy _retVal = new SanteDB.Core.Model.Security.SecurityPolicy();
             // Clone Handler
-            if ((clonee.Handler != null))
-            {
+            if ((clonee.Handler != null)) {
                 _retVal.Handler = clonee.Handler;
             }
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Oid
-            if ((clonee.Oid != null))
-            {
+            if ((clonee.Oid != null)) {
                 _retVal.Oid = clonee.Oid;
             }
             // Clone IsPublic
-            if ((clonee.IsPublic != null))
-            {
-                _retVal.IsPublic = clonee.IsPublic;
-            }
+            _retVal.IsPublic = clonee.IsPublic;
             // Clone CanOverride
-            if ((clonee.CanOverride != null))
-            {
-                _retVal.CanOverride = clonee.CanOverride;
-            }
+            _retVal.CanOverride = clonee.CanOverride;
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityPolicyInstance CloneDeep(this SanteDB.Core.Model.Security.SecurityPolicyInstance clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityPolicyInstance CloneDeep(this SanteDB.Core.Model.Security.SecurityPolicyInstance clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityPolicyInstance _retVal = new SanteDB.Core.Model.Security.SecurityPolicyInstance();
             // Clone PolicyKey
-            if ((clonee.PolicyKey != null))
-            {
+            if ((clonee.PolicyKey != null)) {
                 _retVal.PolicyKey = clonee.PolicyKey;
             }
             // Clone Policy
-            if ((clonee.Policy != null))
-            {
-                _retVal.Policy = DeepCloneExtensions.CloneDeep(clonee.Policy);
+            if ((clonee.Policy != null)) {
+                _retVal.Policy = ((SanteDB.Core.Model.Security.SecurityPolicy)(clonee.Policy.DeepCopy()));
             }
             // Clone GrantType
-            if ((clonee.GrantType != null))
-            {
-                _retVal.GrantType = clonee.GrantType;
-            }
+            _retVal.GrantType = clonee.GrantType;
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityProvenance CloneDeep(this SanteDB.Core.Model.Security.SecurityProvenance clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityProvenance CloneDeep(this SanteDB.Core.Model.Security.SecurityProvenance clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityProvenance _retVal = new SanteDB.Core.Model.Security.SecurityProvenance();
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ApplicationKey
-            if ((clonee.ApplicationKey != null))
-            {
+            if ((clonee.ApplicationKey != null)) {
                 _retVal.ApplicationKey = clonee.ApplicationKey;
             }
             // Clone UserKey
-            if ((clonee.UserKey != null))
-            {
+            if ((clonee.UserKey != null)) {
                 _retVal.UserKey = clonee.UserKey;
             }
             // Clone DeviceKey
-            if ((clonee.DeviceKey != null))
-            {
+            if ((clonee.DeviceKey != null)) {
                 _retVal.DeviceKey = clonee.DeviceKey;
             }
             // Clone SessionKey
-            if ((clonee.SessionKey != null))
-            {
+            if ((clonee.SessionKey != null)) {
                 _retVal.SessionKey = clonee.SessionKey;
             }
             // Clone ExternalSecurityObjectRefKey
-            if ((clonee.ExternalSecurityObjectRefKey != null))
-            {
+            if ((clonee.ExternalSecurityObjectRefKey != null)) {
                 _retVal.ExternalSecurityObjectRefKey = clonee.ExternalSecurityObjectRefKey;
             }
             // Clone ExternalSecurityObjectRefType
-            if ((clonee.ExternalSecurityObjectRefType != null))
-            {
+            if ((clonee.ExternalSecurityObjectRefType != null)) {
                 _retVal.ExternalSecurityObjectRefType = clonee.ExternalSecurityObjectRefType;
             }
             // Clone Device
-            if ((clonee.Device != null))
-            {
-                _retVal.Device = DeepCloneExtensions.CloneDeep(clonee.Device);
+            if ((clonee.Device != null)) {
+                _retVal.Device = ((SanteDB.Core.Model.Security.SecurityDevice)(clonee.Device.DeepCopy()));
             }
             // Clone User
-            if ((clonee.User != null))
-            {
-                _retVal.User = DeepCloneExtensions.CloneDeep(clonee.User);
+            if ((clonee.User != null)) {
+                _retVal.User = ((SanteDB.Core.Model.Security.SecurityUser)(clonee.User.DeepCopy()));
             }
             // Clone Application
-            if ((clonee.Application != null))
-            {
-                _retVal.Application = DeepCloneExtensions.CloneDeep(clonee.Application);
+            if ((clonee.Application != null)) {
+                _retVal.Application = ((SanteDB.Core.Model.Security.SecurityApplication)(clonee.Application.DeepCopy()));
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityRole CloneDeep(this SanteDB.Core.Model.Security.SecurityRole clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityRole CloneDeep(this SanteDB.Core.Model.Security.SecurityRole clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityRole _retVal = new SanteDB.Core.Model.Security.SecurityRole();
+            int _iterator;
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Description
-            if ((clonee.Description != null))
-            {
+            if ((clonee.Description != null)) {
                 _retVal.Description = clonee.Description;
             }
             // Clone Users
-            if ((clonee.Users != null))
-            {
+            if ((clonee.Users != null)) {
                 _retVal.Users = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityUser>();
-                int iUsers;
-                for (iUsers = 0; (iUsers < clonee.Users.Count); iUsers = (iUsers + 1))
-                {
-                    _retVal.Users.Add(DeepCloneExtensions.CloneDeep(clonee.Users[iUsers]));
+                for (_iterator = 0; (_iterator < clonee.Users.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Users.Add(((SanteDB.Core.Model.Security.SecurityUser)(clonee.Users[_iterator].DeepCopy())));
                 }
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Security.SecurityUser CloneDeep(this SanteDB.Core.Model.Security.SecurityUser clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Security.SecurityUser CloneDeep(this SanteDB.Core.Model.Security.SecurityUser clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Security.SecurityUser _retVal = new SanteDB.Core.Model.Security.SecurityUser();
+            int _iterator;
             // Clone Email
-            if ((clonee.Email != null))
-            {
+            if ((clonee.Email != null)) {
                 _retVal.Email = clonee.Email;
             }
             // Clone EmailConfirmed
-            if ((clonee.EmailConfirmed != null))
-            {
-                _retVal.EmailConfirmed = clonee.EmailConfirmed;
-            }
+            _retVal.EmailConfirmed = clonee.EmailConfirmed;
             // Clone InvalidLoginAttempts
-            if ((clonee.InvalidLoginAttempts != null))
-            {
-                _retVal.InvalidLoginAttempts = clonee.InvalidLoginAttempts;
-            }
+            _retVal.InvalidLoginAttempts = clonee.InvalidLoginAttempts;
             // Clone Lockout
-            if ((clonee.Lockout != null))
-            {
+            if ((clonee.Lockout != null)) {
                 _retVal.Lockout = clonee.Lockout;
             }
             // Clone LockoutXml
-            if ((clonee.LockoutXml != null))
-            {
+            if ((clonee.LockoutXml != null)) {
                 _retVal.LockoutXml = clonee.LockoutXml;
             }
             // Clone Password
-            if ((clonee.Password != null))
-            {
+            if ((clonee.Password != null)) {
                 _retVal.Password = clonee.Password;
             }
             // Clone SecurityHash
-            if ((clonee.SecurityHash != null))
-            {
+            if ((clonee.SecurityHash != null)) {
                 _retVal.SecurityHash = clonee.SecurityHash;
             }
             // Clone TwoFactorEnabled
-            if ((clonee.TwoFactorEnabled != null))
-            {
-                _retVal.TwoFactorEnabled = clonee.TwoFactorEnabled;
-            }
+            _retVal.TwoFactorEnabled = clonee.TwoFactorEnabled;
             // Clone UserName
-            if ((clonee.UserName != null))
-            {
+            if ((clonee.UserName != null)) {
                 _retVal.UserName = clonee.UserName;
             }
             // Clone UserPhoto
-            if ((clonee.UserPhoto != null))
-            {
+            if ((clonee.UserPhoto != null)) {
                 _retVal.UserPhoto = clonee.UserPhoto;
             }
             // Clone LastLoginTime
-            if ((clonee.LastLoginTime != null))
-            {
+            if ((clonee.LastLoginTime != null)) {
                 _retVal.LastLoginTime = clonee.LastLoginTime;
             }
             // Clone LastLoginTimeXml
-            if ((clonee.LastLoginTimeXml != null))
-            {
+            if ((clonee.LastLoginTimeXml != null)) {
                 _retVal.LastLoginTimeXml = clonee.LastLoginTimeXml;
             }
             // Clone PasswordExpiration
-            if ((clonee.PasswordExpiration != null))
-            {
+            if ((clonee.PasswordExpiration != null)) {
                 _retVal.PasswordExpiration = clonee.PasswordExpiration;
             }
             // Clone PasswordExpirationXml
-            if ((clonee.PasswordExpirationXml != null))
-            {
+            if ((clonee.PasswordExpirationXml != null)) {
                 _retVal.PasswordExpirationXml = clonee.PasswordExpirationXml;
             }
             // Clone Roles
-            if ((clonee.Roles != null))
-            {
+            if ((clonee.Roles != null)) {
                 _retVal.Roles = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityRole>();
-                int iRoles;
-                for (iRoles = 0; (iRoles < clonee.Roles.Count); iRoles = (iRoles + 1))
-                {
-                    _retVal.Roles.Add(DeepCloneExtensions.CloneDeep(clonee.Roles[iRoles]));
+                for (_iterator = 0; (_iterator < clonee.Roles.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Roles.Add(((SanteDB.Core.Model.Security.SecurityRole)(clonee.Roles[_iterator].DeepCopy())));
                 }
             }
             // Clone PhoneNumber
-            if ((clonee.PhoneNumber != null))
-            {
+            if ((clonee.PhoneNumber != null)) {
                 _retVal.PhoneNumber = clonee.PhoneNumber;
             }
             // Clone PhoneNumberConfirmed
-            if ((clonee.PhoneNumberConfirmed != null))
-            {
-                _retVal.PhoneNumberConfirmed = clonee.PhoneNumberConfirmed;
-            }
+            _retVal.PhoneNumberConfirmed = clonee.PhoneNumberConfirmed;
             // Clone TwoFactorMechnaismKey
-            if ((clonee.TwoFactorMechnaismKey != null))
-            {
+            if ((clonee.TwoFactorMechnaismKey != null)) {
                 _retVal.TwoFactorMechnaismKey = clonee.TwoFactorMechnaismKey;
             }
             // Clone UserClass
-            if ((clonee.UserClass != null))
-            {
-                _retVal.UserClass = clonee.UserClass;
-            }
+            _retVal.UserClass = clonee.UserClass;
             // Clone UserEntity
-            if ((clonee.UserEntity != null))
-            {
-                _retVal.UserEntity = DeepCloneExtensions.CloneDeep(clonee.UserEntity);
+            if ((clonee.UserEntity != null)) {
+                _retVal.UserEntity = ((SanteDB.Core.Model.Entities.UserEntity)(clonee.UserEntity.DeepCopy()));
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Roles.Patient CloneDeep(this SanteDB.Core.Model.Roles.Patient clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Roles.Patient CloneDeep(this SanteDB.Core.Model.Roles.Patient clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Roles.Patient _retVal = new SanteDB.Core.Model.Roles.Patient();
+            int _iterator;
             // Clone MultipleBirthOrder
-            if ((clonee.MultipleBirthOrder != null))
-            {
+            if ((clonee.MultipleBirthOrder != null)) {
                 _retVal.MultipleBirthOrder = clonee.MultipleBirthOrder;
             }
             // Clone LivingArrangementKey
-            if ((clonee.LivingArrangementKey != null))
-            {
+            if ((clonee.LivingArrangementKey != null)) {
                 _retVal.LivingArrangementKey = clonee.LivingArrangementKey;
             }
             // Clone ReligiousAffiliationKey
-            if ((clonee.ReligiousAffiliationKey != null))
-            {
+            if ((clonee.ReligiousAffiliationKey != null)) {
                 _retVal.ReligiousAffiliationKey = clonee.ReligiousAffiliationKey;
             }
             // Clone LivingArrangement
-            if ((clonee.LivingArrangement != null))
-            {
-                _retVal.LivingArrangement = DeepCloneExtensions.CloneDeep(clonee.LivingArrangement);
+            if ((clonee.LivingArrangement != null)) {
+                _retVal.LivingArrangement = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.LivingArrangement.DeepCopy()));
             }
             // Clone ReligiousAffiliation
-            if ((clonee.ReligiousAffiliation != null))
-            {
-                _retVal.ReligiousAffiliation = DeepCloneExtensions.CloneDeep(clonee.ReligiousAffiliation);
+            if ((clonee.ReligiousAffiliation != null)) {
+                _retVal.ReligiousAffiliation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReligiousAffiliation.DeepCopy()));
             }
             // Clone EthnicGroupKey
-            if ((clonee.EthnicGroupKey != null))
-            {
+            if ((clonee.EthnicGroupKey != null)) {
                 _retVal.EthnicGroupKey = clonee.EthnicGroupKey;
             }
             // Clone EthnicGroup
-            if ((clonee.EthnicGroup != null))
-            {
-                _retVal.EthnicGroup = DeepCloneExtensions.CloneDeep(clonee.EthnicGroup);
+            if ((clonee.EthnicGroup != null)) {
+                _retVal.EthnicGroup = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.EthnicGroup.DeepCopy()));
             }
             // Clone MaritalStatus
-            if ((clonee.MaritalStatus != null))
-            {
-                _retVal.MaritalStatus = DeepCloneExtensions.CloneDeep(clonee.MaritalStatus);
+            if ((clonee.MaritalStatus != null)) {
+                _retVal.MaritalStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MaritalStatus.DeepCopy()));
             }
             // Clone EducationLevel
-            if ((clonee.EducationLevel != null))
-            {
-                _retVal.EducationLevel = DeepCloneExtensions.CloneDeep(clonee.EducationLevel);
+            if ((clonee.EducationLevel != null)) {
+                _retVal.EducationLevel = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.EducationLevel.DeepCopy()));
             }
             // Clone MaritalStatusKey
-            if ((clonee.MaritalStatusKey != null))
-            {
+            if ((clonee.MaritalStatusKey != null)) {
                 _retVal.MaritalStatusKey = clonee.MaritalStatusKey;
             }
             // Clone EducationLevelKey
-            if ((clonee.EducationLevelKey != null))
-            {
+            if ((clonee.EducationLevelKey != null)) {
                 _retVal.EducationLevelKey = clonee.EducationLevelKey;
             }
             // Clone DateOfBirth
-            if ((clonee.DateOfBirth != null))
-            {
+            if ((clonee.DateOfBirth != null)) {
                 _retVal.DateOfBirth = clonee.DateOfBirth;
             }
             // Clone DateOfBirthPrecision
-            if ((clonee.DateOfBirthPrecision != null))
-            {
+            if ((clonee.DateOfBirthPrecision != null)) {
                 _retVal.DateOfBirthPrecision = clonee.DateOfBirthPrecision;
             }
             // Clone GenderConceptKey
-            if ((clonee.GenderConceptKey != null))
-            {
+            if ((clonee.GenderConceptKey != null)) {
                 _retVal.GenderConceptKey = clonee.GenderConceptKey;
             }
             // Clone GenderConcept
-            if ((clonee.GenderConcept != null))
-            {
-                _retVal.GenderConcept = DeepCloneExtensions.CloneDeep(clonee.GenderConcept);
+            if ((clonee.GenderConcept != null)) {
+                _retVal.GenderConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.GenderConcept.DeepCopy()));
             }
             // Clone LanguageCommunication
-            if ((clonee.LanguageCommunication != null))
-            {
+            if ((clonee.LanguageCommunication != null)) {
                 _retVal.LanguageCommunication = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.PersonLanguageCommunication>();
-                int iLanguageCommunication;
-                for (iLanguageCommunication = 0; (iLanguageCommunication < clonee.LanguageCommunication.Count); iLanguageCommunication = (iLanguageCommunication + 1))
-                {
-                    _retVal.LanguageCommunication.Add(DeepCloneExtensions.CloneDeep(clonee.LanguageCommunication[iLanguageCommunication]));
+                for (_iterator = 0; (_iterator < clonee.LanguageCommunication.Count); _iterator = (_iterator + 1)) {
+                    _retVal.LanguageCommunication.Add(((SanteDB.Core.Model.Entities.PersonLanguageCommunication)(clonee.LanguageCommunication[_iterator].DeepCopy())));
                 }
             }
             // Clone OccupationKey
-            if ((clonee.OccupationKey != null))
-            {
+            if ((clonee.OccupationKey != null)) {
                 _retVal.OccupationKey = clonee.OccupationKey;
             }
             // Clone Occupation
-            if ((clonee.Occupation != null))
-            {
-                _retVal.Occupation = DeepCloneExtensions.CloneDeep(clonee.Occupation);
+            if ((clonee.Occupation != null)) {
+                _retVal.Occupation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Occupation.DeepCopy()));
             }
             // Clone DeceasedDate
-            if ((clonee.DeceasedDate != null))
-            {
+            if ((clonee.DeceasedDate != null)) {
                 _retVal.DeceasedDate = clonee.DeceasedDate;
             }
             // Clone DeceasedDatePrecision
-            if ((clonee.DeceasedDatePrecision != null))
-            {
+            if ((clonee.DeceasedDatePrecision != null)) {
                 _retVal.DeceasedDatePrecision = clonee.DeceasedDatePrecision;
             }
             // Clone VipStatusKey
-            if ((clonee.VipStatusKey != null))
-            {
+            if ((clonee.VipStatusKey != null)) {
                 _retVal.VipStatusKey = clonee.VipStatusKey;
             }
             // Clone VipStatus
-            if ((clonee.VipStatus != null))
-            {
-                _retVal.VipStatus = DeepCloneExtensions.CloneDeep(clonee.VipStatus);
+            if ((clonee.VipStatus != null)) {
+                _retVal.VipStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.VipStatus.DeepCopy()));
             }
             // Clone NationalityKey
-            if ((clonee.NationalityKey != null))
-            {
+            if ((clonee.NationalityKey != null)) {
                 _retVal.NationalityKey = clonee.NationalityKey;
             }
             // Clone Nationality
-            if ((clonee.Nationality != null))
-            {
-                _retVal.Nationality = DeepCloneExtensions.CloneDeep(clonee.Nationality);
+            if ((clonee.Nationality != null)) {
+                _retVal.Nationality = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Nationality.DeepCopy()));
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Roles.Provider CloneDeep(this SanteDB.Core.Model.Roles.Provider clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Roles.Provider CloneDeep(this SanteDB.Core.Model.Roles.Provider clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Roles.Provider _retVal = new SanteDB.Core.Model.Roles.Provider();
+            int _iterator;
             // Clone SpecialtyKey
-            if ((clonee.SpecialtyKey != null))
-            {
+            if ((clonee.SpecialtyKey != null)) {
                 _retVal.SpecialtyKey = clonee.SpecialtyKey;
             }
             // Clone Specialty
-            if ((clonee.Specialty != null))
-            {
-                _retVal.Specialty = DeepCloneExtensions.CloneDeep(clonee.Specialty);
+            if ((clonee.Specialty != null)) {
+                _retVal.Specialty = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Specialty.DeepCopy()));
             }
             // Clone DateOfBirth
-            if ((clonee.DateOfBirth != null))
-            {
+            if ((clonee.DateOfBirth != null)) {
                 _retVal.DateOfBirth = clonee.DateOfBirth;
             }
             // Clone DateOfBirthPrecision
-            if ((clonee.DateOfBirthPrecision != null))
-            {
+            if ((clonee.DateOfBirthPrecision != null)) {
                 _retVal.DateOfBirthPrecision = clonee.DateOfBirthPrecision;
             }
             // Clone GenderConceptKey
-            if ((clonee.GenderConceptKey != null))
-            {
+            if ((clonee.GenderConceptKey != null)) {
                 _retVal.GenderConceptKey = clonee.GenderConceptKey;
             }
             // Clone GenderConcept
-            if ((clonee.GenderConcept != null))
-            {
-                _retVal.GenderConcept = DeepCloneExtensions.CloneDeep(clonee.GenderConcept);
+            if ((clonee.GenderConcept != null)) {
+                _retVal.GenderConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.GenderConcept.DeepCopy()));
             }
             // Clone LanguageCommunication
-            if ((clonee.LanguageCommunication != null))
-            {
+            if ((clonee.LanguageCommunication != null)) {
                 _retVal.LanguageCommunication = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.PersonLanguageCommunication>();
-                int iLanguageCommunication;
-                for (iLanguageCommunication = 0; (iLanguageCommunication < clonee.LanguageCommunication.Count); iLanguageCommunication = (iLanguageCommunication + 1))
-                {
-                    _retVal.LanguageCommunication.Add(DeepCloneExtensions.CloneDeep(clonee.LanguageCommunication[iLanguageCommunication]));
+                for (_iterator = 0; (_iterator < clonee.LanguageCommunication.Count); _iterator = (_iterator + 1)) {
+                    _retVal.LanguageCommunication.Add(((SanteDB.Core.Model.Entities.PersonLanguageCommunication)(clonee.LanguageCommunication[_iterator].DeepCopy())));
                 }
             }
             // Clone OccupationKey
-            if ((clonee.OccupationKey != null))
-            {
+            if ((clonee.OccupationKey != null)) {
                 _retVal.OccupationKey = clonee.OccupationKey;
             }
             // Clone Occupation
-            if ((clonee.Occupation != null))
-            {
-                _retVal.Occupation = DeepCloneExtensions.CloneDeep(clonee.Occupation);
+            if ((clonee.Occupation != null)) {
+                _retVal.Occupation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Occupation.DeepCopy()));
             }
             // Clone DeceasedDate
-            if ((clonee.DeceasedDate != null))
-            {
+            if ((clonee.DeceasedDate != null)) {
                 _retVal.DeceasedDate = clonee.DeceasedDate;
             }
             // Clone DeceasedDatePrecision
-            if ((clonee.DeceasedDatePrecision != null))
-            {
+            if ((clonee.DeceasedDatePrecision != null)) {
                 _retVal.DeceasedDatePrecision = clonee.DeceasedDatePrecision;
             }
             // Clone VipStatusKey
-            if ((clonee.VipStatusKey != null))
-            {
+            if ((clonee.VipStatusKey != null)) {
                 _retVal.VipStatusKey = clonee.VipStatusKey;
             }
             // Clone VipStatus
-            if ((clonee.VipStatus != null))
-            {
-                _retVal.VipStatus = DeepCloneExtensions.CloneDeep(clonee.VipStatus);
+            if ((clonee.VipStatus != null)) {
+                _retVal.VipStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.VipStatus.DeepCopy()));
             }
             // Clone NationalityKey
-            if ((clonee.NationalityKey != null))
-            {
+            if ((clonee.NationalityKey != null)) {
                 _retVal.NationalityKey = clonee.NationalityKey;
             }
             // Clone Nationality
-            if ((clonee.Nationality != null))
-            {
-                _retVal.Nationality = DeepCloneExtensions.CloneDeep(clonee.Nationality);
+            if ((clonee.Nationality != null)) {
+                _retVal.Nationality = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Nationality.DeepCopy()));
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Patch.PatchCollection CloneDeep(this SanteDB.Core.Model.Patch.PatchCollection clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Patch.PatchCollection CloneDeep(this SanteDB.Core.Model.Patch.PatchCollection clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Patch.PatchCollection _retVal = new SanteDB.Core.Model.Patch.PatchCollection();
+            int _iterator;
             // Clone Patches
-            if ((clonee.Patches != null))
-            {
+            if ((clonee.Patches != null)) {
                 _retVal.Patches = new System.Collections.Generic.List<SanteDB.Core.Model.Patch.Patch>();
-                int iPatches;
-                for (iPatches = 0; (iPatches < clonee.Patches.Count); iPatches = (iPatches + 1))
-                {
-                    _retVal.Patches.Add(DeepCloneExtensions.CloneDeep(clonee.Patches[iPatches]));
+                for (_iterator = 0; (_iterator < clonee.Patches.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Patches.Add(((SanteDB.Core.Model.Patch.Patch)(clonee.Patches[_iterator].DeepCopy())));
                 }
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Patch.Patch CloneDeep(this SanteDB.Core.Model.Patch.Patch clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Patch.Patch CloneDeep(this SanteDB.Core.Model.Patch.Patch clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Patch.Patch _retVal = new SanteDB.Core.Model.Patch.Patch();
             // Clone Version
-            if ((clonee.Version != null))
-            {
+            if ((clonee.Version != null)) {
                 _retVal.Version = clonee.Version;
             }
             // Clone AppliesTo
-            if ((clonee.AppliesTo != null))
-            {
+            if ((clonee.AppliesTo != null)) {
                 _retVal.AppliesTo = clonee.AppliesTo;
             }
             // Clone Operation
-            if ((clonee.Operation != null))
-            {
+            if ((clonee.Operation != null)) {
                 _retVal.Operation = new System.Collections.Generic.List<SanteDB.Core.Model.Patch.PatchOperation>(clonee.Operation);
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.ApplicationEntity CloneDeep(this SanteDB.Core.Model.Entities.ApplicationEntity clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.ApplicationEntity CloneDeep(this SanteDB.Core.Model.Entities.ApplicationEntity clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.ApplicationEntity _retVal = new SanteDB.Core.Model.Entities.ApplicationEntity();
+            int _iterator;
             // Clone SecurityApplication
-            if ((clonee.SecurityApplication != null))
-            {
-                _retVal.SecurityApplication = DeepCloneExtensions.CloneDeep(clonee.SecurityApplication);
+            if ((clonee.SecurityApplication != null)) {
+                _retVal.SecurityApplication = ((SanteDB.Core.Model.Security.SecurityApplication)(clonee.SecurityApplication.DeepCopy()));
             }
             // Clone SecurityApplicationKey
-            if ((clonee.SecurityApplicationKey != null))
-            {
+            if ((clonee.SecurityApplicationKey != null)) {
                 _retVal.SecurityApplicationKey = clonee.SecurityApplicationKey;
             }
             // Clone SoftwareName
-            if ((clonee.SoftwareName != null))
-            {
+            if ((clonee.SoftwareName != null)) {
                 _retVal.SoftwareName = clonee.SoftwareName;
             }
             // Clone VendorName
-            if ((clonee.VendorName != null))
-            {
+            if ((clonee.VendorName != null)) {
                 _retVal.VendorName = clonee.VendorName;
             }
             // Clone VersionName
-            if ((clonee.VersionName != null))
-            {
+            if ((clonee.VersionName != null)) {
                 _retVal.VersionName = clonee.VersionName;
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.Container CloneDeep(this SanteDB.Core.Model.Entities.Container clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.Container CloneDeep(this SanteDB.Core.Model.Entities.Container clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.Container _retVal = new SanteDB.Core.Model.Entities.Container();
+            int _iterator;
             // Clone LotNumber
-            if ((clonee.LotNumber != null))
-            {
+            if ((clonee.LotNumber != null)) {
                 _retVal.LotNumber = clonee.LotNumber;
             }
             // Clone CapacityQuantity
-            if ((clonee.CapacityQuantity != null))
-            {
+            if ((clonee.CapacityQuantity != null)) {
                 _retVal.CapacityQuantity = clonee.CapacityQuantity;
             }
             // Clone DiameterQuantity
-            if ((clonee.DiameterQuantity != null))
-            {
+            if ((clonee.DiameterQuantity != null)) {
                 _retVal.DiameterQuantity = clonee.DiameterQuantity;
             }
             // Clone HeightQuantity
-            if ((clonee.HeightQuantity != null))
-            {
+            if ((clonee.HeightQuantity != null)) {
                 _retVal.HeightQuantity = clonee.HeightQuantity;
             }
             // Clone ExpiryDate
-            if ((clonee.ExpiryDate != null))
-            {
+            if ((clonee.ExpiryDate != null)) {
                 _retVal.ExpiryDate = clonee.ExpiryDate;
             }
             // Clone FormConcept
-            if ((clonee.FormConcept != null))
-            {
-                _retVal.FormConcept = DeepCloneExtensions.CloneDeep(clonee.FormConcept);
+            if ((clonee.FormConcept != null)) {
+                _retVal.FormConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.FormConcept.DeepCopy()));
             }
             // Clone FormConceptKey
-            if ((clonee.FormConceptKey != null))
-            {
+            if ((clonee.FormConceptKey != null)) {
                 _retVal.FormConceptKey = clonee.FormConceptKey;
             }
             // Clone IsAdministrable
-            if ((clonee.IsAdministrable != null))
-            {
-                _retVal.IsAdministrable = clonee.IsAdministrable;
-            }
+            _retVal.IsAdministrable = clonee.IsAdministrable;
             // Clone Quantity
-            if ((clonee.Quantity != null))
-            {
+            if ((clonee.Quantity != null)) {
                 _retVal.Quantity = clonee.Quantity;
             }
             // Clone QuantityConcept
-            if ((clonee.QuantityConcept != null))
-            {
-                _retVal.QuantityConcept = DeepCloneExtensions.CloneDeep(clonee.QuantityConcept);
+            if ((clonee.QuantityConcept != null)) {
+                _retVal.QuantityConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.QuantityConcept.DeepCopy()));
             }
             // Clone QuantityConceptKey
-            if ((clonee.QuantityConceptKey != null))
-            {
+            if ((clonee.QuantityConceptKey != null)) {
                 _retVal.QuantityConceptKey = clonee.QuantityConceptKey;
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.DeviceEntity CloneDeep(this SanteDB.Core.Model.Entities.DeviceEntity clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.DeviceEntity CloneDeep(this SanteDB.Core.Model.Entities.DeviceEntity clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.DeviceEntity _retVal = new SanteDB.Core.Model.Entities.DeviceEntity();
+            int _iterator;
             // Clone ManufacturerModelName
-            if ((clonee.ManufacturerModelName != null))
-            {
+            if ((clonee.ManufacturerModelName != null)) {
                 _retVal.ManufacturerModelName = clonee.ManufacturerModelName;
             }
             // Clone OperatingSystemName
-            if ((clonee.OperatingSystemName != null))
-            {
+            if ((clonee.OperatingSystemName != null)) {
                 _retVal.OperatingSystemName = clonee.OperatingSystemName;
             }
             // Clone SecurityDevice
-            if ((clonee.SecurityDevice != null))
-            {
-                _retVal.SecurityDevice = DeepCloneExtensions.CloneDeep(clonee.SecurityDevice);
+            if ((clonee.SecurityDevice != null)) {
+                _retVal.SecurityDevice = ((SanteDB.Core.Model.Security.SecurityDevice)(clonee.SecurityDevice.DeepCopy()));
             }
             // Clone SecurityDeviceKey
-            if ((clonee.SecurityDeviceKey != null))
-            {
+            if ((clonee.SecurityDeviceKey != null)) {
                 _retVal.SecurityDeviceKey = clonee.SecurityDeviceKey;
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.Entity CloneDeep(this SanteDB.Core.Model.Entities.Entity clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.Entity CloneDeep(this SanteDB.Core.Model.Entities.Entity clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.Entity _retVal = new SanteDB.Core.Model.Entities.Entity();
+            int _iterator;
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.EntityAddress CloneDeep(this SanteDB.Core.Model.Entities.EntityAddress clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.EntityAddress CloneDeep(this SanteDB.Core.Model.Entities.EntityAddress clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.EntityAddress _retVal = new SanteDB.Core.Model.Entities.EntityAddress();
+            int _iterator;
             // Clone AddressUse
-            if ((clonee.AddressUse != null))
-            {
-                _retVal.AddressUse = DeepCloneExtensions.CloneDeep(clonee.AddressUse);
+            if ((clonee.AddressUse != null)) {
+                _retVal.AddressUse = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.AddressUse.DeepCopy()));
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone AddressUseKey
-            if ((clonee.AddressUseKey != null))
-            {
+            if ((clonee.AddressUseKey != null)) {
                 _retVal.AddressUseKey = clonee.AddressUseKey;
             }
             // Clone Component
-            if ((clonee.Component != null))
-            {
+            if ((clonee.Component != null)) {
                 _retVal.Component = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddressComponent>();
-                int iComponent;
-                for (iComponent = 0; (iComponent < clonee.Component.Count); iComponent = (iComponent + 1))
-                {
-                    _retVal.Component.Add(DeepCloneExtensions.CloneDeep(clonee.Component[iComponent]));
+                for (_iterator = 0; (_iterator < clonee.Component.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Component.Add(((SanteDB.Core.Model.Entities.EntityAddressComponent)(clonee.Component[_iterator].DeepCopy())));
                 }
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.EntityAddressComponent CloneDeep(this SanteDB.Core.Model.Entities.EntityAddressComponent clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.EntityAddressComponent CloneDeep(this SanteDB.Core.Model.Entities.EntityAddressComponent clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.EntityAddressComponent _retVal = new SanteDB.Core.Model.Entities.EntityAddressComponent();
             // Clone ComponentTypeKey
-            if ((clonee.ComponentTypeKey != null))
-            {
+            if ((clonee.ComponentTypeKey != null)) {
                 _retVal.ComponentTypeKey = clonee.ComponentTypeKey;
             }
             // Clone OrderSequence
-            if ((clonee.OrderSequence != null))
-            {
-                _retVal.OrderSequence = clonee.OrderSequence;
-            }
+            _retVal.OrderSequence = clonee.OrderSequence;
             // Clone ComponentType
-            if ((clonee.ComponentType != null))
-            {
-                _retVal.ComponentType = DeepCloneExtensions.CloneDeep(clonee.ComponentType);
+            if ((clonee.ComponentType != null)) {
+                _retVal.ComponentType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ComponentType.DeepCopy()));
             }
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.EntityName CloneDeep(this SanteDB.Core.Model.Entities.EntityName clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.EntityName CloneDeep(this SanteDB.Core.Model.Entities.EntityName clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.EntityName _retVal = new SanteDB.Core.Model.Entities.EntityName();
+            int _iterator;
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone Component
-            if ((clonee.Component != null))
-            {
+            if ((clonee.Component != null)) {
                 _retVal.Component = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityNameComponent>();
-                int iComponent;
-                for (iComponent = 0; (iComponent < clonee.Component.Count); iComponent = (iComponent + 1))
-                {
-                    _retVal.Component.Add(DeepCloneExtensions.CloneDeep(clonee.Component[iComponent]));
+                for (_iterator = 0; (_iterator < clonee.Component.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Component.Add(((SanteDB.Core.Model.Entities.EntityNameComponent)(clonee.Component[_iterator].DeepCopy())));
                 }
             }
             // Clone NameUse
-            if ((clonee.NameUse != null))
-            {
-                _retVal.NameUse = DeepCloneExtensions.CloneDeep(clonee.NameUse);
+            if ((clonee.NameUse != null)) {
+                _retVal.NameUse = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.NameUse.DeepCopy()));
             }
             // Clone NameUseKey
-            if ((clonee.NameUseKey != null))
-            {
+            if ((clonee.NameUseKey != null)) {
                 _retVal.NameUseKey = clonee.NameUseKey;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.EntityNameComponent CloneDeep(this SanteDB.Core.Model.Entities.EntityNameComponent clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.EntityNameComponent CloneDeep(this SanteDB.Core.Model.Entities.EntityNameComponent clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.EntityNameComponent _retVal = new SanteDB.Core.Model.Entities.EntityNameComponent();
             // Clone ComponentTypeKey
-            if ((clonee.ComponentTypeKey != null))
-            {
+            if ((clonee.ComponentTypeKey != null)) {
                 _retVal.ComponentTypeKey = clonee.ComponentTypeKey;
             }
             // Clone OrderSequence
-            if ((clonee.OrderSequence != null))
-            {
-                _retVal.OrderSequence = clonee.OrderSequence;
-            }
+            _retVal.OrderSequence = clonee.OrderSequence;
             // Clone ComponentType
-            if ((clonee.ComponentType != null))
-            {
-                _retVal.ComponentType = DeepCloneExtensions.CloneDeep(clonee.ComponentType);
+            if ((clonee.ComponentType != null)) {
+                _retVal.ComponentType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ComponentType.DeepCopy()));
             }
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.EntityRelationship CloneDeep(this SanteDB.Core.Model.Entities.EntityRelationship clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.EntityRelationship CloneDeep(this SanteDB.Core.Model.Entities.EntityRelationship clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.EntityRelationship _retVal = new SanteDB.Core.Model.Entities.EntityRelationship();
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone HolderKey
-            if ((clonee.HolderKey != null))
-            {
+            if ((clonee.HolderKey != null)) {
                 _retVal.HolderKey = clonee.HolderKey;
             }
             // Clone NegationIndicator
-            if ((clonee.NegationIndicator != null))
-            {
+            if ((clonee.NegationIndicator != null)) {
                 _retVal.NegationIndicator = clonee.NegationIndicator;
             }
             // Clone Strength
-            if ((clonee.Strength != null))
-            {
+            if ((clonee.Strength != null)) {
                 _retVal.Strength = clonee.Strength;
             }
             // Clone Quantity
-            if ((clonee.Quantity != null))
-            {
+            if ((clonee.Quantity != null)) {
                 _retVal.Quantity = clonee.Quantity;
             }
             // Clone RelationshipType
-            if ((clonee.RelationshipType != null))
-            {
-                _retVal.RelationshipType = DeepCloneExtensions.CloneDeep(clonee.RelationshipType);
+            if ((clonee.RelationshipType != null)) {
+                _retVal.RelationshipType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.RelationshipType.DeepCopy()));
             }
             // Clone RelationshipTypeKey
-            if ((clonee.RelationshipTypeKey != null))
-            {
+            if ((clonee.RelationshipTypeKey != null)) {
                 _retVal.RelationshipTypeKey = clonee.RelationshipTypeKey;
             }
             // Clone RelationshipRole
-            if ((clonee.RelationshipRole != null))
-            {
-                _retVal.RelationshipRole = DeepCloneExtensions.CloneDeep(clonee.RelationshipRole);
+            if ((clonee.RelationshipRole != null)) {
+                _retVal.RelationshipRole = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.RelationshipRole.DeepCopy()));
             }
             // Clone RelationshipRoleKey
-            if ((clonee.RelationshipRoleKey != null))
-            {
+            if ((clonee.RelationshipRoleKey != null)) {
                 _retVal.RelationshipRoleKey = clonee.RelationshipRoleKey;
             }
             // Clone Classification
-            if ((clonee.Classification != null))
-            {
-                _retVal.Classification = DeepCloneExtensions.CloneDeep(clonee.Classification);
+            if ((clonee.Classification != null)) {
+                _retVal.Classification = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Classification.DeepCopy()));
             }
             // Clone ClassificationKey
-            if ((clonee.ClassificationKey != null))
-            {
+            if ((clonee.ClassificationKey != null)) {
                 _retVal.ClassificationKey = clonee.ClassificationKey;
             }
             // Clone TargetEntity
-            if ((clonee.TargetEntity != null))
-            {
-                _retVal.TargetEntity = DeepCloneExtensions.CloneDeep(clonee.TargetEntity);
+            if ((clonee.TargetEntity != null)) {
+                _retVal.TargetEntity = ((SanteDB.Core.Model.Entities.Entity)(clonee.TargetEntity.DeepCopy()));
             }
             // Clone TargetEntityKey
-            if ((clonee.TargetEntityKey != null))
-            {
+            if ((clonee.TargetEntityKey != null)) {
                 _retVal.TargetEntityKey = clonee.TargetEntityKey;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.EntityTelecomAddress CloneDeep(this SanteDB.Core.Model.Entities.EntityTelecomAddress clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.EntityTelecomAddress CloneDeep(this SanteDB.Core.Model.Entities.EntityTelecomAddress clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.EntityTelecomAddress _retVal = new SanteDB.Core.Model.Entities.EntityTelecomAddress();
             // Clone AddressUse
-            if ((clonee.AddressUse != null))
-            {
-                _retVal.AddressUse = DeepCloneExtensions.CloneDeep(clonee.AddressUse);
+            if ((clonee.AddressUse != null)) {
+                _retVal.AddressUse = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.AddressUse.DeepCopy()));
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone AddressUseKey
-            if ((clonee.AddressUseKey != null))
-            {
+            if ((clonee.AddressUseKey != null)) {
                 _retVal.AddressUseKey = clonee.AddressUseKey;
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.ManufacturedMaterial CloneDeep(this SanteDB.Core.Model.Entities.ManufacturedMaterial clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.ManufacturedMaterial CloneDeep(this SanteDB.Core.Model.Entities.ManufacturedMaterial clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.ManufacturedMaterial _retVal = new SanteDB.Core.Model.Entities.ManufacturedMaterial();
+            int _iterator;
             // Clone LotNumber
-            if ((clonee.LotNumber != null))
-            {
+            if ((clonee.LotNumber != null)) {
                 _retVal.LotNumber = clonee.LotNumber;
             }
             // Clone ExpiryDate
-            if ((clonee.ExpiryDate != null))
-            {
+            if ((clonee.ExpiryDate != null)) {
                 _retVal.ExpiryDate = clonee.ExpiryDate;
             }
             // Clone FormConcept
-            if ((clonee.FormConcept != null))
-            {
-                _retVal.FormConcept = DeepCloneExtensions.CloneDeep(clonee.FormConcept);
+            if ((clonee.FormConcept != null)) {
+                _retVal.FormConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.FormConcept.DeepCopy()));
             }
             // Clone FormConceptKey
-            if ((clonee.FormConceptKey != null))
-            {
+            if ((clonee.FormConceptKey != null)) {
                 _retVal.FormConceptKey = clonee.FormConceptKey;
             }
             // Clone IsAdministrable
-            if ((clonee.IsAdministrable != null))
-            {
-                _retVal.IsAdministrable = clonee.IsAdministrable;
-            }
+            _retVal.IsAdministrable = clonee.IsAdministrable;
             // Clone Quantity
-            if ((clonee.Quantity != null))
-            {
+            if ((clonee.Quantity != null)) {
                 _retVal.Quantity = clonee.Quantity;
             }
             // Clone QuantityConcept
-            if ((clonee.QuantityConcept != null))
-            {
-                _retVal.QuantityConcept = DeepCloneExtensions.CloneDeep(clonee.QuantityConcept);
+            if ((clonee.QuantityConcept != null)) {
+                _retVal.QuantityConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.QuantityConcept.DeepCopy()));
             }
             // Clone QuantityConceptKey
-            if ((clonee.QuantityConceptKey != null))
-            {
+            if ((clonee.QuantityConceptKey != null)) {
                 _retVal.QuantityConceptKey = clonee.QuantityConceptKey;
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.Material CloneDeep(this SanteDB.Core.Model.Entities.Material clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.Material CloneDeep(this SanteDB.Core.Model.Entities.Material clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.Material _retVal = new SanteDB.Core.Model.Entities.Material();
+            int _iterator;
             // Clone ExpiryDate
-            if ((clonee.ExpiryDate != null))
-            {
+            if ((clonee.ExpiryDate != null)) {
                 _retVal.ExpiryDate = clonee.ExpiryDate;
             }
             // Clone FormConcept
-            if ((clonee.FormConcept != null))
-            {
-                _retVal.FormConcept = DeepCloneExtensions.CloneDeep(clonee.FormConcept);
+            if ((clonee.FormConcept != null)) {
+                _retVal.FormConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.FormConcept.DeepCopy()));
             }
             // Clone FormConceptKey
-            if ((clonee.FormConceptKey != null))
-            {
+            if ((clonee.FormConceptKey != null)) {
                 _retVal.FormConceptKey = clonee.FormConceptKey;
             }
             // Clone IsAdministrable
-            if ((clonee.IsAdministrable != null))
-            {
-                _retVal.IsAdministrable = clonee.IsAdministrable;
-            }
+            _retVal.IsAdministrable = clonee.IsAdministrable;
             // Clone Quantity
-            if ((clonee.Quantity != null))
-            {
+            if ((clonee.Quantity != null)) {
                 _retVal.Quantity = clonee.Quantity;
             }
             // Clone QuantityConcept
-            if ((clonee.QuantityConcept != null))
-            {
-                _retVal.QuantityConcept = DeepCloneExtensions.CloneDeep(clonee.QuantityConcept);
+            if ((clonee.QuantityConcept != null)) {
+                _retVal.QuantityConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.QuantityConcept.DeepCopy()));
             }
             // Clone QuantityConceptKey
-            if ((clonee.QuantityConceptKey != null))
-            {
+            if ((clonee.QuantityConceptKey != null)) {
                 _retVal.QuantityConceptKey = clonee.QuantityConceptKey;
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.NonPersonLivingSubject CloneDeep(this SanteDB.Core.Model.Entities.NonPersonLivingSubject clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.NonPersonLivingSubject CloneDeep(this SanteDB.Core.Model.Entities.NonPersonLivingSubject clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.NonPersonLivingSubject _retVal = new SanteDB.Core.Model.Entities.NonPersonLivingSubject();
+            int _iterator;
             // Clone StrainKey
-            if ((clonee.StrainKey != null))
-            {
+            if ((clonee.StrainKey != null)) {
                 _retVal.StrainKey = clonee.StrainKey;
             }
             // Clone Strain
-            if ((clonee.Strain != null))
-            {
-                _retVal.Strain = DeepCloneExtensions.CloneDeep(clonee.Strain);
+            if ((clonee.Strain != null)) {
+                _retVal.Strain = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Strain.DeepCopy()));
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.Organization CloneDeep(this SanteDB.Core.Model.Entities.Organization clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.Organization CloneDeep(this SanteDB.Core.Model.Entities.Organization clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.Organization _retVal = new SanteDB.Core.Model.Entities.Organization();
+            int _iterator;
             // Clone IndustryConcept
-            if ((clonee.IndustryConcept != null))
-            {
-                _retVal.IndustryConcept = DeepCloneExtensions.CloneDeep(clonee.IndustryConcept);
+            if ((clonee.IndustryConcept != null)) {
+                _retVal.IndustryConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.IndustryConcept.DeepCopy()));
             }
             // Clone IndustryConceptKey
-            if ((clonee.IndustryConceptKey != null))
-            {
+            if ((clonee.IndustryConceptKey != null)) {
                 _retVal.IndustryConceptKey = clonee.IndustryConceptKey;
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.Person CloneDeep(this SanteDB.Core.Model.Entities.Person clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.Person CloneDeep(this SanteDB.Core.Model.Entities.Person clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.Person _retVal = new SanteDB.Core.Model.Entities.Person();
+            int _iterator;
             // Clone DateOfBirth
-            if ((clonee.DateOfBirth != null))
-            {
+            if ((clonee.DateOfBirth != null)) {
                 _retVal.DateOfBirth = clonee.DateOfBirth;
             }
             // Clone DateOfBirthPrecision
-            if ((clonee.DateOfBirthPrecision != null))
-            {
+            if ((clonee.DateOfBirthPrecision != null)) {
                 _retVal.DateOfBirthPrecision = clonee.DateOfBirthPrecision;
             }
             // Clone GenderConceptKey
-            if ((clonee.GenderConceptKey != null))
-            {
+            if ((clonee.GenderConceptKey != null)) {
                 _retVal.GenderConceptKey = clonee.GenderConceptKey;
             }
             // Clone GenderConcept
-            if ((clonee.GenderConcept != null))
-            {
-                _retVal.GenderConcept = DeepCloneExtensions.CloneDeep(clonee.GenderConcept);
+            if ((clonee.GenderConcept != null)) {
+                _retVal.GenderConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.GenderConcept.DeepCopy()));
             }
             // Clone LanguageCommunication
-            if ((clonee.LanguageCommunication != null))
-            {
+            if ((clonee.LanguageCommunication != null)) {
                 _retVal.LanguageCommunication = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.PersonLanguageCommunication>();
-                int iLanguageCommunication;
-                for (iLanguageCommunication = 0; (iLanguageCommunication < clonee.LanguageCommunication.Count); iLanguageCommunication = (iLanguageCommunication + 1))
-                {
-                    _retVal.LanguageCommunication.Add(DeepCloneExtensions.CloneDeep(clonee.LanguageCommunication[iLanguageCommunication]));
+                for (_iterator = 0; (_iterator < clonee.LanguageCommunication.Count); _iterator = (_iterator + 1)) {
+                    _retVal.LanguageCommunication.Add(((SanteDB.Core.Model.Entities.PersonLanguageCommunication)(clonee.LanguageCommunication[_iterator].DeepCopy())));
                 }
             }
             // Clone OccupationKey
-            if ((clonee.OccupationKey != null))
-            {
+            if ((clonee.OccupationKey != null)) {
                 _retVal.OccupationKey = clonee.OccupationKey;
             }
             // Clone Occupation
-            if ((clonee.Occupation != null))
-            {
-                _retVal.Occupation = DeepCloneExtensions.CloneDeep(clonee.Occupation);
+            if ((clonee.Occupation != null)) {
+                _retVal.Occupation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Occupation.DeepCopy()));
             }
             // Clone DeceasedDate
-            if ((clonee.DeceasedDate != null))
-            {
+            if ((clonee.DeceasedDate != null)) {
                 _retVal.DeceasedDate = clonee.DeceasedDate;
             }
             // Clone DeceasedDatePrecision
-            if ((clonee.DeceasedDatePrecision != null))
-            {
+            if ((clonee.DeceasedDatePrecision != null)) {
                 _retVal.DeceasedDatePrecision = clonee.DeceasedDatePrecision;
             }
             // Clone VipStatusKey
-            if ((clonee.VipStatusKey != null))
-            {
+            if ((clonee.VipStatusKey != null)) {
                 _retVal.VipStatusKey = clonee.VipStatusKey;
             }
             // Clone VipStatus
-            if ((clonee.VipStatus != null))
-            {
-                _retVal.VipStatus = DeepCloneExtensions.CloneDeep(clonee.VipStatus);
+            if ((clonee.VipStatus != null)) {
+                _retVal.VipStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.VipStatus.DeepCopy()));
             }
             // Clone NationalityKey
-            if ((clonee.NationalityKey != null))
-            {
+            if ((clonee.NationalityKey != null)) {
                 _retVal.NationalityKey = clonee.NationalityKey;
             }
             // Clone Nationality
-            if ((clonee.Nationality != null))
-            {
-                _retVal.Nationality = DeepCloneExtensions.CloneDeep(clonee.Nationality);
+            if ((clonee.Nationality != null)) {
+                _retVal.Nationality = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Nationality.DeepCopy()));
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.PersonLanguageCommunication CloneDeep(this SanteDB.Core.Model.Entities.PersonLanguageCommunication clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.PersonLanguageCommunication CloneDeep(this SanteDB.Core.Model.Entities.PersonLanguageCommunication clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.PersonLanguageCommunication _retVal = new SanteDB.Core.Model.Entities.PersonLanguageCommunication();
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone IsPreferred
-            if ((clonee.IsPreferred != null))
-            {
-                _retVal.IsPreferred = clonee.IsPreferred;
-            }
+            _retVal.IsPreferred = clonee.IsPreferred;
             // Clone LanguageCode
-            if ((clonee.LanguageCode != null))
-            {
+            if ((clonee.LanguageCode != null)) {
                 _retVal.LanguageCode = clonee.LanguageCode;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.Place CloneDeep(this SanteDB.Core.Model.Entities.Place clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.Place CloneDeep(this SanteDB.Core.Model.Entities.Place clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.Place _retVal = new SanteDB.Core.Model.Entities.Place();
+            int _iterator;
             // Clone IsMobile
-            if ((clonee.IsMobile != null))
-            {
-                _retVal.IsMobile = clonee.IsMobile;
-            }
+            _retVal.IsMobile = clonee.IsMobile;
             // Clone Services
-            if ((clonee.Services != null))
-            {
+            if ((clonee.Services != null)) {
                 _retVal.Services = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.PlaceService>();
-                int iServices;
-                for (iServices = 0; (iServices < clonee.Services.Count); iServices = (iServices + 1))
-                {
-                    _retVal.Services.Add(DeepCloneExtensions.CloneDeep(clonee.Services[iServices]));
+                for (_iterator = 0; (_iterator < clonee.Services.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Services.Add(((SanteDB.Core.Model.Entities.PlaceService)(clonee.Services[_iterator].DeepCopy())));
                 }
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.PlaceService CloneDeep(this SanteDB.Core.Model.Entities.PlaceService clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.PlaceService CloneDeep(this SanteDB.Core.Model.Entities.PlaceService clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.PlaceService _retVal = new SanteDB.Core.Model.Entities.PlaceService();
             // Clone ServiceConcept
-            if ((clonee.ServiceConcept != null))
-            {
-                _retVal.ServiceConcept = DeepCloneExtensions.CloneDeep(clonee.ServiceConcept);
+            if ((clonee.ServiceConcept != null)) {
+                _retVal.ServiceConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ServiceConcept.DeepCopy()));
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone ServiceConceptKey
-            if ((clonee.ServiceConceptKey != null))
-            {
+            if ((clonee.ServiceConceptKey != null)) {
                 _retVal.ServiceConceptKey = clonee.ServiceConceptKey;
             }
             // Clone ServiceSchedule
-            if ((clonee.ServiceSchedule != null))
-            {
+            if ((clonee.ServiceSchedule != null)) {
                 _retVal.ServiceSchedule = clonee.ServiceSchedule;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Entities.UserEntity CloneDeep(this SanteDB.Core.Model.Entities.UserEntity clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Entities.UserEntity CloneDeep(this SanteDB.Core.Model.Entities.UserEntity clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Entities.UserEntity _retVal = new SanteDB.Core.Model.Entities.UserEntity();
+            int _iterator;
             // Clone SecurityUserKey
-            if ((clonee.SecurityUserKey != null))
-            {
+            if ((clonee.SecurityUserKey != null)) {
                 _retVal.SecurityUserKey = clonee.SecurityUserKey;
             }
             // Clone DateOfBirth
-            if ((clonee.DateOfBirth != null))
-            {
+            if ((clonee.DateOfBirth != null)) {
                 _retVal.DateOfBirth = clonee.DateOfBirth;
             }
             // Clone DateOfBirthPrecision
-            if ((clonee.DateOfBirthPrecision != null))
-            {
+            if ((clonee.DateOfBirthPrecision != null)) {
                 _retVal.DateOfBirthPrecision = clonee.DateOfBirthPrecision;
             }
             // Clone GenderConceptKey
-            if ((clonee.GenderConceptKey != null))
-            {
+            if ((clonee.GenderConceptKey != null)) {
                 _retVal.GenderConceptKey = clonee.GenderConceptKey;
             }
             // Clone GenderConcept
-            if ((clonee.GenderConcept != null))
-            {
-                _retVal.GenderConcept = DeepCloneExtensions.CloneDeep(clonee.GenderConcept);
+            if ((clonee.GenderConcept != null)) {
+                _retVal.GenderConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.GenderConcept.DeepCopy()));
             }
             // Clone LanguageCommunication
-            if ((clonee.LanguageCommunication != null))
-            {
+            if ((clonee.LanguageCommunication != null)) {
                 _retVal.LanguageCommunication = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.PersonLanguageCommunication>();
-                int iLanguageCommunication;
-                for (iLanguageCommunication = 0; (iLanguageCommunication < clonee.LanguageCommunication.Count); iLanguageCommunication = (iLanguageCommunication + 1))
-                {
-                    _retVal.LanguageCommunication.Add(DeepCloneExtensions.CloneDeep(clonee.LanguageCommunication[iLanguageCommunication]));
+                for (_iterator = 0; (_iterator < clonee.LanguageCommunication.Count); _iterator = (_iterator + 1)) {
+                    _retVal.LanguageCommunication.Add(((SanteDB.Core.Model.Entities.PersonLanguageCommunication)(clonee.LanguageCommunication[_iterator].DeepCopy())));
                 }
             }
             // Clone OccupationKey
-            if ((clonee.OccupationKey != null))
-            {
+            if ((clonee.OccupationKey != null)) {
                 _retVal.OccupationKey = clonee.OccupationKey;
             }
             // Clone Occupation
-            if ((clonee.Occupation != null))
-            {
-                _retVal.Occupation = DeepCloneExtensions.CloneDeep(clonee.Occupation);
+            if ((clonee.Occupation != null)) {
+                _retVal.Occupation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Occupation.DeepCopy()));
             }
             // Clone DeceasedDate
-            if ((clonee.DeceasedDate != null))
-            {
+            if ((clonee.DeceasedDate != null)) {
                 _retVal.DeceasedDate = clonee.DeceasedDate;
             }
             // Clone DeceasedDatePrecision
-            if ((clonee.DeceasedDatePrecision != null))
-            {
+            if ((clonee.DeceasedDatePrecision != null)) {
                 _retVal.DeceasedDatePrecision = clonee.DeceasedDatePrecision;
             }
             // Clone VipStatusKey
-            if ((clonee.VipStatusKey != null))
-            {
+            if ((clonee.VipStatusKey != null)) {
                 _retVal.VipStatusKey = clonee.VipStatusKey;
             }
             // Clone VipStatus
-            if ((clonee.VipStatus != null))
-            {
-                _retVal.VipStatus = DeepCloneExtensions.CloneDeep(clonee.VipStatus);
+            if ((clonee.VipStatus != null)) {
+                _retVal.VipStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.VipStatus.DeepCopy()));
             }
             // Clone NationalityKey
-            if ((clonee.NationalityKey != null))
-            {
+            if ((clonee.NationalityKey != null)) {
                 _retVal.NationalityKey = clonee.NationalityKey;
             }
             // Clone Nationality
-            if ((clonee.Nationality != null))
-            {
-                _retVal.Nationality = DeepCloneExtensions.CloneDeep(clonee.Nationality);
+            if ((clonee.Nationality != null)) {
+                _retVal.Nationality = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Nationality.DeepCopy()));
             }
             // Clone Addresses
-            if ((clonee.Addresses != null))
-            {
+            if ((clonee.Addresses != null)) {
                 _retVal.Addresses = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityAddress>();
-                int iAddresses;
-                for (iAddresses = 0; (iAddresses < clonee.Addresses.Count); iAddresses = (iAddresses + 1))
-                {
-                    _retVal.Addresses.Add(DeepCloneExtensions.CloneDeep(clonee.Addresses[iAddresses]));
+                for (_iterator = 0; (_iterator < clonee.Addresses.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Addresses.Add(((SanteDB.Core.Model.Entities.EntityAddress)(clonee.Addresses[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone CreationAct
-            if ((clonee.CreationAct != null))
-            {
-                _retVal.CreationAct = DeepCloneExtensions.CloneDeep(clonee.CreationAct);
+            if ((clonee.CreationAct != null)) {
+                _retVal.CreationAct = ((SanteDB.Core.Model.Acts.Act)(clonee.CreationAct.DeepCopy()));
             }
             // Clone CreationActKey
-            if ((clonee.CreationActKey != null))
-            {
+            if ((clonee.CreationActKey != null)) {
                 _retVal.CreationActKey = clonee.CreationActKey;
             }
             // Clone DeterminerConcept
-            if ((clonee.DeterminerConcept != null))
-            {
-                _retVal.DeterminerConcept = DeepCloneExtensions.CloneDeep(clonee.DeterminerConcept);
+            if ((clonee.DeterminerConcept != null)) {
+                _retVal.DeterminerConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DeterminerConcept.DeepCopy()));
             }
             // Clone DeterminerConceptKey
-            if ((clonee.DeterminerConceptKey != null))
-            {
+            if ((clonee.DeterminerConceptKey != null)) {
                 _retVal.DeterminerConceptKey = clonee.DeterminerConceptKey;
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.EntityExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.EntityIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Names
-            if ((clonee.Names != null))
-            {
+            if ((clonee.Names != null)) {
                 _retVal.Names = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityName>();
-                int iNames;
-                for (iNames = 0; (iNames < clonee.Names.Count); iNames = (iNames + 1))
-                {
-                    _retVal.Names.Add(DeepCloneExtensions.CloneDeep(clonee.Names[iNames]));
+                for (_iterator = 0; (_iterator < clonee.Names.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Names.Add(((SanteDB.Core.Model.Entities.EntityName)(clonee.Names[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.EntityNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Entities.EntityRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.EntityTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.EntityTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Telecoms
-            if ((clonee.Telecoms != null))
-            {
+            if ((clonee.Telecoms != null)) {
                 _retVal.Telecoms = new System.Collections.Generic.List<SanteDB.Core.Model.Entities.EntityTelecomAddress>();
-                int iTelecoms;
-                for (iTelecoms = 0; (iTelecoms < clonee.Telecoms.Count); iTelecoms = (iTelecoms + 1))
-                {
-                    _retVal.Telecoms.Add(DeepCloneExtensions.CloneDeep(clonee.Telecoms[iTelecoms]));
+                for (_iterator = 0; (_iterator < clonee.Telecoms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Telecoms.Add(((SanteDB.Core.Model.Entities.EntityTelecomAddress)(clonee.Telecoms[_iterator].DeepCopy())));
                 }
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.AssigningAuthority CloneDeep(this SanteDB.Core.Model.DataTypes.AssigningAuthority clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.AssigningAuthority CloneDeep(this SanteDB.Core.Model.DataTypes.AssigningAuthority clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.AssigningAuthority _retVal = new SanteDB.Core.Model.DataTypes.AssigningAuthority();
             // Clone AssigningApplicationKey
-            if ((clonee.AssigningApplicationKey != null))
-            {
+            if ((clonee.AssigningApplicationKey != null)) {
                 _retVal.AssigningApplicationKey = clonee.AssigningApplicationKey;
             }
             // Clone AssigningApplication
-            if ((clonee.AssigningApplication != null))
-            {
-                _retVal.AssigningApplication = DeepCloneExtensions.CloneDeep(clonee.AssigningApplication);
+            if ((clonee.AssigningApplication != null)) {
+                _retVal.AssigningApplication = ((SanteDB.Core.Model.Security.SecurityApplication)(clonee.AssigningApplication.DeepCopy()));
             }
             // Clone Reliability
-            if ((clonee.Reliability != null))
-            {
-                _retVal.Reliability = clonee.Reliability;
-            }
+            _retVal.Reliability = clonee.Reliability;
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone SourceEntity
-            if ((clonee.SourceEntity != null))
-            {
-                _retVal.SourceEntity = DeepCloneExtensions.CloneDeep(clonee.SourceEntity);
+            if ((clonee.SourceEntity != null)) {
+                _retVal.SourceEntity = ((SanteDB.Core.Model.DataTypes.IdentityDomain)(clonee.SourceEntity.DeepCopy()));
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.CodeSystem CloneDeep(this SanteDB.Core.Model.DataTypes.CodeSystem clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.CodeSystem CloneDeep(this SanteDB.Core.Model.DataTypes.CodeSystem clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.CodeSystem _retVal = new SanteDB.Core.Model.DataTypes.CodeSystem();
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Oid
-            if ((clonee.Oid != null))
-            {
+            if ((clonee.Oid != null)) {
                 _retVal.Oid = clonee.Oid;
             }
             // Clone Domain
-            if ((clonee.Domain != null))
-            {
+            if ((clonee.Domain != null)) {
                 _retVal.Domain = clonee.Domain;
             }
             // Clone Url
-            if ((clonee.Url != null))
-            {
+            if ((clonee.Url != null)) {
                 _retVal.Url = clonee.Url;
             }
             // Clone VersionText
-            if ((clonee.VersionText != null))
-            {
+            if ((clonee.VersionText != null)) {
                 _retVal.VersionText = clonee.VersionText;
             }
             // Clone Description
-            if ((clonee.Description != null))
-            {
+            if ((clonee.Description != null)) {
                 _retVal.Description = clonee.Description;
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.Concept CloneDeep(this SanteDB.Core.Model.DataTypes.Concept clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.Concept CloneDeep(this SanteDB.Core.Model.DataTypes.Concept clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.Concept _retVal = new SanteDB.Core.Model.DataTypes.Concept();
+            int _iterator;
             // Clone Mnemonic
-            if ((clonee.Mnemonic != null))
-            {
+            if ((clonee.Mnemonic != null)) {
                 _retVal.Mnemonic = clonee.Mnemonic;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ConceptRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.DataTypes.ConceptRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone ClassKey
-            if ((clonee.ClassKey != null))
-            {
+            if ((clonee.ClassKey != null)) {
                 _retVal.ClassKey = clonee.ClassKey;
             }
             // Clone Class
-            if ((clonee.Class != null))
-            {
-                _retVal.Class = DeepCloneExtensions.CloneDeep(clonee.Class);
+            if ((clonee.Class != null)) {
+                _retVal.Class = ((SanteDB.Core.Model.DataTypes.ConceptClass)(clonee.Class.DeepCopy()));
             }
             // Clone ReferenceTerms
-            if ((clonee.ReferenceTerms != null))
-            {
+            if ((clonee.ReferenceTerms != null)) {
                 _retVal.ReferenceTerms = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ConceptReferenceTerm>();
-                int iReferenceTerms;
-                for (iReferenceTerms = 0; (iReferenceTerms < clonee.ReferenceTerms.Count); iReferenceTerms = (iReferenceTerms + 1))
-                {
-                    _retVal.ReferenceTerms.Add(DeepCloneExtensions.CloneDeep(clonee.ReferenceTerms[iReferenceTerms]));
+                for (_iterator = 0; (_iterator < clonee.ReferenceTerms.Count); _iterator = (_iterator + 1)) {
+                    _retVal.ReferenceTerms.Add(((SanteDB.Core.Model.DataTypes.ConceptReferenceTerm)(clonee.ReferenceTerms[_iterator].DeepCopy())));
                 }
             }
             // Clone ConceptNames
-            if ((clonee.ConceptNames != null))
-            {
+            if ((clonee.ConceptNames != null)) {
                 _retVal.ConceptNames = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ConceptName>();
-                int iConceptNames;
-                for (iConceptNames = 0; (iConceptNames < clonee.ConceptNames.Count); iConceptNames = (iConceptNames + 1))
-                {
-                    _retVal.ConceptNames.Add(DeepCloneExtensions.CloneDeep(clonee.ConceptNames[iConceptNames]));
+                for (_iterator = 0; (_iterator < clonee.ConceptNames.Count); _iterator = (_iterator + 1)) {
+                    _retVal.ConceptNames.Add(((SanteDB.Core.Model.DataTypes.ConceptName)(clonee.ConceptNames[_iterator].DeepCopy())));
                 }
             }
             // Clone ConceptSetsXml
-            if ((clonee.ConceptSetsXml != null))
-            {
+            if ((clonee.ConceptSetsXml != null)) {
                 _retVal.ConceptSetsXml = new System.Collections.Generic.List<System.Guid>(clonee.ConceptSetsXml);
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ConceptTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ConceptTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ConceptExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ConceptExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptClass CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptClass clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptClass CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptClass clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptClass _retVal = new SanteDB.Core.Model.DataTypes.ConceptClass();
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Mnemonic
-            if ((clonee.Mnemonic != null))
-            {
+            if ((clonee.Mnemonic != null)) {
                 _retVal.Mnemonic = clonee.Mnemonic;
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptName CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptName clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptName CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptName clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptName _retVal = new SanteDB.Core.Model.DataTypes.ConceptName();
             // Clone Language
-            if ((clonee.Language != null))
-            {
+            if ((clonee.Language != null)) {
                 _retVal.Language = clonee.Language;
             }
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptReferenceTerm CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptReferenceTerm clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptReferenceTerm CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptReferenceTerm clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptReferenceTerm _retVal = new SanteDB.Core.Model.DataTypes.ConceptReferenceTerm();
             // Clone ReferenceTermKey
-            if ((clonee.ReferenceTermKey != null))
-            {
+            if ((clonee.ReferenceTermKey != null)) {
                 _retVal.ReferenceTermKey = clonee.ReferenceTermKey;
             }
             // Clone ReferenceTerm
-            if ((clonee.ReferenceTerm != null))
-            {
-                _retVal.ReferenceTerm = DeepCloneExtensions.CloneDeep(clonee.ReferenceTerm);
+            if ((clonee.ReferenceTerm != null)) {
+                _retVal.ReferenceTerm = ((SanteDB.Core.Model.DataTypes.ReferenceTerm)(clonee.ReferenceTerm.DeepCopy()));
             }
             // Clone RelationshipTypeKey
-            if ((clonee.RelationshipTypeKey != null))
-            {
+            if ((clonee.RelationshipTypeKey != null)) {
                 _retVal.RelationshipTypeKey = clonee.RelationshipTypeKey;
             }
             // Clone RelationshipType
-            if ((clonee.RelationshipType != null))
-            {
-                _retVal.RelationshipType = DeepCloneExtensions.CloneDeep(clonee.RelationshipType);
+            if ((clonee.RelationshipType != null)) {
+                _retVal.RelationshipType = ((SanteDB.Core.Model.DataTypes.ConceptRelationshipType)(clonee.RelationshipType.DeepCopy()));
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptRelationship CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptRelationship clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptRelationship CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptRelationship clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptRelationship _retVal = new SanteDB.Core.Model.DataTypes.ConceptRelationship();
             // Clone TargetConceptKey
-            if ((clonee.TargetConceptKey != null))
-            {
+            if ((clonee.TargetConceptKey != null)) {
                 _retVal.TargetConceptKey = clonee.TargetConceptKey;
             }
             // Clone TargetConcept
-            if ((clonee.TargetConcept != null))
-            {
-                _retVal.TargetConcept = DeepCloneExtensions.CloneDeep(clonee.TargetConcept);
+            if ((clonee.TargetConcept != null)) {
+                _retVal.TargetConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TargetConcept.DeepCopy()));
             }
             // Clone RelationshipTypeKey
-            if ((clonee.RelationshipTypeKey != null))
-            {
+            if ((clonee.RelationshipTypeKey != null)) {
                 _retVal.RelationshipTypeKey = clonee.RelationshipTypeKey;
             }
             // Clone RelationshipType
-            if ((clonee.RelationshipType != null))
-            {
-                _retVal.RelationshipType = DeepCloneExtensions.CloneDeep(clonee.RelationshipType);
+            if ((clonee.RelationshipType != null)) {
+                _retVal.RelationshipType = ((SanteDB.Core.Model.DataTypes.ConceptRelationshipType)(clonee.RelationshipType.DeepCopy()));
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptRelationshipType CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptRelationshipType clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptRelationshipType CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptRelationshipType clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptRelationshipType _retVal = new SanteDB.Core.Model.DataTypes.ConceptRelationshipType();
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Mnemonic
-            if ((clonee.Mnemonic != null))
-            {
+            if ((clonee.Mnemonic != null)) {
                 _retVal.Mnemonic = clonee.Mnemonic;
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptSet CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptSet clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptSet CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptSet clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptSet _retVal = new SanteDB.Core.Model.DataTypes.ConceptSet();
+            int _iterator;
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Mnemonic
-            if ((clonee.Mnemonic != null))
-            {
+            if ((clonee.Mnemonic != null)) {
                 _retVal.Mnemonic = clonee.Mnemonic;
             }
             // Clone Oid
-            if ((clonee.Oid != null))
-            {
+            if ((clonee.Oid != null)) {
                 _retVal.Oid = clonee.Oid;
             }
             // Clone Url
-            if ((clonee.Url != null))
-            {
+            if ((clonee.Url != null)) {
                 _retVal.Url = clonee.Url;
             }
             // Clone ConceptsXml
-            if ((clonee.ConceptsXml != null))
-            {
+            if ((clonee.ConceptsXml != null)) {
                 _retVal.ConceptsXml = new System.Collections.Generic.List<System.Guid>(clonee.ConceptsXml);
             }
             // Clone Composition
-            if ((clonee.Composition != null))
-            {
+            if ((clonee.Composition != null)) {
                 _retVal.Composition = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ConceptSetComposition>();
-                int iComposition;
-                for (iComposition = 0; (iComposition < clonee.Composition.Count); iComposition = (iComposition + 1))
-                {
-                    _retVal.Composition.Add(DeepCloneExtensions.CloneDeep(clonee.Composition[iComposition]));
+                for (_iterator = 0; (_iterator < clonee.Composition.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Composition.Add(((SanteDB.Core.Model.DataTypes.ConceptSetComposition)(clonee.Composition[_iterator].DeepCopy())));
                 }
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptSetComposition CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptSetComposition clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptSetComposition CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptSetComposition clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptSetComposition _retVal = new SanteDB.Core.Model.DataTypes.ConceptSetComposition();
             // Clone Operation
-            if ((clonee.Operation != null))
-            {
-                _retVal.Operation = clonee.Operation;
-            }
+            _retVal.Operation = clonee.Operation;
             // Clone TargetKey
-            if ((clonee.TargetKey != null))
-            {
+            if ((clonee.TargetKey != null)) {
                 _retVal.TargetKey = clonee.TargetKey;
             }
             // Clone Target
-            if ((clonee.Target != null))
-            {
-                _retVal.Target = DeepCloneExtensions.CloneDeep(clonee.Target);
+            if ((clonee.Target != null)) {
+                _retVal.Target = ((SanteDB.Core.Model.DataTypes.ConceptSet)(clonee.Target.DeepCopy()));
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptExtension CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptExtension clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptExtension CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptExtension clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptExtension _retVal = new SanteDB.Core.Model.DataTypes.ConceptExtension();
             // Clone ExtensionValueData
-            if ((clonee.ExtensionValueData != null))
-            {
+            if ((clonee.ExtensionValueData != null)) {
                 _retVal.ExtensionValueData = clonee.ExtensionValueData;
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone ExtensionValueString
-            if ((clonee.ExtensionValueString != null))
-            {
+            if ((clonee.ExtensionValueString != null)) {
                 _retVal.ExtensionValueString = clonee.ExtensionValueString;
             }
             // Clone ExtensionType
-            if ((clonee.ExtensionType != null))
-            {
-                _retVal.ExtensionType = DeepCloneExtensions.CloneDeep(clonee.ExtensionType);
+            if ((clonee.ExtensionType != null)) {
+                _retVal.ExtensionType = ((SanteDB.Core.Model.DataTypes.ExtensionType)(clonee.ExtensionType.DeepCopy()));
             }
             // Clone ExtensionTypeKey
-            if ((clonee.ExtensionTypeKey != null))
-            {
+            if ((clonee.ExtensionTypeKey != null)) {
                 _retVal.ExtensionTypeKey = clonee.ExtensionTypeKey;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.EntityExtension CloneDeep(this SanteDB.Core.Model.DataTypes.EntityExtension clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.EntityExtension CloneDeep(this SanteDB.Core.Model.DataTypes.EntityExtension clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.EntityExtension _retVal = new SanteDB.Core.Model.DataTypes.EntityExtension();
             // Clone ExtensionValueData
-            if ((clonee.ExtensionValueData != null))
-            {
+            if ((clonee.ExtensionValueData != null)) {
                 _retVal.ExtensionValueData = clonee.ExtensionValueData;
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone ExtensionValueString
-            if ((clonee.ExtensionValueString != null))
-            {
+            if ((clonee.ExtensionValueString != null)) {
                 _retVal.ExtensionValueString = clonee.ExtensionValueString;
             }
             // Clone ExtensionType
-            if ((clonee.ExtensionType != null))
-            {
-                _retVal.ExtensionType = DeepCloneExtensions.CloneDeep(clonee.ExtensionType);
+            if ((clonee.ExtensionType != null)) {
+                _retVal.ExtensionType = ((SanteDB.Core.Model.DataTypes.ExtensionType)(clonee.ExtensionType.DeepCopy()));
             }
             // Clone ExtensionTypeKey
-            if ((clonee.ExtensionTypeKey != null))
-            {
+            if ((clonee.ExtensionTypeKey != null)) {
                 _retVal.ExtensionTypeKey = clonee.ExtensionTypeKey;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ActExtension CloneDeep(this SanteDB.Core.Model.DataTypes.ActExtension clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ActExtension CloneDeep(this SanteDB.Core.Model.DataTypes.ActExtension clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ActExtension _retVal = new SanteDB.Core.Model.DataTypes.ActExtension();
             // Clone ExtensionValueData
-            if ((clonee.ExtensionValueData != null))
-            {
+            if ((clonee.ExtensionValueData != null)) {
                 _retVal.ExtensionValueData = clonee.ExtensionValueData;
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone ExtensionValueString
-            if ((clonee.ExtensionValueString != null))
-            {
+            if ((clonee.ExtensionValueString != null)) {
                 _retVal.ExtensionValueString = clonee.ExtensionValueString;
             }
             // Clone ExtensionType
-            if ((clonee.ExtensionType != null))
-            {
-                _retVal.ExtensionType = DeepCloneExtensions.CloneDeep(clonee.ExtensionType);
+            if ((clonee.ExtensionType != null)) {
+                _retVal.ExtensionType = ((SanteDB.Core.Model.DataTypes.ExtensionType)(clonee.ExtensionType.DeepCopy()));
             }
             // Clone ExtensionTypeKey
-            if ((clonee.ExtensionTypeKey != null))
-            {
+            if ((clonee.ExtensionTypeKey != null)) {
                 _retVal.ExtensionTypeKey = clonee.ExtensionTypeKey;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ExtensionType CloneDeep(this SanteDB.Core.Model.DataTypes.ExtensionType clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ExtensionType CloneDeep(this SanteDB.Core.Model.DataTypes.ExtensionType clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ExtensionType _retVal = new SanteDB.Core.Model.DataTypes.ExtensionType();
             // Clone ExtensionHandler
-            if ((clonee.ExtensionHandler != null))
-            {
+            if ((clonee.ExtensionHandler != null)) {
                 _retVal.ExtensionHandler = clonee.ExtensionHandler;
             }
             // Clone ExtensionHandlerXml
-            if ((clonee.ExtensionHandlerXml != null))
-            {
+            if ((clonee.ExtensionHandlerXml != null)) {
                 _retVal.ExtensionHandlerXml = clonee.ExtensionHandlerXml;
             }
             // Clone Uri
-            if ((clonee.Uri != null))
-            {
+            if ((clonee.Uri != null)) {
                 _retVal.Uri = clonee.Uri;
             }
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone ScopeXml
-            if ((clonee.ScopeXml != null))
-            {
+            if ((clonee.ScopeXml != null)) {
                 _retVal.ScopeXml = new System.Collections.Generic.List<System.Guid>(clonee.ScopeXml);
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.GeoTag CloneDeep(this SanteDB.Core.Model.DataTypes.GeoTag clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.GeoTag CloneDeep(this SanteDB.Core.Model.DataTypes.GeoTag clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.GeoTag _retVal = new SanteDB.Core.Model.DataTypes.GeoTag();
             // Clone Lat
-            if ((clonee.Lat != null))
-            {
+            if ((clonee.Lat != null)) {
                 _retVal.Lat = clonee.Lat;
             }
             // Clone Lng
-            if ((clonee.Lng != null))
-            {
+            if ((clonee.Lng != null)) {
                 _retVal.Lng = clonee.Lng;
             }
             // Clone Precise
-            if ((clonee.Precise != null))
-            {
+            if ((clonee.Precise != null)) {
                 _retVal.Precise = clonee.Precise;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.IdentifiedDataReference CloneDeep(this SanteDB.Core.Model.DataTypes.IdentifiedDataReference clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.IdentifiedDataReference CloneDeep(this SanteDB.Core.Model.DataTypes.IdentifiedDataReference clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.IdentifiedDataReference _retVal = new SanteDB.Core.Model.DataTypes.IdentifiedDataReference();
             // Clone ReferencedTypeXml
-            if ((clonee.ReferencedTypeXml != null))
-            {
+            if ((clonee.ReferencedTypeXml != null)) {
                 _retVal.ReferencedTypeXml = clonee.ReferencedTypeXml;
             }
             // Clone ReferencedType
-            if ((clonee.ReferencedType != null))
-            {
+            if ((clonee.ReferencedType != null)) {
                 _retVal.ReferencedType = clonee.ReferencedType;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.EntityIdentifier CloneDeep(this SanteDB.Core.Model.DataTypes.EntityIdentifier clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.EntityIdentifier CloneDeep(this SanteDB.Core.Model.DataTypes.EntityIdentifier clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.EntityIdentifier _retVal = new SanteDB.Core.Model.DataTypes.EntityIdentifier();
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone IssueDate
-            if ((clonee.IssueDate != null))
-            {
+            if ((clonee.IssueDate != null)) {
                 _retVal.IssueDate = clonee.IssueDate;
             }
             // Clone ExpiryDate
-            if ((clonee.ExpiryDate != null))
-            {
+            if ((clonee.ExpiryDate != null)) {
                 _retVal.ExpiryDate = clonee.ExpiryDate;
             }
             // Clone CheckDigit
-            if ((clonee.CheckDigit != null))
-            {
+            if ((clonee.CheckDigit != null)) {
                 _retVal.CheckDigit = clonee.CheckDigit;
             }
             // Clone IdentityDomainKey
-            if ((clonee.IdentityDomainKey != null))
-            {
+            if ((clonee.IdentityDomainKey != null)) {
                 _retVal.IdentityDomainKey = clonee.IdentityDomainKey;
             }
             // Clone IdentifierTypeKey
-            if ((clonee.IdentifierTypeKey != null))
-            {
+            if ((clonee.IdentifierTypeKey != null)) {
                 _retVal.IdentifierTypeKey = clonee.IdentifierTypeKey;
             }
             // Clone IdentifierType
-            if ((clonee.IdentifierType != null))
-            {
-                _retVal.IdentifierType = DeepCloneExtensions.CloneDeep(clonee.IdentifierType);
+            if ((clonee.IdentifierType != null)) {
+                _retVal.IdentifierType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.IdentifierType.DeepCopy()));
             }
             // Clone IdentityDomain
-            if ((clonee.IdentityDomain != null))
-            {
-                _retVal.IdentityDomain = DeepCloneExtensions.CloneDeep(clonee.IdentityDomain);
+            if ((clonee.IdentityDomain != null)) {
+                _retVal.IdentityDomain = ((SanteDB.Core.Model.DataTypes.IdentityDomain)(clonee.IdentityDomain.DeepCopy()));
             }
             // Clone Reliability
-            if ((clonee.Reliability != null))
-            {
-                _retVal.Reliability = clonee.Reliability;
-            }
+            _retVal.Reliability = clonee.Reliability;
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ActIdentifier CloneDeep(this SanteDB.Core.Model.DataTypes.ActIdentifier clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ActIdentifier CloneDeep(this SanteDB.Core.Model.DataTypes.ActIdentifier clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ActIdentifier _retVal = new SanteDB.Core.Model.DataTypes.ActIdentifier();
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone IssueDate
-            if ((clonee.IssueDate != null))
-            {
+            if ((clonee.IssueDate != null)) {
                 _retVal.IssueDate = clonee.IssueDate;
             }
             // Clone ExpiryDate
-            if ((clonee.ExpiryDate != null))
-            {
+            if ((clonee.ExpiryDate != null)) {
                 _retVal.ExpiryDate = clonee.ExpiryDate;
             }
             // Clone CheckDigit
-            if ((clonee.CheckDigit != null))
-            {
+            if ((clonee.CheckDigit != null)) {
                 _retVal.CheckDigit = clonee.CheckDigit;
             }
             // Clone IdentityDomainKey
-            if ((clonee.IdentityDomainKey != null))
-            {
+            if ((clonee.IdentityDomainKey != null)) {
                 _retVal.IdentityDomainKey = clonee.IdentityDomainKey;
             }
             // Clone IdentifierTypeKey
-            if ((clonee.IdentifierTypeKey != null))
-            {
+            if ((clonee.IdentifierTypeKey != null)) {
                 _retVal.IdentifierTypeKey = clonee.IdentifierTypeKey;
             }
             // Clone IdentifierType
-            if ((clonee.IdentifierType != null))
-            {
-                _retVal.IdentifierType = DeepCloneExtensions.CloneDeep(clonee.IdentifierType);
+            if ((clonee.IdentifierType != null)) {
+                _retVal.IdentifierType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.IdentifierType.DeepCopy()));
             }
             // Clone IdentityDomain
-            if ((clonee.IdentityDomain != null))
-            {
-                _retVal.IdentityDomain = DeepCloneExtensions.CloneDeep(clonee.IdentityDomain);
+            if ((clonee.IdentityDomain != null)) {
+                _retVal.IdentityDomain = ((SanteDB.Core.Model.DataTypes.IdentityDomain)(clonee.IdentityDomain.DeepCopy()));
             }
             // Clone Reliability
-            if ((clonee.Reliability != null))
-            {
-                _retVal.Reliability = clonee.Reliability;
-            }
+            _retVal.Reliability = clonee.Reliability;
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.IdentityDomain CloneDeep(this SanteDB.Core.Model.DataTypes.IdentityDomain clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.IdentityDomain CloneDeep(this SanteDB.Core.Model.DataTypes.IdentityDomain clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.IdentityDomain _retVal = new SanteDB.Core.Model.DataTypes.IdentityDomain();
+            int _iterator;
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone DomainName
-            if ((clonee.DomainName != null))
-            {
+            if ((clonee.DomainName != null)) {
                 _retVal.DomainName = clonee.DomainName;
             }
             // Clone Description
-            if ((clonee.Description != null))
-            {
+            if ((clonee.Description != null)) {
                 _retVal.Description = clonee.Description;
             }
             // Clone Oid
-            if ((clonee.Oid != null))
-            {
+            if ((clonee.Oid != null)) {
                 _retVal.Oid = clonee.Oid;
             }
             // Clone Url
-            if ((clonee.Url != null))
-            {
+            if ((clonee.Url != null)) {
                 _retVal.Url = clonee.Url;
             }
             // Clone AssigningAuthority
-            if ((clonee.AssigningAuthority != null))
-            {
+            if ((clonee.AssigningAuthority != null)) {
                 _retVal.AssigningAuthority = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.AssigningAuthority>();
-                int iAssigningAuthority;
-                for (iAssigningAuthority = 0; (iAssigningAuthority < clonee.AssigningAuthority.Count); iAssigningAuthority = (iAssigningAuthority + 1))
-                {
-                    _retVal.AssigningAuthority.Add(DeepCloneExtensions.CloneDeep(clonee.AssigningAuthority[iAssigningAuthority]));
+                for (_iterator = 0; (_iterator < clonee.AssigningAuthority.Count); _iterator = (_iterator + 1)) {
+                    _retVal.AssigningAuthority.Add(((SanteDB.Core.Model.DataTypes.AssigningAuthority)(clonee.AssigningAuthority[_iterator].DeepCopy())));
                 }
             }
             // Clone Policy
-            if ((clonee.Policy != null))
-            {
-                _retVal.Policy = DeepCloneExtensions.CloneDeep(clonee.Policy);
+            if ((clonee.Policy != null)) {
+                _retVal.Policy = ((SanteDB.Core.Model.Security.SecurityPolicy)(clonee.Policy.DeepCopy()));
             }
             // Clone PolicyKey
-            if ((clonee.PolicyKey != null))
-            {
+            if ((clonee.PolicyKey != null)) {
                 _retVal.PolicyKey = clonee.PolicyKey;
             }
             // Clone IdentifierClassificationKey
-            if ((clonee.IdentifierClassificationKey != null))
-            {
+            if ((clonee.IdentifierClassificationKey != null)) {
                 _retVal.IdentifierClassificationKey = clonee.IdentifierClassificationKey;
             }
             // Clone ValidationRegex
-            if ((clonee.ValidationRegex != null))
-            {
+            if ((clonee.ValidationRegex != null)) {
                 _retVal.ValidationRegex = clonee.ValidationRegex;
             }
             // Clone IsUnique
-            if ((clonee.IsUnique != null))
-            {
-                _retVal.IsUnique = clonee.IsUnique;
-            }
+            _retVal.IsUnique = clonee.IsUnique;
             // Clone CustomValidator
-            if ((clonee.CustomValidator != null))
-            {
+            if ((clonee.CustomValidator != null)) {
                 _retVal.CustomValidator = clonee.CustomValidator;
             }
             // Clone CheckDigitAlgorithm
-            if ((clonee.CheckDigitAlgorithm != null))
-            {
+            if ((clonee.CheckDigitAlgorithm != null)) {
                 _retVal.CheckDigitAlgorithm = clonee.CheckDigitAlgorithm;
             }
             // Clone AuthorityScopeXml
-            if ((clonee.AuthorityScopeXml != null))
-            {
+            if ((clonee.AuthorityScopeXml != null)) {
                 _retVal.AuthorityScopeXml = new System.Collections.Generic.List<System.Guid>(clonee.AuthorityScopeXml);
             }
             // Clone IdentifierClassification
-            if ((clonee.IdentifierClassification != null))
-            {
-                _retVal.IdentifierClassification = DeepCloneExtensions.CloneDeep(clonee.IdentifierClassification);
+            if ((clonee.IdentifierClassification != null)) {
+                _retVal.IdentifierClassification = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.IdentifierClassification.DeepCopy()));
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.EntityNote CloneDeep(this SanteDB.Core.Model.DataTypes.EntityNote clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.EntityNote CloneDeep(this SanteDB.Core.Model.DataTypes.EntityNote clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.EntityNote _retVal = new SanteDB.Core.Model.DataTypes.EntityNote();
             // Clone Text
-            if ((clonee.Text != null))
-            {
+            if ((clonee.Text != null)) {
                 _retVal.Text = clonee.Text;
             }
             // Clone AuthorKey
-            if ((clonee.AuthorKey != null))
-            {
+            if ((clonee.AuthorKey != null)) {
                 _retVal.AuthorKey = clonee.AuthorKey;
             }
             // Clone Author
-            if ((clonee.Author != null))
-            {
-                _retVal.Author = DeepCloneExtensions.CloneDeep(clonee.Author);
+            if ((clonee.Author != null)) {
+                _retVal.Author = ((SanteDB.Core.Model.Entities.Entity)(clonee.Author.DeepCopy()));
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ActNote CloneDeep(this SanteDB.Core.Model.DataTypes.ActNote clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ActNote CloneDeep(this SanteDB.Core.Model.DataTypes.ActNote clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ActNote _retVal = new SanteDB.Core.Model.DataTypes.ActNote();
             // Clone Text
-            if ((clonee.Text != null))
-            {
+            if ((clonee.Text != null)) {
                 _retVal.Text = clonee.Text;
             }
             // Clone AuthorKey
-            if ((clonee.AuthorKey != null))
-            {
+            if ((clonee.AuthorKey != null)) {
                 _retVal.AuthorKey = clonee.AuthorKey;
             }
             // Clone Author
-            if ((clonee.Author != null))
-            {
-                _retVal.Author = DeepCloneExtensions.CloneDeep(clonee.Author);
+            if ((clonee.Author != null)) {
+                _retVal.Author = ((SanteDB.Core.Model.Entities.Entity)(clonee.Author.DeepCopy()));
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ReferenceTerm CloneDeep(this SanteDB.Core.Model.DataTypes.ReferenceTerm clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ReferenceTerm CloneDeep(this SanteDB.Core.Model.DataTypes.ReferenceTerm clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ReferenceTerm _retVal = new SanteDB.Core.Model.DataTypes.ReferenceTerm();
+            int _iterator;
             // Clone Mnemonic
-            if ((clonee.Mnemonic != null))
-            {
+            if ((clonee.Mnemonic != null)) {
                 _retVal.Mnemonic = clonee.Mnemonic;
             }
             // Clone CodeSystem
-            if ((clonee.CodeSystem != null))
-            {
-                _retVal.CodeSystem = DeepCloneExtensions.CloneDeep(clonee.CodeSystem);
+            if ((clonee.CodeSystem != null)) {
+                _retVal.CodeSystem = ((SanteDB.Core.Model.DataTypes.CodeSystem)(clonee.CodeSystem.DeepCopy()));
             }
             // Clone CodeSystemKey
-            if ((clonee.CodeSystemKey != null))
-            {
+            if ((clonee.CodeSystemKey != null)) {
                 _retVal.CodeSystemKey = clonee.CodeSystemKey;
             }
             // Clone DisplayNames
-            if ((clonee.DisplayNames != null))
-            {
+            if ((clonee.DisplayNames != null)) {
                 _retVal.DisplayNames = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ReferenceTermName>();
-                int iDisplayNames;
-                for (iDisplayNames = 0; (iDisplayNames < clonee.DisplayNames.Count); iDisplayNames = (iDisplayNames + 1))
-                {
-                    _retVal.DisplayNames.Add(DeepCloneExtensions.CloneDeep(clonee.DisplayNames[iDisplayNames]));
+                for (_iterator = 0; (_iterator < clonee.DisplayNames.Count); _iterator = (_iterator + 1)) {
+                    _retVal.DisplayNames.Add(((SanteDB.Core.Model.DataTypes.ReferenceTermName)(clonee.DisplayNames[_iterator].DeepCopy())));
                 }
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ReferenceTermName CloneDeep(this SanteDB.Core.Model.DataTypes.ReferenceTermName clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ReferenceTermName CloneDeep(this SanteDB.Core.Model.DataTypes.ReferenceTermName clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ReferenceTermName _retVal = new SanteDB.Core.Model.DataTypes.ReferenceTermName();
             // Clone Language
-            if ((clonee.Language != null))
-            {
+            if ((clonee.Language != null)) {
                 _retVal.Language = clonee.Language;
             }
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.RelationshipValidationRule CloneDeep(this SanteDB.Core.Model.DataTypes.RelationshipValidationRule clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.RelationshipValidationRule CloneDeep(this SanteDB.Core.Model.DataTypes.RelationshipValidationRule clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.RelationshipValidationRule _retVal = new SanteDB.Core.Model.DataTypes.RelationshipValidationRule();
             // Clone SourceClassKey
-            if ((clonee.SourceClassKey != null))
-            {
+            if ((clonee.SourceClassKey != null)) {
                 _retVal.SourceClassKey = clonee.SourceClassKey;
             }
             // Clone SourceClass
-            if ((clonee.SourceClass != null))
-            {
-                _retVal.SourceClass = DeepCloneExtensions.CloneDeep(clonee.SourceClass);
+            if ((clonee.SourceClass != null)) {
+                _retVal.SourceClass = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.SourceClass.DeepCopy()));
             }
             // Clone TargetClassKey
-            if ((clonee.TargetClassKey != null))
-            {
+            if ((clonee.TargetClassKey != null)) {
                 _retVal.TargetClassKey = clonee.TargetClassKey;
             }
             // Clone TargetClass
-            if ((clonee.TargetClass != null))
-            {
-                _retVal.TargetClass = DeepCloneExtensions.CloneDeep(clonee.TargetClass);
+            if ((clonee.TargetClass != null)) {
+                _retVal.TargetClass = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TargetClass.DeepCopy()));
             }
             // Clone RelationshipTypeKey
-            if ((clonee.RelationshipTypeKey != null))
-            {
-                _retVal.RelationshipTypeKey = clonee.RelationshipTypeKey;
-            }
+            _retVal.RelationshipTypeKey = clonee.RelationshipTypeKey;
             // Clone RelationshipType
-            if ((clonee.RelationshipType != null))
-            {
-                _retVal.RelationshipType = DeepCloneExtensions.CloneDeep(clonee.RelationshipType);
+            if ((clonee.RelationshipType != null)) {
+                _retVal.RelationshipType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.RelationshipType.DeepCopy()));
             }
             // Clone AppliesToXml
-            if ((clonee.AppliesToXml != null))
-            {
+            if ((clonee.AppliesToXml != null)) {
                 _retVal.AppliesToXml = clonee.AppliesToXml;
             }
             // Clone AppliesTo
-            if ((clonee.AppliesTo != null))
-            {
+            if ((clonee.AppliesTo != null)) {
                 _retVal.AppliesTo = clonee.AppliesTo;
             }
             // Clone Description
-            if ((clonee.Description != null))
-            {
+            if ((clonee.Description != null)) {
                 _retVal.Description = clonee.Description;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ConceptTag CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptTag clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ConceptTag CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptTag clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ConceptTag _retVal = new SanteDB.Core.Model.DataTypes.ConceptTag();
             // Clone TagKey
-            if ((clonee.TagKey != null))
-            {
+            if ((clonee.TagKey != null)) {
                 _retVal.TagKey = clonee.TagKey;
             }
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.EntityTag CloneDeep(this SanteDB.Core.Model.DataTypes.EntityTag clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.EntityTag CloneDeep(this SanteDB.Core.Model.DataTypes.EntityTag clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.EntityTag _retVal = new SanteDB.Core.Model.DataTypes.EntityTag();
             // Clone TagKey
-            if ((clonee.TagKey != null))
-            {
+            if ((clonee.TagKey != null)) {
                 _retVal.TagKey = clonee.TagKey;
             }
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.ActTag CloneDeep(this SanteDB.Core.Model.DataTypes.ActTag clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.ActTag CloneDeep(this SanteDB.Core.Model.DataTypes.ActTag clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.ActTag _retVal = new SanteDB.Core.Model.DataTypes.ActTag();
             // Clone TagKey
-            if ((clonee.TagKey != null))
-            {
+            if ((clonee.TagKey != null)) {
                 _retVal.TagKey = clonee.TagKey;
             }
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.DataTypes.TemplateDefinition CloneDeep(this SanteDB.Core.Model.DataTypes.TemplateDefinition clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.DataTypes.TemplateDefinition CloneDeep(this SanteDB.Core.Model.DataTypes.TemplateDefinition clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.DataTypes.TemplateDefinition _retVal = new SanteDB.Core.Model.DataTypes.TemplateDefinition();
             // Clone Mnemonic
-            if ((clonee.Mnemonic != null))
-            {
+            if ((clonee.Mnemonic != null)) {
                 _retVal.Mnemonic = clonee.Mnemonic;
             }
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Oid
-            if ((clonee.Oid != null))
-            {
+            if ((clonee.Oid != null)) {
                 _retVal.Oid = clonee.Oid;
             }
             // Clone Description
-            if ((clonee.Description != null))
-            {
+            if ((clonee.Description != null)) {
                 _retVal.Description = clonee.Description;
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Collection.Bundle CloneDeep(this SanteDB.Core.Model.Collection.Bundle clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Collection.Bundle CloneDeep(this SanteDB.Core.Model.Collection.Bundle clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Collection.Bundle _retVal = new SanteDB.Core.Model.Collection.Bundle();
+            int _iterator;
             // Clone CorrelationSequence
-            if ((clonee.CorrelationSequence != null))
-            {
+            if ((clonee.CorrelationSequence != null)) {
                 _retVal.CorrelationSequence = clonee.CorrelationSequence;
             }
             // Clone CorrelationKey
-            if ((clonee.CorrelationKey != null))
-            {
+            if ((clonee.CorrelationKey != null)) {
                 _retVal.CorrelationKey = clonee.CorrelationKey;
             }
             // Clone Item
-            if ((clonee.Item != null))
-            {
+            if ((clonee.Item != null)) {
                 _retVal.Item = new System.Collections.Generic.List<SanteDB.Core.Model.IdentifiedData>();
-                int iItem;
-                for (iItem = 0; (iItem < clonee.Item.Count); iItem = (iItem + 1))
-                {
-                    _retVal.Item.Add(DeepCloneExtensions.CloneDeep(clonee.Item[iItem]));
+                for (_iterator = 0; (_iterator < clonee.Item.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Item.Add(((SanteDB.Core.Model.IdentifiedData)(clonee.Item[_iterator].DeepCopy())));
                 }
             }
             // Clone FocalObjects
-            if ((clonee.FocalObjects != null))
-            {
+            if ((clonee.FocalObjects != null)) {
                 _retVal.FocalObjects = new System.Collections.Generic.List<System.Guid>(clonee.FocalObjects);
             }
             // Clone Offset
-            if ((clonee.Offset != null))
-            {
-                _retVal.Offset = clonee.Offset;
-            }
+            _retVal.Offset = clonee.Offset;
             // Clone Count
-            if ((clonee.Count != null))
-            {
-                _retVal.Count = clonee.Count;
-            }
+            _retVal.Count = clonee.Count;
             // Clone TotalResults
-            if ((clonee.TotalResults != null))
-            {
+            if ((clonee.TotalResults != null)) {
                 _retVal.TotalResults = clonee.TotalResults;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Audit.AuditEventData CloneDeep(this SanteDB.Core.Model.Audit.AuditEventData clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Audit.AuditEventData CloneDeep(this SanteDB.Core.Model.Audit.AuditEventData clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Audit.AuditEventData _retVal = new SanteDB.Core.Model.Audit.AuditEventData();
             // Clone ActionCode
-            if ((clonee.ActionCode != null))
-            {
-                _retVal.ActionCode = clonee.ActionCode;
-            }
+            _retVal.ActionCode = clonee.ActionCode;
             // Clone Actors
-            if ((clonee.Actors != null))
-            {
+            if ((clonee.Actors != null)) {
                 _retVal.Actors = new System.Collections.Generic.List<SanteDB.Core.Model.Audit.AuditActorData>(clonee.Actors);
             }
             // Clone AuditableObjects
-            if ((clonee.AuditableObjects != null))
-            {
+            if ((clonee.AuditableObjects != null)) {
                 _retVal.AuditableObjects = new System.Collections.Generic.List<SanteDB.Core.Model.Audit.AuditableObject>(clonee.AuditableObjects);
             }
             // Clone EventIdentifier
-            if ((clonee.EventIdentifier != null))
-            {
-                _retVal.EventIdentifier = clonee.EventIdentifier;
-            }
+            _retVal.EventIdentifier = clonee.EventIdentifier;
             // Clone EventTypeCode
-            if ((clonee.EventTypeCode != null))
-            {
+            if ((clonee.EventTypeCode != null)) {
                 _retVal.EventTypeCode = clonee.EventTypeCode;
             }
             // Clone Sensitivity
-            if ((clonee.Sensitivity != null))
-            {
-                _retVal.Sensitivity = clonee.Sensitivity;
-            }
+            _retVal.Sensitivity = clonee.Sensitivity;
             // Clone Outcome
-            if ((clonee.Outcome != null))
-            {
-                _retVal.Outcome = clonee.Outcome;
-            }
+            _retVal.Outcome = clonee.Outcome;
             // Clone TimestampXml
-            if ((clonee.TimestampXml != null))
-            {
+            if ((clonee.TimestampXml != null)) {
                 _retVal.TimestampXml = clonee.TimestampXml;
             }
             // Clone Timestamp
-            if ((clonee.Timestamp != null))
-            {
-                _retVal.Timestamp = clonee.Timestamp;
-            }
+            _retVal.Timestamp = clonee.Timestamp;
             // Clone Metadata
-            if ((clonee.Metadata != null))
-            {
+            if ((clonee.Metadata != null)) {
                 _retVal.Metadata = new System.Collections.Generic.List<SanteDB.Core.Model.Audit.AuditMetadata>(clonee.Metadata);
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.Account CloneDeep(this SanteDB.Core.Model.Acts.Account clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.Account CloneDeep(this SanteDB.Core.Model.Acts.Account clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.Account _retVal = new SanteDB.Core.Model.Acts.Account();
+            int _iterator;
             // Clone Balance
-            if ((clonee.Balance != null))
-            {
-                _retVal.Balance = clonee.Balance;
-            }
+            _retVal.Balance = clonee.Balance;
             // Clone CurrencyKey
-            if ((clonee.CurrencyKey != null))
-            {
+            if ((clonee.CurrencyKey != null)) {
                 _retVal.CurrencyKey = clonee.CurrencyKey;
             }
             // Clone Currency
-            if ((clonee.Currency != null))
-            {
-                _retVal.Currency = DeepCloneExtensions.CloneDeep(clonee.Currency);
+            if ((clonee.Currency != null)) {
+                _retVal.Currency = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Currency.DeepCopy()));
             }
             // Clone MinBalance
-            if ((clonee.MinBalance != null))
-            {
+            if ((clonee.MinBalance != null)) {
                 _retVal.MinBalance = clonee.MinBalance;
             }
             // Clone MaxBalance
-            if ((clonee.MaxBalance != null))
-            {
-                _retVal.MaxBalance = clonee.MaxBalance;
-            }
+            _retVal.MaxBalance = clonee.MaxBalance;
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.Act CloneDeep(this SanteDB.Core.Model.Acts.Act clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.Act CloneDeep(this SanteDB.Core.Model.Acts.Act clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.Act _retVal = new SanteDB.Core.Model.Acts.Act();
+            int _iterator;
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.ActParticipation CloneDeep(this SanteDB.Core.Model.Acts.ActParticipation clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.ActParticipation CloneDeep(this SanteDB.Core.Model.Acts.ActParticipation clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.ActParticipation _retVal = new SanteDB.Core.Model.Acts.ActParticipation();
             // Clone Classification
-            if ((clonee.Classification != null))
-            {
-                _retVal.Classification = DeepCloneExtensions.CloneDeep(clonee.Classification);
+            if ((clonee.Classification != null)) {
+                _retVal.Classification = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Classification.DeepCopy()));
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone ClassificationKey
-            if ((clonee.ClassificationKey != null))
-            {
+            if ((clonee.ClassificationKey != null)) {
                 _retVal.ClassificationKey = clonee.ClassificationKey;
             }
             // Clone PlayerEntityKey
-            if ((clonee.PlayerEntityKey != null))
-            {
+            if ((clonee.PlayerEntityKey != null)) {
                 _retVal.PlayerEntityKey = clonee.PlayerEntityKey;
             }
             // Clone ParticipationRoleKey
-            if ((clonee.ParticipationRoleKey != null))
-            {
+            if ((clonee.ParticipationRoleKey != null)) {
                 _retVal.ParticipationRoleKey = clonee.ParticipationRoleKey;
             }
             // Clone PlayerEntity
-            if ((clonee.PlayerEntity != null))
-            {
-                _retVal.PlayerEntity = DeepCloneExtensions.CloneDeep(clonee.PlayerEntity);
+            if ((clonee.PlayerEntity != null)) {
+                _retVal.PlayerEntity = ((SanteDB.Core.Model.Entities.Entity)(clonee.PlayerEntity.DeepCopy()));
             }
             // Clone ParticipationRole
-            if ((clonee.ParticipationRole != null))
-            {
-                _retVal.ParticipationRole = DeepCloneExtensions.CloneDeep(clonee.ParticipationRole);
+            if ((clonee.ParticipationRole != null)) {
+                _retVal.ParticipationRole = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ParticipationRole.DeepCopy()));
             }
             // Clone ActKey
-            if ((clonee.ActKey != null))
-            {
+            if ((clonee.ActKey != null)) {
                 _retVal.ActKey = clonee.ActKey;
             }
             // Clone Quantity
-            if ((clonee.Quantity != null))
-            {
+            if ((clonee.Quantity != null)) {
                 _retVal.Quantity = clonee.Quantity;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.ActProtocol CloneDeep(this SanteDB.Core.Model.Acts.ActProtocol clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.ActProtocol CloneDeep(this SanteDB.Core.Model.Acts.ActProtocol clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.ActProtocol _retVal = new SanteDB.Core.Model.Acts.ActProtocol();
             // Clone ProtocolKey
-            if ((clonee.ProtocolKey != null))
-            {
+            if ((clonee.ProtocolKey != null)) {
                 _retVal.ProtocolKey = clonee.ProtocolKey;
             }
             // Clone Version
-            if ((clonee.Version != null))
-            {
+            if ((clonee.Version != null)) {
                 _retVal.Version = clonee.Version;
             }
             // Clone Sequence
-            if ((clonee.Sequence != null))
-            {
-                _retVal.Sequence = clonee.Sequence;
-            }
+            _retVal.Sequence = clonee.Sequence;
             // Clone StateData
-            if ((clonee.StateData != null))
-            {
+            if ((clonee.StateData != null)) {
                 _retVal.StateData = clonee.StateData;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.ActRelationship CloneDeep(this SanteDB.Core.Model.Acts.ActRelationship clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.ActRelationship CloneDeep(this SanteDB.Core.Model.Acts.ActRelationship clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.ActRelationship _retVal = new SanteDB.Core.Model.Acts.ActRelationship();
             // Clone Classification
-            if ((clonee.Classification != null))
-            {
-                _retVal.Classification = DeepCloneExtensions.CloneDeep(clonee.Classification);
+            if ((clonee.Classification != null)) {
+                _retVal.Classification = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Classification.DeepCopy()));
             }
             // Clone NegationIndicator
-            if ((clonee.NegationIndicator != null))
-            {
+            if ((clonee.NegationIndicator != null)) {
                 _retVal.NegationIndicator = clonee.NegationIndicator;
             }
             // Clone ExternalKey
-            if ((clonee.ExternalKey != null))
-            {
+            if ((clonee.ExternalKey != null)) {
                 _retVal.ExternalKey = clonee.ExternalKey;
             }
             // Clone ClassificationKey
-            if ((clonee.ClassificationKey != null))
-            {
+            if ((clonee.ClassificationKey != null)) {
                 _retVal.ClassificationKey = clonee.ClassificationKey;
             }
             // Clone TargetActKey
-            if ((clonee.TargetActKey != null))
-            {
+            if ((clonee.TargetActKey != null)) {
                 _retVal.TargetActKey = clonee.TargetActKey;
             }
             // Clone TargetAct
-            if ((clonee.TargetAct != null))
-            {
-                _retVal.TargetAct = DeepCloneExtensions.CloneDeep(clonee.TargetAct);
+            if ((clonee.TargetAct != null)) {
+                _retVal.TargetAct = ((SanteDB.Core.Model.Acts.Act)(clonee.TargetAct.DeepCopy()));
             }
             // Clone RelationshipTypeKey
-            if ((clonee.RelationshipTypeKey != null))
-            {
+            if ((clonee.RelationshipTypeKey != null)) {
                 _retVal.RelationshipTypeKey = clonee.RelationshipTypeKey;
             }
             // Clone RelationshipType
-            if ((clonee.RelationshipType != null))
-            {
-                _retVal.RelationshipType = DeepCloneExtensions.CloneDeep(clonee.RelationshipType);
+            if ((clonee.RelationshipType != null)) {
+                _retVal.RelationshipType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.RelationshipType.DeepCopy()));
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.CarePathwayDefinition CloneDeep(this SanteDB.Core.Model.Acts.CarePathwayDefinition clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.CarePathwayDefinition CloneDeep(this SanteDB.Core.Model.Acts.CarePathwayDefinition clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.CarePathwayDefinition _retVal = new SanteDB.Core.Model.Acts.CarePathwayDefinition();
             // Clone Mnemonic
-            if ((clonee.Mnemonic != null))
-            {
+            if ((clonee.Mnemonic != null)) {
                 _retVal.Mnemonic = clonee.Mnemonic;
             }
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Description
-            if ((clonee.Description != null))
-            {
+            if ((clonee.Description != null)) {
                 _retVal.Description = clonee.Description;
             }
             // Clone EligibilityCriteria
-            if ((clonee.EligibilityCriteria != null))
-            {
+            if ((clonee.EligibilityCriteria != null)) {
                 _retVal.EligibilityCriteria = clonee.EligibilityCriteria;
             }
             // Clone EnrollmentMode
-            if ((clonee.EnrollmentMode != null))
-            {
-                _retVal.EnrollmentMode = clonee.EnrollmentMode;
-            }
+            _retVal.EnrollmentMode = clonee.EnrollmentMode;
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone UpdatedTime
-            if ((clonee.UpdatedTime != null))
-            {
+            if ((clonee.UpdatedTime != null)) {
                 _retVal.UpdatedTime = clonee.UpdatedTime;
             }
             // Clone UpdatedByKey
-            if ((clonee.UpdatedByKey != null))
-            {
+            if ((clonee.UpdatedByKey != null)) {
                 _retVal.UpdatedByKey = clonee.UpdatedByKey;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.CarePlan CloneDeep(this SanteDB.Core.Model.Acts.CarePlan clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.CarePlan CloneDeep(this SanteDB.Core.Model.Acts.CarePlan clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.CarePlan _retVal = new SanteDB.Core.Model.Acts.CarePlan();
+            int _iterator;
             // Clone Title
-            if ((clonee.Title != null))
-            {
+            if ((clonee.Title != null)) {
                 _retVal.Title = clonee.Title;
             }
             // Clone CarePathwayKey
-            if ((clonee.CarePathwayKey != null))
-            {
+            if ((clonee.CarePathwayKey != null)) {
                 _retVal.CarePathwayKey = clonee.CarePathwayKey;
             }
             // Clone CarePathway
-            if ((clonee.CarePathway != null))
-            {
-                _retVal.CarePathway = DeepCloneExtensions.CloneDeep(clonee.CarePathway);
+            if ((clonee.CarePathway != null)) {
+                _retVal.CarePathway = ((SanteDB.Core.Model.Acts.CarePathwayDefinition)(clonee.CarePathway.DeepCopy()));
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.ControlAct CloneDeep(this SanteDB.Core.Model.Acts.ControlAct clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.ControlAct CloneDeep(this SanteDB.Core.Model.Acts.ControlAct clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.ControlAct _retVal = new SanteDB.Core.Model.Acts.ControlAct();
+            int _iterator;
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.FinancialContract CloneDeep(this SanteDB.Core.Model.Acts.FinancialContract clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.FinancialContract CloneDeep(this SanteDB.Core.Model.Acts.FinancialContract clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.FinancialContract _retVal = new SanteDB.Core.Model.Acts.FinancialContract();
+            int _iterator;
             // Clone PaymentTermsKey
-            if ((clonee.PaymentTermsKey != null))
-            {
+            if ((clonee.PaymentTermsKey != null)) {
                 _retVal.PaymentTermsKey = clonee.PaymentTermsKey;
             }
             // Clone PaymentTerms
-            if ((clonee.PaymentTerms != null))
-            {
-                _retVal.PaymentTerms = DeepCloneExtensions.CloneDeep(clonee.PaymentTerms);
+            if ((clonee.PaymentTerms != null)) {
+                _retVal.PaymentTerms = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.PaymentTerms.DeepCopy()));
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.FinancialTransaction CloneDeep(this SanteDB.Core.Model.Acts.FinancialTransaction clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.FinancialTransaction CloneDeep(this SanteDB.Core.Model.Acts.FinancialTransaction clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.FinancialTransaction _retVal = new SanteDB.Core.Model.Acts.FinancialTransaction();
+            int _iterator;
             // Clone Amount
-            if ((clonee.Amount != null))
-            {
+            if ((clonee.Amount != null)) {
                 _retVal.Amount = clonee.Amount;
             }
             // Clone CurrencyKey
-            if ((clonee.CurrencyKey != null))
-            {
+            if ((clonee.CurrencyKey != null)) {
                 _retVal.CurrencyKey = clonee.CurrencyKey;
             }
             // Clone Currency
-            if ((clonee.Currency != null))
-            {
-                _retVal.Currency = DeepCloneExtensions.CloneDeep(clonee.Currency);
+            if ((clonee.Currency != null)) {
+                _retVal.Currency = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Currency.DeepCopy()));
             }
             // Clone CreditExchangeRate
-            if ((clonee.CreditExchangeRate != null))
-            {
-                _retVal.CreditExchangeRate = clonee.CreditExchangeRate;
-            }
+            _retVal.CreditExchangeRate = clonee.CreditExchangeRate;
             // Clone DebitExchangeRate
-            if ((clonee.DebitExchangeRate != null))
-            {
-                _retVal.DebitExchangeRate = clonee.DebitExchangeRate;
-            }
+            _retVal.DebitExchangeRate = clonee.DebitExchangeRate;
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.InvoiceElement CloneDeep(this SanteDB.Core.Model.Acts.InvoiceElement clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.InvoiceElement CloneDeep(this SanteDB.Core.Model.Acts.InvoiceElement clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.InvoiceElement _retVal = new SanteDB.Core.Model.Acts.InvoiceElement();
+            int _iterator;
             // Clone ModifierKey
-            if ((clonee.ModifierKey != null))
-            {
+            if ((clonee.ModifierKey != null)) {
                 _retVal.ModifierKey = clonee.ModifierKey;
             }
             // Clone Modifier
-            if ((clonee.Modifier != null))
-            {
-                _retVal.Modifier = DeepCloneExtensions.CloneDeep(clonee.Modifier);
+            if ((clonee.Modifier != null)) {
+                _retVal.Modifier = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Modifier.DeepCopy()));
             }
             // Clone UnitQuantity
-            if ((clonee.UnitQuantity != null))
-            {
+            if ((clonee.UnitQuantity != null)) {
                 _retVal.UnitQuantity = clonee.UnitQuantity;
             }
             // Clone UnitPrice
-            if ((clonee.UnitPrice != null))
-            {
+            if ((clonee.UnitPrice != null)) {
                 _retVal.UnitPrice = clonee.UnitPrice;
             }
             // Clone NetPrice
-            if ((clonee.NetPrice != null))
-            {
+            if ((clonee.NetPrice != null)) {
                 _retVal.NetPrice = clonee.NetPrice;
             }
             // Clone CurrencyKey
-            if ((clonee.CurrencyKey != null))
-            {
+            if ((clonee.CurrencyKey != null)) {
                 _retVal.CurrencyKey = clonee.CurrencyKey;
             }
             // Clone Currency
-            if ((clonee.Currency != null))
-            {
-                _retVal.Currency = DeepCloneExtensions.CloneDeep(clonee.Currency);
+            if ((clonee.Currency != null)) {
+                _retVal.Currency = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Currency.DeepCopy()));
             }
             // Clone Factor
-            if ((clonee.Factor != null))
-            {
+            if ((clonee.Factor != null)) {
                 _retVal.Factor = clonee.Factor;
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.Narrative CloneDeep(this SanteDB.Core.Model.Acts.Narrative clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.Narrative CloneDeep(this SanteDB.Core.Model.Acts.Narrative clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.Narrative _retVal = new SanteDB.Core.Model.Acts.Narrative();
+            int _iterator;
             // Clone VersionNumber
-            if ((clonee.VersionNumber != null))
-            {
+            if ((clonee.VersionNumber != null)) {
                 _retVal.VersionNumber = clonee.VersionNumber;
             }
             // Clone LanguageCode
-            if ((clonee.LanguageCode != null))
-            {
+            if ((clonee.LanguageCode != null)) {
                 _retVal.LanguageCode = clonee.LanguageCode;
             }
             // Clone MimeType
-            if ((clonee.MimeType != null))
-            {
+            if ((clonee.MimeType != null)) {
                 _retVal.MimeType = clonee.MimeType;
             }
             // Clone Title
-            if ((clonee.Title != null))
-            {
+            if ((clonee.Title != null)) {
                 _retVal.Title = clonee.Title;
             }
             // Clone Text
-            if ((clonee.Text != null))
-            {
+            if ((clonee.Text != null)) {
                 _retVal.Text = clonee.Text;
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.Observation CloneDeep(this SanteDB.Core.Model.Acts.Observation clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.Observation CloneDeep(this SanteDB.Core.Model.Acts.Observation clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.Observation _retVal = new SanteDB.Core.Model.Acts.Observation();
+            int _iterator;
             // Clone InterpretationConceptKey
-            if ((clonee.InterpretationConceptKey != null))
-            {
+            if ((clonee.InterpretationConceptKey != null)) {
                 _retVal.InterpretationConceptKey = clonee.InterpretationConceptKey;
             }
             // Clone ValueType
-            if ((clonee.ValueType != null))
-            {
+            if ((clonee.ValueType != null)) {
                 _retVal.ValueType = clonee.ValueType;
             }
             // Clone InterpretationConcept
-            if ((clonee.InterpretationConcept != null))
-            {
-                _retVal.InterpretationConcept = DeepCloneExtensions.CloneDeep(clonee.InterpretationConcept);
+            if ((clonee.InterpretationConcept != null)) {
+                _retVal.InterpretationConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.InterpretationConcept.DeepCopy()));
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.QuantityObservation CloneDeep(this SanteDB.Core.Model.Acts.QuantityObservation clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.QuantityObservation CloneDeep(this SanteDB.Core.Model.Acts.QuantityObservation clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.QuantityObservation _retVal = new SanteDB.Core.Model.Acts.QuantityObservation();
+            int _iterator;
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone ValueType
-            if ((clonee.ValueType != null))
-            {
+            if ((clonee.ValueType != null)) {
                 _retVal.ValueType = clonee.ValueType;
             }
             // Clone UnitOfMeasureKey
-            if ((clonee.UnitOfMeasureKey != null))
-            {
+            if ((clonee.UnitOfMeasureKey != null)) {
                 _retVal.UnitOfMeasureKey = clonee.UnitOfMeasureKey;
             }
             // Clone UnitOfMeasure
-            if ((clonee.UnitOfMeasure != null))
-            {
-                _retVal.UnitOfMeasure = DeepCloneExtensions.CloneDeep(clonee.UnitOfMeasure);
+            if ((clonee.UnitOfMeasure != null)) {
+                _retVal.UnitOfMeasure = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.UnitOfMeasure.DeepCopy()));
             }
             // Clone InterpretationConceptKey
-            if ((clonee.InterpretationConceptKey != null))
-            {
+            if ((clonee.InterpretationConceptKey != null)) {
                 _retVal.InterpretationConceptKey = clonee.InterpretationConceptKey;
             }
             // Clone InterpretationConcept
-            if ((clonee.InterpretationConcept != null))
-            {
-                _retVal.InterpretationConcept = DeepCloneExtensions.CloneDeep(clonee.InterpretationConcept);
+            if ((clonee.InterpretationConcept != null)) {
+                _retVal.InterpretationConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.InterpretationConcept.DeepCopy()));
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.TextObservation CloneDeep(this SanteDB.Core.Model.Acts.TextObservation clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.TextObservation CloneDeep(this SanteDB.Core.Model.Acts.TextObservation clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.TextObservation _retVal = new SanteDB.Core.Model.Acts.TextObservation();
+            int _iterator;
             // Clone ValueType
-            if ((clonee.ValueType != null))
-            {
+            if ((clonee.ValueType != null)) {
                 _retVal.ValueType = clonee.ValueType;
             }
             // Clone Value
-            if ((clonee.Value != null))
-            {
+            if ((clonee.Value != null)) {
                 _retVal.Value = clonee.Value;
             }
             // Clone InterpretationConceptKey
-            if ((clonee.InterpretationConceptKey != null))
-            {
+            if ((clonee.InterpretationConceptKey != null)) {
                 _retVal.InterpretationConceptKey = clonee.InterpretationConceptKey;
             }
             // Clone InterpretationConcept
-            if ((clonee.InterpretationConcept != null))
-            {
-                _retVal.InterpretationConcept = DeepCloneExtensions.CloneDeep(clonee.InterpretationConcept);
+            if ((clonee.InterpretationConcept != null)) {
+                _retVal.InterpretationConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.InterpretationConcept.DeepCopy()));
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.CodedObservation CloneDeep(this SanteDB.Core.Model.Acts.CodedObservation clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.CodedObservation CloneDeep(this SanteDB.Core.Model.Acts.CodedObservation clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.CodedObservation _retVal = new SanteDB.Core.Model.Acts.CodedObservation();
+            int _iterator;
             // Clone ValueType
-            if ((clonee.ValueType != null))
-            {
+            if ((clonee.ValueType != null)) {
                 _retVal.ValueType = clonee.ValueType;
             }
             // Clone ValueKey
-            if ((clonee.ValueKey != null))
-            {
+            if ((clonee.ValueKey != null)) {
                 _retVal.ValueKey = clonee.ValueKey;
             }
             // Clone Value
-            if ((clonee.Value != null))
-            {
-                _retVal.Value = DeepCloneExtensions.CloneDeep(clonee.Value);
+            if ((clonee.Value != null)) {
+                _retVal.Value = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Value.DeepCopy()));
             }
             // Clone InterpretationConceptKey
-            if ((clonee.InterpretationConceptKey != null))
-            {
+            if ((clonee.InterpretationConceptKey != null)) {
                 _retVal.InterpretationConceptKey = clonee.InterpretationConceptKey;
             }
             // Clone InterpretationConcept
-            if ((clonee.InterpretationConcept != null))
-            {
-                _retVal.InterpretationConcept = DeepCloneExtensions.CloneDeep(clonee.InterpretationConcept);
+            if ((clonee.InterpretationConcept != null)) {
+                _retVal.InterpretationConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.InterpretationConcept.DeepCopy()));
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.PatientEncounter CloneDeep(this SanteDB.Core.Model.Acts.PatientEncounter clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.PatientEncounter CloneDeep(this SanteDB.Core.Model.Acts.PatientEncounter clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.PatientEncounter _retVal = new SanteDB.Core.Model.Acts.PatientEncounter();
+            int _iterator;
             // Clone DischargeDispositionKey
-            if ((clonee.DischargeDispositionKey != null))
-            {
+            if ((clonee.DischargeDispositionKey != null)) {
                 _retVal.DischargeDispositionKey = clonee.DischargeDispositionKey;
             }
             // Clone AdmissionSourceTypeKey
-            if ((clonee.AdmissionSourceTypeKey != null))
-            {
+            if ((clonee.AdmissionSourceTypeKey != null)) {
                 _retVal.AdmissionSourceTypeKey = clonee.AdmissionSourceTypeKey;
             }
             // Clone DischargeDisposition
-            if ((clonee.DischargeDisposition != null))
-            {
-                _retVal.DischargeDisposition = DeepCloneExtensions.CloneDeep(clonee.DischargeDisposition);
+            if ((clonee.DischargeDisposition != null)) {
+                _retVal.DischargeDisposition = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DischargeDisposition.DeepCopy()));
             }
             // Clone AdmissionSourceType
-            if ((clonee.AdmissionSourceType != null))
-            {
-                _retVal.AdmissionSourceType = DeepCloneExtensions.CloneDeep(clonee.AdmissionSourceType);
+            if ((clonee.AdmissionSourceType != null)) {
+                _retVal.AdmissionSourceType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.AdmissionSourceType.DeepCopy()));
             }
             // Clone SpecialArrangements
-            if ((clonee.SpecialArrangements != null))
-            {
+            if ((clonee.SpecialArrangements != null)) {
                 _retVal.SpecialArrangements = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.PatientEncounterArrangement>();
-                int iSpecialArrangements;
-                for (iSpecialArrangements = 0; (iSpecialArrangements < clonee.SpecialArrangements.Count); iSpecialArrangements = (iSpecialArrangements + 1))
-                {
-                    _retVal.SpecialArrangements.Add(DeepCloneExtensions.CloneDeep(clonee.SpecialArrangements[iSpecialArrangements]));
+                for (_iterator = 0; (_iterator < clonee.SpecialArrangements.Count); _iterator = (_iterator + 1)) {
+                    _retVal.SpecialArrangements.Add(((SanteDB.Core.Model.Acts.PatientEncounterArrangement)(clonee.SpecialArrangements[_iterator].DeepCopy())));
                 }
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.PatientEncounterArrangement CloneDeep(this SanteDB.Core.Model.Acts.PatientEncounterArrangement clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.PatientEncounterArrangement CloneDeep(this SanteDB.Core.Model.Acts.PatientEncounterArrangement clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.PatientEncounterArrangement _retVal = new SanteDB.Core.Model.Acts.PatientEncounterArrangement();
             // Clone ArrangementTypeKey
-            if ((clonee.ArrangementTypeKey != null))
-            {
+            if ((clonee.ArrangementTypeKey != null)) {
                 _retVal.ArrangementTypeKey = clonee.ArrangementTypeKey;
             }
             // Clone ArrangementType
-            if ((clonee.ArrangementType != null))
-            {
-                _retVal.ArrangementType = DeepCloneExtensions.CloneDeep(clonee.ArrangementType);
+            if ((clonee.ArrangementType != null)) {
+                _retVal.ArrangementType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ArrangementType.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone EffectiveVersionSequenceId
-            if ((clonee.EffectiveVersionSequenceId != null))
-            {
+            if ((clonee.EffectiveVersionSequenceId != null)) {
                 _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             }
             // Clone ObsoleteVersionSequenceId
-            if ((clonee.ObsoleteVersionSequenceId != null))
-            {
+            if ((clonee.ObsoleteVersionSequenceId != null)) {
                 _retVal.ObsoleteVersionSequenceId = clonee.ObsoleteVersionSequenceId;
             }
             // Clone SourceEntityKey
-            if ((clonee.SourceEntityKey != null))
-            {
+            if ((clonee.SourceEntityKey != null)) {
                 _retVal.SourceEntityKey = clonee.SourceEntityKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.Procedure CloneDeep(this SanteDB.Core.Model.Acts.Procedure clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.Procedure CloneDeep(this SanteDB.Core.Model.Acts.Procedure clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.Procedure _retVal = new SanteDB.Core.Model.Acts.Procedure();
+            int _iterator;
             // Clone MethodKey
-            if ((clonee.MethodKey != null))
-            {
+            if ((clonee.MethodKey != null)) {
                 _retVal.MethodKey = clonee.MethodKey;
             }
             // Clone ApproachSiteKey
-            if ((clonee.ApproachSiteKey != null))
-            {
+            if ((clonee.ApproachSiteKey != null)) {
                 _retVal.ApproachSiteKey = clonee.ApproachSiteKey;
             }
             // Clone TargetSiteKey
-            if ((clonee.TargetSiteKey != null))
-            {
+            if ((clonee.TargetSiteKey != null)) {
                 _retVal.TargetSiteKey = clonee.TargetSiteKey;
             }
             // Clone Method
-            if ((clonee.Method != null))
-            {
-                _retVal.Method = DeepCloneExtensions.CloneDeep(clonee.Method);
+            if ((clonee.Method != null)) {
+                _retVal.Method = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Method.DeepCopy()));
             }
             // Clone ApproachSite
-            if ((clonee.ApproachSite != null))
-            {
-                _retVal.ApproachSite = DeepCloneExtensions.CloneDeep(clonee.ApproachSite);
+            if ((clonee.ApproachSite != null)) {
+                _retVal.ApproachSite = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ApproachSite.DeepCopy()));
             }
             // Clone TargetSite
-            if ((clonee.TargetSite != null))
-            {
-                _retVal.TargetSite = DeepCloneExtensions.CloneDeep(clonee.TargetSite);
+            if ((clonee.TargetSite != null)) {
+                _retVal.TargetSite = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TargetSite.DeepCopy()));
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.Protocol CloneDeep(this SanteDB.Core.Model.Acts.Protocol clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.Protocol CloneDeep(this SanteDB.Core.Model.Acts.Protocol clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.Protocol _retVal = new SanteDB.Core.Model.Acts.Protocol();
             // Clone Name
-            if ((clonee.Name != null))
-            {
+            if ((clonee.Name != null)) {
                 _retVal.Name = clonee.Name;
             }
             // Clone Oid
-            if ((clonee.Oid != null))
-            {
+            if ((clonee.Oid != null)) {
                 _retVal.Oid = clonee.Oid;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
         }
-
-        public static SanteDB.Core.Model.Acts.SubstanceAdministration CloneDeep(this SanteDB.Core.Model.Acts.SubstanceAdministration clonee)
-        {
-            if ((clonee == null))
-            {
+        
+        internal static SanteDB.Core.Model.Acts.SubstanceAdministration CloneDeep(this SanteDB.Core.Model.Acts.SubstanceAdministration clonee) {
+            if ((clonee == null)) {
                 return null;
             }
             SanteDB.Core.Model.Acts.SubstanceAdministration _retVal = new SanteDB.Core.Model.Acts.SubstanceAdministration();
+            int _iterator;
             // Clone RouteKey
-            if ((clonee.RouteKey != null))
-            {
+            if ((clonee.RouteKey != null)) {
                 _retVal.RouteKey = clonee.RouteKey;
             }
             // Clone DoseUnitKey
-            if ((clonee.DoseUnitKey != null))
-            {
+            if ((clonee.DoseUnitKey != null)) {
                 _retVal.DoseUnitKey = clonee.DoseUnitKey;
             }
             // Clone Route
-            if ((clonee.Route != null))
-            {
-                _retVal.Route = DeepCloneExtensions.CloneDeep(clonee.Route);
+            if ((clonee.Route != null)) {
+                _retVal.Route = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Route.DeepCopy()));
             }
             // Clone DoseUnit
-            if ((clonee.DoseUnit != null))
-            {
-                _retVal.DoseUnit = DeepCloneExtensions.CloneDeep(clonee.DoseUnit);
+            if ((clonee.DoseUnit != null)) {
+                _retVal.DoseUnit = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.DoseUnit.DeepCopy()));
             }
             // Clone DoseQuantity
-            if ((clonee.DoseQuantity != null))
-            {
-                _retVal.DoseQuantity = clonee.DoseQuantity;
-            }
+            _retVal.DoseQuantity = clonee.DoseQuantity;
             // Clone SequenceId
-            if ((clonee.SequenceId != null))
-            {
+            if ((clonee.SequenceId != null)) {
                 _retVal.SequenceId = clonee.SequenceId;
             }
             // Clone SiteKey
-            if ((clonee.SiteKey != null))
-            {
+            if ((clonee.SiteKey != null)) {
                 _retVal.SiteKey = clonee.SiteKey;
             }
             // Clone Site
-            if ((clonee.Site != null))
-            {
-                _retVal.Site = DeepCloneExtensions.CloneDeep(clonee.Site);
+            if ((clonee.Site != null)) {
+                _retVal.Site = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Site.DeepCopy()));
             }
             // Clone IsNegated
-            if ((clonee.IsNegated != null))
-            {
-                _retVal.IsNegated = clonee.IsNegated;
-            }
+            _retVal.IsNegated = clonee.IsNegated;
             // Clone ActTime
-            if ((clonee.ActTime != null))
-            {
+            if ((clonee.ActTime != null)) {
                 _retVal.ActTime = clonee.ActTime;
             }
             // Clone TemplateKey
-            if ((clonee.TemplateKey != null))
-            {
+            if ((clonee.TemplateKey != null)) {
                 _retVal.TemplateKey = clonee.TemplateKey;
             }
             // Clone Template
-            if ((clonee.Template != null))
-            {
-                _retVal.Template = DeepCloneExtensions.CloneDeep(clonee.Template);
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
             }
             // Clone StartTime
-            if ((clonee.StartTime != null))
-            {
+            if ((clonee.StartTime != null)) {
                 _retVal.StartTime = clonee.StartTime;
             }
             // Clone StopTime
-            if ((clonee.StopTime != null))
-            {
+            if ((clonee.StopTime != null)) {
                 _retVal.StopTime = clonee.StopTime;
             }
             // Clone ClassConceptKey
-            if ((clonee.ClassConceptKey != null))
-            {
+            if ((clonee.ClassConceptKey != null)) {
                 _retVal.ClassConceptKey = clonee.ClassConceptKey;
             }
             // Clone MoodConceptKey
-            if ((clonee.MoodConceptKey != null))
-            {
+            if ((clonee.MoodConceptKey != null)) {
                 _retVal.MoodConceptKey = clonee.MoodConceptKey;
             }
             // Clone ReasonConceptKey
-            if ((clonee.ReasonConceptKey != null))
-            {
+            if ((clonee.ReasonConceptKey != null)) {
                 _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
             }
             // Clone ObsoletionReasonKey
-            if ((clonee.ObsoletionReasonKey != null))
-            {
+            if ((clonee.ObsoletionReasonKey != null)) {
                 _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
             }
             // Clone StatusConceptKey
-            if ((clonee.StatusConceptKey != null))
-            {
+            if ((clonee.StatusConceptKey != null)) {
                 _retVal.StatusConceptKey = clonee.StatusConceptKey;
             }
             // Clone TypeConceptKey
-            if ((clonee.TypeConceptKey != null))
-            {
+            if ((clonee.TypeConceptKey != null)) {
                 _retVal.TypeConceptKey = clonee.TypeConceptKey;
             }
             // Clone ClassConcept
-            if ((clonee.ClassConcept != null))
-            {
-                _retVal.ClassConcept = DeepCloneExtensions.CloneDeep(clonee.ClassConcept);
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
             }
             // Clone MoodConcept
-            if ((clonee.MoodConcept != null))
-            {
-                _retVal.MoodConcept = DeepCloneExtensions.CloneDeep(clonee.MoodConcept);
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
             }
             // Clone ReasonConcept
-            if ((clonee.ReasonConcept != null))
-            {
-                _retVal.ReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ReasonConcept);
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
             }
             // Clone ObsoletionReasonConcept
-            if ((clonee.ObsoletionReasonConcept != null))
-            {
-                _retVal.ObsoletionReasonConcept = DeepCloneExtensions.CloneDeep(clonee.ObsoletionReasonConcept);
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
             }
             // Clone StatusConcept
-            if ((clonee.StatusConcept != null))
-            {
-                _retVal.StatusConcept = DeepCloneExtensions.CloneDeep(clonee.StatusConcept);
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
             }
             // Clone TypeConcept
-            if ((clonee.TypeConcept != null))
-            {
-                _retVal.TypeConcept = DeepCloneExtensions.CloneDeep(clonee.TypeConcept);
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
             }
             // Clone Identifiers
-            if ((clonee.Identifiers != null))
-            {
+            if ((clonee.Identifiers != null)) {
                 _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
-                int iIdentifiers;
-                for (iIdentifiers = 0; (iIdentifiers < clonee.Identifiers.Count); iIdentifiers = (iIdentifiers + 1))
-                {
-                    _retVal.Identifiers.Add(DeepCloneExtensions.CloneDeep(clonee.Identifiers[iIdentifiers]));
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
                 }
             }
             // Clone Relationships
-            if ((clonee.Relationships != null))
-            {
+            if ((clonee.Relationships != null)) {
                 _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
-                int iRelationships;
-                for (iRelationships = 0; (iRelationships < clonee.Relationships.Count); iRelationships = (iRelationships + 1))
-                {
-                    _retVal.Relationships.Add(DeepCloneExtensions.CloneDeep(clonee.Relationships[iRelationships]));
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
                 }
             }
             // Clone Policies
-            if ((clonee.Policies != null))
-            {
+            if ((clonee.Policies != null)) {
                 _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
-                int iPolicies;
-                for (iPolicies = 0; (iPolicies < clonee.Policies.Count); iPolicies = (iPolicies + 1))
-                {
-                    _retVal.Policies.Add(DeepCloneExtensions.CloneDeep(clonee.Policies[iPolicies]));
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
                 }
             }
             // Clone Extensions
-            if ((clonee.Extensions != null))
-            {
+            if ((clonee.Extensions != null)) {
                 _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
-                int iExtensions;
-                for (iExtensions = 0; (iExtensions < clonee.Extensions.Count); iExtensions = (iExtensions + 1))
-                {
-                    _retVal.Extensions.Add(DeepCloneExtensions.CloneDeep(clonee.Extensions[iExtensions]));
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
                 }
             }
             // Clone Notes
-            if ((clonee.Notes != null))
-            {
+            if ((clonee.Notes != null)) {
                 _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
-                int iNotes;
-                for (iNotes = 0; (iNotes < clonee.Notes.Count); iNotes = (iNotes + 1))
-                {
-                    _retVal.Notes.Add(DeepCloneExtensions.CloneDeep(clonee.Notes[iNotes]));
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
                 }
             }
             // Clone Tags
-            if ((clonee.Tags != null))
-            {
+            if ((clonee.Tags != null)) {
                 _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
-                int iTags;
-                for (iTags = 0; (iTags < clonee.Tags.Count); iTags = (iTags + 1))
-                {
-                    _retVal.Tags.Add(DeepCloneExtensions.CloneDeep(clonee.Tags[iTags]));
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
                 }
             }
             // Clone Protocols
-            if ((clonee.Protocols != null))
-            {
+            if ((clonee.Protocols != null)) {
                 _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
-                int iProtocols;
-                for (iProtocols = 0; (iProtocols < clonee.Protocols.Count); iProtocols = (iProtocols + 1))
-                {
-                    _retVal.Protocols.Add(DeepCloneExtensions.CloneDeep(clonee.Protocols[iProtocols]));
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
                 }
             }
             // Clone Participations
-            if ((clonee.Participations != null))
-            {
+            if ((clonee.Participations != null)) {
                 _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
-                int iParticipations;
-                for (iParticipations = 0; (iParticipations < clonee.Participations.Count); iParticipations = (iParticipations + 1))
-                {
-                    _retVal.Participations.Add(DeepCloneExtensions.CloneDeep(clonee.Participations[iParticipations]));
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
                 }
             }
             // Clone GeoTag
-            if ((clonee.GeoTag != null))
-            {
-                _retVal.GeoTag = DeepCloneExtensions.CloneDeep(clonee.GeoTag);
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
             }
             // Clone GeoTagKey
-            if ((clonee.GeoTagKey != null))
-            {
+            if ((clonee.GeoTagKey != null)) {
                 _retVal.GeoTagKey = clonee.GeoTagKey;
             }
             // Clone PreviousVersionKey
-            if ((clonee.PreviousVersionKey != null))
-            {
+            if ((clonee.PreviousVersionKey != null)) {
                 _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
             }
             // Clone IsHeadVersion
-            if ((clonee.IsHeadVersion != null))
-            {
-                _retVal.IsHeadVersion = clonee.IsHeadVersion;
-            }
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
             // Clone VersionKey
-            if ((clonee.VersionKey != null))
-            {
+            if ((clonee.VersionKey != null)) {
                 _retVal.VersionKey = clonee.VersionKey;
             }
             // Clone VersionSequence
-            if ((clonee.VersionSequence != null))
-            {
+            if ((clonee.VersionSequence != null)) {
                 _retVal.VersionSequence = clonee.VersionSequence;
             }
             // Clone CreationTime
-            if ((clonee.CreationTime != null))
-            {
-                _retVal.CreationTime = clonee.CreationTime;
-            }
+            _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
-            if ((clonee.ObsoletionTime != null))
-            {
+            if ((clonee.ObsoletionTime != null)) {
                 _retVal.ObsoletionTime = clonee.ObsoletionTime;
             }
             // Clone CreatedByKey
-            if ((clonee.CreatedByKey != null))
-            {
+            if ((clonee.CreatedByKey != null)) {
                 _retVal.CreatedByKey = clonee.CreatedByKey;
             }
             // Clone ObsoletedByKey
-            if ((clonee.ObsoletedByKey != null))
-            {
+            if ((clonee.ObsoletedByKey != null)) {
                 _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
             }
             // Clone Key
-            if ((clonee.Key != null))
-            {
+            if ((clonee.Key != null)) {
                 _retVal.Key = clonee.Key;
             }
             // Clone BatchOperation
-            if ((clonee.BatchOperation != null))
-            {
-                _retVal.BatchOperation = clonee.BatchOperation;
-            }
+            _retVal.BatchOperation = clonee.BatchOperation;
             return _retVal;
-        }
-
-        public static SanteDB.Core.Model.IdentifiedData CloneDeep(this SanteDB.Core.Model.IdentifiedData clonee)
-        {
-            switch (clonee)
-            {
-                case SanteDB.Core.Model.Subscription.SubscriptionDefinition cl1:
-                    return DeepCloneExtensions.CloneDeep(cl1);
-                case SanteDB.Core.Model.Security.SecurityApplication cl2:
-                    return DeepCloneExtensions.CloneDeep(cl2);
-                case SanteDB.Core.Model.Security.SecurityChallenge cl3:
-                    return DeepCloneExtensions.CloneDeep(cl3);
-                case SanteDB.Core.Model.Security.SecurityDevice cl4:
-                    return DeepCloneExtensions.CloneDeep(cl4);
-                case SanteDB.Core.Model.Security.SecurityRole cl9:
-                    return DeepCloneExtensions.CloneDeep(cl9);
-                case SanteDB.Core.Model.Security.SecurityUser cl10:
-                    return DeepCloneExtensions.CloneDeep(cl10);
-                case SanteDB.Core.Model.Security.SecurityEntity cl5:
-                    return DeepCloneExtensions.CloneDeep(cl5);
-                case SanteDB.Core.Model.Security.SecurityPolicy cl6:
-                    return DeepCloneExtensions.CloneDeep(cl6);
-                case SanteDB.Core.Model.Security.SecurityPolicyInstance cl7:
-                    return DeepCloneExtensions.CloneDeep(cl7);
-                case SanteDB.Core.Model.Security.SecurityProvenance cl8:
-                    return DeepCloneExtensions.CloneDeep(cl8);
-                case SanteDB.Core.Model.Roles.Patient cl11:
-                    return DeepCloneExtensions.CloneDeep(cl11);
-                case SanteDB.Core.Model.Roles.Provider cl12:
-                    return DeepCloneExtensions.CloneDeep(cl12);
-                case SanteDB.Core.Model.Patch.PatchCollection cl13:
-                    return DeepCloneExtensions.CloneDeep(cl13);
-                case SanteDB.Core.Model.Patch.Patch cl14:
-                    return DeepCloneExtensions.CloneDeep(cl14);
-                case SanteDB.Core.Model.Entities.ApplicationEntity cl15:
-                    return DeepCloneExtensions.CloneDeep(cl15);
-                case SanteDB.Core.Model.Entities.Container cl16:
-                    return DeepCloneExtensions.CloneDeep(cl16);
-                case SanteDB.Core.Model.Entities.DeviceEntity cl17:
-                    return DeepCloneExtensions.CloneDeep(cl17);
-                case SanteDB.Core.Model.Entities.ManufacturedMaterial cl25:
-                    return DeepCloneExtensions.CloneDeep(cl25);
-                case SanteDB.Core.Model.Entities.Material cl26:
-                    return DeepCloneExtensions.CloneDeep(cl26);
-                case SanteDB.Core.Model.Entities.NonPersonLivingSubject cl27:
-                    return DeepCloneExtensions.CloneDeep(cl27);
-                case SanteDB.Core.Model.Entities.Organization cl28:
-                    return DeepCloneExtensions.CloneDeep(cl28);
-                case SanteDB.Core.Model.Entities.UserEntity cl33:
-                    return DeepCloneExtensions.CloneDeep(cl33);
-                case SanteDB.Core.Model.Entities.Person cl29:
-                    return DeepCloneExtensions.CloneDeep(cl29);
-                case SanteDB.Core.Model.Entities.PersonLanguageCommunication cl30:
-                    return DeepCloneExtensions.CloneDeep(cl30);
-                case SanteDB.Core.Model.Entities.Place cl31:
-                    return DeepCloneExtensions.CloneDeep(cl31);
-                case SanteDB.Core.Model.Entities.Entity cl18:
-                    return DeepCloneExtensions.CloneDeep(cl18);
-                case SanteDB.Core.Model.Entities.EntityAddress cl19:
-                    return DeepCloneExtensions.CloneDeep(cl19);
-                case SanteDB.Core.Model.Entities.EntityAddressComponent cl20:
-                    return DeepCloneExtensions.CloneDeep(cl20);
-                case SanteDB.Core.Model.Entities.EntityName cl21:
-                    return DeepCloneExtensions.CloneDeep(cl21);
-                case SanteDB.Core.Model.Entities.EntityNameComponent cl22:
-                    return DeepCloneExtensions.CloneDeep(cl22);
-                case SanteDB.Core.Model.Entities.EntityRelationship cl23:
-                    return DeepCloneExtensions.CloneDeep(cl23);
-                case SanteDB.Core.Model.Entities.EntityTelecomAddress cl24:
-                    return DeepCloneExtensions.CloneDeep(cl24);
-                case SanteDB.Core.Model.Entities.PlaceService cl32:
-                    return DeepCloneExtensions.CloneDeep(cl32);
-                case SanteDB.Core.Model.DataTypes.AssigningAuthority cl34:
-                    return DeepCloneExtensions.CloneDeep(cl34);
-                case SanteDB.Core.Model.DataTypes.CodeSystem cl35:
-                    return DeepCloneExtensions.CloneDeep(cl35);
-                case SanteDB.Core.Model.DataTypes.Concept cl36:
-                    return DeepCloneExtensions.CloneDeep(cl36);
-                case SanteDB.Core.Model.DataTypes.ConceptClass cl37:
-                    return DeepCloneExtensions.CloneDeep(cl37);
-                case SanteDB.Core.Model.DataTypes.ConceptName cl38:
-                    return DeepCloneExtensions.CloneDeep(cl38);
-                case SanteDB.Core.Model.DataTypes.ConceptReferenceTerm cl39:
-                    return DeepCloneExtensions.CloneDeep(cl39);
-                case SanteDB.Core.Model.DataTypes.ConceptRelationship cl40:
-                    return DeepCloneExtensions.CloneDeep(cl40);
-                case SanteDB.Core.Model.DataTypes.ConceptRelationshipType cl41:
-                    return DeepCloneExtensions.CloneDeep(cl41);
-                case SanteDB.Core.Model.DataTypes.ConceptSet cl42:
-                    return DeepCloneExtensions.CloneDeep(cl42);
-                case SanteDB.Core.Model.DataTypes.ConceptSetComposition cl43:
-                    return DeepCloneExtensions.CloneDeep(cl43);
-                case SanteDB.Core.Model.DataTypes.ConceptExtension cl44:
-                    return DeepCloneExtensions.CloneDeep(cl44);
-                case SanteDB.Core.Model.DataTypes.EntityExtension cl45:
-                    return DeepCloneExtensions.CloneDeep(cl45);
-                case SanteDB.Core.Model.DataTypes.ActExtension cl46:
-                    return DeepCloneExtensions.CloneDeep(cl46);
-                case SanteDB.Core.Model.DataTypes.ExtensionType cl47:
-                    return DeepCloneExtensions.CloneDeep(cl47);
-                case SanteDB.Core.Model.DataTypes.GeoTag cl48:
-                    return DeepCloneExtensions.CloneDeep(cl48);
-                case SanteDB.Core.Model.DataTypes.IdentifiedDataReference cl49:
-                    return DeepCloneExtensions.CloneDeep(cl49);
-                case SanteDB.Core.Model.DataTypes.EntityIdentifier cl50:
-                    return DeepCloneExtensions.CloneDeep(cl50);
-                case SanteDB.Core.Model.DataTypes.ActIdentifier cl51:
-                    return DeepCloneExtensions.CloneDeep(cl51);
-                case SanteDB.Core.Model.DataTypes.IdentityDomain cl52:
-                    return DeepCloneExtensions.CloneDeep(cl52);
-                case SanteDB.Core.Model.DataTypes.EntityNote cl53:
-                    return DeepCloneExtensions.CloneDeep(cl53);
-                case SanteDB.Core.Model.DataTypes.ActNote cl54:
-                    return DeepCloneExtensions.CloneDeep(cl54);
-                case SanteDB.Core.Model.DataTypes.ReferenceTerm cl55:
-                    return DeepCloneExtensions.CloneDeep(cl55);
-                case SanteDB.Core.Model.DataTypes.ReferenceTermName cl56:
-                    return DeepCloneExtensions.CloneDeep(cl56);
-                case SanteDB.Core.Model.DataTypes.RelationshipValidationRule cl57:
-                    return DeepCloneExtensions.CloneDeep(cl57);
-                case SanteDB.Core.Model.DataTypes.ConceptTag cl58:
-                    return DeepCloneExtensions.CloneDeep(cl58);
-                case SanteDB.Core.Model.DataTypes.EntityTag cl59:
-                    return DeepCloneExtensions.CloneDeep(cl59);
-                case SanteDB.Core.Model.DataTypes.ActTag cl60:
-                    return DeepCloneExtensions.CloneDeep(cl60);
-                case SanteDB.Core.Model.DataTypes.TemplateDefinition cl61:
-                    return DeepCloneExtensions.CloneDeep(cl61);
-                case SanteDB.Core.Model.Collection.Bundle cl62:
-                    return DeepCloneExtensions.CloneDeep(cl62);
-                case SanteDB.Core.Model.Audit.AuditEventData cl63:
-                    return DeepCloneExtensions.CloneDeep(cl63);
-                case SanteDB.Core.Model.Acts.Account cl64:
-                    return DeepCloneExtensions.CloneDeep(cl64);
-                case SanteDB.Core.Model.Acts.CarePlan cl70:
-                    return DeepCloneExtensions.CloneDeep(cl70);
-                case SanteDB.Core.Model.Acts.ControlAct cl71:
-                    return DeepCloneExtensions.CloneDeep(cl71);
-                case SanteDB.Core.Model.Acts.FinancialContract cl72:
-                    return DeepCloneExtensions.CloneDeep(cl72);
-                case SanteDB.Core.Model.Acts.FinancialTransaction cl73:
-                    return DeepCloneExtensions.CloneDeep(cl73);
-                case SanteDB.Core.Model.Acts.InvoiceElement cl74:
-                    return DeepCloneExtensions.CloneDeep(cl74);
-                case SanteDB.Core.Model.Acts.Narrative cl75:
-                    return DeepCloneExtensions.CloneDeep(cl75);
-                case SanteDB.Core.Model.Acts.QuantityObservation cl77:
-                    return DeepCloneExtensions.CloneDeep(cl77);
-                case SanteDB.Core.Model.Acts.TextObservation cl78:
-                    return DeepCloneExtensions.CloneDeep(cl78);
-                case SanteDB.Core.Model.Acts.CodedObservation cl79:
-                    return DeepCloneExtensions.CloneDeep(cl79);
-                case SanteDB.Core.Model.Acts.Observation cl76:
-                    return DeepCloneExtensions.CloneDeep(cl76);
-                case SanteDB.Core.Model.Acts.PatientEncounter cl80:
-                    return DeepCloneExtensions.CloneDeep(cl80);
-                case SanteDB.Core.Model.Acts.PatientEncounterArrangement cl81:
-                    return DeepCloneExtensions.CloneDeep(cl81);
-                case SanteDB.Core.Model.Acts.Procedure cl82:
-                    return DeepCloneExtensions.CloneDeep(cl82);
-                case SanteDB.Core.Model.Acts.SubstanceAdministration cl84:
-                    return DeepCloneExtensions.CloneDeep(cl84);
-                case SanteDB.Core.Model.Acts.Act cl65:
-                    return DeepCloneExtensions.CloneDeep(cl65);
-                case SanteDB.Core.Model.Acts.ActParticipation cl66:
-                    return DeepCloneExtensions.CloneDeep(cl66);
-                case SanteDB.Core.Model.Acts.ActProtocol cl67:
-                    return DeepCloneExtensions.CloneDeep(cl67);
-                case SanteDB.Core.Model.Acts.ActRelationship cl68:
-                    return DeepCloneExtensions.CloneDeep(cl68);
-                case SanteDB.Core.Model.Acts.CarePathwayDefinition cl69:
-                    return DeepCloneExtensions.CloneDeep(cl69);
-                case SanteDB.Core.Model.Acts.Protocol cl83:
-                    return DeepCloneExtensions.CloneDeep(cl83);
-            }
-            return clonee;
         }
     }
 }

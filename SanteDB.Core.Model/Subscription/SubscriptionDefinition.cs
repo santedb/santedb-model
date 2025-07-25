@@ -19,6 +19,7 @@
  * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections.Generic;
@@ -107,5 +108,8 @@ namespace SanteDB.Core.Model.Subscription
         {
             return m_xsz.Deserialize(ms) as SubscriptionDefinition;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

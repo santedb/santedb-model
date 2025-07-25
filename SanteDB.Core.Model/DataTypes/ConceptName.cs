@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Threading;
 using System.Xml.Serialization;
@@ -79,5 +80,8 @@ namespace SanteDB.Core.Model.DataTypes
         {
             return $"{this.Name} [{this.Language}]";
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

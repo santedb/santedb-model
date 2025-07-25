@@ -106,6 +106,9 @@ namespace SanteDB.Core.Model.DataTypes
         public EntityNote(Guid authorKey, String text) : base(authorKey, text)
         {
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -127,5 +130,8 @@ namespace SanteDB.Core.Model.DataTypes
         public ActNote(Guid authorKey, String text) : base(authorKey, text)
         {
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

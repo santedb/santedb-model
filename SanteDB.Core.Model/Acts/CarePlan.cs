@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Roles;
 using System;
 using System.Collections.Generic;
@@ -113,5 +114,7 @@ namespace SanteDB.Core.Model.Acts
             return new CarePlan(p, new Act[0]) { MoodConceptKey = ActMoodKeys.Request };
         }
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Interfaces;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.EntityLoader;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -138,6 +139,8 @@ namespace SanteDB.Core.Model.DataTypes
             }
         }
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
 
     }
 }

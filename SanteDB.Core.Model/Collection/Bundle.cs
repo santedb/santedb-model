@@ -506,5 +506,8 @@ namespace SanteDB.Core.Model.Collection
                 itm.AddAnnotation(annotation);
             }
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

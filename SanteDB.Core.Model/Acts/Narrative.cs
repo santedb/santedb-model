@@ -21,6 +21,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.IO;
 using System.Text;
@@ -173,5 +174,8 @@ namespace SanteDB.Core.Model.Acts
         {
             this.Text = Encoding.UTF8.GetBytes(text);
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }
