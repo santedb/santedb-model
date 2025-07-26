@@ -1823,6 +1823,12 @@ namespace SanteDB
         }
 
 
+
+        /// <summary>
+        /// Copy delay load indicators from another object (used by the deep loader)
+        /// </summary>
+        internal static void CopyDelayLoadIndicators(this IdentifiedData me, IdentifiedData other) => me.AddAnnotation(other.GetAnnotations<PropertyLoadCheck>());
+
         /// <summary>Gets the last modification date of the object</summary>
         public static DateTimeOffset LastModified(this IdentifiedData me) => me.ModifiedOn;
 

@@ -18,6 +18,7 @@
  * User: fyfej
  * Date: 2023-6-21
  */
+using SanteDB.Core.Model;
 using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
@@ -25,6 +26,7 @@ using SanteDB.Core.Model.EntityLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace SanteDB
 {
