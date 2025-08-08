@@ -213,6 +213,23 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
 
+        /// <inheritdoc/>
+        public ITag AddTagUnchecked(String tagKey, String tagValue)
+        {
+            this.Tags = this.Tags ?? new List<ConceptTag>();
+            var tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            if (tag == null)
+            {
+                tag = new ConceptTag(tagKey, tagValue);
+                this.Tags.Add(tag);
+            }
+            else
+            {
+                tag.Value = tagValue;
+            }
+            return tag;
+        }
+
         /// <summary>
         /// Add a tag to this act
         /// </summary>
@@ -289,5 +306,7 @@ namespace SanteDB.Core.Model.DataTypes
             return tag != null;
         }
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

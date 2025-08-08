@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -245,5 +246,8 @@ namespace SanteDB.Core.Model.Entities
                 this.NationalityKey == other.NationalityKey &&
                 this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) != false;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

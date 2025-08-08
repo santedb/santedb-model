@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Xml.Serialization;
 
@@ -46,5 +47,7 @@ namespace SanteDB.Core.Model.DataTypes
         [XmlElement("mnemonic"), JsonProperty("mnemonic")]
         public String Mnemonic { get; set; }
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

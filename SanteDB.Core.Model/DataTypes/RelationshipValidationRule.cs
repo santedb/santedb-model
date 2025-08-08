@@ -123,5 +123,8 @@ namespace SanteDB.Core.Model.DataTypes
 
             return $"{SourceClassKey?.ToString() ?? "*"} ==[{RelationshipTypeKey}]==> {TargetClassKey?.ToString() ?? "*"}";
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

@@ -38,12 +38,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -227,11 +229,11 @@ namespace SanteDB
         /// <summary>
         /// For each item in an enumerable
         /// </summary>
-        public static void ForEach<T>(IEnumerable<T> me, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
-            foreach (var itm in me)
+            foreach (var item in items)
             {
-                action(itm);
+                action(item);
             }
         }
 
@@ -1821,7 +1823,94 @@ namespace SanteDB
         }
 
 
+
+        /// <summary>
+        /// Copy delay load indicators from another object (used by the deep loader)
+        /// </summary>
+        internal static void CopyDelayLoadIndicators(this IdentifiedData me, IdentifiedData other) => me.AddAnnotation(other.GetAnnotations<PropertyLoadCheck>());
+
         /// <summary>Gets the last modification date of the object</summary>
         public static DateTimeOffset LastModified(this IdentifiedData me) => me.ModifiedOn;
+
+
+        /// <summary>
+        /// Searches the expression tree <paramref name="expression"/> to see if there is a property reference to <paramref name="propertyName"/>
+        /// </summary>
+        /// <param name="expression">The expression to be parsed</param>
+        /// <param name="propertyName">The name of the property to check</param>
+        /// <returns>The property reference</returns>
+        public static bool ContainsPropertyReference(this Expression expression, string propertyName)
+        {
+            // Non-recursive algorithm - faster performance 
+            Stack<Expression> processStack = new Stack<Expression>();
+            processStack.Push(expression);
+
+            while (processStack.Count > 0)
+            {
+                var currentExpression = processStack.Pop();
+                switch (currentExpression)
+                {
+                    case LambdaExpression lambda:
+                        processStack.Push(lambda.Body);
+                        break;
+                    case BinaryExpression binaryExpression:
+                        processStack.Push(binaryExpression.Left);
+                        processStack.Push(binaryExpression.Right);
+                        break;
+                    case MemberExpression memberExpression:
+                        if(memberExpression.Member.Name == propertyName && memberExpression.Member is PropertyInfo)
+                        {
+                            return true;
+                        }
+                        processStack.Push(memberExpression.Expression);
+                        break;
+                    case MethodCallExpression methodCallExpression:
+                        processStack.Push(methodCallExpression.Object);
+                        foreach(var arg in methodCallExpression.Arguments)
+                        {
+                            processStack.Push(arg);
+                        };
+                        break;
+                    case InvocationExpression invocationExpression:
+                        processStack.Push(invocationExpression.Expression);
+                        foreach (var arg in invocationExpression.Arguments)
+                        {
+                            processStack.Push(arg);
+                        }
+                        break;
+                    case UnaryExpression unaryExpression:
+                        processStack.Push(unaryExpression.Operand);
+                        break;
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Read a pascal string form the stream
+        /// </summary>
+        /// <remarks>https://stackoverflow.com/questions/25068903/what-are-pascal-strings</remarks>
+        public static String ReadPascalString(this Stream str)
+        {
+            var len = str.ReadByte();
+            if(len <= 0)
+            {
+                return String.Empty;
+            }
+            var strBuf = new Byte[len];
+            str.Read(strBuf, 0, strBuf.Length);
+            return Encoding.UTF8.GetString(strBuf);
+        }
+
+        /// <summary>
+        /// Write <paramref name="stringData"/> to <paramref name="str"/>
+        /// </summary>
+        public static void WritePascalString(this Stream str, String stringData)
+        {
+            var dataBuf = Encoding.UTF8.GetBytes(stringData);
+            str.WriteByte((byte)dataBuf.Length);
+            str.Write(dataBuf, 0, dataBuf.Length);
+        }
     }
 }

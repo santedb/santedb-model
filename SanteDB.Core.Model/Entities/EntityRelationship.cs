@@ -287,5 +287,8 @@ namespace SanteDB.Core.Model.Entities
         /// Association type
         /// </summary>
         Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

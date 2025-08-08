@@ -19,6 +19,7 @@
  * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Xml.Serialization;
 
@@ -38,5 +39,8 @@ namespace SanteDB.Core.Model.Security
         [XmlElement("text"), JsonProperty("text")]
         public String ChallengeText { get; set; }
 
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

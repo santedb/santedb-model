@@ -144,6 +144,9 @@ namespace SanteDB.Core.Model.DataTypes
             this.TagKey = key;
             this.Value = value;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
 
@@ -169,6 +172,9 @@ namespace SanteDB.Core.Model.DataTypes
             this.TagKey = key;
             this.Value = value;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -193,5 +199,9 @@ namespace SanteDB.Core.Model.DataTypes
             this.TagKey = key;
             this.Value = value;
         }
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

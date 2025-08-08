@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -81,5 +82,8 @@ namespace SanteDB.Core.Model.DataTypes
         [SerializationReference(nameof(RelationshipTypeKey))]
         public ConceptRelationshipType RelationshipType { get; set; }
 
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

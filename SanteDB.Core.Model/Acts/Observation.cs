@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -117,6 +118,9 @@ namespace SanteDB.Core.Model.Acts
         /// Should serialize value type?
         /// </summary>
         public bool ShouldSerializeValueType() => false;
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -175,6 +179,9 @@ namespace SanteDB.Core.Model.Acts
 
             return base.SemanticEquals(obj) && this.Value == other.Value && this.UnitOfMeasureKey == other.UnitOfMeasureKey;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -221,6 +228,9 @@ namespace SanteDB.Core.Model.Acts
 
             return base.SemanticEquals(obj) && this.Value == other.Value;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -274,5 +284,9 @@ namespace SanteDB.Core.Model.Acts
 
             return base.SemanticEquals(obj) && other.ValueKey == this.ValueKey;
         }
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

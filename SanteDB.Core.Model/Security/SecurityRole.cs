@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -80,5 +81,8 @@ namespace SanteDB.Core.Model.Security
         /// Get the name of the object as a display string
         /// </summary>
         public override string ToDisplay() => $"{this.Name} [{this.Key}]";
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

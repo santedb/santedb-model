@@ -296,5 +296,8 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.AssociationTypeKey { get => this.ParticipationRoleKey; set => this.ParticipationRoleKey = value; }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

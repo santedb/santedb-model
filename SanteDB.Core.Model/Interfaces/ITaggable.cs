@@ -39,6 +39,14 @@ namespace SanteDB.Core.Model.Interfaces
         ITag AddTag(String tagKey, String tagValue);
 
         /// <summary>
+        /// Adds a tag to the tag collection without first attempting to load tags
+        /// </summary>
+        /// <param name="tagKey">The tag key</param>
+        /// <param name="tagValue">The tag value</param>
+        /// <returns>The tag added</returns>
+        ITag AddTagUnchecked(String tagKey, String tagValue);
+
+        /// <summary>
         /// Get the tag
         /// </summary>
         string GetTag(string tagKey);

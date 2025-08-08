@@ -115,5 +115,8 @@ namespace SanteDB.Core.Model.DataTypes
             get => this.TargetConcept;
             set => this.TargetConcept = (Concept)value;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

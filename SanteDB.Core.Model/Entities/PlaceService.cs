@@ -81,5 +81,8 @@ namespace SanteDB.Core.Model.Entities
                 this.ServiceConceptKey == other.ServiceConceptKey &&
                 this.ServiceSchedule == other.ServiceSchedule;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

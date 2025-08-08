@@ -40,7 +40,7 @@ namespace SanteDB.Core.Model
     /// at a field level.</para></remarks>
     [XmlType(nameof(NonVersionedEntityData), Namespace = "http://santedb.org/model")]
     [JsonObject(Id = nameof(NonVersionedEntityData))]
-    public class NonVersionedEntityData : BaseEntityData, INonVersionedData
+    public abstract class NonVersionedEntityData : BaseEntityData, INonVersionedData
     {
 
         /// <summary>

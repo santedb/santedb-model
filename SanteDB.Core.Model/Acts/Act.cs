@@ -795,6 +795,23 @@ namespace SanteDB.Core.Model.Acts
             }
         }
 
+        /// <inheritdoc/>
+        public ITag AddTagUnchecked(String tagKey, String tagValue)
+        {
+            this.Tags = this.Tags ?? new List<ActTag>();
+            var tag = this.Tags.FirstOrDefault(o => o.TagKey == tagKey);
+            if(tag == null)
+            {
+                tag = new ActTag(tagKey, tagValue);
+                this.Tags.Add(tag);
+            }
+            else
+            {
+                tag.Value = tagValue;
+            }
+            return tag;
+        }
+
         /// <summary>
         /// Add a tag to this act
         /// </summary>
@@ -898,5 +915,7 @@ namespace SanteDB.Core.Model.Acts
         /// <inheritdoc/>
         IEnumerable<SecurityPolicyInstance> IHasPolicies.Policies => this.Policies;
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

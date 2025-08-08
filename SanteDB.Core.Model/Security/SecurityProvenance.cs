@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Globalization;
 using System.Xml.Serialization;
@@ -137,5 +138,8 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(ApplicationKey))]
         public SecurityApplication Application { get; set; }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

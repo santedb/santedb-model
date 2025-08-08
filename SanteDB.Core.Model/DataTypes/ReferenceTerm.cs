@@ -21,6 +21,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -91,5 +92,8 @@ namespace SanteDB.Core.Model.DataTypes
             language = language ?? System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
             return this.LoadCollection(o => o.DisplayNames).FirstOrDefault(o => language.Equals(o.Language, StringComparison.OrdinalIgnoreCase))?.Name;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

@@ -237,5 +237,8 @@ namespace SanteDB.Core.Model.Entities
         {
             return this.ToDisplay();
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

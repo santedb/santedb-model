@@ -21,6 +21,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -76,5 +77,8 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(TemplateKey))]
         public TemplateDefinition Template { get; set; }
+    
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

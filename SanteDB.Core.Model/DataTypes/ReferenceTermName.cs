@@ -105,5 +105,8 @@ namespace SanteDB.Core.Model.DataTypes
         /// Source entity
         /// </summary>
         object ISimpleAssociation.SourceEntity { get => null; set { } }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

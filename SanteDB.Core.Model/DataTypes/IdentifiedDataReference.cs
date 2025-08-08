@@ -19,6 +19,7 @@
  * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Serialization;
 using System;
 using System.Xml.Serialization;
@@ -85,5 +86,8 @@ namespace SanteDB.Core.Model.DataTypes
             get => this.ReferencedTypeXml == null ? null :  m_serializationBinder.BindToType(null, this.ReferencedTypeXml);
             set => this.ReferencedTypeXml = value?.GetSerializationName();
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

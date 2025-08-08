@@ -21,6 +21,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -89,5 +90,8 @@ namespace SanteDB.Core.Model.Entities
         {
             return this.Value;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

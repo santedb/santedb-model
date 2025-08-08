@@ -261,5 +261,8 @@ namespace SanteDB.Core.Model.DataTypes
         {
             return $"{this.DomainName},{this.Oid}";
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }
