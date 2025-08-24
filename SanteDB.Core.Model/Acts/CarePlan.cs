@@ -102,7 +102,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public CarePlan(Patient p, IEnumerable<Act> acts) : this()
         {
-            this.Relationships = new List<ActRelationship>(acts.Select(o => new ActRelationship(ActRelationshipTypeKeys.HasComponent, o)));
+            this.Relationships = new List<ActRelationship>(acts.Select(o => new ActRelationship(ActRelationshipTypeKeys.HasComponent, o) {  ClassificationKey = RelationshipClassKeys.ContainedObjectLink }));
             this.Participations = new List<ActParticipation>() { new ActParticipation(ActParticipationKeys.RecordTarget, p) };
         }
 
