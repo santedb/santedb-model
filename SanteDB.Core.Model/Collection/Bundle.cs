@@ -224,6 +224,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Generic resource entity
         /// </summary>
+        [JsonIgnore, XmlIgnore]
         IEnumerable<IIdentifiedResource> IResourceCollection.Item => this.Item;
 
         /// <summary>
