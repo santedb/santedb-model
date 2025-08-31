@@ -5768,6 +5768,160 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        internal static SanteDB.Core.Model.Acts.DateObservation CloneDeep(this SanteDB.Core.Model.Acts.DateObservation clonee) {
+            if ((clonee == null)) {
+                return null;
+            }
+            SanteDB.Core.Model.Acts.DateObservation _retVal = new SanteDB.Core.Model.Acts.DateObservation();
+            int _iterator;
+            // Clone ValueType
+            _retVal.ValueType = clonee.ValueType;
+            // Clone ValueXml
+            _retVal.ValueXml = clonee.ValueXml;
+            // Clone Value
+            _retVal.Value = clonee.Value;
+            // Clone InterpretationConceptKey
+            _retVal.InterpretationConceptKey = clonee.InterpretationConceptKey;
+            // Clone InterpretationConcept
+            if ((clonee.InterpretationConcept != null)) {
+                _retVal.InterpretationConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.InterpretationConcept.DeepCopy()));
+            }
+            // Clone IsNegated
+            _retVal.IsNegated = clonee.IsNegated;
+            // Clone ActTime
+            _retVal.ActTime = clonee.ActTime;
+            // Clone TemplateKey
+            _retVal.TemplateKey = clonee.TemplateKey;
+            // Clone Template
+            if ((clonee.Template != null)) {
+                _retVal.Template = ((SanteDB.Core.Model.DataTypes.TemplateDefinition)(clonee.Template.DeepCopy()));
+            }
+            // Clone StartTime
+            _retVal.StartTime = clonee.StartTime;
+            // Clone StopTime
+            _retVal.StopTime = clonee.StopTime;
+            // Clone ClassConceptKey
+            _retVal.ClassConceptKey = clonee.ClassConceptKey;
+            // Clone MoodConceptKey
+            _retVal.MoodConceptKey = clonee.MoodConceptKey;
+            // Clone ReasonConceptKey
+            _retVal.ReasonConceptKey = clonee.ReasonConceptKey;
+            // Clone ObsoletionReasonKey
+            _retVal.ObsoletionReasonKey = clonee.ObsoletionReasonKey;
+            // Clone StatusConceptKey
+            _retVal.StatusConceptKey = clonee.StatusConceptKey;
+            // Clone TypeConceptKey
+            _retVal.TypeConceptKey = clonee.TypeConceptKey;
+            // Clone ClassConcept
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
+            }
+            // Clone MoodConcept
+            if ((clonee.MoodConcept != null)) {
+                _retVal.MoodConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MoodConcept.DeepCopy()));
+            }
+            // Clone ReasonConcept
+            if ((clonee.ReasonConcept != null)) {
+                _retVal.ReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ReasonConcept.DeepCopy()));
+            }
+            // Clone ObsoletionReasonConcept
+            if ((clonee.ObsoletionReasonConcept != null)) {
+                _retVal.ObsoletionReasonConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ObsoletionReasonConcept.DeepCopy()));
+            }
+            // Clone StatusConcept
+            if ((clonee.StatusConcept != null)) {
+                _retVal.StatusConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.StatusConcept.DeepCopy()));
+            }
+            // Clone TypeConcept
+            if ((clonee.TypeConcept != null)) {
+                _retVal.TypeConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.TypeConcept.DeepCopy()));
+            }
+            // Clone Identifiers
+            if ((clonee.Identifiers != null)) {
+                _retVal.Identifiers = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActIdentifier>();
+                for (_iterator = 0; (_iterator < clonee.Identifiers.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Identifiers.Add(((SanteDB.Core.Model.DataTypes.ActIdentifier)(clonee.Identifiers[_iterator].DeepCopy())));
+                }
+            }
+            // Clone Relationships
+            if ((clonee.Relationships != null)) {
+                _retVal.Relationships = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActRelationship>();
+                for (_iterator = 0; (_iterator < clonee.Relationships.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Relationships.Add(((SanteDB.Core.Model.Acts.ActRelationship)(clonee.Relationships[_iterator].DeepCopy())));
+                }
+            }
+            // Clone Policies
+            if ((clonee.Policies != null)) {
+                _retVal.Policies = new System.Collections.Generic.List<SanteDB.Core.Model.Security.SecurityPolicyInstance>();
+                for (_iterator = 0; (_iterator < clonee.Policies.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Policies.Add(((SanteDB.Core.Model.Security.SecurityPolicyInstance)(clonee.Policies[_iterator].DeepCopy())));
+                }
+            }
+            // Clone Extensions
+            if ((clonee.Extensions != null)) {
+                _retVal.Extensions = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActExtension>();
+                for (_iterator = 0; (_iterator < clonee.Extensions.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Extensions.Add(((SanteDB.Core.Model.DataTypes.ActExtension)(clonee.Extensions[_iterator].DeepCopy())));
+                }
+            }
+            // Clone Notes
+            if ((clonee.Notes != null)) {
+                _retVal.Notes = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActNote>();
+                for (_iterator = 0; (_iterator < clonee.Notes.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Notes.Add(((SanteDB.Core.Model.DataTypes.ActNote)(clonee.Notes[_iterator].DeepCopy())));
+                }
+            }
+            // Clone Tags
+            if ((clonee.Tags != null)) {
+                _retVal.Tags = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ActTag>();
+                for (_iterator = 0; (_iterator < clonee.Tags.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Tags.Add(((SanteDB.Core.Model.DataTypes.ActTag)(clonee.Tags[_iterator].DeepCopy())));
+                }
+            }
+            // Clone Protocols
+            if ((clonee.Protocols != null)) {
+                _retVal.Protocols = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActProtocol>();
+                for (_iterator = 0; (_iterator < clonee.Protocols.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Protocols.Add(((SanteDB.Core.Model.Acts.ActProtocol)(clonee.Protocols[_iterator].DeepCopy())));
+                }
+            }
+            // Clone Participations
+            if ((clonee.Participations != null)) {
+                _retVal.Participations = new System.Collections.Generic.List<SanteDB.Core.Model.Acts.ActParticipation>();
+                for (_iterator = 0; (_iterator < clonee.Participations.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Participations.Add(((SanteDB.Core.Model.Acts.ActParticipation)(clonee.Participations[_iterator].DeepCopy())));
+                }
+            }
+            // Clone GeoTag
+            if ((clonee.GeoTag != null)) {
+                _retVal.GeoTag = ((SanteDB.Core.Model.DataTypes.GeoTag)(clonee.GeoTag.DeepCopy()));
+            }
+            // Clone GeoTagKey
+            _retVal.GeoTagKey = clonee.GeoTagKey;
+            // Clone PreviousVersionKey
+            _retVal.PreviousVersionKey = clonee.PreviousVersionKey;
+            // Clone IsHeadVersion
+            _retVal.IsHeadVersion = clonee.IsHeadVersion;
+            // Clone VersionKey
+            _retVal.VersionKey = clonee.VersionKey;
+            // Clone VersionSequence
+            _retVal.VersionSequence = clonee.VersionSequence;
+            // Clone CreationTime
+            _retVal.CreationTime = clonee.CreationTime;
+            // Clone ObsoletionTime
+            _retVal.ObsoletionTime = clonee.ObsoletionTime;
+            // Clone CreatedByKey
+            _retVal.CreatedByKey = clonee.CreatedByKey;
+            // Clone ObsoletedByKey
+            _retVal.ObsoletedByKey = clonee.ObsoletedByKey;
+            // Clone Key
+            _retVal.Key = clonee.Key;
+            // Clone BatchOperation
+            _retVal.BatchOperation = clonee.BatchOperation;
+            _retVal.CopyDelayLoadIndicators(clonee);
+            return _retVal;
+        }
+        
         internal static SanteDB.Core.Model.Acts.PatientEncounter CloneDeep(this SanteDB.Core.Model.Acts.PatientEncounter clonee) {
             if ((clonee == null)) {
                 return null;
