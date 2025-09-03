@@ -320,7 +320,7 @@ namespace SanteDB.Core.Model.Acts
         {
             get
             {
-                return this.Value?.ToString("yyyy-MM-dd");
+                return this.Value?.ToString("o");
             }
             set
             {
@@ -352,6 +352,12 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         [XmlIgnore, JsonIgnore]
         public DateTime? Value { get; set; }
+
+        /// <summary>
+        /// Precision of the data in <see cref="Value"/>
+        /// </summary>
+        [XmlElement("valuePrecision"), JsonProperty("valuePrecision")]
+        public DatePrecision? ValuePrecision { get; set; }
 
         /// <summary>
         /// Semantic equality function
