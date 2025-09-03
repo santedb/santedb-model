@@ -85,6 +85,12 @@ namespace SanteDB.Core.Model.DataTypes
         public List<ReferenceTermName> DisplayNames { get; set; }
 
         /// <summary>
+        /// Gets or sets the concepts related to this data
+        /// </summary>
+        [XmlIgnore, JsonIgnore, QueryParameter("concept"), Browsable(false)]
+        public List<ConceptReferenceTerm> Concepts { get; set; }
+
+        /// <summary>
         /// Get display name for the reference term
         /// </summary>
         public string GetDisplayName(String language = null)

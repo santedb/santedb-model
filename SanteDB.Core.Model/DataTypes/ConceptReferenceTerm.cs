@@ -33,7 +33,7 @@ namespace SanteDB.Core.Model.DataTypes
     [Classifier(nameof(ReferenceTerm))]
     [XmlType(nameof(ConceptReferenceTerm), Namespace = "http://santedb.org/model"), JsonObject(nameof(ConceptReferenceTerm))]
     [XmlRoot(nameof(ConceptReferenceTerm), Namespace = "http://santedb.org/model")]
-    public class ConceptReferenceTerm : VersionedAssociation<Concept>
+    public class ConceptReferenceTerm : VersionedAssociation<Concept>, ITargetedAssociation
     {
 
         /// <summary>
@@ -82,8 +82,34 @@ namespace SanteDB.Core.Model.DataTypes
         [SerializationReference(nameof(RelationshipTypeKey))]
         public ConceptRelationshipType RelationshipType { get; set; }
 
+        /// <inheritdoc/>
+        Guid? ITargetedAssociation.TargetEntityKey
+        {
+            get => this.ReferenceTermKey;
+            set => this.ReferenceTermKey = value;
+        }
+
+        /// <inheritdoc/>
+        Guid? ITargetedAssociation.ClassificationKey { get => null; set { } } 
+
+        /// <inheritdoc/>
+        Guid? ITargetedAssociation.AssociationTypeKey { 
+            get => this.RelationshipTypeKey; 
+            set => this.RelationshipTypeKey = value; 
+        }
+        
+        /// <inheritdoc/>
+        object ITargetedAssociation.TargetEntity 
+        { 
+            get => this.ReferenceTerm;
+            set { }
+        }
+
 
         /// <inheritdoc/>
         public override ICanDeepCopy DeepCopy() => this.CloneDeep();
+
+        /// <inheritdoc/>
+        public override string ToString() => $"{this.SourceEntityKey} =[{this.RelationshipTypeKey}]=> {this.ReferenceTermKey}";
     }
 }
