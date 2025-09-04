@@ -45,12 +45,16 @@ namespace SanteDB.Core.Model.DataTypes
         /// </summary>
         Update = 3,
         /// <summary>
-        /// Delete the object
+        /// Delete the object including any related objects
         /// </summary>
         Delete = 4,
         /// <summary>
         /// Ignore this object - it is for reference only
         /// </summary>
-        Ignore = 5
+        Ignore = 5,
+        /// <summary>
+        /// Delete data and preserve related data
+        /// </summary>
+        DeletePreserveContained = 6
     }
 }
