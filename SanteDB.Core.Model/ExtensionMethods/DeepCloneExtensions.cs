@@ -3512,6 +3512,13 @@ namespace SanteDB.Core.Model {
                     _retVal.DisplayNames.Add(((SanteDB.Core.Model.DataTypes.ReferenceTermName)(clonee.DisplayNames[_iterator].DeepCopy())));
                 }
             }
+            // Clone Concepts
+            if ((clonee.Concepts != null)) {
+                _retVal.Concepts = new System.Collections.Generic.List<SanteDB.Core.Model.DataTypes.ConceptReferenceTerm>();
+                for (_iterator = 0; (_iterator < clonee.Concepts.Count); _iterator = (_iterator + 1)) {
+                    _retVal.Concepts.Add(((SanteDB.Core.Model.DataTypes.ConceptReferenceTerm)(clonee.Concepts[_iterator].DeepCopy())));
+                }
+            }
             // Clone UpdatedTime
             _retVal.UpdatedTime = clonee.UpdatedTime;
             // Clone UpdatedByKey
@@ -5780,6 +5787,8 @@ namespace SanteDB.Core.Model {
             _retVal.ValueXml = clonee.ValueXml;
             // Clone Value
             _retVal.Value = clonee.Value;
+            // Clone ValuePrecision
+            _retVal.ValuePrecision = clonee.ValuePrecision;
             // Clone InterpretationConceptKey
             _retVal.InterpretationConceptKey = clonee.InterpretationConceptKey;
             // Clone InterpretationConcept
