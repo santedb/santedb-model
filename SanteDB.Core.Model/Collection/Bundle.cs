@@ -66,6 +66,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(ControlAct))]
     [XmlInclude(typeof(Account))]
     [XmlInclude(typeof(InvoiceElement))]
+    [XmlInclude(typeof(DateObservation))]
     [XmlInclude(typeof(FinancialContract))]
     [XmlInclude(typeof(FinancialTransaction))]
     [XmlInclude(typeof(ConceptReferenceTerm))]

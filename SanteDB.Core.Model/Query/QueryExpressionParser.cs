@@ -354,7 +354,7 @@ namespace SanteDB.Core.Model.Query
                                     var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadCollection), new Type[] { memberInfo.PropertyType.GetGenericArguments()[0] }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
                                     accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>)));
                                 }
-                                else if (typeof(IAnnotatedResource).IsAssignableFrom(memberInfo.PropertyType))
+                                else if (typeof(IAnnotatedResource).IsAssignableFrom(memberInfo.PropertyType) && !memberInfo.PropertyType.IsAbstract)
                                 {
                                     var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
                                     accessExpression = Expression.Coalesce(Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>))), Expression.New(memberInfo.PropertyType));
@@ -395,7 +395,7 @@ namespace SanteDB.Core.Model.Query
                             }
 
                             // Coalesce
-                            if (isCoalesced && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null)
+                            if (isCoalesced && accessExpression.Type.GetConstructor(Type.EmptyTypes) != null && !accessExpression.Type.IsAbstract)
                             {
                                 accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
                             }
@@ -447,7 +447,7 @@ namespace SanteDB.Core.Model.Query
                                                         var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>)));
                                                         guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
                                                     }
-                                                    else
+                                                    else if(!classifierProperty.PropertyType.IsAbstract)
                                                     {
                                                         guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
                                                     }
@@ -572,7 +572,7 @@ namespace SanteDB.Core.Model.Query
                                 }
                             }
                             // Is this an access expression?
-                            if (currentValue.Value == null && typeof(IdentifiedData).IsAssignableFrom(accessExpression.Type) && coalesceOutput)
+                            if (currentValue.Value == null && typeof(IdentifiedData).IsAssignableFrom(accessExpression.Type) && coalesceOutput && !accessExpression.Type.IsAbstract)
                             {
                                 accessExpression = Expression.Coalesce(accessExpression, Expression.New(accessExpression.Type));
                             }
