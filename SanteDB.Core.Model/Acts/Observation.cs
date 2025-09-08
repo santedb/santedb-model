@@ -327,11 +327,11 @@ namespace SanteDB.Core.Model.Acts
                 if (!String.IsNullOrEmpty(value))
                 {
                     // Try to parse ISO date
-                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    if (DateTimeOffset.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset dt))
                     {
                         this.Value = dt;
                     }
-                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
+                    else if (DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
                     {
                         this.Value = dt.Date;
                     }
@@ -351,7 +351,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the person's date of birth
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public DateTime? Value { get; set; }
+        public DateTimeOffset? Value { get; set; }
 
         /// <summary>
         /// Precision of the data in <see cref="Value"/>
