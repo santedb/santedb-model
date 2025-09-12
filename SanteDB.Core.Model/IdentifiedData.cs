@@ -23,10 +23,12 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
@@ -350,5 +352,19 @@ namespace SanteDB.Core.Model
             }
             return this;
         }
+
+#if DEBUG
+        /// <summary>
+        /// Represent the current data as a string
+        /// </summary>
+        /// <returns></returns>
+        public string ToXmlString()
+        {
+            using (var sw = new StringWriter())
+            {
+                XmlModelSerializerFactory.Current.CreateSerializer(this.GetType()).Serialize(sw, this);
+                return sw.ToString();
+            }
+#endif 
     }
 }

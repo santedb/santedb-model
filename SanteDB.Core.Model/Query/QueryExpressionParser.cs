@@ -68,7 +68,8 @@ namespace SanteDB.Core.Model.Query
         private class HdsiAccessPathInfo
         {
 
-            private HdsiAccessPathInfo(String groupingPath, String propertyName, String guardExpression, String castExpression, bool isCoalesced, String remainderExpression) {
+            private HdsiAccessPathInfo(String groupingPath, String propertyName, String guardExpression, String castExpression, bool isCoalesced, String remainderExpression)
+            {
                 this.GroupingPath = groupingPath;
                 this.PropertyName = propertyName;
                 this.GuardExpression = guardExpression;
@@ -154,12 +155,12 @@ namespace SanteDB.Core.Model.Query
             /// <returns>An enumerator of each of the HDSI expressions in the OR path</returns>
             public static IEnumerable<HdsiAccessPathInfo> ParseAllAccessPaths(String accessPath)
             {
-                if(String.IsNullOrEmpty(accessPath))
+                if (String.IsNullOrEmpty(accessPath))
                 {
                     yield return new HdsiAccessPathInfo(String.Empty, String.Empty, String.Empty, String.Empty, false, String.Empty);
                 }
                 var accessMatch = m_propertyExtractionRegex.Match(accessPath);
-                while(accessMatch.Success)
+                while (accessMatch.Success)
                 {
                     yield return Create(accessMatch);
                     accessMatch = m_propertyExtractionRegex.Match(accessMatch.Groups[7].Value);
@@ -191,18 +192,19 @@ namespace SanteDB.Core.Model.Query
             public override string ToString()
             {
                 StringBuilder sb = new StringBuilder(this.PropertyName);
-                if (!String.IsNullOrEmpty(this.GuardExpression)) {
+                if (!String.IsNullOrEmpty(this.GuardExpression))
+                {
                     sb.AppendFormat("[{0}]", this.GuardExpression);
                 }
-                if(!String.IsNullOrEmpty(this.CastExpression))
+                if (!String.IsNullOrEmpty(this.CastExpression))
                 {
                     sb.AppendFormat("@{0}", this.CastExpression);
                 }
-                if(this.IsCoalesced)
+                if (this.IsCoalesced)
                 {
                     sb.Append("?");
                 }
-                if(this.NextProperty != null)
+                if (this.NextProperty != null)
                 {
                     sb.AppendFormat(".{0}", this.NextProperty.ToString());
                 }
@@ -317,7 +319,7 @@ namespace SanteDB.Core.Model.Query
                         {
                             accessExpression = Expression.Call(null, controlMethod, accessExpression, Expression.Constant(hdsiPath.PropertyName), Expression.Constant(null));
                         }
-                        else if(!String.IsNullOrEmpty(hdsiPath.PropertyName) && !hdsiPath.IsControlParameter)
+                        else if (!String.IsNullOrEmpty(hdsiPath.PropertyName) && !hdsiPath.IsControlParameter)
                         {
                             // Attempt to get property cache
                             if (!m_memberCache.TryGetValue(accessExpression.Type, out var memberCache))
@@ -388,7 +390,9 @@ namespace SanteDB.Core.Model.Query
                                 if (!castType.IsClass) // Hard cast
                                 {
                                     accessExpression = Expression.Convert(accessExpression, castType);
-                                } else {
+                                }
+                                else
+                                {
                                     accessExpression = Expression.TypeAs(accessExpression, castType);
                                 }
                                 isCoalesced |= safeNullable;
@@ -412,9 +416,9 @@ namespace SanteDB.Core.Model.Query
                                 foreach (var expr in hdsiPath.GuardExpression.Split('|'))
                                 {
                                     Expression workingExpression = null;
-                                    if (expr.Contains('='))
+                                    if (expr.Contains('=') || expr.Contains(':'))
                                     {
-                                        var guardFilterExpression = expr.ParseQueryString();
+                                        var guardFilterExpression = expr.Replace(":", "=").ParseQueryString();
                                         workingExpression = BuildLinqExpression(itemType, guardFilterExpression, "guard", variables, safeNullable, alwaysCoalesce, forceLoad, lazyExpandVariables, relayControlVariables, coalesceOutput, collectionResolutionMethod, useParameter: guardParameter).Body;
 
                                     }
@@ -447,7 +451,7 @@ namespace SanteDB.Core.Model.Query
                                                         var loadExpression = Expression.Call(loadMethod, guardAccessor, Expression.Constant(classifierProperty.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>)));
                                                         guardAccessor = Expression.Coalesce(loadExpression, Expression.New(classifierProperty.PropertyType));
                                                     }
-                                                    else if(!classifierProperty.PropertyType.IsAbstract)
+                                                    else if (!classifierProperty.PropertyType.IsAbstract)
                                                     {
                                                         guardAccessor = Expression.Coalesce(Expression.MakeMemberAccess(guardAccessor, classifierProperty), Expression.New(classifierProperty.PropertyType));
                                                     }
@@ -846,7 +850,7 @@ namespace SanteDB.Core.Model.Query
                             {
                                 valueExpr = Expression.Convert(Expression.Constant(Guid.Parse(pValue)), typeof(Guid?));
                             }
-                            else if(operandType == typeof(Byte[]) && extendedFilter == null)
+                            else if (operandType == typeof(Byte[]) && extendedFilter == null)
                             {
                                 valueExpr = Expression.Convert(Expression.Constant(pValue.ParseBase64UrlEncode()), typeof(Byte[]));
                             }
@@ -997,7 +1001,7 @@ namespace SanteDB.Core.Model.Query
                 {
                     retVal = currentExpression;
                 }
-                else if(currentExpression != null)
+                else if (currentExpression != null)
                 {
                     retVal = Expression.MakeBinary(ExpressionType.AndAlso, retVal, currentExpression);
                 }
