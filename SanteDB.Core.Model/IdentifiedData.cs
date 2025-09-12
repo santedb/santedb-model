@@ -365,6 +365,7 @@ namespace SanteDB.Core.Model
                 XmlModelSerializerFactory.Current.CreateSerializer(this.GetType()).Serialize(sw, this);
                 return sw.ToString();
             }
+        }
 #endif 
     }
 }
