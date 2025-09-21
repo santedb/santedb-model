@@ -117,7 +117,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         /// <remarks>Classes which extend this should expose the last modified date (for example: CreationTime or UpdatedTime) </remarks>
         [XmlElement("modifiedOn"), JsonProperty("modifiedOn"), SerializationMetadata]
-        public abstract DateTimeOffset ModifiedOn { get; }
+        public virtual DateTimeOffset ModifiedOn => DateTimeOffset.Now;
 
         /// <summary>
         /// Never serialize modified on

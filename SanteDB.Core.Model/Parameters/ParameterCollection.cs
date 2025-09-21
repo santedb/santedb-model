@@ -31,7 +31,7 @@ namespace SanteDB.Core.Model.Parameters
     [XmlType(nameof(ParameterCollection), Namespace = "http://santedb.org/model")]
     [XmlRoot(nameof(ParameterCollection), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(ParameterCollection))]
-    public class ParameterCollection
+    public class ParameterCollection 
     {
         /// <summary>
         /// Parameter collection serialization ctor
