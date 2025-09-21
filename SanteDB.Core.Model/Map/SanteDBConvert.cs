@@ -152,8 +152,7 @@ namespace SanteDB.Core.Model.Map
             switch(date.Kind)
             {
                 case DateTimeKind.Utc:
-                case DateTimeKind.Local:
-                    return ((DateTimeOffset)date).ToUniversalTime().ToUnixTimeSeconds();
+                    return ((DateTimeOffset)date).ToUnixTimeSeconds();
                 default:
                     if(date.TimeOfDay.Hours == 0 && date.TimeOfDay.Minutes == 0 && date.TimeOfDay.Seconds == 0 && date.TimeOfDay.Milliseconds == 0)
                     {
@@ -172,7 +171,14 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static DateTime ParseDateTime(long date)
         {
-            return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime().DateTime;
+            if (date % 86_400 == 0) // Whole date 
+            {
+                return new DateTime(1970,01,01).AddSeconds(date).Date;
+            }
+            else
+            {
+                return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime().DateTime;
+            }
         }
 
         /// <summary>
