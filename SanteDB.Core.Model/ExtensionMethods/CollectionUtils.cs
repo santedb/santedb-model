@@ -48,7 +48,11 @@ namespace SanteDB.Core.Model
                         dependencies = act.Participations != null ? dependencies.Union(act.Participations.Select(p => p.PlayerEntityKey)).ToArray() : dependencies;
                         break;
                     case Concept concept:
-                        dependencies = concept.Relationships?.Select(r => r.TargetConceptKey == identifiedData.Key ? r.SourceEntityKey : r.TargetConceptKey).ToArray();
+                        dependencies = concept.Relationships?.Select(r => r.TargetConceptKey == identifiedData.Key ? r.SourceEntityKey : r.TargetConceptKey).ToArray() ?? new Guid?[0];
+                        dependencies = concept.ConceptSetsXml != null ? dependencies.Union(concept.ConceptSetsXml?.Select(o => (Guid?)o)).ToArray() : dependencies;
+                        break;
+                    case ConceptSet conceptSet:
+                        dependencies = conceptSet.ConceptsXml?.Select(o=>(Guid?)o).ToArray() ?? new Guid?[0];
                         break;
                     case ITargetedAssociation ta:
                         dependencies = new Guid?[] { ta.TargetEntityKey, ta.SourceEntityKey };

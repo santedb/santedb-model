@@ -149,7 +149,21 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static long ToDateTime(DateTime date)
         {
-            return ((DateTimeOffset)date).ToUniversalTime().ToUnixTimeSeconds();
+            switch(date.Kind)
+            {
+                case DateTimeKind.Utc:
+                    return ((DateTimeOffset)date).ToUnixTimeSeconds();
+                default:
+                    if(date.TimeOfDay.Hours == 0 && date.TimeOfDay.Minutes == 0 && date.TimeOfDay.Seconds == 0 && date.TimeOfDay.Milliseconds == 0)
+                    {
+                        // This is a date not a date/time so don't do translation
+                        return (long)date.Date.Subtract(new DateTime(1970, 01, 01)).TotalSeconds;
+                    }
+                    else
+                    {
+                       return ((DateTimeOffset)date).ToUniversalTime().ToUnixTimeSeconds();
+                    }
+            }
         }
 
         /// <summary>
@@ -157,7 +171,14 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static DateTime ParseDateTime(long date)
         {
-            return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime().DateTime;
+            if (date % 86_400 == 0) // Whole date 
+            {
+                return new DateTime(1970,01,01).AddSeconds(date).Date;
+            }
+            else
+            {
+                return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime().DateTime;
+            }
         }
 
         /// <summary>

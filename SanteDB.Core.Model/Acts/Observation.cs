@@ -25,6 +25,7 @@ using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -283,6 +284,93 @@ namespace SanteDB.Core.Model.Acts
             }
 
             return base.SemanticEquals(obj) && other.ValueKey == this.ValueKey;
+        }
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
+    }
+
+    /// <summary>
+    /// Represents an observation which contains a date value
+    /// </summary>
+    [XmlType("DateObservation", Namespace = "http://santedb.org/model"), JsonObject("DateObservation")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "DateObservation")]
+    public class DateObservation : Observation
+    {
+        /// <summary>
+        /// Value type
+        /// </summary>
+        [XmlElement("valueType"), JsonProperty("valueType")]
+        public override string ValueType
+        {
+            get
+            {
+                return "TS";
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the key of the uom concept
+        /// </summary>
+        [XmlElement("value"), JsonProperty("value")]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public String ValueXml
+        {
+            get
+            {
+                return this.Value?.ToString("o");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date
+                    if (DateTimeOffset.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset dt))
+                    {
+                        this.Value = dt;
+                    }
+                    else if (DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
+                    {
+                        this.Value = dt.Date;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Cannot parse {value} as a date");
+                    }
+                }
+                else
+                {
+                    this.Value = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the person's date of birth
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public DateTimeOffset? Value { get; set; }
+
+        /// <summary>
+        /// Precision of the data in <see cref="Value"/>
+        /// </summary>
+        [XmlElement("valuePrecision"), JsonProperty("valuePrecision")]
+        public DatePrecision? ValuePrecision { get; set; }
+
+        /// <summary>
+        /// Semantic equality function
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as DateObservation;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return base.SemanticEquals(obj) && other.Value == this.Value;
         }
 
 
