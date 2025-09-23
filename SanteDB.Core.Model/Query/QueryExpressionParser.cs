@@ -416,9 +416,9 @@ namespace SanteDB.Core.Model.Query
                                 foreach (var expr in hdsiPath.GuardExpression.Split('|'))
                                 {
                                     Expression workingExpression = null;
-                                    if (expr.Contains('='))
+                                    if (expr.Contains('=') || expr.Contains("%3d"))
                                     {
-                                        var guardFilterExpression = expr.ParseQueryString();
+                                        var guardFilterExpression = expr.Replace("%3d", "=").ParseQueryString();
                                         workingExpression = BuildLinqExpression(itemType, guardFilterExpression, "guard", variables, safeNullable, alwaysCoalesce, forceLoad, lazyExpandVariables, relayControlVariables, coalesceOutput, collectionResolutionMethod, useParameter: guardParameter).Body;
 
                                     }
