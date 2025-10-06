@@ -326,12 +326,12 @@ namespace SanteDB.Core.Model.Acts
             {
                 if (!String.IsNullOrEmpty(value))
                 {
-                    // Try to parse ISO date
-                    if (DateTimeOffset.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset dt))
+                    // Try to parse ISO date ONLY 
+                    if (DateTimeOffset.TryParseExact(value, new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset dt))
                     {
                         this.Value = dt;
                     }
-                    else if (DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
+                    else if (DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt)) // Local Time
                     {
                         this.Value = dt.Date;
                     }
