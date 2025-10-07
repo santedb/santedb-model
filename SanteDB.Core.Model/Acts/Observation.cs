@@ -314,7 +314,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Gets or sets the key of the uom concept
         /// </summary>
-        [XmlElement("value"), JsonProperty("value")]
+        [XmlElement("value"), JsonProperty("value"), SerializationMetadataAttribute]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public String ValueXml
         {
@@ -327,11 +327,11 @@ namespace SanteDB.Core.Model.Acts
                 if (!String.IsNullOrEmpty(value))
                 {
                     // Try to parse ISO date ONLY 
-                    if (DateTimeOffset.TryParseExact(value, new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset dt))
+                    if (DateTime.TryParseExact(value, new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
                     {
                         this.Value = dt;
                     }
-                    else if (DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt)) // Local Time
+                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt)) // Local Time
                     {
                         this.Value = dt.Date;
                     }
@@ -351,7 +351,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the person's date of birth
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        public DateTimeOffset? Value { get; set; }
+        public DateTime? Value { get; set; }
 
         /// <summary>
         /// Precision of the data in <see cref="Value"/>
