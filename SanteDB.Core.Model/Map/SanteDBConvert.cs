@@ -194,7 +194,14 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static DateTimeOffset ParseDateTimeOffset(long date)
         {
-            return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime();
+            if (date % 86_400 == 0) // Whole date 
+            {
+                return new DateTime(1970, 01, 01).AddSeconds(date).Date;
+            }
+            else
+            {
+                return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime();
+            }
         }
 
         /// <summary>

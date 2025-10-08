@@ -69,5 +69,22 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string BackEntry = "isBackEntry";
 
+        /// <summary>
+        /// Minimum value allowed for an observation
+        /// </summary>
+        public const string CdssMaxValue = "$cdss.maxValue";
+        /// <summary>
+        /// Minimum value allowed for an observation
+        /// </summary>
+        public const string CdssMinValue = "$cdss.minValue";
+        /// <summary>
+        /// Only allow on of the protocol emissions per visit
+        /// </summary>
+        public const string CdssOnePerVisit = "$cdss.onePerVisit";
+        /// <summary>
+        /// Overwrite a component
+        /// </summary>
+        public const string CdssOverwriteComponent = "$cdss.overwriteComponent";
+
     }
 }
