@@ -38,6 +38,7 @@ namespace SanteDB.Core.Model.Parameters
         /// </summary>
         public ParameterCollection()
         {
+            this.Parameters= new List<Parameter>();
         }
 
         /// <summary>
