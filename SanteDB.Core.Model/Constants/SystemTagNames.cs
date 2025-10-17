@@ -86,5 +86,9 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string CdssOverwriteComponent = "$cdss.overwriteComponent";
 
+        /// <summary>
+        /// CDSS order by tag
+        /// </summary>
+        public const string CdssOrderTag = "$cdss.order";
     }
 }
