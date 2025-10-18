@@ -83,6 +83,7 @@ namespace SanteDB.Core.Model.DataTypes
         public ConceptRelationshipType RelationshipType { get; set; }
 
         /// <inheritdoc/>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.TargetEntityKey
         {
             get => this.ReferenceTermKey;
@@ -90,15 +91,18 @@ namespace SanteDB.Core.Model.DataTypes
         }
 
         /// <inheritdoc/>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.ClassificationKey { get => null; set { } } 
 
         /// <inheritdoc/>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.AssociationTypeKey { 
             get => this.RelationshipTypeKey; 
             set => this.RelationshipTypeKey = value; 
         }
         
         /// <inheritdoc/>
+        [XmlIgnore, JsonIgnore]
         object ITargetedAssociation.TargetEntity 
         { 
             get => this.ReferenceTerm;

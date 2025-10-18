@@ -88,6 +88,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Target entity entity
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.TargetEntityKey
         {
             get => this.TargetConceptKey;
@@ -96,11 +97,13 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Classification of the relationship
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.ClassificationKey { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
         /// <summary>
         /// Association type
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.AssociationTypeKey
         {
             get => this.RelationshipTypeKey;
@@ -110,6 +113,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets the target entity
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         object ITargetedAssociation.TargetEntity
         {
             get => this.TargetConcept;
