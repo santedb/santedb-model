@@ -286,6 +286,7 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Association type
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
 
         /// <inheritdoc/>
