@@ -329,11 +329,11 @@ namespace SanteDB.Core.Model.Acts
                     // Try to parse ISO date ONLY 
                     if (DateTime.TryParseExact(value, new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
                     {
-                        this.Value = dt;
+                        this.Value = dt.Date;
                     }
                     else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt)) // Local Time
                     {
-                        this.Value = dt.Date;
+                        this.Value = dt;
                     }
                     else
                     {
