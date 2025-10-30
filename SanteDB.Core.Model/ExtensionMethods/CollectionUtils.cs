@@ -116,12 +116,14 @@ namespace SanteDB.Core.Model
             {
                 dependencyTree.Add(new DependencyNode(itm, dependencyTree));
             }
-            
+
+            var dependencyObjects = collectionDictionary.Where(o => o.Value.BatchOperation != BatchOperationType.Update).Select(o => o.Key).ToList() ;
+
             // Organize the tree 
             while(dependencyTree.Any())
             {
                 // Find the next leaf in the tree
-                var node = dependencyTree.FirstOrDefault(o => !o.OutboundDependencies.Any(b => collectionDictionary.ContainsKey(b))) ?? // If this is null there is a circular dependency
+                var node = dependencyTree.FirstOrDefault(o => !o.OutboundDependencies.Any(b => dependencyObjects.Contains(b))) ?? // If this is null there is a circular dependency
                      dependencyTree.FirstOrDefault(o=>collectionDictionary.TryGetValue(o.NodeKey, out var v) && v.BatchOperation == BatchOperationType.Update); // We can also attempt to exclude updates since they already exist
                 if(node == null)
                 {

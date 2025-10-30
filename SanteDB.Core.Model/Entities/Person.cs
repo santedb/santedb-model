@@ -94,11 +94,11 @@ namespace SanteDB.Core.Model.Entities
                 if (!String.IsNullOrEmpty(value))
                 {
                     // Try to parse ISO date
-                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
+                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
                     {
                         this.DateOfBirth = dt.Date;
                     }
-                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
+                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
                     {
                         this.DateOfBirth = dt.Date;
                     }
@@ -162,11 +162,11 @@ namespace SanteDB.Core.Model.Entities
                 if (!String.IsNullOrEmpty(value))
                 {
                     // Try to parse ISO date
-                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
+                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
                     {
                         this.DeceasedDate = dt.Date;
                     }
-                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
+                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
                     {
                         this.DeceasedDate = dt.Date;
                     }
