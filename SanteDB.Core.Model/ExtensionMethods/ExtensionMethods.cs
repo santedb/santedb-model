@@ -121,6 +121,14 @@ namespace SanteDB
         private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
         private static readonly Regex s_verRegex = new Regex(@"^([0-9]+?(?:\.[0-9]+){0,3})?(?:-?((?:alpha|beta|debug)[0-9]*))?$", RegexOptions.Compiled);
       
+        /// <summary>
+        /// Marker struct
+        /// </summary>
+        private struct PreventDelayLoadMarker
+        {
+
+        }
+
 
         /// <summary>
         /// Indicates a properly was load/checked
@@ -224,6 +232,15 @@ namespace SanteDB
             }
 
             return dict;
+        }
+
+        /// <summary>
+        /// Prevent delay load
+        /// </summary>
+        /// <param name="me"></param>
+        public static void PreventDelayLoad(this IdentifiedData me)
+        {
+            me.AddAnnotation(new PreventDelayLoadMarker());
         }
 
         /// <summary>
@@ -765,6 +782,10 @@ namespace SanteDB
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
+            if (me.GetAnnotations<PreventDelayLoadMarker>().Any())
+            {
+                return currentValue;
+            }
 
             if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBModelConstants.NoDynamicLoadAnnotation)))
             {
