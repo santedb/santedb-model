@@ -46,6 +46,9 @@ namespace SanteDB.Core.Model
     public abstract class IdentifiedData : IAnnotatedResource, ICanDeepCopy, IHasToDisplay
     {
 
+        // Annotation lock
+        private object m_annotationLock = new object();
+
         // Properties which can be copied
         private static ConcurrentDictionary<Type, PropertyInfo[]> m_copyProperties = new ConcurrentDictionary<Type, PropertyInfo[]>();
 
@@ -283,7 +286,10 @@ namespace SanteDB.Core.Model
         {
             if (this.m_annotations.TryGetValue(annotation.GetType(), out var values))
             {
-                values.Remove(annotation);
+                lock (this.m_annotationLock)
+                {
+                    values.Remove(annotation);
+                }
             }
         }
 
@@ -294,7 +300,10 @@ namespace SanteDB.Core.Model
         {
             if (this.m_annotations.TryGetValue(typeof(T), out var values))
             {
-                values.Clear();
+                lock (this.m_annotationLock)
+                {
+                    values.Clear();
+                }
             }
         }
 
@@ -327,7 +336,10 @@ namespace SanteDB.Core.Model
                 values = new List<object>();
                 this.m_annotations.TryAdd(typeof(T), values);
             }
-            values.Add(annotation);
+            lock (this.m_annotationLock)
+            {
+                values.Add(annotation);
+            }
 
         }
 
@@ -342,7 +354,10 @@ namespace SanteDB.Core.Model
                 {
                     if (this.m_annotations.TryGetValue(itm.Key, out var values))
                     {
-                        values.AddRange(itm.Value);
+                        lock (this.m_annotationLock)
+                        {
+                            values.AddRange(itm.Value);
+                        }
                     }
                     else
                     {
