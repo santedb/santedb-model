@@ -133,7 +133,18 @@ namespace SanteDB.Core.Model.Map
         public static DateTimeOffset DateTimeToDateTimeOffset(DateTime dt)
         {
             //return new DateTimeOffset(dt.Ticks, TimeSpan.Zero);
-            return new DateTimeOffset(dt);
+            if (dt == DateTime.MaxValue)
+            {
+                return DateTimeOffset.MaxValue;
+            }
+            else if (dt == DateTime.MinValue)
+            {
+                return DateTimeOffset.MinValue;
+            }
+            else
+            {
+                return new DateTimeOffset(dt);
+            }
         }
 
         /// <summary>

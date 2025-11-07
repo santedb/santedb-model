@@ -81,7 +81,7 @@ namespace SanteDB.Core.Model.Security
             {
                 if (value != null)
                 {
-                    this.Lockout = DateTime.ParseExact(value, "o", CultureInfo.InvariantCulture);
+                    this.Lockout = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
                 }
                 else
                 {
