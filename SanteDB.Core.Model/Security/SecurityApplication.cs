@@ -53,21 +53,12 @@ namespace SanteDB.Core.Model.Security
         [XmlElement("lockout"), JsonProperty("lockout"), SerializationMetadata]
         public String LockoutXml
         {
-            get => this.Lockout?.ToString("o", CultureInfo.InvariantCulture);
+            get { return this.Lockout?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
-                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
                 {
-                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
-                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
-                    {
-                        this.Lockout = val;
-                    }
-                    else
-                    {
-                        throw new FormatException($"Date {value} was not recognized as a valid date format");
-                    }
+                    this.Lockout = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
                 }
                 else
                 {
