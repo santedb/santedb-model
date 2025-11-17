@@ -244,6 +244,11 @@ namespace SanteDB
         }
 
         /// <summary>
+        /// True if delay loading operations should be prevented
+        /// </summary>
+        public static bool DelayLoadDisabled(this IdentifiedData me) => me.GetAnnotations<PreventDelayLoadMarker>().Any();
+
+        /// <summary>
         /// For each item in an enumerable
         /// </summary>
         public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
