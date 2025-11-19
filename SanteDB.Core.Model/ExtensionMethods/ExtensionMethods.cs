@@ -120,7 +120,8 @@ namespace SanteDB
         private static IDictionary<String, Type> s_resourceNames;
         private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
         private static readonly Regex s_verRegex = new Regex(@"^([0-9]+?(?:\.[0-9]+){0,3})?(?:-?((?:alpha|beta|debug)[0-9]*))?$", RegexOptions.Compiled);
-      
+        private static ConcurrentDictionary<Type, String> s_serializationNames = new ConcurrentDictionary<Type, string>();
+
         /// <summary>
         /// Marker struct
         /// </summary>
@@ -1278,16 +1279,23 @@ namespace SanteDB
         /// </summary>
         public static MethodBase GetGenericMethod(this Type type, string name, Type[] typeArgs, Type[] argTypes)
         {
-            int typeArity = typeArgs.Length;
-            var methods = type.GetMethods()
-                .Where(m => m.Name == name)
-                .Where(m => m.GetGenericArguments().Length == typeArity)
-                .Where(m => m.GetParameters().Length == argTypes.Length)
-                .Select(m => m.MakeGenericMethod(typeArgs)).ToList();
+            var key = $"{type.FullName}.{name}<{String.Join(",", typeArgs.Select(o => o.FullName))}>({String.Join(",", argTypes.Select(o => o.FullName))})";
+            if (!s_genericMethodCache.TryGetValue(key, out var method))
+            {
+                int typeArity = typeArgs.Length;
+                var methods = type.GetMethods()
+                    .Where(m => m.Name == name)
+                    .Where(m => m.GetGenericArguments().Length == typeArity)
+                    .Where(m => m.GetParameters().Length == argTypes.Length)
+                    .Select(m => m.MakeGenericMethod(typeArgs)).ToList();
 
-            methods = methods.Where(m => Enumerable.Range(0, argTypes.Length).All(i => m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.IsAssignableFrom(argTypes[i]))).ToList();
+                methods = methods.Where(m => Enumerable.Range(0, argTypes.Length).All(i => m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.IsAssignableFrom(argTypes[i]))).ToList();
 
-            return methods.FirstOrDefault();
+
+                method = methods.FirstOrDefault();
+                s_genericMethodCache.TryAdd(key, method);
+            }
+            return method;
         }
 
         /// <summary>
@@ -1392,7 +1400,12 @@ namespace SanteDB
         /// </summary>
         public static String GetSerializationName(this Type type)
         {
-            return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.FullName;
+            if (!s_serializationNames.TryGetValue(type, out var serializationName))
+            {
+                serializationName = type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.FullName;
+                s_serializationNames.TryAdd(type, serializationName);
+            }
+            return serializationName;
         }
         
         /// <summary>
