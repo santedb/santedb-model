@@ -140,6 +140,17 @@ namespace SanteDB.Core.Model.Entities
             return this.DateOfBirthPrecision.HasValue;
         }
 
+        /// <summary>
+        /// Gets or sets the marital status code
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
+        public Concept MaritalStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the key of the marital status concept
+        /// </summary>
+        [XmlElement("maritalStatus"), JsonProperty("maritalStatus")]
+        public Guid? MaritalStatusKey { get; set; }
 
         /// <summary>
         /// Gets or sets the date the patient was deceased

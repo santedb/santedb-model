@@ -97,22 +97,10 @@ namespace SanteDB.Core.Model.Roles
         }
 
         /// <summary>
-        /// Gets or sets the marital status code
-        /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
-        public Concept MaritalStatus { get; set; }
-
-        /// <summary>
         /// Gets or sets the education level of the person
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
         public Concept EducationLevel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the key of the marital status concept
-        /// </summary>
-        [XmlElement("maritalStatus"), JsonProperty("maritalStatus")]
-        public Guid? MaritalStatusKey { get; set; }
 
         /// <summary>
         /// Gets or sets the key of the education level
