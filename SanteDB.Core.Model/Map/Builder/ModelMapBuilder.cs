@@ -211,6 +211,13 @@ namespace SanteDB.Core.Model.Map.Builder
                 retVal.Members.Add(this.CreateMapToTargetMethod(newMap, interfaceDefinition));
                 retVal.Members.Add(this.CreateMapToSourceMethod(newMap, interfaceDefinition));
             }
+
+
+            foreach (CodeTypeMember m in retVal.Members)
+            {
+                m.Comments.Add(new CodeCommentStatement("<inheritdoc/>", true));
+            }
+            retVal.Comments.Add(new CodeCommentStatement($"<summary>Transforms between model class {map.ModelClass} and persistence class {map.DomainClass}</summary>", true));
             return retVal;
         }
 
