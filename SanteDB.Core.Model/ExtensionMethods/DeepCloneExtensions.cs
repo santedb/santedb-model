@@ -4242,6 +4242,10 @@ namespace SanteDB.Core.Model {
             if ((clonee.StateData != null)) {
                 _retVal.StateData = clonee.StateData;
             }
+            // Clone NotBefore
+            _retVal.NotBefore = clonee.NotBefore;
+            // Clone NotAfter
+            _retVal.NotAfter = clonee.NotAfter;
             // Clone SourceEntityKey
             _retVal.SourceEntityKey = clonee.SourceEntityKey;
             // Clone Key
