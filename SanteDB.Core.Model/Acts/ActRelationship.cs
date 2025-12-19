@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [Classifier(nameof(RelationshipType)), NonCached]
     [XmlType("ActRelationship", Namespace = "http://santedb.org/model"), JsonObject("ActRelationship")]
-    public class ActRelationship : VersionedAssociation<Act>, ITargetedVersionedExtension, IHasExternalKey
+    public class ActRelationship : VersionedAssociation<Act>, ITargetedVersionedExtension, IHasExternalKey, IClassifiedRelationship
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ActRelationship"/> class.
