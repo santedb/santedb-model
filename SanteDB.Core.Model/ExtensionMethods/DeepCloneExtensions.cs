@@ -14,6 +14,7 @@ namespace SanteDB.Core.Model {
     
     internal static class DeepCloner {
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Subscription.SubscriptionDefinition CloneDeep(this SanteDB.Core.Model.Subscription.SubscriptionDefinition clonee) {
             if ((clonee == null)) {
                 return null;
@@ -43,6 +44,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityApplication CloneDeep(this SanteDB.Core.Model.Security.SecurityApplication clonee) {
             if ((clonee == null)) {
                 return null;
@@ -78,6 +80,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityChallenge CloneDeep(this SanteDB.Core.Model.Security.SecurityChallenge clonee) {
             if ((clonee == null)) {
                 return null;
@@ -105,6 +108,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityDevice CloneDeep(this SanteDB.Core.Model.Security.SecurityDevice clonee) {
             if ((clonee == null)) {
                 return null;
@@ -140,6 +144,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityEntity CloneDeep(this SanteDB.Core.Model.Security.SecurityEntity clonee) {
             if ((clonee == null)) {
                 return null;
@@ -165,6 +170,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityPolicy CloneDeep(this SanteDB.Core.Model.Security.SecurityPolicy clonee) {
             if ((clonee == null)) {
                 return null;
@@ -196,6 +202,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityPolicyInstance CloneDeep(this SanteDB.Core.Model.Security.SecurityPolicyInstance clonee) {
             if ((clonee == null)) {
                 return null;
@@ -219,6 +226,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityProvenance CloneDeep(this SanteDB.Core.Model.Security.SecurityProvenance clonee) {
             if ((clonee == null)) {
                 return null;
@@ -258,6 +266,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityRole CloneDeep(this SanteDB.Core.Model.Security.SecurityRole clonee) {
             if ((clonee == null)) {
                 return null;
@@ -295,6 +304,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Security.SecurityUser CloneDeep(this SanteDB.Core.Model.Security.SecurityUser clonee) {
             if ((clonee == null)) {
                 return null;
@@ -370,6 +380,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Roles.Patient CloneDeep(this SanteDB.Core.Model.Roles.Patient clonee) {
             if ((clonee == null)) {
                 return null;
@@ -396,16 +407,10 @@ namespace SanteDB.Core.Model {
             if ((clonee.EthnicGroup != null)) {
                 _retVal.EthnicGroup = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.EthnicGroup.DeepCopy()));
             }
-            // Clone MaritalStatus
-            if ((clonee.MaritalStatus != null)) {
-                _retVal.MaritalStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MaritalStatus.DeepCopy()));
-            }
             // Clone EducationLevel
             if ((clonee.EducationLevel != null)) {
                 _retVal.EducationLevel = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.EducationLevel.DeepCopy()));
             }
-            // Clone MaritalStatusKey
-            _retVal.MaritalStatusKey = clonee.MaritalStatusKey;
             // Clone EducationLevelKey
             _retVal.EducationLevelKey = clonee.EducationLevelKey;
             // Clone DateOfBirth
@@ -431,6 +436,12 @@ namespace SanteDB.Core.Model {
             if ((clonee.Occupation != null)) {
                 _retVal.Occupation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Occupation.DeepCopy()));
             }
+            // Clone MaritalStatus
+            if ((clonee.MaritalStatus != null)) {
+                _retVal.MaritalStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MaritalStatus.DeepCopy()));
+            }
+            // Clone MaritalStatusKey
+            _retVal.MaritalStatusKey = clonee.MaritalStatusKey;
             // Clone DeceasedDate
             _retVal.DeceasedDate = clonee.DeceasedDate;
             // Clone DeceasedDatePrecision
@@ -576,6 +587,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Roles.Provider CloneDeep(this SanteDB.Core.Model.Roles.Provider clonee) {
             if ((clonee == null)) {
                 return null;
@@ -611,6 +623,12 @@ namespace SanteDB.Core.Model {
             if ((clonee.Occupation != null)) {
                 _retVal.Occupation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Occupation.DeepCopy()));
             }
+            // Clone MaritalStatus
+            if ((clonee.MaritalStatus != null)) {
+                _retVal.MaritalStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MaritalStatus.DeepCopy()));
+            }
+            // Clone MaritalStatusKey
+            _retVal.MaritalStatusKey = clonee.MaritalStatusKey;
             // Clone DeceasedDate
             _retVal.DeceasedDate = clonee.DeceasedDate;
             // Clone DeceasedDatePrecision
@@ -756,6 +774,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Patch.PatchCollection CloneDeep(this SanteDB.Core.Model.Patch.PatchCollection clonee) {
             if ((clonee == null)) {
                 return null;
@@ -777,6 +796,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Patch.Patch CloneDeep(this SanteDB.Core.Model.Patch.Patch clonee) {
             if ((clonee == null)) {
                 return null;
@@ -808,6 +828,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.ApplicationEntity CloneDeep(this SanteDB.Core.Model.Entities.ApplicationEntity clonee) {
             if ((clonee == null)) {
                 return null;
@@ -955,6 +976,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.Container CloneDeep(this SanteDB.Core.Model.Entities.Container clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1116,6 +1138,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.DeviceEntity CloneDeep(this SanteDB.Core.Model.Entities.DeviceEntity clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1261,6 +1284,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.Entity CloneDeep(this SanteDB.Core.Model.Entities.Entity clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1396,6 +1420,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.EntityAddress CloneDeep(this SanteDB.Core.Model.Entities.EntityAddress clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1431,6 +1456,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.EntityAddressComponent CloneDeep(this SanteDB.Core.Model.Entities.EntityAddressComponent clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1456,6 +1482,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.EntityName CloneDeep(this SanteDB.Core.Model.Entities.EntityName clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1491,6 +1518,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.EntityNameComponent CloneDeep(this SanteDB.Core.Model.Entities.EntityNameComponent clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1516,6 +1544,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.EntityRelationship CloneDeep(this SanteDB.Core.Model.Entities.EntityRelationship clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1569,6 +1598,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.EntityTelecomAddress CloneDeep(this SanteDB.Core.Model.Entities.EntityTelecomAddress clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1604,6 +1634,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.ManufacturedMaterial CloneDeep(this SanteDB.Core.Model.Entities.ManufacturedMaterial clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1759,6 +1790,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.Material CloneDeep(this SanteDB.Core.Model.Entities.Material clonee) {
             if ((clonee == null)) {
                 return null;
@@ -1912,6 +1944,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.NonPersonLivingSubject CloneDeep(this SanteDB.Core.Model.Entities.NonPersonLivingSubject clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2053,6 +2086,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.Organization CloneDeep(this SanteDB.Core.Model.Entities.Organization clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2194,6 +2228,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.Person CloneDeep(this SanteDB.Core.Model.Entities.Person clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2223,6 +2258,12 @@ namespace SanteDB.Core.Model {
             if ((clonee.Occupation != null)) {
                 _retVal.Occupation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Occupation.DeepCopy()));
             }
+            // Clone MaritalStatus
+            if ((clonee.MaritalStatus != null)) {
+                _retVal.MaritalStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MaritalStatus.DeepCopy()));
+            }
+            // Clone MaritalStatusKey
+            _retVal.MaritalStatusKey = clonee.MaritalStatusKey;
             // Clone DeceasedDate
             _retVal.DeceasedDate = clonee.DeceasedDate;
             // Clone DeceasedDatePrecision
@@ -2368,6 +2409,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.PersonLanguageCommunication CloneDeep(this SanteDB.Core.Model.Entities.PersonLanguageCommunication clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2393,6 +2435,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.Place CloneDeep(this SanteDB.Core.Model.Entities.Place clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2537,6 +2580,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.PlaceService CloneDeep(this SanteDB.Core.Model.Entities.PlaceService clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2566,6 +2610,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Entities.UserEntity CloneDeep(this SanteDB.Core.Model.Entities.UserEntity clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2597,6 +2642,12 @@ namespace SanteDB.Core.Model {
             if ((clonee.Occupation != null)) {
                 _retVal.Occupation = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.Occupation.DeepCopy()));
             }
+            // Clone MaritalStatus
+            if ((clonee.MaritalStatus != null)) {
+                _retVal.MaritalStatus = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.MaritalStatus.DeepCopy()));
+            }
+            // Clone MaritalStatusKey
+            _retVal.MaritalStatusKey = clonee.MaritalStatusKey;
             // Clone DeceasedDate
             _retVal.DeceasedDate = clonee.DeceasedDate;
             // Clone DeceasedDatePrecision
@@ -2742,6 +2793,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.AssigningAuthority CloneDeep(this SanteDB.Core.Model.DataTypes.AssigningAuthority clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2777,6 +2829,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.CodeSystem CloneDeep(this SanteDB.Core.Model.DataTypes.CodeSystem clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2814,6 +2867,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.Concept CloneDeep(this SanteDB.Core.Model.DataTypes.Concept clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2897,6 +2951,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptClass CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptClass clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2926,6 +2981,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptName CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptName clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2949,6 +3005,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptReferenceTerm CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptReferenceTerm clonee) {
             if ((clonee == null)) {
                 return null;
@@ -2980,6 +3037,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptRelationship CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptRelationship clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3011,6 +3069,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptRelationshipType CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptRelationshipType clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3040,6 +3099,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptSet CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptSet clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3085,6 +3145,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptSetComposition CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptSetComposition clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3108,6 +3169,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptExtension CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptExtension clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3141,6 +3203,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.EntityExtension CloneDeep(this SanteDB.Core.Model.DataTypes.EntityExtension clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3174,6 +3237,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ActExtension CloneDeep(this SanteDB.Core.Model.DataTypes.ActExtension clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3207,6 +3271,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ExtensionType CloneDeep(this SanteDB.Core.Model.DataTypes.ExtensionType clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3246,6 +3311,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.GeoTag CloneDeep(this SanteDB.Core.Model.DataTypes.GeoTag clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3265,6 +3331,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.IdentifiedDataReference CloneDeep(this SanteDB.Core.Model.DataTypes.IdentifiedDataReference clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3284,6 +3351,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.EntityIdentifier CloneDeep(this SanteDB.Core.Model.DataTypes.EntityIdentifier clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3327,6 +3395,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ActIdentifier CloneDeep(this SanteDB.Core.Model.DataTypes.ActIdentifier clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3370,6 +3439,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.IdentityDomain CloneDeep(this SanteDB.Core.Model.DataTypes.IdentityDomain clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3437,6 +3507,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.EntityNote CloneDeep(this SanteDB.Core.Model.DataTypes.EntityNote clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3464,6 +3535,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ActNote CloneDeep(this SanteDB.Core.Model.DataTypes.ActNote clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3491,6 +3563,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ReferenceTerm CloneDeep(this SanteDB.Core.Model.DataTypes.ReferenceTerm clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3539,6 +3612,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ReferenceTermName CloneDeep(this SanteDB.Core.Model.DataTypes.ReferenceTermName clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3566,6 +3640,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.RelationshipValidationRule CloneDeep(this SanteDB.Core.Model.DataTypes.RelationshipValidationRule clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3613,6 +3688,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ConceptTag CloneDeep(this SanteDB.Core.Model.DataTypes.ConceptTag clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3640,6 +3716,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.EntityTag CloneDeep(this SanteDB.Core.Model.DataTypes.EntityTag clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3667,6 +3744,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.ActTag CloneDeep(this SanteDB.Core.Model.DataTypes.ActTag clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3694,6 +3772,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.DataTypes.TemplateDefinition CloneDeep(this SanteDB.Core.Model.DataTypes.TemplateDefinition clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3727,6 +3806,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Collection.Bundle CloneDeep(this SanteDB.Core.Model.Collection.Bundle clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3762,6 +3842,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Audit.AuditEventData CloneDeep(this SanteDB.Core.Model.Audit.AuditEventData clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3803,6 +3884,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.Account CloneDeep(this SanteDB.Core.Model.Acts.Account clonee) {
             if ((clonee == null)) {
                 return null;
@@ -3957,6 +4039,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.Act CloneDeep(this SanteDB.Core.Model.Acts.Act clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4099,6 +4182,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.ActParticipation CloneDeep(this SanteDB.Core.Model.Acts.ActParticipation clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4142,6 +4226,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.ActProtocol CloneDeep(this SanteDB.Core.Model.Acts.ActProtocol clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4157,6 +4242,10 @@ namespace SanteDB.Core.Model {
             if ((clonee.StateData != null)) {
                 _retVal.StateData = clonee.StateData;
             }
+            // Clone NotBefore
+            _retVal.NotBefore = clonee.NotBefore;
+            // Clone NotAfter
+            _retVal.NotAfter = clonee.NotAfter;
             // Clone SourceEntityKey
             _retVal.SourceEntityKey = clonee.SourceEntityKey;
             // Clone Key
@@ -4167,6 +4256,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.ActRelationship CloneDeep(this SanteDB.Core.Model.Acts.ActRelationship clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4208,6 +4298,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.CarePathwayDefinition CloneDeep(this SanteDB.Core.Model.Acts.CarePathwayDefinition clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4249,6 +4340,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.CarePlan CloneDeep(this SanteDB.Core.Model.Acts.CarePlan clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4399,6 +4491,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.ControlAct CloneDeep(this SanteDB.Core.Model.Acts.ControlAct clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4541,6 +4634,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.FinancialContract CloneDeep(this SanteDB.Core.Model.Acts.FinancialContract clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4689,6 +4783,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.FinancialTransaction CloneDeep(this SanteDB.Core.Model.Acts.FinancialTransaction clonee) {
             if ((clonee == null)) {
                 return null;
@@ -4843,6 +4938,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.InvoiceElement CloneDeep(this SanteDB.Core.Model.Acts.InvoiceElement clonee) {
             if ((clonee == null)) {
                 return null;
@@ -5005,6 +5101,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.Narrative CloneDeep(this SanteDB.Core.Model.Acts.Narrative clonee) {
             if ((clonee == null)) {
                 return null;
@@ -5159,6 +5256,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.Observation CloneDeep(this SanteDB.Core.Model.Acts.Observation clonee) {
             if ((clonee == null)) {
                 return null;
@@ -5309,6 +5407,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.QuantityObservation CloneDeep(this SanteDB.Core.Model.Acts.QuantityObservation clonee) {
             if ((clonee == null)) {
                 return null;
@@ -5467,6 +5566,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.TextObservation CloneDeep(this SanteDB.Core.Model.Acts.TextObservation clonee) {
             if ((clonee == null)) {
                 return null;
@@ -5619,6 +5719,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.CodedObservation CloneDeep(this SanteDB.Core.Model.Acts.CodedObservation clonee) {
             if ((clonee == null)) {
                 return null;
@@ -5775,6 +5876,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.DateObservation CloneDeep(this SanteDB.Core.Model.Acts.DateObservation clonee) {
             if ((clonee == null)) {
                 return null;
@@ -5783,8 +5885,6 @@ namespace SanteDB.Core.Model {
             int _iterator;
             // Clone ValueType
             _retVal.ValueType = clonee.ValueType;
-            // Clone ValueXml
-            _retVal.ValueXml = clonee.ValueXml;
             // Clone Value
             _retVal.Value = clonee.Value;
             // Clone ValuePrecision
@@ -5931,6 +6031,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.PatientEncounter CloneDeep(this SanteDB.Core.Model.Acts.PatientEncounter clonee) {
             if ((clonee == null)) {
                 return null;
@@ -6092,6 +6193,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.PatientEncounterArrangement CloneDeep(this SanteDB.Core.Model.Acts.PatientEncounterArrangement clonee) {
             if ((clonee == null)) {
                 return null;
@@ -6121,6 +6223,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.Procedure CloneDeep(this SanteDB.Core.Model.Acts.Procedure clonee) {
             if ((clonee == null)) {
                 return null;
@@ -6281,6 +6384,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.Protocol CloneDeep(this SanteDB.Core.Model.Acts.Protocol clonee) {
             if ((clonee == null)) {
                 return null;
@@ -6306,6 +6410,7 @@ namespace SanteDB.Core.Model {
             return _retVal;
         }
         
+        /// <inheritdoc />
         internal static SanteDB.Core.Model.Acts.SubstanceAdministration CloneDeep(this SanteDB.Core.Model.Acts.SubstanceAdministration clonee) {
             if ((clonee == null)) {
                 return null;

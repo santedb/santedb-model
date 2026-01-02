@@ -59,6 +59,11 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string ConfirmedLink = "AEF80D5E-911A-456E-97F4-D341E420181A";
 
+        /// <summary>
+        /// The linkage is permanent and cannot be deleted
+        /// </summary>
+        public const string PermanentLink = "F77C13A9-1BFB-4353-93CD-C4AE1819AF28";
+
     }
 
     /// <summary>
@@ -93,5 +98,9 @@ namespace SanteDB.Core.Model.Constants
         /// The linkage was confirmed by a user
         /// </summary>
         public static readonly Guid ConfirmedLink = Guid.Parse(RelationshipClassKeyStrings.ConfirmedLink);
+        /// <summary>
+        /// Permanent link (cannot be deleted)
+        /// </summary>
+        public static readonly Guid PermanentLink = Guid.Parse(RelationshipClassKeyStrings.PermanentLink);
     }
 }

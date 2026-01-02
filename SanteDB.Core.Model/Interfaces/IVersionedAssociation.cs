@@ -44,4 +44,15 @@ namespace SanteDB.Core.Model.Interfaces
     public interface ITargetedVersionedExtension : IVersionedAssociation, ITargetedAssociation
     {
     }
+
+    /// <summary>
+    /// A relationship that is classified 
+    /// </summary>
+    public interface IClassifiedRelationship : ISimpleAssociation
+    {
+        /// <summary>
+        /// Gets or sets teh classification
+        /// </summary>
+        Guid? ClassificationKey { get; set; }
+    }
 }

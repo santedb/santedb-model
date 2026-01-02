@@ -90,5 +90,10 @@ namespace SanteDB.Core.Model.Constants
         /// CDSS order by tag
         /// </summary>
         public const string CdssOrderTag = "$cdss.order";
+
+        /// <summary>
+        /// Skip matching
+        /// </summary>
+        public const string SkipDuplicateCheck = "$match.skip";
     }
 }
