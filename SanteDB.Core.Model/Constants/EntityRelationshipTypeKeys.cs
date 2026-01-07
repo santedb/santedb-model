@@ -1662,5 +1662,15 @@ namespace SanteDB.Core.Model.Constants
         /// Extended SanteDB type for contained report flag
         /// </summary>
         public static readonly Guid ReportTarget = Guid.Parse(EntityRelationshipTypeKeyStrings.ReportTarget);
+
+        /// <summary>
+        /// Entity relationship types where the nature of the relationship indicates that the target of the relationship is the more 
+        /// important of the objects. This is used to determine appropriate permissions for altering the object, and not versioning the 
+        /// source.
+        /// </summary>
+        public static readonly Guid[] ReverseRelationshipTypes =
+        {
+            EntityRelationshipTypeKeys.ManufacturedProduct
+        };
     }
 }
