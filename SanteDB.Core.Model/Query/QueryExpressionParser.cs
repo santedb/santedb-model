@@ -1229,7 +1229,7 @@ namespace SanteDB.Core.Model.Query
             }
             else
             {
-                var le = BuildLinqExpression(type, nvc, "__xinstance", null, false, forceLoad, false);
+                var le = BuildLinqExpression(type, nvc, "__xinstance", variables: null, safeNullable: false, forceLoad: forceLoad, lazyExpandVariables: true, relayControlVariables: false, coalesceOutput: true);
                 return Expression.Lambda(Expression.Convert(le.Body, convertReturn), le.Parameters);
             }
         }
