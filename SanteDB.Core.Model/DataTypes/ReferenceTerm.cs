@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -21,6 +21,7 @@
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -84,6 +85,12 @@ namespace SanteDB.Core.Model.DataTypes
         public List<ReferenceTermName> DisplayNames { get; set; }
 
         /// <summary>
+        /// Gets or sets the concepts related to this data
+        /// </summary>
+        [XmlIgnore, JsonIgnore, QueryParameter("concept"), Browsable(false)]
+        public List<ConceptReferenceTerm> Concepts { get; set; }
+
+        /// <summary>
         /// Get display name for the reference term
         /// </summary>
         public string GetDisplayName(String language = null)
@@ -91,5 +98,8 @@ namespace SanteDB.Core.Model.DataTypes
             language = language ?? System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
             return this.LoadCollection(o => o.DisplayNames).FirstOrDefault(o => language.Equals(o.Language, StringComparison.OrdinalIgnoreCase))?.Name;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

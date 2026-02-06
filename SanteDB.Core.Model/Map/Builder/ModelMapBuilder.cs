@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -211,6 +211,13 @@ namespace SanteDB.Core.Model.Map.Builder
                 retVal.Members.Add(this.CreateMapToTargetMethod(newMap, interfaceDefinition));
                 retVal.Members.Add(this.CreateMapToSourceMethod(newMap, interfaceDefinition));
             }
+
+
+            foreach (CodeTypeMember m in retVal.Members)
+            {
+                m.Comments.Add(new CodeCommentStatement("<inheritdoc/>", true));
+            }
+            retVal.Comments.Add(new CodeCommentStatement($"<summary>Transforms between model class {map.ModelClass} and persistence class {map.DomainClass}</summary>", true));
             return retVal;
         }
 

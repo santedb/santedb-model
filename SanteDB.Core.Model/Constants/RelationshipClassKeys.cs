@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -59,6 +59,11 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string ConfirmedLink = "AEF80D5E-911A-456E-97F4-D341E420181A";
 
+        /// <summary>
+        /// The linkage is permanent and cannot be deleted
+        /// </summary>
+        public const string PermanentLink = "F77C13A9-1BFB-4353-93CD-C4AE1819AF28";
+
     }
 
     /// <summary>
@@ -93,5 +98,9 @@ namespace SanteDB.Core.Model.Constants
         /// The linkage was confirmed by a user
         /// </summary>
         public static readonly Guid ConfirmedLink = Guid.Parse(RelationshipClassKeyStrings.ConfirmedLink);
+        /// <summary>
+        /// Permanent link (cannot be deleted)
+        /// </summary>
+        public static readonly Guid PermanentLink = Guid.Parse(RelationshipClassKeyStrings.PermanentLink);
     }
 }

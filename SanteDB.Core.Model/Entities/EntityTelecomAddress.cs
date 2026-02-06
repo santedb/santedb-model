@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -116,7 +116,7 @@ namespace SanteDB.Core.Model.Entities
                 var scheme = this.LoadProperty(o => o.TypeConcept)?.LoadProperty(o => o.Extensions)?.Find(o=>o.ExtensionTypeKey == ExtensionTypeKeys.Rfc3986SchemeExtension)?.ExtensionValue?.ToString();
                 if (!String.IsNullOrEmpty(scheme))
                 {
-                    return String.Format("{0}:{1}", scheme, this.Value);
+                    return String.Format("{0}{1}", scheme, this.Value);
                 }
                 else if (s_EmailRegex.IsMatch(this.Value))
                 {
@@ -156,7 +156,7 @@ namespace SanteDB.Core.Model.Entities
                 var match = s_IetfValueRegex.Match(value);
                 if (match.Groups[1].Value != "tel:")
                 {
-                    this.Value = value.Substring(value.IndexOf(":"));
+                    this.Value = String.IsNullOrEmpty(match.Groups[4].Value) ? match.Groups[5].Value : match.Groups[4].Value;
                     return;
                 }
 
@@ -231,6 +231,9 @@ namespace SanteDB.Core.Model.Entities
             return base.SemanticEquals(obj) && this.Value == other.Value && this.AddressUseKey == other.AddressUseKey;
         }
 
-        
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

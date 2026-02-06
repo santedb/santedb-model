@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -23,10 +23,12 @@ using SanteDB.Core.Model.Acts;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
+using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
@@ -43,6 +45,9 @@ namespace SanteDB.Core.Model
     [ResourceSensitivity(ResourceSensitivityClassification.Metadata)]
     public abstract class IdentifiedData : IAnnotatedResource, ICanDeepCopy, IHasToDisplay
     {
+
+        // Annotation lock
+        private object m_annotationLock = new object();
 
         // Properties which can be copied
         private static ConcurrentDictionary<Type, PropertyInfo[]> m_copyProperties = new ConcurrentDictionary<Type, PropertyInfo[]>();
@@ -115,7 +120,7 @@ namespace SanteDB.Core.Model
         /// </summary>
         /// <remarks>Classes which extend this should expose the last modified date (for example: CreationTime or UpdatedTime) </remarks>
         [XmlElement("modifiedOn"), JsonProperty("modifiedOn"), SerializationMetadata]
-        public abstract DateTimeOffset ModifiedOn { get; }
+        public virtual DateTimeOffset ModifiedOn => DateTimeOffset.Now;
 
         /// <summary>
         /// Never serialize modified on
@@ -281,7 +286,10 @@ namespace SanteDB.Core.Model
         {
             if (this.m_annotations.TryGetValue(annotation.GetType(), out var values))
             {
-                values.Remove(annotation);
+                lock (this.m_annotationLock)
+                {
+                    values.Remove(annotation);
+                }
             }
         }
 
@@ -292,7 +300,10 @@ namespace SanteDB.Core.Model
         {
             if (this.m_annotations.TryGetValue(typeof(T), out var values))
             {
-                values.Clear();
+                lock (this.m_annotationLock)
+                {
+                    values.Clear();
+                }
             }
         }
 
@@ -325,7 +336,10 @@ namespace SanteDB.Core.Model
                 values = new List<object>();
                 this.m_annotations.TryAdd(typeof(T), values);
             }
-            values.Add(annotation);
+            lock (this.m_annotationLock)
+            {
+                values.Add(annotation);
+            }
 
         }
 
@@ -340,7 +354,10 @@ namespace SanteDB.Core.Model
                 {
                     if (this.m_annotations.TryGetValue(itm.Key, out var values))
                     {
-                        values.AddRange(itm.Value);
+                        lock (this.m_annotationLock)
+                        {
+                            values.AddRange(itm.Value);
+                        }
                     }
                     else
                     {
@@ -350,5 +367,20 @@ namespace SanteDB.Core.Model
             }
             return this;
         }
+
+#if DEBUG
+        /// <summary>
+        /// Represent the current data as a string
+        /// </summary>
+        /// <returns></returns>
+        public string ToXmlString()
+        {
+            using (var sw = new StringWriter())
+            {
+                XmlModelSerializerFactory.Current.CreateSerializer(this.GetType()).Serialize(sw, this);
+                return sw.ToString();
+            }
+        }
+#endif 
     }
 }

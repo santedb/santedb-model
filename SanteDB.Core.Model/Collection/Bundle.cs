@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -66,6 +66,7 @@ namespace SanteDB.Core.Model.Collection
     [XmlInclude(typeof(ControlAct))]
     [XmlInclude(typeof(Account))]
     [XmlInclude(typeof(InvoiceElement))]
+    [XmlInclude(typeof(DateObservation))]
     [XmlInclude(typeof(FinancialContract))]
     [XmlInclude(typeof(FinancialTransaction))]
     [XmlInclude(typeof(ConceptReferenceTerm))]
@@ -224,6 +225,7 @@ namespace SanteDB.Core.Model.Collection
         /// <summary>
         /// Generic resource entity
         /// </summary>
+        [JsonIgnore, XmlIgnore]
         IEnumerable<IIdentifiedResource> IResourceCollection.Item => this.Item;
 
         /// <summary>
@@ -506,5 +508,8 @@ namespace SanteDB.Core.Model.Collection
                 itm.AddAnnotation(annotation);
             }
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

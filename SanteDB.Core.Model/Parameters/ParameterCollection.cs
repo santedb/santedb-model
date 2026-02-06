@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -31,13 +31,14 @@ namespace SanteDB.Core.Model.Parameters
     [XmlType(nameof(ParameterCollection), Namespace = "http://santedb.org/model")]
     [XmlRoot(nameof(ParameterCollection), Namespace = "http://santedb.org/model")]
     [JsonObject(nameof(ParameterCollection))]
-    public class ParameterCollection
+    public class ParameterCollection 
     {
         /// <summary>
         /// Parameter collection serialization ctor
         /// </summary>
         public ParameterCollection()
         {
+            this.Parameters= new List<Parameter>();
         }
 
         /// <summary>

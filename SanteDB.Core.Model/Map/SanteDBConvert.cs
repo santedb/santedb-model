@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -132,8 +132,19 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static DateTimeOffset DateTimeToDateTimeOffset(DateTime dt)
         {
-            return new DateTimeOffset(dt.Ticks, TimeSpan.Zero);
-            //return dt;
+            //return new DateTimeOffset(dt.Ticks, TimeSpan.Zero);
+            if (dt == DateTime.MaxValue)
+            {
+                return DateTimeOffset.MaxValue;
+            }
+            else if (dt == DateTime.MinValue)
+            {
+                return DateTimeOffset.MinValue;
+            }
+            else
+            {
+                return new DateTimeOffset(dt);
+            }
         }
 
         /// <summary>
@@ -149,7 +160,21 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static long ToDateTime(DateTime date)
         {
-            return ((DateTimeOffset)date).ToUniversalTime().ToUnixTimeSeconds();
+            switch(date.Kind)
+            {
+                case DateTimeKind.Utc:
+                    return ((DateTimeOffset)date).ToUnixTimeSeconds();
+                default:
+                    if(date.TimeOfDay.Hours == 0 && date.TimeOfDay.Minutes == 0 && date.TimeOfDay.Seconds == 0 && date.TimeOfDay.Milliseconds == 0)
+                    {
+                        // This is a date not a date/time so don't do translation
+                        return (long)date.Date.Subtract(new DateTime(1970, 01, 01)).TotalSeconds;
+                    }
+                    else
+                    {
+                       return ((DateTimeOffset)date).ToUniversalTime().ToUnixTimeSeconds();
+                    }
+            }
         }
 
         /// <summary>
@@ -157,7 +182,14 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static DateTime ParseDateTime(long date)
         {
-            return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime().DateTime;
+            if (date % 86_400 == 0) // Whole date 
+            {
+                return new DateTime(1970,01,01).AddSeconds(date).Date;
+            }
+            else
+            {
+                return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime().DateTime;
+            }
         }
 
         /// <summary>
@@ -173,7 +205,14 @@ namespace SanteDB.Core.Model.Map
         /// </summary>
         public static DateTimeOffset ParseDateTimeOffset(long date)
         {
-            return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime();
+            if (date % 86_400 == 0) // Whole date 
+            {
+                return new DateTime(1970, 01, 01).AddSeconds(date).Date;
+            }
+            else
+            {
+                return DateTimeOffset.FromUnixTimeSeconds(date).ToLocalTime();
+            }
         }
 
         /// <summary>

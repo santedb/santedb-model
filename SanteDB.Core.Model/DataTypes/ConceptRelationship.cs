@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -88,6 +88,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Target entity entity
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.TargetEntityKey
         {
             get => this.TargetConceptKey;
@@ -96,11 +97,13 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Classification of the relationship
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.ClassificationKey { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
         /// <summary>
         /// Association type
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.AssociationTypeKey
         {
             get => this.RelationshipTypeKey;
@@ -110,10 +113,14 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Gets the target entity
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         object ITargetedAssociation.TargetEntity
         {
             get => this.TargetConcept;
             set => this.TargetConcept = (Concept)value;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -20,7 +20,9 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using System;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -74,6 +76,79 @@ namespace SanteDB.Core.Model.Acts
         public byte[] StateData { get; set; }
 
         /// <summary>
+        /// Do not apply the protocol action before the date
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        public DateTime? NotBefore { get; set; }
+
+        /// <summary>
+        /// Not before XML representation
+        /// </summary>
+        [XmlElement("notBefore"), JsonProperty("notBefore"), SerializationMetadata]
+        public string NotBeforeXml
+        {
+            get => this.NotBefore?.ToString("yyyy-MM-dd");
+            set {
+                if(DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var dt))
+                {
+                    this.NotBefore = dt;
+                }
+                else if (DateTime.TryParse(value, out dt))
+                {
+                    this.NotBefore = dt;
+                }
+                else if(String.IsNullOrEmpty(value))
+                {
+                    this.NotBefore = null;
+                }
+                else
+                {
+                    throw new FormatException($"{value} is not in epxected date format");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Do not apply the protocol action after the date
+        /// </summary>
+        [JsonIgnore, XmlIgnore]
+        public DateTime? NotAfter { get; set; }
+
+        /// <summary>
+        /// Not before XML representation
+        /// </summary>
+        [XmlElement("notAfter"), JsonProperty("notAfter"), SerializationMetadata]
+        public string NotAfterXml
+        {
+            get => this.NotAfter?.ToString("yyyy-MM-dd");
+            set
+            {
+                if (DateTime.TryParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var dt))
+                {
+                    this.NotAfter = dt;
+                }
+                else if (DateTime.TryParse(value, out dt))
+                {
+                    this.NotAfter = dt;
+                }
+                else if (String.IsNullOrEmpty(value))
+                {
+                    this.NotAfter = null;
+                }
+                else
+                {
+                    throw new FormatException($"{value} is not in epxected date format");
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        public bool ShouldSerializeNotBeforeXml() => this.NotBefore.GetValueOrDefault() != default(DateTime);
+
+        /// <inheritdoc/>
+        public bool ShouldSerializeNotAfterXml() => this.NotAfter.GetValueOrDefault() != default(DateTime) && this.NotAfter.GetValueOrDefault() != DateTime.MaxValue;
+
+        /// <summary>
         /// Determines equality of this association
         /// </summary>
         /// <param name="obj">The object.</param>
@@ -93,5 +168,8 @@ namespace SanteDB.Core.Model.Acts
         /// Shoud serialize source
         /// </summary>
         public override bool ShouldSerializeSourceEntityKey() => false;
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

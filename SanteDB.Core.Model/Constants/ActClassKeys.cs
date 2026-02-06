@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -142,6 +142,11 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string CarePlan = "042232b9-a694-42e0-9708-f387393a6c80";
 
+        /// <summary>
+        /// An ACT that organizes a set of component acts into a semantic grouping that have a shared subject.
+        /// </summary>
+        public const string Cluster = "d38091b5-9065-4721-8a1f-bfbb3b4bf447";
+
     }
 
     /// <summary>
@@ -265,6 +270,10 @@ namespace SanteDB.Core.Model.Constants
         /// List
         /// </summary>
         public static readonly Guid List = Guid.Parse(ActClassKeyStrings.List);
+        /// <summary>
+        /// Cluster
+        /// </summary>
+        public static readonly Guid Cluster = Guid.Parse(ActClassKeyStrings.Cluster);
 
     }
 }

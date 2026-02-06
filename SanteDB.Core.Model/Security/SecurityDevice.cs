@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Globalization;
 using System.Xml.Serialization;
@@ -53,21 +54,12 @@ namespace SanteDB.Core.Model.Security
         [XmlElement("lockout"), JsonProperty("lockout"), SerializationMetadata]
         public String LockoutXml
         {
-            get => this.Lockout?.ToString("o", CultureInfo.InvariantCulture);
+            get { return this.Lockout?.ToString("o", CultureInfo.InvariantCulture); }
             set
             {
-                DateTimeOffset val = default(DateTimeOffset);
                 if (value != null)
                 {
-                    if (DateTimeOffset.TryParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.None, out val) ||
-                        DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out val))
-                    {
-                        this.Lockout = val;
-                    }
-                    else
-                    {
-                        throw new FormatException($"Date {value} was not recognized as a valid date format");
-                    }
+                    this.Lockout = DateTimeOffset.ParseExact(value, "o", CultureInfo.InvariantCulture);
                 }
                 else
                 {
@@ -127,5 +119,8 @@ namespace SanteDB.Core.Model.Security
         /// Get the name of the object as a display string
         /// </summary>
         public override string ToDisplay() => $"{this.Name} [{this.Key}]";
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

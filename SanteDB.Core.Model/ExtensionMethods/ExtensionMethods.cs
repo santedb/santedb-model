@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -38,11 +38,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -117,14 +120,16 @@ namespace SanteDB
         private static IDictionary<String, Type> s_resourceNames;
         private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
         private static readonly Regex s_verRegex = new Regex(@"^([0-9]+?(?:\.[0-9]+){0,3})?(?:-?((?:alpha|beta|debug)[0-9]*))?$", RegexOptions.Compiled);
-        
+        private static ConcurrentDictionary<Type, String> s_serializationNames = new ConcurrentDictionary<Type, string>();
+
         /// <summary>
-        /// Defer constraints annotation
+        /// Marker struct
         /// </summary>
-        private struct DeferConstraints
+        private struct PreventDelayLoadMarker
         {
 
         }
+
 
         /// <summary>
         /// Indicates a properly was load/checked
@@ -231,13 +236,27 @@ namespace SanteDB
         }
 
         /// <summary>
+        /// Prevent delay load
+        /// </summary>
+        /// <param name="me"></param>
+        public static void PreventDelayLoad(this IdentifiedData me)
+        {
+            me.AddAnnotation(new PreventDelayLoadMarker());
+        }
+
+        /// <summary>
+        /// True if delay loading operations should be prevented
+        /// </summary>
+        public static bool DelayLoadDisabled(this IdentifiedData me) => me.GetAnnotations<PreventDelayLoadMarker>().Any();
+
+        /// <summary>
         /// For each item in an enumerable
         /// </summary>
-        public static void ForEach<T>(IEnumerable<T> me, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
-            foreach (var itm in me)
+            foreach (var item in items)
             {
-                action(itm);
+                action(item);
             }
         }
 
@@ -769,6 +788,10 @@ namespace SanteDB
             var currentValue = propertyToLoad.GetValue(me);
             var loadCheck = new PropertyLoadCheck(propertyName);
 
+            if (me.GetAnnotations<PreventDelayLoadMarker>().Any())
+            {
+                return currentValue;
+            }
 
             if (!forceReload && (me.GetAnnotations<PropertyLoadCheck>().Contains(loadCheck) || me.GetAnnotations<String>().Contains(SanteDBModelConstants.NoDynamicLoadAnnotation)))
             {
@@ -1256,16 +1279,23 @@ namespace SanteDB
         /// </summary>
         public static MethodBase GetGenericMethod(this Type type, string name, Type[] typeArgs, Type[] argTypes)
         {
-            int typeArity = typeArgs.Length;
-            var methods = type.GetMethods()
-                .Where(m => m.Name == name)
-                .Where(m => m.GetGenericArguments().Length == typeArity)
-                .Where(m => m.GetParameters().Length == argTypes.Length)
-                .Select(m => m.MakeGenericMethod(typeArgs)).ToList();
+            var key = $"{type.FullName}.{name}<{String.Join(",", typeArgs.Select(o => o.FullName))}>({String.Join(",", argTypes.Select(o => o.FullName))})";
+            if (!s_genericMethodCache.TryGetValue(key, out var method))
+            {
+                int typeArity = typeArgs.Length;
+                var methods = type.GetMethods()
+                    .Where(m => m.Name == name)
+                    .Where(m => m.GetGenericArguments().Length == typeArity)
+                    .Where(m => m.GetParameters().Length == argTypes.Length)
+                    .Select(m => m.MakeGenericMethod(typeArgs)).ToList();
 
-            methods = methods.Where(m => Enumerable.Range(0, argTypes.Length).All(i => m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.IsAssignableFrom(argTypes[i]))).ToList();
+                methods = methods.Where(m => Enumerable.Range(0, argTypes.Length).All(i => m.GetParameters()[i].IsOut || m.GetParameters()[i].ParameterType.IsAssignableFrom(argTypes[i]))).ToList();
 
-            return methods.FirstOrDefault();
+
+                method = methods.FirstOrDefault();
+                s_genericMethodCache.TryAdd(key, method);
+            }
+            return method;
         }
 
         /// <summary>
@@ -1370,7 +1400,20 @@ namespace SanteDB
         /// </summary>
         public static String GetSerializationName(this Type type)
         {
-            return type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.FullName;
+            if (!s_serializationNames.TryGetValue(type, out var serializationName))
+            {
+                serializationName = type.GetCustomAttribute<XmlRootAttribute>(false)?.ElementName ?? type.GetCustomAttribute<JsonObjectAttribute>(false)?.Id ?? type.GetCustomAttribute<XmlTypeAttribute>(false)?.TypeName ?? type.FullName;
+                s_serializationNames.TryAdd(type, serializationName);
+            }
+            return serializationName;
+        }
+        
+        /// <summary>
+        /// Get the preferred resource name or the default resource name
+        /// </summary>
+        public static String GetResourceName(this Type type)
+        {
+            return type.GetCustomAttribute<ResourceNameAttribute>(false)?.ResourceName ?? type.GetSerializationName();
         }
 
         /// <summary>
@@ -1818,20 +1861,95 @@ namespace SanteDB
             return me;
         }
 
-        /// <summary>
-        /// Defer check constraints on the object in the persistence layer
-        /// </summary>
-        public static void DisablePersistenceConstraints(this IdentifiedData me)
-        {
-            me.AddAnnotation(new DeferConstraints());
-        }
+
 
         /// <summary>
-        /// Determine if the object has been flagged for constraint deferral
+        /// Copy delay load indicators from another object (used by the deep loader)
         /// </summary>
-        public static bool ShouldDisablePersistenceConstraints(this IdentifiedData me) => me.GetAnnotations<DeferConstraints>().Any();
+        internal static void CopyDelayLoadIndicators(this IdentifiedData me, IdentifiedData other) => me.AddAnnotation(other.GetAnnotations<PropertyLoadCheck>());
 
         /// <summary>Gets the last modification date of the object</summary>
         public static DateTimeOffset LastModified(this IdentifiedData me) => me.ModifiedOn;
+
+
+        /// <summary>
+        /// Searches the expression tree <paramref name="expression"/> to see if there is a property reference to <paramref name="propertyName"/>
+        /// </summary>
+        /// <param name="expression">The expression to be parsed</param>
+        /// <param name="propertyName">The name of the property to check</param>
+        /// <returns>The property reference</returns>
+        public static bool ContainsPropertyReference(this Expression expression, string propertyName)
+        {
+            // Non-recursive algorithm - faster performance 
+            Stack<Expression> processStack = new Stack<Expression>();
+            processStack.Push(expression);
+
+            while (processStack.Count > 0)
+            {
+                var currentExpression = processStack.Pop();
+                switch (currentExpression)
+                {
+                    case LambdaExpression lambda:
+                        processStack.Push(lambda.Body);
+                        break;
+                    case BinaryExpression binaryExpression:
+                        processStack.Push(binaryExpression.Left);
+                        processStack.Push(binaryExpression.Right);
+                        break;
+                    case MemberExpression memberExpression:
+                        if(memberExpression.Member.Name == propertyName && memberExpression.Member is PropertyInfo)
+                        {
+                            return true;
+                        }
+                        processStack.Push(memberExpression.Expression);
+                        break;
+                    case MethodCallExpression methodCallExpression:
+                        processStack.Push(methodCallExpression.Object);
+                        foreach(var arg in methodCallExpression.Arguments)
+                        {
+                            processStack.Push(arg);
+                        };
+                        break;
+                    case InvocationExpression invocationExpression:
+                        processStack.Push(invocationExpression.Expression);
+                        foreach (var arg in invocationExpression.Arguments)
+                        {
+                            processStack.Push(arg);
+                        }
+                        break;
+                    case UnaryExpression unaryExpression:
+                        processStack.Push(unaryExpression.Operand);
+                        break;
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Read a pascal string form the stream
+        /// </summary>
+        /// <remarks>https://stackoverflow.com/questions/25068903/what-are-pascal-strings</remarks>
+        public static String ReadPascalString(this Stream str)
+        {
+            var len = str.ReadByte();
+            if(len <= 0)
+            {
+                return String.Empty;
+            }
+            var strBuf = new Byte[len];
+            str.Read(strBuf, 0, strBuf.Length);
+            return Encoding.UTF8.GetString(strBuf);
+        }
+
+        /// <summary>
+        /// Write <paramref name="stringData"/> to <paramref name="str"/>
+        /// </summary>
+        public static void WritePascalString(this Stream str, String stringData)
+        {
+            var dataBuf = Encoding.UTF8.GetBytes(stringData);
+            str.WriteByte((byte)dataBuf.Length);
+            str.Write(dataBuf, 0, dataBuf.Length);
+        }
     }
 }

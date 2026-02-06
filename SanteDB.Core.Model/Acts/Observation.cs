@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -22,8 +22,10 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Acts
@@ -117,6 +119,9 @@ namespace SanteDB.Core.Model.Acts
         /// Should serialize value type?
         /// </summary>
         public bool ShouldSerializeValueType() => false;
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -175,6 +180,9 @@ namespace SanteDB.Core.Model.Acts
 
             return base.SemanticEquals(obj) && this.Value == other.Value && this.UnitOfMeasureKey == other.UnitOfMeasureKey;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -221,6 +229,9 @@ namespace SanteDB.Core.Model.Acts
 
             return base.SemanticEquals(obj) && this.Value == other.Value;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 
     /// <summary>
@@ -274,5 +285,96 @@ namespace SanteDB.Core.Model.Acts
 
             return base.SemanticEquals(obj) && other.ValueKey == this.ValueKey;
         }
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
+    }
+
+    /// <summary>
+    /// Represents an observation which contains a date value
+    /// </summary>
+    [XmlType("DateObservation", Namespace = "http://santedb.org/model"), JsonObject("DateObservation")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "DateObservation")]
+    public class DateObservation : Observation
+    {
+        /// <summary>
+        /// Value type
+        /// </summary>
+        [XmlElement("valueType"), JsonProperty("valueType")]
+        public override string ValueType
+        {
+            get
+            {
+                return "TS";
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the key of the uom concept
+        /// </summary>
+        [XmlElement("value"), JsonProperty("value"), SerializationMetadataAttribute]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public String ValueXml
+        {
+            get
+            {
+                return this.Value?.ToString("o");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date ONLY 
+                    if (DateTime.TryParseExact(value, new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
+                    {
+                        this.Value = dt.Date;
+                    }
+                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt)) // Local Time
+                    {
+                        this.Value = dt;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Cannot parse {value} as a date");
+                    }
+                }
+                else
+                {
+                    this.Value = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the person's date of birth
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public DateTime? Value { get; set; }
+
+        /// <summary>
+        /// Precision of the data in <see cref="Value"/>
+        /// </summary>
+        [XmlElement("valuePrecision"), JsonProperty("valuePrecision")]
+        public DatePrecision? ValuePrecision { get; set; }
+
+        /// <summary>
+        /// Semantic equality function
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as DateObservation;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return base.SemanticEquals(obj) && other.Value == this.Value;
+        }
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

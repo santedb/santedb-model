@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -120,7 +120,7 @@ namespace SanteDB.Core.Model.Map.Builder
             var retVal = Activator.CreateInstance(this.m_classMap.DomainType);
 
             // Iterate through properties
-            foreach (var propInfo in modelInstance.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            foreach (var propInfo in modelInstance.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance).Where(p=>p.CanRead && p.CanWrite))
             {
                 var propValue = propInfo.GetValue(modelInstance);
                 // Property info

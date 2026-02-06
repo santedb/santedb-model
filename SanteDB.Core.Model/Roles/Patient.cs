@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -23,6 +23,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Xml.Serialization;
 
@@ -96,22 +97,10 @@ namespace SanteDB.Core.Model.Roles
         }
 
         /// <summary>
-        /// Gets or sets the marital status code
-        /// </summary>
-        [XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
-        public Concept MaritalStatus { get; set; }
-
-        /// <summary>
         /// Gets or sets the education level of the person
         /// </summary>
         [XmlIgnore, JsonIgnore, SerializationReference(nameof(EducationLevelKey))]
         public Concept EducationLevel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the key of the marital status concept
-        /// </summary>
-        [XmlElement("maritalStatus"), JsonProperty("maritalStatus")]
-        public Guid? MaritalStatusKey { get; set; }
 
         /// <summary>
         /// Gets or sets the key of the education level
@@ -153,5 +142,8 @@ namespace SanteDB.Core.Model.Roles
                 this.VipStatusKey == other.VipStatusKey;
         }
 
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

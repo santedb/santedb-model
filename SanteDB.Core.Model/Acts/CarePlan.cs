@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.i18n;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Roles;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,7 @@ namespace SanteDB.Core.Model.Acts
         /// </summary>
         public CarePlan(Patient p, IEnumerable<Act> acts) : this()
         {
-            this.Relationships = new List<ActRelationship>(acts.Select(o => new ActRelationship(ActRelationshipTypeKeys.HasComponent, o)));
+            this.Relationships = new List<ActRelationship>(acts.Select(o => new ActRelationship(ActRelationshipTypeKeys.HasComponent, o) {  ClassificationKey = RelationshipClassKeys.ContainedObjectLink }));
             this.Participations = new List<ActParticipation>() { new ActParticipation(ActParticipationKeys.RecordTarget, p) };
         }
 
@@ -113,5 +114,7 @@ namespace SanteDB.Core.Model.Acts
             return new CarePlan(p, new Act[0]) { MoodConceptKey = ActMoodKeys.Request };
         }
 
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

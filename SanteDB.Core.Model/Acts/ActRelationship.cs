@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -41,7 +41,7 @@ namespace SanteDB.Core.Model.Acts
     /// </remarks>
     [Classifier(nameof(RelationshipType)), NonCached]
     [XmlType("ActRelationship", Namespace = "http://santedb.org/model"), JsonObject("ActRelationship")]
-    public class ActRelationship : VersionedAssociation<Act>, ITargetedVersionedExtension, IHasExternalKey
+    public class ActRelationship : VersionedAssociation<Act>, ITargetedVersionedExtension, IHasExternalKey, IClassifiedRelationship
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ActRelationship"/> class.
@@ -198,5 +198,8 @@ namespace SanteDB.Core.Model.Acts
         /// Association type
         /// </summary>
         Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

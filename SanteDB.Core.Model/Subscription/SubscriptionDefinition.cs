@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -19,6 +19,7 @@
  * Date: 2023-6-21
  */
 using Newtonsoft.Json;
+using SanteDB.Core.Model.Interfaces;
 using SanteDB.Core.Model.Serialization;
 using System;
 using System.Collections.Generic;
@@ -107,5 +108,8 @@ namespace SanteDB.Core.Model.Subscription
         {
             return m_xsz.Deserialize(ms) as SubscriptionDefinition;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

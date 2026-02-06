@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -80,24 +80,24 @@ namespace SanteDB.Core.Model.Map
         // The map file
         private ModelMap m_mapFile;
 
+
         /// <summary>
         /// Creates a new mapper from source stream
         /// </summary>
-        public ModelMapper(Stream sourceStream, String name, bool useReflectionOnly = false)
+        public ModelMapper(Stream sourceStream, String name, Assembly preGeneratedAssembly = null, bool useReflectionOnly = false)
         {
-            this.Load(sourceStream, name, useReflectionOnly || UseReflectionOnly);
+            this.Load(sourceStream, name, useReflectionOnly || UseReflectionOnly, preGeneratedAssembly);
         }
 
         /// <summary>
         /// Load mapping from a stream
         /// </summary>
-        private void Load(Stream sourceStream, String name, bool useReflectionOnly)
+        private void Load(Stream sourceStream, String name, bool useReflectionOnly, Assembly loadedAssembly = null)
         {
             this.m_mapFile = ModelMap.Load(sourceStream);
-
-            if (m_loadedMaps.TryGetValue(name, out Assembly asm))
+            if (loadedAssembly != null || m_loadedMaps.TryGetValue(name, out loadedAssembly))
             {
-                this.ProcessAssembly(asm);
+                this.ProcessAssembly(loadedAssembly);
             }
             else
             {

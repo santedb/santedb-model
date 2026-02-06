@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -69,5 +69,31 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public const string BackEntry = "isBackEntry";
 
+        /// <summary>
+        /// Minimum value allowed for an observation
+        /// </summary>
+        public const string CdssMaxValue = "$cdss.maxValue";
+        /// <summary>
+        /// Minimum value allowed for an observation
+        /// </summary>
+        public const string CdssMinValue = "$cdss.minValue";
+        /// <summary>
+        /// Only allow on of the protocol emissions per visit
+        /// </summary>
+        public const string CdssOnePerVisit = "$cdss.onePerVisit";
+        /// <summary>
+        /// Overwrite a component
+        /// </summary>
+        public const string CdssOverwriteComponent = "$cdss.overwriteComponent";
+
+        /// <summary>
+        /// CDSS order by tag
+        /// </summary>
+        public const string CdssOrderTag = "$cdss.order";
+
+        /// <summary>
+        /// Skip matching
+        /// </summary>
+        public const string SkipDuplicateCheck = "$match.skip";
     }
 }

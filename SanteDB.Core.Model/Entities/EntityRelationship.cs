@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -35,7 +35,7 @@ namespace SanteDB.Core.Model.Entities
     [Classifier(nameof(RelationshipType)), NonCached]
     [XmlRoot("EntityRelationship", Namespace = "http://santedb.org/model")]
     [XmlType("EntityRelationship", Namespace = "http://santedb.org/model"), JsonObject("EntityRelationship")]
-    public class EntityRelationship : VersionedAssociation<Entity>, ITargetedVersionedExtension, IHasExternalKey
+    public class EntityRelationship : VersionedAssociation<Entity>, ITargetedVersionedExtension, IHasExternalKey, IClassifiedRelationship
     {
 
         // The target entity
@@ -286,6 +286,10 @@ namespace SanteDB.Core.Model.Entities
         /// <summary>
         /// Association type
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }

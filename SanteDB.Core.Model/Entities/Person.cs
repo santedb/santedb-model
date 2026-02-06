@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2021 - 2025, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2021 - 2026, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
  * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
  * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
+using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -95,7 +96,7 @@ namespace SanteDB.Core.Model.Entities
                     // Try to parse ISO date
                     if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
                     {
-                        this.DateOfBirth = dt;
+                        this.DateOfBirth = dt.Date;
                     }
                     else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
                     {
@@ -139,6 +140,17 @@ namespace SanteDB.Core.Model.Entities
             return this.DateOfBirthPrecision.HasValue;
         }
 
+        /// <summary>
+        /// Gets or sets the marital status code
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(MaritalStatusKey))]
+        public Concept MaritalStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the key of the marital status concept
+        /// </summary>
+        [XmlElement("maritalStatus"), JsonProperty("maritalStatus")]
+        public Guid? MaritalStatusKey { get; set; }
 
         /// <summary>
         /// Gets or sets the date the patient was deceased
@@ -163,7 +175,7 @@ namespace SanteDB.Core.Model.Entities
                     // Try to parse ISO date
                     if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
                     {
-                        this.DeceasedDate = dt;
+                        this.DeceasedDate = dt.Date;
                     }
                     else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
                     {
@@ -245,5 +257,8 @@ namespace SanteDB.Core.Model.Entities
                 this.NationalityKey == other.NationalityKey &&
                 this.LanguageCommunication?.SemanticEquals(other.LanguageCommunication) != false;
         }
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
 }
