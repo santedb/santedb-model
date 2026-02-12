@@ -25,7 +25,7 @@ namespace SanteDB.Core.Model.Interfaces
     /// <summary>
     /// Relationship target
     /// </summary>
-    public interface IHasRelationships
+    public interface IHasRelationships : IIdentifiedResource
     {
         /// <summary>
         /// Gets the relationshp
