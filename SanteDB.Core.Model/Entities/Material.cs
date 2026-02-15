@@ -85,8 +85,9 @@ namespace SanteDB.Core.Model.Entities
             }
         }
 
-        // <summary>
-        /// Gets or sets the expiration date backing field
+      
+        /// <summary>
+        /// Expiration date backing field
         /// </summary>
         [XmlIgnore, JsonIgnore]
         public DateTime? ExpiryDate { get; set; }
