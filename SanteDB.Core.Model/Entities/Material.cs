@@ -24,6 +24,7 @@ using SanteDB.Core.Model.Constants;
 using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model.Entities
@@ -57,6 +58,37 @@ namespace SanteDB.Core.Model.Entities
         /// Gets or sets the expiry date of the material
         /// </summary>
         [XmlElement("expiryDate"), JsonProperty("expiryDate")]
+        public String ExpiryDateXml
+        {
+            get
+            {
+                return this.ExpiryDate?.ToString("yyyy-MM-dd");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date
+                    if (DateTime.TryParseExact(value, new String[] { "o", "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    {
+                        this.ExpiryDate = dt;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Cannot parse {value} as a date");
+                    }
+                }
+                else
+                {
+                    this.ExpiryDate = null;
+                }
+            }
+        }
+
+        // <summary>
+        /// Gets or sets the expiration date backing field
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
         public DateTime? ExpiryDate { get; set; }
 
         /// <summary>
