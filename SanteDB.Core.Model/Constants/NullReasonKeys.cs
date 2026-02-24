@@ -102,6 +102,11 @@ namespace SanteDB.Core.Model.Constants
         /// The value is available however it has been masked due to privacy concerns
         /// </summary>
         public const String Masked = "9B16BF12-073E-4EA4-B6C5-E1B93E8FD490";
+
+        /// <summary>
+        /// Value was asked for and refused to be given
+        /// </summary>
+        public const string AskedRefused = "e7fb387e-854d-44a7-9e62-9e1b5001e6bb";
     }
 
     /// <summary>
@@ -183,5 +188,58 @@ namespace SanteDB.Core.Model.Constants
         /// The value is available however it has been masked due to privacy concerns
         /// </summary>
         public static Guid Masked = Guid.Parse(NullReasonStrings.Masked);
+
+        /// <summary>
+        /// Value was asked for and an answer was refused
+        /// </summary>
+        public static Guid AskedRefused = Guid.Parse(NullReasonStrings.AskedRefused);
+
+        /// <summary>
+        /// Keys which indicate a privacy problem
+        /// </summary>
+        public static readonly Guid[] Privacy = new Guid[]
+        {
+            Masked
+        };
+
+        /// <summary>
+        /// Keys which indicate the value was asked but not provided for some reason
+        /// </summary>
+        public static readonly Guid[] Asked = new Guid[]
+        {
+            AskedRefused,
+            AskedUnknown,
+            NotAsked
+        };
+
+        /// <summary>
+        /// Any reason which indicates there was no source information
+        /// </summary>
+        public static Guid[] MissingInformation = new Guid[]
+        {
+            Unknown,
+            Unavailable,
+            NoInformation,
+            UnEncoded,
+        };
+
+        /// <summary>
+        /// Any reason
+        /// </summary>
+        public static Guid[] All = new Guid[]
+        {
+            AskedRefused,
+            AskedUnknown,
+            Derived,
+            Unavailable,
+            Unknown,
+            NoInformation,
+            Masked,
+            PositiveInfinity,
+            NegativeInfinity,
+            Trace,
+            UnEncoded,
+            SufficientQuantity,
+        };
     }
 }
