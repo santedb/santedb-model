@@ -32,5 +32,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// Gets the class concept key
         /// </summary>
         Guid? ClassConceptKey { get; }
+    
     }
 }
