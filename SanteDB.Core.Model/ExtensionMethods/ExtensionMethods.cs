@@ -547,7 +547,7 @@ namespace SanteDB
         /// </summary>
         public static String HexEncode(this byte[] array)
         {
-            
+
             return BitConverter.ToString(array).Replace("-", "");
         }
 
@@ -625,7 +625,7 @@ namespace SanteDB
         public static bool HasDirectOrParentRelationshipWith(this Entity me, Guid relationshipTypeKey, Guid? targetEntityKey)
         {
             bool retVal = false;
-            while(!retVal && targetEntityKey.GetValueOrDefault() != Guid.Empty)
+            while (!retVal && targetEntityKey.GetValueOrDefault() != Guid.Empty)
             {
                 retVal |= me.LoadProperty(o => o.Relationships).Any(r => r.RelationshipTypeKey == relationshipTypeKey && r.TargetEntityKey == targetEntityKey);
                 targetEntityKey = EntitySource.Current.Provider.Query<EntityRelationship>(o => o.SourceEntityKey == targetEntityKey && o.ObsoleteVersionSequenceId == null && o.RelationshipTypeKey == EntityRelationshipTypeKeys.Parent).Select(o => o.TargetEntityKey).FirstOrDefault();
@@ -825,7 +825,7 @@ namespace SanteDB
                             if (me is ITaggable taggable && taggable.TryGetTag(SystemTagNames.AlternateKeysTag, out ITag altKeys))
                             {
                                 var loadedData = inverted ?
-                                    EntitySource.Current.Provider.GetInverseRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray()) 
+                                    EntitySource.Current.Provider.GetInverseRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray())
                                     : EntitySource.Current.Provider.GetRelations(propertyToLoad.PropertyType.StripGeneric(), altKeys.Value.Split(',').Select(o => (Guid?)Guid.Parse(o)).ToArray());
                                 foreach (var itm in loadedData)
                                 {
@@ -861,7 +861,7 @@ namespace SanteDB
                     else
                     {
                         var mi = typeof(IEntitySourceProvider).GetGenericMethod(nameof(IEntitySourceProvider.Get), new Type[] { propertyToLoad.PropertyType }, new Type[] { typeof(Guid?) });
-                        var loaded = referenceData?.FirstOrDefault(o=>o.Key == keyValue) ?? mi.Invoke(EntitySource.Current.Provider, new object[] { keyValue });
+                        var loaded = referenceData?.FirstOrDefault(o => o.Key == keyValue) ?? mi.Invoke(EntitySource.Current.Provider, new object[] { keyValue });
                         propertyToLoad.SetValue(me, loaded);
                         return loaded;
                     }
@@ -1367,7 +1367,7 @@ namespace SanteDB
         public static PropertyInfo GetClassifierProperty(this Type type)
         {
             var classAttr = type.GetCustomAttribute<ClassifierAttribute>();
-            if(classAttr == null)
+            if (classAttr == null)
             {
                 return null; //throw new InvalidOperationException(String.Format(ErrorMessages.NO_CLASSIFIER_PROPERTY, type));
             }
@@ -1407,7 +1407,7 @@ namespace SanteDB
             }
             return serializationName;
         }
-        
+
         /// <summary>
         /// Get the preferred resource name or the default resource name
         /// </summary>
@@ -1620,7 +1620,7 @@ namespace SanteDB
         /// <param name="attributeType">The type of attribute to check on <paramref name="p"/></param>
         /// <returns>True if <paramref name="p"/> is annotated with <paramref name="attributeType"/></returns>
         public static bool HasCustomAttribute(this PropertyInfo p, Type attributeType)
-            => p?.GetCustomAttribute(attributeType) != null;
+            => p?.GetCustomAttributes(attributeType)?.Any() == true;
 
         /// <summary>
         /// Returns true if <paramref name="t"/> has <typeparamref name="TAttribute"/>
@@ -1638,7 +1638,7 @@ namespace SanteDB
         /// <param name="attributeType">The type of attribute to check on <paramref name="t"/></param>
         /// <returns>True if <paramref name="t"/> is annotated with <paramref name="attributeType"/></returns>
         public static bool HasCustomAttribute(this Type t, Type attributeType)
-            => t?.GetCustomAttribute(attributeType) != null;
+            => t?.GetCustomAttributes(attributeType)?.Any() == true;
         //=> t?.CustomAttributes?.Any(cad => cad.AttributeType == attributeType) ?? false;
 
 
@@ -1832,7 +1832,7 @@ namespace SanteDB
                                     pi.SetValue(me, null);
                                 }
                             }
-                            else if(iddata.Key.HasValue)
+                            else if (iddata.Key.HasValue)
                             {
                                 keyProperty.SetValue(me, iddata.Key);
                             }
@@ -1843,7 +1843,7 @@ namespace SanteDB
                             {
                                 keyProperty.SetValue(me, iddata.Key);
                             }
-                            else if(keyValue != null)
+                            else if (keyValue != null)
                             {
                                 pi.SetValue(me, null); // Let the identifier data stand
                             }
@@ -1897,7 +1897,7 @@ namespace SanteDB
                         processStack.Push(binaryExpression.Right);
                         break;
                     case MemberExpression memberExpression:
-                        if(memberExpression.Member.Name == propertyName && memberExpression.Member is PropertyInfo)
+                        if (memberExpression.Member.Name == propertyName && memberExpression.Member is PropertyInfo)
                         {
                             return true;
                         }
@@ -1905,10 +1905,11 @@ namespace SanteDB
                         break;
                     case MethodCallExpression methodCallExpression:
                         processStack.Push(methodCallExpression.Object);
-                        foreach(var arg in methodCallExpression.Arguments)
+                        foreach (var arg in methodCallExpression.Arguments)
                         {
                             processStack.Push(arg);
-                        };
+                        }
+                        ;
                         break;
                     case InvocationExpression invocationExpression:
                         processStack.Push(invocationExpression.Expression);
@@ -1933,7 +1934,7 @@ namespace SanteDB
         public static String ReadPascalString(this Stream str)
         {
             var len = str.ReadByte();
-            if(len <= 0)
+            if (len <= 0)
             {
                 return String.Empty;
             }
@@ -1950,6 +1951,54 @@ namespace SanteDB
             var dataBuf = Encoding.UTF8.GetBytes(stringData);
             str.WriteByte((byte)dataBuf.Length);
             str.Write(dataBuf, 0, dataBuf.Length);
+        }
+
+        /// <summary>
+        /// Resolves <paramref name="me"/> to the appropriate RIM type based on its class key
+        /// </summary>
+        /// <param name="me">The class concept object to be resolved</param>
+        /// <param name="mappedType">The mapped type</param>
+        /// <returns>True if the type was mapped succesfully from class concept</returns>
+        /// <remarks>
+        /// This method can be used when a method is passed, for example, a generic Entity instance which claims to be a Patient 
+        /// to discover the declared type
+        /// </remarks>
+        public static bool TryResolveClassConceptToType(this IHasClassConcept me, out Type mappedType)
+        {
+            if (me == null)
+            {
+                throw new ArgumentNullException();
+            }
+            else if (!me.ClassConceptKey.HasValue)
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.DEPENDENT_PROPERTY_NULL, nameof(me.ClassConceptKey)));
+            }
+
+            return SanteDBModelConstants.CLASS_CONCEPT_TYPE_MAP.TryGetValue(me.ClassConceptKey.Value, out mappedType);
+        }
+
+        /// <summary>
+        /// Resolves <paramref name="me"/> to the appropriate RIM type based on its type concept key
+        /// </summary>
+        /// <param name="me">The type concept object to be resolved</param>
+        /// <param name="mappedType">The mapped type</param>
+        /// <returns>True if the type resolution was successful</returns>
+        /// <remarks>
+        /// This method can be used in scenarios where a wrapper object is used to convey or indicate the type of object 
+        /// based on its type concept (for example in MDM)
+        /// </remarks>
+        public static bool TryResolveTypeConceptToType(this IHasTypeConcept me, out Type mappedType)
+        {
+            if (me == null)
+            {
+                throw new ArgumentNullException();
+            }
+            else if (!me.TypeConceptKey.HasValue)
+            {
+                throw new InvalidOperationException(String.Format(ErrorMessages.DEPENDENT_PROPERTY_NULL, nameof(me.TypeConceptKey)));
+            }
+
+            return SanteDBModelConstants.CLASS_CONCEPT_TYPE_MAP.TryGetValue(me.TypeConceptKey.Value, out mappedType);
         }
     }
 }
