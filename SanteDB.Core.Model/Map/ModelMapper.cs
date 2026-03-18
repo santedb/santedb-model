@@ -340,7 +340,12 @@ namespace SanteDB.Core.Model.Map
         /// <summary>
         /// Gets the domain type for the specified model type
         /// </summary>
-        public Type MapModelType(Type modelType)
+        public Type MapModelType(Type modelType) => MapModelType(modelType, true);
+
+        /// <summary>
+        /// Map the model type controlling whether there is an error thrown
+        /// </summary>
+        public Type MapModelType(Type modelType, bool throwOnError)
         {
             // Just a value type - don't look for a map
             if (modelType?.BaseType == typeof(ValueType) || modelType == null)
@@ -356,15 +361,15 @@ namespace SanteDB.Core.Model.Map
             }
             else if (classMap == null && modelType.BaseType != typeof(Object))
             {
-                return MapModelType(modelType.BaseType);
+                return MapModelType(modelType.BaseType, throwOnError);
             }
-            else if (classMap == null)
+            else if (classMap == null && throwOnError)
             {
                 throw new InvalidOperationException($"Cannot map {modelType.FullName} to a domain type");
             }
 
-            Type domainType = classMap.DomainType;
-            if (domainType == null)
+            Type domainType = classMap?.DomainType;
+            if (domainType == null && throwOnError)
             {
                 throw new InvalidOperationException(String.Format("Cannot find class {0}", classMap.DomainClass));
             }
