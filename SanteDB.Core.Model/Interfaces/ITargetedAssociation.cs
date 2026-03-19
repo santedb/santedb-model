@@ -22,16 +22,30 @@ using System;
 
 namespace SanteDB.Core.Model.Interfaces
 {
+
     /// <summary>
-    /// Represents an association where the caller can traverse between the source and target
+    /// Simple targeted association
     /// </summary>
-    public interface ITargetedAssociation : ISimpleAssociation
+    public interface ISimpleTargetedAssociation : ISimpleAssociation
     {
 
         /// <summary>
         /// The target (where the association points)
         /// </summary>
         Guid? TargetEntityKey { get; set; }
+
+        /// <summary>
+        /// The target entity object
+        /// </summary>
+        object TargetEntity { get; set; }
+    }
+
+    /// <summary>
+    /// Represents an association where the caller can traverse between the source and target
+    /// </summary>
+    public interface ITargetedAssociation : ISimpleTargetedAssociation
+    {
+
 
         /// <summary>
         /// Classification key (how the holder is related to the target)
@@ -43,10 +57,6 @@ namespace SanteDB.Core.Model.Interfaces
         /// </summary>
         Guid? AssociationTypeKey { get; set; }
 
-        /// <summary>
-        /// The target entity object
-        /// </summary>
-        object TargetEntity { get; set; }
 
     }
 }

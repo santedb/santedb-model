@@ -178,7 +178,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the targeted entity
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        Guid? ITargetedAssociation.TargetEntityKey
+        Guid? ISimpleTargetedAssociation.TargetEntityKey
         {
             get => this.TargetActKey;
             set => this.TargetActKey = value;
@@ -188,7 +188,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the targeted entity
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        object ITargetedAssociation.TargetEntity
+        object ISimpleTargetedAssociation.TargetEntity
         {
             get => this.TargetAct;
             set => this.TargetAct = value as Act;

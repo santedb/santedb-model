@@ -437,10 +437,11 @@ namespace SanteDB.Core.Model.Collection
 
                 currentBundle.m_modifiedOn = DateTimeOffset.Now;
 
-                foreach (var pi in properties.Where(o => o.DeclaringType.IsAssignableFrom(model.GetType())))
+                foreach (var propertyInfo in properties.Where(o => o.DeclaringType.IsAssignableFrom(model.GetType())))
                 {
                     try
                     {
+                        var pi = propertyInfo;
                         object rawValue = pi.GetValue(model);
                         if (propertiesToExclude.Contains(pi) || pi == null)
                         {
@@ -449,6 +450,11 @@ namespace SanteDB.Core.Model.Collection
                         }
                         else if (rawValue == null)
                         {
+                            rawValue = model.LoadProperty(pi.Name);
+                        }
+                        else if(pi.GetSerializationModelProperty() != pi)
+                        {
+                            pi = pi.GetSerializationModelProperty();
                             rawValue = model.LoadProperty(pi.Name);
                         }
 
@@ -472,6 +478,7 @@ namespace SanteDB.Core.Model.Collection
                             // Check for existing item
                             if (!currentBundle.HasTag(ident.Tag) && pi.GetCustomAttribute<XmlIgnoreAttribute>() != null) // won't be serialized
                             {
+                                ident.BatchOperation = BatchOperationType.Ignore; // for reference only
                                 currentBundle.Insert(0, ident);
                                 ProcessModel(ident, currentBundle, followList, propertiesToInclude, propertiesToExclude);
                             }
