@@ -144,6 +144,12 @@ namespace SanteDB.Core.Model.Acts
         public Concept RelationshipType { get; set; }
 
         /// <summary>
+        /// Gets or sets the sequence of the relationship
+        /// </summary>
+        [XmlElement("sequence"), JsonProperty("sequence")]
+        public long? Sequence { get; set; }
+
+        /// <summary>
         /// Empty?
         /// </summary>
         public override bool IsEmpty() => this.RelationshipType == null && this.RelationshipTypeKey == null ||
