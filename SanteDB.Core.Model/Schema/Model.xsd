@@ -19,8 +19,9 @@
  - User: fyfej
  - Date: 2025-1-14
  -->
-<xs:schema xmlns:tns="http://santedb.org/model" elementFormDefault="qualified" targetNamespace="http://santedb.org/model" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<xs:import namespace="http://microsoft.com/wsdl/types/" schemaLocation="BaseTypes.xsd"/>
+<xs:schema xmlns:tns="http://santedb.org/model" elementFormDefault="qualified"
+	targetNamespace="http://santedb.org/model" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:import namespace="http://microsoft.com/wsdl/types/" schemaLocation="BaseTypes.xsd" />
 	<xs:element name="SecurityApplication" nillable="true" type="tns:SecurityApplication" />
 	<xs:complexType name="SecurityApplication">
 		<xs:complexContent mixed="false">
@@ -29,7 +30,7 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="applicationSecret" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="lockout" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="invalidAuth" nillable="true" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="invalidAuth" nillable="true" type="xs:int" />
 					<xs:element minOccurs="0" maxOccurs="1" name="lastAuthenticationTime" type="xs:string" />
 				</xs:sequence>
 			</xs:extension>
@@ -40,7 +41,7 @@
 			<xs:extension base="tns:NonVersionedEntityData" />
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="NonVersionedEntityData">
+	<xs:complexType name="NonVersionedEntityData" abstract="true">
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:BaseEntityData">
 				<xs:sequence>
@@ -76,6 +77,7 @@
 			<xs:enumeration value="Update" />
 			<xs:enumeration value="Delete" />
 			<xs:enumeration value="Ignore" />
+			<xs:enumeration value="DeletePreserveContained" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="SecurityChallenge" nillable="true" type="tns:SecurityChallenge" />
@@ -96,7 +98,7 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="deviceSecret" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="lockout" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="invalidAuth" nillable="true" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="invalidAuth" nillable="true" type="xs:int" />
 					<xs:element minOccurs="0" maxOccurs="1" name="lastAuthenticationTime" type="xs:string" />
 				</xs:sequence>
 			</xs:extension>
@@ -110,8 +112,8 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="handler" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="oid" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="isPublic" type="xs:boolean" />
-					<xs:element minOccurs="1" maxOccurs="1" name="canOverride" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="isPublic" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="canOverride" type="xs:boolean" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -120,8 +122,8 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:AssociationOfSecurityEntity">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="policy" nillable="true" xmlns:q5="http://microsoft.com/wsdl/types/" type="q5:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="grant" type="tns:PolicyGrantType" />
+					<xs:element minOccurs="0" maxOccurs="1" name="policy" nillable="true" xmlns:q5="http://microsoft.com/wsdl/types/" type="q5:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="grant" type="tns:PolicyGrantType" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -148,11 +150,11 @@
 			<xs:extension base="tns:IdentifiedData">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="creationTime" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="application" nillable="true" xmlns:q7="http://microsoft.com/wsdl/types/" type="q7:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="user" nillable="true" xmlns:q8="http://microsoft.com/wsdl/types/" type="q8:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="device" nillable="true" xmlns:q9="http://microsoft.com/wsdl/types/" type="q9:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="session" nillable="true" xmlns:q10="http://microsoft.com/wsdl/types/" type="q10:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="extern" nillable="true" xmlns:q11="http://microsoft.com/wsdl/types/" type="q11:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="application" nillable="true" xmlns:q7="http://microsoft.com/wsdl/types/" type="q7:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="user" nillable="true" xmlns:q8="http://microsoft.com/wsdl/types/" type="q8:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="device" nillable="true" xmlns:q9="http://microsoft.com/wsdl/types/" type="q9:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="session" nillable="true" xmlns:q10="http://microsoft.com/wsdl/types/" type="q10:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="extern" nillable="true" xmlns:q11="http://microsoft.com/wsdl/types/" type="q11:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="externClass" type="xs:string" />
 				</xs:sequence>
 			</xs:extension>
@@ -175,20 +177,20 @@
 			<xs:extension base="tns:SecurityEntity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="email" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="emailConfirmed" type="xs:boolean" />
-					<xs:element minOccurs="1" maxOccurs="1" name="invalidLoginAttempts" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="emailConfirmed" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="invalidLoginAttempts" type="xs:int" />
 					<xs:element minOccurs="0" maxOccurs="1" name="lockout" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="password" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="securityStamp" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="twoFactorEnabled" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="twoFactorEnabled" type="xs:boolean" />
 					<xs:element minOccurs="0" maxOccurs="1" name="userName" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="photo" type="xs:base64Binary" />
 					<xs:element minOccurs="0" maxOccurs="1" name="lastLoginTime" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="passwordExpiry" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="phoneNumber" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="phoneNumberConfirmed" type="xs:boolean" />
-					<xs:element minOccurs="1" maxOccurs="1" name="twoFactorMechanism" nillable="true" xmlns:q12="http://microsoft.com/wsdl/types/" type="q12:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="userClass" xmlns:q13="http://microsoft.com/wsdl/types/" type="q13:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="phoneNumberConfirmed" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="twoFactorMechanism" nillable="true" xmlns:q12="http://microsoft.com/wsdl/types/" type="q12:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="userClass" xmlns:q13="http://microsoft.com/wsdl/types/" type="q13:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -199,11 +201,10 @@
 			<xs:extension base="tns:Person">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="multipleBirthOrder" nillable="true" type="xs:int" />
-					<xs:element minOccurs="1" maxOccurs="1" name="livingArrangement" nillable="true" xmlns:q14="http://microsoft.com/wsdl/types/" type="q14:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="religion" nillable="true" xmlns:q15="http://microsoft.com/wsdl/types/" type="q15:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="ethnicity" nillable="true" xmlns:q16="http://microsoft.com/wsdl/types/" type="q16:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="maritalStatus" nillable="true" xmlns:q17="http://microsoft.com/wsdl/types/" type="q17:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="educationLevel" nillable="true" xmlns:q18="http://microsoft.com/wsdl/types/" type="q18:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="livingArrangement" nillable="true" xmlns:q14="http://microsoft.com/wsdl/types/" type="q14:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="religion" nillable="true" xmlns:q15="http://microsoft.com/wsdl/types/" type="q15:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="ethnicity" nillable="true" xmlns:q16="http://microsoft.com/wsdl/types/" type="q16:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="educationLevel" nillable="true" xmlns:q17="http://microsoft.com/wsdl/types/" type="q17:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -213,14 +214,15 @@
 			<xs:extension base="tns:Entity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="dateOfBirthPrecision" nillable="true" type="tns:DatePrecision" />
-					<xs:element minOccurs="1" maxOccurs="1" name="genderConcept" nillable="true" xmlns:q19="http://microsoft.com/wsdl/types/" type="q19:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="genderConcept" nillable="true" xmlns:q18="http://microsoft.com/wsdl/types/" type="q18:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="dateOfBirth" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="language" type="tns:PersonLanguageCommunication" />
-					<xs:element minOccurs="1" maxOccurs="1" name="occupation" nillable="true" xmlns:q20="http://microsoft.com/wsdl/types/" type="q20:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="occupation" nillable="true" xmlns:q19="http://microsoft.com/wsdl/types/" type="q19:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="maritalStatus" nillable="true" xmlns:q20="http://microsoft.com/wsdl/types/" type="q20:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="deceasedDate" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="deceasedDatePrecision" nillable="true" type="tns:DatePrecision" />
-					<xs:element minOccurs="1" maxOccurs="1" name="vipStatus" nillable="true" xmlns:q21="http://microsoft.com/wsdl/types/" type="q21:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="nationality" nillable="true" xmlns:q22="http://microsoft.com/wsdl/types/" type="q22:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="vipStatus" nillable="true" xmlns:q21="http://microsoft.com/wsdl/types/" type="q21:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="nationality" nillable="true" xmlns:q22="http://microsoft.com/wsdl/types/" type="q22:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -230,16 +232,16 @@
 			<xs:extension base="tns:VersionedEntityDataOfEntity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="address" type="tns:EntityAddress" />
-					<xs:element minOccurs="1" maxOccurs="1" name="classConcept" nillable="true" xmlns:q23="http://microsoft.com/wsdl/types/" type="q23:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="classConcept" nillable="true" xmlns:q23="http://microsoft.com/wsdl/types/" type="q23:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="creationAct" nillable="true" xmlns:q24="http://microsoft.com/wsdl/types/" type="q24:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="determinerConcept" nillable="true" xmlns:q25="http://microsoft.com/wsdl/types/" type="q25:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="determinerConcept" nillable="true" xmlns:q25="http://microsoft.com/wsdl/types/" type="q25:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="extension" type="tns:EntityExtension" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="identifier" type="tns:EntityIdentifier" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="name" type="tns:EntityName" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="note" type="tns:EntityNote" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="participation" type="tns:ActParticipation" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="relationship" type="tns:EntityRelationship" />
-					<xs:element minOccurs="1" maxOccurs="1" name="statusConcept" nillable="true" xmlns:q26="http://microsoft.com/wsdl/types/" type="q26:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="statusConcept" nillable="true" xmlns:q26="http://microsoft.com/wsdl/types/" type="q26:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="tag" type="tns:EntityTag" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="telecom" type="tns:EntityTelecomAddress" />
 					<xs:element minOccurs="0" maxOccurs="1" name="template" nillable="true" xmlns:q27="http://microsoft.com/wsdl/types/" type="q27:guid" />
@@ -256,7 +258,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="previousVersion" nillable="true" xmlns:q29="http://microsoft.com/wsdl/types/" type="q29:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="version" nillable="true" xmlns:q30="http://microsoft.com/wsdl/types/" type="q30:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="sequence" nillable="true" type="xs:long" />
+					<xs:element minOccurs="0" maxOccurs="1" name="sequence" nillable="true" type="xs:long" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -266,7 +268,7 @@
 			<xs:extension base="tns:VersionedAssociationOfEntity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="use" nillable="true" xmlns:q31="http://microsoft.com/wsdl/types/" type="q31:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="use" nillable="true" xmlns:q31="http://microsoft.com/wsdl/types/" type="q31:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="component" type="tns:AddressComponent" />
 				</xs:sequence>
 			</xs:extension>
@@ -291,7 +293,7 @@
 			<xs:extension base="tns:VersionedAssociationOfEntity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="isPreferred" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="isPreferred" type="xs:boolean" />
 					<xs:element minOccurs="0" maxOccurs="1" name="languageCode" type="xs:string" />
 				</xs:sequence>
 			</xs:extension>
@@ -302,8 +304,8 @@
 			<xs:extension base="tns:VersionedAssociationOfEntity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="use" nillable="true" xmlns:q33="http://microsoft.com/wsdl/types/" type="q33:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="type" nillable="true" xmlns:q34="http://microsoft.com/wsdl/types/" type="q34:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="use" nillable="true" xmlns:q33="http://microsoft.com/wsdl/types/" type="q33:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="type" nillable="true" xmlns:q34="http://microsoft.com/wsdl/types/" type="q34:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="value" type="xs:string" />
 				</xs:sequence>
 			</xs:extension>
@@ -314,14 +316,14 @@
 			<xs:extension base="tns:VersionedAssociationOfEntity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="holder" nillable="true" xmlns:q35="http://microsoft.com/wsdl/types/" type="q35:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="holder" nillable="true" xmlns:q35="http://microsoft.com/wsdl/types/" type="q35:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="negationInd" nillable="true" type="xs:boolean" />
-					<xs:element minOccurs="1" maxOccurs="1" name="strength" nillable="true" type="xs:double" />
+					<xs:element minOccurs="0" maxOccurs="1" name="strength" nillable="true" type="xs:double" />
 					<xs:element minOccurs="0" maxOccurs="1" name="quantity" nillable="true" type="xs:int" />
-					<xs:element minOccurs="1" maxOccurs="1" name="relationshipType" nillable="true" xmlns:q36="http://microsoft.com/wsdl/types/" type="q36:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="relationshipRole" nillable="true" xmlns:q37="http://microsoft.com/wsdl/types/" type="q37:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="classification" nillable="true" xmlns:q38="http://microsoft.com/wsdl/types/" type="q38:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="target" nillable="true" xmlns:q39="http://microsoft.com/wsdl/types/" type="q39:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="relationshipType" nillable="true" xmlns:q36="http://microsoft.com/wsdl/types/" type="q36:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="relationshipRole" nillable="true" xmlns:q37="http://microsoft.com/wsdl/types/" type="q37:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="classification" nillable="true" xmlns:q38="http://microsoft.com/wsdl/types/" type="q38:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="target" nillable="true" xmlns:q39="http://microsoft.com/wsdl/types/" type="q39:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -331,7 +333,7 @@
 			<xs:extension base="tns:VersionedAssociationOfEntity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="text" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="author" nillable="true" xmlns:q40="http://microsoft.com/wsdl/types/" type="q40:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="author" nillable="true" xmlns:q40="http://microsoft.com/wsdl/types/" type="q40:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -347,7 +349,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="component" type="tns:EntityNameComponent" />
-					<xs:element minOccurs="1" maxOccurs="1" name="use" nillable="true" xmlns:q41="http://microsoft.com/wsdl/types/" type="q41:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="use" nillable="true" xmlns:q41="http://microsoft.com/wsdl/types/" type="q41:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -356,7 +358,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:GenericComponentValuesOfEntityName">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="sequence" type="xs:long" />
+					<xs:element minOccurs="0" maxOccurs="1" name="sequence" type="xs:long" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -389,10 +391,10 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="issued" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="expires" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="checkDigit" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="domain" nillable="true" xmlns:q44="http://microsoft.com/wsdl/types/" type="q44:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="domain" nillable="true" xmlns:q44="http://microsoft.com/wsdl/types/" type="q44:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="authority" type="tns:IdentityDomain" />
-					<xs:element minOccurs="1" maxOccurs="1" name="type" nillable="true" xmlns:q45="http://microsoft.com/wsdl/types/" type="q45:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="reliability" type="tns:IdentifierReliability" />
+					<xs:element minOccurs="0" maxOccurs="1" name="type" nillable="true" xmlns:q45="http://microsoft.com/wsdl/types/" type="q45:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="reliability" type="tns:IdentifierReliability" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -407,8 +409,8 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="oid" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="url" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="assigningAuthority" type="tns:AssigningAuthority" />
-					<xs:element minOccurs="1" maxOccurs="1" name="policy" nillable="true" xmlns:q46="http://microsoft.com/wsdl/types/" type="q46:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="identifierClass" nillable="true" xmlns:q47="http://microsoft.com/wsdl/types/" type="q47:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="policy" nillable="true" xmlns:q46="http://microsoft.com/wsdl/types/" type="q46:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="identifierClass" nillable="true" xmlns:q47="http://microsoft.com/wsdl/types/" type="q47:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="validation" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="isUnique" type="xs:boolean" />
 					<xs:element minOccurs="0" maxOccurs="1" name="customValidator" type="xs:string" />
@@ -422,9 +424,9 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:BaseEntityData">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="assigningApplication" nillable="true" xmlns:q49="http://microsoft.com/wsdl/types/" type="q49:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="reliability" type="tns:IdentifierReliability" />
-					<xs:element minOccurs="1" maxOccurs="1" name="source" nillable="true" xmlns:q50="http://microsoft.com/wsdl/types/" type="q50:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="assigningApplication" nillable="true" xmlns:q49="http://microsoft.com/wsdl/types/" type="q49:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="reliability" type="tns:IdentifierReliability" />
+					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q50="http://microsoft.com/wsdl/types/" type="q50:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -447,7 +449,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="value" type="xs:base64Binary" />
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="extensionType" nillable="true" xmlns:q51="http://microsoft.com/wsdl/types/" type="q51:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="extensionType" nillable="true" xmlns:q51="http://microsoft.com/wsdl/types/" type="q51:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -461,7 +463,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:GenericComponentValuesOfEntityAddress">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="sequence" type="xs:long" />
+					<xs:element minOccurs="0" maxOccurs="1" name="sequence" type="xs:long" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -490,9 +492,9 @@
 			<xs:extension base="tns:VersionedAssociationOfAct">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="classification" nillable="true" xmlns:q54="http://microsoft.com/wsdl/types/" type="q54:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="player" nillable="true" xmlns:q55="http://microsoft.com/wsdl/types/" type="q55:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="participationRole" nillable="true" xmlns:q56="http://microsoft.com/wsdl/types/" type="q56:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="classification" nillable="true" xmlns:q54="http://microsoft.com/wsdl/types/" type="q54:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="player" nillable="true" xmlns:q55="http://microsoft.com/wsdl/types/" type="q55:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="participationRole" nillable="true" xmlns:q56="http://microsoft.com/wsdl/types/" type="q56:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="act" nillable="true" xmlns:q57="http://microsoft.com/wsdl/types/" type="q57:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="quantity" nillable="true" type="xs:int" />
 				</xs:sequence>
@@ -524,7 +526,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="key" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="value" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="source" nillable="true" xmlns:q59="http://microsoft.com/wsdl/types/" type="q59:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q59="http://microsoft.com/wsdl/types/" type="q59:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -533,9 +535,9 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:IdentifiedData">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="lat" nillable="true" type="xs:double" />
-					<xs:element minOccurs="1" maxOccurs="1" name="lng" nillable="true" type="xs:double" />
-					<xs:element minOccurs="1" maxOccurs="1" name="precise" nillable="true" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="lat" nillable="true" type="xs:double" />
+					<xs:element minOccurs="0" maxOccurs="1" name="lng" nillable="true" type="xs:double" />
+					<xs:element minOccurs="0" maxOccurs="1" name="precise" nillable="true" type="xs:boolean" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -556,7 +558,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Person">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="providerSpecialty" nillable="true" xmlns:q60="http://microsoft.com/wsdl/types/" type="q60:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="providerSpecialty" nillable="true" xmlns:q60="http://microsoft.com/wsdl/types/" type="q60:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -603,6 +605,7 @@
 			<xs:enumeration value="remove" />
 			<xs:enumeration value="replace" />
 			<xs:enumeration value="test" />
+			<xs:enumeration value="test-ne" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="Patch" nillable="true" type="tns:Patch" />
@@ -610,14 +613,14 @@
 	<xs:complexType name="Parameter">
 		<xs:sequence>
 			<xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
-			<xs:choice minOccurs="1" maxOccurs="1">
-				<xs:element minOccurs="1" maxOccurs="1" name="int" type="xs:int" />
-				<xs:element minOccurs="1" maxOccurs="1" name="bool" type="xs:boolean" />
+			<xs:choice minOccurs="0" maxOccurs="1">
+				<xs:element minOccurs="0" maxOccurs="1" name="int" type="xs:int" />
+				<xs:element minOccurs="0" maxOccurs="1" name="bool" type="xs:boolean" />
 				<xs:element minOccurs="0" maxOccurs="1" name="array" type="tns:ArrayOfString" />
-				<xs:element minOccurs="1" maxOccurs="1" name="date" type="xs:dateTime" />
+				<xs:element minOccurs="0" maxOccurs="1" name="date" type="xs:dateTime" />
 				<xs:element minOccurs="0" maxOccurs="1" name="string" type="xs:string" />
-				<xs:element minOccurs="1" maxOccurs="1" name="float" type="xs:float" />
-				<xs:element minOccurs="1" maxOccurs="1" name="uuid" xmlns:q63="http://microsoft.com/wsdl/types/" type="q63:guid" />
+				<xs:element minOccurs="0" maxOccurs="1" name="float" type="xs:float" />
+				<xs:element minOccurs="0" maxOccurs="1" name="uuid" xmlns:q63="http://microsoft.com/wsdl/types/" type="q63:guid" />
 				<xs:element minOccurs="0" maxOccurs="1" name="patient" type="tns:Patient" />
 				<xs:element minOccurs="0" maxOccurs="1" name="act" type="tns:Act" />
 				<xs:element minOccurs="0" maxOccurs="1" name="substanceAdministration" type="tns:SubstanceAdministration" />
@@ -641,17 +644,17 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:VersionedEntityDataOfAct">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="isNegated" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="isNegated" type="xs:boolean" />
 					<xs:element minOccurs="0" maxOccurs="1" name="template" nillable="true" xmlns:q64="http://microsoft.com/wsdl/types/" type="q64:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="actTime" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="startTime" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="stopTime" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="classConcept" nillable="true" xmlns:q65="http://microsoft.com/wsdl/types/" type="q65:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="moodConcept" nillable="true" xmlns:q66="http://microsoft.com/wsdl/types/" type="q66:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="classConcept" nillable="true" xmlns:q65="http://microsoft.com/wsdl/types/" type="q65:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="moodConcept" nillable="true" xmlns:q66="http://microsoft.com/wsdl/types/" type="q66:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="reasonConcept" nillable="true" xmlns:q67="http://microsoft.com/wsdl/types/" type="q67:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="obsoletionReason" nillable="true" xmlns:q68="http://microsoft.com/wsdl/types/" type="q68:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="statusConcept" nillable="true" xmlns:q69="http://microsoft.com/wsdl/types/" type="q69:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="typeConcept" nillable="true" xmlns:q70="http://microsoft.com/wsdl/types/" type="q70:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="obsoletionReason" nillable="true" xmlns:q68="http://microsoft.com/wsdl/types/" type="q68:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="statusConcept" nillable="true" xmlns:q69="http://microsoft.com/wsdl/types/" type="q69:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="typeConcept" nillable="true" xmlns:q70="http://microsoft.com/wsdl/types/" type="q70:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="identifier" type="tns:ActIdentifier" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="relationship" type="tns:ActRelationship" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="policy" type="tns:SecurityPolicyInstance" />
@@ -671,7 +674,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="previousVersion" nillable="true" xmlns:q71="http://microsoft.com/wsdl/types/" type="q71:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="version" nillable="true" xmlns:q72="http://microsoft.com/wsdl/types/" type="q72:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="sequence" nillable="true" type="xs:long" />
+					<xs:element minOccurs="0" maxOccurs="1" name="sequence" nillable="true" type="xs:long" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -690,10 +693,10 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="issued" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="expires" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="checkDigit" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="domain" nillable="true" xmlns:q73="http://microsoft.com/wsdl/types/" type="q73:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="domain" nillable="true" xmlns:q73="http://microsoft.com/wsdl/types/" type="q73:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="authority" type="tns:IdentityDomain" />
-					<xs:element minOccurs="1" maxOccurs="1" name="type" nillable="true" xmlns:q74="http://microsoft.com/wsdl/types/" type="q74:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="reliability" type="tns:IdentifierReliability" />
+					<xs:element minOccurs="0" maxOccurs="1" name="type" nillable="true" xmlns:q74="http://microsoft.com/wsdl/types/" type="q74:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="reliability" type="tns:IdentifierReliability" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -702,11 +705,11 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:VersionedAssociationOfAct">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="negationInd" nillable="true" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="negationInd" nillable="true" type="xs:boolean" />
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="classification" nillable="true" xmlns:q75="http://microsoft.com/wsdl/types/" type="q75:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="target" nillable="true" xmlns:q76="http://microsoft.com/wsdl/types/" type="q76:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="relationshipType" nillable="true" xmlns:q77="http://microsoft.com/wsdl/types/" type="q77:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="classification" nillable="true" xmlns:q75="http://microsoft.com/wsdl/types/" type="q75:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="target" nillable="true" xmlns:q76="http://microsoft.com/wsdl/types/" type="q76:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="relationshipType" nillable="true" xmlns:q77="http://microsoft.com/wsdl/types/" type="q77:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -722,7 +725,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="value" type="xs:base64Binary" />
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="extensionType" nillable="true" xmlns:q78="http://microsoft.com/wsdl/types/" type="q78:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="extensionType" nillable="true" xmlns:q78="http://microsoft.com/wsdl/types/" type="q78:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -737,7 +740,7 @@
 			<xs:extension base="tns:VersionedAssociationOfAct">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="text" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="author" nillable="true" xmlns:q79="http://microsoft.com/wsdl/types/" type="q79:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="author" nillable="true" xmlns:q79="http://microsoft.com/wsdl/types/" type="q79:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -753,7 +756,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="key" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="value" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="source" nillable="true" xmlns:q80="http://microsoft.com/wsdl/types/" type="q80:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q80="http://microsoft.com/wsdl/types/" type="q80:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -762,10 +765,12 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:AssociationOfAct">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="protocol" nillable="true" xmlns:q81="http://microsoft.com/wsdl/types/" type="q81:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="protocol" nillable="true" xmlns:q81="http://microsoft.com/wsdl/types/" type="q81:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="version" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="sequence" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="sequence" type="xs:int" />
 					<xs:element minOccurs="0" maxOccurs="1" name="state" type="xs:base64Binary" />
+					<xs:element minOccurs="0" maxOccurs="1" name="notBefore" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="notAfter" type="xs:string" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -775,7 +780,7 @@
 			<xs:extension base="tns:Act">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="title" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="pathway" nillable="true" xmlns:q82="http://microsoft.com/wsdl/types/" type="q82:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="pathway" nillable="true" xmlns:q82="http://microsoft.com/wsdl/types/" type="q82:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -784,10 +789,10 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Act">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="amount" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="currency" nillable="true" xmlns:q83="http://microsoft.com/wsdl/types/" type="q83:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="creditExchange" type="xs:float" />
-					<xs:element minOccurs="1" maxOccurs="1" name="debitExchange" type="xs:float" />
+					<xs:element minOccurs="0" maxOccurs="1" name="amount" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="currency" nillable="true" xmlns:q83="http://microsoft.com/wsdl/types/" type="q83:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="creditExchange" type="xs:float" />
+					<xs:element minOccurs="0" maxOccurs="1" name="debitExchange" type="xs:float" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -796,7 +801,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Act">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="paymentTerms" nillable="true" xmlns:q84="http://microsoft.com/wsdl/types/" type="q84:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="paymentTerms" nillable="true" xmlns:q84="http://microsoft.com/wsdl/types/" type="q84:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -805,12 +810,12 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Act">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="modifier" nillable="true" xmlns:q85="http://microsoft.com/wsdl/types/" type="q85:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="unitQty" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="unitPrice" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="netPrice" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="currency" nillable="true" xmlns:q86="http://microsoft.com/wsdl/types/" type="q86:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="factor" nillable="true" type="xs:float" />
+					<xs:element minOccurs="0" maxOccurs="1" name="modifier" nillable="true" xmlns:q85="http://microsoft.com/wsdl/types/" type="q85:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="unitQty" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="unitPrice" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="netPrice" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="currency" nillable="true" xmlns:q86="http://microsoft.com/wsdl/types/" type="q86:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="factor" nillable="true" type="xs:float" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -819,10 +824,10 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Act">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="balance" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="currency" nillable="true" xmlns:q87="http://microsoft.com/wsdl/types/" type="q87:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="minBalance" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="maxBalance" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="balance" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="currency" nillable="true" xmlns:q87="http://microsoft.com/wsdl/types/" type="q87:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="minBalance" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="maxBalance" type="xs:decimal" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -849,8 +854,8 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Act">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="dischargeDisposition" nillable="true" xmlns:q88="http://microsoft.com/wsdl/types/" type="q88:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="admissionSource" nillable="true" xmlns:q89="http://microsoft.com/wsdl/types/" type="q89:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="dischargeDisposition" nillable="true" xmlns:q88="http://microsoft.com/wsdl/types/" type="q88:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="admissionSource" nillable="true" xmlns:q89="http://microsoft.com/wsdl/types/" type="q89:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="specialArrangement" type="tns:PatientEncounterArrangement" />
 				</xs:sequence>
 			</xs:extension>
@@ -860,7 +865,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:VersionedAssociationOfAct">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="type" nillable="true" xmlns:q90="http://microsoft.com/wsdl/types/" type="q90:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="type" nillable="true" xmlns:q90="http://microsoft.com/wsdl/types/" type="q90:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="startTime" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="stopTime" type="xs:string" />
 				</xs:sequence>
@@ -871,9 +876,9 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Act">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="method" nillable="true" xmlns:q91="http://microsoft.com/wsdl/types/" type="q91:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="approachSite" nillable="true" xmlns:q92="http://microsoft.com/wsdl/types/" type="q92:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="targetSite" nillable="true" xmlns:q93="http://microsoft.com/wsdl/types/" type="q93:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="method" nillable="true" xmlns:q91="http://microsoft.com/wsdl/types/" type="q91:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="approachSite" nillable="true" xmlns:q92="http://microsoft.com/wsdl/types/" type="q92:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="targetSite" nillable="true" xmlns:q93="http://microsoft.com/wsdl/types/" type="q93:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -882,8 +887,18 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Act">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="interpretationConcept" nillable="true" xmlns:q94="http://microsoft.com/wsdl/types/" type="q94:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="interpretationConcept" nillable="true" xmlns:q94="http://microsoft.com/wsdl/types/" type="q94:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="valueType" type="xs:string" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DateObservation">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:Observation">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="value" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="valuePrecision" nillable="true" type="tns:DatePrecision" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -901,7 +916,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Observation">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="value" nillable="true" xmlns:q95="http://microsoft.com/wsdl/types/" type="q95:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="value" nillable="true" xmlns:q95="http://microsoft.com/wsdl/types/" type="q95:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -910,8 +925,8 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Observation">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="value" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="unitOfMeasure" nillable="true" xmlns:q96="http://microsoft.com/wsdl/types/" type="q96:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="value" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="unitOfMeasure" nillable="true" xmlns:q96="http://microsoft.com/wsdl/types/" type="q96:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -920,10 +935,10 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Act">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="route" nillable="true" xmlns:q97="http://microsoft.com/wsdl/types/" type="q97:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="doseUnit" nillable="true" xmlns:q98="http://microsoft.com/wsdl/types/" type="q98:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="doseQuantity" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="doseSequence" nillable="true" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="route" nillable="true" xmlns:q97="http://microsoft.com/wsdl/types/" type="q97:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="doseUnit" nillable="true" xmlns:q98="http://microsoft.com/wsdl/types/" type="q98:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="doseQuantity" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="doseSequence" nillable="true" type="xs:int" />
 					<xs:element minOccurs="0" maxOccurs="1" name="site" nillable="true" xmlns:q99="http://microsoft.com/wsdl/types/" type="q99:guid" />
 				</xs:sequence>
 			</xs:extension>
@@ -933,11 +948,13 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:IdentifiedData">
 				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="correlationSeq" nillable="true" type="xs:long" />
+					<xs:element minOccurs="0" maxOccurs="1" name="correlationId" nillable="true" xmlns:q100="http://microsoft.com/wsdl/types/" type="q100:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="resource" type="tns:IdentifiedData" />
-					<xs:element minOccurs="0" maxOccurs="unbounded" name="focal" xmlns:q100="http://microsoft.com/wsdl/types/" type="q100:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="offset" type="xs:int" />
-					<xs:element minOccurs="1" maxOccurs="1" name="count" type="xs:int" />
-					<xs:element minOccurs="1" maxOccurs="1" name="totalResults" nillable="true" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="focal" xmlns:q101="http://microsoft.com/wsdl/types/" type="q101:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="offset" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="count" type="xs:int" />
+					<xs:element minOccurs="0" maxOccurs="1" name="totalResults" nillable="true" type="xs:int" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -953,7 +970,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Entity">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="securityApplication" nillable="true" xmlns:q101="http://microsoft.com/wsdl/types/" type="q101:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="securityApplication" nillable="true" xmlns:q102="http://microsoft.com/wsdl/types/" type="q102:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="softwareName" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="vendorName" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="versionName" type="xs:string" />
@@ -967,9 +984,9 @@
 			<xs:extension base="tns:Material">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="lotNumber" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="capacityQuantity" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="diameterQuantity" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="heightQuantity" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="capacityQuantity" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="diameterQuantity" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="heightQuantity" nillable="true" type="xs:decimal" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -978,11 +995,11 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Entity">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="expiryDate" nillable="true" type="xs:dateTime" />
-					<xs:element minOccurs="1" maxOccurs="1" name="formConcept" nillable="true" xmlns:q102="http://microsoft.com/wsdl/types/" type="q102:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="isAdministrable" type="xs:boolean" />
-					<xs:element minOccurs="1" maxOccurs="1" name="quantity" nillable="true" type="xs:decimal" />
-					<xs:element minOccurs="1" maxOccurs="1" name="quantityConcept" nillable="true" xmlns:q103="http://microsoft.com/wsdl/types/" type="q103:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="expiryDate" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="formConcept" nillable="true" xmlns:q103="http://microsoft.com/wsdl/types/" type="q103:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="isAdministrable" type="xs:boolean" />
+					<xs:element minOccurs="0" maxOccurs="1" name="quantity" nillable="true" type="xs:decimal" />
+					<xs:element minOccurs="0" maxOccurs="1" name="quantityConcept" nillable="true" xmlns:q104="http://microsoft.com/wsdl/types/" type="q104:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1003,7 +1020,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="manufacturerModelName" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="operatingSystemName" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="securityDevice" nillable="true" xmlns:q104="http://microsoft.com/wsdl/types/" type="q104:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="securityDevice" nillable="true" xmlns:q105="http://microsoft.com/wsdl/types/" type="q105:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1017,7 +1034,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Entity">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="strain" nillable="true" xmlns:q105="http://microsoft.com/wsdl/types/" type="q105:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="strain" nillable="true" xmlns:q106="http://microsoft.com/wsdl/types/" type="q106:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1027,7 +1044,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Entity">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="industryConcept" nillable="true" xmlns:q106="http://microsoft.com/wsdl/types/" type="q106:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="industryConcept" nillable="true" xmlns:q107="http://microsoft.com/wsdl/types/" type="q107:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1049,7 +1066,7 @@
 			<xs:extension base="tns:VersionedAssociationOfEntity">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="serviceConcept" nillable="true" xmlns:q107="http://microsoft.com/wsdl/types/" type="q107:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="serviceConcept" nillable="true" xmlns:q108="http://microsoft.com/wsdl/types/" type="q108:guid" />
 					<xs:element minOccurs="0" maxOccurs="1" name="serviceSchedule" type="xs:string" />
 				</xs:sequence>
 			</xs:extension>
@@ -1061,7 +1078,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:Person">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="securityUser" nillable="true" xmlns:q108="http://microsoft.com/wsdl/types/" type="q108:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="securityUser" nillable="true" xmlns:q109="http://microsoft.com/wsdl/types/" type="q109:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1088,12 +1105,14 @@
 			<xs:extension base="tns:VersionedEntityDataOfConcept">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="mnemonic" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="statusConcept" nillable="true" xmlns:q109="http://microsoft.com/wsdl/types/" type="q109:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="statusConcept" nillable="true" xmlns:q110="http://microsoft.com/wsdl/types/" type="q110:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="relationship" type="tns:ConceptRelationship" />
-					<xs:element minOccurs="1" maxOccurs="1" name="conceptClass" nillable="true" xmlns:q110="http://microsoft.com/wsdl/types/" type="q110:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="conceptClass" nillable="true" xmlns:q111="http://microsoft.com/wsdl/types/" type="q111:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="referenceTerm" type="tns:ConceptReferenceTerm" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="name" type="tns:ConceptName" />
-					<xs:element minOccurs="0" maxOccurs="unbounded" name="conceptSet" xmlns:q111="http://microsoft.com/wsdl/types/" type="q111:guid" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="conceptSet" xmlns:q112="http://microsoft.com/wsdl/types/" type="q112:guid" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="tag" type="tns:ConceptTag" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="extension" type="tns:ConceptExtension" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1102,9 +1121,9 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:BaseEntityData">
 				<xs:sequence>
-					<xs:element minOccurs="0" maxOccurs="1" name="previousVersion" nillable="true" xmlns:q112="http://microsoft.com/wsdl/types/" type="q112:guid" />
-					<xs:element minOccurs="0" maxOccurs="1" name="version" nillable="true" xmlns:q113="http://microsoft.com/wsdl/types/" type="q113:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="sequence" nillable="true" type="xs:long" />
+					<xs:element minOccurs="0" maxOccurs="1" name="previousVersion" nillable="true" xmlns:q113="http://microsoft.com/wsdl/types/" type="q113:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="version" nillable="true" xmlns:q114="http://microsoft.com/wsdl/types/" type="q114:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="sequence" nillable="true" type="xs:long" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1113,8 +1132,8 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:VersionedAssociationOfConcept">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="targetConcept" nillable="true" xmlns:q114="http://microsoft.com/wsdl/types/" type="q114:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="relationshipType" nillable="true" xmlns:q115="http://microsoft.com/wsdl/types/" type="q115:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="targetConcept" nillable="true" xmlns:q115="http://microsoft.com/wsdl/types/" type="q115:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="relationshipType" nillable="true" xmlns:q116="http://microsoft.com/wsdl/types/" type="q116:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1128,9 +1147,25 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:IdentifiedData">
 				<xs:sequence>
-					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q116="http://microsoft.com/wsdl/types/" type="q116:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q117="http://microsoft.com/wsdl/types/" type="q117:guid" />
 				</xs:sequence>
 			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ExtensionOfConcept" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:VersionedAssociationOfConcept">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="value" type="xs:base64Binary" />
+					<xs:element minOccurs="0" maxOccurs="1" name="externId" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="extensionType" nillable="true" xmlns:q118="http://microsoft.com/wsdl/types/" type="q118:guid" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConceptExtension">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:ExtensionOfConcept" />
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="ConceptName">
@@ -1147,10 +1182,15 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:VersionedAssociationOfConcept">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="term" nillable="true" xmlns:q117="http://microsoft.com/wsdl/types/" type="q117:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="relationshipType" nillable="true" xmlns:q118="http://microsoft.com/wsdl/types/" type="q118:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="term" nillable="true" xmlns:q119="http://microsoft.com/wsdl/types/" type="q119:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="relationshipType" nillable="true" xmlns:q120="http://microsoft.com/wsdl/types/" type="q120:guid" />
 				</xs:sequence>
 			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConceptTag">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:TagOfEntity" />
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="ConceptClass" nillable="true" type="tns:ConceptClass" />
@@ -1186,7 +1226,7 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="mnemonic" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="oid" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="url" type="xs:string" />
-					<xs:element minOccurs="0" maxOccurs="unbounded" name="concept" xmlns:q119="http://microsoft.com/wsdl/types/" type="q119:guid" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="concept" xmlns:q121="http://microsoft.com/wsdl/types/" type="q121:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="compose" type="tns:ConceptSetComposition" />
 				</xs:sequence>
 			</xs:extension>
@@ -1196,8 +1236,8 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:AssociationOfConceptSet">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="instruction" type="tns:ConceptSetCompositionOperation" />
-					<xs:element minOccurs="1" maxOccurs="1" name="target" nillable="true" xmlns:q120="http://microsoft.com/wsdl/types/" type="q120:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="instruction" type="tns:ConceptSetCompositionOperation" />
+					<xs:element minOccurs="0" maxOccurs="1" name="target" nillable="true" xmlns:q122="http://microsoft.com/wsdl/types/" type="q122:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1206,7 +1246,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:IdentifiedData">
 				<xs:sequence>
-					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q121="http://microsoft.com/wsdl/types/" type="q121:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q123="http://microsoft.com/wsdl/types/" type="q123:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1217,6 +1257,7 @@
 			<xs:enumeration value="exclude" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:element name="ConceptExtension" nillable="true" type="tns:ConceptExtension" />
 	<xs:element name="EntityExtension" nillable="true" type="tns:EntityExtension" />
 	<xs:element name="ActExtension" nillable="true" type="tns:ActExtension" />
 	<xs:element name="ExtensionType" nillable="true" type="tns:ExtensionType" />
@@ -1227,7 +1268,7 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="handlerClass" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="uri" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
-					<xs:element minOccurs="0" maxOccurs="unbounded" name="scope" xmlns:q122="http://microsoft.com/wsdl/types/" type="q122:guid" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="scope" xmlns:q124="http://microsoft.com/wsdl/types/" type="q124:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1249,7 +1290,7 @@
 			<xs:extension base="tns:NonVersionedEntityData">
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="mnemonic" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="codeSystem" nillable="true" xmlns:q123="http://microsoft.com/wsdl/types/" type="q123:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="codeSystem" nillable="true" xmlns:q125="http://microsoft.com/wsdl/types/" type="q125:guid" />
 					<xs:element minOccurs="0" maxOccurs="unbounded" name="name" type="tns:ReferenceTermName" />
 				</xs:sequence>
 			</xs:extension>
@@ -1261,7 +1302,7 @@
 				<xs:sequence>
 					<xs:element minOccurs="0" maxOccurs="1" name="language" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="value" type="xs:string" />
-					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q124="http://microsoft.com/wsdl/types/" type="q124:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="source" nillable="true" xmlns:q126="http://microsoft.com/wsdl/types/" type="q126:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1271,23 +1312,15 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:BaseEntityData">
 				<xs:sequence>
-					<xs:element minOccurs="1" maxOccurs="1" name="sourceClass" nillable="true" xmlns:q125="http://microsoft.com/wsdl/types/" type="q125:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="targetClass" nillable="true" xmlns:q126="http://microsoft.com/wsdl/types/" type="q126:guid" />
-					<xs:element minOccurs="1" maxOccurs="1" name="relationshipType" xmlns:q127="http://microsoft.com/wsdl/types/" type="q127:guid" />
-					<xs:element minOccurs="0" maxOccurs="1" name="appliesTo" type="tns:EntityRelationshipType" />
+					<xs:element minOccurs="0" maxOccurs="1" name="sourceClass" nillable="true" xmlns:q127="http://microsoft.com/wsdl/types/" type="q127:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="targetClass" nillable="true" xmlns:q128="http://microsoft.com/wsdl/types/" type="q128:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="relationshipType" xmlns:q129="http://microsoft.com/wsdl/types/" type="q129:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="appliesTo" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="description" type="xs:string" />
-          <!--TODO: Need to add relationship class here, depending on how we choose to encode it in the final model type. -->
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-  <xs:simpleType name="EntityRelationshipType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="EntityRelationship" />
-      <xs:enumeration value="ActRelationship" />
-      <xs:enumeration value="ActParticipation" />
-		</xs:restriction>
-	</xs:simpleType>
 	<xs:element name="TemplateDefinition" nillable="true" type="tns:TemplateDefinition" />
 	<xs:complexType name="TemplateDefinition">
 		<xs:complexContent mixed="false">
@@ -1313,8 +1346,8 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="description" type="xs:string" />
 					<xs:element minOccurs="0" maxOccurs="1" name="eligibility" type="xs:string" />
-					<xs:element minOccurs="1" maxOccurs="1" name="enrollment" type="tns:CarePathwayEnrollmentMode" />
-					<xs:element minOccurs="1" maxOccurs="1" name="encounterTemplate" nillable="true" xmlns:q128="http://microsoft.com/wsdl/types/" type="q128:guid" />
+					<xs:element minOccurs="0" maxOccurs="1" name="enrollment" type="tns:CarePathwayEnrollmentMode" />
+					<xs:element minOccurs="0" maxOccurs="1" name="encounterTemplate" nillable="true" xmlns:q130="http://microsoft.com/wsdl/types/" type="q130:guid" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -1334,6 +1367,7 @@
 	<xs:element name="QuantityObservation" nillable="true" type="tns:QuantityObservation" />
 	<xs:element name="TextObservation" nillable="true" type="tns:TextObservation" />
 	<xs:element name="CodedObservation" nillable="true" type="tns:CodedObservation" />
+	<xs:element name="DateObservation" nillable="true" type="tns:DateObservation" />
 	<xs:element name="PatientEncounter" nillable="true" type="tns:PatientEncounter" />
 	<xs:element name="Procedure" nillable="true" type="tns:Procedure" />
 	<xs:element name="Protocol" nillable="true" type="tns:Protocol" />
