@@ -70,6 +70,16 @@ namespace SanteDB.Core.Model.Constants
         public const string BackEntry = "isBackEntry";
 
         /// <summary>
+        /// True if the data was imported/sourced from another system and should be validated
+        /// </summary>
+        public const string Imported = "imported";
+
+        /// <summary>
+        /// True if the data is from an external source and data may change
+        /// </summary>
+        public const string External = "isExternal";
+
+        /// <summary>
         /// Minimum value allowed for an observation
         /// </summary>
         public const string CdssMaxValue = "$cdss.maxValue";
