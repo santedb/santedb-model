@@ -84,7 +84,7 @@ namespace SanteDB.Core.Model.DataTypes
 
         /// <inheritdoc/>
         [XmlIgnore, JsonIgnore]
-        Guid? ITargetedAssociation.TargetEntityKey
+        Guid? ISimpleTargetedAssociation.TargetEntityKey
         {
             get => this.ReferenceTermKey;
             set => this.ReferenceTermKey = value;
@@ -103,7 +103,7 @@ namespace SanteDB.Core.Model.DataTypes
         
         /// <inheritdoc/>
         [XmlIgnore, JsonIgnore]
-        object ITargetedAssociation.TargetEntity 
+        object ISimpleTargetedAssociation.TargetEntity 
         { 
             get => this.ReferenceTerm;
             set { }

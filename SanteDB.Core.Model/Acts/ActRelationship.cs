@@ -144,6 +144,12 @@ namespace SanteDB.Core.Model.Acts
         public Concept RelationshipType { get; set; }
 
         /// <summary>
+        /// Gets or sets the sequence of the relationship
+        /// </summary>
+        [XmlElement("sequence"), JsonProperty("sequence")]
+        public long? Sequence { get; set; }
+
+        /// <summary>
         /// Empty?
         /// </summary>
         public override bool IsEmpty() => this.RelationshipType == null && this.RelationshipTypeKey == null ||
@@ -178,7 +184,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the targeted entity
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        Guid? ITargetedAssociation.TargetEntityKey
+        Guid? ISimpleTargetedAssociation.TargetEntityKey
         {
             get => this.TargetActKey;
             set => this.TargetActKey = value;
@@ -188,7 +194,7 @@ namespace SanteDB.Core.Model.Acts
         /// Gets or sets the targeted entity
         /// </summary>
         [JsonIgnore, XmlIgnore]
-        object ITargetedAssociation.TargetEntity
+        object ISimpleTargetedAssociation.TargetEntity
         {
             get => this.TargetAct;
             set => this.TargetAct = value as Act;
@@ -197,6 +203,7 @@ namespace SanteDB.Core.Model.Acts
         /// <summary>
         /// Association type
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid? ITargetedAssociation.AssociationTypeKey { get => this.RelationshipTypeKey; set => this.RelationshipTypeKey = value; }
 
         /// <inheritdoc/>

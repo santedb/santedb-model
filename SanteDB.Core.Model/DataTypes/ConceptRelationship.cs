@@ -89,7 +89,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Target entity entity
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        Guid? ITargetedAssociation.TargetEntityKey
+        Guid? ISimpleTargetedAssociation.TargetEntityKey
         {
             get => this.TargetConceptKey;
             set => this.TargetConceptKey = value;
@@ -114,7 +114,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// Gets the target entity
         /// </summary>
         [XmlIgnore, JsonIgnore]
-        object ITargetedAssociation.TargetEntity
+        object ISimpleTargetedAssociation.TargetEntity
         {
             get => this.TargetConcept;
             set => this.TargetConcept = (Concept)value;

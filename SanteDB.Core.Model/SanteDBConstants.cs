@@ -18,6 +18,16 @@
  * User: fyfej
  * Date: 2023-6-21
  */
+using Newtonsoft.Json.Converters;
+using SanteDB.Core.Model.Acts;
+using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
 namespace SanteDB.Core.Model
 {
     /// <summary>
@@ -35,5 +45,43 @@ namespace SanteDB.Core.Model
         /// XHTML namespace
         /// </summary>
         public const string NS_XHTML = "http://www.w3.org/1999/xhtml";
+
+        /// <summary>
+        /// Class concept type map
+        /// </summary>
+        internal static readonly Dictionary<Guid, Type> CLASS_CONCEPT_TYPE_MAP;
+
+        /// <summary>
+        /// Model constants
+        /// </summary>
+        static SanteDBModelConstants()
+        {
+            CLASS_CONCEPT_TYPE_MAP = AppDomain.CurrentDomain.GetAllTypes()
+                .Where(t => !t.IsGenericType && !t.IsAbstract && !t.IsInterface)
+                .Where(t => t.HasCustomAttribute<ClassConceptKeyAttribute>())
+                .SelectMany(t => t.GetCustomAttributes<ClassConceptKeyAttribute>().Select(k => new { Type = t, ClassKey = k.ClassConcept }))
+                .ToDictionaryIgnoringDuplicates(k => Guid.Parse(k.ClassKey), t => t.Type);
+
+            // Fill in missing generic types
+            foreach(var fi in typeof(EntityClassKeys).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                var ck = (Guid?)fi.GetValue(null);
+                if(ck.HasValue && !CLASS_CONCEPT_TYPE_MAP.ContainsKey(ck.Value))
+                {
+                    CLASS_CONCEPT_TYPE_MAP.Add(ck.Value, typeof(Entity));
+                }
+            }
+
+            // Fill in missing generic types
+            foreach (var fi in typeof(ActClassKeys).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                var ck = (Guid?)fi.GetValue(null);
+                if (ck.HasValue && !CLASS_CONCEPT_TYPE_MAP.ContainsKey(ck.Value))
+                {
+                    CLASS_CONCEPT_TYPE_MAP.Add(ck.Value, typeof(Act));
+                }
+            }
+
+        }
     }
 }

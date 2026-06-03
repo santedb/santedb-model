@@ -264,6 +264,32 @@ namespace SanteDB.Core.Model.Map
         }
 
         /// <summary>
+        /// Decimal to Int16
+        /// </summary>
+        public static Int16 DecimalToInt16(Decimal val)
+        {
+            return (short)val;
+        }
+
+        /// <summary>
+        /// Decimal to Int32
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static Int32 DecimalToInt32(Decimal val)
+        {
+            return (int)val;
+        }
+
+        /// <summary>
+        /// Decimal to Int64
+        /// </summary>
+        public static Int64 DecimalToInt64(Decimal val)
+        {
+            return (long)val;
+        }
+
+        /// <summary>
         /// Timespan converted to string
         /// </summary>
         public static String TimeSpanToString(TimeSpan ts)

@@ -77,6 +77,9 @@ namespace SanteDB.Core.Model.Entities
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Guid? SecurityDeviceKey { get; set; }
 
+        /// <inheritdoc/>
+        public bool ShouldSerializeSecurityDeviceKey() => this.SecurityDeviceKey.GetValueOrDefault() != Guid.Empty;
+
         /// <summary>
         /// Determine semantic equality
         /// </summary>
