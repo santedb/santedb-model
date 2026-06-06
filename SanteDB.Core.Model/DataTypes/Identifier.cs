@@ -209,6 +209,10 @@ namespace SanteDB.Core.Model.DataTypes
                     {
                         this.ExpiryDate = dt;
                     }
+                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt))
+                    {
+                        this.ExpiryDate = dt.Date;
+                    }
                     else
                     {
                         throw new FormatException($"Cannot parse {value} as a date");

@@ -30,26 +30,25 @@ namespace SanteDB.Core.Model
                 this.Initialize(identifiedData, containerTree);
             }
 
-
             private void Initialize(IdentifiedData identifiedData, IEnumerable<DependencyNode> containerTree)
             {
                 Guid?[] dependencies = null;
                 switch (identifiedData)
                 {
                     case Entity entity:
-                        dependencies = entity.Relationships?.Select(r => r.TargetEntityKey == identifiedData.Key ? r.SourceEntityKey : r.TargetEntityKey).ToArray() ?? new Guid?[0];
-                        dependencies = entity.Participations != null ? dependencies.Union(entity.Participations.Where(p => p.Act == null).Select(p => p.ActKey)).ToArray() : dependencies;
+                        dependencies = entity.Relationships?.Where(o=>o.BatchOperation != BatchOperationType.Ignore).Select(r => r.TargetEntityKey == identifiedData.Key ? r.SourceEntityKey : r.TargetEntityKey).ToArray() ?? new Guid?[0];
+                        dependencies = entity.Participations != null ? dependencies.Union(entity.Participations.Where(p => p.Act == null && p.BatchOperation != BatchOperationType.Ignore).Select(p => p.ActKey)).ToArray() : dependencies;
                         if (entity.CreationActKey.HasValue)
                         {
                             dependencies = dependencies.Union(new Guid?[] { entity.CreationActKey }).ToArray();
                         }
                         break;
                     case Act act:
-                        dependencies = act.Relationships?.Select(r => r.TargetActKey == identifiedData.Key ? r.SourceEntityKey : r.TargetActKey).ToArray() ?? new Guid?[0];
-                        dependencies = act.Participations != null ? dependencies.Union(act.Participations.Select(p => p.PlayerEntityKey)).ToArray() : dependencies;
+                        dependencies = act.Relationships?.Where(o => o.BatchOperation != BatchOperationType.Ignore).Select(r => r.TargetActKey == identifiedData.Key ? r.SourceEntityKey : r.TargetActKey).ToArray() ?? new Guid?[0];
+                        dependencies = act.Participations != null ? dependencies.Union(act.Participations.Where(o => o.BatchOperation != BatchOperationType.Ignore).Select(p => p.PlayerEntityKey)).ToArray() : dependencies;
                         break;
                     case Concept concept:
-                        dependencies = concept.Relationships?.Select(r => r.TargetConceptKey == identifiedData.Key ? r.SourceEntityKey : r.TargetConceptKey).ToArray() ?? new Guid?[0];
+                        dependencies = concept.Relationships?.Where(o => o.BatchOperation != BatchOperationType.Ignore).Select(r => r.TargetConceptKey == identifiedData.Key ? r.SourceEntityKey : r.TargetConceptKey).ToArray() ?? new Guid?[0];
                         dependencies = concept.ConceptSetsXml != null ? dependencies.Union(concept.ConceptSetsXml?.Select(o => (Guid?)o)).ToArray() : dependencies;
                         break;
                     case ConceptSet conceptSet:
@@ -103,7 +102,7 @@ namespace SanteDB.Core.Model
             public override int GetHashCode() => this.NodeKey.GetHashCode();
 
             /// <inheritdoc/>
-            public override string ToString() => this.NodeKey.ToString();
+            public override string ToString() => $"{this.NodeKey} = INBOUND[{String.Join(" , ", this.InboundDependencies.Select(o => o.NodeKey))}] OUTBOUND[{String.Join(" , ", this.OutboundDependencies)}]";
         }
 
         /// <summary>
@@ -128,7 +127,7 @@ namespace SanteDB.Core.Model
                      dependencyTree.FirstOrDefault(o => collectionDictionary.TryGetValue(o.NodeKey, out var v) && v.BatchOperation == BatchOperationType.Update); // We can also attempt to exclude updates since they already exist
                 if (node == null)
                 {
-                    throw new InvalidOperationException(ErrorMessages.DATA_CIRCULAR_REFERENCE);
+                    throw new InvalidOperationException(String.Format(ErrorMessages.DATA_CIRCULAR_REFERNCE_DETAIL, String.Join("\r\n\t", dependencyTree)));
                 }
                 if (collectionDictionary.TryGetValue(node.NodeKey, out var rv))
                 {

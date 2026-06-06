@@ -841,6 +841,10 @@ namespace SanteDB
                                 {
                                     foreach (var itm in delayLoad)
                                     {
+                                        if(inverted && itm is IdentifiedData idd)
+                                        {
+                                            idd.BatchOperation = Core.Model.DataTypes.BatchOperationType.Ignore;
+                                        }
                                         loaded.Add(itm);
                                     }
                                 }
