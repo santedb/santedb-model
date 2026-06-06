@@ -20,7 +20,9 @@
  */
 using SanteDB.Core.Model.Attributes;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -364,6 +366,13 @@ namespace SanteDB.Core.Model.Map
 
         }
 
+        private static MethodInfo GetEnumerableContains(Type tSource)
+        {
+            var genmethod = typeof(Enumerable).GetMethods().FirstOrDefault(m => m.Name == "Contains" && m.GetParameters().Length == 2);
+
+            return genmethod.MakeGenericMethod(tSource);
+        }
+
         /// <summary>
         /// Visit method call
         /// </summary>
@@ -371,22 +380,53 @@ namespace SanteDB.Core.Model.Map
         {
             if (node.Object == null) // static method
             {
+
                 switch (node.Method.Name)
                 {
-                    case "Contains": // Enumerable contains
+#if NET10_0_OR_GREATER
+                    case "op_Implicit" when node.Method.IsSpecialName && (node.Method.DeclaringType.IsConstructedGenericType && node.Method.DeclaringType.GetGenericTypeDefinition() == typeof(ReadOnlySpan<>)):
+                        //Silently unroll the span here to the underlying source.
+                        return node.Arguments.First();
+                    case "Contains" when node.Method.DeclaringType == typeof(System.MemoryExtensions):
                         try
                         {
-                            var newParam = node.Arguments.Select(o => Expression.Convert(this.Visit(o), node.Method.GetParameters()[node.Arguments.IndexOf(o)].ParameterType));
+                            var methodparams = node.Method.GetParameters();
+                            Expression[] newparameters =
+                            {
+                                Expression.Convert(this.Visit(node.Arguments[0]), typeof(IEnumerable<>).MakeGenericType(methodparams[1].ParameterType)),
+                                Expression.Convert(this.Visit(node.Arguments[1]), methodparams[1].ParameterType),
+                            };
+                            MethodInfo method = GetEnumerableContains(node.Method.GetParameters()[1].ParameterType);
 
-                            return Expression.Call(node.Method, newParam.ToArray());
+                            if (node.Arguments.Count == 3)
+                            {
+                                //TODO: Validate equality comparer is null.
+                            }
+                            else if (node.Arguments.Count != 2)
+                            {
+                                throw new InvalidOperationException($"Expression {node} uses an unsupported overload of System.MemoryExtensions.Contains().");
+                            }
+
+                            return Expression.Call(method, newparameters);
                         }
                         catch
                         {
                             return null;
                         }
-
+#endif
+                    case "Contains":
+                        try
+                        {
+                            var newparameters = node.Arguments.Select(o => Expression.Convert(this.Visit(o), node.Method.GetParameters()[node.Arguments.IndexOf(o)].ParameterType));
+                            return Expression.Call(node.Method, newparameters.ToArray());
+                        }
+                        catch
+                        {
+                            return null;
+                        }
+                    default:
+                        return null;
                 }
-                return null;
             }
             else
             {

@@ -25,6 +25,7 @@ namespace SanteDB.Core.Model.Attributes
     /// <summary>
     /// The query parameter attribute allows for the querying of non-serialized values such as simple values or "handy" shortcut values
     /// </summary>
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = true)]
     public class QueryParameterAttribute : Attribute
     {
         /// <summary>

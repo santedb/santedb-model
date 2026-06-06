@@ -311,7 +311,11 @@ namespace SanteDB.Core.Model.Query
                         }
                     case "Contains":
                         {
-                            if (node.Object == null && node.Method.DeclaringType == typeof(Enumerable))
+#if NET10_0_OR_GREATER
+                            if (node.Object == null && (node.Method.DeclaringType == typeof(Enumerable) || node.Method.DeclaringType == typeof(System.MemoryExtensions)))
+#else
+                            if (node.Object == null && (node.Method.DeclaringType == typeof(Enumerable)))
+#endif
                             {
                                 return this.ParseArrayContains(node, negate);
                             }
@@ -734,9 +738,9 @@ namespace SanteDB.Core.Model.Query
                     }
 
                     // Is this a delay load?
-                    var serializationReferenceAttribute = memberExpr.Member.GetCustomAttribute<SerializationReferenceAttribute>();
-                    var queryParameterAttribute = memberExpr.Member.GetCustomAttribute<QueryParameterAttribute>();
-                    var xmlIgnoreAttribute = memberExpr.Member.GetCustomAttribute<XmlIgnoreAttribute>();
+                    var serializationReferenceAttribute = memberInfo.GetCustomAttribute<SerializationReferenceAttribute>();
+                    var queryParameterAttribute = memberInfo.GetCustomAttribute<QueryParameterAttribute>();
+                    var xmlIgnoreAttribute = memberInfo.GetCustomAttribute<XmlIgnoreAttribute>();
                     if (xmlIgnoreAttribute != null && serializationReferenceAttribute != null && !String.IsNullOrEmpty(serializationReferenceAttribute.RedirectProperty))
                     {
                         memberInfo = memberExpr.Expression.Type.GetRuntimeProperty(serializationReferenceAttribute.RedirectProperty);
