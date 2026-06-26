@@ -603,6 +603,25 @@ namespace SanteDB.Core.Model.Map
                         return Expression.MakeBinary(node.NodeType, left, Expression.Convert(right, left.Type));
                     }
                 }
+                else if(left.Type.StripNullable() == typeof(Guid) && right.Type == typeof(String))
+                {
+                    Guid uuidValue;
+                    var cvalue = this.GetConstantValue(right);
+
+                    if (cvalue == null)
+                    {
+                        return Expression.MakeBinary(node.NodeType, left, Expression.Constant(null));
+                    }
+                    else if (!Guid.TryParse(cvalue.ToString(), out uuidValue))
+                    {
+                        throw new InvalidOperationException($"Unable to convert {(right as ConstantExpression)?.Value} to a valid date time");
+                    }
+                    else
+                    {
+                        right = Expression.Constant(uuidValue, left.Type);
+                        return Expression.MakeBinary(node.NodeType, left, Expression.Convert(right, left.Type));
+                    }
+                }
 
                 return Expression.MakeBinary(node.NodeType, left, Expression.Convert(right, left.Type));
             }
