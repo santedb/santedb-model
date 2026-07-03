@@ -341,15 +341,14 @@ namespace SanteDB.Core.Model.DataTypes
     public class IdentifierEqualityComparer<T> : IEqualityComparer<T>
         where T : IExternalIdentifier
     {
+        /// <inheritdoc/>
         public bool Equals(T x, T y)
         {
             return (x.IdentityDomain?.Key ?? x.IdentityDomainKey) == (y.IdentityDomain?.Key ?? y.IdentityDomainKey) &&
                 x.Value == y.Value;
         }
 
-        /// <summary>
-        /// Get hash code
-        /// </summary>
+        /// <inheritdoc/>
         public int GetHashCode(T obj)
         {
             return (obj.IdentityDomain?.Key ?? obj.IdentityDomainKey).GetHashCode() ^
