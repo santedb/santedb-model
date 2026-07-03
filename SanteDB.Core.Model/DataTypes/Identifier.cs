@@ -24,6 +24,7 @@ using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
@@ -329,6 +330,30 @@ namespace SanteDB.Core.Model.DataTypes
         public override string ToString()
         {
             return $"{this.Value} [{this.IdentityDomain}]";
+        }
+    }
+
+
+    /// <summary>
+    /// Identifier equality comparer based on uniqueness of 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class IdentifierEqualityComparer<T> : IEqualityComparer<T>
+        where T : IExternalIdentifier
+    {
+        public bool Equals(T x, T y)
+        {
+            return (x.IdentityDomain?.Key ?? x.IdentityDomainKey) == (y.IdentityDomain?.Key ?? y.IdentityDomainKey) &&
+                x.Value == y.Value;
+        }
+
+        /// <summary>
+        /// Get hash code
+        /// </summary>
+        public int GetHashCode(T obj)
+        {
+            return (obj.IdentityDomain?.Key ?? obj.IdentityDomainKey).GetHashCode() ^
+                obj.Value.GetHashCode();
         }
     }
 }
