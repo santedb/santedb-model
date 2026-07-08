@@ -344,6 +344,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <inheritdoc/>
         public bool Equals(T x, T y)
         {
+            //Nullable<T> handles null inputs on both sides of Equals().
             return (x.IdentityDomain?.Key ?? x.IdentityDomainKey) == (y.IdentityDomain?.Key ?? y.IdentityDomainKey) &&
                 x.Value == y.Value;
         }
@@ -351,8 +352,9 @@ namespace SanteDB.Core.Model.DataTypes
         /// <inheritdoc/>
         public int GetHashCode(T obj)
         {
-            return (obj.IdentityDomain?.Key ?? obj.IdentityDomainKey).GetHashCode() ^
-                obj.Value.GetHashCode();
+            // Guid.Empty is needed for this chain to call GetHashCode().
+            return (obj.IdentityDomain?.Key ?? obj.IdentityDomainKey ?? Guid.Empty).GetHashCode() ^
+                (obj.Value ?? string.Empty).GetHashCode();
         }
     }
 }
