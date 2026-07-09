@@ -344,15 +344,21 @@ namespace SanteDB.Core.Model.DataTypes
         /// <inheritdoc/>
         public bool Equals(T x, T y)
         {
-            return (x.IdentityDomain?.Key ?? x.IdentityDomainKey) == (y.IdentityDomain?.Key ?? y.IdentityDomainKey) &&
-                x.Value == y.Value;
+            return 
+                (
+                    x.IdentityDomain?.DomainName == y.IdentityDomain?.DomainName || 
+                    (x.IdentityDomain?.Key ?? x.IdentityDomainKey) == (y.IdentityDomain?.Key ?? y.IdentityDomainKey) 
+                ) && x.Value == y.Value;
         }
 
         /// <inheritdoc/>
         public int GetHashCode(T obj)
         {
-            return (obj.IdentityDomain?.Key ?? obj.IdentityDomainKey).GetHashCode() ^
-                obj.Value.GetHashCode();
+            return 
+                (
+                    (obj.IdentityDomain?.Key ?? obj.IdentityDomainKey)?.GetHashCode() ??
+                    (obj.IdentityDomain?.DomainName).GetHashCode()
+                ) ^ obj.Value.GetHashCode();
         }
     }
 }
