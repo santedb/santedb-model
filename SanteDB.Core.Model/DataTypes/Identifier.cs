@@ -355,10 +355,9 @@ namespace SanteDB.Core.Model.DataTypes
         public int GetHashCode(T obj)
         {
             return 
-                (
-                    (obj.IdentityDomain?.Key ?? obj.IdentityDomainKey)?.GetHashCode() ??
-                    (obj.IdentityDomain?.DomainName).GetHashCode()
-                ) ^ obj.Value.GetHashCode();
+                (obj.IdentityDomain?.Key ?? obj.IdentityDomainKey ?? Guid.Empty).GetHashCode() ^
+                (obj.IdentityDomain?.DomainName ?? String.Empty).GetHashCode() ^
+                (obj.Value ?? String.Empty).GetHashCode();
         }
     }
 }
