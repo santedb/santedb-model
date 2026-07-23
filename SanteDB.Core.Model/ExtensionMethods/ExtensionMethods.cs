@@ -1829,7 +1829,7 @@ namespace SanteDB
                             {
                                 if (strictKeyAgreement)
                                 {
-                                    throw new InvalidOperationException(String.Format(ErrorMessages.KEY_PROPERTY_DISAGREEMENT, keyProperty.ToString(), pi.ToString()));
+                                    throw new InvalidOperationException(String.Format(ErrorMessages.KEY_PROPERTY_DISAGREEMENT, keyProperty.ToString(), keyValue, pi.ToString(), iddata.Key, me));
                                 }
                                 else
                                 {
