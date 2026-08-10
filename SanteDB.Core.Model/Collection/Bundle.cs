@@ -175,7 +175,7 @@ namespace SanteDB.Core.Model.Collection
                 if (!this.m_correlationKey.HasValue)
                 {
                     this.m_correlationKey = value;
-                    this.CorrelationSequence = this.CorrelationSequence ?? DateTime.Now.Ticks;
+                    this.CorrelationSequence = this.CorrelationSequence ?? DateTimeOffset.UtcNow.Ticks;
                 }
                 else if(!value.HasValue)
                 {
@@ -295,7 +295,7 @@ namespace SanteDB.Core.Model.Collection
             retVal.Key = Guid.NewGuid();
             if (resourceRoot.Count() == 1)
             {
-                retVal.CorrelationSequence = DateTime.Now.Ticks;
+                retVal.CorrelationSequence = DateTimeOffset.UtcNow.Ticks;
                 retVal.CorrelationKey = resourceRoot.First()?.Key;
             }
             retVal.Count = resourceRoot.Count();
