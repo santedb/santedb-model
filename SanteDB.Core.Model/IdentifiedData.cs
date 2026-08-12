@@ -256,28 +256,6 @@ namespace SanteDB.Core.Model
             return this.Key.ToString();
         }
 
-        /// <summary>
-        /// Quality Comparer
-        /// </summary>
-        public class SemanticEqualityComparer<T> : IEqualityComparer<T>
-            where T : IdentifiedData
-        {
-            /// <summary>
-            /// Equality
-            /// </summary>
-            public bool Equals(T x, T y)
-            {
-                return x.SemanticEquals(y);
-            }
-
-            /// <summary>
-            /// Get comparison hash code
-            /// </summary>
-            public int GetHashCode(T obj)
-            {
-                return obj.Key.GetHashCode();
-            }
-        }
 
         /// <summary>
         /// Remove annotation
@@ -382,5 +360,29 @@ namespace SanteDB.Core.Model
             }
         }
 #endif 
+    }
+
+
+    /// <summary>
+    /// Quality Comparer
+    /// </summary>
+    public class SemanticEqualityComparer<T> : IEqualityComparer<T>
+        where T : IdentifiedData
+    {
+        /// <summary>
+        /// Equality
+        /// </summary>
+        public bool Equals(T x, T y)
+        {
+            return x.SemanticEquals(y);
+        }
+
+        /// <summary>
+        /// Get comparison hash code
+        /// </summary>
+        public int GetHashCode(T obj)
+        {
+            return obj.GetHashCode();
+        }
     }
 }

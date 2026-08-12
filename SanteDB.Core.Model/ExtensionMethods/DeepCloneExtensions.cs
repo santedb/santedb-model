@@ -186,6 +186,12 @@ namespace SanteDB.Core.Model {
             _retVal.IsPublic = clonee.IsPublic;
             // Clone CanOverride
             _retVal.CanOverride = clonee.CanOverride;
+            // Clone ClassConceptKey
+            _retVal.ClassConceptKey = clonee.ClassConceptKey;
+            // Clone ClassConcept
+            if ((clonee.ClassConcept != null)) {
+                _retVal.ClassConcept = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.ClassConcept.DeepCopy()));
+            }
             // Clone CreationTime
             _retVal.CreationTime = clonee.CreationTime;
             // Clone ObsoletionTime
@@ -991,6 +997,8 @@ namespace SanteDB.Core.Model {
             _retVal.DiameterQuantity = clonee.DiameterQuantity;
             // Clone HeightQuantity
             _retVal.HeightQuantity = clonee.HeightQuantity;
+            // Clone ExpiryDateXml
+            _retVal.ExpiryDateXml = clonee.ExpiryDateXml;
             // Clone ExpiryDate
             _retVal.ExpiryDate = clonee.ExpiryDate;
             // Clone FormConcept
@@ -1643,6 +1651,8 @@ namespace SanteDB.Core.Model {
             int _iterator;
             // Clone LotNumber
             _retVal.LotNumber = clonee.LotNumber;
+            // Clone ExpiryDateXml
+            _retVal.ExpiryDateXml = clonee.ExpiryDateXml;
             // Clone ExpiryDate
             _retVal.ExpiryDate = clonee.ExpiryDate;
             // Clone FormConcept
@@ -1797,6 +1807,8 @@ namespace SanteDB.Core.Model {
             }
             SanteDB.Core.Model.Entities.Material _retVal = new SanteDB.Core.Model.Entities.Material();
             int _iterator;
+            // Clone ExpiryDateXml
+            _retVal.ExpiryDateXml = clonee.ExpiryDateXml;
             // Clone ExpiryDate
             _retVal.ExpiryDate = clonee.ExpiryDate;
             // Clone FormConcept
@@ -4284,6 +4296,8 @@ namespace SanteDB.Core.Model {
             if ((clonee.RelationshipType != null)) {
                 _retVal.RelationshipType = ((SanteDB.Core.Model.DataTypes.Concept)(clonee.RelationshipType.DeepCopy()));
             }
+            // Clone Sequence
+            _retVal.Sequence = clonee.Sequence;
             // Clone EffectiveVersionSequenceId
             _retVal.EffectiveVersionSequenceId = clonee.EffectiveVersionSequenceId;
             // Clone ObsoleteVersionSequenceId
