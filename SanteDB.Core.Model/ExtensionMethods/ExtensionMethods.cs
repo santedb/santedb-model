@@ -644,7 +644,7 @@ namespace SanteDB
         {
             me.Key = me.Key ?? Guid.NewGuid();
             me.CorrelationKey = me.CorrelationKey ?? correlationKey;
-            me.CorrelationSequence = me.CorrelationSequence ?? DateTime.Now.Ticks;
+            me.CorrelationSequence = me.CorrelationSequence ?? DateTimeOffset.UtcNow.Ticks;
             return me;
         }
 
