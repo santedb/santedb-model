@@ -644,7 +644,7 @@ namespace SanteDB
         {
             me.Key = me.Key ?? Guid.NewGuid();
             me.CorrelationKey = me.CorrelationKey ?? correlationKey;
-            me.CorrelationSequence = me.CorrelationSequence ?? DateTime.Now.Ticks;
+            me.CorrelationSequence = me.CorrelationSequence ?? DateTimeOffset.UtcNow.Ticks;
             return me;
         }
 
@@ -1829,7 +1829,7 @@ namespace SanteDB
                             {
                                 if (strictKeyAgreement)
                                 {
-                                    throw new InvalidOperationException(String.Format(ErrorMessages.KEY_PROPERTY_DISAGREEMENT, keyProperty.ToString(), pi.ToString()));
+                                    throw new InvalidOperationException(String.Format(ErrorMessages.KEY_PROPERTY_DISAGREEMENT, keyProperty.ToString(), keyValue, pi.ToString(), iddata.Key, me));
                                 }
                                 else
                                 {

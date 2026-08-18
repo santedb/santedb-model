@@ -20,6 +20,7 @@
  */
 using Newtonsoft.Json;
 using SanteDB.Core.Model.Attributes;
+using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Interfaces;
 using System;
 using System.Xml.Serialization;
@@ -65,12 +66,13 @@ namespace SanteDB.Core.Model.Security
         /// <summary>
         /// Create a new security policy
         /// </summary>
-        public SecurityPolicy(String name, String oid, bool isPublic, bool canOverride)
+        public SecurityPolicy(String name, String oid, bool isPublic, bool canOverride, Guid? classificationKey)
         {
             this.Name = name;
             this.Oid = oid;
             this.IsPublic = IsPublic;
             this.CanOverride = canOverride;
+            this.ClassConceptKey = classificationKey;
         }
 
         /// <summary>
@@ -102,6 +104,18 @@ namespace SanteDB.Core.Model.Security
         /// </summary>
         [XmlElement("canOverride"), JsonProperty("canOverride")]
         public bool CanOverride { get; set; }
+
+        /// <summary>
+        /// Gets or sets the concept classification which allows this policy to map to a structured codification system
+        /// </summary>
+        [XmlElement("classConcept"), JsonProperty("classConcept")]
+        public Guid? ClassConceptKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the concept
+        /// </summary>
+        [XmlIgnore, JsonIgnore, SerializationReference(nameof(ClassConceptKey))]
+        public Concept ClassConcept { get; set; }
 
         /// <summary>
         /// Get the name of the object as a display string
@@ -153,4 +167,5 @@ namespace SanteDB.Core.Model.Security
         /// <inheritdoc/>
         public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
+
 }

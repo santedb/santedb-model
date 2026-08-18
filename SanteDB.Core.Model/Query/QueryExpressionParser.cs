@@ -1017,8 +1017,6 @@ namespace SanteDB.Core.Model.Query
 
         }
 
-
-
         /// <summary>
         /// Build linq expression from string
         /// </summary>
@@ -1026,6 +1024,7 @@ namespace SanteDB.Core.Model.Query
         {
             return BuildLinqExpression<TModelType>(filter.ParseQueryString(), null);
         }
+
         /// <summary>
         /// Build a LINQ expression
         /// </summary>
