@@ -557,7 +557,7 @@ namespace SanteDB.Core.Model.Query
                                     }
 
                                     // Add collect other parameters
-                                    foreach (var wv in workingValues.Where(o => o.Key.StartsWith(hdsiPath.GroupingPath)).ToList())
+                                    foreach (var wv in workingValues.Where(o => o.Key.StartsWith($"{hdsiPath.GroupingPath}.")).ToList())
                                     {
                                         var keyName = wv.Key.Substring(hdsiPath.GroupingPath.Length + 1);
                                         Array.ForEach(wv.Value, o => subFilter.Add(keyName, o));
