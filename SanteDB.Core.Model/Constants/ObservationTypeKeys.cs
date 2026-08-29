@@ -73,5 +73,29 @@ namespace SanteDB.Core.Model.Constants
         /// </summary>
         public static readonly Guid FindingSite = Guid.Parse("25D9F855-F0C8-4718-884D-04D3B6439E5C");
 
+        /// <summary>
+        /// Verification status
+        /// </summary>
+        public static readonly Guid VerificationStatus = Guid.Parse("97513cbe-188f-11eb-adc1-0242ac120002");
+
+        /// <summary>
+        /// Date of onset
+        /// </summary>
+        public static readonly Guid DateOfOnset = Guid.Parse("99e13c67-0987-4f19-a9a3-e64e61ce1642");
+
+        /// <summary>
+        /// Date of resolution
+        /// </summary>
+        public static readonly Guid DateOfResolution = Guid.Parse("aaf71c41-cca3-4a39-9dc9-3f685fc34c4d");
+
+        /// <summary>
+        /// Date of treatment start
+        /// </summary>
+        public static readonly Guid DateOfTreatmentStart = Guid.Parse("629c2d19-f72a-4821-8a3b-1c0278b30f43");
+
+        /// <summary>
+        /// Clinical status
+        /// </summary>
+        public static readonly Guid ClinicalStatus = Guid.Parse("656251ec-21bc-4594-9914-ca971c9defcc");
     }
 }
