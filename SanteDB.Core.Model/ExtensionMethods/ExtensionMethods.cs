@@ -118,6 +118,7 @@ namespace SanteDB
 
         // Revers lookup cache for resource names
         private static IDictionary<String, Type> s_resourceNames;
+        private static readonly Regex s_normalizeNameRegex = new Regex(@"[\s\-\d_\,]", RegexOptions.Compiled);
         private static readonly Regex s_hexRegex = new Regex(@"^[A-Fa-f0-9]+$", RegexOptions.Compiled);
         private static readonly Regex s_verRegex = new Regex(@"^([0-9]+?(?:\.[0-9]+){0,3})?(?:-?((?:alpha|beta|debug)[0-9]*))?$", RegexOptions.Compiled);
         private static ConcurrentDictionary<Type, String> s_serializationNames = new ConcurrentDictionary<Type, string>();
@@ -646,6 +647,14 @@ namespace SanteDB
             me.CorrelationKey = me.CorrelationKey ?? correlationKey;
             me.CorrelationSequence = me.CorrelationSequence ?? DateTimeOffset.UtcNow.Ticks;
             return me;
+        }
+
+        /// <summary>
+        /// Normalize a name for comparison (remove any special characters)
+        /// </summary>
+        public static String NormalizeName(this string me)
+        {
+            return s_normalizeNameRegex.Replace(me, "").ToLowerInvariant();
         }
 
         /// <summary>

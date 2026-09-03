@@ -82,9 +82,9 @@ namespace SanteDB.Core.Model.Query
             /// <summary>
             /// Add a condition if not already present
             /// </summary>
-            private void AddCondition(String key, Object value)
+            private void AddCondition(String key, Object value, bool ignoreStripNull = false)
             {
-                if ("!null".Equals(value) && this.StripNullChecks)
+                if ("!null".Equals(value) && this.StripNullChecks && !ignoreStripNull)
                 {
                     return;
                 }
@@ -482,11 +482,11 @@ namespace SanteDB.Core.Model.Query
                     {
                         if (node.NodeType == ExpressionType.NotEqual)
                         {
-                            this.AddCondition(parmName, true.Equals(cci.Value) ? "null" : "!null");
+                            this.AddCondition(parmName, true.Equals(cci.Value) ? "null" : "!null", ignoreStripNull: true);
                         }
                         else if (node.NodeType == ExpressionType.Equal)
                         {
-                            this.AddCondition(parmName, true.Equals(cci.Value) ? "!null" : "null");
+                            this.AddCondition(parmName, true.Equals(cci.Value) ? "!null" : "null", ignoreStripNull: true);
                         }
                         else
                         {

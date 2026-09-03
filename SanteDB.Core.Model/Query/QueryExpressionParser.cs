@@ -359,7 +359,12 @@ namespace SanteDB.Core.Model.Query
                                 else if (typeof(IAnnotatedResource).IsAssignableFrom(memberInfo.PropertyType) && !memberInfo.PropertyType.IsAbstract)
                                 {
                                     var loadMethod = (MethodInfo)typeof(ExtensionMethods).GetGenericMethod(nameof(ExtensionMethods.LoadProperty), new Type[] { memberInfo.PropertyType }, new Type[] { typeof(IdentifiedData), typeof(String), typeof(bool), typeof(IEnumerable<IdentifiedData>) });
-                                    accessExpression = Expression.Coalesce(Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>))), Expression.New(memberInfo.PropertyType));
+                                    accessExpression = Expression.Call(loadMethod, accessExpression, Expression.Constant(memberInfo.Name), Expression.Constant(false), Expression.Convert(Expression.Constant(null), typeof(IEnumerable<IdentifiedData>)));
+
+                                    if (isCoalesced)
+                                    {
+                                        accessExpression = Expression.Coalesce(accessExpression, Expression.New(memberInfo.PropertyType));
+                                    }
                                 }
                                 else
                                 {
@@ -557,7 +562,7 @@ namespace SanteDB.Core.Model.Query
                                     }
 
                                     // Add collect other parameters
-                                    foreach (var wv in workingValues.Where(o => o.Key.StartsWith(hdsiPath.GroupingPath)).ToList())
+                                    foreach (var wv in workingValues.Where(o => o.Key.StartsWith($"{hdsiPath.GroupingPath}.")).ToList())
                                     {
                                         var keyName = wv.Key.Substring(hdsiPath.GroupingPath.Length + 1);
                                         Array.ForEach(wv.Value, o => subFilter.Add(keyName, o));

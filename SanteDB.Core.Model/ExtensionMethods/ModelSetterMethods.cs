@@ -104,7 +104,7 @@ namespace SanteDB
                     }
                     if (!setterDelegates.TryGetValue(match.Groups[0].Value, out var accessorDelegate))
                     {
-                        var propertyAccessor = QueryExpressionParser.BuildPropertySelector(focalObject.GetType(), match.Groups[0].Value, true);
+                        var propertyAccessor = QueryExpressionParser.BuildPropertySelector(focalObject.GetType(), match.Groups[0].Value, true, returnNewObjectOnNull: false);
                         if (propertyAccessor.Body.NodeType == System.Linq.Expressions.ExpressionType.Coalesce && propertyAccessor.Body is BinaryExpression be) // Strip off the coalesce
                         {
                             propertyAccessor = Expression.Lambda(be.Left, propertyAccessor.Parameters[0]);
