@@ -57,5 +57,12 @@ namespace SanteDB.Core.Model.Constants
         /// The source concept is wider in meaning than the target
         /// </summary>
         public static readonly Guid WiderThan = Guid.Parse("ae8b4f2f-009f-4e0d-b35e-5a89555c5980");
+
+        /// <summary>
+        /// Indicates that one concept flows into another during a state transition (ACTIVE->NULLIFIED, NEW->ACTIVE, etc.)
+        /// </summary>
+        public static readonly Guid StateFlow = Guid.Parse("3e1fef9d-dd8e-4b9d-8462-ce5a52213743");
+
+
     }
 }
