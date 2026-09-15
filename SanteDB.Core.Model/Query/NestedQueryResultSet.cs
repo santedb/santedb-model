@@ -166,12 +166,32 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Skip n records
         /// </summary>
-        public IQueryResultSet Skip(int count) => new NestedQueryResultSet(this.m_wrapped.Skip(count), this.m_yielder);
+        public IQueryResultSet Skip(int count)
+        {
+            if (this.m_wrapped is IQueryResultSet iqrs)
+            {
+                return new MemoryQueryResultSet(iqrs.Skip(count));
+            }
+            else
+            {
+                return new MemoryQueryResultSet(this.m_wrapped.Skip(count));
+            }
+        }
 
         /// <summary>
         /// Take n records
         /// </summary>
-        public IQueryResultSet Take(int count) => new NestedQueryResultSet(this.m_wrapped.Take(count), this.m_yielder);
+        public IQueryResultSet Take(int count)
+        {
+            if (this.m_wrapped is IQueryResultSet iqrs)
+            {
+                return new MemoryQueryResultSet(iqrs.Take(count));
+            }
+            else
+            {
+                return new MemoryQueryResultSet(this.m_wrapped.Take(count));
+            }
+        }
 
         /// <summary>
         /// Union the two datasets
