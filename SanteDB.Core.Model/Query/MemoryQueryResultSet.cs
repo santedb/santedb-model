@@ -49,8 +49,17 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// True if any results
         /// </summary>
-        public bool Any() => this.m_wrapped.Any();
-
+        public bool Any()
+        {
+            if (this.m_wrapped is IQueryResultSet iqrs)
+            {
+                return iqrs.Any();
+            }
+            else
+            {
+                return this.m_wrapped.Any();
+            }
+        }
 
         /// <summary>
         /// As stateful query
@@ -165,12 +174,32 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Skip n records
         /// </summary>
-        public IQueryResultSet Skip(int count) => new MemoryQueryResultSet(this.m_wrapped.Skip(count));
+        public IQueryResultSet Skip(int count)
+        {
+            if (this.m_wrapped is IQueryResultSet iqrs)
+            {
+                return new MemoryQueryResultSet(iqrs.Skip(count));
+            }
+            else
+            {
+                return new MemoryQueryResultSet(this.m_wrapped.Skip(count));
+            }
+        }
 
         /// <summary>
         /// Take n records
         /// </summary>
-        public IQueryResultSet Take(int count) => new MemoryQueryResultSet(this.m_wrapped.Take(count));
+        public IQueryResultSet Take(int count)
+        {
+            if (this.m_wrapped is IQueryResultSet iqrs)
+            {
+                return new MemoryQueryResultSet(iqrs.Take(count));
+            }
+            else
+            {
+                return new MemoryQueryResultSet(this.m_wrapped.Take(count));
+            }
+        }
 
         /// <summary>
         /// Union records

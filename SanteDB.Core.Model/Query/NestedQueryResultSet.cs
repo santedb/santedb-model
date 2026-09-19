@@ -166,12 +166,32 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Skip n records
         /// </summary>
-        public IQueryResultSet Skip(int count) => new NestedQueryResultSet(this.m_wrapped.Skip(count), this.m_yielder);
+        public IQueryResultSet Skip(int count)
+        {
+            if (this.m_wrapped is IQueryResultSet iqrs)
+            {
+                return new NestedQueryResultSet(iqrs.Skip(count), this.m_yielder);
+            }
+            else
+            {
+                return new NestedQueryResultSet(this.m_wrapped.Skip(count), this.m_yielder);
+            }
+        }
 
         /// <summary>
         /// Take n records
         /// </summary>
-        public IQueryResultSet Take(int count) => new NestedQueryResultSet(this.m_wrapped.Take(count), this.m_yielder);
+        public IQueryResultSet Take(int count)
+        {
+            if (this.m_wrapped is IQueryResultSet iqrs)
+            {
+                return new NestedQueryResultSet(iqrs.Take(count), this.m_yielder);
+            }
+            else
+            {
+                return new NestedQueryResultSet(this.m_wrapped.Take(count), this.m_yielder);
+            }
+        }
 
         /// <summary>
         /// Union the two datasets
@@ -355,11 +375,31 @@ namespace SanteDB.Core.Model.Query
         /// <summary>
         /// Skip the specified results
         /// </summary>
-        IQueryResultSet<TData> IQueryResultSet<TData>.Skip(int count) => new NestedQueryResultSet<TData>(this.m_wrapped.Skip(count), this.m_yielder);
+        IQueryResultSet<TData> IQueryResultSet<TData>.Skip(int count)
+        {
+            if (this.m_wrapped is IQueryResultSet<TData> iqrs)
+            {
+                return new NestedQueryResultSet<TData>(iqrs.Skip(count), this.m_yielder);
+            }
+            else
+            {
+                return new NestedQueryResultSet<TData>(this.m_wrapped.Skip(count), this.m_yielder);
+            }
+        }
 
         /// <summary>
         /// Take only <paramref name="count"/>
         /// </summary>
-        IQueryResultSet<TData> IQueryResultSet<TData>.Take(int count) => new NestedQueryResultSet<TData>(this.m_wrapped.Take(count), this.m_yielder);
+        IQueryResultSet<TData> IQueryResultSet<TData>.Take(int count)
+        {
+            if (this.m_wrapped is IQueryResultSet<TData> iqrs)
+            {
+                return new NestedQueryResultSet<TData>(iqrs.Take(count), this.m_yielder);
+            }
+            else
+            {
+                return new NestedQueryResultSet<TData>(this.m_wrapped.Take(count), this.m_yielder);
+            }
+        }
     }
 }
