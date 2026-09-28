@@ -1157,7 +1157,7 @@ namespace SanteDB.Core.Model.Query
                         return Expression.Call(retVal, retVal.Type.GetMethod(nameof(Object.ToString), Type.EmptyTypes));
                     }
                 }
-                else if (expectedReturn == typeof(Guid) && retVal.Type != typeof(Guid))
+                else if (expectedReturn.StripNullable() == typeof(Guid) && retVal.Type.StripNullable() != typeof(Guid))
                 {
                     if (retVal is ConstantExpression ce && ce.Value == null)
                     {
