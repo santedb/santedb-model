@@ -27,6 +27,7 @@ namespace SanteDB.Core.Model.Serialization
             this.m_rootNamespace = manifestResourceStreamRoot;
         }
 
+        /// <inheritdoc/>
         public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
         {
             if(absoluteUri == null)
