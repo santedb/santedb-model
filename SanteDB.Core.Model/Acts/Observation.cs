@@ -70,8 +70,10 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot("Observation", Namespace = "http://santedb.org/model")]
     [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     [ClassConceptKey(ActClassKeyStrings.Observation)]
+    [ClassConceptKey(ActClassKeyStrings.Cluster)]
     public class Observation : Act
     {
+
         /// <summary>
         /// Observation ctor
         /// </summary>
