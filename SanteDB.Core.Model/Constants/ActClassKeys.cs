@@ -143,9 +143,26 @@ namespace SanteDB.Core.Model.Constants
         public const string CarePlan = "042232b9-a694-42e0-9708-f387393a6c80";
 
         /// <summary>
-        /// An ACT that organizes a set of component acts into a semantic grouping that have a shared subject.
+        /// An ACT that organizes a set of component acts around a common subject or child participation/act relationship types.
         /// </summary>
         public const string Cluster = "d38091b5-9065-4721-8a1f-bfbb3b4bf447";
+
+        /// <summary>
+        /// An ACT that organizes a set of component acts into a semantic grouping that share a particular context such as timeframe, patient, etc
+        /// </summary>
+        public const string Grouper = "6143087c-5fbf-41ba-b25d-8b780900883d";
+
+        /// <summary>
+        /// An ACT which represents a series of observation focused around a common subject which occur over a period of time. The component 
+        /// acts of this should be the same type (example: realtime monitoring of a heart rate, pulse, o2 saturation, etc.)
+        /// </summary>
+        public const string ObservationSeries = "3b72e125-e792-4b5e-8839-256ff1a9eaf6";
+
+        /// <summary>
+        /// An ACT which groups together <see cref="ObservationSeries"/>. For example, a sensor multiple probes
+        /// grouped together to form a cohesive series of observations over time
+        /// </summary>
+        public const string CorrelatedObservationSequences = "ba143438-55a7-40ae-b6eb-1c383498219e";
 
     }
 
@@ -274,6 +291,21 @@ namespace SanteDB.Core.Model.Constants
         /// Cluster
         /// </summary>
         public static readonly Guid Cluster = Guid.Parse(ActClassKeyStrings.Cluster);
+
+        /// <summary>
+        /// <see cref="ActClassKeyStrings.Grouper"/>
+        /// </summary>
+        public static readonly Guid Grouper = Guid.Parse(ActClassKeyStrings.Grouper);
+
+        /// <summary>
+        /// <see cref="ActClassKeyStrings.ObservationSeries"/>
+        /// </summary>
+        public static readonly Guid ObservationSeries = Guid.Parse(ActClassKeyStrings.ObservationSeries);
+
+        /// <summary>
+        /// <see cref="ActClassKeyStrings.CorrelatedObservationSequences"/>
+        /// </summary>
+        public static readonly Guid CorrelatedObservationSequences = Guid.Parse(ActClassKeyStrings.CorrelatedObservationSequences);
 
     }
 }
