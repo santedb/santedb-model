@@ -733,7 +733,7 @@ namespace SanteDB.Core.Model.Query
                         memberInfo = mapType.GetRuntimeProperty(memberInfo.Name) ?? memberInfo;
                     }
 
-                    // Is this a delay load?
+                   
                     var serializationReferenceAttribute = memberExpr.Member.GetCustomAttribute<SerializationReferenceAttribute>();
                     var queryParameterAttribute = memberExpr.Member.GetCustomAttribute<QueryParameterAttribute>();
                     var xmlIgnoreAttribute = memberExpr.Member.GetCustomAttribute<XmlIgnoreAttribute>();
@@ -748,18 +748,22 @@ namespace SanteDB.Core.Model.Query
                     {
                         memberXattribute = new XmlElementAttribute(queryParameterAttribute.ParameterName); // We don't serialize but it does exist
                     }
-                    else if (memberExpr.Expression is ConstantExpression)
+                    else if (memberExpr.Expression is ConstantExpression ce)
                     {
-                        return (memberExpr.Expression as ConstantExpression).Value.ToString();
+                        return ce.Value.ToString();
                     }
-                    else if (memberXattribute == null)
-                    {
-                        if (memberExpr.Expression.Type.StripNullable() == typeof(DateTimeOffset) &&
+                    else if (memberExpr.Expression.Type.StripNullable() == typeof(DateTimeOffset) &&
                             memberExpr.Member.Name == "DateTime")
-                        {
-                            return path;
-                        }
-
+                    {
+                        return path;
+                    }
+                    else if (memberInfo is PropertyInfo pi)
+                    {
+                        memberXattribute = new XmlElementAttribute(pi.GetSerializationName());
+                    }
+                    
+                    if (memberXattribute == null)
+                    {
                         throw new InvalidOperationException($"The path {access} cannot be translated, ensure the property is XML navigable or has a QueryParameter attribute"); // TODO: When this occurs?
                     }
 

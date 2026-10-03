@@ -70,8 +70,11 @@ namespace SanteDB.Core.Model.Acts
     [XmlRoot("Observation", Namespace = "http://santedb.org/model")]
     [ResourceSensitivity(ResourceSensitivityClassification.PersonalHealthInformation)]
     [ClassConceptKey(ActClassKeyStrings.Observation)]
+    [ClassConceptKey(ActClassKeyStrings.ObservationSeries)]
+    [ClassConceptKey(ActClassKeyStrings.CorrelatedObservationSequences)]
     public class Observation : Act
     {
+
         /// <summary>
         /// Observation ctor
         /// </summary>
@@ -377,4 +380,252 @@ namespace SanteDB.Core.Model.Acts
         /// <inheritdoc/>
         public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
+
+    /// <summary>
+    /// Represents an observation which contains a URI value
+    /// </summary>
+    [XmlType("UriObservation", Namespace = "http://santedb.org/model"), JsonObject("UriObservation")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "UriObservation")]
+    public class UriObservation : Observation
+    {
+        /// <summary>
+        /// Value type
+        /// </summary>
+        [XmlElement("valueType"), JsonProperty("valueType")]
+        public override string ValueType
+        {
+            get
+            {
+                return "UR";
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the target type
+        /// </summary>
+        [XmlElement("contentClass"), JsonProperty("contentClass"), Binding(typeof(UriObservationContentClassKeys))]
+        public Guid? ContentClassKey { get; set; }
+
+        /// <summary>
+        /// Identifies the expected/known type of content from the URL
+        /// </summary>
+        [XmlElement("mimeType"), JsonProperty("mimeType")]
+        public String MimeType { get; set; }
+
+        /// <summary>
+        /// If known - the hash of the object at the URL when the observation was stored
+        /// </summary>
+        /// <remarks>Can be used to detect changes in the target object since storage of the observation</remarks>
+        [XmlElement("hash"), JsonProperty("hash")]
+        public byte[] Hash { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of target
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        [SerializationReference(nameof(ContentClassKey))]
+        public Concept ContentClass { get; set; }
+
+        /// <summary>
+        /// Gets or sets the target URL
+        /// </summary>
+        [XmlElement("value"), JsonProperty("value")]
+        public String Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets the availabilty start
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public DateTimeOffset? AvailabilityStartTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the availability end
+        /// </summary>
+        [XmlIgnore, JsonIgnore]
+        public DateTimeOffset? AvailabilityStopTime { get; set; }
+
+        /// <summary>
+        /// The start or stop time of the availability
+        /// </summary>
+        [XmlElement("availabilityStart"), JsonProperty("availabilityStart"), SerializationMetadataAttribute]
+        public String AvailabilityStartTimeXml
+        {
+            get
+            {
+                return this.AvailabilityStartTime?.ToString("o");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date ONLY 
+                    if (DateTime.TryParseExact(value, new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
+                    {
+                        this.AvailabilityStartTime = dt.Date;
+                    }
+                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt)) // Local Time
+                    {
+                        this.AvailabilityStartTime = dt;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Cannot parse {value} as a date");
+                    }
+                }
+                else
+                {
+                    this.AvailabilityStartTime = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The start or stop time of the availability
+        /// </summary>
+        [XmlElement("availabilityStop"), JsonProperty("availabilityStop"), SerializationMetadataAttribute]
+        public String AvailabilityStopTimeXml
+        {
+            get
+            {
+                return this.AvailabilityStopTime?.ToString("o");
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    // Try to parse ISO date ONLY 
+                    if (DateTime.TryParseExact(value, new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
+                    {
+                        this.AvailabilityStopTime = dt.Date;
+                    }
+                    else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out dt)) // Local Time
+                    {
+                        this.AvailabilityStopTime = dt;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Cannot parse {value} as a date");
+                    }
+                }
+                else
+                {
+                    this.AvailabilityStopTime = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Semantic equality function
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as UriObservation;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return base.SemanticEquals(obj) && other.Value == this.Value &&
+                this.TypeConceptKey == other.TypeConceptKey;
+        }
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
+    }
+
+    /// <summary>
+    /// Numeric observation without a value
+    /// </summary>
+    [XmlType("NumericObservation", Namespace = "http://santedb.org/model"), JsonObject("NumericObservation")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "NumericObservation")]
+    public class NumericObservation : Observation
+    {
+        /// <summary>
+        /// Value type
+        /// </summary>
+        [XmlElement("valueType"), JsonProperty("valueType")]
+        public override string ValueType
+        {
+            get
+            {
+                return "NM";
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the value
+        /// </summary>
+        [XmlElement("value"), JsonProperty("value")]
+        public Decimal? Value { get; set; }
+
+
+        /// <summary>
+        /// Semantic equality function
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as NumericObservation;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return base.SemanticEquals(obj) && other.Value == this.Value;
+        }
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
+    }
+
+
+    /// <summary>
+    /// Numeric observation without a value
+    /// </summary>
+    [XmlType("BooleanObservation", Namespace = "http://santedb.org/model"), JsonObject("BooleanObservation")]
+    [XmlRoot(Namespace = "http://santedb.org/model", ElementName = "BooleanObservation")]
+    public class BooleanObservation : Observation
+    {
+        /// <summary>
+        /// Value type
+        /// </summary>
+        [XmlElement("valueType"), JsonProperty("valueType")]
+        public override string ValueType
+        {
+            get
+            {
+                return "BL";
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the value
+        /// </summary>
+        [XmlElement("value"), JsonProperty("value")]
+        public bool? Value { get; set; }
+
+
+        /// <summary>
+        /// Semantic equality function
+        /// </summary>
+        public override bool SemanticEquals(object obj)
+        {
+            var other = obj as BooleanObservation;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return base.SemanticEquals(obj) && other.Value == this.Value;
+        }
+
+
+        /// <inheritdoc/>
+        public override ICanDeepCopy DeepCopy() => this.CloneDeep();
+    }
+
 }
