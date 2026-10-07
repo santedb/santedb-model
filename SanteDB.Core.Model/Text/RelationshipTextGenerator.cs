@@ -18,15 +18,24 @@ namespace SanteDB.Core.Model.Text
     public abstract class RelationshipTextGenerator<TModel> : ComplexTextGeneratorBase<TModel>
         where TModel : IdentifiedData, ITargetedAssociation
     {
+        /// <inheritdoc/>
         public override TextGeneratorRenderStyle RenderStyle => TextGeneratorRenderStyle.DefinitionList;
 
+        /// <summary>
+        /// Generate target summary 
+        /// </summary>
         protected XElement GetTargetSummary(TModel target) =>
             new XElement("span", (target.LoadProperty(o => o.TargetEntity) as IdentifiedData)?.ToDisplay() ??
                 target.TargetEntity.ToString());
     }
 
+    /// <summary>
+    /// Entity relationship text generator
+    /// </summary>
     public class EntityRelationshipTextGenerator : RelationshipTextGenerator<EntityRelationship>
     {
+        /// <inheritdoc/>
+        /// <inheritdoc/>
         public override IEnumerable<Expression<Func<EntityRelationship, object>>> GetRenderFields() => new Expression<Func<EntityRelationship, object>>[]
         {
             o=> o.RelationshipType,
@@ -35,9 +44,12 @@ namespace SanteDB.Core.Model.Text
         };
 
     }
-
+    /// <summary>
+    /// ACt relationship text generator
+    /// </summary>
     public class ActRelationshipTextGenerator : RelationshipTextGenerator<ActRelationship>
     {
+        /// <inheritdoc/>
         public override IEnumerable<Expression<Func<ActRelationship, object>>> GetRenderFields() => new Expression<Func<ActRelationship, object>>[]
          {
             o=> o.RelationshipType,
@@ -45,8 +57,12 @@ namespace SanteDB.Core.Model.Text
          };
     }
 
+    /// <summary>
+    /// Act participation text generator
+    /// </summary>
     public class ActParticipationTextGenerator : RelationshipTextGenerator<ActParticipation>
     {
+        /// <inheritdoc/>
         public override IEnumerable<Expression<Func<ActParticipation, object>>> GetRenderFields() => new Expression<Func<ActParticipation, object>>[]
         {
             o=> o.ParticipationRole,

@@ -14,9 +14,21 @@ namespace SanteDB.Core.Model.Text
     /// </summary>
     public enum TextGeneratorRenderStyle
     {
+        /// <summary>
+        /// Represent as a table
+        /// </summary>
         Table,
+        /// <summary>
+        /// Represent as a list
+        /// </summary>
         List,
+        /// <summary>
+        /// represents as a DL/DD relationship
+        /// </summary>
         DefinitionList,
+        /// <summary>
+        /// Represent inline
+        /// </summary>
         Inline
     };
 

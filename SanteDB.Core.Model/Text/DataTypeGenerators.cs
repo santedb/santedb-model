@@ -78,6 +78,7 @@ namespace SanteDB.Core.Model.Text
     public abstract class ExtensionTextGenerator<TModel> : SimpleTextGeneratorBase<TModel>
         where TModel : IdentifiedData, IModelExtension
     {
+        /// <inheritdoc/>
         protected override void WriteSummary(XmlWriter htmlWriter, TModel data)
         {
             if (data.ExtensionTypeKey == ExtensionTypeKeys.JpegPhotoExtension)
@@ -110,6 +111,7 @@ namespace SanteDB.Core.Model.Text
     /// </summary>
     public class EntityTelecomTextGenerator : SimpleTextGeneratorBase<EntityTelecomAddress>
     {
+        /// <inheritdoc/>
         protected override void WriteSummary(XmlWriter htmlWriter, EntityTelecomAddress data)
         {
             htmlWriter.WriteStartElement("strong", SanteDBModelConstants.NS_XHTML);
@@ -131,6 +133,7 @@ namespace SanteDB.Core.Model.Text
     /// </summary>
     public class SecurityPolicyInstanceTextGenerator : SimpleTextGeneratorBase<SecurityPolicyInstance>
     {
+        /// <inheritdoc/>
         protected override void WriteSummary(XmlWriter htmlWriter, SecurityPolicyInstance data)
         {
             htmlWriter.WriteElementString("span", SanteDBModelConstants.NS_XHTML, data.LoadProperty(o => o.Policy).Name);
@@ -148,8 +151,12 @@ namespace SanteDB.Core.Model.Text
         }
     }
 
+    /// <summary>
+    /// Entity note text generator
+    /// </summary>
     public class EntityNoteTextGenerator : SimpleTextGeneratorBase<EntityNote>
     {
+        /// <inheritdoc/>
         protected override void WriteSummary(XmlWriter htmlWriter, EntityNote data)
         {
             htmlWriter.WriteElementString("strong", SanteDBModelConstants.NS_XHTML, $"Author: {data.LoadProperty(c=>c.Author).ToDisplay()}");

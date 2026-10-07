@@ -14,6 +14,7 @@ namespace SanteDB.Core.Model.Text
     /// </summary>
     public class ConceptTextGenerator : SimpleTextGeneratorBase<Concept>
     {
+        /// <inheritdoc/>
         protected override void WriteSummary(XmlWriter htmlWriter, Concept data)
         {
             var currentLanguageString = data.LoadProperty(o => o.ConceptNames).FirstOrDefault(o => o.Language == CultureInfo.CurrentUICulture.TwoLetterISOLanguageName) ??

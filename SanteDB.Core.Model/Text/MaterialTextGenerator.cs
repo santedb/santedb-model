@@ -24,8 +24,14 @@ namespace SanteDB.Core.Model.Text
         }
     }
 
+    /// <summary>
+    /// Material text generator
+    /// </summary>
     public class MaterialTextGenerator : MaterialTextGeneratorBase<Material> { }
 
+    /// <summary>
+    /// Manufactured material text generator
+    /// </summary>
     public class ManufacturedMaterialTextGenerator : MaterialTextGeneratorBase<ManufacturedMaterial>
     {
         /// <inheritdoc/>
