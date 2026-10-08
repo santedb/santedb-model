@@ -90,9 +90,7 @@ namespace SanteDB.Core.Model.Audit
         /// <summary>
         /// Gets whether ID type code is specified
         /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public bool IDTypeCodeXmlSpecified
-        { get { return this.IDTypeCode.HasValue; } }
+        public bool ShouldSerializeIDTypeCodeXml() => this.IDTypeCode.HasValue; 
 
         /// <summary>
         /// Lifecycle type
@@ -111,9 +109,7 @@ namespace SanteDB.Core.Model.Audit
         /// <summary>
         /// Gets whether ID type code is specified
         /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public bool LifecycleTypeXmlSpecified
-        { get { return this.LifecycleType.HasValue; } }
+        public bool ShouldSerializeLifecycleTypeXml () => this.LifecycleType.HasValue;
 
         /// <summary>
         /// Data associated with the object
@@ -156,9 +152,7 @@ namespace SanteDB.Core.Model.Audit
         /// <summary>
         /// Gets whether ID type code is specified
         /// </summary>
-        [XmlIgnore, JsonIgnore]
-        public bool RoleXmlSpecified
-        { get { return this.Role.HasValue; } }
+        public bool ShouldSerializeRoleXml() => this.Role.HasValue && this.Role.GetValueOrDefault() != 0;
 
         /// <summary>
         /// Identifies the type of object being expressed
