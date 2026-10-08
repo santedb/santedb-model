@@ -25,6 +25,7 @@ using SanteDB.Core.Model;
 using SanteDB.Core.Model.Attributes;
 using SanteDB.Core.Model.Collection;
 using SanteDB.Core.Model.Constants;
+using SanteDB.Core.Model.DataTypes;
 using SanteDB.Core.Model.Entities;
 using SanteDB.Core.Model.EntityLoader;
 using SanteDB.Core.Model.Interfaces;
@@ -41,6 +42,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -2012,6 +2014,25 @@ namespace SanteDB
             }
 
             return SanteDBModelConstants.CLASS_CONCEPT_TYPE_MAP.TryGetValue(me.TypeConceptKey.Value, out mappedType);
+        }
+
+
+        /// <summary>
+        /// Assert system provenance
+        /// </summary>
+        public static void AssertSystemProvenance(this IExternalIdentifier ihi)
+        {
+            switch(ihi)
+            {
+                case EntityIdentifier ei:
+                    ei.AssertSystemProvenance();
+                    break;
+                case ActIdentifier ai:
+                    ai.AssertSystemProvenance();
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
         }
     }
 }

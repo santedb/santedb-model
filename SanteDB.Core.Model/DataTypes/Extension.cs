@@ -187,6 +187,7 @@ namespace SanteDB.Core.Model.DataTypes
         /// <summary>
         /// Get the type key
         /// </summary>
+        [XmlIgnore, JsonIgnore]
         Guid IModelExtension.ExtensionTypeKey
         {
             get
@@ -194,7 +195,7 @@ namespace SanteDB.Core.Model.DataTypes
                 return this.ExtensionTypeKey.Value;
             }
         }
-
+        
         /// <summary>
         /// Gets the data
         /// </summary>

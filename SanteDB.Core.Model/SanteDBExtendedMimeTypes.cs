@@ -42,6 +42,11 @@ namespace SanteDB.Core.Model
         public const string RimModelRoot = ApplicationRoot + ".rim";
 
         /// <summary>
+        ///  HDSI root
+        /// </summary>
+        public const string HdsiRoot = ApplicationRoot + ".hdsi";
+
+        /// <summary>
         /// RIM in JSON
         /// </summary>
         public const string JsonRimModel = RimModelRoot + "+json";

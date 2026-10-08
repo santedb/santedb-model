@@ -30,7 +30,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace SanteDB.Core.Model
@@ -359,7 +361,8 @@ namespace SanteDB.Core.Model
                 return sw.ToString();
             }
         }
-#endif 
+
+#endif
     }
 
 
