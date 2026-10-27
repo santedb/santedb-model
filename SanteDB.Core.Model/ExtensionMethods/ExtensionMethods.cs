@@ -731,6 +731,36 @@ namespace SanteDB
         }
 
         /// <summary>
+        /// Ensure that the <paramref name="property"/> matches the underlying key property. If not, remove it.
+        /// </summary>
+        /// <typeparam name="TSource">The type of source object</typeparam>
+        /// <typeparam name="TReturn">The return object</typeparam>
+        /// <param name="property">The model property to be cleared if the key property doesn't match</param>
+        public static TReturn ConditionalClearModelProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> property)
+            where TSource : IAnnotatedResource
+        {
+            if (property is LambdaExpression lambda && lambda.Body is MemberExpression body && 
+                body.Member is PropertyInfo pi)
+            {
+                var modelProperty = pi.GetSerializationRedirectProperty();
+                var value = (TReturn)pi.GetValue(me);
+
+                if(value is IdentifiedData idv && 
+                    modelProperty != null && 
+                    !idv.Key.GetValueOrDefault().Equals(modelProperty.GetValue(me)))
+                {
+                    pi.SetValue(me, null);
+                }
+                return value;
+
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown expression passed");
+            }
+        }
+
+        /// <summary>
         /// Load collection of <typeparamref name="TReturn"/> from <typeparamref name="TSource"/>
         /// </summary>
         public static TReturn LoadProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> selector, bool forceReload = false, IEnumerable<IdentifiedData> referenceData = null)
@@ -779,6 +809,7 @@ namespace SanteDB
             var loadCheck = new PropertyLoadCheck(propertyName);
             me.RemoveAnnotation(loadCheck);
         }
+
 
         /// <summary>
         /// Delay load property
@@ -852,7 +883,7 @@ namespace SanteDB
                                 {
                                     foreach (var itm in delayLoad)
                                     {
-                                        if(inverted && itm is IdentifiedData idd)
+                                        if (inverted && itm is IdentifiedData idd)
                                         {
                                             idd.BatchOperation = Core.Model.DataTypes.BatchOperationType.Ignore;
                                         }
@@ -2022,7 +2053,7 @@ namespace SanteDB
         /// </summary>
         public static void AssertSystemProvenance(this IExternalIdentifier ihi)
         {
-            switch(ihi)
+            switch (ihi)
             {
                 case EntityIdentifier ei:
                     ei.AssertSystemProvenance();
