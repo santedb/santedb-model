@@ -501,7 +501,7 @@ namespace SanteDB.Core.Model.Collection
         /// </summary>
         public IEnumerable<IdentifiedData> GetFocalItems()
         {
-            return this.Item.Where(o => this.FocalObjects.Contains(o.Key.Value));
+            return this.Item.Where(o => this.FocalObjects.Contains(o.Key.GetValueOrDefault()));
         }
 
         /// <summary>
