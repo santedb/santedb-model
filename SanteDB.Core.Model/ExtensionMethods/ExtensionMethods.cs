@@ -735,6 +735,7 @@ namespace SanteDB
         /// </summary>
         /// <typeparam name="TSource">The type of source object</typeparam>
         /// <typeparam name="TReturn">The return object</typeparam>
+        /// <param name="me">The object on which the property is being cleared</param>
         /// <param name="property">The model property to be cleared if the key property doesn't match</param>
         public static TReturn ConditionalClearModelProperty<TSource, TReturn>(this TSource me, Expression<Func<TSource, TReturn>> property)
             where TSource : IAnnotatedResource
