@@ -34,6 +34,11 @@ namespace SanteDB.Core.Model.Security
     public class SecurityEntity : NonVersionedEntityData
     {
 
+        /// <summary>
+        /// Tag for security user
+        /// </summary>
+        public override string Tag =>  $"W/{this.Key}/{(this.UpdatedTime??this.CreationTime).Ticks}";
+
         /// <inheritdoc/>
         public override ICanDeepCopy DeepCopy() => this.CloneDeep();
     }
